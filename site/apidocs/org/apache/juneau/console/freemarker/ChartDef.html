@@ -153,6 +153,16 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#data(java.util.List)" class="member-name-link">data</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>?&gt;&gt;&nbsp;rows)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dataTab()" class="member-name-link">dataTab</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Shows the chart's data as a visible Data tab beside the chart, in the same card.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dataTab(boolean)" class="member-name-link">dataTab</a><wbr>(boolean&nbsp;v)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Shows or hides the Data tab.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decorate(java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">decorate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;args)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -1013,20 +1023,44 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="dataTab()">
+<h3>dataTab</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ChartDef.html#line-606">dataTab</a></span>()</div>
+<div class="block">Shows the chart's data as a visible Data tab beside the chart, in the same card.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="dataTab(boolean)">
+<h3>dataTab</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ChartDef.html#line-614">dataTab</a></span><wbr><span class="parameters">(boolean&nbsp;v)</span></div>
+<div class="block">Shows or hides the Data tab.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>v</code> - Whether to show the data as a visible Data tab; off by default (a visually hidden table is always rendered for screen readers).</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="a11y(java.lang.String,boolean)">
 <h3>a11y</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ChartDef.html#line-602">a11y</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;summary,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ChartDef.html#line-617">a11y</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;summary,
  boolean&nbsp;table)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>summary</code> - The figure caption, or <jk>null</jk> for the generated one. @param table Show the data-table toggle. @return This object.</dd>
+<dd><code>summary</code> - The figure caption, or <jk>null</jk> for the generated one. @param table Render the screen-reader data table (visually hidden unless <a href="#dataTab()"><code>dataTab</code></a>). @return This object.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="map(java.lang.String,java.lang.String)">
 <h3>map</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ChartDef.html#line-611">map</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ChartDef.html#line-626">map</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1037,7 +1071,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ChartDef.html#line-698">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ChartDef.html#line-713">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Sets a body key that has no dedicated method (for example an ECharts-level card key the glue reads).
  For a helper kind, a helper key set here is routed under <code>helper</code>.</div>
@@ -1053,7 +1087,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="visibleWhen(org.apache.juneau.console.views.VisibilityRule...)">
 <h3>visibleWhen</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ChartDef.html#line-708">visibleWhen</a></span><wbr><span class="parameters">(<a href="../views/VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>...&nbsp;rules)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ChartDef.html#line-723">visibleWhen</a></span><wbr><span class="parameters">(<a href="../views/VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>...&nbsp;rules)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>rules</code> - Card-level visibility rules, ANDed. @return This object.</dd>
@@ -1063,7 +1097,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toCardSpec()">
 <h3>toCardSpec</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ChartDef.html#line-715">toCardSpec</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ChartDef.html#line-730">toCardSpec</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The <code>chart</code> card.</dd>

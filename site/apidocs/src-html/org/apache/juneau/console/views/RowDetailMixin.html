@@ -195,7 +195,7 @@
 <span class="source-line-no">182</span><span id="line-182">   private static List&lt;String&gt; titleFields(RowDetail d) {</span>
 <span class="source-line-no">183</span><span id="line-183">      var out = new ArrayList&lt;String&gt;();</span>
 <span class="source-line-no">184</span><span id="line-184">      if (d.titleTemplate() != null) {</span>
-<span class="source-line-no">185</span><span id="line-185">         var m = Pattern.compile("\\{([A-Za-z_][A-Za-z0-9_]*)\\}").matcher(d.titleTemplate());</span>
+<span class="source-line-no">185</span><span id="line-185">         var m = Pattern.compile("\\{([A-Za-z_]\\w*)\\}").matcher(d.titleTemplate());</span>
 <span class="source-line-no">186</span><span id="line-186">         while (m.find())</span>
 <span class="source-line-no">187</span><span id="line-187">            out.add(m.group(1));</span>
 <span class="source-line-no">188</span><span id="line-188">      }</span>

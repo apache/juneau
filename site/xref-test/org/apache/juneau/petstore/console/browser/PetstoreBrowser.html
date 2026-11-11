@@ -81,123 +81,140 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">private</strong> <a name="PetstoreBrowser" href="../../../../../../org/apache/juneau/petstore/console/browser/PetstoreBrowser.html#PetstoreBrowser">PetstoreBrowser</a>() {}
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 * @param suite A short name for the files this run writes under {@code target/js}.</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * @param baseUrl The server base URL.</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * @param cases The cases.</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * @return Case name to that case's report.</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * @throws Exception If the harness can't run or exits non-zero.</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; run(String suite, String baseUrl, List&lt;Map&lt;String,Object&gt;&gt; cases) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> dir = Path.of(required(<span class="jxr_string">"juneau.jsTests.dir"</span>));
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> harness = Path.of(required(<span class="jxr_string">"juneau.jsTests.harness"</span>));
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> in = dir.resolve(suite + <span class="jxr_string">"-cases.json"</span>);
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> out = dir.resolve(suite + <span class="jxr_string">"-stdout.json"</span>);
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> err = dir.resolve(suite + <span class="jxr_string">"-stderr.txt"</span>);
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		Files.createDirectories(dir.resolve(<span class="jxr_string">"snapshots"</span>));
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		Files.writeString(in, Json.of(Map.of(<span class="jxr_string">"baseUrl"</span>, baseUrl, <span class="jxr_string">"snapshots"</span>, dir.resolve(<span class="jxr_string">"snapshots"</span>).toString(), <span class="jxr_string">"cases"</span>, cases)), UTF_8);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> pb = <strong class="jxr_keyword">new</strong> ProcessBuilder(List.of(System.getProperty(<span class="jxr_string">"juneau.jsTests.node"</span>, <span class="jxr_string">"node"</span>), harness.toString(), in.toString()))
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			.redirectOutput(out.toFile()).redirectError(err.toFile());
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		pb.environment().put(<span class="jxr_string">"NODE_PATH"</span>, dir.resolve(<span class="jxr_string">"node_modules"</span>).toString());
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		pb.environment().put(<span class="jxr_string">"PLAYWRIGHT_BROWSERS_PATH"</span>, required(<span class="jxr_string">"juneau.jsTests.browsers"</span>));
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> p = pb.start();
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">if</strong> (! p.waitFor(8, TimeUnit.MINUTES)) {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			p.destroyForcibly();
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			fail(<span class="jxr_string">"Harness '"</span> + suite + <span class="jxr_string">"' did not finish within 8m; stderr:\n"</span> + quietRead(err));
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		}
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertEquals(0, p.exitValue(), () -&gt; <span class="jxr_string">"Harness '"</span> + suite + <span class="jxr_string">"' exited non-zero; stderr:\n"</span> + quietRead(err));
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		@SuppressWarnings({
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// The harness writes {cases:{name:{...}}}.</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		})
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> r = (Map&lt;String,Map&lt;String,Object&gt;&gt;) Json.to(Files.readString(out), Map.<strong class="jxr_keyword">class</strong>).get(<span class="jxr_string">"cases"</span>);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertNotNull(r, () -&gt; <span class="jxr_string">"Harness '"</span> + suite + <span class="jxr_string">"' wrote no 'cases' object; stdout:\n"</span> + quietRead(out));
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		printSlowest(suite, r);
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">return</strong> r;
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<span class="jxr_string">"java:S106"</span> <em class="jxr_comment">// The slowest cases are the measurement this class exists to report.</em>
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	})
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> printSlowest(String suite, Map&lt;String,Map&lt;String,Object&gt;&gt; report) {
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		System.out.println(<span class="jxr_string">"[petstore-browser] "</span> + suite + <span class="jxr_string">": "</span> + report.size() + <span class="jxr_string">" cases, slowest: "</span> + slowest(report, 5));
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">	 * @param report The {@link #run} result.</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 * @param n How many cases to list.</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 * @return The {@code n} slowest cases as {@code "name 1234 ms"}, longest first, comma separated.</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">static</strong> String slowest(Map&lt;String,Map&lt;String,Object&gt;&gt; report, <strong class="jxr_keyword">int</strong> n) {
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">return</strong> report.entrySet().stream()
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			.filter(e -&gt; e.getValue().get(<span class="jxr_string">"ms"</span>) instanceof Number)
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			.sorted((a, b) -&gt; Long.compare(((Number) b.getValue().get(<span class="jxr_string">"ms"</span>)).longValue(), ((Number) a.getValue().get(<span class="jxr_string">"ms"</span>)).longValue()))
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			.limit(n)
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			.map(e -&gt; e.getKey() + <span class="jxr_string">" "</span> + ((Number) e.getValue().get(<span class="jxr_string">"ms"</span>)).longValue() + <span class="jxr_string">" ms"</span>)
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			.collect(Collectors.joining(<span class="jxr_string">", "</span>));
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * Asserts the case loaded with status 200, no script errors, no deprecation warnings and no timeouts.</em>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * @param report The {@link #run} result.</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * @param name The case name.</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 * @return The case's report.</em>
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; assertClean(Map&lt;String,Map&lt;String,Object&gt;&gt; report, String name) {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> c = report.get(name);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertNotNull(c, () -&gt; <span class="jxr_string">"No report for case '"</span> + name + <span class="jxr_string">"'; cases: "</span> + report.keySet());
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertEquals(200, ((Number) c.get(<span class="jxr_string">"status"</span>)).intValue(), () -&gt; <span class="jxr_string">"Case '"</span> + name + <span class="jxr_string">"' status: "</span> + c);
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertEquals(List.of(), c.get(<span class="jxr_string">"jsFailures"</span>), () -&gt; <span class="jxr_string">"Case '"</span> + name + <span class="jxr_string">"' logged script errors: "</span> + c.get(<span class="jxr_string">"jsFailures"</span>));
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertEquals(List.of(), c.get(<span class="jxr_string">"deprecations"</span>), () -&gt; <span class="jxr_string">"Case '"</span> + name + <span class="jxr_string">"' used deprecated client APIs: "</span> + c.get(<span class="jxr_string">"deprecations"</span>));
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(List.of(), c.get(<span class="jxr_string">"timeouts"</span>), () -&gt; <span class="jxr_string">"Case '"</span> + name + <span class="jxr_string">"' timed out waiting for: "</span> + c.get(<span class="jxr_string">"timeouts"</span>));
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 * A JS expression that selects a switcher view and, when the address has a section ({@code view.section}), that</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * view's section tab.  Switcher views are built on first selection, so a probe must select before it reads a card.</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * @param switcherId The switcher card id.</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * @param address A view id, or {@code view.section}.</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * @return The expression.</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String select(String switcherId, String address) {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> dot = address.indexOf('.');
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> view = dot &lt; 0 ? address : address.substring(0, dot);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"(function () { var sw = window.JuneauConsole.cardApi('"</span>).append(switcherId).append(<span class="jxr_string">"'); sw.select('"</span>).append(view).append(<span class="jxr_string">"');"</span>);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">if</strong> (dot &gt;= 0)
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			sb.append(<span class="jxr_string">" var t = document.querySelector('#"</span>).append(switcherId).append(<span class="jxr_string">" [data-juneau-strip-mode=\&quot;tab\&quot;] [data-tab-id=\&quot;"</span>).append(address.substring(dot + 1)).append(<span class="jxr_string">"\&quot;]'); if (t) t.click();"</span>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">return</strong> sb.append(<span class="jxr_string">" })()"</span>).toString();
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * @param suite A short name for the files this run writes under {@code target/js}.</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * @param baseUrl The server base URL.</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 * @param cases The cases.</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 * @return Case name to that case's report.</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 * @throws Exception If the harness can't run or exits non-zero.</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; run(String suite, String baseUrl, List&lt;Map&lt;String,Object&gt;&gt; cases) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> dir = Path.of(required(<span class="jxr_string">"juneau.jsTests.dir"</span>));
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">var</strong> harness = Path.of(required(<span class="jxr_string">"juneau.jsTests.harness"</span>));
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> in = dir.resolve(suite + <span class="jxr_string">"-cases.json"</span>);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> out = dir.resolve(suite + <span class="jxr_string">"-stdout.json"</span>);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">var</strong> err = dir.resolve(suite + <span class="jxr_string">"-stderr.txt"</span>);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		Files.createDirectories(dir.resolve(<span class="jxr_string">"snapshots"</span>));
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		Files.writeString(in, Json.of(Map.of(<span class="jxr_string">"baseUrl"</span>, baseUrl, <span class="jxr_string">"snapshots"</span>, dir.resolve(<span class="jxr_string">"snapshots"</span>).toString(), <span class="jxr_string">"cases"</span>, cases)), UTF_8);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> pb = <strong class="jxr_keyword">new</strong> ProcessBuilder(List.of(System.getProperty(<span class="jxr_string">"juneau.jsTests.node"</span>, <span class="jxr_string">"node"</span>), harness.toString(), in.toString()))
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			.redirectOutput(out.toFile()).redirectError(err.toFile());
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		pb.environment().put(<span class="jxr_string">"NODE_PATH"</span>, dir.resolve(<span class="jxr_string">"node_modules"</span>).toString());
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		pb.environment().put(<span class="jxr_string">"PLAYWRIGHT_BROWSERS_PATH"</span>, required(<span class="jxr_string">"juneau.jsTests.browsers"</span>));
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> p = pb.start();
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">if</strong> (! p.waitFor(8, TimeUnit.MINUTES)) {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			p.destroyForcibly();
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			fail(<span class="jxr_string">"Harness '"</span> + suite + <span class="jxr_string">"' did not finish within 8m; stderr:\n"</span> + quietRead(err));
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertEquals(0, p.exitValue(), () -&gt; <span class="jxr_string">"Harness '"</span> + suite + <span class="jxr_string">"' exited non-zero; stderr:\n"</span> + quietRead(err));
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		@SuppressWarnings({
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// The harness writes {cases:{name:{...}}}.</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		})
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">var</strong> r = (Map&lt;String,Map&lt;String,Object&gt;&gt;) Json.to(Files.readString(out), Map.<strong class="jxr_keyword">class</strong>).get(<span class="jxr_string">"cases"</span>);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertNotNull(r, () -&gt; <span class="jxr_string">"Harness '"</span> + suite + <span class="jxr_string">"' wrote no 'cases' object; stdout:\n"</span> + quietRead(out));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		printSlowest(suite, r);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">return</strong> r;
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<span class="jxr_string">"java:S106"</span> <em class="jxr_comment">// The slowest cases are the measurement this class exists to report.</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	})
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> printSlowest(String suite, Map&lt;String,Map&lt;String,Object&gt;&gt; report) {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		System.out.println(<span class="jxr_string">"[petstore-browser] "</span> + suite + <span class="jxr_string">": "</span> + report.size() + <span class="jxr_string">" cases, slowest: "</span> + slowest(report, 5));
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * @param report The {@link #run} result.</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 * @param n How many cases to list.</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * @return The {@code n} slowest cases as {@code "name 1234 ms"}, longest first, comma separated.</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">static</strong> String slowest(Map&lt;String,Map&lt;String,Object&gt;&gt; report, <strong class="jxr_keyword">int</strong> n) {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">return</strong> report.entrySet().stream()
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			.filter(e -&gt; e.getValue().get(<span class="jxr_string">"ms"</span>) instanceof Number)
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			.sorted((a, b) -&gt; Long.compare(((Number) b.getValue().get(<span class="jxr_string">"ms"</span>)).longValue(), ((Number) a.getValue().get(<span class="jxr_string">"ms"</span>)).longValue()))
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			.limit(n)
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			.map(e -&gt; e.getKey() + <span class="jxr_string">" "</span> + ((Number) e.getValue().get(<span class="jxr_string">"ms"</span>)).longValue() + <span class="jxr_string">" ms"</span>)
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			.collect(Collectors.joining(<span class="jxr_string">", "</span>));
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 * @param c One case's report.</em>
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 * @param key The query name.</em>
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 * @return The query's value as returned by the page.</em>
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// queries is always a JSON object.</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	})
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Object query(Map&lt;String,Object&gt; c, String key) {
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">return</strong> ((Map&lt;String,Object&gt;) c.get(<span class="jxr_string">"queries"</span>)).get(key);
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	}
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * Returns the JSON body of the last captured POST whose URL contains the given text.</em>
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 * @param c One case's report (its {@code capture} must cover the URL).</em>
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 * @param urlPart The URL substring.</em>
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 * @return The parsed POST body.</em>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 * @throws Exception If the body is not JSON.</em>
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// requests is a JSON array of {url, method, postData}.</em>
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	})
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; lastCaptured(Map&lt;String,Object&gt; c, String urlPart) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">var</strong> reqs = ((List&lt;Map&lt;String,Object&gt;&gt;) c.get(<span class="jxr_string">"requests"</span>)).stream()
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			.filter(r -&gt; <span class="jxr_string">"POST"</span>.equals(r.get(<span class="jxr_string">"method"</span>)) &amp;&amp; String.valueOf(r.get(<span class="jxr_string">"url"</span>)).contains(urlPart)).toList();
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertFalse(reqs.isEmpty(), () -&gt; f(<span class="jxr_string">"No captured POST matching '%s'"</span>, urlPart));
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">return</strong> Json.to((String) reqs.get(reqs.size() - 1).get(<span class="jxr_string">"postData"</span>), Map.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	}
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String required(String name) {
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> v = System.getProperty(name);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertNotNull(v, () -&gt; <span class="jxr_string">"-D"</span> + name + <span class="jxr_string">" not set; the js-tests profile is responsible for providing it"</span>);
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">return</strong> v;
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String quietRead(Path p) {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">return</strong> Files.readString(p);
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;unreadable: "</span> + e + <span class="jxr_string">"&gt;"</span>;
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		}
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> }
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 * Asserts the case loaded with status 200, no script errors, no deprecation warnings and no timeouts.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 * @param report The {@link #run} result.</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 * @param name The case name.</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 * @return The case's report.</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; assertClean(Map&lt;String,Map&lt;String,Object&gt;&gt; report, String name) {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> c = report.get(name);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertNotNull(c, () -&gt; <span class="jxr_string">"No report for case '"</span> + name + <span class="jxr_string">"'; cases: "</span> + report.keySet());
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertEquals(200, ((Number) c.get(<span class="jxr_string">"status"</span>)).intValue(), () -&gt; <span class="jxr_string">"Case '"</span> + name + <span class="jxr_string">"' status: "</span> + c);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertEquals(List.of(), c.get(<span class="jxr_string">"jsFailures"</span>), () -&gt; <span class="jxr_string">"Case '"</span> + name + <span class="jxr_string">"' logged script errors: "</span> + c.get(<span class="jxr_string">"jsFailures"</span>));
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertEquals(List.of(), c.get(<span class="jxr_string">"deprecations"</span>), () -&gt; <span class="jxr_string">"Case '"</span> + name + <span class="jxr_string">"' used deprecated client APIs: "</span> + c.get(<span class="jxr_string">"deprecations"</span>));
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertEquals(List.of(), c.get(<span class="jxr_string">"timeouts"</span>), () -&gt; <span class="jxr_string">"Case '"</span> + name + <span class="jxr_string">"' timed out waiting for: "</span> + c.get(<span class="jxr_string">"timeouts"</span>));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 * @param c One case's report.</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 * @param key The query name.</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 * @return The query's value as returned by the page.</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// queries is always a JSON object.</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	})
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Object query(Map&lt;String,Object&gt; c, String key) {
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">return</strong> ((Map&lt;String,Object&gt;) c.get(<span class="jxr_string">"queries"</span>)).get(key);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 * Returns the JSON body of the last captured POST whose URL contains the given text.</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * @param c One case's report (its {@code capture} must cover the URL).</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * @param urlPart The URL substring.</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * @return The parsed POST body.</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * @throws Exception If the body is not JSON.</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// requests is a JSON array of {url, method, postData}.</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	})
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; lastCaptured(Map&lt;String,Object&gt; c, String urlPart) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> reqs = ((List&lt;Map&lt;String,Object&gt;&gt;) c.get(<span class="jxr_string">"requests"</span>)).stream()
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			.filter(r -&gt; <span class="jxr_string">"POST"</span>.equals(r.get(<span class="jxr_string">"method"</span>)) &amp;&amp; String.valueOf(r.get(<span class="jxr_string">"url"</span>)).contains(urlPart)).toList();
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertFalse(reqs.isEmpty(), () -&gt; f(<span class="jxr_string">"No captured POST matching '%s'"</span>, urlPart));
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">return</strong> Json.to((String) reqs.get(reqs.size() - 1).get(<span class="jxr_string">"postData"</span>), Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	}
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String required(String name) {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">var</strong> v = System.getProperty(name);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertNotNull(v, () -&gt; <span class="jxr_string">"-D"</span> + name + <span class="jxr_string">" not set; the js-tests profile is responsible for providing it"</span>);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">return</strong> v;
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String quietRead(Path p) {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">return</strong> Files.readString(p);
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;unreadable: "</span> + e + <span class="jxr_string">"&gt;"</span>;
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		}
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

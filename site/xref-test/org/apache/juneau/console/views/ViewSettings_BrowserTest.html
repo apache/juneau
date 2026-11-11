@@ -183,18 +183,18 @@
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertTrue(String.valueOf(c.get(<span class="jxr_string">"detailSelected"</span>)).startsWith(<span class="jxr_string">"Name"</span>), c::toString);
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	@Test <strong class="jxr_keyword">void</strong> c02_selectedTabFillDiffersFromUnselectedAndDialog() {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	@Test <strong class="jxr_keyword">void</strong> c02_selectedTabJoinsDialogWithAccentBar() {
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">var</strong> t = obj(obj(report, <span class="jxr_string">"chooserLight"</span>), <span class="jxr_string">"tabs"</span>);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertNotEquals(t.get(<span class="jxr_string">"selBg"</span>), t.get(<span class="jxr_string">"unBg"</span>), t::toString);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertNotEquals(t.get(<span class="jxr_string">"selBg"</span>), t.get(<span class="jxr_string">"dlgBg"</span>), t::toString);
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertEquals(t.get(<span class="jxr_string">"wash"</span>), t.get(<span class="jxr_string">"selBg"</span>), t::toString);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertEquals(t.get(<span class="jxr_string">"dlgBg"</span>), t.get(<span class="jxr_string">"selBg"</span>), t::toString);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertTrue(String.valueOf(t.get(<span class="jxr_string">"selBar"</span>)).contains(<span class="jxr_string">"0px 3px 0px 0px inset"</span>), t::toString);
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	@Test <strong class="jxr_keyword">void</strong> c03_selectedTabFillDiffersFromUnselectedAndDialog_dark() {
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	@Test <strong class="jxr_keyword">void</strong> c03_selectedTabJoinsDialogWithAccentBar_dark() {
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">var</strong> t = obj(obj(report, <span class="jxr_string">"chooserDark"</span>), <span class="jxr_string">"tabs"</span>);
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertNotEquals(t.get(<span class="jxr_string">"selBg"</span>), t.get(<span class="jxr_string">"unBg"</span>), t::toString);
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertNotEquals(t.get(<span class="jxr_string">"selBg"</span>), t.get(<span class="jxr_string">"dlgBg"</span>), t::toString);
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertEquals(t.get(<span class="jxr_string">"wash"</span>), t.get(<span class="jxr_string">"selBg"</span>), t::toString);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertEquals(t.get(<span class="jxr_string">"dlgBg"</span>), t.get(<span class="jxr_string">"selBg"</span>), t::toString);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertTrue(String.valueOf(t.get(<span class="jxr_string">"selBar"</span>)).contains(<span class="jxr_string">"0px 3px 0px 0px inset"</span>), t::toString);
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 	@Test <strong class="jxr_keyword">void</strong> a04_footerIsResetThenCancelThenApply() {

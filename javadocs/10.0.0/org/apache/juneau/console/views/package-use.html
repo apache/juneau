@@ -80,16 +80,21 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Petstore console orders page and its JSON endpoints.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.pets">org.apache.juneau.petstore.console.pets</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.pages">org.apache.juneau.petstore.console.pages</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Builder twins of the petstore console pages: each page's <code>.ftlh</code> file rebuilt with <code>PageSpec</code>, served
+ when the page is requested with <code>?builder</code>.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.pets">org.apache.juneau.petstore.console.pets</a></div>
+<div class="col-last even-row-color">
 <div class="block">Petstore console pets pages and their JSON endpoints.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.users">org.apache.juneau.petstore.console.users</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.users">org.apache.juneau.petstore.console.users</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Petstore console users page and its JSON endpoints.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.terminal.region">org.apache.juneau.terminal.region</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.terminal.region">org.apache.juneau.terminal.region</a></div>
+<div class="col-last even-row-color">
 <div class="block">Raw command output in the browser: a byte-offset endpoint over a <a href="../../terminal/region/TerminalSource.html" title="interface in org.apache.juneau.terminal.region"><code>TerminalSource</code></a>
  and an xterm.js panel that renders it the way a terminal would.</div>
 </div>
@@ -459,6 +464,27 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">The typed result a row action's submit returns &mdash; the load-bearing half of the write path.</div>
 </div>
+<div class="col-first odd-row-color"><a href="class-use/RowDetail.html#org.apache.juneau.petstore.console.orders">RowDetail</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Row-detail panel for a table: the per-row GET endpoint, title template, icon and the row-detail region.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/RowDetailMixin.html#org.apache.juneau.petstore.console.orders">RowDetailMixin</a></div>
+<div class="col-last even-row-color">
+<div class="block">Mixin that serves the bean-backed row details of a resource.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.pages">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.console.views</a> used by <a href="../../petstore/console/pages/package-summary.html">org.apache.juneau.petstore.console.pages</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/RowDetail.html#org.apache.juneau.petstore.console.pages">RowDetail</a></div>
+<div class="col-last even-row-color">
+<div class="block">Row-detail panel for a table: the per-row GET endpoint, title template, icon and the row-detail region.</div>
+</div>
 </div>
 </section>
 </li>
@@ -483,6 +509,14 @@ loadScripts(document, 'script');</script>
 <div class="block">The response shape of an <code>aggregate</code>-mode bulk action (<a href="RowAction.BulkMode.html#AGGREGATE"><code>RowAction.BulkMode.AGGREGATE</code></a>) &mdash;
  one outcome per id submitted in the matching <a href="BulkRequest.html" title="class in org.apache.juneau.console.views"><code>BulkRequest</code></a>.</div>
 </div>
+<div class="col-first odd-row-color"><a href="class-use/RowDetail.html#org.apache.juneau.petstore.console.pets">RowDetail</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Row-detail panel for a table: the per-row GET endpoint, title template, icon and the row-detail region.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/RowDetailMixin.html#org.apache.juneau.petstore.console.pets">RowDetailMixin</a></div>
+<div class="col-last even-row-color">
+<div class="block">Mixin that serves the bean-backed row details of a resource.</div>
+</div>
 </div>
 </section>
 </li>
@@ -495,6 +529,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><a href="class-use/ActionResult.html#org.apache.juneau.petstore.console.users">ActionResult</a></div>
 <div class="col-last even-row-color">
 <div class="block">The typed result a row action's submit returns &mdash; the load-bearing half of the write path.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/RowDetail.html#org.apache.juneau.petstore.console.users">RowDetail</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Row-detail panel for a table: the per-row GET endpoint, title template, icon and the row-detail region.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/RowDetailMixin.html#org.apache.juneau.petstore.console.users">RowDetailMixin</a></div>
+<div class="col-last even-row-color">
+<div class="block">Mixin that serves the bean-backed row details of a resource.</div>
 </div>
 </div>
 </section>

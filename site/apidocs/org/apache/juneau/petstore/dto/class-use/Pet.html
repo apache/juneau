@@ -64,25 +64,29 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Petstore console Developer pages: custom cards, themes, rendering flavors and the secure API demo.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.pages">org.apache.juneau.petstore.console.pages</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.orders">org.apache.juneau.petstore.console.orders</a></div>
 <div class="col-last even-row-color">
+<div class="block">Petstore console orders page and its JSON endpoints.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.pages">org.apache.juneau.petstore.console.pages</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder twins of the petstore console pages: each page's <code>.ftlh</code> file rebuilt with <code>PageSpec</code>, served
  when the page is requested with <code>?builder</code>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.pets">org.apache.juneau.petstore.console.pets</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.pets">org.apache.juneau.petstore.console.pets</a></div>
+<div class="col-last even-row-color">
 <div class="block">Petstore console pets pages and their JSON endpoints.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.dto">org.apache.juneau.petstore.dto</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.dto">org.apache.juneau.petstore.dto</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Petstore domain beans (DTOs).</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.rest">org.apache.juneau.petstore.rest</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.rest">org.apache.juneau.petstore.rest</a></div>
+<div class="col-last even-row-color">
 <div class="block">Petstore REST resources.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.service">org.apache.juneau.petstore.service</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.service">org.apache.juneau.petstore.service</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Petstore service layer (in-memory store).</div>
 </div>
 </div>
@@ -155,6 +159,22 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.petstore.console.orders">
+<h2>Uses of <a href="../Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a> in <a href="../../console/orders/package-summary.html">org.apache.juneau.petstore.console.orders</a></h2>
+<div class="caption"><span>Methods in <a href="../../console/orders/package-summary.html">org.apache.juneau.petstore.console.orders</a> that return types with arguments of type <a href="../Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OrdersRest.</span><code><a href="../../console/orders/OrdersRest.html#petRows(java.lang.Long)" class="member-name-link">petRows</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;orderId)</code></div>
+<div class="col-last even-row-color">
+<div class="block">The Pet tab of the order row detail: the pet an order is for, as a one-row table.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.petstore.console.pages">
 <h2>Uses of <a href="../Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a> in <a href="../../console/pages/package-summary.html">org.apache.juneau.petstore.console.pages</a></h2>
 <div class="caption"><span>Methods in <a href="../../console/pages/package-summary.html">org.apache.juneau.petstore.console.pages</a> with parameters of type <a href="../Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></span></div>
@@ -171,6 +191,22 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;apiCsrf)</code></div>
 <div class="col-last even-row-color">
 <div class="block">P4 one pet, on one tab.</div>
+</div>
+</div>
+<div class="caption"><span>Method parameters in <a href="../../console/pages/package-summary.html">org.apache.juneau.petstore.console.pages</a> with type arguments of type <a href="../Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="../../../console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetails.</span><code><a href="../../console/pages/RowDetails.html#pet(java.util.function.Function)" class="member-name-link">pet</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a>&gt;&nbsp;lookup)</code></div>
+<div class="col-last even-row-color">
+<div class="block">The Pets table detail: Details, this pet's orders and its history.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../../../console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetails.</span><code><a href="../../console/pages/RowDetails.html#soldPet(java.util.function.Function)" class="member-name-link">soldPet</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a>&gt;&nbsp;lookup)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The Sold table detail: the columns that table shows, and this pet's orders.</div>
 </div>
 </div>
 </section>

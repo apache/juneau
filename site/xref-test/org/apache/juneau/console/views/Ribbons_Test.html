@@ -92,66 +92,68 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> a07_without_rejects_unknown_and_type_aliases() {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bad : List.of(<span class="jxr_string">"nope"</span>, <span class="jxr_string">"collapseAll"</span>, <span class="jxr_string">"resetDefaults"</span>, <span class="jxr_string">"columnSettings"</span>, <span class="jxr_string">"linkButton"</span>, <span class="jxr_string">"create"</span>)) {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; Ribbons.standard().without(bad).build(), bad);
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			assertTrue(e.getMessage().contains(<span class="jxr_string">"collapse"</span>) &amp;&amp; e.getMessage().contains(<span class="jxr_string">"columns"</span>), <span class="jxr_string">"lists valid ids: "</span> + e.getMessage());
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		}
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Test <strong class="jxr_keyword">void</strong> a08_refreshId_override_and_without_accepts_override() {
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> items = Ribbons.standard().refreshId(<span class="jxr_string">"groom-refresh"</span>).build();
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertTrue(ids(items).contains(<span class="jxr_string">"groom-refresh"</span>));
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertFalse(ids(Ribbons.standard().refreshId(<span class="jxr_string">"groom-refresh"</span>).without(<span class="jxr_string">"groom-refresh"</span>).build()).contains(<span class="jxr_string">"groom-refresh"</span>));
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertFalse(ids(Ribbons.standard().without(<span class="jxr_string">"groom-refresh"</span>).refreshId(<span class="jxr_string">"groom-refresh"</span>).build()).contains(<span class="jxr_string">"groom-refresh"</span>));
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> a09_refresh_has_page_group() {
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> items = Ribbons.standard().build();
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertEquals(<span class="jxr_string">"page"</span>, items.get(items.size() - 1).toMap().get(<span class="jxr_string">"group"</span>));
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Test <strong class="jxr_keyword">void</strong> a10_every_item_has_an_id_and_validates() {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i : Ribbons.standard().export(<span class="jxr_string">"excel"</span>).build()) {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			assertNotNull(i.toMap().get(<span class="jxr_string">"id"</span>));
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			RibbonItem.validate(i.toMap());
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		}
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Test <strong class="jxr_keyword">void</strong> a11_duplicate_id_between_custom_and_preset_<strong class="jxr_keyword">throws</strong>_at_tableSpec() {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> items = Ribbons.standard().create(RibbonItem.dialog(<span class="jxr_string">"refresh"</span>)).build();
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; TableSpec.create(<span class="jxr_string">"t"</span>).ribbon(items));
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@Test <strong class="jxr_keyword">void</strong> a12_tableSpec_ribbon_list_equals_varargs() {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">var</strong> items = Ribbons.standard().build();
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> a = TableSpec.create(<span class="jxr_string">"t"</span>).dataUrl(<span class="jxr_string">"/d"</span>).ribbon(items);
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">var</strong> b = TableSpec.create(<span class="jxr_string">"t"</span>).dataUrl(<span class="jxr_string">"/d"</span>).ribbon(items.toArray(RibbonItem[]::<strong class="jxr_keyword">new</strong>));
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		a.columns(Column.create(<span class="jxr_string">"x"</span>)); b.columns(Column.create(<span class="jxr_string">"x"</span>));
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertEquals(a.toCardBody(), b.toCardBody());
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	}
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	@Test <strong class="jxr_keyword">void</strong> a13_preset_validates_in_a_table() {
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		TableSpec.create(<span class="jxr_string">"t"</span>).dataUrl(<span class="jxr_string">"/d"</span>).ribbon(Ribbons.standard().export(<span class="jxr_string">"excel"</span>).build());
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@Test <strong class="jxr_keyword">void</strong> z01_preset_order_matches_the_runtime_canonical_group_order() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		String js;
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = ViewsMixin.<strong class="jxr_keyword">class</strong>.getResourceAsStream(ViewsMixin.RIBBON_JS_RESOURCE)) {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			js = <strong class="jxr_keyword">new</strong> String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		}
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> m = java.util.regex.Pattern.compile(<span class="jxr_string">"const CANONICAL_GROUPS = &#92;&#92;[([^&#92;&#92;]]*)&#92;&#92;]"</span>).matcher(js);
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertTrue(m.find());
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> canonical = Arrays.stream(m.group(1).split(<span class="jxr_string">","</span>)).map(x -&gt; x.trim().replace(<span class="jxr_string">"\&quot;"</span>, <span class="jxr_string">""</span>)).toList();
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">var</strong> items = Ribbons.standard().create(RibbonItem.dialog(<span class="jxr_string">"c"</span>)).filter(RibbonItem.optionGroup(<span class="jxr_string">"f"</span>, RibbonItem.option(<span class="jxr_string">"a"</span>)))
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			.export(<span class="jxr_string">"excel"</span>).build();
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">int</strong> last = -1;
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> g : groups(items)) {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">int</strong> r = canonical.indexOf(g);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			assertTrue(r &gt;= 0, <span class="jxr_string">"group not canonical: "</span> + g);
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			assertTrue(r &gt;= last, <span class="jxr_string">"preset order disagrees with the runtime at group "</span> + g);
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			last = r;
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		}
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> }
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">var</strong> builder = Ribbons.standard().without(bad);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; builder.build(), bad);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			assertTrue(e.getMessage().contains(<span class="jxr_string">"collapse"</span>) &amp;&amp; e.getMessage().contains(<span class="jxr_string">"columns"</span>), <span class="jxr_string">"lists valid ids: "</span> + e.getMessage());
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	}
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@Test <strong class="jxr_keyword">void</strong> a08_refreshId_override_and_without_accepts_override() {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> items = Ribbons.standard().refreshId(<span class="jxr_string">"groom-refresh"</span>).build();
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertTrue(ids(items).contains(<span class="jxr_string">"groom-refresh"</span>));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertFalse(ids(Ribbons.standard().refreshId(<span class="jxr_string">"groom-refresh"</span>).without(<span class="jxr_string">"groom-refresh"</span>).build()).contains(<span class="jxr_string">"groom-refresh"</span>));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertFalse(ids(Ribbons.standard().without(<span class="jxr_string">"groom-refresh"</span>).refreshId(<span class="jxr_string">"groom-refresh"</span>).build()).contains(<span class="jxr_string">"groom-refresh"</span>));
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	@Test <strong class="jxr_keyword">void</strong> a09_refresh_has_page_group() {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">var</strong> items = Ribbons.standard().build();
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		assertEquals(<span class="jxr_string">"page"</span>, items.get(items.size() - 1).toMap().get(<span class="jxr_string">"group"</span>));
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	}
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@Test <strong class="jxr_keyword">void</strong> a10_every_item_has_an_id_and_validates() {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i : Ribbons.standard().export(<span class="jxr_string">"excel"</span>).build()) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			assertNotNull(i.toMap().get(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			RibbonItem.validate(i.toMap());
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	@Test <strong class="jxr_keyword">void</strong> a11_duplicate_id_between_custom_and_preset_<strong class="jxr_keyword">throws</strong>_at_tableSpec() {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> items = Ribbons.standard().create(RibbonItem.dialog(<span class="jxr_string">"refresh"</span>)).build();
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">var</strong> sut1 = TableSpec.create(<span class="jxr_string">"t"</span>);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; sut1.ribbon(items));
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@Test <strong class="jxr_keyword">void</strong> a12_tableSpec_ribbon_list_equals_varargs() {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">var</strong> items = Ribbons.standard().build();
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> a = TableSpec.create(<span class="jxr_string">"t"</span>).dataUrl(<span class="jxr_string">"/d"</span>).ribbon(items);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> b = TableSpec.create(<span class="jxr_string">"t"</span>).dataUrl(<span class="jxr_string">"/d"</span>).ribbon(items.toArray(RibbonItem[]::<strong class="jxr_keyword">new</strong>));
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		a.columns(Column.create(<span class="jxr_string">"x"</span>)); b.columns(Column.create(<span class="jxr_string">"x"</span>));
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertEquals(a.toCardBody(), b.toCardBody());
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@Test <strong class="jxr_keyword">void</strong> a13_preset_validates_in_a_table() {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertDoesNotThrow(() -&gt; TableSpec.create(<span class="jxr_string">"t"</span>).dataUrl(<span class="jxr_string">"/d"</span>).ribbon(Ribbons.standard().export(<span class="jxr_string">"excel"</span>).build()));
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	@Test <strong class="jxr_keyword">void</strong> z01_preset_order_matches_the_runtime_canonical_group_order() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		String js;
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = ViewsMixin.<strong class="jxr_keyword">class</strong>.getResourceAsStream(ViewsMixin.RIBBON_JS_RESOURCE)) {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			js = <strong class="jxr_keyword">new</strong> String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		}
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> m = java.util.regex.Pattern.compile(<span class="jxr_string">"const CANONICAL_GROUPS = &#92;&#92;[([^&#92;&#92;]]*)&#92;&#92;]"</span>).matcher(js);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertTrue(m.find());
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">var</strong> canonical = Arrays.stream(m.group(1).split(<span class="jxr_string">","</span>)).map(x -&gt; x.trim().replace(<span class="jxr_string">"\&quot;"</span>, <span class="jxr_string">""</span>)).toList();
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> items = Ribbons.standard().create(RibbonItem.dialog(<span class="jxr_string">"c"</span>)).filter(RibbonItem.optionGroup(<span class="jxr_string">"f"</span>, RibbonItem.option(<span class="jxr_string">"a"</span>)))
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			.export(<span class="jxr_string">"excel"</span>).build();
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">int</strong> last = -1;
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> g : groups(items)) {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">int</strong> r = canonical.indexOf(g);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			assertTrue(r &gt;= 0, <span class="jxr_string">"group not canonical: "</span> + g);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			assertTrue(r &gt;= last, <span class="jxr_string">"preset order disagrees with the runtime at group "</span> + g);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			last = r;
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

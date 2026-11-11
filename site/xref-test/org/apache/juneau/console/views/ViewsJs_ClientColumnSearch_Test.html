@@ -266,9 +266,9 @@
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		assertBean(report(), <span class="jxr_string">"popoverCommitClosed,popoverCommitRows,popoverCommitDraws"</span>, <span class="jxr_string">"true,[1,3],1"</span>);
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 	}
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	@Test <strong class="jxr_keyword">void</strong> d05_popover_bareLivePreview_andEscRevert() {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	@Test <strong class="jxr_keyword">void</strong> d05_popover_noLivePreview_andEscLeavesFilter() {
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		assertBean(report(), <span class="jxr_string">"popoverLiveRows,popoverLiveNative,popoverRevertRows,popoverRevertExpr"</span>,
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<span class="jxr_string">"[1],,[0,1,2,3],"</span>);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<span class="jxr_string">"[0,1,2,3],,[0,1,2,3],"</span>);
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 	}
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 	@Test <strong class="jxr_keyword">void</strong> d06_popover_utcNote_onlyOnTimestampColumns() {

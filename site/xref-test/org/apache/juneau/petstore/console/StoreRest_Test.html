@@ -80,16 +80,16 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Test <strong class="jxr_keyword">void</strong> a01_cardOrder() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertPage(page(client(), <span class="jxr_string">"/console/store"</span>)).isValid()
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			.hasCardOrder(<span class="jxr_string">"welcome"</span>, <span class="jxr_string">"stats"</span>, <span class="jxr_string">"revenue"</span>, <span class="jxr_string">"revenue-sw"</span>, <span class="jxr_string">"orders-sw"</span>, <span class="jxr_string">"pets-sw"</span>, <span class="jxr_string">"hours"</span>)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			.hasCardOrder(<span class="jxr_string">"welcome"</span>, <span class="jxr_string">"revenue"</span>, <span class="jxr_string">"store-sw"</span>)
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			.hasCard(<span class="jxr_string">"welcome"</span>, <span class="jxr_string">"html"</span>)
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			.hasCard(<span class="jxr_string">"stats"</span>, <span class="jxr_string">"datatables"</span>)
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			.hasCard(<span class="jxr_string">"revenue"</span>, <span class="jxr_string">"kpi"</span>)
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			.hasCardKey(<span class="jxr_string">"revenue"</span>, <span class="jxr_string">"/dataUrl"</span>, <span class="jxr_string">"/console/store/kpi/revenue"</span>)
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			.hasCard(<span class="jxr_string">"orders-trend"</span>, <span class="jxr_string">"chart"</span>)
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			.hasCard(<span class="jxr_string">"by-species"</span>, <span class="jxr_string">"chart"</span>)
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			.hasCard(<span class="jxr_string">"by-status"</span>, <span class="jxr_string">"chart"</span>)
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.hasCard(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"chart"</span>)
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.hasCard(<span class="jxr_string">"revenue-sw"</span>, <span class="jxr_string">"switcher"</span>).hasCard(<span class="jxr_string">"orders-sw"</span>, <span class="jxr_string">"switcher"</span>).hasCard(<span class="jxr_string">"pets-sw"</span>, <span class="jxr_string">"switcher"</span>)
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			.hasCard(<span class="jxr_string">"store-sw"</span>, <span class="jxr_string">"switcher"</span>).hasCardKey(<span class="jxr_string">"store-sw"</span>, <span class="jxr_string">"/style"</span>, <span class="jxr_string">"slider"</span>)
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			.hasCard(<span class="jxr_string">"stats"</span>, <span class="jxr_string">"datatables"</span>)
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			.hasCard(<span class="jxr_string">"revenue"</span>, <span class="jxr_string">"kpi"</span>)
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			.hasCardKey(<span class="jxr_string">"revenue"</span>, <span class="jxr_string">"/dataUrl"</span>, <span class="jxr_string">"/console/store/kpi/revenue"</span>)
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			.hasCard(<span class="jxr_string">"orders-trend"</span>, <span class="jxr_string">"chart"</span>)
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			.hasCard(<span class="jxr_string">"by-species"</span>, <span class="jxr_string">"chart"</span>)
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.hasCard(<span class="jxr_string">"by-status"</span>, <span class="jxr_string">"chart"</span>)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.hasCard(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"chart"</span>)
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  			.hasCard(<span class="jxr_string">"revenue-chart"</span>, <span class="jxr_string">"chart"</span>)
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			.hasCard(<span class="jxr_string">"hours"</span>, <span class="jxr_string">"html"</span>);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertContainsAll(page(client(), <span class="jxr_string">"/console/store"</span>), <span class="jxr_string">"/console/store/recent-orders"</span>, <span class="jxr_string">"/console/store/fragments/hours"</span>);
@@ -138,9 +138,9 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			.hasCardKey(<span class="jxr_string">"by-status"</span>, <span class="jxr_string">"/src"</span>, <span class="jxr_string">"/console/store/stats/status"</span>)
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 			.hasCardKey(<span class="jxr_string">"by-status"</span>, <span class="jxr_string">"/x/field"</span>, <span class="jxr_string">"status"</span>)
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 			.hasCardKey(<span class="jxr_string">"by-status"</span>, <span class="jxr_string">"/series/0/field"</span>, <span class="jxr_string">"count"</span>)
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			.hasCardKey(<span class="jxr_string">"revenue-sw"</span>, <span class="jxr_string">"/title"</span>, <span class="jxr_string">"Revenue, last 30 days"</span>)
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			.hasCardKey(<span class="jxr_string">"orders-sw"</span>, <span class="jxr_string">"/title"</span>, <span class="jxr_string">"Orders, last 30 days"</span>)
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			.hasCardKey(<span class="jxr_string">"pets-sw"</span>, <span class="jxr_string">"/title"</span>, <span class="jxr_string">"Pets"</span>)
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			.hasCardKey(<span class="jxr_string">"by-species"</span>, <span class="jxr_string">"/dataTab"</span>, <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			.hasCardKey(<span class="jxr_string">"by-status"</span>, <span class="jxr_string">"/dataTab"</span>, <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/dataTab"</span>, <strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 			.hasCardKey(<span class="jxr_string">"orders-trend"</span>, <span class="jxr_string">"/x/label"</span>, <span class="jxr_string">"Day"</span>)
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 			.hasCardKey(<span class="jxr_string">"orders-trend"</span>, <span class="jxr_string">"/series/0/label"</span>, <span class="jxr_string">"Placed"</span>)
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 			.hasCardKey(<span class="jxr_string">"orders-trend"</span>, <span class="jxr_string">"/series/1/label"</span>, <span class="jxr_string">"Delivered"</span>)
@@ -171,272 +171,279 @@
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> top : cards.elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"switcher"</span>.equals(top.getString(<span class="jxr_string">"type"</span>)))
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 				<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : top.getList(<span class="jxr_string">"views"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 				<strong class="jxr_keyword">if</strong> (! v.containsKey(<span class="jxr_string">"card"</span>) || ! <span class="jxr_string">"datatables"</span>.equals(v.getMap(<span class="jxr_string">"card"</span>).getString(<span class="jxr_string">"type"</span>)))
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 					<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 				<strong class="jxr_keyword">var</strong> card = v.getMap(<span class="jxr_string">"card"</span>);
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				<strong class="jxr_keyword">var</strong> t = card.getMap(<span class="jxr_string">"table"</span>);
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				<strong class="jxr_keyword">var</strong> row = list(json(), t.getString(<span class="jxr_string">"dataUrl"</span>)).getMap(0);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> col : t.getList(<span class="jxr_string">"columns"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 					assertTrue(row.containsKey(col.getString(<span class="jxr_string">"key"</span>)), card.getString(<span class="jxr_string">"id"</span>) + <span class="jxr_string">" column "</span> + col.getString(<span class="jxr_string">"key"</span>));
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 				checked.add(card.getString(<span class="jxr_string">"id"</span>));
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			}
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		}
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertEquals(List.of(<span class="jxr_string">"revenue-data"</span>, <span class="jxr_string">"orders-data"</span>), checked);
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	}
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * Asserts that row 0 of each chart card's {@code src} has every field the card reads.</em>
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * @return The chart card ids checked, in page order.</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<strong class="jxr_keyword">static</strong> List&lt;String&gt; assertChartFieldsInRows(MockRestClient c, JsonList cards) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">var</strong> checked = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> flat = <strong class="jxr_keyword">new</strong> ArrayList&lt;JsonMap&gt;();
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> top : cards.elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"switcher"</span>.equals(top.getString(<span class="jxr_string">"type"</span>))) {
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 				flat.add(top);
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 				<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			}
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : top.getList(<span class="jxr_string">"views"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				<strong class="jxr_keyword">if</strong> (v.containsKey(<span class="jxr_string">"card"</span>))
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 					flat.add(v.getMap(<span class="jxr_string">"card"</span>));
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 				<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> sec : v.getList(<span class="jxr_string">"sections"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 						flat.add(sec.getMap(<span class="jxr_string">"card"</span>));
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">var</strong> nested = <strong class="jxr_keyword">new</strong> ArrayList&lt;JsonMap&gt;();
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : top.getList(<span class="jxr_string">"views"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<strong class="jxr_keyword">if</strong> (v.containsKey(<span class="jxr_string">"card"</span>))
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 					nested.add(v.getMap(<span class="jxr_string">"card"</span>));
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> sec : v.getList(<span class="jxr_string">"sections"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 						nested.add(sec.getMap(<span class="jxr_string">"card"</span>));
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			}
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> card : nested) {
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 				<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"datatables"</span>.equals(card.getString(<span class="jxr_string">"type"</span>)))
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				<strong class="jxr_keyword">var</strong> t = card.getMap(<span class="jxr_string">"table"</span>);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				<strong class="jxr_keyword">var</strong> row = list(json(), t.getString(<span class="jxr_string">"dataUrl"</span>)).getMap(0);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> col : t.getList(<span class="jxr_string">"columns"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 					assertTrue(row.containsKey(col.getString(<span class="jxr_string">"key"</span>)), card.getString(<span class="jxr_string">"id"</span>) + <span class="jxr_string">" column "</span> + col.getString(<span class="jxr_string">"key"</span>));
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				checked.add(card.getString(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			}
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		}
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertEquals(List.of(<span class="jxr_string">"stats"</span>, <span class="jxr_string">"revenue-data"</span>, <span class="jxr_string">"orders-data"</span>), checked);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * Asserts that row 0 of each chart card's {@code src} has every field the card reads.</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * @return The chart card ids checked, in page order.</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<strong class="jxr_keyword">static</strong> List&lt;String&gt; assertChartFieldsInRows(MockRestClient c, JsonList cards) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">var</strong> checked = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">var</strong> flat = <strong class="jxr_keyword">new</strong> ArrayList&lt;JsonMap&gt;();
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> top : cards.elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"switcher"</span>.equals(top.getString(<span class="jxr_string">"type"</span>))) {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 				flat.add(top);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 				<strong class="jxr_keyword">continue</strong>;
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 			}
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		}
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : flat) {
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"chart"</span>.equals(o.getString(<span class="jxr_string">"type"</span>)))
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">var</strong> id = o.getString(<span class="jxr_string">"id"</span>);
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<strong class="jxr_keyword">var</strong> fields = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">if</strong> (o.containsKey(<span class="jxr_string">"x"</span>))
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 				fields.add(o.getMap(<span class="jxr_string">"x"</span>).getString(<span class="jxr_string">"field"</span>));
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			<strong class="jxr_keyword">if</strong> (o.containsKey(<span class="jxr_string">"series"</span>))
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : o.getList(<span class="jxr_string">"series"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 					fields.add(x.getString(<span class="jxr_string">"field"</span>));
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : List.of(<span class="jxr_string">"label"</span>, <span class="jxr_string">"value"</span>))
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 				<strong class="jxr_keyword">if</strong> (o.containsKey(k))
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 					fields.add(o.getString(k));
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">if</strong> (o.containsKey(<span class="jxr_string">"helper"</span>) &amp;&amp; <span class="jxr_string">"treemap"</span>.equals(o.getMap(<span class="jxr_string">"helper"</span>).getString(<span class="jxr_string">"kind"</span>))) {
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 				<strong class="jxr_keyword">var</strong> h = o.getMap(<span class="jxr_string">"helper"</span>);
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 				fields.add(h.getString(<span class="jxr_string">"label"</span>));
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> g : h.getList(<span class="jxr_string">"groupBy"</span>))
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 					fields.add(String.valueOf(g));
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> g : h.getList(<span class="jxr_string">"tileFields"</span>))
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 					fields.add(String.valueOf(g));
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 				<strong class="jxr_keyword">if</strong> (h.containsKey(<span class="jxr_string">"color"</span>))
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 					fields.add(h.getMap(<span class="jxr_string">"color"</span>).getString(<span class="jxr_string">"field"</span>));
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			}
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			assertFalse(fields.isEmpty(), () -&gt; id + <span class="jxr_string">" names no fields"</span>);
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<strong class="jxr_keyword">var</strong> row = list(c, o.getString(<span class="jxr_string">"src"</span>)).getMap(0);
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : fields)
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 				assertTrue(row.containsKey(f), () -&gt; id + <span class="jxr_string">" reads '"</span> + f + <span class="jxr_string">"' but "</span> + o.getString(<span class="jxr_string">"src"</span>) + <span class="jxr_string">" rows have "</span> + row.keySet());
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			checked.add(id);
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		}
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">return</strong> checked;
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	}
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<em class="jxr_javadoccomment">/** {@code assertBean} renders a null property as {@code &lt;null&gt;}; other tests create pets without a species. */</em>
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String nullToMarker(String s) {
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">return</strong> s == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"&lt;null&gt;"</span> : s;
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	}
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	@Test <strong class="jxr_keyword">void</strong> c01_statsPets_returnsIdNameSpeciesStatus_forEveryPet() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">var</strong> c = json();
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/stats/pets"</span>);
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">var</strong> pets = list(c, <span class="jxr_string">"/petstore/pets"</span>);
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertSize(pets.size(), rows);
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertTrue(pets.size() &gt; 0);
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">var</strong> byId = <strong class="jxr_keyword">new</strong> HashMap&lt;Long,JsonMap&gt;();
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : rows.elements(JsonMap.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			byId.put(r.getLong(<span class="jxr_string">"id"</span>), r);
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertEquals(pets.size(), byId.size());
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : pets.elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<strong class="jxr_keyword">var</strong> r = byId.get(p.getLong(<span class="jxr_string">"id"</span>));
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			assertNotNull(r, () -&gt; <span class="jxr_string">"no row for pet "</span> + p.getLong(<span class="jxr_string">"id"</span>));
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(List.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"name"</span>, <span class="jxr_string">"species"</span>, <span class="jxr_string">"status"</span>)), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(r.keySet()));
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			assertBean(r, <span class="jxr_string">"name,species,status"</span>, p.getString(<span class="jxr_string">"name"</span>) + <span class="jxr_string">","</span> + nullToMarker(p.getString(<span class="jxr_string">"species"</span>)) + <span class="jxr_string">","</span> + nullToMarker(p.getString(<span class="jxr_string">"status"</span>)));
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		}
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	}
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	@Test <strong class="jxr_keyword">void</strong> c02_petsMap_isTreemap_onClickActionIsPetEditDialog() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertPage(page(client(), <span class="jxr_string">"/console/store"</span>))
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			.hasCard(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"chart"</span>)
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/helper/kind"</span>, <span class="jxr_string">"treemap"</span>)
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/src"</span>, <span class="jxr_string">"/console/store/stats/pets"</span>)
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/helper/groupBy/0"</span>, <span class="jxr_string">"species"</span>)
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/helper/groupBy/1"</span>, <span class="jxr_string">"status"</span>)
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/helper/label"</span>, <span class="jxr_string">"name"</span>)
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/helper/tileFields/0"</span>, <span class="jxr_string">"id"</span>)
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/on/click"</span>, <span class="jxr_string">"pets-map.click"</span>)
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/id"</span>, <span class="jxr_string">"edit"</span>)
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/present"</span>, <span class="jxr_string">"dialog"</span>)
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/form"</span>, <span class="jxr_string">"/console/pets/form?id={id}"</span>)
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/endpoint"</span>, <span class="jxr_string">"/console/pets/{id}"</span>)
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/method"</span>, <span class="jxr_string">"PUT"</span>)
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/onSuccess"</span>, <span class="jxr_string">"redraw"</span>);
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	}
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	@Test <strong class="jxr_keyword">void</strong> c02b_ordersTrend_clickLandsOnTheOrdersPageForThatDay() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> path : List.of(<span class="jxr_string">"/console/store"</span>, <span class="jxr_string">"/console/store?builder"</span>))
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			assertPage(page(client(), path))
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				.hasCard(<span class="jxr_string">"orders-trend"</span>, <span class="jxr_string">"chart"</span>)
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 				.hasCardKey(<span class="jxr_string">"orders-trend"</span>, <span class="jxr_string">"/onClick/href"</span>, <span class="jxr_string">"/console/orders?state=day({day})"</span>);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : top.getList(<span class="jxr_string">"views"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 				<strong class="jxr_keyword">if</strong> (v.containsKey(<span class="jxr_string">"card"</span>))
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 					flat.add(v.getMap(<span class="jxr_string">"card"</span>));
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> sec : v.getList(<span class="jxr_string">"sections"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 						flat.add(sec.getMap(<span class="jxr_string">"card"</span>));
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			}
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		}
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : flat) {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"chart"</span>.equals(o.getString(<span class="jxr_string">"type"</span>)))
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<strong class="jxr_keyword">var</strong> id = o.getString(<span class="jxr_string">"id"</span>);
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">var</strong> fields = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">if</strong> (o.containsKey(<span class="jxr_string">"x"</span>))
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 				fields.add(o.getMap(<span class="jxr_string">"x"</span>).getString(<span class="jxr_string">"field"</span>));
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">if</strong> (o.containsKey(<span class="jxr_string">"series"</span>))
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : o.getList(<span class="jxr_string">"series"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 					fields.add(x.getString(<span class="jxr_string">"field"</span>));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : List.of(<span class="jxr_string">"label"</span>, <span class="jxr_string">"value"</span>))
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 				<strong class="jxr_keyword">if</strong> (o.containsKey(k))
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 					fields.add(o.getString(k));
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<strong class="jxr_keyword">if</strong> (o.containsKey(<span class="jxr_string">"helper"</span>) &amp;&amp; <span class="jxr_string">"treemap"</span>.equals(o.getMap(<span class="jxr_string">"helper"</span>).getString(<span class="jxr_string">"kind"</span>))) {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 				<strong class="jxr_keyword">var</strong> h = o.getMap(<span class="jxr_string">"helper"</span>);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 				fields.add(h.getString(<span class="jxr_string">"label"</span>));
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> g : h.getList(<span class="jxr_string">"groupBy"</span>))
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 					fields.add(String.valueOf(g));
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> g : h.getList(<span class="jxr_string">"tileFields"</span>))
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 					fields.add(String.valueOf(g));
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 				<strong class="jxr_keyword">if</strong> (h.containsKey(<span class="jxr_string">"color"</span>))
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 					fields.add(h.getMap(<span class="jxr_string">"color"</span>).getString(<span class="jxr_string">"field"</span>));
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			}
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			assertFalse(fields.isEmpty(), () -&gt; id + <span class="jxr_string">" names no fields"</span>);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">var</strong> row = list(c, o.getString(<span class="jxr_string">"src"</span>)).getMap(0);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : fields)
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 				assertTrue(row.containsKey(f), () -&gt; id + <span class="jxr_string">" reads '"</span> + f + <span class="jxr_string">"' but "</span> + o.getString(<span class="jxr_string">"src"</span>) + <span class="jxr_string">" rows have "</span> + row.keySet());
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			checked.add(id);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		}
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">return</strong> checked;
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<em class="jxr_javadoccomment">/** {@code assertBean} renders a null property as {@code &lt;null&gt;}; other tests create pets without a species. */</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String nullToMarker(String s) {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">return</strong> s == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"&lt;null&gt;"</span> : s;
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	}
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	@Test <strong class="jxr_keyword">void</strong> c01_statsPets_returnsIdNameSpeciesStatus_forEveryPet() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">var</strong> c = json();
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/stats/pets"</span>);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">var</strong> pets = list(c, <span class="jxr_string">"/petstore/pets"</span>);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		assertSize(pets.size(), rows);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		assertTrue(pets.size() &gt; 0);
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> byId = <strong class="jxr_keyword">new</strong> HashMap&lt;Long,JsonMap&gt;();
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : rows.elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			byId.put(r.getLong(<span class="jxr_string">"id"</span>), r);
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		assertEquals(pets.size(), byId.size());
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : pets.elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">var</strong> r = byId.get(p.getLong(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			assertNotNull(r, () -&gt; <span class="jxr_string">"no row for pet "</span> + p.getLong(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(List.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"name"</span>, <span class="jxr_string">"species"</span>, <span class="jxr_string">"status"</span>)), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(r.keySet()));
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			assertBean(r, <span class="jxr_string">"name,species,status"</span>, p.getString(<span class="jxr_string">"name"</span>) + <span class="jxr_string">","</span> + nullToMarker(p.getString(<span class="jxr_string">"species"</span>)) + <span class="jxr_string">","</span> + nullToMarker(p.getString(<span class="jxr_string">"status"</span>)));
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		}
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	}
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	@Test <strong class="jxr_keyword">void</strong> c02_petsMap_isTreemap_onClickActionIsPetEditDialog() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertPage(page(client(), <span class="jxr_string">"/console/store"</span>))
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			.hasCard(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"chart"</span>)
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/helper/kind"</span>, <span class="jxr_string">"treemap"</span>)
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/src"</span>, <span class="jxr_string">"/console/store/stats/pets"</span>)
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/helper/groupBy/0"</span>, <span class="jxr_string">"species"</span>)
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/helper/groupBy/1"</span>, <span class="jxr_string">"status"</span>)
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/helper/label"</span>, <span class="jxr_string">"name"</span>)
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/helper/tileFields/0"</span>, <span class="jxr_string">"id"</span>)
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/on/click"</span>, <span class="jxr_string">"pets-map.click"</span>)
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/id"</span>, <span class="jxr_string">"edit"</span>)
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/present"</span>, <span class="jxr_string">"dialog"</span>)
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/form"</span>, <span class="jxr_string">"/console/pets/form?id={id}"</span>)
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/endpoint"</span>, <span class="jxr_string">"/console/pets/{id}"</span>)
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/method"</span>, <span class="jxr_string">"PUT"</span>)
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/onSuccess"</span>, <span class="jxr_string">"redraw"</span>);
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	@Test <strong class="jxr_keyword">void</strong> c03_petsMap_builderTwin_redrawsOnSuccess_whilePetsTableMergesRow() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		assertPage(page(client(), <span class="jxr_string">"/console/store?builder"</span>))
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/onSuccess"</span>, <span class="jxr_string">"redraw"</span>)
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/present"</span>, <span class="jxr_string">"dialog"</span>);
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		assertPage(page(client(), <span class="jxr_string">"/console/pets?builder"</span>))
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			.hasCardKey(<span class="jxr_string">"pets"</span>, <span class="jxr_string">"/table/rowActions/0/onSuccess"</span>, <span class="jxr_string">"mergeRow"</span>);
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	}
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	@Test <strong class="jxr_keyword">void</strong> b01_dailyStatsCoverThirtyDays() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">var</strong> rows = list(json(), <span class="jxr_string">"/console/store/stats/daily"</span>);
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertSize(30, rows);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertBean(rows.getMap(29), <span class="jxr_string">"day"</span>, <span class="jxr_string">"2026-10-01"</span>); <em class="jxr_comment">// DEFAULT_CLOCK day, oldest first</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		assertBean(rows.getMap(0), <span class="jxr_string">"day"</span>, <span class="jxr_string">"2026-09-02"</span>);
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		assertTrue(rows.getMap(0).containsKey(<span class="jxr_string">"placed"</span>) &amp;&amp; rows.getMap(0).containsKey(<span class="jxr_string">"delivered"</span>));
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	}
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	@Test <strong class="jxr_keyword">void</strong> b02_bySpeciesSumsToPetCount() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">var</strong> c = json();
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/stats/species"</span>);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		assertEquals(Species.values().length, rows.size());
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		assertBean(rows.getMap(0), <span class="jxr_string">"species"</span>, Species.values()[0].name());
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertEquals(live(c, <span class="jxr_string">"species"</span>).values().stream().mapToInt(Integer::intValue).sum(), sum(rows));
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		assertEquals(live(c, <span class="jxr_string">"species"</span>), counts(rows, <span class="jxr_string">"species"</span>));
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	}
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	@Test <strong class="jxr_keyword">void</strong> b03_byStatusSumsToPetCount() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">var</strong> c = json();
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/stats/status"</span>);
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		assertEquals(PetStatus.values().length, rows.size());
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertEquals(live(c, <span class="jxr_string">"status"</span>), counts(rows, <span class="jxr_string">"status"</span>));
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		assertEquals(list(c, <span class="jxr_string">"/petstore/pets"</span>).size(), sum(rows));
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	}
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;?&gt; stripItems(String path) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">var</strong> card = assertPage(page(client(), path)).card(<span class="jxr_string">"stats"</span>);
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">return</strong> (List&lt;?&gt;)((Map&lt;?,?&gt;)((Map&lt;?,?&gt;)card.get(<span class="jxr_string">"table"</span>)).get(<span class="jxr_string">"quickStats"</span>)).get(<span class="jxr_string">"items"</span>);
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	}
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">long</strong> withStatus(JsonList rows, String status) {
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">return</strong> StreamSupport.stream(rows.elements(JsonMap.<strong class="jxr_keyword">class</strong>).spliterator(), false).filter(x -&gt; status.equals(x.getString(<span class="jxr_string">"status"</span>))).count();
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	}
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	@Test <strong class="jxr_keyword">void</strong> b04_quickStatsMatchTheStore() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> c = json();
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">var</strong> html = page(client(), <span class="jxr_string">"/console/store"</span>);
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">var</strong> sold = StreamSupport.stream(list(c, <span class="jxr_string">"/petstore/pets"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>).spliterator(), false).filter(x -&gt; <span class="jxr_string">"SOLD"</span>.equals(x.getString(<span class="jxr_string">"status"</span>))).count();
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		assertContainsAll(html, <span class="jxr_string">"\&quot;id\&quot;:\&quot;sold\&quot;"</span>, <span class="jxr_string">"\&quot;value\&quot;:"</span> + sold, <span class="jxr_string">"\&quot;id\&quot;:\&quot;available\&quot;"</span>);
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">var</strong> pets = list(c, <span class="jxr_string">"/petstore/pets"</span>);
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">var</strong> total = pets.size();
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">var</strong> available = withStatus(pets, <span class="jxr_string">"AVAILABLE"</span>);
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">var</strong> orders = list(c, <span class="jxr_string">"/petstore/orders"</span>);
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">var</strong> placed = withStatus(orders, <span class="jxr_string">"PLACED"</span>);
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">var</strong> approved = withStatus(orders, <span class="jxr_string">"APPROVED"</span>);
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">var</strong> delivered = withStatus(orders, <span class="jxr_string">"DELIVERED"</span>);
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		assertTrue(total &gt; 0);
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : List.of(html, page(client(), <span class="jxr_string">"/console/store?builder"</span>))) <em class="jxr_comment">// the FTL page and its builder twin</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			assertContainsAll(h, <span class="jxr_string">"\&quot;id\&quot;:\&quot;orders\&quot;,\&quot;type\&quot;:\&quot;segmented\&quot;"</span>,
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 				<span class="jxr_string">"\&quot;label\&quot;:\&quot;Placed\&quot;,\&quot;count\&quot;:"</span> + placed + <span class="jxr_string">"}"</span>,
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 				<span class="jxr_string">"\&quot;label\&quot;:\&quot;Approved\&quot;,\&quot;count\&quot;:"</span> + approved + <span class="jxr_string">",\&quot;tone\&quot;:\&quot;info\&quot;"</span>,
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 				<span class="jxr_string">"\&quot;label\&quot;:\&quot;Delivered\&quot;,\&quot;count\&quot;:"</span> + delivered + <span class="jxr_string">",\&quot;tone\&quot;:\&quot;success\&quot;"</span>,
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 				<span class="jxr_string">"\&quot;id\&quot;:\&quot;inventory\&quot;,\&quot;type\&quot;:\&quot;meter\&quot;"</span>,
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 				<span class="jxr_string">"\&quot;value\&quot;:"</span> + available + <span class="jxr_string">",\&quot;max\&quot;:"</span> + total,
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 				<span class="jxr_string">"\&quot;text\&quot;:\&quot;"</span> + available + <span class="jxr_string">" of "</span> + total + <span class="jxr_string">"\&quot;"</span>);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pg : List.of(<span class="jxr_string">"/console/store"</span>, <span class="jxr_string">"/console/store?builder"</span>)) {
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">var</strong> segs = (List&lt;?&gt;)((Map&lt;?,?&gt;)stripItems(pg).get(3)).get(<span class="jxr_string">"segments"</span>);
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			<strong class="jxr_keyword">var</strong> got = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : segs) {
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 				<strong class="jxr_keyword">var</strong> m = (Map&lt;?,?&gt;)o;
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 				got.add(m.get(<span class="jxr_string">"label"</span>) + <span class="jxr_string">"="</span> + m.get(<span class="jxr_string">"count"</span>) + <span class="jxr_string">"/"</span> + m.get(<span class="jxr_string">"tone"</span>));
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			}
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			assertEquals(List.of(<span class="jxr_string">"Placed="</span> + placed + <span class="jxr_string">"/null"</span>, <span class="jxr_string">"Approved="</span> + approved + <span class="jxr_string">"/info"</span>, <span class="jxr_string">"Delivered="</span> + delivered + <span class="jxr_string">"/success"</span>), got, pg);
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		}
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/recent-orders"</span>);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		assertSize(10, rows);
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertTrue(rows.getMap(0).getString(<span class="jxr_string">"shipDate"</span>).compareTo(rows.getMap(9).getString(<span class="jxr_string">"shipDate"</span>)) &gt;= 0);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	@Test <strong class="jxr_keyword">void</strong> b05_hoursFragmentIsMarkupOnly() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">var</strong> html = client().get(<span class="jxr_string">"/console/store/fragments/hours"</span>).run().assertStatus(200).getContent().asString();
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		assertContains(<span class="jxr_string">"jc-prose"</span>, html);
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertNotContains(() -&gt; html, <span class="jxr_string">"&lt;html"</span>, html);
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertNotContains(() -&gt; html, <span class="jxr_string">"juneau-page"</span>, html);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	@Test <strong class="jxr_keyword">void</strong> c02b_ordersTrend_clickLandsOnTheOrdersPageForThatDay() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> path : List.of(<span class="jxr_string">"/console/store"</span>, <span class="jxr_string">"/console/store?builder"</span>))
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			assertPage(page(client(), path))
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 				.hasCard(<span class="jxr_string">"orders-trend"</span>, <span class="jxr_string">"chart"</span>)
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 				.hasCardKey(<span class="jxr_string">"orders-trend"</span>, <span class="jxr_string">"/onClick/href"</span>, <span class="jxr_string">"/console/orders?state=day({day})"</span>);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	}
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	@Test <strong class="jxr_keyword">void</strong> c03_petsMap_builderTwin_redrawsOnSuccess_whilePetsTableMergesRow() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		assertPage(page(client(), <span class="jxr_string">"/console/store?builder"</span>))
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/onSuccess"</span>, <span class="jxr_string">"redraw"</span>)
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			.hasCardKey(<span class="jxr_string">"pets-map"</span>, <span class="jxr_string">"/onClick/action/present"</span>, <span class="jxr_string">"dialog"</span>);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertPage(page(client(), <span class="jxr_string">"/console/pets?builder"</span>))
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			.hasCardKey(<span class="jxr_string">"pets"</span>, <span class="jxr_string">"/table/rowActions/0/onSuccess"</span>, <span class="jxr_string">"mergeRow"</span>);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	@Test <strong class="jxr_keyword">void</strong> b01_dailyStatsCoverThirtyDays() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> rows = list(json(), <span class="jxr_string">"/console/store/stats/daily"</span>);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		assertSize(30, rows);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		assertBean(rows.getMap(29), <span class="jxr_string">"day"</span>, <span class="jxr_string">"2026-10-01"</span>); <em class="jxr_comment">// DEFAULT_CLOCK day, oldest first</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		assertBean(rows.getMap(0), <span class="jxr_string">"day"</span>, <span class="jxr_string">"2026-09-02"</span>);
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		assertTrue(rows.getMap(0).containsKey(<span class="jxr_string">"placed"</span>) &amp;&amp; rows.getMap(0).containsKey(<span class="jxr_string">"delivered"</span>));
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	@Test <strong class="jxr_keyword">void</strong> b02_bySpeciesSumsToPetCount() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">var</strong> c = json();
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/stats/species"</span>);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		assertEquals(Species.values().length, rows.size());
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		assertBean(rows.getMap(0), <span class="jxr_string">"species"</span>, Species.values()[0].name());
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		assertEquals(live(c, <span class="jxr_string">"species"</span>).values().stream().mapToInt(Integer::intValue).sum(), sum(rows));
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertEquals(live(c, <span class="jxr_string">"species"</span>), counts(rows, <span class="jxr_string">"species"</span>));
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	}
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	@Test <strong class="jxr_keyword">void</strong> b03_byStatusSumsToPetCount() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">var</strong> c = json();
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/stats/status"</span>);
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		assertEquals(PetStatus.values().length, rows.size());
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		assertEquals(live(c, <span class="jxr_string">"status"</span>), counts(rows, <span class="jxr_string">"status"</span>));
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		assertEquals(list(c, <span class="jxr_string">"/petstore/pets"</span>).size(), sum(rows));
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	}
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;?&gt; stripItems(String path) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">var</strong> card = assertPage(page(client(), path)).card(<span class="jxr_string">"stats"</span>);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">return</strong> (List&lt;?&gt;)((Map&lt;?,?&gt;)((Map&lt;?,?&gt;)card.get(<span class="jxr_string">"table"</span>)).get(<span class="jxr_string">"quickStats"</span>)).get(<span class="jxr_string">"items"</span>);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	}
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">long</strong> withStatus(JsonList rows, String status) {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">return</strong> StreamSupport.stream(rows.elements(JsonMap.<strong class="jxr_keyword">class</strong>).spliterator(), false).filter(x -&gt; status.equals(x.getString(<span class="jxr_string">"status"</span>))).count();
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	}
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	@Test <strong class="jxr_keyword">void</strong> b04_quickStatsMatchTheStore() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">var</strong> c = json();
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">var</strong> html = page(client(), <span class="jxr_string">"/console/store"</span>);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">var</strong> sold = StreamSupport.stream(list(c, <span class="jxr_string">"/petstore/pets"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>).spliterator(), false).filter(x -&gt; <span class="jxr_string">"SOLD"</span>.equals(x.getString(<span class="jxr_string">"status"</span>))).count();
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		assertContainsAll(html, <span class="jxr_string">"\&quot;id\&quot;:\&quot;sold\&quot;"</span>, <span class="jxr_string">"\&quot;value\&quot;:"</span> + sold, <span class="jxr_string">"\&quot;id\&quot;:\&quot;available\&quot;"</span>);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">var</strong> pets = list(c, <span class="jxr_string">"/petstore/pets"</span>);
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">var</strong> total = pets.size();
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">var</strong> available = withStatus(pets, <span class="jxr_string">"AVAILABLE"</span>);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">var</strong> orders = list(c, <span class="jxr_string">"/petstore/orders"</span>);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<strong class="jxr_keyword">var</strong> placed = withStatus(orders, <span class="jxr_string">"PLACED"</span>);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">var</strong> approved = withStatus(orders, <span class="jxr_string">"APPROVED"</span>);
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">var</strong> delivered = withStatus(orders, <span class="jxr_string">"DELIVERED"</span>);
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		assertTrue(total &gt; 0);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : List.of(html, page(client(), <span class="jxr_string">"/console/store?builder"</span>))) <em class="jxr_comment">// the FTL page and its builder twin</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			assertContainsAll(h, <span class="jxr_string">"\&quot;id\&quot;:\&quot;orders\&quot;,\&quot;type\&quot;:\&quot;segmented\&quot;"</span>,
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 				<span class="jxr_string">"\&quot;label\&quot;:\&quot;Placed\&quot;,\&quot;count\&quot;:"</span> + placed + <span class="jxr_string">"}"</span>,
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 				<span class="jxr_string">"\&quot;label\&quot;:\&quot;Approved\&quot;,\&quot;count\&quot;:"</span> + approved + <span class="jxr_string">",\&quot;tone\&quot;:\&quot;info\&quot;"</span>,
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 				<span class="jxr_string">"\&quot;label\&quot;:\&quot;Delivered\&quot;,\&quot;count\&quot;:"</span> + delivered + <span class="jxr_string">",\&quot;tone\&quot;:\&quot;success\&quot;"</span>,
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 				<span class="jxr_string">"\&quot;id\&quot;:\&quot;inventory\&quot;,\&quot;type\&quot;:\&quot;meter\&quot;"</span>,
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 				<span class="jxr_string">"\&quot;value\&quot;:"</span> + available + <span class="jxr_string">",\&quot;max\&quot;:"</span> + total,
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 				<span class="jxr_string">"\&quot;text\&quot;:\&quot;"</span> + available + <span class="jxr_string">" of "</span> + total + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pg : List.of(<span class="jxr_string">"/console/store"</span>, <span class="jxr_string">"/console/store?builder"</span>)) {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			<strong class="jxr_keyword">var</strong> segs = (List&lt;?&gt;)((Map&lt;?,?&gt;)stripItems(pg).get(3)).get(<span class="jxr_string">"segments"</span>);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<strong class="jxr_keyword">var</strong> got = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : segs) {
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 				<strong class="jxr_keyword">var</strong> m = (Map&lt;?,?&gt;)o;
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 				got.add(m.get(<span class="jxr_string">"label"</span>) + <span class="jxr_string">"="</span> + m.get(<span class="jxr_string">"count"</span>) + <span class="jxr_string">"/"</span> + m.get(<span class="jxr_string">"tone"</span>));
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			}
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			assertEquals(List.of(<span class="jxr_string">"Placed="</span> + placed + <span class="jxr_string">"/null"</span>, <span class="jxr_string">"Approved="</span> + approved + <span class="jxr_string">"/info"</span>, <span class="jxr_string">"Delivered="</span> + delivered + <span class="jxr_string">"/success"</span>), got, pg);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		}
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/recent-orders"</span>);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertSize(10, rows);
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertTrue(rows.getMap(0).getString(<span class="jxr_string">"shipDate"</span>).compareTo(rows.getMap(9).getString(<span class="jxr_string">"shipDate"</span>)) &gt;= 0);
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 	}
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	@Test <strong class="jxr_keyword">void</strong> b06_revenueToday() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<em class="jxr_comment">// Deliver one priced pet today so a tile stuck at zero cannot pass.</em>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">var</strong> store = store();
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">var</strong> pet = store.getPets().stream().filter(x -&gt; x.getPrice() &gt; 0).findFirst().orElseThrow();
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">var</strong> today = LocalDate.ofInstant(store.clock().instant(), ZoneOffset.UTC).toString();
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">var</strong> pinned = store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.DELIVERED).setShipDate(today), <span class="jxr_string">"test"</span>);
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">var</strong> c = json();
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			<strong class="jxr_keyword">var</strong> daily = list(c, <span class="jxr_string">"/console/store/stats/daily"</span>);
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			assertEquals(today, daily.getMap(daily.size() - 1).getString(<span class="jxr_string">"day"</span>));
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<strong class="jxr_keyword">var</strong> prices = <strong class="jxr_keyword">new</strong> HashMap&lt;Long,Double&gt;();
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : list(c, <span class="jxr_string">"/petstore/pets"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 				prices.put(p.getLong(<span class="jxr_string">"id"</span>), p.get(<span class="jxr_string">"price"</span>, Double.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			<strong class="jxr_keyword">var</strong> expected = 0d;
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			<strong class="jxr_keyword">var</strong> delivered = 0;
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : list(c, <span class="jxr_string">"/petstore/orders"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"DELIVERED"</span>.equals(o.getString(<span class="jxr_string">"status"</span>)) &amp;&amp; today.equals(o.getString(<span class="jxr_string">"shipDate"</span>))) {
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 					expected += prices.getOrDefault(o.getLong(<span class="jxr_string">"petId"</span>), 0d);
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 					delivered++;
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 				}
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			}
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			assertTrue(expected &gt;= pet.getPrice() - 0.001, () -&gt; <span class="jxr_string">"pinned order missing from the expected total"</span>);
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			assertTrue(expected &gt; 0);
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			assertEquals(daily.getMap(daily.size() - 1).getInt(<span class="jxr_string">"delivered"</span>), delivered);
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			<strong class="jxr_keyword">var</strong> kpi = <strong class="jxr_keyword">new</strong> JsonMap(c.get(<span class="jxr_string">"/console/store/kpi/revenue"</span>).run().assertStatus(200).getContent().asString());
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 			assertBean(kpi, <span class="jxr_string">"label,unit"</span>, <span class="jxr_string">"Revenue today,USD"</span>);
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			assertEquals(Math.round(expected * 100) / 100d, kpi.get(<span class="jxr_string">"value"</span>, Double.<strong class="jxr_keyword">class</strong>), 0.001);
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			store.deleteOrder(pinned.getId(), <span class="jxr_string">"test"</span>);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		}
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	@Test <strong class="jxr_keyword">void</strong> d01_revenueFeed() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<em class="jxr_comment">// Deliver one priced pet today and one a few days back, plus a placed order that must not count.</em>
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">var</strong> store = store();
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">var</strong> pet = store.getPets().stream().filter(x -&gt; x.getPrice() &gt; 0).findFirst().orElseThrow();
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<strong class="jxr_keyword">var</strong> today = LocalDate.ofInstant(store.clock().instant(), ZoneOffset.UTC);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">var</strong> earlier = today.minusDays(3).toString();
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">var</strong> made = <strong class="jxr_keyword">new</strong> ArrayList&lt;Long&gt;();
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		made.add(store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.DELIVERED).setShipDate(today.toString()), <span class="jxr_string">"test"</span>).getId());
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		made.add(store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.DELIVERED).setShipDate(earlier), <span class="jxr_string">"test"</span>).getId());
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		made.add(store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.PLACED).setShipDate(earlier), <span class="jxr_string">"test"</span>).getId());
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<strong class="jxr_keyword">var</strong> c = json();
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/stats/revenue"</span>);
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			assertSize(30, rows);
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			assertEquals(today.toString(), rows.getMap(29).getString(<span class="jxr_string">"day"</span>));
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			assertEquals(today.minusDays(29).toString(), rows.getMap(0).getString(<span class="jxr_string">"day"</span>));
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			<strong class="jxr_keyword">var</strong> prices = <strong class="jxr_keyword">new</strong> HashMap&lt;Long,Double&gt;();
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : list(c, <span class="jxr_string">"/petstore/pets"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 				prices.put(p.getLong(<span class="jxr_string">"id"</span>), p.get(<span class="jxr_string">"price"</span>, Double.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">var</strong> expected = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Double&gt;();
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : list(c, <span class="jxr_string">"/petstore/orders"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"DELIVERED"</span>.equals(o.getString(<span class="jxr_string">"status"</span>)) &amp;&amp; prices.containsKey(o.getLong(<span class="jxr_string">"petId"</span>)))
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 					expected.merge(o.getString(<span class="jxr_string">"shipDate"</span>), prices.get(o.getLong(<span class="jxr_string">"petId"</span>)), Double::sum);
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : rows.elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 				assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(List.of(<span class="jxr_string">"day"</span>, <span class="jxr_string">"revenue"</span>)), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(r.keySet()));
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 				assertEquals(Math.round(expected.getOrDefault(r.getString(<span class="jxr_string">"day"</span>), 0d) * 100) / 100d, r.get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>), 0.001, r.getString(<span class="jxr_string">"day"</span>));
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			}
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			assertTrue(rows.getMap(29).get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>) &gt;= pet.getPrice() - 0.001);
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			assertTrue(rows.getMap(26).get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>) &gt;= pet.getPrice() - 0.001);
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> id : made)
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 				store.deleteOrder(id, <span class="jxr_string">"test"</span>);
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		}
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	}
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> }
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	@Test <strong class="jxr_keyword">void</strong> b05_hoursFragmentIsMarkupOnly() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">var</strong> html = client().get(<span class="jxr_string">"/console/store/fragments/hours"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertContains(<span class="jxr_string">"jc-prose"</span>, html);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		assertNotContains(() -&gt; html, <span class="jxr_string">"&lt;html"</span>, html);
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		assertNotContains(() -&gt; html, <span class="jxr_string">"juneau-page"</span>, html);
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	}
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	@Test <strong class="jxr_keyword">void</strong> b06_revenueToday() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<em class="jxr_comment">// Deliver one priced pet today so a tile stuck at zero cannot pass.</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">var</strong> store = store();
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">var</strong> pet = store.getPets().stream().filter(x -&gt; x.getPrice() &gt; 0).findFirst().orElseThrow();
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">var</strong> today = LocalDate.ofInstant(store.clock().instant(), ZoneOffset.UTC).toString();
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">var</strong> pinned = store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.DELIVERED).setShipDate(today), <span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			<strong class="jxr_keyword">var</strong> c = json();
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			<strong class="jxr_keyword">var</strong> daily = list(c, <span class="jxr_string">"/console/store/stats/daily"</span>);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			assertEquals(today, daily.getMap(daily.size() - 1).getString(<span class="jxr_string">"day"</span>));
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			<strong class="jxr_keyword">var</strong> prices = <strong class="jxr_keyword">new</strong> HashMap&lt;Long,Double&gt;();
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : list(c, <span class="jxr_string">"/petstore/pets"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 				prices.put(p.getLong(<span class="jxr_string">"id"</span>), p.get(<span class="jxr_string">"price"</span>, Double.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">var</strong> expected = 0d;
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			<strong class="jxr_keyword">var</strong> delivered = 0;
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : list(c, <span class="jxr_string">"/petstore/orders"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"DELIVERED"</span>.equals(o.getString(<span class="jxr_string">"status"</span>)) &amp;&amp; today.equals(o.getString(<span class="jxr_string">"shipDate"</span>))) {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 					expected += prices.getOrDefault(o.getLong(<span class="jxr_string">"petId"</span>), 0d);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 					delivered++;
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 				}
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			}
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			assertTrue(expected &gt;= pet.getPrice() - 0.001, () -&gt; <span class="jxr_string">"pinned order missing from the expected total"</span>);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			assertTrue(expected &gt; 0);
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			assertEquals(daily.getMap(daily.size() - 1).getInt(<span class="jxr_string">"delivered"</span>), delivered);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">var</strong> kpi = <strong class="jxr_keyword">new</strong> JsonMap(c.get(<span class="jxr_string">"/console/store/kpi/revenue"</span>).run().assertStatus(200).getContent().asString());
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			assertBean(kpi, <span class="jxr_string">"label,unit"</span>, <span class="jxr_string">"Revenue today,USD"</span>);
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			assertEquals(Math.round(expected * 100) / 100d, kpi.get(<span class="jxr_string">"value"</span>, Double.<strong class="jxr_keyword">class</strong>), 0.001);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			store.deleteOrder(pinned.getId(), <span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		}
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	}
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	@Test <strong class="jxr_keyword">void</strong> d01_revenueFeed() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<em class="jxr_comment">// Deliver one priced pet today and one a few days back, plus a placed order that must not count.</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">var</strong> store = store();
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">var</strong> pet = store.getPets().stream().filter(x -&gt; x.getPrice() &gt; 0).findFirst().orElseThrow();
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">var</strong> today = LocalDate.ofInstant(store.clock().instant(), ZoneOffset.UTC);
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">var</strong> earlier = today.minusDays(3).toString();
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">var</strong> made = <strong class="jxr_keyword">new</strong> ArrayList&lt;Long&gt;();
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		made.add(store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.DELIVERED).setShipDate(today.toString()), <span class="jxr_string">"test"</span>).getId());
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		made.add(store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.DELIVERED).setShipDate(earlier), <span class="jxr_string">"test"</span>).getId());
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		made.add(store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.PLACED).setShipDate(earlier), <span class="jxr_string">"test"</span>).getId());
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			<strong class="jxr_keyword">var</strong> c = json();
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/stats/revenue"</span>);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			assertSize(30, rows);
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			assertEquals(today.toString(), rows.getMap(29).getString(<span class="jxr_string">"day"</span>));
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			assertEquals(today.minusDays(29).toString(), rows.getMap(0).getString(<span class="jxr_string">"day"</span>));
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">var</strong> prices = <strong class="jxr_keyword">new</strong> HashMap&lt;Long,Double&gt;();
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : list(c, <span class="jxr_string">"/petstore/pets"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 				prices.put(p.getLong(<span class="jxr_string">"id"</span>), p.get(<span class="jxr_string">"price"</span>, Double.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">var</strong> expected = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Double&gt;();
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : list(c, <span class="jxr_string">"/petstore/orders"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"DELIVERED"</span>.equals(o.getString(<span class="jxr_string">"status"</span>)) &amp;&amp; prices.containsKey(o.getLong(<span class="jxr_string">"petId"</span>)))
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 					expected.merge(o.getString(<span class="jxr_string">"shipDate"</span>), prices.get(o.getLong(<span class="jxr_string">"petId"</span>)), Double::sum);
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : rows.elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 				assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(List.of(<span class="jxr_string">"day"</span>, <span class="jxr_string">"revenue"</span>)), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(r.keySet()));
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 				assertEquals(Math.round(expected.getOrDefault(r.getString(<span class="jxr_string">"day"</span>), 0d) * 100) / 100d, r.get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>), 0.001, r.getString(<span class="jxr_string">"day"</span>));
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			}
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			assertTrue(rows.getMap(29).get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>) &gt;= pet.getPrice() - 0.001);
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			assertTrue(rows.getMap(26).get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>) &gt;= pet.getPrice() - 0.001);
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> id : made)
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 				store.deleteOrder(id, <span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		}
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	}
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

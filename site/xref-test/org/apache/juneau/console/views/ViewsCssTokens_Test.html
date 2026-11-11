@@ -144,69 +144,76 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 			assertEquals(e.getValue(), root.get(e.getKey()), e.getKey());
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Test <strong class="jxr_keyword">void</strong> a02_noBareLightLiterals() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> v = views();
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertTokenSpent(v, <span class="jxr_string">"table.dataTable &gt; thead &gt; tr &gt; td"</span>, <span class="jxr_string">"background-color"</span>);
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<em class="jxr_comment">// The toolbar Search fill is chrome.css's (cascade Rule 1); views.css keeps only its shape.</em>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertEquals(List.of(), decls(v, <span class="jxr_string">"div.dt-container div.dt-search input"</span>, <span class="jxr_string">"background"</span>));
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertEquals(List.of(), decls(v, <span class="jxr_string">"div.dataTables_wrapper div.dataTables_filter input"</span>, <span class="jxr_string">"background"</span>));
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertTokenSpent(chrome(), <span class="jxr_string">"div.dt-container div.dt-search input"</span>, <span class="jxr_string">"background-color"</span>);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertTokenSpent(chrome(), <span class="jxr_string">"div.dataTables_wrapper div.dataTables_filter input"</span>, <span class="jxr_string">"background-color"</span>);
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> sel : List.of(
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 				<span class="jxr_string">".juneau-view-toolbar-right .dataTables_filter input::placeholder"</span>,
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 				<span class="jxr_string">".juneau-view-toolbar-right .dataTables_filter input::-webkit-input-placeholder"</span>,
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				<span class="jxr_string">".juneau-view-toolbar-right .dt-search input::placeholder"</span>,
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 				<span class="jxr_string">".juneau-view-toolbar-right .dt-search input::-webkit-input-placeholder"</span>,
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 				<span class="jxr_string">"div.dt-container div.dt-search input::placeholder"</span>,
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 				<span class="jxr_string">"div.dt-container div.dt-search input::-webkit-input-placeholder"</span>,
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				<span class="jxr_string">"div.dataTables_wrapper div.dataTables_filter input::placeholder"</span>,
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 				<span class="jxr_string">"div.dataTables_wrapper div.dataTables_filter input::-webkit-input-placeholder"</span>))
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			assertTokenSpent(v, sel, <span class="jxr_string">"color"</span>);
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertTokenSpent(v, <span class="jxr_string">".juneau-view-dialog"</span>, <span class="jxr_string">"background"</span>);
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertTokenSpent(v, <span class="jxr_string">".juneau-ts-popup"</span>, <span class="jxr_string">"border"</span>);
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertTokenSpent(v, <span class="jxr_string">".juneau-ts-popup"</span>, <span class="jxr_string">"background"</span>);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertTokenSpent(v, <span class="jxr_string">".juneau-ts-popup"</span>, <span class="jxr_string">"color"</span>);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertTokenSpent(v, <span class="jxr_string">".jc-cell-popover"</span>, <span class="jxr_string">"color"</span>);
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertTokenSpent(v, <span class="jxr_string">".jc-cell-popover-label"</span>, <span class="jxr_string">"color"</span>);
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertTokenSpent(v, <span class="jxr_string">".juneau-view-card-status"</span>, <span class="jxr_string">"color"</span>);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertTokenSpent(v, <span class="jxr_string">".juneau-view-card-field dt"</span>, <span class="jxr_string">"color"</span>);
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Test <strong class="jxr_keyword">void</strong> a05_viewSettingsCss_shapeOnly_coloursInChrome() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<em class="jxr_comment">// The View Settings dialog is the shared frame (its surface is .juneau-view-dialog's, probed above); its own</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<em class="jxr_comment">// stylesheet carries no colour at all, and chrome.css colours its pieces with tokens.</em>
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">var</strong> cfg = COMMENT.matcher(config()).replaceAll(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> prop : List.of(<span class="jxr_string">"color:"</span>, <span class="jxr_string">"background:"</span>, <span class="jxr_string">"background-color:"</span>, <span class="jxr_string">"border-color:"</span>, <span class="jxr_string">"#"</span>, <span class="jxr_string">"rgb"</span>))
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			assertFalse(cfg.contains(prop), () -&gt; <span class="jxr_string">"juneau-config.css carries a colour ("</span> + prop + <span class="jxr_string">")"</span>);
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">var</strong> c = chrome();
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-text)"</span>), decls(c, <span class="jxr_string">".juneau-config-dialog .juneau-config-col-remove:hover:not(:disabled)"</span>, <span class="jxr_string">"color"</span>));
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-text-muted)"</span>), decls(c, <span class="jxr_string">".juneau-config-dialog .juneau-config-col-head"</span>, <span class="jxr_string">"color"</span>));
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-accent-wash)"</span>), decls(c, <span class="jxr_string">".juneau-config-dialog .juneau-config-avail[aria-selected=\&quot;true\&quot;]"</span>, <span class="jxr_string">"background-color"</span>));
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertFalse(c.contains(<span class="jxr_string">".juneau-config-dialog button"</span>), <span class="jxr_string">"chrome.css must not restyle every button in the dialog (it out-specifies .jc-btn-link)"</span>);
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	}
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	@Test <strong class="jxr_keyword">void</strong> a03_textRolesUsed() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> c = chrome();
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-text)"</span>), decls(c, <span class="jxr_string">".jc-btn-danger"</span>, <span class="jxr_string">"color"</span>));
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-success-text)"</span>), decls(c, <span class="jxr_string">".jc-btn-success"</span>, <span class="jxr_string">"color"</span>));
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-text)"</span>), decls(c, <span class="jxr_string">".jc-editable-field-error"</span>, <span class="jxr_string">"color"</span>));
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-text)"</span>), decls(c, <span class="jxr_string">".jc-toast.is-error"</span>, <span class="jxr_string">"color"</span>));
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-success-text)"</span>), decls(c, <span class="jxr_string">".jc-toast.is-success"</span>, <span class="jxr_string">"color"</span>));
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-text)"</span>), decls(c, <span class="jxr_string">".juneau-view-dialog-dismiss:hover"</span>, <span class="jxr_string">"color"</span>));
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-text)"</span>), decls(c, <span class="jxr_string">".jc-dash-error"</span>, <span class="jxr_string">"color"</span>));
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger)"</span>), decls(c, <span class="jxr_string">".juneau-view-dialog-confirm.juneau-view-dialog-confirm-danger"</span>, <span class="jxr_string">"background-color"</span>));
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-strong)"</span>), decls(c, <span class="jxr_string">".jc-btn-destructive:hover:not(:disabled):not([aria-disabled=\&quot;true\&quot;])"</span>, <span class="jxr_string">"background-color"</span>));
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-success)"</span>), decls(c, <span class="jxr_string">".juneau-view-toggle:checked"</span>, <span class="jxr_string">"background-color"</span>));
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<em class="jxr_comment">// Rest face (first match; the zero-specificity :where() hover list also names it).</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertEquals(<span class="jxr_string">"var(--jc-control-bg)"</span>, decls(c, <span class="jxr_string">".juneau-view-dialog-cancel"</span>, <span class="jxr_string">"background-color"</span>).get(0));
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertEquals(<span class="jxr_string">"var(--jc-control-bg)"</span>, decls(c, <span class="jxr_string">".juneau-view-dialog-close"</span>, <span class="jxr_string">"background-color"</span>).get(0));
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	}
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	@Test <strong class="jxr_keyword">void</strong> a04_commentUpdated() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertFalse(views().contains(<span class="jxr_string">"No dark console theme ships today"</span>), <span class="jxr_string">"stale dark-theme comment"</span>);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertTrue(views().contains(<span class="jxr_string">"juneau-theme-dark.css"</span>), <span class="jxr_string">"dark-theme comment does not name the dark file"</span>);
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> }
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Test <strong class="jxr_keyword">void</strong> termFontSizeToken_a01() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> css = views();
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertEquals(1, css.split(<span class="jxr_string">"--jc-term-font-size: 12&#92;&#92;.5px;"</span>, -1).length - 1);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertEquals(<span class="jxr_string">"12.5px"</span>, rootDecls(css).get(<span class="jxr_string">"--jc-term-font-size"</span>));
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertTrue(css.indexOf(<span class="jxr_string">"--jc-term-bg:"</span>) &lt; css.indexOf(<span class="jxr_string">"--jc-term-font-size:"</span>));
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	}
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	@Test <strong class="jxr_keyword">void</strong> a02_noBareLightLiterals() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">var</strong> v = views();
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		assertTokenSpent(v, <span class="jxr_string">"table.dataTable &gt; thead &gt; tr &gt; td"</span>, <span class="jxr_string">"background-color"</span>);
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<em class="jxr_comment">// The toolbar Search fill is chrome.css's (cascade Rule 1); views.css keeps only its shape.</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertEquals(List.of(), decls(v, <span class="jxr_string">"div.dt-container div.dt-search input"</span>, <span class="jxr_string">"background"</span>));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertEquals(List.of(), decls(v, <span class="jxr_string">"div.dataTables_wrapper div.dataTables_filter input"</span>, <span class="jxr_string">"background"</span>));
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertTokenSpent(chrome(), <span class="jxr_string">"div.dt-container div.dt-search input"</span>, <span class="jxr_string">"background-color"</span>);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertTokenSpent(chrome(), <span class="jxr_string">"div.dataTables_wrapper div.dataTables_filter input"</span>, <span class="jxr_string">"background-color"</span>);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> sel : List.of(
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 				<span class="jxr_string">".juneau-view-toolbar-right .dataTables_filter input::placeholder"</span>,
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 				<span class="jxr_string">".juneau-view-toolbar-right .dataTables_filter input::-webkit-input-placeholder"</span>,
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				<span class="jxr_string">".juneau-view-toolbar-right .dt-search input::placeholder"</span>,
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 				<span class="jxr_string">".juneau-view-toolbar-right .dt-search input::-webkit-input-placeholder"</span>,
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				<span class="jxr_string">"div.dt-container div.dt-search input::placeholder"</span>,
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 				<span class="jxr_string">"div.dt-container div.dt-search input::-webkit-input-placeholder"</span>,
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 				<span class="jxr_string">"div.dataTables_wrapper div.dataTables_filter input::placeholder"</span>,
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				<span class="jxr_string">"div.dataTables_wrapper div.dataTables_filter input::-webkit-input-placeholder"</span>))
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			assertTokenSpent(v, sel, <span class="jxr_string">"color"</span>);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertTokenSpent(v, <span class="jxr_string">".juneau-view-dialog"</span>, <span class="jxr_string">"background"</span>);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertTokenSpent(v, <span class="jxr_string">".juneau-ts-popup"</span>, <span class="jxr_string">"border"</span>);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		assertTokenSpent(v, <span class="jxr_string">".juneau-ts-popup"</span>, <span class="jxr_string">"background"</span>);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertTokenSpent(v, <span class="jxr_string">".juneau-ts-popup"</span>, <span class="jxr_string">"color"</span>);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertTokenSpent(v, <span class="jxr_string">".jc-cell-popover"</span>, <span class="jxr_string">"color"</span>);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertTokenSpent(v, <span class="jxr_string">".jc-cell-popover-label"</span>, <span class="jxr_string">"color"</span>);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertTokenSpent(v, <span class="jxr_string">".juneau-view-card-status"</span>, <span class="jxr_string">"color"</span>);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertTokenSpent(v, <span class="jxr_string">".juneau-view-card-field dt"</span>, <span class="jxr_string">"color"</span>);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	@Test <strong class="jxr_keyword">void</strong> a05_viewSettingsCss_shapeOnly_coloursInChrome() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<em class="jxr_comment">// The View Settings dialog is the shared frame (its surface is .juneau-view-dialog's, probed above); its own</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<em class="jxr_comment">// stylesheet carries no colour at all, and chrome.css colours its pieces with tokens.</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> cfg = COMMENT.matcher(config()).replaceAll(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> prop : List.of(<span class="jxr_string">"color:"</span>, <span class="jxr_string">"background:"</span>, <span class="jxr_string">"background-color:"</span>, <span class="jxr_string">"border-color:"</span>, <span class="jxr_string">"#"</span>, <span class="jxr_string">"rgb"</span>))
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			assertFalse(cfg.contains(prop), () -&gt; <span class="jxr_string">"juneau-config.css carries a colour ("</span> + prop + <span class="jxr_string">")"</span>);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> c = chrome();
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-text)"</span>), decls(c, <span class="jxr_string">".juneau-config-dialog .juneau-config-col-remove:hover:not(:disabled)"</span>, <span class="jxr_string">"color"</span>));
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-text-muted)"</span>), decls(c, <span class="jxr_string">".juneau-config-dialog .juneau-config-col-head"</span>, <span class="jxr_string">"color"</span>));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-accent-wash)"</span>), decls(c, <span class="jxr_string">".juneau-config-dialog .juneau-config-avail[aria-selected=\&quot;true\&quot;]"</span>, <span class="jxr_string">"background-color"</span>));
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertFalse(c.contains(<span class="jxr_string">".juneau-config-dialog button"</span>), <span class="jxr_string">"chrome.css must not restyle every button in the dialog (it out-specifies .jc-btn-link)"</span>);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	@Test <strong class="jxr_keyword">void</strong> a03_textRolesUsed() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> c = chrome();
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-text)"</span>), decls(c, <span class="jxr_string">".jc-btn-danger"</span>, <span class="jxr_string">"color"</span>));
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-success-text)"</span>), decls(c, <span class="jxr_string">".jc-btn-success"</span>, <span class="jxr_string">"color"</span>));
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-text)"</span>), decls(c, <span class="jxr_string">".jc-editable-field-error"</span>, <span class="jxr_string">"color"</span>));
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-text)"</span>), decls(c, <span class="jxr_string">".jc-toast.is-error"</span>, <span class="jxr_string">"color"</span>));
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-success-text)"</span>), decls(c, <span class="jxr_string">".jc-toast.is-success"</span>, <span class="jxr_string">"color"</span>));
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-text)"</span>), decls(c, <span class="jxr_string">".juneau-view-dialog-dismiss:hover"</span>, <span class="jxr_string">"color"</span>));
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-text)"</span>), decls(c, <span class="jxr_string">".jc-dash-error"</span>, <span class="jxr_string">"color"</span>));
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger)"</span>), decls(c, <span class="jxr_string">".juneau-view-dialog-confirm.juneau-view-dialog-confirm-danger"</span>, <span class="jxr_string">"background-color"</span>));
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-danger-strong)"</span>), decls(c, <span class="jxr_string">".jc-btn-destructive:hover:not(:disabled):not([aria-disabled=\&quot;true\&quot;])"</span>, <span class="jxr_string">"background-color"</span>));
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertEquals(List.of(<span class="jxr_string">"var(--jc-success)"</span>), decls(c, <span class="jxr_string">".juneau-view-toggle:checked"</span>, <span class="jxr_string">"background-color"</span>));
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<em class="jxr_comment">// Rest face (first match; the zero-specificity :where() hover list also names it).</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertEquals(<span class="jxr_string">"var(--jc-control-bg)"</span>, decls(c, <span class="jxr_string">".juneau-view-dialog-cancel"</span>, <span class="jxr_string">"background-color"</span>).get(0));
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertEquals(<span class="jxr_string">"var(--jc-control-bg)"</span>, decls(c, <span class="jxr_string">".juneau-view-dialog-close"</span>, <span class="jxr_string">"background-color"</span>).get(0));
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	}
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	@Test <strong class="jxr_keyword">void</strong> a04_commentUpdated() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertFalse(views().contains(<span class="jxr_string">"No dark console theme ships today"</span>), <span class="jxr_string">"stale dark-theme comment"</span>);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertTrue(views().contains(<span class="jxr_string">"juneau-theme-dark.css"</span>), <span class="jxr_string">"dark-theme comment does not name the dark file"</span>);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

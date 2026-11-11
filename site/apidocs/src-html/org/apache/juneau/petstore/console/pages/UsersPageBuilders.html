@@ -58,29 +58,31 @@
 <span class="source-line-no">045</span><span id="line-45">      return PageSpec.create().tab("users").toolkit("views", "datatables-buttons", "datatables-export")</span>
 <span class="source-line-no">046</span><span id="line-46">         .table(TableSpec.create("users").rowType("User").dataMode(DataMode.SERVER).dataUrl("/console/users/query")</span>
 <span class="source-line-no">047</span><span id="line-47">            .defaultOrder("username", Sort.ASC)</span>
-<span class="source-line-no">048</span><span id="line-48">            .columns(</span>
-<span class="source-line-no">049</span><span id="line-49">               Column.create("username").label("Username"),</span>
-<span class="source-line-no">050</span><span id="line-50">               Column.create("firstName").label("First name"),</span>
-<span class="source-line-no">051</span><span id="line-51">               Column.create("lastName").label("Last name"),</span>
-<span class="source-line-no">052</span><span id="line-52">               Column.create("userStatus").label("Status").render(PillRenders.userStatus()))</span>
-<span class="source-line-no">053</span><span id="line-53">            .columnConfig(true)</span>
-<span class="source-line-no">054</span><span id="line-54">            .ribbon(Ribbons.standard()</span>
-<span class="source-line-no">055</span><span id="line-55">               .create(RibbonItem.dialog("add-user").title("+ Add user").symbol("plus")</span>
-<span class="source-line-no">056</span><span id="line-56">                  .form("/console/users/form").endpoint("/console/users").method(Method.POST).onSuccess(OnSuccess.REDRAW))</span>
-<span class="source-line-no">057</span><span id="line-57">               .filter(RibbonItem.optionGroup("userStatus",</span>
-<span class="source-line-no">058</span><span id="line-58">                  RibbonItem.option("active").title("Active").symbol("user_check").column("userStatus").value("$eq(ACTIVE)"),</span>
-<span class="source-line-no">059</span><span id="line-59">                  RibbonItem.option("inactive").title("Inactive").symbol("user_x").column("userStatus").value("$eq(INACTIVE)"))</span>
-<span class="source-line-no">060</span><span id="line-60">                  .title("User status").deselectable(true))</span>
-<span class="source-line-no">061</span><span id="line-61">               .export("excel", "pdf")</span>
-<span class="source-line-no">062</span><span id="line-62">               .build())</span>
-<span class="source-line-no">063</span><span id="line-63">            .rowActions(</span>
-<span class="source-line-no">064</span><span id="line-64">               RowAction.create("edit").label("Edit").form("/console/users/form?username={username}").present(Present.DIALOG)</span>
-<span class="source-line-no">065</span><span id="line-65">                  .endpoint("/console/users/{username}").method(Method.PUT).onSuccess(OnSuccess.REDRAW),</span>
-<span class="source-line-no">066</span><span id="line-66">               RowAction.create("delete").label("Delete").endpoint("/console/users/{username}").method(Method.DELETE)</span>
-<span class="source-line-no">067</span><span id="line-67">                  .confirm("Delete user '{username}'?").confirmLabel("Delete").tone(Tone.DANGER).onSuccess(OnSuccess.REDRAW)),</span>
-<span class="source-line-no">068</span><span id="line-68">            "Users");</span>
-<span class="source-line-no">069</span><span id="line-69">   }</span>
-<span class="source-line-no">070</span><span id="line-70">}</span>
+<span class="source-line-no">048</span><span id="line-48">            .rowIdField("username")</span>
+<span class="source-line-no">049</span><span id="line-49">            .detail(RowDetails.user())</span>
+<span class="source-line-no">050</span><span id="line-50">            .columns(</span>
+<span class="source-line-no">051</span><span id="line-51">               Column.create("username").label("Username"),</span>
+<span class="source-line-no">052</span><span id="line-52">               Column.create("firstName").label("First name"),</span>
+<span class="source-line-no">053</span><span id="line-53">               Column.create("lastName").label("Last name"),</span>
+<span class="source-line-no">054</span><span id="line-54">               Column.create("userStatus").label("Status").render(PillRenders.userStatus()))</span>
+<span class="source-line-no">055</span><span id="line-55">            .columnConfig(true)</span>
+<span class="source-line-no">056</span><span id="line-56">            .ribbon(Ribbons.standard()</span>
+<span class="source-line-no">057</span><span id="line-57">               .create(RibbonItem.dialog("add-user").title("+ Add user").symbol("plus")</span>
+<span class="source-line-no">058</span><span id="line-58">                  .form("/console/users/form").endpoint("/console/users").method(Method.POST).onSuccess(OnSuccess.REDRAW))</span>
+<span class="source-line-no">059</span><span id="line-59">               .filter(RibbonItem.optionGroup("userStatus",</span>
+<span class="source-line-no">060</span><span id="line-60">                  RibbonItem.option("active").title("Active").symbol("user_check").column("userStatus").value("$eq(ACTIVE)"),</span>
+<span class="source-line-no">061</span><span id="line-61">                  RibbonItem.option("inactive").title("Inactive").symbol("user_x").column("userStatus").value("$eq(INACTIVE)"))</span>
+<span class="source-line-no">062</span><span id="line-62">                  .title("User status").deselectable(true))</span>
+<span class="source-line-no">063</span><span id="line-63">               .export("excel", "pdf")</span>
+<span class="source-line-no">064</span><span id="line-64">               .build())</span>
+<span class="source-line-no">065</span><span id="line-65">            .rowActions(</span>
+<span class="source-line-no">066</span><span id="line-66">               RowAction.create("edit").label("Edit").form("/console/users/form?username={username}").present(Present.DIALOG)</span>
+<span class="source-line-no">067</span><span id="line-67">                  .endpoint("/console/users/{username}").method(Method.PUT).onSuccess(OnSuccess.REDRAW),</span>
+<span class="source-line-no">068</span><span id="line-68">               RowAction.create("delete").label("Delete").endpoint("/console/users/{username}").method(Method.DELETE)</span>
+<span class="source-line-no">069</span><span id="line-69">                  .confirm("Delete user '{username}'?").confirmLabel("Delete").tone(Tone.DANGER).onSuccess(OnSuccess.REDRAW)),</span>
+<span class="source-line-no">070</span><span id="line-70">            "Users");</span>
+<span class="source-line-no">071</span><span id="line-71">   }</span>
+<span class="source-line-no">072</span><span id="line-72">}</span>
 
 
 

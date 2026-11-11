@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; DEDICATED = Set.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"type"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"src"</span>, <span class="jxr_string">"kind"</span>, <span class="jxr_string">"data"</span>,
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<span class="jxr_string">"series"</span>, <span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>, <span class="jxr_string">"stacked"</span>, <span class="jxr_string">"orientation"</span>, <span class="jxr_string">"legend"</span>, <span class="jxr_string">"height"</span>, <span class="jxr_string">"refreshMs"</span>, <span class="jxr_string">"onClick"</span>, <span class="jxr_string">"emptyText"</span>, <span class="jxr_string">"label"</span>,
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<span class="jxr_string">"value"</span>, <span class="jxr_string">"center"</span>, <span class="jxr_string">"visibleWhen"</span>, <span class="jxr_string">"source"</span>, <span class="jxr_string">"helper"</span>, <span class="jxr_string">"option"</span>, <span class="jxr_string">"patch"</span>, <span class="jxr_string">"decorators"</span>, <span class="jxr_string">"on"</span>, <span class="jxr_string">"group"</span>, <span class="jxr_string">"renderer"</span>,
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<span class="jxr_string">"theme"</span>, <span class="jxr_string">"largeData"</span>, <span class="jxr_string">"partialFrames"</span>, <span class="jxr_string">"a11y"</span>, <span class="jxr_string">"maps"</span>, <span class="jxr_string">"scale"</span>, <span class="jxr_string">"symbolSize"</span>, <span class="jxr_string">"groupBy"</span>, <span class="jxr_string">"size"</span>, <span class="jxr_string">"color"</span>, <span class="jxr_string">"tileFields"</span>,
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<span class="jxr_string">"theme"</span>, <span class="jxr_string">"largeData"</span>, <span class="jxr_string">"partialFrames"</span>, <span class="jxr_string">"dataTab"</span>, <span class="jxr_string">"a11y"</span>, <span class="jxr_string">"maps"</span>, <span class="jxr_string">"scale"</span>, <span class="jxr_string">"symbolSize"</span>, <span class="jxr_string">"groupBy"</span>, <span class="jxr_string">"size"</span>, <span class="jxr_string">"color"</span>, <span class="jxr_string">"tileFields"</span>,
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<span class="jxr_string">"topicActions"</span>, <span class="jxr_string">"actions"</span>);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<em class="jxr_comment">// An id that can be the namespace of a custom topic.</em>
@@ -606,177 +606,192 @@
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> 	<em class="jxr_javadoccomment">/** Draws partial frames during a chunked {@code source} load. @return This object. */</em>
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> 	<strong class="jxr_keyword">public</strong> ChartDef partialFrames() { body.put(<span class="jxr_string">"partialFrames"</span>, <strong class="jxr_keyword">true</strong>); <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	<em class="jxr_javadoccomment">/** @param summary The figure caption, or &lt;jk&gt;null&lt;/jk&gt; for the generated one. @param table Show the data-table toggle. @return This object. */</em>
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 	<strong class="jxr_keyword">public</strong> ChartDef a11y(String summary, <strong class="jxr_keyword">boolean</strong> table) {
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> JsonMap();
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">if</strong> (nn(summary)) m.put(<span class="jxr_string">"summary"</span>, summary);
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		m.put(<span class="jxr_string">"table"</span>, table);
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		body.put(<span class="jxr_string">"a11y"</span>, m);
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	}
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	<em class="jxr_javadoccomment">/** @param name An ECharts map name. @param path A same-origin path to its GeoJSON. @return This object. */</em>
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 	<strong class="jxr_keyword">public</strong> ChartDef map(String name, String path) {
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">if</strong> (! SafePathTemplate.isSameOriginPath(path))
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' map '%s' must be a same-origin path; got '%s'."</span>, id, name, path);
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		maps.put(name, path);
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	}
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	<em class="jxr_comment">// raw(...) has no kind; Set.of(...).contains(null) throws.</em>
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> legacy() {
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<strong class="jxr_keyword">return</strong> kind != <strong class="jxr_keyword">null</strong> &amp;&amp; LEGACY_KINDS.contains(kind);
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 	}
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> only(String k, String method) {
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		<strong class="jxr_keyword">if</strong> (neq(kind, k))
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' %s(...) is for kind '%s' only."</span>, id, method, k);
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 	}
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 	<em class="jxr_comment">// One entry per topic: the first wins, except that a later retain=true upgrades it (zoom:/legend: need it).</em>
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addPublish(String topic, <strong class="jxr_keyword">boolean</strong> retain) {
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		TopicDecl.of(topic);
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		publishes.merge(topic, retain, Boolean::logicalOr);
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	}
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 	<strong class="jxr_keyword">private</strong> JsonMap parsed(Object v, String what) {
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">if</strong> (v instanceof JsonMap m)
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 			<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 			<strong class="jxr_keyword">return</strong> Json5Parser.DEFAULT.read(((String)v).trim(), JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		} <strong class="jxr_keyword">catch</strong> (org.apache.juneau.marshall.parser.ParseException e) {
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' %s is not valid JSON5: %s"</span>, id, what, e.getMessage());
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		}
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	}
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> <em class="jxr_javadoccomment">	 * Deep merge: objects by key; arrays element-by-element by {@code id} (a match merges, no match</em>
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> <em class="jxr_javadoccomment">	 * appends); an array whose elements carry no {@code id} replaces the whole array.  {@code into} is changed in place.</em>
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Narrows a JSON-shaped Map&lt;?,?&gt; to Map&lt;String,Object&gt;; its keys are always strings.</em>
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 	})
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> merge(Map&lt;String,Object&gt; into, Map&lt;?,?&gt; from) {
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : from.entrySet()) {
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			<strong class="jxr_keyword">var</strong> k = String.valueOf(e.getKey());
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			<strong class="jxr_keyword">var</strong> cur = into.get(k);
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 			<strong class="jxr_keyword">var</strong> v = e.getValue();
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			<strong class="jxr_keyword">if</strong> (cur instanceof Map &amp;&amp; v instanceof Map) {
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 				<strong class="jxr_keyword">var</strong> copy = <strong class="jxr_keyword">new</strong> JsonMap((Map&lt;String,Object&gt;)cur);
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 				merge(copy, (Map&lt;?,?&gt;)v);
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 				into.put(k, copy);
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cur instanceof List&lt;?&gt; a &amp;&amp; v instanceof List&lt;?&gt; b &amp;&amp; hasIds(b)) {
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 				<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> ArrayList&lt;Object&gt;(a);
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> item : b) {
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 					<strong class="jxr_keyword">var</strong> at = indexOfId(out, ((Map&lt;?,?&gt;)item).get(<span class="jxr_string">"id"</span>));
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 					<strong class="jxr_keyword">if</strong> (at &lt; 0) {
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 						out.add(item);
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 						<strong class="jxr_keyword">var</strong> copy = <strong class="jxr_keyword">new</strong> JsonMap((Map&lt;String,Object&gt;)out.get(at));
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 						merge(copy, (Map&lt;?,?&gt;)item);
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 						out.set(at, copy);
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 					}
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 				}
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 				into.put(k, out);
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 				into.put(k, v);
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 			}
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		}
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	}
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> hasIds(List&lt;?&gt; l) {
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">return</strong> ! l.isEmpty() &amp;&amp; l.stream().allMatch(x -&gt; x instanceof Map&lt;?,?&gt; m &amp;&amp; m.get(<span class="jxr_string">"id"</span>) != <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 	}
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> indexOfId(List&lt;Object&gt; l, Object id) {
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; l.size(); i++)
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 			<strong class="jxr_keyword">if</strong> (l.get(i) instanceof Map&lt;?,?&gt; m &amp;&amp; eq(m.get(<span class="jxr_string">"id"</span>), id))
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 				<strong class="jxr_keyword">return</strong> i;
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<strong class="jxr_keyword">return</strong> -1;
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 	}
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> <em class="jxr_javadoccomment">	 * Sets a body key that has no dedicated method (for example an ECharts-level card key the glue reads).</em>
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> <em class="jxr_javadoccomment">	 * For a helper kind, a helper key set here is routed under {@code helper}.</em>
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> <em class="jxr_javadoccomment">	 * @param key A key with no dedicated method.</em>
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> <em class="jxr_javadoccomment">	 * @param value Its value.</em>
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 	<strong class="jxr_keyword">public</strong> ChartDef set(String key, Object value) {
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> 		<strong class="jxr_keyword">if</strong> (CARD_LEVEL.contains(key))
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' key '%s' is card-level; set it on toCardSpec()."</span>, id, key);
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 		<strong class="jxr_keyword">if</strong> (DEDICATED.contains(key))
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' key '%s' has a dedicated method."</span>, id, key);
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		body.put(key, value);
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> 	}
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> 
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> 	<em class="jxr_javadoccomment">/** @param rules Card-level visibility rules, ANDed. @return This object. */</em>
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 	<strong class="jxr_keyword">public</strong> ChartDef visibleWhen(VisibilityRule... rules) { visibleWhen = rules; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> <em class="jxr_javadoccomment">	 * @return The {@code chart} card.</em>
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If not exactly one of {@code src}/{@code data}/{@code source} is set, a kind's</em>
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">	 * 	required keys are missing, {@code raw} has no option, or an option/patch string is not valid JSON5.</em>
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 	<strong class="jxr_keyword">public</strong> <a name="CardSpec" href="../../../../../org/apache/juneau/console/freemarker/CardSpec.html#CardSpec">CardSpec</a> toCardSpec() {
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 		<strong class="jxr_keyword">if</strong> ((nn(src) ? 1 : 0) + (nn(data) ? 1 : 0) + (nn(source) ? 1 : 0) != 1)
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' requires exactly one of src(...), data(...) or source(...)."</span>, id);
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		<strong class="jxr_keyword">if</strong> (! nn(src) &amp;&amp; body.containsKey(<span class="jxr_string">"refreshMs"</span>))
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' refreshMs(...) needs src(...); inline data never refreshes."</span>, id);
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> 		<strong class="jxr_keyword">if</strong> (body.containsKey(<span class="jxr_string">"partialFrames"</span>) &amp;&amp; ! nn(source))
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' partialFrames() needs source(...)."</span>, id);
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 		<strong class="jxr_keyword">if</strong> (kind != <strong class="jxr_keyword">null</strong> &amp;&amp; Set.of(<span class="jxr_string">"line"</span>, <span class="jxr_string">"bar"</span>, <span class="jxr_string">"scatter"</span>).contains(kind) &amp;&amp; (! body.containsKey(<span class="jxr_string">"x"</span>) || series.isEmpty()))
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' kind '%s' requires x(...) and at least one series(...)."</span>, id, kind);
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> 		<strong class="jxr_keyword">if</strong> (kind != <strong class="jxr_keyword">null</strong> &amp;&amp; Set.of(<span class="jxr_string">"donut"</span>, <span class="jxr_string">"pie"</span>).contains(kind) &amp;&amp; (! (body.get(<span class="jxr_string">"label"</span>) instanceof String l) || l.isBlank() || ! (body.get(<span class="jxr_string">"value"</span>) instanceof String v) || v.isBlank()))
-<a class="jxr_linenumber" name="L725" href="#L725">725</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' kind '%s' requires label(...) and value(...)."</span>, id, kind);
-<a class="jxr_linenumber" name="L726" href="#L726">726</a> 		<strong class="jxr_keyword">if</strong> (eq(kind, <span class="jxr_string">"treemap"</span>) &amp;&amp; ! body.containsKey(<span class="jxr_string">"groupBy"</span>))
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' kind 'treemap' requires groupBy(...)."</span>, id);
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 		<strong class="jxr_keyword">if</strong> (eq(kind, <span class="jxr_string">"treemap"</span>) &amp;&amp; (! (body.get(<span class="jxr_string">"label"</span>) instanceof String tl) || tl.isBlank()))
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' kind 'treemap' requires label(field)."</span>, id);
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> 		<strong class="jxr_keyword">if</strong> (eq(kind, <span class="jxr_string">"heatmap"</span>) &amp;&amp; (! body.containsKey(<span class="jxr_string">"x"</span>) || ! body.containsKey(<span class="jxr_string">"y"</span>) || ! (body.get(<span class="jxr_string">"value"</span>) instanceof String)))
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' kind 'heatmap' requires x(...), yField(...) and value(...)."</span>, id);
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 		<strong class="jxr_keyword">if</strong> (kind == <strong class="jxr_keyword">null</strong> &amp;&amp; option == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' raw(...) requires option(...)."</span>, id);
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> 		<strong class="jxr_keyword">if</strong> (kind == <strong class="jxr_keyword">null</strong> &amp;&amp; (! series.isEmpty() || body.keySet().stream().anyMatch(HELPER_KEYS::contains)))
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' raw(...) takes no helper keys (x, y, series, ...); put them in option(...)."</span>, id);
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> 		<strong class="jxr_keyword">var</strong> c = CardSpec.of(<span class="jxr_string">"chart"</span>, id);
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> 		<strong class="jxr_keyword">if</strong> (legacy())
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> 			c.body(<span class="jxr_string">"kind"</span>, kind);
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> 		<strong class="jxr_keyword">if</strong> (nn(title)) c.title(title);
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> 		<strong class="jxr_keyword">if</strong> (nn(src)) c.src(src);
-<a class="jxr_linenumber" name="L741" href="#L741">741</a> 		<strong class="jxr_keyword">if</strong> (nn(source)) {
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> 			c.body(<span class="jxr_string">"source"</span>, source);
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> 			c.subscribes(Subscription.to(source).as(<span class="jxr_string">"data"</span>));
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> 		}
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> 		<strong class="jxr_keyword">if</strong> (legacy()) {
-<a class="jxr_linenumber" name="L746" href="#L746">746</a> 			body.forEach(c::body);
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> 			<strong class="jxr_keyword">if</strong> (! series.isEmpty()) c.body(<span class="jxr_string">"series"</span>, List.copyOf(series));
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> 			<strong class="jxr_keyword">var</strong> helper = kind == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : JsonMap.of(<span class="jxr_string">"kind"</span>, kind);
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> 			body.forEach((k, v) -&gt; { <strong class="jxr_keyword">if</strong> (helper != <strong class="jxr_keyword">null</strong> &amp;&amp; HELPER_KEYS.contains(k)) helper.put(k, v); <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (! HELPER_KEYS.contains(k)) c.body(k, v); });
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> 			<strong class="jxr_keyword">if</strong> (helper != <strong class="jxr_keyword">null</strong> &amp;&amp; ! series.isEmpty()) helper.put(<span class="jxr_string">"series"</span>, List.copyOf(series));
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> 			<strong class="jxr_keyword">if</strong> (helper != <strong class="jxr_keyword">null</strong>) c.body(<span class="jxr_string">"helper"</span>, helper);
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> 		}
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		<strong class="jxr_keyword">if</strong> (nn(data)) c.body(<span class="jxr_string">"data"</span>, List.copyOf(data));
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> 		<strong class="jxr_keyword">if</strong> (nn(option)) c.body(<span class="jxr_string">"option"</span>, parsed(option, <span class="jxr_string">"option"</span>));
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		<strong class="jxr_keyword">if</strong> (! patches.isEmpty()) {
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> 			<strong class="jxr_keyword">var</strong> p = <strong class="jxr_keyword">new</strong> JsonMap();
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : patches)
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 				merge(p, parsed(x, <span class="jxr_string">"patch"</span>));
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> 			c.body(<span class="jxr_string">"patch"</span>, p);
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 		}
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 		<strong class="jxr_keyword">if</strong> (! decorators.isEmpty()) c.body(<span class="jxr_string">"decorators"</span>, List.copyOf(decorators));
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> 		<strong class="jxr_keyword">if</strong> (! on.isEmpty()) c.body(<span class="jxr_string">"on"</span>, <strong class="jxr_keyword">new</strong> JsonMap(on));
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		<strong class="jxr_keyword">if</strong> (! topicActions.isEmpty()) c.body(<span class="jxr_string">"topicActions"</span>, List.copyOf(topicActions));
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 		<strong class="jxr_keyword">if</strong> (! catalog.isEmpty()) c.body(<span class="jxr_string">"actions"</span>, List.copyOf(catalog));
-<a class="jxr_linenumber" name="L766" href="#L766">766</a> 		<strong class="jxr_keyword">if</strong> (! maps.isEmpty()) c.body(<span class="jxr_string">"maps"</span>, <strong class="jxr_keyword">new</strong> JsonMap(maps));
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> 		<strong class="jxr_keyword">if</strong> (! publishes.isEmpty()) c.publishes(publishes.entrySet().stream().map(e -&gt; TopicDecl.of(e.getKey()).retain(e.getValue())).toArray(<a name="TopicDecl" href="../../../../../org/apache/juneau/console/TopicDecl.html#TopicDecl">TopicDecl</a>[]::<strong class="jxr_keyword">new</strong>));
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> 		<strong class="jxr_keyword">if</strong> (nn(visibleWhen)) c.visibleWhen(visibleWhen);
-<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L770" href="#L770">770</a> 	}
-<a class="jxr_linenumber" name="L771" href="#L771">771</a> }
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> <em class="jxr_javadoccomment">	 * Shows the chart's data as a visible Data tab beside the chart, in the same card.</em>
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 	<strong class="jxr_keyword">public</strong> ChartDef dataTab() { <strong class="jxr_keyword">return</strong> dataTab(<strong class="jxr_keyword">true</strong>); }
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">	 * Shows or hides the Data tab.</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">	 * @param v Whether to show the data as a visible Data tab; off by default (a visually hidden table is always rendered for screen readers).</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 	<strong class="jxr_keyword">public</strong> ChartDef dataTab(<strong class="jxr_keyword">boolean</strong> v) { body.put(<span class="jxr_string">"dataTab"</span>, v); <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	<em class="jxr_javadoccomment">/** @param summary The figure caption, or &lt;jk&gt;null&lt;/jk&gt; for the generated one. @param table Render the screen-reader data table (visually hidden unless {@link #dataTab() dataTab}). @return This object. */</em>
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 	<strong class="jxr_keyword">public</strong> ChartDef a11y(String summary, <strong class="jxr_keyword">boolean</strong> table) {
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> JsonMap();
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<strong class="jxr_keyword">if</strong> (nn(summary)) m.put(<span class="jxr_string">"summary"</span>, summary);
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		m.put(<span class="jxr_string">"table"</span>, table);
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		body.put(<span class="jxr_string">"a11y"</span>, m);
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 	}
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 	<em class="jxr_javadoccomment">/** @param name An ECharts map name. @param path A same-origin path to its GeoJSON. @return This object. */</em>
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 	<strong class="jxr_keyword">public</strong> ChartDef map(String name, String path) {
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		<strong class="jxr_keyword">if</strong> (! SafePathTemplate.isSameOriginPath(path))
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' map '%s' must be a same-origin path; got '%s'."</span>, id, name, path);
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		maps.put(name, path);
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 	}
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	<em class="jxr_comment">// raw(...) has no kind; Set.of(...).contains(null) throws.</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> legacy() {
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">return</strong> kind != <strong class="jxr_keyword">null</strong> &amp;&amp; LEGACY_KINDS.contains(kind);
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 	}
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> only(String k, String method) {
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		<strong class="jxr_keyword">if</strong> (neq(kind, k))
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' %s(...) is for kind '%s' only."</span>, id, method, k);
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 	}
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 	<em class="jxr_comment">// One entry per topic: the first wins, except that a later retain=true upgrades it (zoom:/legend: need it).</em>
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addPublish(String topic, <strong class="jxr_keyword">boolean</strong> retain) {
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		TopicDecl.of(topic);
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		publishes.merge(topic, retain, Boolean::logicalOr);
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 	}
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	<strong class="jxr_keyword">private</strong> JsonMap parsed(Object v, String what) {
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		<strong class="jxr_keyword">if</strong> (v instanceof JsonMap m)
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 			<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			<strong class="jxr_keyword">return</strong> Json5Parser.DEFAULT.read(((String)v).trim(), JsonMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		} <strong class="jxr_keyword">catch</strong> (org.apache.juneau.marshall.parser.ParseException e) {
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' %s is not valid JSON5: %s"</span>, id, what, e.getMessage());
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		}
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	}
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> <em class="jxr_javadoccomment">	 * Deep merge: objects by key; arrays element-by-element by {@code id} (a match merges, no match</em>
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> <em class="jxr_javadoccomment">	 * appends); an array whose elements carry no {@code id} replaces the whole array.  {@code into} is changed in place.</em>
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Narrows a JSON-shaped Map&lt;?,?&gt; to Map&lt;String,Object&gt;; its keys are always strings.</em>
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	})
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> merge(Map&lt;String,Object&gt; into, Map&lt;?,?&gt; from) {
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : from.entrySet()) {
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 			<strong class="jxr_keyword">var</strong> k = String.valueOf(e.getKey());
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 			<strong class="jxr_keyword">var</strong> cur = into.get(k);
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 			<strong class="jxr_keyword">var</strong> v = e.getValue();
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 			<strong class="jxr_keyword">if</strong> (cur instanceof Map &amp;&amp; v instanceof Map) {
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 				<strong class="jxr_keyword">var</strong> copy = <strong class="jxr_keyword">new</strong> JsonMap((Map&lt;String,Object&gt;)cur);
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 				merge(copy, (Map&lt;?,?&gt;)v);
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 				into.put(k, copy);
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cur instanceof List&lt;?&gt; a &amp;&amp; v instanceof List&lt;?&gt; b &amp;&amp; hasIds(b)) {
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 				<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> ArrayList&lt;Object&gt;(a);
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> item : b) {
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 					<strong class="jxr_keyword">var</strong> at = indexOfId(out, ((Map&lt;?,?&gt;)item).get(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 					<strong class="jxr_keyword">if</strong> (at &lt; 0) {
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 						out.add(item);
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 					} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 						<strong class="jxr_keyword">var</strong> copy = <strong class="jxr_keyword">new</strong> JsonMap((Map&lt;String,Object&gt;)out.get(at));
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 						merge(copy, (Map&lt;?,?&gt;)item);
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 						out.set(at, copy);
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 					}
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 				}
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 				into.put(k, out);
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 				into.put(k, v);
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 			}
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		}
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 	}
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> hasIds(List&lt;?&gt; l) {
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		<strong class="jxr_keyword">return</strong> ! l.isEmpty() &amp;&amp; l.stream().allMatch(x -&gt; x instanceof Map&lt;?,?&gt; m &amp;&amp; m.get(<span class="jxr_string">"id"</span>) != <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 	}
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> indexOfId(List&lt;Object&gt; l, Object id) {
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; l.size(); i++)
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 			<strong class="jxr_keyword">if</strong> (l.get(i) instanceof Map&lt;?,?&gt; m &amp;&amp; eq(m.get(<span class="jxr_string">"id"</span>), id))
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 				<strong class="jxr_keyword">return</strong> i;
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 		<strong class="jxr_keyword">return</strong> -1;
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 	}
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">	 * Sets a body key that has no dedicated method (for example an ECharts-level card key the glue reads).</em>
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">	 * For a helper kind, a helper key set here is routed under {@code helper}.</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">	 * @param key A key with no dedicated method.</em>
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> <em class="jxr_javadoccomment">	 * @param value Its value.</em>
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 	<strong class="jxr_keyword">public</strong> ChartDef set(String key, Object value) {
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<strong class="jxr_keyword">if</strong> (CARD_LEVEL.contains(key))
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' key '%s' is card-level; set it on toCardSpec()."</span>, id, key);
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 		<strong class="jxr_keyword">if</strong> (DEDICATED.contains(key))
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' key '%s' has a dedicated method."</span>, id, key);
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		body.put(key, value);
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 	}
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 	<em class="jxr_javadoccomment">/** @param rules Card-level visibility rules, ANDed. @return This object. */</em>
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 	<strong class="jxr_keyword">public</strong> ChartDef visibleWhen(VisibilityRule... rules) { visibleWhen = rules; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">	 * @return The {@code chart} card.</em>
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If not exactly one of {@code src}/{@code data}/{@code source} is set, a kind's</em>
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> <em class="jxr_javadoccomment">	 * 	required keys are missing, {@code raw} has no option, or an option/patch string is not valid JSON5.</em>
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 	<strong class="jxr_keyword">public</strong> <a name="CardSpec" href="../../../../../org/apache/juneau/console/freemarker/CardSpec.html#CardSpec">CardSpec</a> toCardSpec() {
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 		<strong class="jxr_keyword">if</strong> ((nn(src) ? 1 : 0) + (nn(data) ? 1 : 0) + (nn(source) ? 1 : 0) != 1)
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' requires exactly one of src(...), data(...) or source(...)."</span>, id);
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 		<strong class="jxr_keyword">if</strong> (! nn(src) &amp;&amp; body.containsKey(<span class="jxr_string">"refreshMs"</span>))
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' refreshMs(...) needs src(...); inline data never refreshes."</span>, id);
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 		<strong class="jxr_keyword">if</strong> (body.containsKey(<span class="jxr_string">"partialFrames"</span>) &amp;&amp; ! nn(source))
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' partialFrames() needs source(...)."</span>, id);
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 		<strong class="jxr_keyword">if</strong> (kind != <strong class="jxr_keyword">null</strong> &amp;&amp; Set.of(<span class="jxr_string">"line"</span>, <span class="jxr_string">"bar"</span>, <span class="jxr_string">"scatter"</span>).contains(kind) &amp;&amp; (! body.containsKey(<span class="jxr_string">"x"</span>) || series.isEmpty()))
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' kind '%s' requires x(...) and at least one series(...)."</span>, id, kind);
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> 		<strong class="jxr_keyword">if</strong> (kind != <strong class="jxr_keyword">null</strong> &amp;&amp; Set.of(<span class="jxr_string">"donut"</span>, <span class="jxr_string">"pie"</span>).contains(kind) &amp;&amp; (! (body.get(<span class="jxr_string">"label"</span>) instanceof String l) || l.isBlank() || ! (body.get(<span class="jxr_string">"value"</span>) instanceof String v) || v.isBlank()))
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' kind '%s' requires label(...) and value(...)."</span>, id, kind);
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 		<strong class="jxr_keyword">if</strong> (eq(kind, <span class="jxr_string">"treemap"</span>) &amp;&amp; ! body.containsKey(<span class="jxr_string">"groupBy"</span>))
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' kind 'treemap' requires groupBy(...)."</span>, id);
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 		<strong class="jxr_keyword">if</strong> (eq(kind, <span class="jxr_string">"treemap"</span>) &amp;&amp; (! (body.get(<span class="jxr_string">"label"</span>) instanceof String tl) || tl.isBlank()))
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' kind 'treemap' requires label(field)."</span>, id);
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 		<strong class="jxr_keyword">if</strong> (eq(kind, <span class="jxr_string">"heatmap"</span>) &amp;&amp; (! body.containsKey(<span class="jxr_string">"x"</span>) || ! body.containsKey(<span class="jxr_string">"y"</span>) || ! (body.get(<span class="jxr_string">"value"</span>) instanceof String)))
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' kind 'heatmap' requires x(...), yField(...) and value(...)."</span>, id);
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 		<strong class="jxr_keyword">if</strong> (kind == <strong class="jxr_keyword">null</strong> &amp;&amp; option == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' raw(...) requires option(...)."</span>, id);
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		<strong class="jxr_keyword">if</strong> (kind == <strong class="jxr_keyword">null</strong> &amp;&amp; (! series.isEmpty() || body.keySet().stream().anyMatch(HELPER_KEYS::contains)))
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ChartDef '%s' raw(...) takes no helper keys (x, y, series, ...); put them in option(...)."</span>, id);
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 		<strong class="jxr_keyword">var</strong> c = CardSpec.of(<span class="jxr_string">"chart"</span>, id);
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 		<strong class="jxr_keyword">if</strong> (legacy())
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 			c.body(<span class="jxr_string">"kind"</span>, kind);
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		<strong class="jxr_keyword">if</strong> (nn(title)) c.title(title);
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 		<strong class="jxr_keyword">if</strong> (nn(src)) c.src(src);
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		<strong class="jxr_keyword">if</strong> (nn(source)) {
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 			c.body(<span class="jxr_string">"source"</span>, source);
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 			c.subscribes(Subscription.to(source).as(<span class="jxr_string">"data"</span>));
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		}
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 		<strong class="jxr_keyword">if</strong> (legacy()) {
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 			body.forEach(c::body);
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 			<strong class="jxr_keyword">if</strong> (! series.isEmpty()) c.body(<span class="jxr_string">"series"</span>, List.copyOf(series));
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 			<strong class="jxr_keyword">var</strong> helper = kind == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : JsonMap.of(<span class="jxr_string">"kind"</span>, kind);
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 			body.forEach((k, v) -&gt; { <strong class="jxr_keyword">if</strong> (helper != <strong class="jxr_keyword">null</strong> &amp;&amp; HELPER_KEYS.contains(k)) helper.put(k, v); <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (! HELPER_KEYS.contains(k)) c.body(k, v); });
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 			<strong class="jxr_keyword">if</strong> (helper != <strong class="jxr_keyword">null</strong> &amp;&amp; ! series.isEmpty()) helper.put(<span class="jxr_string">"series"</span>, List.copyOf(series));
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 			<strong class="jxr_keyword">if</strong> (helper != <strong class="jxr_keyword">null</strong>) c.body(<span class="jxr_string">"helper"</span>, helper);
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 		}
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		<strong class="jxr_keyword">if</strong> (nn(data)) c.body(<span class="jxr_string">"data"</span>, List.copyOf(data));
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 		<strong class="jxr_keyword">if</strong> (nn(option)) c.body(<span class="jxr_string">"option"</span>, parsed(option, <span class="jxr_string">"option"</span>));
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 		<strong class="jxr_keyword">if</strong> (! patches.isEmpty()) {
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 			<strong class="jxr_keyword">var</strong> p = <strong class="jxr_keyword">new</strong> JsonMap();
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : patches)
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 				merge(p, parsed(x, <span class="jxr_string">"patch"</span>));
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 			c.body(<span class="jxr_string">"patch"</span>, p);
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 		}
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		<strong class="jxr_keyword">if</strong> (! decorators.isEmpty()) c.body(<span class="jxr_string">"decorators"</span>, List.copyOf(decorators));
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		<strong class="jxr_keyword">if</strong> (! on.isEmpty()) c.body(<span class="jxr_string">"on"</span>, <strong class="jxr_keyword">new</strong> JsonMap(on));
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		<strong class="jxr_keyword">if</strong> (! topicActions.isEmpty()) c.body(<span class="jxr_string">"topicActions"</span>, List.copyOf(topicActions));
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 		<strong class="jxr_keyword">if</strong> (! catalog.isEmpty()) c.body(<span class="jxr_string">"actions"</span>, List.copyOf(catalog));
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		<strong class="jxr_keyword">if</strong> (! maps.isEmpty()) c.body(<span class="jxr_string">"maps"</span>, <strong class="jxr_keyword">new</strong> JsonMap(maps));
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 		<strong class="jxr_keyword">if</strong> (! publishes.isEmpty()) c.publishes(publishes.entrySet().stream().map(e -&gt; TopicDecl.of(e.getKey()).retain(e.getValue())).toArray(<a name="TopicDecl" href="../../../../../org/apache/juneau/console/TopicDecl.html#TopicDecl">TopicDecl</a>[]::<strong class="jxr_keyword">new</strong>));
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 		<strong class="jxr_keyword">if</strong> (nn(visibleWhen)) c.visibleWhen(visibleWhen);
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 		<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 	}
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="SwitcherDef.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.html#line-98">SwitcherDef.View</a></span>
+<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.html#line-123">SwitcherDef.View</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a>&gt;</span></div>
 <div class="block">One view of a switcher.
@@ -110,30 +110,35 @@ implements <a href="../Handled.html" title="interface in org.apache.juneau.conso
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initialSection(java.lang.String)" class="member-name-link">initialSection</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionId)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#modelBlock()" class="member-name-link">modelBlock</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cards(org.apache.juneau.console.freemarker.CardSpec...)" class="member-name-link">cards</a><wbr>(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>...&nbsp;cards)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Stacks the cards vertically in this view, with the card gap between them.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initialSection(java.lang.String)" class="member-name-link">initialSection</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionId)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#modelBlock()" class="member-name-link">modelBlock</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the element's model block.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#section(java.lang.String,java.lang.String,org.apache.juneau.console.freemarker.CardSpec)" class="member-name-link">section</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionId,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#section(java.lang.String,java.lang.String,org.apache.juneau.console.freemarker.CardSpec)" class="member-name-link">section</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionId,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionLabel,
  <a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#section(java.lang.String,java.lang.String,org.apache.juneau.console.freemarker.CardSpec,java.util.function.Consumer)" class="member-name-link">section</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionId,
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#section(java.lang.String,java.lang.String,org.apache.juneau.console.freemarker.CardSpec,java.util.function.Consumer)" class="member-name-link">section</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionId,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionLabel,
  <a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="SwitcherDef.Section.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.Section</a>&gt;&nbsp;config)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#section(org.apache.juneau.console.freemarker.CardSpec)" class="member-name-link">section</a><wbr>(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#self()" class="member-name-link">self</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#section(org.apache.juneau.console.freemarker.CardSpec)" class="member-name-link">section</a><wbr>(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#self()" class="member-name-link">self</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns this builder.</div>
 </div>
 </div>
@@ -159,7 +164,7 @@ implements <a href="../Handled.html" title="interface in org.apache.juneau.conso
 <li>
 <section class="detail" id="modelBlock()">
 <h3>modelBlock</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.View.html#line-111">modelBlock</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.View.html#line-137">modelBlock</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Handled.html#modelBlock()">Handled</a></code></span></div>
 <div class="block">Returns the element's model block.</div>
 <dl class="notes">
@@ -173,7 +178,7 @@ implements <a href="../Handled.html" title="interface in org.apache.juneau.conso
 <li>
 <section class="detail" id="self()">
 <h3>self</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.View.html#line-114">self</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.View.html#line-140">self</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Handled.html#self()">Handled</a></code></span></div>
 <div class="block">Returns this builder.</div>
 <dl class="notes">
@@ -187,7 +192,7 @@ implements <a href="../Handled.html" title="interface in org.apache.juneau.conso
 <li>
 <section class="detail" id="section(org.apache.juneau.console.freemarker.CardSpec)">
 <h3>section</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.View.html#line-118">section</a></span><wbr><span class="parameters">(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.View.html#line-144">section</a></span><wbr><span class="parameters">(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>card</code> - The only card of the view, in the default section. @return This object.</dd>
@@ -197,7 +202,7 @@ implements <a href="../Handled.html" title="interface in org.apache.juneau.conso
 <li>
 <section class="detail" id="section(java.lang.String,java.lang.String,org.apache.juneau.console.freemarker.CardSpec)">
 <h3>section</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.View.html#line-124">section</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionId,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.View.html#line-150">section</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionId,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionLabel,
  <a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card)</span></div>
 <dl class="notes">
@@ -209,7 +214,7 @@ implements <a href="../Handled.html" title="interface in org.apache.juneau.conso
 <li>
 <section class="detail" id="section(java.lang.String,java.lang.String,org.apache.juneau.console.freemarker.CardSpec,java.util.function.Consumer)">
 <h3>section</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.View.html#line-130">section</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionId,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.View.html#line-156">section</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionId,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionLabel,
  <a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="SwitcherDef.Section.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.Section</a>&gt;&nbsp;config)</span></div>
@@ -220,9 +225,22 @@ implements <a href="../Handled.html" title="interface in org.apache.juneau.conso
 </section>
 </li>
 <li>
+<section class="detail" id="cards(org.apache.juneau.console.freemarker.CardSpec...)">
+<h3>cards</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.View.html#line-169">cards</a></span><wbr><span class="parameters">(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>...&nbsp;cards)</span></div>
+<div class="block">Stacks the cards vertically in this view, with the card gap between them.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>cards</code> - The cards, two or more.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="initialSection(java.lang.String)">
 <h3>initialSection</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.View.html#line-138">initialSection</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionId)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/SwitcherDef.View.html#line-175">initialSection</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionId)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>sectionId</code> - The section shown first when nothing else decides. @return This object.</dd>

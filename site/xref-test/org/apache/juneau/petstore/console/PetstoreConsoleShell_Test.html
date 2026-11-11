@@ -84,12 +84,27 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertNotContains(<span class="jxr_string">"Coming soon"</span>, page(client(), <span class="jxr_string">"/console/dev/cards"</span>));
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Test <strong class="jxr_keyword">void</strong> a07_missingStoreBeanFailsLoudly() {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> StoreRest();
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> e = org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, r::store);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertContains(<span class="jxr_string">"No PetStore bean is wired"</span>, e.getMessage());
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  }
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Test <strong class="jxr_keyword">void</strong> a08_headerUsesPawPrintSymbol() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> html = client().get(<span class="jxr_string">"/console/store"</span>).accept(<span class="jxr_string">"text/html"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertContains(<span class="jxr_string">"rel=\&quot;icon\&quot;"</span>, html);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertContains(<span class="jxr_string">"juneau-symbol/paw_print.svg"</span>, html);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertContains(<span class="jxr_string">"paw_print"</span>, html);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> a09_petPageFaviconResolves() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> html = client().get(<span class="jxr_string">"/console/pets/1/summary"</span>).accept(<span class="jxr_string">"text/html"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> m = java.util.regex.Pattern.compile(<span class="jxr_string">"rel=\&quot;icon\&quot;[^&gt;]*href=\&quot;([^\&quot;]+)\&quot;|href=\&quot;([^\&quot;]+paw_print[^\&quot;]*)\&quot;"</span>).matcher(html);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		org.junit.jupiter.api.Assertions.assertTrue(m.find(), html.substring(0, Math.min(html.length(), 1500)));
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> href = m.group(1) != <strong class="jxr_keyword">null</strong> ? m.group(1) : m.group(2);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		client().get(href).accept(<span class="jxr_string">"image/svg+xml"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Test <strong class="jxr_keyword">void</strong> a07_missingStoreBeanFailsLoudly() {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> StoreRest();
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> e = org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, r::store);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertContains(<span class="jxr_string">"No PetStore bean is wired"</span>, e.getMessage());
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

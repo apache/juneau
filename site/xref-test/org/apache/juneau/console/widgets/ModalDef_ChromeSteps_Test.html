@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  			.step(ModalDef.Step.of(<span class="jxr_string">"pick"</span>).title(<span class="jxr_string">"Pick"</span>).confirmLabel(<span class="jxr_string">"Next"</span>).field(<span class="jxr_string">"Pet"</span>, <span class="jxr_string">"Rex"</span>))
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  			.step(ModalDef.Step.of(<span class="jxr_string">"review"</span>).title(<span class="jxr_string">"Review"</span>).field(<span class="jxr_string">"Total"</span>, <span class="jxr_string">"5"</span>));
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> expected = Json.to(<span class="jxr_string">""</span><span class="jxr_string">"
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"2"</span>,<span class="jxr_string">"title"</span>:<span class="jxr_string">"Wizard"</span>,
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"3"</span>,<span class="jxr_string">"title"</span>:<span class="jxr_string">"Wizard"</span>,
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  			 <span class="jxr_string">"steps"</span>:[{<span class="jxr_string">"id"</span>:<span class="jxr_string">"pick"</span>,<span class="jxr_string">"title"</span>:<span class="jxr_string">"Pick"</span>,<span class="jxr_string">"confirmLabel"</span>:<span class="jxr_string">"Next"</span>,<span class="jxr_string">"fields"</span>:[{<span class="jxr_string">"label"</span>:<span class="jxr_string">"Pet"</span>,<span class="jxr_string">"value"</span>:<span class="jxr_string">"Rex"</span>}]},
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			          {<span class="jxr_string">"id"</span>:<span class="jxr_string">"review"</span>,<span class="jxr_string">"title"</span>:<span class="jxr_string">"Review"</span>,<span class="jxr_string">"fields"</span>:[{<span class="jxr_string">"label"</span>:<span class="jxr_string">"Total"</span>,<span class="jxr_string">"value"</span>:<span class="jxr_string">"5"</span>}]}]}
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  			<span class="jxr_string">""</span><span class="jxr_string">", Map.<strong class="jxr_keyword">class</strong>);
@@ -89,8 +89,8 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Test <strong class="jxr_keyword">void</strong> a08_nav_contractVersionUnchanged() {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		Map&lt;?,?&gt; actual = Json.to(Json.of(ModalDef.create(<span class="jxr_string">"t"</span>).nav(ModalDef.NAV_FOLDER)), Map.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertEquals(<span class="jxr_string">"2"</span>, actual.get(<span class="jxr_string">"contractVersion"</span>));
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertEquals(<span class="jxr_string">"2"</span>, ModalDef.CONTRACT_VERSION);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertEquals(<span class="jxr_string">"3"</span>, actual.get(<span class="jxr_string">"contractVersion"</span>));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertEquals(<span class="jxr_string">"3"</span>, ModalDef.CONTRACT_VERSION);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> b01_validate_blankChromeRejected() {

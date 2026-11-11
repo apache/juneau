@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RowDetail BOOM = RowDetail.fromBean(Pet.<strong class="jxr_keyword">class</strong>, id -&gt; { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"lookup failed"</span>); }).key(<span class="jxr_string">"boom"</span>)
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		.tab(DetailTab.fields(<span class="jxr_string">"Info"</span>, <span class="jxr_string">"name"</span>).count(id -&gt; { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"count failed"</span>); }));
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RowDetail BADCOUNT = RowDetail.fromBean(Pet.<strong class="jxr_keyword">class</strong>, id -&gt; <strong class="jxr_keyword">new</strong> Pet(id)).key(<span class="jxr_string">"badcount"</span>)
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RowDetail BADCOUNT = RowDetail.fromBean(Pet.<strong class="jxr_keyword">class</strong>, Pet::<strong class="jxr_keyword">new</strong>).key(<span class="jxr_string">"badcount"</span>)
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		.tab(DetailTab.fields(<span class="jxr_string">"Info"</span>, <span class="jxr_string">"name"</span>).count(id -&gt; { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"count failed"</span>); }));
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Rest
@@ -127,33 +127,31 @@
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@Test <strong class="jxr_keyword">void</strong> a06_duplicateKey_failsStartup() {
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">var</strong> mixin = <strong class="jxr_keyword">new</strong> RowDetailMixin() {
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			@Override <strong class="jxr_keyword">public</strong> Collection&lt;RowDetail&gt; rowDetails() { <strong class="jxr_keyword">return</strong> List.of(PET, RowDetail.fromBean(Pet.<strong class="jxr_keyword">class</strong>, id -&gt; <strong class="jxr_keyword">null</strong>)); }
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		};
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, mixin::rowDetailIndex);
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@Test <strong class="jxr_keyword">void</strong> z01_oneDetailOnTwoTables_servesFieldsOfBoth() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		TableSpec.create(<span class="jxr_string">"ta"</span>).dataUrl(<span class="jxr_string">"/a"</span>).columns(Column.create(<span class="jxr_string">"id"</span>), Column.create(<span class="jxr_string">"name"</span>)).detail(SHARED).toCardBody();
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		TableSpec.create(<span class="jxr_string">"tb"</span>).dataUrl(<span class="jxr_string">"/b"</span>).columns(Column.create(<span class="jxr_string">"id"</span>), Column.create(<span class="jxr_string">"email"</span>)).detail(SHARED).toCardBody();
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> body = c2.get(<span class="jxr_string">"/row-detail/shared/p1"</span>).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).run().assertStatus(200).getContent().asString();
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> f = (Map&lt;String,Object&gt;)Json.to(body, Map.<strong class="jxr_keyword">class</strong>).get(<span class="jxr_string">"fields"</span>);
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertTrue(f.containsKey(<span class="jxr_string">"name"</span>), body);
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertTrue(f.containsKey(<span class="jxr_string">"email"</span>), body);
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	@Test <strong class="jxr_keyword">void</strong> z02_throwingLookup_isTheSameEmpty404() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertSame404(c2.get(<span class="jxr_string">"/row-detail/boom/p1"</span>).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).run());
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		assertSame404(c2.get(<span class="jxr_string">"/row-detail/boom/p1/counts"</span>).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).run());
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertSame404(c2.get(<span class="jxr_string">"/row-detail/boom/p1/tab/info"</span>).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).run());
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	@Test <strong class="jxr_keyword">void</strong> z03_throwingCounter_dropsItsCount_notTheDetail() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> body = c2.get(<span class="jxr_string">"/row-detail/badcount/p1"</span>).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).run().assertStatus(200).getContent().asString();
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">var</strong> counts = (Map&lt;String,Object&gt;)Json.to(body, Map.<strong class="jxr_keyword">class</strong>).get(<span class="jxr_string">"counts"</span>);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertFalse(counts.containsKey(<span class="jxr_string">"info"</span>), body);
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> }
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		RowDetailMixin mixin = () -&gt; List.of(PET, RowDetail.fromBean(Pet.<strong class="jxr_keyword">class</strong>, id -&gt; <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, mixin::rowDetailIndex);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@Test <strong class="jxr_keyword">void</strong> z01_oneDetailOnTwoTables_servesFieldsOfBoth() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		TableSpec.create(<span class="jxr_string">"ta"</span>).dataUrl(<span class="jxr_string">"/a"</span>).columns(Column.create(<span class="jxr_string">"id"</span>), Column.create(<span class="jxr_string">"name"</span>)).detail(SHARED).toCardBody();
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		TableSpec.create(<span class="jxr_string">"tb"</span>).dataUrl(<span class="jxr_string">"/b"</span>).columns(Column.create(<span class="jxr_string">"id"</span>), Column.create(<span class="jxr_string">"email"</span>)).detail(SHARED).toCardBody();
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> body = c2.get(<span class="jxr_string">"/row-detail/shared/p1"</span>).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> f = (Map&lt;String,Object&gt;)Json.to(body, Map.<strong class="jxr_keyword">class</strong>).get(<span class="jxr_string">"fields"</span>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertTrue(f.containsKey(<span class="jxr_string">"name"</span>), body);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertTrue(f.containsKey(<span class="jxr_string">"email"</span>), body);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	@Test <strong class="jxr_keyword">void</strong> z02_throwingLookup_isTheSameEmpty404() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertSame404(c2.get(<span class="jxr_string">"/row-detail/boom/p1"</span>).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).run());
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		assertSame404(c2.get(<span class="jxr_string">"/row-detail/boom/p1/counts"</span>).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).run());
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertSame404(c2.get(<span class="jxr_string">"/row-detail/boom/p1/tab/info"</span>).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).run());
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	@Test <strong class="jxr_keyword">void</strong> z03_throwingCounter_dropsItsCount_notTheDetail() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> body = c2.get(<span class="jxr_string">"/row-detail/badcount/p1"</span>).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> counts = (Map&lt;String,Object&gt;)Json.to(body, Map.<strong class="jxr_keyword">class</strong>).get(<span class="jxr_string">"counts"</span>);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertFalse(counts.containsKey(<span class="jxr_string">"info"</span>), body);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

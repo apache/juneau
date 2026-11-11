@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@ParameterizedTest
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	@ValueSource(strings = {<span class="jxr_string">"valid-example.json"</span>, <span class="jxr_string">"valid-minimal.json"</span>, <span class="jxr_string">"valid-deep.json"</span>,
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<span class="jxr_string">"valid-terminal-view.json"</span>, <span class="jxr_string">"valid-terminal-view-nopoll.json"</span>, <span class="jxr_string">"valid-terminal.json"</span>,
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<span class="jxr_string">"valid-datatables-table.json"</span>, <span class="jxr_string">"valid-datatables-table-full.json"</span>, <span class="jxr_string">"valid-datatables-rows.json"</span>,
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<span class="jxr_string">"valid-datatables-table.json"</span>, <span class="jxr_string">"valid-datatables-table-full.json"</span>, <span class="jxr_string">"valid-datatables-table-rowidfield.json"</span>, <span class="jxr_string">"valid-datatables-rows.json"</span>,
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<span class="jxr_string">"valid-datatables-src.json"</span>, <span class="jxr_string">"valid-badge.json"</span>, <span class="jxr_string">"valid-badge-refreshes-allow-missing.json"</span>,
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<span class="jxr_string">"valid-chart-src.json"</span>, <span class="jxr_string">"valid-chart-data.json"</span>, <span class="jxr_string">"valid-job-log.json"</span>,
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<span class="jxr_string">"valid-html-src-sanitize.json"</span>, <span class="jxr_string">"valid-chart-bare.json"</span>, <span class="jxr_string">"valid-chart-option.json"</span>, <span class="jxr_string">"valid-chart-helper.json"</span>, <span class="jxr_string">"valid-chart-action-visiblewhen.json"</span>,
@@ -198,7 +198,16 @@
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> id = JsonMap.ofString(PageContractSchema.get().schemaJson()).getString(<span class="jxr_string">"$id"</span>);
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertTrue(id.endsWith(<span class="jxr_string">"1.1/juneau-page.schema.json"</span>) || id.endsWith(<span class="jxr_string">"1.1"</span>), () -&gt; <span class="jxr_string">"expected $id to carry '1.1'; got '"</span> + id + <span class="jxr_string">"'"</span>);
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 	}
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> }
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	@Test <strong class="jxr_keyword">void</strong> columnSearchHelpUrl_a01() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">var</strong> base = fixture(<span class="jxr_string">"valid-datatables-table.json"</span>);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> ok = base.replace(<span class="jxr_string">"\&quot;dataUrl\&quot;"</span>, <span class="jxr_string">"\&quot;columnSearchHelpUrl\&quot;:\&quot;https://example.com/search\&quot;,\&quot;dataUrl\&quot;"</span>);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertNotEquals(base, ok);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertEquals(List.of(), PageContractSchema.get().validate(ok));
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">var</strong> bad = base.replace(<span class="jxr_string">"\&quot;dataUrl\&quot;"</span>, <span class="jxr_string">"\&quot;columnSearchHelpUrl\&quot;:5,\&quot;dataUrl\&quot;"</span>);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertFalse(PageContractSchema.get().validate(bad).isEmpty());
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	}
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

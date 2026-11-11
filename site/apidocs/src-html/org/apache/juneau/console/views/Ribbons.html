@@ -73,145 +73,151 @@
 <span class="source-line-no">060</span><span id="line-60"> *          .build());</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;/p&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> */</span>
-<span class="source-line-no">063</span><span id="line-63">public final class Ribbons {</span>
-<span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">   private static final List&lt;String&gt; VALID_IDS = List.of(</span>
-<span class="source-line-no">066</span><span id="line-66">      "search", "export", "copy", "csv", "excel", "pdf", "link", "collapse", "columns", "reset", "refresh");</span>
+<span class="source-line-no">063</span><span id="line-63">@SuppressWarnings({</span>
+<span class="source-line-no">064</span><span id="line-64">   "java:S1192" // Ribbon item ids read more clearly inline than as constants.</span>
+<span class="source-line-no">065</span><span id="line-65">})</span>
+<span class="source-line-no">066</span><span id="line-66">public final class Ribbons {</span>
 <span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   private Ribbons() {}</span>
-<span class="source-line-no">069</span><span id="line-69"></span>
-<span class="source-line-no">070</span><span id="line-70">   /**</span>
-<span class="source-line-no">071</span><span id="line-71">    * Starts the standard preset.</span>
-<span class="source-line-no">072</span><span id="line-72">    *</span>
-<span class="source-line-no">073</span><span id="line-73">    * @return A new builder.</span>
-<span class="source-line-no">074</span><span id="line-74">    */</span>
-<span class="source-line-no">075</span><span id="line-75">   public static Standard standard() {</span>
-<span class="source-line-no">076</span><span id="line-76">      return new Standard();</span>
-<span class="source-line-no">077</span><span id="line-77">   }</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">   /** Builder for the standard table ribbon. */</span>
-<span class="source-line-no">080</span><span id="line-80">   public static final class Standard {</span>
+<span class="source-line-no">068</span><span id="line-68">   private static final List&lt;String&gt; VALID_IDS = List.of(</span>
+<span class="source-line-no">069</span><span id="line-69">      "search", "export", "copy", "csv", "excel", "pdf", "link", "collapse", "columns", "reset", "refresh");</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">   private Ribbons() {}</span>
+<span class="source-line-no">072</span><span id="line-72"></span>
+<span class="source-line-no">073</span><span id="line-73">   /**</span>
+<span class="source-line-no">074</span><span id="line-74">    * Starts the standard preset.</span>
+<span class="source-line-no">075</span><span id="line-75">    *</span>
+<span class="source-line-no">076</span><span id="line-76">    * @return A new builder.</span>
+<span class="source-line-no">077</span><span id="line-77">    */</span>
+<span class="source-line-no">078</span><span id="line-78">   public static Standard standard() {</span>
+<span class="source-line-no">079</span><span id="line-79">      return new Standard();</span>
+<span class="source-line-no">080</span><span id="line-80">   }</span>
 <span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82">      private final List&lt;RibbonItem&gt; create = new ArrayList&lt;&gt;();</span>
-<span class="source-line-no">083</span><span id="line-83">      private final List&lt;RibbonItem&gt; filter = new ArrayList&lt;&gt;();</span>
-<span class="source-line-no">084</span><span id="line-84">      private final List&lt;String&gt; extras = new ArrayList&lt;&gt;();</span>
-<span class="source-line-no">085</span><span id="line-85">      private final Set&lt;String&gt; without = new LinkedHashSet&lt;&gt;();</span>
-<span class="source-line-no">086</span><span id="line-86">      private String refreshId = "refresh";</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">      private Standard() {}</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">      /**</span>
-<span class="source-line-no">091</span><span id="line-91">       * Adds items to the create slot (group {@code entity}); repeatable.</span>
-<span class="source-line-no">092</span><span id="line-92">       *</span>
-<span class="source-line-no">093</span><span id="line-93">       * &lt;p&gt;</span>
-<span class="source-line-no">094</span><span id="line-94">       * Ids of items added here are not checked for duplicates by the builder; build-time id validation applies</span>
-<span class="source-line-no">095</span><span id="line-95">       * to the stock items only, so keep the ids you pass unique among themselves and against the stock ids.</span>
-<span class="source-line-no">096</span><span id="line-96">       *</span>
-<span class="source-line-no">097</span><span id="line-97">       * @param items The items.</span>
-<span class="source-line-no">098</span><span id="line-98">       * @return This object.</span>
-<span class="source-line-no">099</span><span id="line-99">       */</span>
-<span class="source-line-no">100</span><span id="line-100">      public Standard create(RibbonItem...items) {</span>
-<span class="source-line-no">101</span><span id="line-101">         create.addAll(List.of(items));</span>
-<span class="source-line-no">102</span><span id="line-102">         return this;</span>
-<span class="source-line-no">103</span><span id="line-103">      }</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">      /**</span>
-<span class="source-line-no">106</span><span id="line-106">       * Adds items to the filter slot (group {@code filter}); repeatable.</span>
-<span class="source-line-no">107</span><span id="line-107">       *</span>
-<span class="source-line-no">108</span><span id="line-108">       * @param items The items.</span>
-<span class="source-line-no">109</span><span id="line-109">       * @return This object.</span>
-<span class="source-line-no">110</span><span id="line-110">       */</span>
-<span class="source-line-no">111</span><span id="line-111">      public Standard filter(RibbonItem...items) {</span>
-<span class="source-line-no">112</span><span id="line-112">         filter.addAll(List.of(items));</span>
-<span class="source-line-no">113</span><span id="line-113">         return this;</span>
-<span class="source-line-no">114</span><span id="line-114">      }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">      /**</span>
-<span class="source-line-no">117</span><span id="line-117">       * Adds optional export buttons (for example {@code "excel"}, {@code "pdf"}) after copy and csv.</span>
-<span class="source-line-no">118</span><span id="line-118">       *</span>
-<span class="source-line-no">119</span><span id="line-119">       * &lt;p&gt;</span>
-<span class="source-line-no">120</span><span id="line-120">       * An optional button is omitted at runtime when its library is missing.</span>
+<span class="source-line-no">082</span><span id="line-82">   /** Builder for the standard table ribbon. */</span>
+<span class="source-line-no">083</span><span id="line-83">   public static final class Standard {</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">      private final List&lt;RibbonItem&gt; create = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">086</span><span id="line-86">      private final List&lt;RibbonItem&gt; filter = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">087</span><span id="line-87">      private final List&lt;String&gt; extras = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">088</span><span id="line-88">      private final Set&lt;String&gt; without = new LinkedHashSet&lt;&gt;();</span>
+<span class="source-line-no">089</span><span id="line-89">      private String refreshId = "refresh";</span>
+<span class="source-line-no">090</span><span id="line-90"></span>
+<span class="source-line-no">091</span><span id="line-91">      private Standard() {}</span>
+<span class="source-line-no">092</span><span id="line-92"></span>
+<span class="source-line-no">093</span><span id="line-93">      /**</span>
+<span class="source-line-no">094</span><span id="line-94">       * Adds items to the create slot (group {@code entity}); repeatable.</span>
+<span class="source-line-no">095</span><span id="line-95">       *</span>
+<span class="source-line-no">096</span><span id="line-96">       * &lt;p&gt;</span>
+<span class="source-line-no">097</span><span id="line-97">       * Ids of items added here are not checked for duplicates by the builder; build-time id validation applies</span>
+<span class="source-line-no">098</span><span id="line-98">       * to the stock items only, so keep the ids you pass unique among themselves and against the stock ids.</span>
+<span class="source-line-no">099</span><span id="line-99">       *</span>
+<span class="source-line-no">100</span><span id="line-100">       * @param items The items.</span>
+<span class="source-line-no">101</span><span id="line-101">       * @return This object.</span>
+<span class="source-line-no">102</span><span id="line-102">       */</span>
+<span class="source-line-no">103</span><span id="line-103">      public Standard create(RibbonItem...items) {</span>
+<span class="source-line-no">104</span><span id="line-104">         create.addAll(List.of(items));</span>
+<span class="source-line-no">105</span><span id="line-105">         return this;</span>
+<span class="source-line-no">106</span><span id="line-106">      }</span>
+<span class="source-line-no">107</span><span id="line-107"></span>
+<span class="source-line-no">108</span><span id="line-108">      /**</span>
+<span class="source-line-no">109</span><span id="line-109">       * Adds items to the filter slot (group {@code filter}); repeatable.</span>
+<span class="source-line-no">110</span><span id="line-110">       *</span>
+<span class="source-line-no">111</span><span id="line-111">       * @param items The items.</span>
+<span class="source-line-no">112</span><span id="line-112">       * @return This object.</span>
+<span class="source-line-no">113</span><span id="line-113">       */</span>
+<span class="source-line-no">114</span><span id="line-114">      public Standard filter(RibbonItem...items) {</span>
+<span class="source-line-no">115</span><span id="line-115">         filter.addAll(List.of(items));</span>
+<span class="source-line-no">116</span><span id="line-116">         return this;</span>
+<span class="source-line-no">117</span><span id="line-117">      }</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">      /**</span>
+<span class="source-line-no">120</span><span id="line-120">       * Adds optional export buttons (for example {@code "excel"}, {@code "pdf"}) after copy and csv.</span>
 <span class="source-line-no">121</span><span id="line-121">       *</span>
-<span class="source-line-no">122</span><span id="line-122">       * @param buttons The buttons, each {@code excel} or {@code pdf}.</span>
-<span class="source-line-no">123</span><span id="line-123">       * @return This object.</span>
-<span class="source-line-no">124</span><span id="line-124">       */</span>
-<span class="source-line-no">125</span><span id="line-125">      public Standard export(String...buttons) {</span>
-<span class="source-line-no">126</span><span id="line-126">         extras.addAll(List.of(buttons));</span>
-<span class="source-line-no">127</span><span id="line-127">         return this;</span>
-<span class="source-line-no">128</span><span id="line-128">      }</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">      /**</span>
-<span class="source-line-no">131</span><span id="line-131">       * Drops a preset item or export button by id.</span>
-<span class="source-line-no">132</span><span id="line-132">       *</span>
-<span class="source-line-no">133</span><span id="line-133">       * &lt;p&gt;</span>
-<span class="source-line-no">134</span><span id="line-134">       * Valid ids are {@code search}, {@code export}, {@code copy}, {@code csv}, {@code excel}, {@code pdf},</span>
-<span class="source-line-no">135</span><span id="line-135">       * {@code link}, {@code collapse}, {@code columns}, {@code reset}, {@code refresh}, and the id given to</span>
-<span class="source-line-no">136</span><span id="line-136">       * {@link #refreshId(String)}.  An unknown id is rejected by {@link #build()}.</span>
-<span class="source-line-no">137</span><span id="line-137">       *</span>
-<span class="source-line-no">138</span><span id="line-138">       * @param id The id.</span>
-<span class="source-line-no">139</span><span id="line-139">       * @return This object.</span>
-<span class="source-line-no">140</span><span id="line-140">       */</span>
-<span class="source-line-no">141</span><span id="line-141">      public Standard without(String id) {</span>
-<span class="source-line-no">142</span><span id="line-142">         without.add(id);</span>
-<span class="source-line-no">143</span><span id="line-143">         return this;</span>
-<span class="source-line-no">144</span><span id="line-144">      }</span>
-<span class="source-line-no">145</span><span id="line-145"></span>
-<span class="source-line-no">146</span><span id="line-146">      /**</span>
-<span class="source-line-no">147</span><span id="line-147">       * Renames the refresh item (default {@code "refresh"}).</span>
-<span class="source-line-no">148</span><span id="line-148">       *</span>
-<span class="source-line-no">149</span><span id="line-149">       * @param id The id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">150</span><span id="line-150">       * @return This object.</span>
-<span class="source-line-no">151</span><span id="line-151">       */</span>
-<span class="source-line-no">152</span><span id="line-152">      public Standard refreshId(String id) {</span>
-<span class="source-line-no">153</span><span id="line-153">         if (ib(id))</span>
-<span class="source-line-no">154</span><span id="line-154">            throw new IllegalArgumentException("Ribbons refresh id must not be null or blank.");</span>
-<span class="source-line-no">155</span><span id="line-155">         refreshId = id;</span>
-<span class="source-line-no">156</span><span id="line-156">         return this;</span>
-<span class="source-line-no">157</span><span id="line-157">      }</span>
-<span class="source-line-no">158</span><span id="line-158"></span>
-<span class="source-line-no">159</span><span id="line-159">      /**</span>
-<span class="source-line-no">160</span><span id="line-160">       * Builds the items in slot order, each with its canonical group.</span>
-<span class="source-line-no">161</span><span id="line-161">       *</span>
-<span class="source-line-no">162</span><span id="line-162">       * @return An immutable list, for {@link TableSpec#ribbon(List)}.</span>
-<span class="source-line-no">163</span><span id="line-163">       * @throws IllegalArgumentException If {@link #without(String)} named an id that is not a preset id.</span>
-<span class="source-line-no">164</span><span id="line-164">       */</span>
-<span class="source-line-no">165</span><span id="line-165">      public List&lt;RibbonItem&gt; build() {</span>
-<span class="source-line-no">166</span><span id="line-166">         for (var w : without)</span>
-<span class="source-line-no">167</span><span id="line-167">            if (! VALID_IDS.contains(w) &amp;&amp; ! w.equals(refreshId))</span>
-<span class="source-line-no">168</span><span id="line-168">               throw new IllegalArgumentException("Unknown ribbon preset id '" + w + "'. Valid ids: " + VALID_IDS + " and the refresh id '" + refreshId + "'.");</span>
-<span class="source-line-no">169</span><span id="line-169">         var out = new ArrayList&lt;RibbonItem&gt;();</span>
-<span class="source-line-no">170</span><span id="line-170">         if (! without.contains("search"))</span>
-<span class="source-line-no">171</span><span id="line-171">            out.add(RibbonItem.search().id("search").group("search"));</span>
-<span class="source-line-no">172</span><span id="line-172">         create.forEach(i -&gt; out.add(i.group("entity")));</span>
-<span class="source-line-no">173</span><span id="line-173">         filter.forEach(i -&gt; out.add(i.group("filter")));</span>
-<span class="source-line-no">174</span><span id="line-174">         if (! without.contains("export")) {</span>
-<span class="source-line-no">175</span><span id="line-175">            var buttons = new ArrayList&lt;String&gt;();</span>
-<span class="source-line-no">176</span><span id="line-176">            if (! without.contains("copy"))</span>
-<span class="source-line-no">177</span><span id="line-177">               buttons.add("copy");</span>
-<span class="source-line-no">178</span><span id="line-178">            if (! without.contains("csv"))</span>
-<span class="source-line-no">179</span><span id="line-179">               buttons.add("csv");</span>
-<span class="source-line-no">180</span><span id="line-180">            var optional = extras.stream().filter(x -&gt; ! without.contains(x)).toList();</span>
-<span class="source-line-no">181</span><span id="line-181">            if (! buttons.isEmpty() || ! optional.isEmpty()) {</span>
-<span class="source-line-no">182</span><span id="line-182">               var e = RibbonItem.export(buttons.toArray(String[]::new)).id("export").group("export");</span>
-<span class="source-line-no">183</span><span id="line-183">               if (! optional.isEmpty())</span>
-<span class="source-line-no">184</span><span id="line-184">                  e.optional(optional.toArray(String[]::new));</span>
-<span class="source-line-no">185</span><span id="line-185">               out.add(e);</span>
-<span class="source-line-no">186</span><span id="line-186">            }</span>
-<span class="source-line-no">187</span><span id="line-187">         }</span>
-<span class="source-line-no">188</span><span id="line-188">         if (! without.contains("link"))</span>
-<span class="source-line-no">189</span><span id="line-189">            out.add(RibbonItem.linkButton().id("link").group("export"));</span>
-<span class="source-line-no">190</span><span id="line-190">         if (! without.contains("collapse"))</span>
-<span class="source-line-no">191</span><span id="line-191">            out.add(RibbonItem.collapseAll().id("collapse").group("viewing"));</span>
-<span class="source-line-no">192</span><span id="line-192">         if (! without.contains("columns"))</span>
-<span class="source-line-no">193</span><span id="line-193">            out.add(RibbonItem.columnSettings().id("columns").group("viewing"));</span>
-<span class="source-line-no">194</span><span id="line-194">         if (! without.contains("reset"))</span>
-<span class="source-line-no">195</span><span id="line-195">            out.add(RibbonItem.resetDefaults().id("reset").group("viewing"));</span>
-<span class="source-line-no">196</span><span id="line-196">         if (! without.contains(refreshId))</span>
-<span class="source-line-no">197</span><span id="line-197">            out.add(RibbonItem.refresh().id(refreshId).group("page"));</span>
-<span class="source-line-no">198</span><span id="line-198">         return List.copyOf(out);</span>
-<span class="source-line-no">199</span><span id="line-199">      }</span>
-<span class="source-line-no">200</span><span id="line-200">   }</span>
-<span class="source-line-no">201</span><span id="line-201">}</span>
+<span class="source-line-no">122</span><span id="line-122">       * &lt;p&gt;</span>
+<span class="source-line-no">123</span><span id="line-123">       * An optional button is omitted at runtime when its library is missing.</span>
+<span class="source-line-no">124</span><span id="line-124">       *</span>
+<span class="source-line-no">125</span><span id="line-125">       * @param buttons The buttons, each {@code excel} or {@code pdf}.</span>
+<span class="source-line-no">126</span><span id="line-126">       * @return This object.</span>
+<span class="source-line-no">127</span><span id="line-127">       */</span>
+<span class="source-line-no">128</span><span id="line-128">      public Standard export(String...buttons) {</span>
+<span class="source-line-no">129</span><span id="line-129">         extras.addAll(List.of(buttons));</span>
+<span class="source-line-no">130</span><span id="line-130">         return this;</span>
+<span class="source-line-no">131</span><span id="line-131">      }</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">      /**</span>
+<span class="source-line-no">134</span><span id="line-134">       * Drops a preset item or export button by id.</span>
+<span class="source-line-no">135</span><span id="line-135">       *</span>
+<span class="source-line-no">136</span><span id="line-136">       * &lt;p&gt;</span>
+<span class="source-line-no">137</span><span id="line-137">       * Valid ids are {@code search}, {@code export}, {@code copy}, {@code csv}, {@code excel}, {@code pdf},</span>
+<span class="source-line-no">138</span><span id="line-138">       * {@code link}, {@code collapse}, {@code columns}, {@code reset}, {@code refresh}, and the id given to</span>
+<span class="source-line-no">139</span><span id="line-139">       * {@link #refreshId(String)}.  An unknown id is rejected by {@link #build()}.</span>
+<span class="source-line-no">140</span><span id="line-140">       *</span>
+<span class="source-line-no">141</span><span id="line-141">       * @param id The id.</span>
+<span class="source-line-no">142</span><span id="line-142">       * @return This object.</span>
+<span class="source-line-no">143</span><span id="line-143">       */</span>
+<span class="source-line-no">144</span><span id="line-144">      public Standard without(String id) {</span>
+<span class="source-line-no">145</span><span id="line-145">         without.add(id);</span>
+<span class="source-line-no">146</span><span id="line-146">         return this;</span>
+<span class="source-line-no">147</span><span id="line-147">      }</span>
+<span class="source-line-no">148</span><span id="line-148"></span>
+<span class="source-line-no">149</span><span id="line-149">      /**</span>
+<span class="source-line-no">150</span><span id="line-150">       * Renames the refresh item (default {@code "refresh"}).</span>
+<span class="source-line-no">151</span><span id="line-151">       *</span>
+<span class="source-line-no">152</span><span id="line-152">       * @param id The id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">153</span><span id="line-153">       * @return This object.</span>
+<span class="source-line-no">154</span><span id="line-154">       */</span>
+<span class="source-line-no">155</span><span id="line-155">      public Standard refreshId(String id) {</span>
+<span class="source-line-no">156</span><span id="line-156">         if (ib(id))</span>
+<span class="source-line-no">157</span><span id="line-157">            throw new IllegalArgumentException("Ribbons refresh id must not be null or blank.");</span>
+<span class="source-line-no">158</span><span id="line-158">         refreshId = id;</span>
+<span class="source-line-no">159</span><span id="line-159">         return this;</span>
+<span class="source-line-no">160</span><span id="line-160">      }</span>
+<span class="source-line-no">161</span><span id="line-161"></span>
+<span class="source-line-no">162</span><span id="line-162">      /**</span>
+<span class="source-line-no">163</span><span id="line-163">       * Builds the items in slot order, each with its canonical group.</span>
+<span class="source-line-no">164</span><span id="line-164">       *</span>
+<span class="source-line-no">165</span><span id="line-165">       * @return An immutable list, for {@link TableSpec#ribbon(List)}.</span>
+<span class="source-line-no">166</span><span id="line-166">       * @throws IllegalArgumentException If {@link #without(String)} named an id that is not a preset id.</span>
+<span class="source-line-no">167</span><span id="line-167">       */</span>
+<span class="source-line-no">168</span><span id="line-168">      @SuppressWarnings({</span>
+<span class="source-line-no">169</span><span id="line-169">         "java:S3776" // Branching is inherent to build(), which assembles the ribbon from many optional items.</span>
+<span class="source-line-no">170</span><span id="line-170">      })</span>
+<span class="source-line-no">171</span><span id="line-171">      public List&lt;RibbonItem&gt; build() {</span>
+<span class="source-line-no">172</span><span id="line-172">         for (var w : without)</span>
+<span class="source-line-no">173</span><span id="line-173">            if (! VALID_IDS.contains(w) &amp;&amp; ! w.equals(refreshId))</span>
+<span class="source-line-no">174</span><span id="line-174">               throw new IllegalArgumentException("Unknown ribbon preset id '" + w + "'. Valid ids: " + VALID_IDS + " and the refresh id '" + refreshId + "'.");</span>
+<span class="source-line-no">175</span><span id="line-175">         var out = new ArrayList&lt;RibbonItem&gt;();</span>
+<span class="source-line-no">176</span><span id="line-176">         if (! without.contains("search"))</span>
+<span class="source-line-no">177</span><span id="line-177">            out.add(RibbonItem.search().id("search").group("search"));</span>
+<span class="source-line-no">178</span><span id="line-178">         create.forEach(i -&gt; out.add(i.group("entity")));</span>
+<span class="source-line-no">179</span><span id="line-179">         filter.forEach(i -&gt; out.add(i.group("filter")));</span>
+<span class="source-line-no">180</span><span id="line-180">         if (! without.contains("export")) {</span>
+<span class="source-line-no">181</span><span id="line-181">            var buttons = new ArrayList&lt;String&gt;();</span>
+<span class="source-line-no">182</span><span id="line-182">            if (! without.contains("copy"))</span>
+<span class="source-line-no">183</span><span id="line-183">               buttons.add("copy");</span>
+<span class="source-line-no">184</span><span id="line-184">            if (! without.contains("csv"))</span>
+<span class="source-line-no">185</span><span id="line-185">               buttons.add("csv");</span>
+<span class="source-line-no">186</span><span id="line-186">            var optional = extras.stream().filter(x -&gt; ! without.contains(x)).toList();</span>
+<span class="source-line-no">187</span><span id="line-187">            if (! buttons.isEmpty() || ! optional.isEmpty()) {</span>
+<span class="source-line-no">188</span><span id="line-188">               var e = RibbonItem.export(buttons.toArray(String[]::new)).id("export").group("export");</span>
+<span class="source-line-no">189</span><span id="line-189">               if (! optional.isEmpty())</span>
+<span class="source-line-no">190</span><span id="line-190">                  e.optional(optional.toArray(String[]::new));</span>
+<span class="source-line-no">191</span><span id="line-191">               out.add(e);</span>
+<span class="source-line-no">192</span><span id="line-192">            }</span>
+<span class="source-line-no">193</span><span id="line-193">         }</span>
+<span class="source-line-no">194</span><span id="line-194">         if (! without.contains("link"))</span>
+<span class="source-line-no">195</span><span id="line-195">            out.add(RibbonItem.linkButton().id("link").group("export"));</span>
+<span class="source-line-no">196</span><span id="line-196">         if (! without.contains("collapse"))</span>
+<span class="source-line-no">197</span><span id="line-197">            out.add(RibbonItem.collapseAll().id("collapse").group("viewing"));</span>
+<span class="source-line-no">198</span><span id="line-198">         if (! without.contains("columns"))</span>
+<span class="source-line-no">199</span><span id="line-199">            out.add(RibbonItem.columnSettings().id("columns").group("viewing"));</span>
+<span class="source-line-no">200</span><span id="line-200">         if (! without.contains("reset"))</span>
+<span class="source-line-no">201</span><span id="line-201">            out.add(RibbonItem.resetDefaults().id("reset").group("viewing"));</span>
+<span class="source-line-no">202</span><span id="line-202">         if (! without.contains(refreshId))</span>
+<span class="source-line-no">203</span><span id="line-203">            out.add(RibbonItem.refresh().id(refreshId).group("page"));</span>
+<span class="source-line-no">204</span><span id="line-204">         return List.copyOf(out);</span>
+<span class="source-line-no">205</span><span id="line-205">      }</span>
+<span class="source-line-no">206</span><span id="line-206">   }</span>
+<span class="source-line-no">207</span><span id="line-207">}</span>
 
 
 

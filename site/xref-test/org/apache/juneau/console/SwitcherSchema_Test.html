@@ -61,7 +61,45 @@
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertFalse(errors.isEmpty(), <span class="jxr_string">"nested switcher should fail"</span>);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertEquals(List.of(<span class="jxr_string">"$.cards[0]: matches 0 of oneOf (expected exactly 1)"</span>), errors);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	}
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	@Test <strong class="jxr_keyword">void</strong> style_a01_enumInSchema() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> base = fixture(<span class="jxr_string">"valid-switcher.json"</span>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">var</strong> slider = base.replace(<span class="jxr_string">"\&quot;initialView\&quot;:\&quot;a\&quot;,"</span>, <span class="jxr_string">"\&quot;initialView\&quot;:\&quot;a\&quot;,\&quot;style\&quot;:\&quot;slider\&quot;,"</span>);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertNotEquals(base, slider);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertTrue(PageContractSchema.get().validate(slider).isEmpty());
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertFalse(PageContractSchema.get().validate(slider.replace(<span class="jxr_string">"slider"</span>, <span class="jxr_string">"pills"</span>)).isEmpty());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	@Test <strong class="jxr_keyword">void</strong> dataTab_a01_booleanInSchema() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> base = fixture(<span class="jxr_string">"valid-chart-src.json"</span>);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">var</strong> on = base.replace(<span class="jxr_string">"\&quot;legend\&quot;:\&quot;bottom\&quot;"</span>, <span class="jxr_string">"\&quot;legend\&quot;:\&quot;bottom\&quot;,\&quot;dataTab\&quot;:true"</span>);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertNotEquals(base, on);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertTrue(PageContractSchema.get().validate(on).isEmpty());
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertFalse(PageContractSchema.get().validate(on.replace(<span class="jxr_string">"\&quot;dataTab\&quot;:true"</span>, <span class="jxr_string">"\&quot;dataTab\&quot;:\&quot;yes\&quot;"</span>)).isEmpty());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Test <strong class="jxr_keyword">void</strong> symbol_a05_schemaAllowsSymbol() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> base = fixture(<span class="jxr_string">"valid-example.json"</span>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> logo = <span class="jxr_string">"\&quot;logo\&quot;: { \&quot;src\&quot;: \&quot;/img/sandbox-console-logo.svg\&quot;, \&quot;href\&quot;: \&quot;/\&quot;, \&quot;alt\&quot;: \&quot;Support Enablement Console\&quot; }"</span>;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertTrue(base.contains(logo));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertTrue(PageContractSchema.get().validate(base.replace(logo, <span class="jxr_string">"\&quot;logo\&quot;: { \&quot;symbol\&quot;: \&quot;paw_print\&quot; }"</span>)).isEmpty());
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertFalse(PageContractSchema.get().validate(base.replace(logo, <span class="jxr_string">"\&quot;logo\&quot;: { \&quot;symbol\&quot;: \&quot;Bad\&quot; }"</span>)).isEmpty());
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertFalse(PageContractSchema.get().validate(base.replace(logo, <span class="jxr_string">"\&quot;logo\&quot;: { \&quot;symbol\&quot;: \&quot;paw_print\&quot;, \&quot;src\&quot;: \&quot;/a.svg\&quot; }"</span>)).isEmpty());
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Test <strong class="jxr_keyword">void</strong> cards_a01_schema() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> base = fixture(<span class="jxr_string">"valid-switcher.json"</span>);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> stacked = base.replace(<span class="jxr_string">"\&quot;card\&quot;:{\&quot;id\&quot;:\&quot;ca\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t\&quot;}"</span>,
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			<span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;ca\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t\&quot;},{\&quot;id\&quot;:\&quot;ca2\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t\&quot;}]"</span>);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertNotEquals(base, stacked);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertEquals(List.of(), PageContractSchema.get().validate(stacked));
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> both = stacked.replace(<span class="jxr_string">"\&quot;cards\&quot;:["</span>, <span class="jxr_string">"\&quot;card\&quot;:{\&quot;id\&quot;:\&quot;cx\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t\&quot;},\&quot;cards\&quot;:["</span>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertFalse(PageContractSchema.get().validate(both).isEmpty());
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> one = stacked.replace(<span class="jxr_string">",{\&quot;id\&quot;:\&quot;ca2\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t\&quot;}"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertNotEquals(stacked, one);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertFalse(PageContractSchema.get().validate(one).isEmpty());
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

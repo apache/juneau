@@ -32,287 +32,381 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.console.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * The switcher card in real Chromium against the real shell, views pack, charts runtime and ECharts: a chart that</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * redraws after its view is hidden and shown again, view and section choice kept in the address and in preferences</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * (the address winning), two switchers sharing one address directive, keyboard and labelling, and the folder-tab look</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * of the section strip.</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  @EnabledIfSystemProperty(named=ConsoleBrowserFixture.GATE, matches=<span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	disabledReason=<span class="jxr_string">"JS-execution harness is opt-in; run with `mvn -Pjs-tests -pl juneau-rest/juneau-console-views -am test` from the repo root"</span>)
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">class</strong> <a name="ConsoleSwitcher_BrowserTest" href="../../../../../org/apache/juneau/console/views/ConsoleSwitcher_BrowserTest.html#ConsoleSwitcher_BrowserTest">ConsoleSwitcher_BrowserTest</a> <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CHARTS = <span class="jxr_string">"/juneau-console/juneau-charts.js"</span>;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ECHARTS = <span class="jxr_string">"/webjars/echarts/6.1.0/dist/echarts.min.js"</span>;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ECHARTS_RESOURCE = <span class="jxr_string">"/META-INF/resources"</span> + ECHARTS;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String VIEW_PREF = <span class="jxr_string">"juneau-card:sw1:switcher:view"</span>;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SECTION_PREF = <span class="jxr_string">"juneau-card:sw1:switcher:section.multi"</span>;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LEAF = <span class="jxr_string">"&lt;script&gt;JuneauConsole.registerCard('leaf', class extends JuneauViews.model.Card { render() { this.el.textContent = 'leaf:' + this.spec.id; } });&lt;/script&gt;\n"</span>;
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<em class="jxr_comment">// Shared helpers for the page scripts.</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String HELPERS = <span class="jxr_string">""</span><span class="jxr_string">"
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		function until(test, ms) {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		  <strong class="jxr_keyword">var</strong> end = Date.now() + (ms || 5000);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		  <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Promise(function (res) {
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		    (function poll() { <strong class="jxr_keyword">var</strong> v = test(); <strong class="jxr_keyword">if</strong> (v || Date.now() &gt; end) res(v); <strong class="jxr_keyword">else</strong> requestAnimationFrame(poll); })();
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		  });
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		}
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		function frames() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Promise(function (r) { requestAnimationFrame(function () { requestAnimationFrame(r); }); }); }
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		function tab(id) { <strong class="jxr_keyword">return</strong> document.querySelector('[data-tab-id=<span class="jxr_string">"' + id + '"</span>]'); }
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		function accent() {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		  <strong class="jxr_keyword">var</strong> t = document.createElement('i'); t.style.borderTop = '1px solid <strong class="jxr_keyword">var</strong>(--jc-accent)'; document.body.appendChild(t);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		  <strong class="jxr_keyword">var</strong> v = getComputedStyle(t).borderTopColor; t.remove(); <strong class="jxr_keyword">return</strong> v;
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		}
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<span class="jxr_string">""</span><span class="jxr_string">";
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MAIN_SCRIPT = <span class="jxr_string">"&lt;script&gt;\n(function () {\n"</span> + HELPERS + <span class="jxr_string">""</span><span class="jxr_string">"
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> p = window.__probe = { aria: [] };
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		function rec() {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		  <strong class="jxr_keyword">var</strong> d = document.getElementById('sw1-display'), sel = document.querySelector('#sw1 .juneau-switcher-selector [aria-selected=<span class="jxr_string">"true"</span>]');
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		  p.aria.push({ labelled: d.getAttribute('aria-labelledby'), selected: sel &amp;&amp; sel.id });
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		}
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		function chartState() {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		  <strong class="jxr_keyword">var</strong> c = window.JuneauConsole.cardApi('c-chart').chart(), el = document.querySelector('#c-chart canvas');
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		  <strong class="jxr_keyword">return</strong> { w: el ? el.getBoundingClientRect().width : 0, cw: c.getWidth(), count: c.getModel().getSeriesByIndex(0).getData().count() };
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		}
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		document.addEventListener('DOMContentLoaded', async function () { <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		  await until(function () { <strong class="jxr_keyword">try</strong> { <strong class="jxr_keyword">return</strong> window.JuneauConsole.cardApi('c-chart').chart(); } <strong class="jxr_keyword">catch</strong> (e) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; } });
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		  p.initial = window.JuneauConsole.cardApi('sw1').activeView;
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		  p.addrStart = location.search;
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		  p.chart0 = chartState(); rec();
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		  tab('data').click(); await frames(); rec();
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		  p.addrData = decodeURIComponent(location.search);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		  p.prefData = localStorage.getItem('juneau-card:sw1:switcher:view');
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		  tab('chart').click(); await frames(); await frames();
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		  p.chart1 = chartState(); p.addrDefault = decodeURIComponent(location.search); rec();
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		  tab('multi').click(); await frames(); rec();
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		  p.addrMulti = decodeURIComponent(location.search);
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		  p.subStrips = document.querySelectorAll('#sw1 [data-juneau-strip-mode=<span class="jxr_string">"tab"</span>]').length;
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		  tab('s2').click(); await frames();
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		  p.addrSection = decodeURIComponent(location.search);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		  p.prefSection = localStorage.getItem('juneau-card:sw1:switcher:section.multi');
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		  <strong class="jxr_keyword">var</strong> sel = tab('s2'), uns = tab('s1'), panes = document.querySelector('#sw1 .juneau-view-helper-tabstrip-panes');
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		  <strong class="jxr_keyword">var</strong> accentColor = accent(), cs = getComputedStyle(sel), cu = getComputedStyle(uns);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		  p.look = { accent: accentColor, selWeight: cs.fontWeight, selBorderTop: cs.borderTopColor, selBorderTopWidth: cs.borderTopWidth, selBg: cs.backgroundColor,
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		    unsBg: cu.backgroundColor, unsWeight: cu.fontWeight, panes: panes ? getComputedStyle(panes).borderTopColor : <strong class="jxr_keyword">null</strong> };
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		  } <strong class="jxr_keyword">catch</strong> (e) { window.__probe.error = String(e &amp;&amp; e.stack || e); }
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		  <strong class="jxr_keyword">var</strong> done = document.createElement('i'); done.id = 'done'; document.body.appendChild(done);
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		});
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		})();
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		&lt;/script&gt;
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<span class="jxr_string">""</span><span class="jxr_string">";
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<em class="jxr_comment">// The keyboard page opens on the multi-section view; steps drive real key presses and record where focus lands.</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String rec(String key) {
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"var a = document.activeElement; window.__probe."</span> + key + <span class="jxr_string">" = { tab: a.getAttribute('data-tab-id'), id: a.id, tabindex: a.getAttribute('tabindex'), "</span>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			+ <span class="jxr_string">"offset: getComputedStyle(a).outlineOffset };"</span>;
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String KBD_SCRIPT = <span class="jxr_string">"&lt;script&gt;\n(function () {\n"</span> + HELPERS + <span class="jxr_string">""</span><span class="jxr_string">"
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		window.__probe = {};
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		document.addEventListener('DOMContentLoaded', async function () { <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		  await until(function () { <strong class="jxr_keyword">return</strong> tab('mv'); });
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		  await frames();
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		  } <strong class="jxr_keyword">catch</strong> (e) { window.__probe.error = String(e &amp;&amp; e.stack || e); }
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		  <strong class="jxr_keyword">var</strong> done = document.createElement('i'); done.id = 'done'; document.body.appendChild(done);
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		});
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		})();
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		&lt;/script&gt;
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<span class="jxr_string">""</span><span class="jxr_string">";
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TWO_SCRIPT = <span class="jxr_string">"&lt;script&gt;\n(function () {\n"</span> + HELPERS + <span class="jxr_string">""</span><span class="jxr_string">"
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> p = window.__probe = {};
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		document.addEventListener('DOMContentLoaded', async function () { <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		  await until(function () { <strong class="jxr_keyword">return</strong> tab('a2') &amp;&amp; tab('b3'); });
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		  tab('a2').click(); await frames(); tab('b3').click(); await frames();
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		  p.addr = decodeURIComponent(location.search);
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		  p.active = [window.JuneauConsole.cardApi('swa').activeView, window.JuneauConsole.cardApi('swb').activeView];
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		  tab('a1').click(); await frames();
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		  p.addrAfterDefault = decodeURIComponent(location.search);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		  } <strong class="jxr_keyword">catch</strong> (e) { window.__probe.error = String(e &amp;&amp; e.stack || e); }
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		  <strong class="jxr_keyword">var</strong> done = document.createElement('i'); done.id = 'done'; document.body.appendChild(done);
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		});
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		})();
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		&lt;/script&gt;
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<span class="jxr_string">""</span><span class="jxr_string">";
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String PROBE_SCRIPT = <span class="jxr_string">"&lt;script&gt;\n(function () {\n"</span> + HELPERS + <span class="jxr_string">""</span><span class="jxr_string">"
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">var</strong> p = window.__probe = {};
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		document.addEventListener('DOMContentLoaded', async function () { <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		  await until(function () { <strong class="jxr_keyword">return</strong> document.getElementById('sw1-display'); });
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		  await frames();
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		  p.active = window.JuneauConsole.cardApi('sw1').activeView;
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		  <strong class="jxr_keyword">var</strong> sec = document.querySelector('#sw1 [data-juneau-strip-mode=<span class="jxr_string">"tab"</span>] [aria-selected=<span class="jxr_string">"true"</span>]');
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		  p.section = sec ? sec.getAttribute('data-tab-id') : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		  } <strong class="jxr_keyword">catch</strong> (e) { window.__probe.error = String(e &amp;&amp; e.stack || e); }
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		  <strong class="jxr_keyword">var</strong> done = document.createElement('i'); done.id = 'done'; document.body.appendChild(done);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		});
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		})();
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		&lt;/script&gt;
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<span class="jxr_string">""</span><span class="jxr_string">";
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String leaf(String id) {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"{\&quot;id\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;,\&quot;type\&quot;:\&quot;leaf\&quot;}"</span>;
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String switcher(String id, String initial, String... views) {
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"{\&quot;id\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;,\&quot;type\&quot;:\&quot;switcher\&quot;,\&quot;title\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;"</span> + (initial == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : <span class="jxr_string">",\&quot;initialView\&quot;:\&quot;"</span> + initial + <span class="jxr_string">"\&quot;"</span>)
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			+ <span class="jxr_string">",\&quot;views\&quot;:["</span> + String.join(<span class="jxr_string">","</span>, views) + <span class="jxr_string">"]}"</span>;
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	}
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String view(String id, String card) {
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"{\&quot;id\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;,\&quot;label\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;,\&quot;card\&quot;:"</span> + card + <span class="jxr_string">"}"</span>;
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String sections(String id, String... cards) {
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"{\&quot;id\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;,\&quot;label\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;,\&quot;sections\&quot;:["</span>);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; cards.length; i++)
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			sb.append(i == 0 ? <span class="jxr_string">""</span> : <span class="jxr_string">","</span>).append(<span class="jxr_string">"{\&quot;id\&quot;:\&quot;s"</span>).append(i + 1).append(<span class="jxr_string">"\&quot;,\&quot;label\&quot;:\&quot;S"</span>).append(i + 1).append(<span class="jxr_string">"\&quot;,\&quot;card\&quot;:"</span>).append(cards[i]).append('}');
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">return</strong> sb.append(<span class="jxr_string">"]}"</span>).toString();
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CHART = <span class="jxr_string">"{\&quot;id\&quot;:\&quot;c-chart\&quot;,\&quot;type\&quot;:\&quot;chart\&quot;,\&quot;kind\&quot;:\&quot;line\&quot;,\&quot;x\&quot;:{\&quot;field\&quot;:\&quot;day\&quot;},\&quot;series\&quot;:[{\&quot;field\&quot;:\&quot;n\&quot;}],"</span>
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		+ <span class="jxr_string">"\&quot;data\&quot;:[{\&quot;day\&quot;:\&quot;Mon\&quot;,\&quot;n\&quot;:3},{\&quot;day\&quot;:\&quot;Tue\&quot;,\&quot;n\&quot;:5},{\&quot;day\&quot;:\&quot;Wed\&quot;,\&quot;n\&quot;:4}],\&quot;patch\&quot;:{\&quot;animation\&quot;:false}}"</span>;
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; report;
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String page(String cards, String script) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> before = <span class="jxr_string">"&lt;script src=\&quot;"</span> + ECHARTS + <span class="jxr_string">"\&quot;&gt;&lt;/script&gt;\n"</span>;
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> after = ConsoleBrowserFixture.viewsPack() + LEAF + <span class="jxr_string">"&lt;script src=\&quot;"</span> + CHARTS + <span class="jxr_string">"\&quot;&gt;&lt;/script&gt;\n"</span> + ConsoleBrowserFixture.switcherScript() + script;
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">return</strong> contractPage(<span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;1\&quot;,\&quot;title\&quot;:\&quot;T\&quot;,\&quot;cards\&quot;:["</span> + cards + <span class="jxr_string">"]}"</span>, <span class="jxr_string">""</span>, before, after);
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String main() {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">return</strong> switcher(<span class="jxr_string">"sw1"</span>, <strong class="jxr_keyword">null</strong>, view(<span class="jxr_string">"chart"</span>, CHART), view(<span class="jxr_string">"data"</span>, leaf(<span class="jxr_string">"d1"</span>)), sections(<span class="jxr_string">"multi"</span>, leaf(<span class="jxr_string">"m1"</span>), leaf(<span class="jxr_string">"m2"</span>)));
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	@BeforeAll
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> runPages() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> kbd = switcher(<span class="jxr_string">"sw1"</span>, <span class="jxr_string">"mv"</span>, sections(<span class="jxr_string">"mv"</span>, leaf(<span class="jxr_string">"m1"</span>), leaf(<span class="jxr_string">"m2"</span>)), view(<span class="jxr_string">"other"</span>, leaf(<span class="jxr_string">"o1"</span>)));
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> two = switcher(<span class="jxr_string">"swa"</span>, <strong class="jxr_keyword">null</strong>, view(<span class="jxr_string">"a1"</span>, leaf(<span class="jxr_string">"x1"</span>)), view(<span class="jxr_string">"a2"</span>, leaf(<span class="jxr_string">"x2"</span>)), view(<span class="jxr_string">"a3"</span>, leaf(<span class="jxr_string">"x3"</span>)))
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			+ <span class="jxr_string">","</span> + switcher(<span class="jxr_string">"swb"</span>, <strong class="jxr_keyword">null</strong>, view(<span class="jxr_string">"b1"</span>, leaf(<span class="jxr_string">"y1"</span>)), view(<span class="jxr_string">"b2"</span>, leaf(<span class="jxr_string">"y2"</span>)), view(<span class="jxr_string">"b3"</span>, leaf(<span class="jxr_string">"y3"</span>)));
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> seededView = Map.of(VIEW_PREF, <span class="jxr_string">"\&quot;data\&quot;"</span>);
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> seededSection = Map.of(VIEW_PREF, <span class="jxr_string">"\&quot;multi\&quot;"</span>, SECTION_PREF, <span class="jxr_string">"\&quot;s2\&quot;"</span>);
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">var</strong> urlBeatsPrefs = Map.of(VIEW_PREF, <span class="jxr_string">"\&quot;multi\&quot;"</span>);
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		report = ConsoleBrowserFixture.create(<span class="jxr_string">"switcher"</span>)
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			.asset(CHARTS, resource(ConsoleChromeMixin.CHARTS_JS_RESOURCE), <span class="jxr_string">"text/javascript"</span>)
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			.asset(ECHARTS, resource(ECHARTS_RESOURCE), <span class="jxr_string">"text/javascript"</span>)
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			.page(<span class="jxr_string">"main"</span>, ORIGIN + <span class="jxr_string">"/main"</span>, page(main(), MAIN_SCRIPT))
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			.waitFor(<span class="jxr_string">"#done"</span>)
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			.page(<span class="jxr_string">"kbd"</span>, ORIGIN + <span class="jxr_string">"/kbd"</span>, page(kbd, KBD_SCRIPT))
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			.waitFor(<span class="jxr_string">"#done"</span>)
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			.eval(<span class="jxr_string">"document.querySelector('#sw1 .juneau-switcher-selector [aria-selected=\&quot;true\&quot;]').focus();"</span> + rec(<span class="jxr_string">"k0"</span>))
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			.press(<span class="jxr_string">"ArrowRight"</span>)
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			.eval(rec(<span class="jxr_string">"k1"</span>))
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			.press(<span class="jxr_string">"Tab"</span>)
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			.eval(rec(<span class="jxr_string">"k2"</span>))
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			.eval(<span class="jxr_string">"JuneauConsole.cardApi('sw1').select('mv'); document.querySelector('#sw1 [data-juneau-strip-mode=\&quot;tab\&quot;] [data-tab-id=\&quot;s1\&quot;]').focus();"</span>)
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			.press(<span class="jxr_string">"Shift"</span>)
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			.eval(rec(<span class="jxr_string">"k3"</span>))
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			.page(<span class="jxr_string">"two"</span>, ORIGIN + <span class="jxr_string">"/two"</span>, page(two, TWO_SCRIPT))
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			.waitFor(<span class="jxr_string">"#done"</span>)
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			.page(<span class="jxr_string">"prefView"</span>, ORIGIN + <span class="jxr_string">"/prefview"</span>, page(main(), PROBE_SCRIPT))
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			.storage(seededView)
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			.waitFor(<span class="jxr_string">"#done"</span>)
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			.page(<span class="jxr_string">"prefSection"</span>, ORIGIN + <span class="jxr_string">"/prefsection"</span>, page(main(), PROBE_SCRIPT))
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			.storage(seededSection)
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			.waitFor(<span class="jxr_string">"#done"</span>)
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			.page(<span class="jxr_string">"sharedUrl"</span>, ORIGIN + <span class="jxr_string">"/shared?state="</span> + URLEncoder.encode(<span class="jxr_string">"sw(sw1:data)"</span>, StandardCharsets.UTF_8), page(main(), PROBE_SCRIPT))
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			.storage(urlBeatsPrefs)
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			.waitFor(<span class="jxr_string">"#done"</span>)
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			.run();
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.console.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * The switcher card in real Chromium against the real shell, views pack, charts runtime and ECharts: a chart that</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * redraws after its view is hidden and shown again, view and section choice kept in the address and in preferences</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * (the address winning), two switchers sharing one address directive, keyboard and labelling, and the folder-tab look</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * of the section strip.</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  @EnabledIfSystemProperty(named=ConsoleBrowserFixture.GATE, matches=<span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	disabledReason=<span class="jxr_string">"JS-execution harness is opt-in; run with `mvn -Pjs-tests -pl juneau-rest/juneau-console-views -am test` from the repo root"</span>)
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">class</strong> <a name="ConsoleSwitcher_BrowserTest" href="../../../../../org/apache/juneau/console/views/ConsoleSwitcher_BrowserTest.html#ConsoleSwitcher_BrowserTest">ConsoleSwitcher_BrowserTest</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CHARTS = <span class="jxr_string">"/juneau-console/juneau-charts.js"</span>;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ECHARTS = <span class="jxr_string">"/webjars/echarts/6.1.0/dist/echarts.min.js"</span>;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ECHARTS_RESOURCE = <span class="jxr_string">"/META-INF/resources"</span> + ECHARTS;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String VIEW_PREF = <span class="jxr_string">"juneau-card:sw1:switcher:view"</span>;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SECTION_PREF = <span class="jxr_string">"juneau-card:sw1:switcher:section.multi"</span>;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LEAF = <span class="jxr_string">"&lt;script&gt;JuneauConsole.registerCard('leaf', class extends JuneauViews.model.Card { render() { this.el.textContent = 'leaf:' + this.spec.id; } });&lt;/script&gt;\n"</span>;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<em class="jxr_comment">// Shared helpers for the page scripts.</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String HELPERS = <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		function until(test, ms) {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		  <strong class="jxr_keyword">var</strong> end = Date.now() + (ms || 5000);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		  <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Promise(function (res) {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		    (function poll() { <strong class="jxr_keyword">var</strong> v = test(); <strong class="jxr_keyword">if</strong> (v || Date.now() &gt; end) res(v); <strong class="jxr_keyword">else</strong> requestAnimationFrame(poll); })();
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		  });
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		}
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		function frames() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Promise(function (r) { requestAnimationFrame(function () { requestAnimationFrame(r); }); }); }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		function tab(id) { <strong class="jxr_keyword">return</strong> document.querySelector('[data-tab-id=<span class="jxr_string">"' + id + '"</span>]'); }
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		function accent() {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		  <strong class="jxr_keyword">var</strong> t = document.createElement('i'); t.style.borderTop = '1px solid <strong class="jxr_keyword">var</strong>(--jc-accent)'; document.body.appendChild(t);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		  <strong class="jxr_keyword">var</strong> v = getComputedStyle(t).borderTopColor; t.remove(); <strong class="jxr_keyword">return</strong> v;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		}
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<span class="jxr_string">""</span><span class="jxr_string">";
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MAIN_SCRIPT = <span class="jxr_string">"&lt;script&gt;\n(function () {\n"</span> + HELPERS + <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">var</strong> p = window.__probe = { aria: [] };
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		function rec() {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		  <strong class="jxr_keyword">var</strong> d = document.getElementById('sw1-display'), sel = document.querySelector('#sw1 .juneau-switcher-selector [aria-selected=<span class="jxr_string">"true"</span>]');
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		  p.aria.push({ labelled: d.getAttribute('aria-labelledby'), selected: sel &amp;&amp; sel.id });
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		}
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		function chartState() {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		  <strong class="jxr_keyword">var</strong> c = window.JuneauConsole.cardApi('c-chart').chart(), el = document.querySelector('#c-chart canvas');
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		  <strong class="jxr_keyword">return</strong> { w: el ? el.getBoundingClientRect().width : 0, cw: c.getWidth(), count: c.getModel().getSeriesByIndex(0).getData().count() };
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		}
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		document.addEventListener('DOMContentLoaded', async function () { <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		  await until(function () { <strong class="jxr_keyword">try</strong> { <strong class="jxr_keyword">return</strong> window.JuneauConsole.cardApi('c-chart').chart(); } <strong class="jxr_keyword">catch</strong> (e) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; } });
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		  p.initial = window.JuneauConsole.cardApi('sw1').activeView;
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		  p.addrStart = location.search;
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		  p.chart0 = chartState(); rec();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		  tab('data').click(); await frames(); rec();
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		  p.addrData = decodeURIComponent(location.search);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		  p.prefData = localStorage.getItem('juneau-card:sw1:switcher:view');
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		  tab('chart').click(); await frames(); await frames();
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		  p.chart1 = chartState(); p.addrDefault = decodeURIComponent(location.search); rec();
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		  tab('multi').click(); await frames(); rec();
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		  p.addrMulti = decodeURIComponent(location.search);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		  p.subStrips = document.querySelectorAll('#sw1-display [data-juneau-strip-mode=<span class="jxr_string">"tab"</span>]').length;
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		  tab('s2').click(); await frames();
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		  p.addrSection = decodeURIComponent(location.search);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		  p.prefSection = localStorage.getItem('juneau-card:sw1:switcher:section.multi');
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		  <strong class="jxr_keyword">var</strong> sel = tab('s2'), uns = tab('s1'), panes = document.querySelector('#sw1 .juneau-view-helper-tabstrip-panes');
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		  <strong class="jxr_keyword">var</strong> accentColor = accent(), cs = getComputedStyle(sel), cu = getComputedStyle(uns);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		  p.look = { accent: accentColor, selWeight: cs.fontWeight, selBorderTop: cs.borderTopColor, selBorderTopWidth: cs.borderTopWidth, selShadow: cs.boxShadow, selBg: cs.backgroundColor,
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		    unsBg: cu.backgroundColor, unsWeight: cu.fontWeight, panes: panes ? getComputedStyle(panes).borderTopColor : <strong class="jxr_keyword">null</strong> };
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		  } <strong class="jxr_keyword">catch</strong> (e) { window.__probe.error = String(e &amp;&amp; e.stack || e); }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		  <strong class="jxr_keyword">var</strong> done = document.createElement('i'); done.id = 'done'; document.body.appendChild(done);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		});
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		})();
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		&lt;/script&gt;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<span class="jxr_string">""</span><span class="jxr_string">";
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<em class="jxr_comment">// The keyboard page opens on the multi-section view; steps drive real key presses and record where focus lands.</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String rec(String key) {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"var a = document.activeElement; window.__probe."</span> + key + <span class="jxr_string">" = { tab: a.getAttribute('data-tab-id'), id: a.id, tabindex: a.getAttribute('tabindex'), "</span>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			+ <span class="jxr_string">"offset: getComputedStyle(a).outlineOffset };"</span>;
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String KBD_SCRIPT = <span class="jxr_string">"&lt;script&gt;\n(function () {\n"</span> + HELPERS + <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		window.__probe = {};
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		document.addEventListener('DOMContentLoaded', async function () { <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		  await until(function () { <strong class="jxr_keyword">return</strong> tab('mv'); });
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		  await frames();
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		  } <strong class="jxr_keyword">catch</strong> (e) { window.__probe.error = String(e &amp;&amp; e.stack || e); }
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		  <strong class="jxr_keyword">var</strong> done = document.createElement('i'); done.id = 'done'; document.body.appendChild(done);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		});
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		})();
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		&lt;/script&gt;
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<span class="jxr_string">""</span><span class="jxr_string">";
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TWO_SCRIPT = <span class="jxr_string">"&lt;script&gt;\n(function () {\n"</span> + HELPERS + <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">var</strong> p = window.__probe = {};
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		document.addEventListener('DOMContentLoaded', async function () { <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		  await until(function () { <strong class="jxr_keyword">return</strong> tab('a2') &amp;&amp; tab('b3'); });
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		  tab('a2').click(); await frames(); tab('b3').click(); await frames();
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		  p.addr = decodeURIComponent(location.search);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		  p.active = [window.JuneauConsole.cardApi('swa').activeView, window.JuneauConsole.cardApi('swb').activeView];
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		  tab('a1').click(); await frames();
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		  p.addrAfterDefault = decodeURIComponent(location.search);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		  } <strong class="jxr_keyword">catch</strong> (e) { window.__probe.error = String(e &amp;&amp; e.stack || e); }
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		  <strong class="jxr_keyword">var</strong> done = document.createElement('i'); done.id = 'done'; document.body.appendChild(done);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		});
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		})();
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		&lt;/script&gt;
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<span class="jxr_string">""</span><span class="jxr_string">";
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String PROBE_SCRIPT = <span class="jxr_string">"&lt;script&gt;\n(function () {\n"</span> + HELPERS + <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> p = window.__probe = {};
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		document.addEventListener('DOMContentLoaded', async function () { <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		  await until(function () { <strong class="jxr_keyword">return</strong> document.getElementById('sw1-display'); });
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		  await frames();
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		  p.active = window.JuneauConsole.cardApi('sw1').activeView;
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		  <strong class="jxr_keyword">var</strong> sec = document.querySelector('#sw1-display [data-juneau-strip-mode=<span class="jxr_string">"tab"</span>] [aria-selected=<span class="jxr_string">"true"</span>]');
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		  p.section = sec ? sec.getAttribute('data-tab-id') : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		  } <strong class="jxr_keyword">catch</strong> (e) { window.__probe.error = String(e &amp;&amp; e.stack || e); }
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		  <strong class="jxr_keyword">var</strong> done = document.createElement('i'); done.id = 'done'; document.body.appendChild(done);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		});
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		})();
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		&lt;/script&gt;
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<span class="jxr_string">""</span><span class="jxr_string">";
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	<em class="jxr_comment">// Layout probes: slider thumb, borderless nested host, unclipped selected tab, card gap, and a datatables card in a switcher.</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LAYOUT_SCRIPT = <span class="jxr_string">"&lt;script&gt;\n(function () {\n"</span> + HELPERS + <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> p = window.__probe = {};
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		function wait(ms) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Promise(function (r) { setTimeout(r, ms); }); }
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		document.addEventListener('DOMContentLoaded', async function () { <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		  await until(function () { <strong class="jxr_keyword">return</strong> tab('b') &amp;&amp; tab('s2') &amp;&amp; tab('slb'); });
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		  await frames();
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		  <strong class="jxr_keyword">var</strong> t1 = document.getElementById('top1').getBoundingClientRect(), t2 = document.getElementById('top2').getBoundingClientRect();
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		  <strong class="jxr_keyword">var</strong> g = document.createElement('i'); g.style.display = 'block'; g.style.height = '<strong class="jxr_keyword">var</strong>(--jc-card-gap, 1rem)'; document.body.appendChild(g);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		  p.gap = { actual: t2.top - t1.bottom, token: g.getBoundingClientRect().height }; g.remove();
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		  <strong class="jxr_keyword">var</strong> host = document.querySelector('.juneau-switcher-view .jc-card[data-juneau-in-switcher]'), hs = getComputedStyle(host);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		  p.nested = { shadow: hs.boxShadow, padding: hs.paddingTop + ' ' + hs.paddingLeft, bg: hs.backgroundColor, attr: host.hasAttribute('data-juneau-in-switcher') };
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		  tab('s2').click(); await frames();
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		  <strong class="jxr_keyword">var</strong> sel = tab('s2').getBoundingClientRect(), panes = document.querySelector('#swm .juneau-view-helper-tabstrip-panes').getBoundingClientRect();
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		  <strong class="jxr_keyword">var</strong> grp = document.querySelector('#swm [data-juneau-strip-mode=<span class="jxr_string">"tab"</span>]');
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		  p.clip = { selBottom: sel.bottom, panesTop: panes.top, overflowY: getComputedStyle(grp).overflowY };
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		  tab('slb').click(); await wait(600); await frames();
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		  <strong class="jxr_keyword">var</strong> th = document.querySelector('#sws .juneau-switcher-thumb'), st = tab('slb');
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		  p.thumb = { thumbX: th.getBoundingClientRect().left, tabX: st.getBoundingClientRect().left };
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		  tab('b').click(); await frames();
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		  } <strong class="jxr_keyword">catch</strong> (e) { window.__probe.error = String(e &amp;&amp; e.stack || e); }
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		  <strong class="jxr_keyword">var</strong> done = document.createElement('i'); done.id = 'done'; document.body.appendChild(done);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		});
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		})();
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		&lt;/script&gt;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<span class="jxr_string">""</span><span class="jxr_string">";
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String nestedTable() {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> t = TableSpec.create(<span class="jxr_string">"nt"</span>).dataMode(TableSpec.DataMode.CLIENT).dataUrl(<span class="jxr_string">"/api/nt"</span>)
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			.columns(Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Id"</span>), Column.create(<span class="jxr_string">"name"</span>).label(<span class="jxr_string">"Name"</span>))
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			.ribbon(RibbonItem.collapseAll())
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			.quickStats(<span class="jxr_string">"qs"</span>, QuickStat.of(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"Open"</span>, 3))
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			.detail(RowDetail.create(<span class="jxr_string">"/api/nt/{id}/detail"</span>).title(<span class="jxr_string">"Row {id}"</span>).tab(DetailTab.fields(<span class="jxr_string">"Info"</span>, <span class="jxr_string">"name"</span>).id(<span class="jxr_string">"info"</span>)));
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">var</strong> card = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		card.put(<span class="jxr_string">"id"</span>, <span class="jxr_string">"nt"</span>);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		card.put(<span class="jxr_string">"type"</span>, <span class="jxr_string">"datatables"</span>);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		card.put(<span class="jxr_string">"table"</span>, t.toCardBody());
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">return</strong> Json.of(card);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String leaf(String id) {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"{\&quot;id\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;,\&quot;type\&quot;:\&quot;leaf\&quot;}"</span>;
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	}
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String switcher(String id, String initial, String... views) {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"{\&quot;id\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;,\&quot;type\&quot;:\&quot;switcher\&quot;,\&quot;title\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;"</span> + (initial == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : <span class="jxr_string">",\&quot;initialView\&quot;:\&quot;"</span> + initial + <span class="jxr_string">"\&quot;"</span>)
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			+ <span class="jxr_string">",\&quot;views\&quot;:["</span> + String.join(<span class="jxr_string">","</span>, views) + <span class="jxr_string">"]}"</span>;
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	}
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String view(String id, String card) {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"{\&quot;id\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;,\&quot;label\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;,\&quot;card\&quot;:"</span> + card + <span class="jxr_string">"}"</span>;
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String sections(String id, String... cards) {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"{\&quot;id\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;,\&quot;label\&quot;:\&quot;"</span> + id + <span class="jxr_string">"\&quot;,\&quot;sections\&quot;:["</span>);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; cards.length; i++)
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			sb.append(i == 0 ? <span class="jxr_string">""</span> : <span class="jxr_string">","</span>).append(<span class="jxr_string">"{\&quot;id\&quot;:\&quot;s"</span>).append(i + 1).append(<span class="jxr_string">"\&quot;,\&quot;label\&quot;:\&quot;S"</span>).append(i + 1).append(<span class="jxr_string">"\&quot;,\&quot;card\&quot;:"</span>).append(cards[i]).append('}');
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">return</strong> sb.append(<span class="jxr_string">"]}"</span>).toString();
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CHART = <span class="jxr_string">"{\&quot;id\&quot;:\&quot;c-chart\&quot;,\&quot;type\&quot;:\&quot;chart\&quot;,\&quot;kind\&quot;:\&quot;line\&quot;,\&quot;x\&quot;:{\&quot;field\&quot;:\&quot;day\&quot;},\&quot;series\&quot;:[{\&quot;field\&quot;:\&quot;n\&quot;}],"</span>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		+ <span class="jxr_string">"\&quot;data\&quot;:[{\&quot;day\&quot;:\&quot;Mon\&quot;,\&quot;n\&quot;:3},{\&quot;day\&quot;:\&quot;Tue\&quot;,\&quot;n\&quot;:5},{\&quot;day\&quot;:\&quot;Wed\&quot;,\&quot;n\&quot;:4}],\&quot;patch\&quot;:{\&quot;animation\&quot;:false}}"</span>;
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; report;
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String page(String cards, String script) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">var</strong> before = <span class="jxr_string">"&lt;script src=\&quot;"</span> + ECHARTS + <span class="jxr_string">"\&quot;&gt;&lt;/script&gt;\n"</span>;
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">var</strong> after = ConsoleBrowserFixture.viewsPack() + LEAF + <span class="jxr_string">"&lt;script src=\&quot;"</span> + CHARTS + <span class="jxr_string">"\&quot;&gt;&lt;/script&gt;\n"</span> + ConsoleBrowserFixture.switcherScript() + script;
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">return</strong> contractPage(<span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;1\&quot;,\&quot;title\&quot;:\&quot;T\&quot;,\&quot;cards\&quot;:["</span> + cards + <span class="jxr_string">"]}"</span>, <span class="jxr_string">""</span>, before, after);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; p(String name) {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">var</strong> r = report.get(name);
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertNoShellErrors(r);
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">return</strong> probe(r);
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	}
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; m(Object o) {
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">return</strong> (Map&lt;String,Object&gt;)o;
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	}
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	@Test <strong class="jxr_keyword">void</strong> a01_chartRedrawsAfterSwitchBack() {
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">var</strong> p = p(<span class="jxr_string">"main"</span>);
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertEquals(<span class="jxr_string">"chart"</span>, p.get(<span class="jxr_string">"initial"</span>), p::toString);
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : List.of(<span class="jxr_string">"chart0"</span>, <span class="jxr_string">"chart1"</span>)) {
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">var</strong> c = m(p.get(k));
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			assertTrue(((Number)c.get(<span class="jxr_string">"w"</span>)).doubleValue() &gt; 0, p::toString);
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			assertTrue(((Number)c.get(<span class="jxr_string">"cw"</span>)).intValue() &gt; 0, p::toString);
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			assertEquals(3, ((Number)c.get(<span class="jxr_string">"count"</span>)).intValue(), p::toString);
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		}
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	}
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	@Test <strong class="jxr_keyword">void</strong> b01_reloadRestoresViewFromPreferences() {
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertEquals(<span class="jxr_string">"\&quot;data\&quot;"</span>, p(<span class="jxr_string">"main"</span>).get(<span class="jxr_string">"prefData"</span>));
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertEquals(<span class="jxr_string">"data"</span>, p(<span class="jxr_string">"prefView"</span>).get(<span class="jxr_string">"active"</span>));
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	}
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	@Test <strong class="jxr_keyword">void</strong> b02_sharedUrlBeatsPreferences() {
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		assertEquals(<span class="jxr_string">"data"</span>, p(<span class="jxr_string">"sharedUrl"</span>).get(<span class="jxr_string">"active"</span>));
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	}
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	@Test <strong class="jxr_keyword">void</strong> b03_selectingWritesTheAddressAndTheDefaultViewRemovesIt() {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">var</strong> p = p(<span class="jxr_string">"main"</span>);
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		assertEquals(<span class="jxr_string">""</span>, p.get(<span class="jxr_string">"addrStart"</span>), p::toString);
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertTrue(String.valueOf(p.get(<span class="jxr_string">"addrData"</span>)).contains(<span class="jxr_string">"sw(sw1:data)"</span>), p::toString);
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		assertFalse(String.valueOf(p.get(<span class="jxr_string">"addrDefault"</span>)).contains(<span class="jxr_string">"sw("</span>), p::toString);
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	}
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	@Test <strong class="jxr_keyword">void</strong> b04_tablelessPageWritesTheAddress() {
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		assertTrue(String.valueOf(p(<span class="jxr_string">"main"</span>).get(<span class="jxr_string">"addrMulti"</span>)).contains(<span class="jxr_string">"sw(sw1:multi"</span>), p(<span class="jxr_string">"main"</span>)::toString);
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	}
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	@Test <strong class="jxr_keyword">void</strong> c01_multiSectionShowsSubtabsAndKeepsTheSectionChoice() {
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">var</strong> p = p(<span class="jxr_string">"main"</span>);
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		assertEquals(1, ((Number)p.get(<span class="jxr_string">"subStrips"</span>)).intValue(), p::toString);
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		assertTrue(String.valueOf(p.get(<span class="jxr_string">"addrSection"</span>)).contains(<span class="jxr_string">"sw(sw1:multi.s2)"</span>), p::toString);
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		assertEquals(<span class="jxr_string">"\&quot;s2\&quot;"</span>, p.get(<span class="jxr_string">"prefSection"</span>), p::toString);
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">var</strong> r = p(<span class="jxr_string">"prefSection"</span>);
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		assertEquals(<span class="jxr_string">"multi"</span>, r.get(<span class="jxr_string">"active"</span>), r::toString);
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		assertEquals(<span class="jxr_string">"s2"</span>, r.get(<span class="jxr_string">"section"</span>), r::toString);
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	}
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	@Test <strong class="jxr_keyword">void</strong> d01_keyboardMovesBetweenViewTabsAndTabReachesTheDisplay() {
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<strong class="jxr_keyword">var</strong> p = p(<span class="jxr_string">"kbd"</span>);
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		assertEquals(<span class="jxr_string">"mv"</span>, m(p.get(<span class="jxr_string">"k0"</span>)).get(<span class="jxr_string">"tab"</span>), p::toString);
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		assertEquals(<span class="jxr_string">"other"</span>, m(p.get(<span class="jxr_string">"k1"</span>)).get(<span class="jxr_string">"tab"</span>), p::toString);
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		assertEquals(<span class="jxr_string">"-3px"</span>, m(p.get(<span class="jxr_string">"k3"</span>)).get(<span class="jxr_string">"offset"</span>), p::toString);
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		assertEquals(<span class="jxr_string">"sw1-display"</span>, m(p.get(<span class="jxr_string">"k2"</span>)).get(<span class="jxr_string">"id"</span>), p::toString);
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		assertEquals(<span class="jxr_string">"0"</span>, m(p.get(<span class="jxr_string">"k2"</span>)).get(<span class="jxr_string">"tabindex"</span>), p::toString);
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	}
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	@Test <strong class="jxr_keyword">void</strong> d02_displayIsLabelledByTheSelectedTab() {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">var</strong> aria = (List&lt;Map&lt;String,Object&gt;&gt;)p(<span class="jxr_string">"main"</span>).get(<span class="jxr_string">"aria"</span>);
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		assertEquals(4, aria.size());
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : aria)
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			assertEquals(a.get(<span class="jxr_string">"selected"</span>), a.get(<span class="jxr_string">"labelled"</span>), aria::toString);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String main() {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">return</strong> switcher(<span class="jxr_string">"sw1"</span>, <strong class="jxr_keyword">null</strong>, view(<span class="jxr_string">"chart"</span>, CHART), view(<span class="jxr_string">"data"</span>, leaf(<span class="jxr_string">"d1"</span>)), sections(<span class="jxr_string">"multi"</span>, leaf(<span class="jxr_string">"m1"</span>), leaf(<span class="jxr_string">"m2"</span>)));
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	}
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String layoutCards() {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">return</strong> leaf(<span class="jxr_string">"top1"</span>) + <span class="jxr_string">","</span> + leaf(<span class="jxr_string">"top2"</span>) + <span class="jxr_string">","</span>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			+ switcher(<span class="jxr_string">"swm"</span>, <strong class="jxr_keyword">null</strong>, sections(<span class="jxr_string">"multi"</span>, leaf(<span class="jxr_string">"m1"</span>), leaf(<span class="jxr_string">"m2"</span>)))
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			+ <span class="jxr_string">","</span> + <span class="jxr_string">"{\&quot;id\&quot;:\&quot;sws\&quot;,\&quot;type\&quot;:\&quot;switcher\&quot;,\&quot;style\&quot;:\&quot;slider\&quot;,\&quot;views\&quot;:["</span>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;sla\&quot;,\&quot;label\&quot;:\&quot;A\&quot;,\&quot;card\&quot;:"</span> + leaf(<span class="jxr_string">"sa1"</span>) + <span class="jxr_string">"},{\&quot;id\&quot;:\&quot;slb\&quot;,\&quot;label\&quot;:\&quot;B\&quot;,\&quot;card\&quot;:"</span> + leaf(<span class="jxr_string">"sb1"</span>) + <span class="jxr_string">"}]}"</span>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			+ <span class="jxr_string">","</span> + switcher(<span class="jxr_string">"swn"</span>, <strong class="jxr_keyword">null</strong>, view(<span class="jxr_string">"a"</span>, leaf(<span class="jxr_string">"na1"</span>)), view(<span class="jxr_string">"b"</span>, nestedTable()));
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	}
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	@BeforeAll
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> runPages() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> kbd = switcher(<span class="jxr_string">"sw1"</span>, <span class="jxr_string">"mv"</span>, sections(<span class="jxr_string">"mv"</span>, leaf(<span class="jxr_string">"m1"</span>), leaf(<span class="jxr_string">"m2"</span>)), view(<span class="jxr_string">"other"</span>, leaf(<span class="jxr_string">"o1"</span>)));
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">var</strong> two = switcher(<span class="jxr_string">"swa"</span>, <strong class="jxr_keyword">null</strong>, view(<span class="jxr_string">"a1"</span>, leaf(<span class="jxr_string">"x1"</span>)), view(<span class="jxr_string">"a2"</span>, leaf(<span class="jxr_string">"x2"</span>)), view(<span class="jxr_string">"a3"</span>, leaf(<span class="jxr_string">"x3"</span>)))
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			+ <span class="jxr_string">","</span> + switcher(<span class="jxr_string">"swb"</span>, <strong class="jxr_keyword">null</strong>, view(<span class="jxr_string">"b1"</span>, leaf(<span class="jxr_string">"y1"</span>)), view(<span class="jxr_string">"b2"</span>, leaf(<span class="jxr_string">"y2"</span>)), view(<span class="jxr_string">"b3"</span>, leaf(<span class="jxr_string">"y3"</span>)));
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">var</strong> seededView = Map.of(VIEW_PREF, <span class="jxr_string">"\&quot;data\&quot;"</span>);
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">var</strong> seededSection = Map.of(VIEW_PREF, <span class="jxr_string">"\&quot;multi\&quot;"</span>, SECTION_PREF, <span class="jxr_string">"\&quot;s2\&quot;"</span>);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">var</strong> urlBeatsPrefs = Map.of(VIEW_PREF, <span class="jxr_string">"\&quot;multi\&quot;"</span>);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		report = ConsoleBrowserFixture.create(<span class="jxr_string">"switcher"</span>)
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			.asset(CHARTS, resource(ConsoleChromeMixin.CHARTS_JS_RESOURCE), <span class="jxr_string">"text/javascript"</span>)
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			.asset(ECHARTS, resource(ECHARTS_RESOURCE), <span class="jxr_string">"text/javascript"</span>)
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			.page(<span class="jxr_string">"main"</span>, ORIGIN + <span class="jxr_string">"/main"</span>, page(main(), MAIN_SCRIPT))
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			.waitFor(<span class="jxr_string">"#done"</span>)
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			.page(<span class="jxr_string">"kbd"</span>, ORIGIN + <span class="jxr_string">"/kbd"</span>, page(kbd, KBD_SCRIPT))
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			.waitFor(<span class="jxr_string">"#done"</span>)
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			.eval(<span class="jxr_string">"document.querySelector('#sw1 .juneau-switcher-selector [aria-selected=\&quot;true\&quot;]').focus();"</span> + rec(<span class="jxr_string">"k0"</span>))
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			.press(<span class="jxr_string">"ArrowRight"</span>)
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			.eval(rec(<span class="jxr_string">"k1"</span>))
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			.press(<span class="jxr_string">"Tab"</span>)
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			.eval(rec(<span class="jxr_string">"k2"</span>))
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			.eval(<span class="jxr_string">"JuneauConsole.cardApi('sw1').select('mv'); document.querySelector('#sw1 [data-juneau-strip-mode=\&quot;tab\&quot;] [data-tab-id=\&quot;s1\&quot;]').focus();"</span>)
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			.press(<span class="jxr_string">"Shift"</span>)
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			.eval(rec(<span class="jxr_string">"k3"</span>))
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			.asset(<span class="jxr_string">"/api/nt"</span>, <span class="jxr_string">"[{\&quot;id\&quot;:\&quot;p1\&quot;,\&quot;name\&quot;:\&quot;Rex\&quot;}]"</span>, <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			.asset(<span class="jxr_string">"/api/nt/p1/detail"</span>, <span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;1\&quot;,\&quot;fields\&quot;:{\&quot;name\&quot;:\&quot;Rex\&quot;}}"</span>, <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			.page(<span class="jxr_string">"layout"</span>, ORIGIN + <span class="jxr_string">"/layout"</span>, page(layoutCards(), LAYOUT_SCRIPT))
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			.waitFor(<span class="jxr_string">"#done"</span>)
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			.waitFor(<span class="jxr_string">"table[data-juneau-view=\&quot;nt\&quot;] tbody td.sorting_1"</span>)
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			.eval(<span class="jxr_string">"var host = document.querySelector('.juneau-switcher-view [data-juneau-in-switcher] table[data-juneau-view=\&quot;nt\&quot;]');"</span>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 				+ <span class="jxr_string">"window.__probe.inSwitcher = !!host;"</span>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 				+ <span class="jxr_string">"window.__probe.statStrip = !!document.querySelector('[data-juneau-stat=\&quot;q1\&quot;]');"</span>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 				+ <span class="jxr_string">"window.__probe.ribbon = !!document.querySelector('[data-juneau-ribbon-id=collapseAll]');"</span>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 				+ <span class="jxr_string">"document.querySelector('table[data-juneau-view=\&quot;nt\&quot;] .juneau-view-detail-toggle').click();"</span>)
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			.eval(<span class="jxr_string">"(async function () { await new Promise(function (r) { setTimeout(r, 1500); });"</span>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				+ <span class="jxr_string">"window.__probe.detailPanels = document.querySelectorAll('.juneau-view-detail-panel').length;"</span>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 				+ <span class="jxr_string">"})()"</span>)
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			.page(<span class="jxr_string">"two"</span>, ORIGIN + <span class="jxr_string">"/two"</span>, page(two, TWO_SCRIPT))
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			.waitFor(<span class="jxr_string">"#done"</span>)
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			.page(<span class="jxr_string">"prefView"</span>, ORIGIN + <span class="jxr_string">"/prefview"</span>, page(main(), PROBE_SCRIPT))
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			.storage(seededView)
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			.waitFor(<span class="jxr_string">"#done"</span>)
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			.page(<span class="jxr_string">"prefSection"</span>, ORIGIN + <span class="jxr_string">"/prefsection"</span>, page(main(), PROBE_SCRIPT))
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			.storage(seededSection)
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			.waitFor(<span class="jxr_string">"#done"</span>)
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			.page(<span class="jxr_string">"sharedUrl"</span>, ORIGIN + <span class="jxr_string">"/shared?state="</span> + URLEncoder.encode(<span class="jxr_string">"sw(sw1:data)"</span>, StandardCharsets.UTF_8), page(main(), PROBE_SCRIPT))
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			.storage(urlBeatsPrefs)
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			.waitFor(<span class="jxr_string">"#done"</span>)
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			.run();
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	}
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; p(String name) {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">var</strong> r = report.get(name);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		assertNoShellErrors(r);
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">return</strong> probe(r);
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 	}
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	@Test <strong class="jxr_keyword">void</strong> e01_twoSwitchersShareOneDirective() {
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">var</strong> p = p(<span class="jxr_string">"two"</span>);
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		assertEquals(List.of(<span class="jxr_string">"a2"</span>, <span class="jxr_string">"b3"</span>), p.get(<span class="jxr_string">"active"</span>), p::toString);
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		assertTrue(String.valueOf(p.get(<span class="jxr_string">"addr"</span>)).contains(<span class="jxr_string">"sw(swa:a2~swb:b3)"</span>), p::toString);
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		assertTrue(String.valueOf(p.get(<span class="jxr_string">"addrAfterDefault"</span>)).contains(<span class="jxr_string">"sw(swb:b3)"</span>), p::toString);
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	}
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	@Test <strong class="jxr_keyword">void</strong> f01_sectionStripUsesTheFolderTabLook() {
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">var</strong> look = m(p(<span class="jxr_string">"main"</span>).get(<span class="jxr_string">"look"</span>));
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<em class="jxr_comment">// The shipped selected folder tab is semibold (600); the stylesheet is the source of truth.</em>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		assertEquals(<span class="jxr_string">"600"</span>, look.get(<span class="jxr_string">"selWeight"</span>), look::toString);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertEquals(<span class="jxr_string">"1px"</span>, look.get(<span class="jxr_string">"selBorderTopWidth"</span>), look::toString);
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		assertEquals(look.get(<span class="jxr_string">"accent"</span>), look.get(<span class="jxr_string">"selBorderTop"</span>), look::toString);
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		assertNotEquals(look.get(<span class="jxr_string">"selBg"</span>), look.get(<span class="jxr_string">"unsBg"</span>), look::toString);
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		assertEquals(look.get(<span class="jxr_string">"accent"</span>), look.get(<span class="jxr_string">"panes"</span>), look::toString);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	}
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> }
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; m(Object o) {
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">return</strong> (Map&lt;String,Object&gt;)o;
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	@Test <strong class="jxr_keyword">void</strong> a01_chartRedrawsAfterSwitchBack() {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> p = p(<span class="jxr_string">"main"</span>);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		assertEquals(<span class="jxr_string">"chart"</span>, p.get(<span class="jxr_string">"initial"</span>), p::toString);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : List.of(<span class="jxr_string">"chart0"</span>, <span class="jxr_string">"chart1"</span>)) {
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<strong class="jxr_keyword">var</strong> c = m(p.get(k));
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			assertTrue(((Number)c.get(<span class="jxr_string">"w"</span>)).doubleValue() &gt; 0, p::toString);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			assertTrue(((Number)c.get(<span class="jxr_string">"cw"</span>)).intValue() &gt; 0, p::toString);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			assertEquals(3, ((Number)c.get(<span class="jxr_string">"count"</span>)).intValue(), p::toString);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		}
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	}
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	@Test <strong class="jxr_keyword">void</strong> b01_reloadRestoresViewFromPreferences() {
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		assertEquals(<span class="jxr_string">"\&quot;data\&quot;"</span>, p(<span class="jxr_string">"main"</span>).get(<span class="jxr_string">"prefData"</span>));
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		assertEquals(<span class="jxr_string">"data"</span>, p(<span class="jxr_string">"prefView"</span>).get(<span class="jxr_string">"active"</span>));
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	}
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	@Test <strong class="jxr_keyword">void</strong> b02_sharedUrlBeatsPreferences() {
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		assertEquals(<span class="jxr_string">"data"</span>, p(<span class="jxr_string">"sharedUrl"</span>).get(<span class="jxr_string">"active"</span>));
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	}
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	@Test <strong class="jxr_keyword">void</strong> b03_selectingWritesTheAddressAndTheDefaultViewRemovesIt() {
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">var</strong> p = p(<span class="jxr_string">"main"</span>);
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		assertEquals(<span class="jxr_string">""</span>, p.get(<span class="jxr_string">"addrStart"</span>), p::toString);
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		assertTrue(String.valueOf(p.get(<span class="jxr_string">"addrData"</span>)).contains(<span class="jxr_string">"sw(sw1:data)"</span>), p::toString);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		assertFalse(String.valueOf(p.get(<span class="jxr_string">"addrDefault"</span>)).contains(<span class="jxr_string">"sw("</span>), p::toString);
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	}
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	@Test <strong class="jxr_keyword">void</strong> b04_tablelessPageWritesTheAddress() {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		assertTrue(String.valueOf(p(<span class="jxr_string">"main"</span>).get(<span class="jxr_string">"addrMulti"</span>)).contains(<span class="jxr_string">"sw(sw1:multi"</span>), p(<span class="jxr_string">"main"</span>)::toString);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	}
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	@Test <strong class="jxr_keyword">void</strong> c01_multiSectionShowsSubtabsAndKeepsTheSectionChoice() {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">var</strong> p = p(<span class="jxr_string">"main"</span>);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		assertEquals(1, ((Number)p.get(<span class="jxr_string">"subStrips"</span>)).intValue(), p::toString);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		assertTrue(String.valueOf(p.get(<span class="jxr_string">"addrSection"</span>)).contains(<span class="jxr_string">"sw(sw1:multi.s2)"</span>), p::toString);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		assertEquals(<span class="jxr_string">"\&quot;s2\&quot;"</span>, p.get(<span class="jxr_string">"prefSection"</span>), p::toString);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">var</strong> r = p(<span class="jxr_string">"prefSection"</span>);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		assertEquals(<span class="jxr_string">"multi"</span>, r.get(<span class="jxr_string">"active"</span>), r::toString);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		assertEquals(<span class="jxr_string">"s2"</span>, r.get(<span class="jxr_string">"section"</span>), r::toString);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	}
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	@Test <strong class="jxr_keyword">void</strong> d01_keyboardMovesBetweenViewTabsAndTabReachesTheDisplay() {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">var</strong> p = p(<span class="jxr_string">"kbd"</span>);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		assertEquals(<span class="jxr_string">"mv"</span>, m(p.get(<span class="jxr_string">"k0"</span>)).get(<span class="jxr_string">"tab"</span>), p::toString);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		assertEquals(<span class="jxr_string">"other"</span>, m(p.get(<span class="jxr_string">"k1"</span>)).get(<span class="jxr_string">"tab"</span>), p::toString);
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		assertEquals(<span class="jxr_string">"-3px"</span>, m(p.get(<span class="jxr_string">"k3"</span>)).get(<span class="jxr_string">"offset"</span>), p::toString);
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		assertEquals(<span class="jxr_string">"sw1-display"</span>, m(p.get(<span class="jxr_string">"k2"</span>)).get(<span class="jxr_string">"id"</span>), p::toString);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		assertEquals(<span class="jxr_string">"0"</span>, m(p.get(<span class="jxr_string">"k2"</span>)).get(<span class="jxr_string">"tabindex"</span>), p::toString);
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	}
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	@Test <strong class="jxr_keyword">void</strong> d02_displayIsLabelledByTheSelectedTab() {
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">var</strong> aria = (List&lt;Map&lt;String,Object&gt;&gt;)p(<span class="jxr_string">"main"</span>).get(<span class="jxr_string">"aria"</span>);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		assertEquals(4, aria.size());
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : aria)
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			assertEquals(a.get(<span class="jxr_string">"selected"</span>), a.get(<span class="jxr_string">"labelled"</span>), aria::toString);
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	@Test <strong class="jxr_keyword">void</strong> e01_twoSwitchersShareOneDirective() {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">var</strong> p = p(<span class="jxr_string">"two"</span>);
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertEquals(List.of(<span class="jxr_string">"a2"</span>, <span class="jxr_string">"b3"</span>), p.get(<span class="jxr_string">"active"</span>), p::toString);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		assertTrue(String.valueOf(p.get(<span class="jxr_string">"addr"</span>)).contains(<span class="jxr_string">"sw(swa:a2~swb:b3)"</span>), p::toString);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertTrue(String.valueOf(p.get(<span class="jxr_string">"addrAfterDefault"</span>)).contains(<span class="jxr_string">"sw(swb:b3)"</span>), p::toString);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	@Test <strong class="jxr_keyword">void</strong> f01_sectionStripUsesTheFolderTabLook() {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">var</strong> look = m(p(<span class="jxr_string">"main"</span>).get(<span class="jxr_string">"look"</span>));
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<em class="jxr_comment">// The shipped selected folder tab is semibold (600); the stylesheet is the source of truth.</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		assertEquals(<span class="jxr_string">"600"</span>, look.get(<span class="jxr_string">"selWeight"</span>), look::toString);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		assertEquals(<span class="jxr_string">"1px"</span>, look.get(<span class="jxr_string">"selBorderTopWidth"</span>), look::toString);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertTrue(String.valueOf(look.get(<span class="jxr_string">"selShadow"</span>)).contains(String.valueOf(look.get(<span class="jxr_string">"accent"</span>))), look::toString);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertNotEquals(look.get(<span class="jxr_string">"selBg"</span>), look.get(<span class="jxr_string">"unsBg"</span>), look::toString);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertEquals(look.get(<span class="jxr_string">"panes"</span>), look.get(<span class="jxr_string">"selBorderTop"</span>), look::toString);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	@Test <strong class="jxr_keyword">void</strong> slider_thumbMovesWithSelection() {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">var</strong> t = m(p(<span class="jxr_string">"layout"</span>).get(<span class="jxr_string">"thumb"</span>));
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertEquals(((Number)t.get(<span class="jxr_string">"tabX"</span>)).doubleValue(), ((Number)t.get(<span class="jxr_string">"thumbX"</span>)).doubleValue(), 1.0, t::toString);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	@Test <strong class="jxr_keyword">void</strong> tabs_nestedHostIsBorderless() {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">var</strong> n = m(p(<span class="jxr_string">"layout"</span>).get(<span class="jxr_string">"nested"</span>));
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, n.get(<span class="jxr_string">"attr"</span>), n::toString);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertEquals(<span class="jxr_string">"none"</span>, n.get(<span class="jxr_string">"shadow"</span>), n::toString);
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertEquals(<span class="jxr_string">"0px 0px"</span>, n.get(<span class="jxr_string">"padding"</span>), n::toString);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertEquals(<span class="jxr_string">"rgba(0, 0, 0, 0)"</span>, n.get(<span class="jxr_string">"bg"</span>), n::toString);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	}
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	@Test <strong class="jxr_keyword">void</strong> selectedTabIsNotClipped() {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">var</strong> c = m(p(<span class="jxr_string">"layout"</span>).get(<span class="jxr_string">"clip"</span>));
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		assertTrue(((Number)c.get(<span class="jxr_string">"selBottom"</span>)).doubleValue() &gt;= ((Number)c.get(<span class="jxr_string">"panesTop"</span>)).doubleValue() + 1, c::toString);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		assertNotEquals(<span class="jxr_string">"hidden"</span>, c.get(<span class="jxr_string">"overflowY"</span>), c::toString);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	}
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	@Test <strong class="jxr_keyword">void</strong> topLevelCards_gapEqualsToken() {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">var</strong> g = m(p(<span class="jxr_string">"layout"</span>).get(<span class="jxr_string">"gap"</span>));
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		assertEquals(((Number)g.get(<span class="jxr_string">"token"</span>)).doubleValue(), ((Number)g.get(<span class="jxr_string">"actual"</span>)).doubleValue(), 1.0, g::toString);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	}
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	@Test <strong class="jxr_keyword">void</strong> nestedDatatablesKeepsRowDetailRibbonQuickStats() {
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">var</strong> p = p(<span class="jxr_string">"layout"</span>);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, p.get(<span class="jxr_string">"statStrip"</span>), p::toString);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, p.get(<span class="jxr_string">"ribbon"</span>), p::toString);
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, p.get(<span class="jxr_string">"inSwitcher"</span>), p::toString);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		assertTrue(((Number)p.get(<span class="jxr_string">"detailPanels"</span>)).intValue() &gt;= 1, p::toString);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	}
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>PetstoreRowDetails_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/petstore/console/PetstoreRowDetails_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.petstore.console;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.petstore.console.PetstoreConsoleFixture.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.console.test.PageContractAssert.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.stream.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.classic.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.params.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.params.provider.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * Expandable row details across the console tables: the bean-backed detail endpoints (200 for a known row, an empty 404</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * for any other), the projection that keeps unexposed properties off the wire, the scoped rows behind the nested-table</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * tabs, and the detail each table's card declares.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// MockRestClient is a no-op close.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  })
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">class</strong> PetstoreRowDetails_Test <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonMap json(MockRestClient c, String path, <strong class="jxr_keyword">int</strong> status) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonMap(c.get(path).accept(<span class="jxr_string">"application/json"</span>).run().assertStatus(status).getContent().asString());
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	}
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonList list(MockRestClient c, String path) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonList(c.get(path).accept(<span class="jxr_string">"application/json"</span>).run().assertStatus(200).getContent().asString());
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	}
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertEmpty404(MockRestClient c, String path) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">var</strong> r = c.get(path).accept(<span class="jxr_string">"application/json"</span>).run().assertStatus(404);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		assertEquals(<span class="jxr_string">"{}"</span>, r.getContent().asString().replaceAll(<span class="jxr_string">"&#92;&#92;s"</span>, <span class="jxr_string">""</span>), path);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertEquals(<span class="jxr_string">"no-store"</span>, r.getStringHeader(<span class="jxr_string">"Cache-Control"</span>).orElse(<strong class="jxr_keyword">null</strong>), path);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<em class="jxr_comment">// a - the bean-backed detail endpoints</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Test <strong class="jxr_keyword">void</strong> a01_petDetail() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">var</strong> m = json(client(), <span class="jxr_string">"/console/pets/row-detail/pet/1"</span>, 200);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertEquals(<span class="jxr_string">"1"</span>, m.getString(<span class="jxr_string">"contractVersion"</span>));
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> f = m.getMap(<span class="jxr_string">"fields"</span>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		assertEquals(<span class="jxr_string">"Mr. Frisky"</span>, f.getString(<span class="jxr_string">"name"</span>));
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertNotNull(f.get(<span class="jxr_string">"price"</span>));
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	@Test <strong class="jxr_keyword">void</strong> a02_orderDetail() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> f = json(client(), <span class="jxr_string">"/console/orders/row-detail/order/101"</span>, 200).getMap(<span class="jxr_string">"fields"</span>);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertEquals(101L, f.getLong(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertNotNull(f.get(<span class="jxr_string">"status"</span>));
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Test <strong class="jxr_keyword">void</strong> a03_userDetailNeverCarriesPrivateProperties() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> body = client().get(<span class="jxr_string">"/console/users/row-detail/user/mwatson"</span>).accept(<span class="jxr_string">"application/json"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(<span class="jxr_string">"mwatson"</span>, <strong class="jxr_keyword">new</strong> JsonMap(body).getMap(<span class="jxr_string">"fields"</span>).getString(<span class="jxr_string">"username"</span>));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> secret : <strong class="jxr_keyword">new</strong> String[] {<span class="jxr_string">"password"</span>, <span class="jxr_string">"email"</span>, <span class="jxr_string">"phone"</span>})
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			assertFalse(body.contains(secret), <span class="jxr_string">"leaked "</span> + secret);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@ParameterizedTest(name=<span class="jxr_string">"{0}"</span>)
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@ValueSource(strings = {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<span class="jxr_string">"/console/pets/row-detail/pet/999999"</span>, <span class="jxr_string">"/console/pets/row-detail/pet/abc"</span>, <span class="jxr_string">"/console/pets/row-detail/nope/1"</span>,
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<span class="jxr_string">"/console/orders/row-detail/order/999999"</span>, <span class="jxr_string">"/console/users/row-detail/user/nobody"</span>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	})
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">void</strong> a04_unknownRowIsAnEmpty404(String path) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertEmpty404(client(), path);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	@Test <strong class="jxr_keyword">void</strong> a05_tabsAndCounts() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> c = client();
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(<span class="jxr_string">"Mr. Frisky"</span>, json(c, <span class="jxr_string">"/console/pets/row-detail/pet/1/tab/details"</span>, 200).getMap(<span class="jxr_string">"fields"</span>).getString(<span class="jxr_string">"name"</span>));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertTrue(json(c, <span class="jxr_string">"/console/pets/row-detail/pet/1/counts"</span>, 200).getMap(<span class="jxr_string">"counts"</span>).isEmpty()); <em class="jxr_comment">// the nested tabs count their own rows</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEmpty404(c, <span class="jxr_string">"/console/pets/row-detail/pet/999999/counts"</span>);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<em class="jxr_comment">// b - the scoped rows behind the nested-table tabs</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	@Test <strong class="jxr_keyword">void</strong> b01_petOrdersAreScopedToThePet() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> c = client();
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> all = list(c, <span class="jxr_string">"/petstore/orders"</span>);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">var</strong> petId = all.getMap(0).getLong(<span class="jxr_string">"petId"</span>);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/pets/orders/rows?petId="</span> + petId);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertFalse(rows.isEmpty());
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; rows.size(); i++)
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			assertEquals(petId, rows.getMap(i).getLong(<span class="jxr_string">"petId"</span>));
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Test <strong class="jxr_keyword">void</strong> b02_petHistoryIsScopedToThePet() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> c = client();
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/pets/history/rows?petId=1"</span>);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; rows.size(); i++) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			assertEquals(<span class="jxr_string">"Pet"</span>, rows.getMap(i).getString(<span class="jxr_string">"entity"</span>));
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			assertEquals(<span class="jxr_string">"1"</span>, rows.getMap(i).getString(<span class="jxr_string">"entityId"</span>));
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		}
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	}
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	@Test <strong class="jxr_keyword">void</strong> b03_userOrdersAreThoseTheUserPlaced() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> c = client();
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		store().createUser(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.User().setUsername(<span class="jxr_string">"orderer1"</span>).setPassword(<span class="jxr_string">"x"</span>), <span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> placed = store().createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(1), <span class="jxr_string">"console:orderer1"</span>);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/users/orders/rows?username=orderer1"</span>);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertEquals(1, rows.size());
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertEquals(placed.getId(), rows.getMap(0).getLong(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertEquals(0, list(c, <span class="jxr_string">"/console/users/orders/rows?username=mwatson"</span>).size());
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	@Test <strong class="jxr_keyword">void</strong> b04_orderPetIsTheOrdersPet() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> c = client();
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> o = list(c, <span class="jxr_string">"/petstore/orders"</span>).getMap(0);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/orders/pet/rows?orderId="</span> + o.getLong(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertEquals(1, rows.size());
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertEquals(o.getLong(<span class="jxr_string">"petId"</span>), rows.getMap(0).getLong(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@ParameterizedTest(name=<span class="jxr_string">"{0}"</span>)
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@ValueSource(strings = {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<span class="jxr_string">"/console/pets/orders/rows?petId=999999"</span>, <span class="jxr_string">"/console/pets/orders/rows"</span>, <span class="jxr_string">"/console/pets/history/rows?petId=999999"</span>,
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<span class="jxr_string">"/console/users/orders/rows?username=nobody"</span>, <span class="jxr_string">"/console/users/orders/rows"</span>, <span class="jxr_string">"/console/orders/pet/rows?orderId=999999"</span>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	})
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">void</strong> b05_unknownParentIs404(String path) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		client().get(path).accept(<span class="jxr_string">"application/json"</span>).run().assertStatus(404);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<em class="jxr_comment">// c - the detail each table declares</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">static</strong> Stream&lt;org.junit.jupiter.params.provider.Arguments&gt; tables() {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">return</strong> Stream.of(
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			Arguments.of(<span class="jxr_string">"/console/pets"</span>, <span class="jxr_string">"pets"</span>, <span class="jxr_string">"/console/pets/row-detail/pet/{id}"</span>),
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			Arguments.of(<span class="jxr_string">"/console/pets/sold"</span>, <span class="jxr_string">"sold"</span>, <span class="jxr_string">"/console/pets/row-detail/soldPet/{id}"</span>),
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			Arguments.of(<span class="jxr_string">"/console/orders"</span>, <span class="jxr_string">"orders"</span>, <span class="jxr_string">"/console/orders/row-detail/order/{id}"</span>),
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			Arguments.of(<span class="jxr_string">"/console/store"</span>, <span class="jxr_string">"stats"</span>, <span class="jxr_string">"/console/orders/row-detail/order/{id}"</span>),
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			Arguments.of(<span class="jxr_string">"/console/users"</span>, <span class="jxr_string">"users"</span>, <span class="jxr_string">"/console/users/row-detail/user/{id}"</span>));
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	}
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	@ParameterizedTest(name=<span class="jxr_string">"{0}"</span>)
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	@MethodSource(<span class="jxr_string">"tables"</span>)
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<strong class="jxr_keyword">void</strong> c01_tableDeclaresItsDetail(String path0, String card, String endpoint) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> suffix : <strong class="jxr_keyword">new</strong> String[] {<span class="jxr_string">""</span>, <span class="jxr_string">"?builder"</span>}) {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">var</strong> page = path(path0, suffix);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			assertPage(page(client(), page)).isValid().hasCard(card, <span class="jxr_string">"datatables"</span>)
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 				.hasCardKey(card, <span class="jxr_string">"/table/detail/endpoint"</span>, endpoint)
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 				.hasCardKey(card, <span class="jxr_string">"/table/detail/mode"</span>, <span class="jxr_string">"bean"</span>);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		}
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	@Test <strong class="jxr_keyword">void</strong> c02_inlineDetails() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> suffix : <strong class="jxr_keyword">new</strong> String[] {<span class="jxr_string">""</span>, <span class="jxr_string">"?builder"</span>}) {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			assertPage(page(client(), path(<span class="jxr_string">"/console/pets/changes"</span>, suffix))).hasCardKey(<span class="jxr_string">"changes"</span>, <span class="jxr_string">"/table/detail/mode"</span>, <span class="jxr_string">"inline"</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			assertPage(page(client(), path(<span class="jxr_string">"/console/ops/audit"</span>, suffix))).hasCardKey(<span class="jxr_string">"audit"</span>, <span class="jxr_string">"/table/detail/mode"</span>, <span class="jxr_string">"inline"</span>);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			assertPage(page(client(), path(<span class="jxr_string">"/console/pets/1/history"</span>, suffix))).hasCardKey(<span class="jxr_string">"history"</span>, <span class="jxr_string">"/table/detail/mode"</span>, <span class="jxr_string">"inline"</span>);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		}
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	}
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	@Test <strong class="jxr_keyword">void</strong> c03_detailsCarryTheirNestedTabs() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> pets = card(page(client(), <span class="jxr_string">"/console/pets?builder"</span>), <span class="jxr_string">"pets"</span>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> kinds = pets.getMap(<span class="jxr_string">"table"</span>).getMap(<span class="jxr_string">"detail"</span>).getList(<span class="jxr_string">"tabs"</span>).stream().map(x -&gt; ((java.util.Map&lt;?,?&gt;)x).get(<span class="jxr_string">"id"</span>)).toList();
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertEquals(java.util.List.of(<span class="jxr_string">"details"</span>, <span class="jxr_string">"orders"</span>, <span class="jxr_string">"history"</span>), kinds);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String path(String base, String suffix) {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">return</strong> base + suffix;
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	}
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonMap card(String html, String id) {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">return</strong> assertPage(html).card(id);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

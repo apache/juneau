@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	@Test <strong class="jxr_keyword">void</strong> a04_docNamesTheTagAndLicenses() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> md = read(<span class="jxr_string">"juneau-symbols-lucide-provenance.md"</span>);
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertTrue(Pattern.compile(<span class="jxr_string">"v?&#92;&#92;d+&#92;&#92;.&#92;&#92;d+&#92;&#92;.&#92;&#92;d+"</span>).matcher(md).find());
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertTrue(Pattern.compile(<span class="jxr_string">"v?+&#92;&#92;d++&#92;&#92;.&#92;&#92;d++&#92;&#92;.&#92;&#92;d++"</span>).matcher(md).find());
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertTrue(md.contains(<span class="jxr_string">"ISC"</span>));
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertTrue(md.contains(<span class="jxr_string">"MIT"</span>));
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}

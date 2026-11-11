@@ -70,58 +70,58 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			.eval(<span class="jxr_string">"window.__probe.selected = Array.from(document.querySelectorAll('#t1-body [role=tab]')).map(function (t) { return t.getAttribute('aria-selected'); });"</span>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  				+ <span class="jxr_string">"window.__probe.visiblePanes = Array.from(document.querySelectorAll('#t1-body [role=tabpanel]')).filter(function (p) { return !p.hidden; }).length;"</span>)
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  			.run();
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	}
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	@Test <strong class="jxr_keyword">void</strong> a01_expandPaintsTabStrip_andSelectingSecondTabSwitchesPane() {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> r = report.get(<span class="jxr_string">"tabs"</span>);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertNoShellErrors(r);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> p = ConsoleBrowserFixture.probe(r);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertEquals(List.of(<span class="jxr_string">"Main"</span>, <span class="jxr_string">"More"</span>), p.get(<span class="jxr_string">"tabs"</span>), r::toString);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertEquals(List.of(<span class="jxr_string">"false"</span>, <span class="jxr_string">"true"</span>), p.get(<span class="jxr_string">"selected"</span>), r::toString);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertEquals(1, ((Number)p.get(<span class="jxr_string">"visiblePanes"</span>)).intValue(), r::toString);
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<em class="jxr_comment">// ---- Table-model detail: header actions, ribbon collapse-all, redraw re-open, polling pause counters ----</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String W = <span class="jxr_string">"window.__w = function (fn) { return new Promise(function (res) { var n = 0; (function t() { if (fn() || n++ &gt; 400) res(); else setTimeout(t, 50); })(); }); };"</span>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		+ <span class="jxr_string">"window.__res = function (re) { return performance.getEntriesByType('resource').filter(function (e) { return re.test(new URL(e.name).pathname); }).length; };"</span>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		+ <span class="jxr_string">"window.__tabs = function (id) { return Array.from(document.querySelectorAll('#' + id + '-body [role=tab]')); };"</span>;
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; pollCard(String id, <strong class="jxr_keyword">boolean</strong> pauseWhileEditing) {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> orders = TableSpec.create(id + <span class="jxr_string">"-orders"</span>).dataMode(TableSpec.DataMode.CLIENT).dataUrl(<span class="jxr_string">"/api/"</span> + id + <span class="jxr_string">"orders"</span>)
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.columns(Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Id"</span>));
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> detail = RowDetail.create(<span class="jxr_string">"/api/"</span> + id + <span class="jxr_string">"/{id}/detail"</span>).title(<span class="jxr_string">"Row {id}"</span>)
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			.tab(DetailTab.fields(<span class="jxr_string">"Info"</span>, <span class="jxr_string">"name"</span>).id(<span class="jxr_string">"info"</span>))
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			.tab(DetailTab.table(<span class="jxr_string">"Orders"</span>, orders).id(<span class="jxr_string">"orders"</span>).scopeParam(<span class="jxr_string">"rid"</span>).refreshOnPoll(<strong class="jxr_keyword">true</strong>))
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			.action(RowAction.create(<span class="jxr_string">"del"</span>).label(<span class="jxr_string">"Delete"</span>).icon(<span class="jxr_string">"trash"</span>).confirm(<span class="jxr_string">"Really delete?"</span>)
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  				.endpoint(<span class="jxr_string">"/api/"</span> + id + <span class="jxr_string">"/{id}"</span>).method(RowAction.Method.DELETE))
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			.action(RowAction.create(<span class="jxr_string">"note"</span>).label(<span class="jxr_string">"Note"</span>).present(RowAction.Present.DIALOG).confirm(<span class="jxr_string">"Add a note?"</span>));
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> t = TableSpec.create(id).dataMode(TableSpec.DataMode.CLIENT).dataUrl(<span class="jxr_string">"/api/"</span> + id)
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			.selection(SelectionDef.create(<span class="jxr_string">"id"</span>)).pollIntervalMs(5000).pausePollingWhileEditing(pauseWhileEditing)
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			.columns(Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Id"</span>), Column.create(<span class="jxr_string">"name"</span>).label(<span class="jxr_string">"Name"</span>))
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			.ribbon(RibbonItem.collapseAll())
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			.detail(detail);
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> card = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		card.put(<span class="jxr_string">"id"</span>, id);
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		card.put(<span class="jxr_string">"type"</span>, <span class="jxr_string">"datatables"</span>);
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		card.put(<span class="jxr_string">"title"</span>, id);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		card.put(<span class="jxr_string">"table"</span>, t.toCardBody());
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">return</strong> card;
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String twoTablePage() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> page = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		page.put(<span class="jxr_string">"contractVersion"</span>, <span class="jxr_string">"1"</span>);
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		page.put(<span class="jxr_string">"modelVersion"</span>, <span class="jxr_string">"1"</span>);
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		page.put(<span class="jxr_string">"title"</span>, <span class="jxr_string">"Two"</span>);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		page.put(<span class="jxr_string">"cards"</span>, List.of(pollCard(<span class="jxr_string">"pa"</span>, <strong class="jxr_keyword">true</strong>), pollCard(<span class="jxr_string">"pb"</span>, false)));
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">return</strong> contractPage(Json.of(page), <span class="jxr_string">""</span>, <span class="jxr_string">""</span>, viewsPack());
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; tableReport;
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	@BeforeAll
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> tables() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		tables();
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	@Test <strong class="jxr_keyword">void</strong> a01_expandPaintsTabStrip_andSelectingSecondTabSwitchesPane() {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> r = report.get(<span class="jxr_string">"tabs"</span>);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertNoShellErrors(r);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> p = ConsoleBrowserFixture.probe(r);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertEquals(List.of(<span class="jxr_string">"Main"</span>, <span class="jxr_string">"More"</span>), p.get(<span class="jxr_string">"tabs"</span>), r::toString);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertEquals(List.of(<span class="jxr_string">"false"</span>, <span class="jxr_string">"true"</span>), p.get(<span class="jxr_string">"selected"</span>), r::toString);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertEquals(1, ((Number)p.get(<span class="jxr_string">"visiblePanes"</span>)).intValue(), r::toString);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	}
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<em class="jxr_comment">// ---- Table-model detail: header actions, ribbon collapse-all, redraw re-open, polling pause counters ----</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String W = <span class="jxr_string">"window.__w = function (fn) { return new Promise(function (res) { var n = 0; (function t() { if (fn() || n++ &gt; 400) res(); else setTimeout(t, 50); })(); }); };"</span>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		+ <span class="jxr_string">"window.__res = function (re) { return performance.getEntriesByType('resource').filter(function (e) { return re.test(new URL(e.name).pathname); }).length; };"</span>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		+ <span class="jxr_string">"window.__tabs = function (id) { return Array.from(document.querySelectorAll('#' + id + '-body [role=tab]')); };"</span>;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; pollCard(String id, <strong class="jxr_keyword">boolean</strong> pauseWhileEditing) {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> orders = TableSpec.create(id + <span class="jxr_string">"-orders"</span>).dataMode(TableSpec.DataMode.CLIENT).dataUrl(<span class="jxr_string">"/api/"</span> + id + <span class="jxr_string">"orders"</span>)
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			.columns(Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Id"</span>));
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> detail = RowDetail.create(<span class="jxr_string">"/api/"</span> + id + <span class="jxr_string">"/{id}/detail"</span>).title(<span class="jxr_string">"Row {id}"</span>)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			.tab(DetailTab.fields(<span class="jxr_string">"Info"</span>, <span class="jxr_string">"name"</span>).id(<span class="jxr_string">"info"</span>))
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			.tab(DetailTab.table(<span class="jxr_string">"Orders"</span>, orders).id(<span class="jxr_string">"orders"</span>).scopeParam(<span class="jxr_string">"rid"</span>).refreshOnPoll(<strong class="jxr_keyword">true</strong>))
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			.action(RowAction.create(<span class="jxr_string">"del"</span>).label(<span class="jxr_string">"Delete"</span>).icon(<span class="jxr_string">"trash"</span>).confirm(<span class="jxr_string">"Really delete?"</span>)
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  				.endpoint(<span class="jxr_string">"/api/"</span> + id + <span class="jxr_string">"/{id}"</span>).method(RowAction.Method.DELETE))
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			.action(RowAction.create(<span class="jxr_string">"note"</span>).label(<span class="jxr_string">"Note"</span>).present(RowAction.Present.DIALOG).confirm(<span class="jxr_string">"Add a note?"</span>));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> t = TableSpec.create(id).dataMode(TableSpec.DataMode.CLIENT).dataUrl(<span class="jxr_string">"/api/"</span> + id)
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			.selection(SelectionDef.create(<span class="jxr_string">"id"</span>)).pollIntervalMs(5000).pausePollingWhileEditing(pauseWhileEditing)
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			.columns(Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Id"</span>), Column.create(<span class="jxr_string">"name"</span>).label(<span class="jxr_string">"Name"</span>))
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			.ribbon(RibbonItem.collapseAll())
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			.detail(detail);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> card = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		card.put(<span class="jxr_string">"id"</span>, id);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		card.put(<span class="jxr_string">"type"</span>, <span class="jxr_string">"datatables"</span>);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		card.put(<span class="jxr_string">"title"</span>, id);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		card.put(<span class="jxr_string">"table"</span>, t.toCardBody());
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">return</strong> card;
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	}
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String twoTablePage() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> page = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		page.put(<span class="jxr_string">"contractVersion"</span>, <span class="jxr_string">"1"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		page.put(<span class="jxr_string">"modelVersion"</span>, <span class="jxr_string">"1"</span>);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		page.put(<span class="jxr_string">"title"</span>, <span class="jxr_string">"Two"</span>);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		page.put(<span class="jxr_string">"cards"</span>, List.of(pollCard(<span class="jxr_string">"pa"</span>, <strong class="jxr_keyword">true</strong>), pollCard(<span class="jxr_string">"pb"</span>, false)));
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">return</strong> contractPage(Json.of(page), <span class="jxr_string">""</span>, <span class="jxr_string">""</span>, viewsPack());
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; tableReport;
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> tables() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">var</strong> f = ConsoleBrowserFixture.create(<span class="jxr_string">"row-detail-model"</span>);
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> id : List.of(<span class="jxr_string">"pa"</span>, <span class="jxr_string">"pb"</span>)) {
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 			f.asset(<span class="jxr_string">"/api/"</span> + id, <span class="jxr_string">"[{\&quot;id\&quot;:\&quot;r1\&quot;,\&quot;name\&quot;:\&quot;Rex\&quot;}]"</span>, <span class="jxr_string">"application/json"</span>)

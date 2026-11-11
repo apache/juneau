@@ -146,14 +146,22 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@Test <strong class="jxr_keyword">void</strong> j03_cardCannotOverrideTheme() { ok(<span class="jxr_string">"t03_cardCannotOverrideTheme"</span>); }
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Test <strong class="jxr_keyword">void</strong> j04_themeChangedUpdates() { ok(<span class="jxr_string">"t04_themeChangedUpdates"</span>); }
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	@Test <strong class="jxr_keyword">void</strong> j05_listenerRemovedOnCleanup() { ok(<span class="jxr_string">"t05_listenerRemovedOnCleanup"</span>); }
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	@Test <strong class="jxr_keyword">void</strong> z01_everyCasePasses() {
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> r = r();
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertSize(() -&gt; <span class="jxr_string">"case count changed; add a method per new case: "</span> + r.keySet(), 93, r);
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : r.entrySet())
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			assertEquals(<strong class="jxr_keyword">true</strong>, e.getValue(), () -&gt; e.getKey() + <span class="jxr_string">" -&gt; "</span> + e.getValue());
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> }
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	@Test <strong class="jxr_keyword">void</strong> j06_mountUsesTokenAsStartFont() { ok(<span class="jxr_string">"t06_mountUsesTokenAsStartFont"</span>); }
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	@Test <strong class="jxr_keyword">void</strong> j07_followIsAToggleButton() { ok(<span class="jxr_string">"t07_followIsAToggleButton"</span>); }
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	@Test <strong class="jxr_keyword">void</strong> j08_followToggles() { ok(<span class="jxr_string">"t08_followToggles"</span>); }
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	@Test <strong class="jxr_keyword">void</strong> j09_searchAndCopyClasses() { ok(<span class="jxr_string">"t09_searchAndCopyClasses"</span>); }
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	@Test <strong class="jxr_keyword">void</strong> a07_readBaseFontDefault() { ok(<span class="jxr_string">"g01_readBaseFontDefault"</span>); }
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	@Test <strong class="jxr_keyword">void</strong> a08_readBaseFontToken() { ok(<span class="jxr_string">"g02_readBaseFontToken"</span>); }
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	@Test <strong class="jxr_keyword">void</strong> a09_readBaseFontInvalid() { ok(<span class="jxr_string">"g03_readBaseFontInvalid"</span>); }
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> a10_fitFontStillClampsForAnyReference() { ok(<span class="jxr_string">"g04_fitFontStillClampsForAnyReference"</span>); }
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@Test <strong class="jxr_keyword">void</strong> z01_everyCasePasses() {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> r = r();
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertSize(() -&gt; <span class="jxr_string">"case count changed; add a method per new case: "</span> + r.keySet(), 101, r);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : r.entrySet())
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			assertEquals(<strong class="jxr_keyword">true</strong>, e.getValue(), () -&gt; e.getKey() + <span class="jxr_string">" -&gt; "</span> + e.getValue());
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -288,104 +288,116 @@
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 		assertEquals(j(<span class="jxr_string">"{threshold:200}"</span>), map(ChartDef.line(<span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>).largeData(200)).get(<span class="jxr_string">"largeData"</span>));
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 	}
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	@Test <strong class="jxr_keyword">void</strong> b15_partialFrames_needsSource() {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">var</strong> target31 = ChartDef.line(<span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>).partialFrames();
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, target31::toCardSpec);
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		assertString(<span class="jxr_string">"ChartDef 't' partialFrames() needs source(...)."</span>, e.getMessage());
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	}
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	@Test <strong class="jxr_keyword">void</strong> b16_kindOnlyMethods_rejectedOnOtherKinds() {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">var</strong> target32 = ChartDef.line(<span class="jxr_string">"t"</span>);
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target32.yField(<span class="jxr_string">"r"</span>));
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">var</strong> target33 = ChartDef.bar(<span class="jxr_string">"t"</span>);
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target33.symbolSizeBy(<span class="jxr_string">"r"</span>));
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">var</strong> target34 = ChartDef.line(<span class="jxr_string">"t"</span>);
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target34.scale(0, 1));
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	}
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	@Test <strong class="jxr_keyword">void</strong> b17_heatmap_requiresXyValue() {
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">var</strong> target35 = ChartDef.heatmap(<span class="jxr_string">"h"</span>).src(<span class="jxr_string">"/h"</span>).x(<span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, target35::toCardSpec);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		assertString(<span class="jxr_string">"ChartDef 'h' kind 'heatmap' requires x(...), yField(...) and value(...)."</span>, e.getMessage());
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	@Test <strong class="jxr_keyword">void</strong> b18_newKeysAreDedicated() {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">var</strong> target36 = ChartDef.line(<span class="jxr_string">"t"</span>);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : List.of(<span class="jxr_string">"source"</span>, <span class="jxr_string">"helper"</span>, <span class="jxr_string">"option"</span>, <span class="jxr_string">"patch"</span>, <span class="jxr_string">"decorators"</span>, <span class="jxr_string">"on"</span>, <span class="jxr_string">"group"</span>, <span class="jxr_string">"renderer"</span>, <span class="jxr_string">"theme"</span>, <span class="jxr_string">"largeData"</span>, <span class="jxr_string">"partialFrames"</span>, <span class="jxr_string">"a11y"</span>, <span class="jxr_string">"maps"</span>))
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target36.set(k, 1), k);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	@Test <strong class="jxr_keyword">void</strong> dataTab_a01_serialized() {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, map(ChartDef.line(<span class="jxr_string">"c"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>).dataTab()).get(<span class="jxr_string">"dataTab"</span>));
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	@Test <strong class="jxr_keyword">void</strong> dataTab_a02_defaultAbsent() {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		assertFalse(map(ChartDef.line(<span class="jxr_string">"c"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>)).containsKey(<span class="jxr_string">"dataTab"</span>));
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	}
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	@Test <strong class="jxr_keyword">void</strong> dataTab_a03_falseExplicit() {
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertEquals(false, map(ChartDef.line(<span class="jxr_string">"c"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>).dataTab(false)).get(<span class="jxr_string">"dataTab"</span>));
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test <strong class="jxr_keyword">void</strong> b15_partialFrames_needsSource() {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">var</strong> target31 = ChartDef.line(<span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>).partialFrames();
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, target31::toCardSpec);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		assertString(<span class="jxr_string">"ChartDef 't' partialFrames() needs source(...)."</span>, e.getMessage());
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	}
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	@Test <strong class="jxr_keyword">void</strong> b16_kindOnlyMethods_rejectedOnOtherKinds() {
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">var</strong> target32 = ChartDef.line(<span class="jxr_string">"t"</span>);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target32.yField(<span class="jxr_string">"r"</span>));
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">var</strong> target33 = ChartDef.bar(<span class="jxr_string">"t"</span>);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target33.symbolSizeBy(<span class="jxr_string">"r"</span>));
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">var</strong> target34 = ChartDef.line(<span class="jxr_string">"t"</span>);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target34.scale(0, 1));
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 	}
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	@Test <strong class="jxr_keyword">void</strong> b19_maps_sameOrigin() {
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		assertEquals(j(<span class="jxr_string">"{world:'/geo/world.json'}"</span>), map(ChartDef.raw(<span class="jxr_string">"r"</span>).src(<span class="jxr_string">"/r"</span>).option(<span class="jxr_string">"{}"</span>).map(<span class="jxr_string">"world"</span>, <span class="jxr_string">"/geo/world.json"</span>)).get(<span class="jxr_string">"maps"</span>));
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">var</strong> target37 = ChartDef.raw(<span class="jxr_string">"r"</span>);
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target37.map(<span class="jxr_string">"world"</span>, <span class="jxr_string">"https://x/w.json"</span>));
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	@Test <strong class="jxr_keyword">void</strong> b17_heatmap_requiresXyValue() {
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">var</strong> target35 = ChartDef.heatmap(<span class="jxr_string">"h"</span>).src(<span class="jxr_string">"/h"</span>).x(<span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, target35::toCardSpec);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		assertString(<span class="jxr_string">"ChartDef 'h' kind 'heatmap' requires x(...), yField(...) and value(...)."</span>, e.getMessage());
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 	}
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	@Test <strong class="jxr_keyword">void</strong> b20_ofIsGone() {
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		assertTrue(Arrays.stream(ChartDef.<strong class="jxr_keyword">class</strong>.getMethods()).noneMatch(x -&gt; x.getName().equals(<span class="jxr_string">"of"</span>)));
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	}
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	@Test <strong class="jxr_keyword">void</strong> b21_largeData_thresholdBelowOne_rejected() {
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">var</strong> target38 = ChartDef.line(<span class="jxr_string">"t"</span>);
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target38.largeData(0));
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		assertString(<span class="jxr_string">"ChartDef 't' largeData threshold '0' must be at least 1."</span>, e.getMessage());
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	}
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	@Test <strong class="jxr_keyword">void</strong> b22_group_blank_rejected() {
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">var</strong> target39 = ChartDef.line(<span class="jxr_string">"t"</span>);
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target39.group(<span class="jxr_string">" "</span>));
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		assertString(<span class="jxr_string">"ChartDef 't' group must be non-blank."</span>, e.getMessage());
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	@Test <strong class="jxr_keyword">void</strong> b18_newKeysAreDedicated() {
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">var</strong> target36 = ChartDef.line(<span class="jxr_string">"t"</span>);
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : List.of(<span class="jxr_string">"source"</span>, <span class="jxr_string">"helper"</span>, <span class="jxr_string">"option"</span>, <span class="jxr_string">"patch"</span>, <span class="jxr_string">"decorators"</span>, <span class="jxr_string">"on"</span>, <span class="jxr_string">"group"</span>, <span class="jxr_string">"renderer"</span>, <span class="jxr_string">"theme"</span>, <span class="jxr_string">"largeData"</span>, <span class="jxr_string">"partialFrames"</span>, <span class="jxr_string">"a11y"</span>, <span class="jxr_string">"maps"</span>))
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target36.set(k, 1), k);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	}
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	@Test <strong class="jxr_keyword">void</strong> b19_maps_sameOrigin() {
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		assertEquals(j(<span class="jxr_string">"{world:'/geo/world.json'}"</span>), map(ChartDef.raw(<span class="jxr_string">"r"</span>).src(<span class="jxr_string">"/r"</span>).option(<span class="jxr_string">"{}"</span>).map(<span class="jxr_string">"world"</span>, <span class="jxr_string">"/geo/world.json"</span>)).get(<span class="jxr_string">"maps"</span>));
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> target37 = ChartDef.raw(<span class="jxr_string">"r"</span>);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target37.map(<span class="jxr_string">"world"</span>, <span class="jxr_string">"https://x/w.json"</span>));
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	}
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	@Test <strong class="jxr_keyword">void</strong> b20_ofIsGone() {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		assertTrue(Arrays.stream(ChartDef.<strong class="jxr_keyword">class</strong>.getMethods()).noneMatch(x -&gt; x.getName().equals(<span class="jxr_string">"of"</span>)));
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	@Test <strong class="jxr_keyword">void</strong> b23_patch_json5ParseError_failsToCardSpec() {
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">var</strong> d = ChartDef.line(<span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>).patch(<span class="jxr_string">"{a: ["</span>);
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, d::toCardSpec);
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		assertContains(<span class="jxr_string">"ChartDef 't' patch is not valid JSON5"</span>, e.getMessage());
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	@Test <strong class="jxr_keyword">void</strong> b21_largeData_thresholdBelowOne_rejected() {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">var</strong> target38 = ChartDef.line(<span class="jxr_string">"t"</span>);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target38.largeData(0));
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		assertString(<span class="jxr_string">"ChartDef 't' largeData threshold '0' must be at least 1."</span>, e.getMessage());
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 	}
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	@Test <strong class="jxr_keyword">void</strong> b24_decorate_customDecoratorWithBadName_isE74() {
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		Decorator bad = () -&gt; JsonMap.of(<span class="jxr_string">"use"</span>, <span class="jxr_string">"Bad"</span>);
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">var</strong> target40 = ChartDef.line(<span class="jxr_string">"t"</span>);
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target40.decorate(bad));
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		assertString(<span class="jxr_string">"E-74: 'Bad' is not a valid decorator name"</span>, e.getMessage());
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		Decorator none = () -&gt; JsonMap.of(<span class="jxr_string">"x"</span>, 1);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> target41 = ChartDef.line(<span class="jxr_string">"t"</span>);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">var</strong> e2 = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target41.decorate(none));
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		assertString(<span class="jxr_string">"E-74: 'null' is not a valid decorator name"</span>, e2.getMessage());
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	}
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	@Test <strong class="jxr_keyword">void</strong> b25_decorateWithUse_inArgs_rejected() {
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> target42 = ChartDef.line(<span class="jxr_string">"t"</span>);
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">var</strong> arg3 = JsonMap.of(<span class="jxr_string">"use"</span>, <span class="jxr_string">"y"</span>);
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target42.decorate(<span class="jxr_string">"app.x"</span>, arg3));
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		assertString(<span class="jxr_string">"ChartDef 't' decorator 'app.x' args must not set 'use'."</span>, e.getMessage());
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	}
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	@Test <strong class="jxr_keyword">void</strong> b28_on_badTopic_doesNotStoreTheEvent() {
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">var</strong> c = ChartDef.line(<span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>);
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.on(<span class="jxr_string">"click"</span>, <span class="jxr_string">"Bad Topic!"</span>));
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertNull(c.toCardSpec().toMap().get(<span class="jxr_string">"on"</span>));
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	}
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	@Test <strong class="jxr_keyword">void</strong> b26_raw_withHelperKeys_rejected() {
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">var</strong> target43 = ChartDef.raw(<span class="jxr_string">"r"</span>).src(<span class="jxr_string">"/s"</span>).option(<span class="jxr_string">"{}"</span>).x(<span class="jxr_string">"d"</span>);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, target43::toCardSpec);
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertString(<span class="jxr_string">"ChartDef 'r' raw(...) takes no helper keys (x, y, series, ...); put them in option(...)."</span>, e.getMessage());
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">var</strong> target44 = ChartDef.raw(<span class="jxr_string">"r"</span>).src(<span class="jxr_string">"/s"</span>).option(<span class="jxr_string">"{}"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>);
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, target44::toCardSpec);
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		assertNotNull(ChartDef.raw(<span class="jxr_string">"r"</span>).src(<span class="jxr_string">"/s"</span>).option(<span class="jxr_string">"{}"</span>).height(200).toCardSpec());
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	}
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	@Test <strong class="jxr_keyword">void</strong> b27_publishes_dedupedByTopic_retainUpgrades() {
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">var</strong> m = map(ChartDef.line(<span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>)
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			.on(<span class="jxr_string">"click"</span>, <span class="jxr_string">"app.pick"</span>).on(<span class="jxr_string">"dblclick"</span>, <span class="jxr_string">"app.pick"</span>).publishZoom().publishZoom());
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		assertEquals(j(<span class="jxr_string">"[{topic:'app.pick',retain:false},{topic:'zoom:t',retain:true}]"</span>), m.get(<span class="jxr_string">"publishes"</span>));
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">var</strong> viaDecorator = map(ChartDef.line(<span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>).on(<span class="jxr_string">"click"</span>, <span class="jxr_string">"app.pick"</span>).decorate(Markers.values(List.of()).onClick(<span class="jxr_string">"app.pick"</span>)));
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		assertEquals(j(<span class="jxr_string">"[{topic:'app.pick',retain:false}]"</span>), viaDecorator.get(<span class="jxr_string">"publishes"</span>));
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">var</strong> upgraded = map(ChartDef.line(<span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>).on(<span class="jxr_string">"click"</span>, <span class="jxr_string">"zoom:t"</span>).publishZoom());
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertEquals(j(<span class="jxr_string">"[{topic:'zoom:t',retain:true}]"</span>), upgraded.get(<span class="jxr_string">"publishes"</span>));
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	}
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> }
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	@Test <strong class="jxr_keyword">void</strong> b22_group_blank_rejected() {
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<strong class="jxr_keyword">var</strong> target39 = ChartDef.line(<span class="jxr_string">"t"</span>);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target39.group(<span class="jxr_string">" "</span>));
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		assertString(<span class="jxr_string">"ChartDef 't' group must be non-blank."</span>, e.getMessage());
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	}
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	@Test <strong class="jxr_keyword">void</strong> b23_patch_json5ParseError_failsToCardSpec() {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">var</strong> d = ChartDef.line(<span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>).patch(<span class="jxr_string">"{a: ["</span>);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, d::toCardSpec);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		assertContains(<span class="jxr_string">"ChartDef 't' patch is not valid JSON5"</span>, e.getMessage());
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	}
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	@Test <strong class="jxr_keyword">void</strong> b24_decorate_customDecoratorWithBadName_isE74() {
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		Decorator bad = () -&gt; JsonMap.of(<span class="jxr_string">"use"</span>, <span class="jxr_string">"Bad"</span>);
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> target40 = ChartDef.line(<span class="jxr_string">"t"</span>);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target40.decorate(bad));
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		assertString(<span class="jxr_string">"E-74: 'Bad' is not a valid decorator name"</span>, e.getMessage());
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		Decorator none = () -&gt; JsonMap.of(<span class="jxr_string">"x"</span>, 1);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">var</strong> target41 = ChartDef.line(<span class="jxr_string">"t"</span>);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">var</strong> e2 = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target41.decorate(none));
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertString(<span class="jxr_string">"E-74: 'null' is not a valid decorator name"</span>, e2.getMessage());
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	}
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	@Test <strong class="jxr_keyword">void</strong> b25_decorateWithUse_inArgs_rejected() {
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">var</strong> target42 = ChartDef.line(<span class="jxr_string">"t"</span>);
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">var</strong> arg3 = JsonMap.of(<span class="jxr_string">"use"</span>, <span class="jxr_string">"y"</span>);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target42.decorate(<span class="jxr_string">"app.x"</span>, arg3));
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertString(<span class="jxr_string">"ChartDef 't' decorator 'app.x' args must not set 'use'."</span>, e.getMessage());
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	}
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	@Test <strong class="jxr_keyword">void</strong> b28_on_badTopic_doesNotStoreTheEvent() {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">var</strong> c = ChartDef.line(<span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>);
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.on(<span class="jxr_string">"click"</span>, <span class="jxr_string">"Bad Topic!"</span>));
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertNull(c.toCardSpec().toMap().get(<span class="jxr_string">"on"</span>));
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	}
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	@Test <strong class="jxr_keyword">void</strong> b26_raw_withHelperKeys_rejected() {
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">var</strong> target43 = ChartDef.raw(<span class="jxr_string">"r"</span>).src(<span class="jxr_string">"/s"</span>).option(<span class="jxr_string">"{}"</span>).x(<span class="jxr_string">"d"</span>);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, target43::toCardSpec);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertString(<span class="jxr_string">"ChartDef 'r' raw(...) takes no helper keys (x, y, series, ...); put them in option(...)."</span>, e.getMessage());
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">var</strong> target44 = ChartDef.raw(<span class="jxr_string">"r"</span>).src(<span class="jxr_string">"/s"</span>).option(<span class="jxr_string">"{}"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>);
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, target44::toCardSpec);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertNotNull(ChartDef.raw(<span class="jxr_string">"r"</span>).src(<span class="jxr_string">"/s"</span>).option(<span class="jxr_string">"{}"</span>).height(200).toCardSpec());
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	}
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	@Test <strong class="jxr_keyword">void</strong> b27_publishes_dedupedByTopic_retainUpgrades() {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">var</strong> m = map(ChartDef.line(<span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>)
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			.on(<span class="jxr_string">"click"</span>, <span class="jxr_string">"app.pick"</span>).on(<span class="jxr_string">"dblclick"</span>, <span class="jxr_string">"app.pick"</span>).publishZoom().publishZoom());
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		assertEquals(j(<span class="jxr_string">"[{topic:'app.pick',retain:false},{topic:'zoom:t',retain:true}]"</span>), m.get(<span class="jxr_string">"publishes"</span>));
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">var</strong> viaDecorator = map(ChartDef.line(<span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>).on(<span class="jxr_string">"click"</span>, <span class="jxr_string">"app.pick"</span>).decorate(Markers.values(List.of()).onClick(<span class="jxr_string">"app.pick"</span>)));
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertEquals(j(<span class="jxr_string">"[{topic:'app.pick',retain:false}]"</span>), viaDecorator.get(<span class="jxr_string">"publishes"</span>));
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">var</strong> upgraded = map(ChartDef.line(<span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"v"</span>, <span class="jxr_string">"V"</span>).on(<span class="jxr_string">"click"</span>, <span class="jxr_string">"zoom:t"</span>).publishZoom());
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertEquals(j(<span class="jxr_string">"[{topic:'zoom:t',retain:true}]"</span>), upgraded.get(<span class="jxr_string">"publishes"</span>));
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	}
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -86,73 +86,85 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">return</strong> builder(req) ? twin(req, DevPageBuilders.cards()) : FreemarkerView.of(<span class="jxr_string">"cards.ftlh"</span>);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<em class="jxr_javadoccomment">/** @return The kpi card's number: how many pets are available. */</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@RestGet(path=<span class="jxr_string">"/stats/available"</span>)
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">public</strong> JsonMap available() {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> n = store().getPets().stream().filter(p -&gt; p.getStatus() == PetStatus.AVAILABLE).count();
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonMap().append(<span class="jxr_string">"label"</span>, <span class="jxr_string">"Pets available"</span>).append(<span class="jxr_string">"value"</span>, n);
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * Counts one species' pets by status, for the gauge.</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * @param species The species name, case-insensitive.</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * @return {@code {species, available, pending, sold}}.</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * @throws BadRequest If the species is missing or unknown.</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@RestGet(path=<span class="jxr_string">"/inventory"</span>)
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">public</strong> JsonMap inventory(@Query(<span class="jxr_string">"species"</span>) String species) {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">if</strong> (species == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Missing 'species'"</span>);
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		Species s;
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			s = Species.valueOf(species.toUpperCase(Locale.ROOT));
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(e, <span class="jxr_string">"Unknown species '%s'"</span>, species);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		}
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> counts = <strong class="jxr_keyword">new</strong> EnumMap&lt;PetStatus,Long&gt;(PetStatus.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> st : PetStatus.values())
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			counts.put(st, 0L);
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		store().getPets().stream().filter(p -&gt; p.getSpecies() == s).forEach(p -&gt; counts.merge(p.getStatus(), 1L, Long::sum));
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonMap().append(<span class="jxr_string">"species"</span>, s.name())
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			.append(<span class="jxr_string">"available"</span>, counts.get(PetStatus.AVAILABLE))
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			.append(<span class="jxr_string">"pending"</span>, counts.get(PetStatus.PENDING))
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			.append(<span class="jxr_string">"sold"</span>, counts.get(PetStatus.SOLD));
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	}
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<em class="jxr_javadoccomment">/** @return One {@link #inventory(String)} row per species, in enum order, for the stock bands chart. */</em>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@RestGet(path=<span class="jxr_string">"/inventory/all"</span>)
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">public</strong> JsonList inventoryAll() {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> rows = <strong class="jxr_keyword">new</strong> JsonList();
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		Arrays.stream(Species.values()).forEach(s -&gt; rows.add(inventory(s.name())));
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">return</strong> rows;
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<em class="jxr_javadoccomment">/** @return One row {@code {id, price}} per pet, by id, for the zoomable prices chart. */</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	@RestGet(path=<span class="jxr_string">"/prices"</span>)
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">public</strong> JsonList prices() {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> rows = <strong class="jxr_keyword">new</strong> JsonList();
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		store().getPets().stream().sorted(Comparator.comparingLong(Pet::getId))
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			.forEach(p -&gt; rows.add(<strong class="jxr_keyword">new</strong> JsonMap().append(<span class="jxr_string">"id"</span>, p.getId()).append(<span class="jxr_string">"price"</span>, p.getPrice())));
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">return</strong> rows;
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * Serves the page-local script.</em>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * @param res The response.</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * @throws IOException If the bundled script can't be read.</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@RestGet(path=<span class="jxr_string">"/petstore-cards.js"</span>)
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> script(RestResponse res) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = CustomCardsRest.<strong class="jxr_keyword">class</strong>.getResourceAsStream(<span class="jxr_string">"petstore-cards.js"</span>)) {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">if</strong> (in == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Missing classpath resource 'petstore-cards.js' beside "</span> + CustomCardsRest.<strong class="jxr_keyword">class</strong>.getName());
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			res.setContentType(<span class="jxr_string">"text/javascript;charset=utf-8"</span>);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			res.getWriter().write(<strong class="jxr_keyword">new</strong> String(in.readAllBytes(), UTF_8));
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		}
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<em class="jxr_javadoccomment">/** @return The Card API controls as a chrome-free fragment. */</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@RestGet(path=<span class="jxr_string">"/fragments/toolbar"</span>)
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">public</strong> <a name="View" href="../../../../../../org/apache/juneau/rest/server/view/View.html#View">View</a> toolbar() {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">return</strong> FreemarkerView.of(<span class="jxr_string">"fragments/cards-toolbar.ftlh"</span>);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<em class="jxr_javadoccomment">/** @return The card-type notes as a chrome-free fragment. */</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@RestGet(path=<span class="jxr_string">"/fragments/how"</span>)
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">public</strong> <a name="View" href="../../../../../../org/apache/juneau/rest/server/view/View.html#View">View</a> how() {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">return</strong> FreemarkerView.of(<span class="jxr_string">"fragments/cards-how.ftlh"</span>);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	}
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<em class="jxr_javadoccomment">/** @return The kpi card's number: how many pets are available. */</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@RestGet(path=<span class="jxr_string">"/stats/available"</span>)
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">public</strong> JsonMap available() {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> n = store().getPets().stream().filter(p -&gt; p.getStatus() == PetStatus.AVAILABLE).count();
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonMap().append(<span class="jxr_string">"label"</span>, <span class="jxr_string">"Pets available"</span>).append(<span class="jxr_string">"value"</span>, n);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * Counts one species' pets by status, for the gauge.</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * @param species The species name, case-insensitive.</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * @return {@code {species, available, pending, sold}}.</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * @throws BadRequest If the species is missing or unknown.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	@RestGet(path=<span class="jxr_string">"/inventory"</span>)
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">public</strong> JsonMap inventory(@Query(<span class="jxr_string">"species"</span>) String species) {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">if</strong> (species == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Missing 'species'"</span>);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		Species s;
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			s = Species.valueOf(species.toUpperCase(Locale.ROOT));
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(e, <span class="jxr_string">"Unknown species '%s'"</span>, species);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">var</strong> counts = <strong class="jxr_keyword">new</strong> EnumMap&lt;PetStatus,Long&gt;(PetStatus.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> st : PetStatus.values())
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			counts.put(st, 0L);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		store().getPets().stream().filter(p -&gt; p.getSpecies() == s).forEach(p -&gt; counts.merge(p.getStatus(), 1L, Long::sum));
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonMap().append(<span class="jxr_string">"species"</span>, s.name())
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			.append(<span class="jxr_string">"available"</span>, counts.get(PetStatus.AVAILABLE))
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			.append(<span class="jxr_string">"pending"</span>, counts.get(PetStatus.PENDING))
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			.append(<span class="jxr_string">"sold"</span>, counts.get(PetStatus.SOLD));
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<em class="jxr_javadoccomment">/** @return One {@link #inventory(String)} row per species, in enum order, for the stock bands chart. */</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@RestGet(path=<span class="jxr_string">"/inventory/all"</span>)
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">public</strong> JsonList inventoryAll() {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> rows = <strong class="jxr_keyword">new</strong> JsonList();
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		Arrays.stream(Species.values()).forEach(s -&gt; rows.add(inventory(s.name())));
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">return</strong> rows;
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<em class="jxr_javadoccomment">/** @return One row {@code {id, price}} per pet, by id, for the zoomable prices chart. */</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@RestGet(path=<span class="jxr_string">"/prices"</span>)
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">public</strong> JsonList prices() {
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> rows = <strong class="jxr_keyword">new</strong> JsonList();
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		store().getPets().stream().sorted(Comparator.comparingLong(Pet::getId))
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			.forEach(p -&gt; rows.add(<strong class="jxr_keyword">new</strong> JsonMap().append(<span class="jxr_string">"id"</span>, p.getId()).append(<span class="jxr_string">"price"</span>, p.getPrice())));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">return</strong> rows;
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	}
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 * Serves the page-local script.</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 * @param res The response.</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * @throws IOException If the bundled script can't be read.</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@RestGet(path=<span class="jxr_string">"/petstore-cards.js"</span>)
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> script(RestResponse res) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = CustomCardsRest.<strong class="jxr_keyword">class</strong>.getResourceAsStream(<span class="jxr_string">"petstore-cards.js"</span>)) {
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">if</strong> (in == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Missing classpath resource 'petstore-cards.js' beside "</span> + CustomCardsRest.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			res.setContentType(<span class="jxr_string">"text/javascript;charset=utf-8"</span>);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			res.getWriter().write(<strong class="jxr_keyword">new</strong> String(in.readAllBytes(), UTF_8));
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		}
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	}
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

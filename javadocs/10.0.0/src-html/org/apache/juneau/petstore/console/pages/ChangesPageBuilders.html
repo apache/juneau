@@ -61,27 +61,28 @@
 <span class="source-line-no">048</span><span id="line-48">      return PageSpec.create().tab("pets/changes").toolkit("views", "datatables-buttons")</span>
 <span class="source-line-no">049</span><span id="line-49">         .table(TableSpec.create("changes").rowType("PendingChange").dataMode(DataMode.SERVER).dataUrl("/console/pets/changes/query")</span>
 <span class="source-line-no">050</span><span id="line-50">            .defaultOrder("id", Sort.DESC)</span>
-<span class="source-line-no">051</span><span id="line-51">            .columns(</span>
-<span class="source-line-no">052</span><span id="line-52">               Column.create("id").label("Change"),</span>
-<span class="source-line-no">053</span><span id="line-53">               Column.create("summary").label("Change summary"),</span>
-<span class="source-line-no">054</span><span id="line-54">               Column.create("author").label("Author"),</span>
-<span class="source-line-no">055</span><span id="line-55">               Column.create("state").label("State").render(PillRenders.changeState()),</span>
-<span class="source-line-no">056</span><span id="line-56">               Column.create("message").label("Message").defaultVisible(false))</span>
-<span class="source-line-no">057</span><span id="line-57">            .columnConfig(true)</span>
-<span class="source-line-no">058</span><span id="line-58">            .ribbon(Ribbons.standard()</span>
-<span class="source-line-no">059</span><span id="line-59">               .filter(RibbonItem.option("pending-only").title("Pending only").symbol("hourglass").column("state").value("$eq(PENDING)").defaultOn())</span>
-<span class="source-line-no">060</span><span id="line-60">               .build())</span>
-<span class="source-line-no">061</span><span id="line-61">            .rowActions(</span>
-<span class="source-line-no">062</span><span id="line-62">               RowAction.create("retry").label("Retry").endpoint("/console/pets/changes/{id}/retry").method(Method.POST).onSuccess(OnSuccess.REDRAW)</span>
-<span class="source-line-no">063</span><span id="line-63">                  .visibleWhen(VisibilityRule.when("state").eq("FAILED")))</span>
-<span class="source-line-no">064</span><span id="line-64">            .selection(selection)</span>
-<span class="source-line-no">065</span><span id="line-65">            .bulk(BulkMutateDef.create(WritePermit.forCapability("pets.changes"), selection).actions(</span>
-<span class="source-line-no">066</span><span id="line-66">               RowAction.create("discard").label("Discard").endpoint("/console/pets/changes/discard").method(Method.POST).bulkMode(BulkMode.AGGREGATE)</span>
-<span class="source-line-no">067</span><span id="line-67">                  .confirmTitle("Discard changes").confirm("Discard the selected changes?").tone(Tone.DANGER).confirmRenderer("typed"),</span>
-<span class="source-line-no">068</span><span id="line-68">               RowAction.create("apply").label("Apply").endpoint("/console/pets/changes/{id}/apply").method(Method.POST).bulkMode(BulkMode.PER_ROW))),</span>
-<span class="source-line-no">069</span><span id="line-69">            "Pending changes");</span>
-<span class="source-line-no">070</span><span id="line-70">   }</span>
-<span class="source-line-no">071</span><span id="line-71">}</span>
+<span class="source-line-no">051</span><span id="line-51">            .detail(RowDetails.change())</span>
+<span class="source-line-no">052</span><span id="line-52">            .columns(</span>
+<span class="source-line-no">053</span><span id="line-53">               Column.create("id").label("Change"),</span>
+<span class="source-line-no">054</span><span id="line-54">               Column.create("summary").label("Change summary"),</span>
+<span class="source-line-no">055</span><span id="line-55">               Column.create("author").label("Author"),</span>
+<span class="source-line-no">056</span><span id="line-56">               Column.create("state").label("State").render(PillRenders.changeState()),</span>
+<span class="source-line-no">057</span><span id="line-57">               Column.create("message").label("Message").defaultVisible(false))</span>
+<span class="source-line-no">058</span><span id="line-58">            .columnConfig(true)</span>
+<span class="source-line-no">059</span><span id="line-59">            .ribbon(Ribbons.standard()</span>
+<span class="source-line-no">060</span><span id="line-60">               .filter(RibbonItem.option("pending-only").title("Pending only").symbol("hourglass").column("state").value("$eq(PENDING)").defaultOn())</span>
+<span class="source-line-no">061</span><span id="line-61">               .build())</span>
+<span class="source-line-no">062</span><span id="line-62">            .rowActions(</span>
+<span class="source-line-no">063</span><span id="line-63">               RowAction.create("retry").label("Retry").endpoint("/console/pets/changes/{id}/retry").method(Method.POST).onSuccess(OnSuccess.REDRAW)</span>
+<span class="source-line-no">064</span><span id="line-64">                  .visibleWhen(VisibilityRule.when("state").eq("FAILED")))</span>
+<span class="source-line-no">065</span><span id="line-65">            .selection(selection)</span>
+<span class="source-line-no">066</span><span id="line-66">            .bulk(BulkMutateDef.create(WritePermit.forCapability("pets.changes"), selection).actions(</span>
+<span class="source-line-no">067</span><span id="line-67">               RowAction.create("discard").label("Discard").endpoint("/console/pets/changes/discard").method(Method.POST).bulkMode(BulkMode.AGGREGATE)</span>
+<span class="source-line-no">068</span><span id="line-68">                  .confirmTitle("Discard changes").confirm("Discard the selected changes?").tone(Tone.DANGER).confirmRenderer("typed"),</span>
+<span class="source-line-no">069</span><span id="line-69">               RowAction.create("apply").label("Apply").endpoint("/console/pets/changes/{id}/apply").method(Method.POST).bulkMode(BulkMode.PER_ROW))),</span>
+<span class="source-line-no">070</span><span id="line-70">            "Pending changes");</span>
+<span class="source-line-no">071</span><span id="line-71">   }</span>
+<span class="source-line-no">072</span><span id="line-72">}</span>
 
 
 

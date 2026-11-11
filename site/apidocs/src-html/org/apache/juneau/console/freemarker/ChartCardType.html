@@ -181,218 +181,220 @@
 <span class="source-line-no">168</span><span id="line-168">         throw source.error("type='chart' maps must be a JSON object.");</span>
 <span class="source-line-no">169</span><span id="line-169">      if (body.containsKey("partialFrames") &amp;&amp; ! (body.get("partialFrames") instanceof Boolean))</span>
 <span class="source-line-no">170</span><span id="line-170">         throw source.error("type='chart' partialFrames must be a boolean.");</span>
-<span class="source-line-no">171</span><span id="line-171">      for (var k : List.of("group", "theme"))</span>
-<span class="source-line-no">172</span><span id="line-172">         if (body.containsKey(k) &amp;&amp; ! (body.get(k) instanceof String))</span>
-<span class="source-line-no">173</span><span id="line-173">            throw source.error("type='chart' %s must be a string.", k);</span>
-<span class="source-line-no">174</span><span id="line-174">      for (var k : List.of("largeData", "a11y"))</span>
-<span class="source-line-no">175</span><span id="line-175">         if (body.containsKey(k) &amp;&amp; ! (body.get(k) instanceof Map))</span>
-<span class="source-line-no">176</span><span id="line-176">            throw source.error("type='chart' %s must be a JSON object.", k);</span>
-<span class="source-line-no">177</span><span id="line-177">      if (Boolean.TRUE.equals(body.get("partialFrames")) &amp;&amp; ! hasSource)</span>
-<span class="source-line-no">178</span><span id="line-178">         throw source.error("type='chart' partialFrames needs a source.");</span>
-<span class="source-line-no">179</span><span id="line-179">      walkFns(source, body.get("option"));</span>
-<span class="source-line-no">180</span><span id="line-180">      walkFns(source, body.get("patch"));</span>
-<span class="source-line-no">181</span><span id="line-181">      walkFns(source, body.get("decorators"));</span>
-<span class="source-line-no">182</span><span id="line-182">      // helper keys are mostly field names, but a helper value can be a $fn marker (ChartDef.symbolSizeBy puts Fn.ref under</span>
-<span class="source-line-no">183</span><span id="line-183">      // helper.symbolSize), so the helper -- or, for a legacy flat body, its HELPER_KEYS -- is walked with the same skip set.</span>
-<span class="source-line-no">184</span><span id="line-184">      if (helper != null) {</span>
-<span class="source-line-no">185</span><span id="line-185">         var hm = new JsonMap();</span>
-<span class="source-line-no">186</span><span id="line-186">         for (var e : helper.entrySet())</span>
-<span class="source-line-no">187</span><span id="line-187">            if (helper != body || ChartDef.HELPER_KEYS.contains(e.getKey()))</span>
-<span class="source-line-no">188</span><span id="line-188">               hm.put(String.valueOf(e.getKey()), e.getValue());</span>
-<span class="source-line-no">189</span><span id="line-189">         walkFns(source, hm);</span>
-<span class="source-line-no">190</span><span id="line-190">      }</span>
-<span class="source-line-no">191</span><span id="line-191">      var refresh = body.get("refreshMs");</span>
-<span class="source-line-no">192</span><span id="line-192">      if (nn(refresh)) {</span>
-<span class="source-line-no">193</span><span id="line-193">         if (! (refresh instanceof Integer || refresh instanceof Long))</span>
-<span class="source-line-no">194</span><span id="line-194">            throw source.error("type='chart' refreshMs must be an integer; got '%s'.", refresh);</span>
-<span class="source-line-no">195</span><span id="line-195">         if (! hasSrc)</span>
-<span class="source-line-no">196</span><span id="line-196">            throw source.error("type='chart' refreshMs needs src=; inline data never refreshes.");</span>
-<span class="source-line-no">197</span><span id="line-197">         if (((Number)refresh).longValue() &lt; SafePathTemplate.MIN_POLL_INTERVAL_MS)</span>
-<span class="source-line-no">198</span><span id="line-198">            throw source.error("type='chart' refreshMs='%s' is below the minimum '%s'.", refresh, SafePathTemplate.MIN_POLL_INTERVAL_MS);</span>
-<span class="source-line-no">199</span><span id="line-199">      }</span>
-<span class="source-line-no">200</span><span id="line-200">      var height = body.get("height");</span>
-<span class="source-line-no">201</span><span id="line-201">      if (nn(height)) {</span>
-<span class="source-line-no">202</span><span id="line-202">         if (! (height instanceof Integer || height instanceof Long))</span>
-<span class="source-line-no">203</span><span id="line-203">            throw source.error("type='chart' height must be an integer; got '%s'.", height);</span>
-<span class="source-line-no">204</span><span id="line-204">         if (((Number)height).longValue() &lt; ChartDef.MIN_HEIGHT)</span>
-<span class="source-line-no">205</span><span id="line-205">            throw source.error("type='chart' height='%s' is below the minimum '%s'.", height, ChartDef.MIN_HEIGHT);</span>
-<span class="source-line-no">206</span><span id="line-206">      }</span>
-<span class="source-line-no">207</span><span id="line-207">      var onClick = body.get("onClick");</span>
-<span class="source-line-no">208</span><span id="line-208">      var ids = new HashSet&lt;String&gt;();</span>
-<span class="source-line-no">209</span><span id="line-209">      if (nn(onClick))</span>
-<span class="source-line-no">210</span><span id="line-210">         checkOnClick(source, body, onClick, ids);</span>
-<span class="source-line-no">211</span><span id="line-211">      if (nn(body.get("topicActions")))</span>
-<span class="source-line-no">212</span><span id="line-212">         checkTopicActions(source, body, ids);</span>
-<span class="source-line-no">213</span><span id="line-213">      if (nn(body.get("actions")))</span>
-<span class="source-line-no">214</span><span id="line-214">         checkCatalog(source, body.get("actions"), ids);</span>
-<span class="source-line-no">215</span><span id="line-215">      var frag = new JsonMap();</span>
-<span class="source-line-no">216</span><span id="line-216">      frag.putAll(body);</span>
-<span class="source-line-no">217</span><span id="line-217">      frag.remove("visibleWhen");</span>
-<span class="source-line-no">218</span><span id="line-218">      return frag;</span>
-<span class="source-line-no">219</span><span id="line-219">   }</span>
-<span class="source-line-no">220</span><span id="line-220"></span>
-<span class="source-line-no">221</span><span id="line-221">   // The helper (or a legacy flat body): the kind set, plus the legacy per-kind checks.</span>
-<span class="source-line-no">222</span><span id="line-222">   private static void checkHelper(CardSource source, Map&lt;?,?&gt; h) {</span>
-<span class="source-line-no">223</span><span id="line-223">      if (! (h.get("kind") instanceof String kind) || kind.isBlank())</span>
-<span class="source-line-no">224</span><span id="line-224">         throw source.error("type='chart' requires a non-blank 'kind'.");</span>
-<span class="source-line-no">225</span><span id="line-225">      if (! ChartDef.KINDS.contains(kind))</span>
-<span class="source-line-no">226</span><span id="line-226">         throw source.error("type='chart' kind '%s' must be one of '%s'.", kind, String.join(", ", new TreeSet&lt;&gt;(ChartDef.KINDS)));</span>
-<span class="source-line-no">227</span><span id="line-227">      if (CARTESIAN.contains(kind) &amp;&amp; (h.get("x") == null || ! (h.get("series") instanceof List&lt;?&gt; s) || s.isEmpty()))</span>
-<span class="source-line-no">228</span><span id="line-228">         throw source.error("type='chart' kind='%s' requires x and at least one series.", kind);</span>
-<span class="source-line-no">229</span><span id="line-229">      if (CARTESIAN.contains(kind)) {</span>
-<span class="source-line-no">230</span><span id="line-230">         var series = (List&lt;?&gt;)h.get("series");</span>
-<span class="source-line-no">231</span><span id="line-231">         for (var i = 0; i &lt; series.size(); i++)</span>
-<span class="source-line-no">232</span><span id="line-232">            if (ib(seriesField(series.get(i))))</span>
-<span class="source-line-no">233</span><span id="line-233">               throw source.error("type='chart' kind='%s' series[%s] requires a non-blank 'field'.", kind, i);</span>
-<span class="source-line-no">234</span><span id="line-234">      }</span>
-<span class="source-line-no">235</span><span id="line-235">      if (Set.of("donut", "pie").contains(kind) &amp;&amp; (! (h.get("label") instanceof String l) || l.isBlank() || ! (h.get("value") instanceof String v) || v.isBlank()))</span>
-<span class="source-line-no">236</span><span id="line-236">         throw source.error("type='chart' kind='%s' requires string 'label' and 'value' fields.", kind);</span>
-<span class="source-line-no">237</span><span id="line-237">      if (eq(kind, "heatmap") &amp;&amp; (h.get("x") == null || h.get("y") == null || ! (h.get("value") instanceof String)))</span>
-<span class="source-line-no">238</span><span id="line-238">         throw source.error("type='chart' kind='heatmap' requires x, y and a string 'value' field.");</span>
-<span class="source-line-no">239</span><span id="line-239">      if (eq(kind, "treemap"))</span>
-<span class="source-line-no">240</span><span id="line-240">         checkTreemap(source, h);</span>
-<span class="source-line-no">241</span><span id="line-241">   }</span>
-<span class="source-line-no">242</span><span id="line-242"></span>
-<span class="source-line-no">243</span><span id="line-243">   private static void checkTreemap(CardSource source, Map&lt;?,?&gt; h) {</span>
-<span class="source-line-no">244</span><span id="line-244">      if (! (h.get("groupBy") instanceof List&lt;?&gt; g) || g.isEmpty() || ! g.stream().allMatch(x -&gt; x instanceof String s &amp;&amp; ! s.isBlank()))</span>
-<span class="source-line-no">245</span><span id="line-245">         throw source.error("type='chart' helper kind 'treemap' requires 'groupBy' as a non-empty array of non-blank strings.");</span>
-<span class="source-line-no">246</span><span id="line-246">      if (! (h.get("label") instanceof String l) || l.isBlank())</span>
-<span class="source-line-no">247</span><span id="line-247">         throw source.error("type='chart' helper kind 'treemap' requires a non-blank string 'label'.");</span>
-<span class="source-line-no">248</span><span id="line-248">      if (h.containsKey("size") &amp;&amp; ! (h.get("size") instanceof String sz &amp;&amp; ! sz.isBlank()))</span>
-<span class="source-line-no">249</span><span id="line-249">         throw source.error("type='chart' helper kind 'treemap' size must be a non-blank string.");</span>
-<span class="source-line-no">250</span><span id="line-250">      if (h.containsKey("tileFields") &amp;&amp; ! (h.get("tileFields") instanceof List&lt;?&gt; t &amp;&amp; t.stream().allMatch(x -&gt; x instanceof String s &amp;&amp; ChartDef.TILE_FIELD.matcher(s).matches())))</span>
-<span class="source-line-no">251</span><span id="line-251">         throw source.error("type='chart' helper kind 'treemap' tileFields must be an array of strings matching [A-Za-z0-9_.-]+.");</span>
-<span class="source-line-no">252</span><span id="line-252">      if (h.containsKey("color")) {</span>
-<span class="source-line-no">253</span><span id="line-253">         if (! (h.get("color") instanceof Map&lt;?,?&gt; c) || ! (c.get("field") instanceof String f) || f.isBlank())</span>
-<span class="source-line-no">254</span><span id="line-254">            throw source.error("type='chart' helper kind 'treemap' color must be an object with a non-blank string 'field'.");</span>
-<span class="source-line-no">255</span><span id="line-255">         var legend = ((Map&lt;?,?&gt;)h.get("color")).get("legend");</span>
-<span class="source-line-no">256</span><span id="line-256">         if (nn(legend)) {</span>
-<span class="source-line-no">257</span><span id="line-257">            if (! (legend instanceof List&lt;?&gt; ll) || ! ll.stream().allMatch(x -&gt; x instanceof Map&lt;?,?&gt; m &amp;&amp; m.get("value") instanceof String))</span>
-<span class="source-line-no">258</span><span id="line-258">               throw source.error("type='chart' helper kind 'treemap' color.legend must be an array of objects with a string 'value'.");</span>
-<span class="source-line-no">259</span><span id="line-259">            for (var i = 0; i &lt; ((List&lt;?&gt;)legend).size(); i++) {</span>
-<span class="source-line-no">260</span><span id="line-260">               var tone = ((Map&lt;?,?&gt;)((List&lt;?&gt;)legend).get(i)).get("tone");</span>
-<span class="source-line-no">261</span><span id="line-261">               if (nn(tone) &amp;&amp; ! (tone instanceof String ts &amp;&amp; ChartDef.TREEMAP_TONES.contains(ts)))</span>
-<span class="source-line-no">262</span><span id="line-262">                  throw source.error("type='chart' helper kind 'treemap' color.legend[%s].tone '%s' must be 'ok', 'warning', 'danger', '--jc-chart-1'..'--jc-chart-8' or absent.", i, tone);</span>
-<span class="source-line-no">263</span><span id="line-263">            }</span>
-<span class="source-line-no">264</span><span id="line-264">         }</span>
-<span class="source-line-no">265</span><span id="line-265">      }</span>
-<span class="source-line-no">266</span><span id="line-266">   }</span>
-<span class="source-line-no">267</span><span id="line-267"></span>
-<span class="source-line-no">268</span><span id="line-268">   private static void checkOnClick(CardSource source, Map&lt;?,?&gt; body, Object onClick, Set&lt;String&gt; ids) {</span>
-<span class="source-line-no">269</span><span id="line-269">      if (! (onClick instanceof Map&lt;?,?&gt; m))</span>
-<span class="source-line-no">270</span><span id="line-270">         throw source.error("type='chart' onClick must be an object with a string href.");</span>
-<span class="source-line-no">271</span><span id="line-271">      for (var k : m.keySet())</span>
-<span class="source-line-no">272</span><span id="line-272">         if (! "href".equals(k) &amp;&amp; ! "action".equals(k))</span>
-<span class="source-line-no">273</span><span id="line-273">            throw source.error("type='chart' onClick has unknown key '%s'.", k);</span>
-<span class="source-line-no">274</span><span id="line-274">      if (m.containsKey("href") &amp;&amp; m.containsKey("action"))</span>
-<span class="source-line-no">275</span><span id="line-275">         throw source.error("type='chart' onClick takes either href or action, not both.");</span>
-<span class="source-line-no">276</span><span id="line-276">      if (m.containsKey("action")) {</span>
-<span class="source-line-no">277</span><span id="line-277">         if (! (body.get("on") instanceof Map&lt;?,?&gt; on) || ! (on.get("click") instanceof String))</span>
-<span class="source-line-no">278</span><span id="line-278">            throw source.error("type='chart' onClick.action needs on.click to declare the click topic.");</span>
-<span class="source-line-no">279</span><span id="line-279">         checkAction(source, "onClick.action", m.get("action"), ids);</span>
-<span class="source-line-no">280</span><span id="line-280">      } else if (! (m.get("href") instanceof String href)) {</span>
-<span class="source-line-no">281</span><span id="line-281">         throw source.error("type='chart' onClick must be an object with a string href.");</span>
-<span class="source-line-no">282</span><span id="line-282">      } else if (! SafePathTemplate.isSameOriginPath(href)) {</span>
-<span class="source-line-no">283</span><span id="line-283">         throw source.error("type='chart' onClick.href must be a same-origin path; got '%s'.", href);</span>
-<span class="source-line-no">284</span><span id="line-284">      }</span>
-<span class="source-line-no">285</span><span id="line-285">   }</span>
-<span class="source-line-no">286</span><span id="line-286"></span>
-<span class="source-line-no">287</span><span id="line-287">   private static void checkTopicActions(CardSource source, Map&lt;?,?&gt; body, Set&lt;String&gt; ids) {</span>
-<span class="source-line-no">288</span><span id="line-288">      var shape = "type='chart' topicActions must be an array of objects with a string topic and an action object.";</span>
-<span class="source-line-no">289</span><span id="line-289">      if (! (body.get("topicActions") instanceof List&lt;?&gt; l))</span>
-<span class="source-line-no">290</span><span id="line-290">         throw source.error("%s", shape);</span>
-<span class="source-line-no">291</span><span id="line-291">      var topics = body.get("on") instanceof Map&lt;?,?&gt; on ? on.values() : List.of();</span>
-<span class="source-line-no">292</span><span id="line-292">      for (var i = 0; i &lt; l.size(); i++) {</span>
-<span class="source-line-no">293</span><span id="line-293">         if (! (l.get(i) instanceof Map&lt;?,?&gt; e) || ! (e.get("topic") instanceof String topic) || ! (e.get("action") instanceof Map))</span>
-<span class="source-line-no">294</span><span id="line-294">            throw source.error("%s", shape);</span>
-<span class="source-line-no">295</span><span id="line-295">         if (! topics.contains(topic))</span>
-<span class="source-line-no">296</span><span id="line-296">            throw source.error("type='chart' topicActions[%s].topic '%s' must be one this card publishes through 'on'.", i, topic);</span>
-<span class="source-line-no">297</span><span id="line-297">         checkAction(source, "topicActions[" + i + "].action", e.get("action"), ids);</span>
-<span class="source-line-no">298</span><span id="line-298">      }</span>
-<span class="source-line-no">299</span><span id="line-299">   }</span>
-<span class="source-line-no">300</span><span id="line-300"></span>
-<span class="source-line-no">301</span><span id="line-301">   private static void checkCatalog(CardSource source, Object actions, Set&lt;String&gt; ids) {</span>
-<span class="source-line-no">302</span><span id="line-302">      if (! (actions instanceof List&lt;?&gt; l))</span>
-<span class="source-line-no">303</span><span id="line-303">         throw source.error("type='chart' actions must be an array of action objects.");</span>
-<span class="source-line-no">304</span><span id="line-304">      for (var i = 0; i &lt; l.size(); i++) {</span>
-<span class="source-line-no">305</span><span id="line-305">         var where = "actions[" + i + "]";</span>
-<span class="source-line-no">306</span><span id="line-306">         checkAction(source, where, l.get(i), ids);</span>
-<span class="source-line-no">307</span><span id="line-307">         var a = (Map&lt;?,?&gt;)l.get(i);</span>
-<span class="source-line-no">308</span><span id="line-308">         if (! "dialog".equals(a.get("present")))</span>
-<span class="source-line-no">309</span><span id="line-309">            throw source.error("type='chart' %s '%s' must be present=dialog; a dialog button can only open a dialog action.", where, a.get("id"));</span>
-<span class="source-line-no">310</span><span id="line-310">      }</span>
-<span class="source-line-no">311</span><span id="line-311">   }</span>
-<span class="source-line-no">312</span><span id="line-312"></span>
-<span class="source-line-no">313</span><span id="line-313">   // The rules every chart action obeys, wherever it is declared: a chart has no cell, page or servlet to hand off to.</span>
-<span class="source-line-no">314</span><span id="line-314">   private static void checkAction(CardSource source, String where, Object action, Set&lt;String&gt; ids) {</span>
-<span class="source-line-no">315</span><span id="line-315">      if (! (action instanceof Map&lt;?,?&gt; a))</span>
-<span class="source-line-no">316</span><span id="line-316">         throw source.error("type='chart' %s must be an object.", where);</span>
-<span class="source-line-no">317</span><span id="line-317">      if (! (a.get("id") instanceof String id) || id.isBlank())</span>
-<span class="source-line-no">318</span><span id="line-318">         throw source.error("type='chart' %s requires a non-blank string id.", where);</span>
-<span class="source-line-no">319</span><span id="line-319">      if (! (a.get("endpoint") instanceof String endpoint) || endpoint.isBlank())</span>
-<span class="source-line-no">320</span><span id="line-320">         throw source.error("type='chart' %s requires a non-blank string endpoint.", where);</span>
-<span class="source-line-no">321</span><span id="line-321">      if (! SafePathTemplate.isSameOriginPath(endpoint))</span>
-<span class="source-line-no">322</span><span id="line-322">         throw source.error("type='chart' %s endpoint must be a same-origin path; got '%s'.", where, endpoint);</span>
-<span class="source-line-no">323</span><span id="line-323">      if (nn(a.get("form")) &amp;&amp; ! (a.get("form") instanceof String form &amp;&amp; SafePathTemplate.isSameOriginPath(form)))</span>
-<span class="source-line-no">324</span><span id="line-324">         throw source.error("type='chart' %s form must be a same-origin path; got '%s'.", where, a.get("form"));</span>
-<span class="source-line-no">325</span><span id="line-325">      if (! (a.get("method") instanceof String method) || ! ACTION_METHODS.contains(method))</span>
-<span class="source-line-no">326</span><span id="line-326">         throw source.error("type='chart' %s method must be POST, PUT, PATCH or DELETE; got '%s'.", where, a.get("method"));</span>
-<span class="source-line-no">327</span><span id="line-327">      if (nn(a.get("confirm")) &amp;&amp; ! (a.get("confirm") instanceof String || Boolean.FALSE.equals(a.get("confirm"))))</span>
-<span class="source-line-no">328</span><span id="line-328">         throw source.error("type='chart' %s confirm must be a string or false.", where);</span>
-<span class="source-line-no">329</span><span id="line-329">      if (nn(a.get("present")) &amp;&amp; ! "dialog".equals(a.get("present")))</span>
-<span class="source-line-no">330</span><span id="line-330">         throw source.error("type='chart' %s present must be 'dialog' or absent; got '%s'.", where, a.get("present"));</span>
-<span class="source-line-no">331</span><span id="line-331">      if (nn(a.get("visibleWhen")) &amp;&amp; ! (a.get("visibleWhen") instanceof List))</span>
-<span class="source-line-no">332</span><span id="line-332">         throw source.error("type='chart' %s visibleWhen must be an array of rules; it is tested against the clicked point.", where);</span>
-<span class="source-line-no">333</span><span id="line-333">      if (nn(a.get("enabledWhen")) &amp;&amp; ! (a.get("enabledWhen") instanceof List))</span>
-<span class="source-line-no">334</span><span id="line-334">         throw source.error("type='chart' %s enabledWhen must be an array of rules.", where);</span>
-<span class="source-line-no">335</span><span id="line-335">      if ("navigate".equals(a.get("onSuccess")))</span>
-<span class="source-line-no">336</span><span id="line-336">         throw source.error("type='chart' %s onSuccess must not be 'navigate'; a chart has nowhere to navigate.", where);</span>
-<span class="source-line-no">337</span><span id="line-337">      if (! ids.add(id))</span>
-<span class="source-line-no">338</span><span id="line-338">         throw source.error("type='chart' action id '%s' is declared more than once.", id);</span>
-<span class="source-line-no">339</span><span id="line-339">   }</span>
-<span class="source-line-no">340</span><span id="line-340"></span>
-<span class="source-line-no">341</span><span id="line-341">   private static void checkName(CardSource source, String name, String what) {</span>
-<span class="source-line-no">342</span><span id="line-342">      if (! Fn.validName(name))</span>
-<span class="source-line-no">343</span><span id="line-343">         throw source.error("%s", "E-74: " + f(BusWiringValidator.E74, name, what));</span>
-<span class="source-line-no">344</span><span id="line-344">   }</span>
-<span class="source-line-no">345</span><span id="line-345"></span>
-<span class="source-line-no">346</span><span id="line-346">   // $fn markers: an object whose only keys are $fn and, optionally, args.  Same skip set as</span>
-<span class="source-line-no">347</span><span id="line-347">   // BusWiringValidator.walkFns: dataset[*].source and series[*].data are rows of data, never extension references.</span>
-<span class="source-line-no">348</span><span id="line-348">   private static void walkFns(CardSource source, Object o) {</span>
-<span class="source-line-no">349</span><span id="line-349">      if (o instanceof Map&lt;?,?&gt; m) {</span>
-<span class="source-line-no">350</span><span id="line-350">         if (m.containsKey("$fn") &amp;&amp; m.keySet().stream().allMatch(k -&gt; "$fn".equals(k) || "args".equals(k)))</span>
-<span class="source-line-no">351</span><span id="line-351">            checkName(source, m.get("$fn") instanceof String s ? s : null, "$fn");</span>
-<span class="source-line-no">352</span><span id="line-352">         for (var e : m.entrySet()) {</span>
-<span class="source-line-no">353</span><span id="line-353">            if ("dataset".equals(e.getKey()))</span>
-<span class="source-line-no">354</span><span id="line-354">               walkSkipping(source, e.getValue(), "source");</span>
-<span class="source-line-no">355</span><span id="line-355">            else if ("series".equals(e.getKey()))</span>
-<span class="source-line-no">356</span><span id="line-356">               walkSkipping(source, e.getValue(), "data");</span>
-<span class="source-line-no">357</span><span id="line-357">            else</span>
-<span class="source-line-no">358</span><span id="line-358">               walkFns(source, e.getValue());</span>
-<span class="source-line-no">359</span><span id="line-359">         }</span>
-<span class="source-line-no">360</span><span id="line-360">      } else if (o instanceof List&lt;?&gt; l) {</span>
-<span class="source-line-no">361</span><span id="line-361">         l.forEach(v -&gt; walkFns(source, v));</span>
-<span class="source-line-no">362</span><span id="line-362">      }</span>
-<span class="source-line-no">363</span><span id="line-363">   }</span>
-<span class="source-line-no">364</span><span id="line-364"></span>
-<span class="source-line-no">365</span><span id="line-365">   // Walks o (a map or a list of maps) without descending into the skip key of each map.</span>
-<span class="source-line-no">366</span><span id="line-366">   private static void walkSkipping(CardSource source, Object o, String skip) {</span>
-<span class="source-line-no">367</span><span id="line-367">      if (o instanceof List&lt;?&gt; l) {</span>
-<span class="source-line-no">368</span><span id="line-368">         l.forEach(x -&gt; walkSkipping(source, x, skip));</span>
-<span class="source-line-no">369</span><span id="line-369">      } else if (o instanceof Map&lt;?,?&gt; m) {</span>
-<span class="source-line-no">370</span><span id="line-370">         for (var e : m.entrySet())</span>
-<span class="source-line-no">371</span><span id="line-371">            if (! skip.equals(e.getKey()))</span>
-<span class="source-line-no">372</span><span id="line-372">               walkFns(source, e.getValue());</span>
-<span class="source-line-no">373</span><span id="line-373">      }</span>
-<span class="source-line-no">374</span><span id="line-374">   }</span>
-<span class="source-line-no">375</span><span id="line-375"></span>
-<span class="source-line-no">376</span><span id="line-376">   // A series entry is a field name or an object with a field, as juneau-charts.js reads it.</span>
-<span class="source-line-no">377</span><span id="line-377">   private static String seriesField(Object entry) {</span>
-<span class="source-line-no">378</span><span id="line-378">      if (entry instanceof String s)</span>
-<span class="source-line-no">379</span><span id="line-379">         return s;</span>
-<span class="source-line-no">380</span><span id="line-380">      return entry instanceof Map&lt;?,?&gt; m &amp;&amp; m.get("field") instanceof String s ? s : null;</span>
-<span class="source-line-no">381</span><span id="line-381">   }</span>
-<span class="source-line-no">382</span><span id="line-382">}</span>
+<span class="source-line-no">171</span><span id="line-171">      if (body.containsKey("dataTab") &amp;&amp; ! (body.get("dataTab") instanceof Boolean))</span>
+<span class="source-line-no">172</span><span id="line-172">         throw source.error("type='chart' dataTab must be a boolean.");</span>
+<span class="source-line-no">173</span><span id="line-173">      for (var k : List.of("group", "theme"))</span>
+<span class="source-line-no">174</span><span id="line-174">         if (body.containsKey(k) &amp;&amp; ! (body.get(k) instanceof String))</span>
+<span class="source-line-no">175</span><span id="line-175">            throw source.error("type='chart' %s must be a string.", k);</span>
+<span class="source-line-no">176</span><span id="line-176">      for (var k : List.of("largeData", "a11y"))</span>
+<span class="source-line-no">177</span><span id="line-177">         if (body.containsKey(k) &amp;&amp; ! (body.get(k) instanceof Map))</span>
+<span class="source-line-no">178</span><span id="line-178">            throw source.error("type='chart' %s must be a JSON object.", k);</span>
+<span class="source-line-no">179</span><span id="line-179">      if (Boolean.TRUE.equals(body.get("partialFrames")) &amp;&amp; ! hasSource)</span>
+<span class="source-line-no">180</span><span id="line-180">         throw source.error("type='chart' partialFrames needs a source.");</span>
+<span class="source-line-no">181</span><span id="line-181">      walkFns(source, body.get("option"));</span>
+<span class="source-line-no">182</span><span id="line-182">      walkFns(source, body.get("patch"));</span>
+<span class="source-line-no">183</span><span id="line-183">      walkFns(source, body.get("decorators"));</span>
+<span class="source-line-no">184</span><span id="line-184">      // helper keys are mostly field names, but a helper value can be a $fn marker (ChartDef.symbolSizeBy puts Fn.ref under</span>
+<span class="source-line-no">185</span><span id="line-185">      // helper.symbolSize), so the helper -- or, for a legacy flat body, its HELPER_KEYS -- is walked with the same skip set.</span>
+<span class="source-line-no">186</span><span id="line-186">      if (helper != null) {</span>
+<span class="source-line-no">187</span><span id="line-187">         var hm = new JsonMap();</span>
+<span class="source-line-no">188</span><span id="line-188">         for (var e : helper.entrySet())</span>
+<span class="source-line-no">189</span><span id="line-189">            if (helper != body || ChartDef.HELPER_KEYS.contains(e.getKey()))</span>
+<span class="source-line-no">190</span><span id="line-190">               hm.put(String.valueOf(e.getKey()), e.getValue());</span>
+<span class="source-line-no">191</span><span id="line-191">         walkFns(source, hm);</span>
+<span class="source-line-no">192</span><span id="line-192">      }</span>
+<span class="source-line-no">193</span><span id="line-193">      var refresh = body.get("refreshMs");</span>
+<span class="source-line-no">194</span><span id="line-194">      if (nn(refresh)) {</span>
+<span class="source-line-no">195</span><span id="line-195">         if (! (refresh instanceof Integer || refresh instanceof Long))</span>
+<span class="source-line-no">196</span><span id="line-196">            throw source.error("type='chart' refreshMs must be an integer; got '%s'.", refresh);</span>
+<span class="source-line-no">197</span><span id="line-197">         if (! hasSrc)</span>
+<span class="source-line-no">198</span><span id="line-198">            throw source.error("type='chart' refreshMs needs src=; inline data never refreshes.");</span>
+<span class="source-line-no">199</span><span id="line-199">         if (((Number)refresh).longValue() &lt; SafePathTemplate.MIN_POLL_INTERVAL_MS)</span>
+<span class="source-line-no">200</span><span id="line-200">            throw source.error("type='chart' refreshMs='%s' is below the minimum '%s'.", refresh, SafePathTemplate.MIN_POLL_INTERVAL_MS);</span>
+<span class="source-line-no">201</span><span id="line-201">      }</span>
+<span class="source-line-no">202</span><span id="line-202">      var height = body.get("height");</span>
+<span class="source-line-no">203</span><span id="line-203">      if (nn(height)) {</span>
+<span class="source-line-no">204</span><span id="line-204">         if (! (height instanceof Integer || height instanceof Long))</span>
+<span class="source-line-no">205</span><span id="line-205">            throw source.error("type='chart' height must be an integer; got '%s'.", height);</span>
+<span class="source-line-no">206</span><span id="line-206">         if (((Number)height).longValue() &lt; ChartDef.MIN_HEIGHT)</span>
+<span class="source-line-no">207</span><span id="line-207">            throw source.error("type='chart' height='%s' is below the minimum '%s'.", height, ChartDef.MIN_HEIGHT);</span>
+<span class="source-line-no">208</span><span id="line-208">      }</span>
+<span class="source-line-no">209</span><span id="line-209">      var onClick = body.get("onClick");</span>
+<span class="source-line-no">210</span><span id="line-210">      var ids = new HashSet&lt;String&gt;();</span>
+<span class="source-line-no">211</span><span id="line-211">      if (nn(onClick))</span>
+<span class="source-line-no">212</span><span id="line-212">         checkOnClick(source, body, onClick, ids);</span>
+<span class="source-line-no">213</span><span id="line-213">      if (nn(body.get("topicActions")))</span>
+<span class="source-line-no">214</span><span id="line-214">         checkTopicActions(source, body, ids);</span>
+<span class="source-line-no">215</span><span id="line-215">      if (nn(body.get("actions")))</span>
+<span class="source-line-no">216</span><span id="line-216">         checkCatalog(source, body.get("actions"), ids);</span>
+<span class="source-line-no">217</span><span id="line-217">      var frag = new JsonMap();</span>
+<span class="source-line-no">218</span><span id="line-218">      frag.putAll(body);</span>
+<span class="source-line-no">219</span><span id="line-219">      frag.remove("visibleWhen");</span>
+<span class="source-line-no">220</span><span id="line-220">      return frag;</span>
+<span class="source-line-no">221</span><span id="line-221">   }</span>
+<span class="source-line-no">222</span><span id="line-222"></span>
+<span class="source-line-no">223</span><span id="line-223">   // The helper (or a legacy flat body): the kind set, plus the legacy per-kind checks.</span>
+<span class="source-line-no">224</span><span id="line-224">   private static void checkHelper(CardSource source, Map&lt;?,?&gt; h) {</span>
+<span class="source-line-no">225</span><span id="line-225">      if (! (h.get("kind") instanceof String kind) || kind.isBlank())</span>
+<span class="source-line-no">226</span><span id="line-226">         throw source.error("type='chart' requires a non-blank 'kind'.");</span>
+<span class="source-line-no">227</span><span id="line-227">      if (! ChartDef.KINDS.contains(kind))</span>
+<span class="source-line-no">228</span><span id="line-228">         throw source.error("type='chart' kind '%s' must be one of '%s'.", kind, String.join(", ", new TreeSet&lt;&gt;(ChartDef.KINDS)));</span>
+<span class="source-line-no">229</span><span id="line-229">      if (CARTESIAN.contains(kind) &amp;&amp; (h.get("x") == null || ! (h.get("series") instanceof List&lt;?&gt; s) || s.isEmpty()))</span>
+<span class="source-line-no">230</span><span id="line-230">         throw source.error("type='chart' kind='%s' requires x and at least one series.", kind);</span>
+<span class="source-line-no">231</span><span id="line-231">      if (CARTESIAN.contains(kind)) {</span>
+<span class="source-line-no">232</span><span id="line-232">         var series = (List&lt;?&gt;)h.get("series");</span>
+<span class="source-line-no">233</span><span id="line-233">         for (var i = 0; i &lt; series.size(); i++)</span>
+<span class="source-line-no">234</span><span id="line-234">            if (ib(seriesField(series.get(i))))</span>
+<span class="source-line-no">235</span><span id="line-235">               throw source.error("type='chart' kind='%s' series[%s] requires a non-blank 'field'.", kind, i);</span>
+<span class="source-line-no">236</span><span id="line-236">      }</span>
+<span class="source-line-no">237</span><span id="line-237">      if (Set.of("donut", "pie").contains(kind) &amp;&amp; (! (h.get("label") instanceof String l) || l.isBlank() || ! (h.get("value") instanceof String v) || v.isBlank()))</span>
+<span class="source-line-no">238</span><span id="line-238">         throw source.error("type='chart' kind='%s' requires string 'label' and 'value' fields.", kind);</span>
+<span class="source-line-no">239</span><span id="line-239">      if (eq(kind, "heatmap") &amp;&amp; (h.get("x") == null || h.get("y") == null || ! (h.get("value") instanceof String)))</span>
+<span class="source-line-no">240</span><span id="line-240">         throw source.error("type='chart' kind='heatmap' requires x, y and a string 'value' field.");</span>
+<span class="source-line-no">241</span><span id="line-241">      if (eq(kind, "treemap"))</span>
+<span class="source-line-no">242</span><span id="line-242">         checkTreemap(source, h);</span>
+<span class="source-line-no">243</span><span id="line-243">   }</span>
+<span class="source-line-no">244</span><span id="line-244"></span>
+<span class="source-line-no">245</span><span id="line-245">   private static void checkTreemap(CardSource source, Map&lt;?,?&gt; h) {</span>
+<span class="source-line-no">246</span><span id="line-246">      if (! (h.get("groupBy") instanceof List&lt;?&gt; g) || g.isEmpty() || ! g.stream().allMatch(x -&gt; x instanceof String s &amp;&amp; ! s.isBlank()))</span>
+<span class="source-line-no">247</span><span id="line-247">         throw source.error("type='chart' helper kind 'treemap' requires 'groupBy' as a non-empty array of non-blank strings.");</span>
+<span class="source-line-no">248</span><span id="line-248">      if (! (h.get("label") instanceof String l) || l.isBlank())</span>
+<span class="source-line-no">249</span><span id="line-249">         throw source.error("type='chart' helper kind 'treemap' requires a non-blank string 'label'.");</span>
+<span class="source-line-no">250</span><span id="line-250">      if (h.containsKey("size") &amp;&amp; ! (h.get("size") instanceof String sz &amp;&amp; ! sz.isBlank()))</span>
+<span class="source-line-no">251</span><span id="line-251">         throw source.error("type='chart' helper kind 'treemap' size must be a non-blank string.");</span>
+<span class="source-line-no">252</span><span id="line-252">      if (h.containsKey("tileFields") &amp;&amp; ! (h.get("tileFields") instanceof List&lt;?&gt; t &amp;&amp; t.stream().allMatch(x -&gt; x instanceof String s &amp;&amp; ChartDef.TILE_FIELD.matcher(s).matches())))</span>
+<span class="source-line-no">253</span><span id="line-253">         throw source.error("type='chart' helper kind 'treemap' tileFields must be an array of strings matching [A-Za-z0-9_.-]+.");</span>
+<span class="source-line-no">254</span><span id="line-254">      if (h.containsKey("color")) {</span>
+<span class="source-line-no">255</span><span id="line-255">         if (! (h.get("color") instanceof Map&lt;?,?&gt; c) || ! (c.get("field") instanceof String f) || f.isBlank())</span>
+<span class="source-line-no">256</span><span id="line-256">            throw source.error("type='chart' helper kind 'treemap' color must be an object with a non-blank string 'field'.");</span>
+<span class="source-line-no">257</span><span id="line-257">         var legend = ((Map&lt;?,?&gt;)h.get("color")).get("legend");</span>
+<span class="source-line-no">258</span><span id="line-258">         if (nn(legend)) {</span>
+<span class="source-line-no">259</span><span id="line-259">            if (! (legend instanceof List&lt;?&gt; ll) || ! ll.stream().allMatch(x -&gt; x instanceof Map&lt;?,?&gt; m &amp;&amp; m.get("value") instanceof String))</span>
+<span class="source-line-no">260</span><span id="line-260">               throw source.error("type='chart' helper kind 'treemap' color.legend must be an array of objects with a string 'value'.");</span>
+<span class="source-line-no">261</span><span id="line-261">            for (var i = 0; i &lt; ((List&lt;?&gt;)legend).size(); i++) {</span>
+<span class="source-line-no">262</span><span id="line-262">               var tone = ((Map&lt;?,?&gt;)((List&lt;?&gt;)legend).get(i)).get("tone");</span>
+<span class="source-line-no">263</span><span id="line-263">               if (nn(tone) &amp;&amp; ! (tone instanceof String ts &amp;&amp; ChartDef.TREEMAP_TONES.contains(ts)))</span>
+<span class="source-line-no">264</span><span id="line-264">                  throw source.error("type='chart' helper kind 'treemap' color.legend[%s].tone '%s' must be 'ok', 'warning', 'danger', '--jc-chart-1'..'--jc-chart-8' or absent.", i, tone);</span>
+<span class="source-line-no">265</span><span id="line-265">            }</span>
+<span class="source-line-no">266</span><span id="line-266">         }</span>
+<span class="source-line-no">267</span><span id="line-267">      }</span>
+<span class="source-line-no">268</span><span id="line-268">   }</span>
+<span class="source-line-no">269</span><span id="line-269"></span>
+<span class="source-line-no">270</span><span id="line-270">   private static void checkOnClick(CardSource source, Map&lt;?,?&gt; body, Object onClick, Set&lt;String&gt; ids) {</span>
+<span class="source-line-no">271</span><span id="line-271">      if (! (onClick instanceof Map&lt;?,?&gt; m))</span>
+<span class="source-line-no">272</span><span id="line-272">         throw source.error("type='chart' onClick must be an object with a string href.");</span>
+<span class="source-line-no">273</span><span id="line-273">      for (var k : m.keySet())</span>
+<span class="source-line-no">274</span><span id="line-274">         if (! "href".equals(k) &amp;&amp; ! "action".equals(k))</span>
+<span class="source-line-no">275</span><span id="line-275">            throw source.error("type='chart' onClick has unknown key '%s'.", k);</span>
+<span class="source-line-no">276</span><span id="line-276">      if (m.containsKey("href") &amp;&amp; m.containsKey("action"))</span>
+<span class="source-line-no">277</span><span id="line-277">         throw source.error("type='chart' onClick takes either href or action, not both.");</span>
+<span class="source-line-no">278</span><span id="line-278">      if (m.containsKey("action")) {</span>
+<span class="source-line-no">279</span><span id="line-279">         if (! (body.get("on") instanceof Map&lt;?,?&gt; on) || ! (on.get("click") instanceof String))</span>
+<span class="source-line-no">280</span><span id="line-280">            throw source.error("type='chart' onClick.action needs on.click to declare the click topic.");</span>
+<span class="source-line-no">281</span><span id="line-281">         checkAction(source, "onClick.action", m.get("action"), ids);</span>
+<span class="source-line-no">282</span><span id="line-282">      } else if (! (m.get("href") instanceof String href)) {</span>
+<span class="source-line-no">283</span><span id="line-283">         throw source.error("type='chart' onClick must be an object with a string href.");</span>
+<span class="source-line-no">284</span><span id="line-284">      } else if (! SafePathTemplate.isSameOriginPath(href)) {</span>
+<span class="source-line-no">285</span><span id="line-285">         throw source.error("type='chart' onClick.href must be a same-origin path; got '%s'.", href);</span>
+<span class="source-line-no">286</span><span id="line-286">      }</span>
+<span class="source-line-no">287</span><span id="line-287">   }</span>
+<span class="source-line-no">288</span><span id="line-288"></span>
+<span class="source-line-no">289</span><span id="line-289">   private static void checkTopicActions(CardSource source, Map&lt;?,?&gt; body, Set&lt;String&gt; ids) {</span>
+<span class="source-line-no">290</span><span id="line-290">      var shape = "type='chart' topicActions must be an array of objects with a string topic and an action object.";</span>
+<span class="source-line-no">291</span><span id="line-291">      if (! (body.get("topicActions") instanceof List&lt;?&gt; l))</span>
+<span class="source-line-no">292</span><span id="line-292">         throw source.error("%s", shape);</span>
+<span class="source-line-no">293</span><span id="line-293">      var topics = body.get("on") instanceof Map&lt;?,?&gt; on ? on.values() : List.of();</span>
+<span class="source-line-no">294</span><span id="line-294">      for (var i = 0; i &lt; l.size(); i++) {</span>
+<span class="source-line-no">295</span><span id="line-295">         if (! (l.get(i) instanceof Map&lt;?,?&gt; e) || ! (e.get("topic") instanceof String topic) || ! (e.get("action") instanceof Map))</span>
+<span class="source-line-no">296</span><span id="line-296">            throw source.error("%s", shape);</span>
+<span class="source-line-no">297</span><span id="line-297">         if (! topics.contains(topic))</span>
+<span class="source-line-no">298</span><span id="line-298">            throw source.error("type='chart' topicActions[%s].topic '%s' must be one this card publishes through 'on'.", i, topic);</span>
+<span class="source-line-no">299</span><span id="line-299">         checkAction(source, "topicActions[" + i + "].action", e.get("action"), ids);</span>
+<span class="source-line-no">300</span><span id="line-300">      }</span>
+<span class="source-line-no">301</span><span id="line-301">   }</span>
+<span class="source-line-no">302</span><span id="line-302"></span>
+<span class="source-line-no">303</span><span id="line-303">   private static void checkCatalog(CardSource source, Object actions, Set&lt;String&gt; ids) {</span>
+<span class="source-line-no">304</span><span id="line-304">      if (! (actions instanceof List&lt;?&gt; l))</span>
+<span class="source-line-no">305</span><span id="line-305">         throw source.error("type='chart' actions must be an array of action objects.");</span>
+<span class="source-line-no">306</span><span id="line-306">      for (var i = 0; i &lt; l.size(); i++) {</span>
+<span class="source-line-no">307</span><span id="line-307">         var where = "actions[" + i + "]";</span>
+<span class="source-line-no">308</span><span id="line-308">         checkAction(source, where, l.get(i), ids);</span>
+<span class="source-line-no">309</span><span id="line-309">         var a = (Map&lt;?,?&gt;)l.get(i);</span>
+<span class="source-line-no">310</span><span id="line-310">         if (! "dialog".equals(a.get("present")))</span>
+<span class="source-line-no">311</span><span id="line-311">            throw source.error("type='chart' %s '%s' must be present=dialog; a dialog button can only open a dialog action.", where, a.get("id"));</span>
+<span class="source-line-no">312</span><span id="line-312">      }</span>
+<span class="source-line-no">313</span><span id="line-313">   }</span>
+<span class="source-line-no">314</span><span id="line-314"></span>
+<span class="source-line-no">315</span><span id="line-315">   // The rules every chart action obeys, wherever it is declared: a chart has no cell, page or servlet to hand off to.</span>
+<span class="source-line-no">316</span><span id="line-316">   private static void checkAction(CardSource source, String where, Object action, Set&lt;String&gt; ids) {</span>
+<span class="source-line-no">317</span><span id="line-317">      if (! (action instanceof Map&lt;?,?&gt; a))</span>
+<span class="source-line-no">318</span><span id="line-318">         throw source.error("type='chart' %s must be an object.", where);</span>
+<span class="source-line-no">319</span><span id="line-319">      if (! (a.get("id") instanceof String id) || id.isBlank())</span>
+<span class="source-line-no">320</span><span id="line-320">         throw source.error("type='chart' %s requires a non-blank string id.", where);</span>
+<span class="source-line-no">321</span><span id="line-321">      if (! (a.get("endpoint") instanceof String endpoint) || endpoint.isBlank())</span>
+<span class="source-line-no">322</span><span id="line-322">         throw source.error("type='chart' %s requires a non-blank string endpoint.", where);</span>
+<span class="source-line-no">323</span><span id="line-323">      if (! SafePathTemplate.isSameOriginPath(endpoint))</span>
+<span class="source-line-no">324</span><span id="line-324">         throw source.error("type='chart' %s endpoint must be a same-origin path; got '%s'.", where, endpoint);</span>
+<span class="source-line-no">325</span><span id="line-325">      if (nn(a.get("form")) &amp;&amp; ! (a.get("form") instanceof String form &amp;&amp; SafePathTemplate.isSameOriginPath(form)))</span>
+<span class="source-line-no">326</span><span id="line-326">         throw source.error("type='chart' %s form must be a same-origin path; got '%s'.", where, a.get("form"));</span>
+<span class="source-line-no">327</span><span id="line-327">      if (! (a.get("method") instanceof String method) || ! ACTION_METHODS.contains(method))</span>
+<span class="source-line-no">328</span><span id="line-328">         throw source.error("type='chart' %s method must be POST, PUT, PATCH or DELETE; got '%s'.", where, a.get("method"));</span>
+<span class="source-line-no">329</span><span id="line-329">      if (nn(a.get("confirm")) &amp;&amp; ! (a.get("confirm") instanceof String || Boolean.FALSE.equals(a.get("confirm"))))</span>
+<span class="source-line-no">330</span><span id="line-330">         throw source.error("type='chart' %s confirm must be a string or false.", where);</span>
+<span class="source-line-no">331</span><span id="line-331">      if (nn(a.get("present")) &amp;&amp; ! "dialog".equals(a.get("present")))</span>
+<span class="source-line-no">332</span><span id="line-332">         throw source.error("type='chart' %s present must be 'dialog' or absent; got '%s'.", where, a.get("present"));</span>
+<span class="source-line-no">333</span><span id="line-333">      if (nn(a.get("visibleWhen")) &amp;&amp; ! (a.get("visibleWhen") instanceof List))</span>
+<span class="source-line-no">334</span><span id="line-334">         throw source.error("type='chart' %s visibleWhen must be an array of rules; it is tested against the clicked point.", where);</span>
+<span class="source-line-no">335</span><span id="line-335">      if (nn(a.get("enabledWhen")) &amp;&amp; ! (a.get("enabledWhen") instanceof List))</span>
+<span class="source-line-no">336</span><span id="line-336">         throw source.error("type='chart' %s enabledWhen must be an array of rules.", where);</span>
+<span class="source-line-no">337</span><span id="line-337">      if ("navigate".equals(a.get("onSuccess")))</span>
+<span class="source-line-no">338</span><span id="line-338">         throw source.error("type='chart' %s onSuccess must not be 'navigate'; a chart has nowhere to navigate.", where);</span>
+<span class="source-line-no">339</span><span id="line-339">      if (! ids.add(id))</span>
+<span class="source-line-no">340</span><span id="line-340">         throw source.error("type='chart' action id '%s' is declared more than once.", id);</span>
+<span class="source-line-no">341</span><span id="line-341">   }</span>
+<span class="source-line-no">342</span><span id="line-342"></span>
+<span class="source-line-no">343</span><span id="line-343">   private static void checkName(CardSource source, String name, String what) {</span>
+<span class="source-line-no">344</span><span id="line-344">      if (! Fn.validName(name))</span>
+<span class="source-line-no">345</span><span id="line-345">         throw source.error("%s", "E-74: " + f(BusWiringValidator.E74, name, what));</span>
+<span class="source-line-no">346</span><span id="line-346">   }</span>
+<span class="source-line-no">347</span><span id="line-347"></span>
+<span class="source-line-no">348</span><span id="line-348">   // $fn markers: an object whose only keys are $fn and, optionally, args.  Same skip set as</span>
+<span class="source-line-no">349</span><span id="line-349">   // BusWiringValidator.walkFns: dataset[*].source and series[*].data are rows of data, never extension references.</span>
+<span class="source-line-no">350</span><span id="line-350">   private static void walkFns(CardSource source, Object o) {</span>
+<span class="source-line-no">351</span><span id="line-351">      if (o instanceof Map&lt;?,?&gt; m) {</span>
+<span class="source-line-no">352</span><span id="line-352">         if (m.containsKey("$fn") &amp;&amp; m.keySet().stream().allMatch(k -&gt; "$fn".equals(k) || "args".equals(k)))</span>
+<span class="source-line-no">353</span><span id="line-353">            checkName(source, m.get("$fn") instanceof String s ? s : null, "$fn");</span>
+<span class="source-line-no">354</span><span id="line-354">         for (var e : m.entrySet()) {</span>
+<span class="source-line-no">355</span><span id="line-355">            if ("dataset".equals(e.getKey()))</span>
+<span class="source-line-no">356</span><span id="line-356">               walkSkipping(source, e.getValue(), "source");</span>
+<span class="source-line-no">357</span><span id="line-357">            else if ("series".equals(e.getKey()))</span>
+<span class="source-line-no">358</span><span id="line-358">               walkSkipping(source, e.getValue(), "data");</span>
+<span class="source-line-no">359</span><span id="line-359">            else</span>
+<span class="source-line-no">360</span><span id="line-360">               walkFns(source, e.getValue());</span>
+<span class="source-line-no">361</span><span id="line-361">         }</span>
+<span class="source-line-no">362</span><span id="line-362">      } else if (o instanceof List&lt;?&gt; l) {</span>
+<span class="source-line-no">363</span><span id="line-363">         l.forEach(v -&gt; walkFns(source, v));</span>
+<span class="source-line-no">364</span><span id="line-364">      }</span>
+<span class="source-line-no">365</span><span id="line-365">   }</span>
+<span class="source-line-no">366</span><span id="line-366"></span>
+<span class="source-line-no">367</span><span id="line-367">   // Walks o (a map or a list of maps) without descending into the skip key of each map.</span>
+<span class="source-line-no">368</span><span id="line-368">   private static void walkSkipping(CardSource source, Object o, String skip) {</span>
+<span class="source-line-no">369</span><span id="line-369">      if (o instanceof List&lt;?&gt; l) {</span>
+<span class="source-line-no">370</span><span id="line-370">         l.forEach(x -&gt; walkSkipping(source, x, skip));</span>
+<span class="source-line-no">371</span><span id="line-371">      } else if (o instanceof Map&lt;?,?&gt; m) {</span>
+<span class="source-line-no">372</span><span id="line-372">         for (var e : m.entrySet())</span>
+<span class="source-line-no">373</span><span id="line-373">            if (! skip.equals(e.getKey()))</span>
+<span class="source-line-no">374</span><span id="line-374">               walkFns(source, e.getValue());</span>
+<span class="source-line-no">375</span><span id="line-375">      }</span>
+<span class="source-line-no">376</span><span id="line-376">   }</span>
+<span class="source-line-no">377</span><span id="line-377"></span>
+<span class="source-line-no">378</span><span id="line-378">   // A series entry is a field name or an object with a field, as juneau-charts.js reads it.</span>
+<span class="source-line-no">379</span><span id="line-379">   private static String seriesField(Object entry) {</span>
+<span class="source-line-no">380</span><span id="line-380">      if (entry instanceof String s)</span>
+<span class="source-line-no">381</span><span id="line-381">         return s;</span>
+<span class="source-line-no">382</span><span id="line-382">      return entry instanceof Map&lt;?,?&gt; m &amp;&amp; m.get("field") instanceof String s ? s : null;</span>
+<span class="source-line-no">383</span><span id="line-383">   }</span>
+<span class="source-line-no">384</span><span id="line-384">}</span>
 
 
 

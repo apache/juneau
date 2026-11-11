@@ -167,11 +167,11 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">return</strong> out;
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<strong class="jxr_keyword">private</strong> <a name="RowDetail" href="../../../../../org/apache/juneau/console/views/RowDetail.html#RowDetail">RowDetail</a> detail(String key) {
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<strong class="jxr_keyword">private</strong> RowDetail detail(String key) {
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">return</strong> key == <strong class="jxr_keyword">null</strong> || ! SEGMENT.matcher(key).matches() ? <strong class="jxr_keyword">null</strong> : rowDetailIndex().get(key);
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	<strong class="jxr_keyword">private</strong> Object bean(<a name="RowDetail" href="../../../../../org/apache/juneau/console/views/RowDetail.html#RowDetail">RowDetail</a> d, String id) {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	<strong class="jxr_keyword">private</strong> Object bean(RowDetail d, String id) {
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">if</strong> (d == <strong class="jxr_keyword">null</strong> || ! validRowId(id))
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">try</strong> {
@@ -187,24 +187,24 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonMap();
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; titleFields(<a name="RowDetail" href="../../../../../org/apache/juneau/console/views/RowDetail.html#RowDetail">RowDetail</a> d) {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; titleFields(RowDetail d) {
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">if</strong> (d.titleTemplate() != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">var</strong> m = Pattern.compile(<span class="jxr_string">"&#92;&#92;{([A-Za-z_][A-Za-z0-9_]*)&#92;&#92;}"</span>).matcher(d.titleTemplate());
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">var</strong> m = Pattern.compile(<span class="jxr_string">"&#92;&#92;{([A-Za-z_]&#92;&#92;w*)&#92;&#92;}"</span>).matcher(d.titleTemplate());
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">while</strong> (m.find())
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 				out.add(m.group(1));
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		}
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">return</strong> out;
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; firstFieldsTab(<a name="RowDetail" href="../../../../../org/apache/juneau/console/views/RowDetail.html#RowDetail">RowDetail</a> d) {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; firstFieldsTab(RowDetail d) {
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t : d.tabList())
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">if</strong> (t.kind() == DetailTab.Kind.FIELDS)
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 				<strong class="jxr_keyword">return</strong> t.fieldNames().isEmpty() ? d.resolvedFields() : t.fieldNames();
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">return</strong> d.resolvedFields();
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonMap project(<a name="RowDetail" href="../../../../../org/apache/juneau/console/views/RowDetail.html#RowDetail">RowDetail</a> d, Object bean, Collection&lt;String&gt; names) {
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonMap project(RowDetail d, Object bean, Collection&lt;String&gt; names) {
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">var</strong> ok = d.servableProperties();
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> bm = MarshallingContext.DEFAULT.toBeanMap(bean);
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> JsonMap();
@@ -214,7 +214,7 @@
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">return</strong> out;
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonMap labels(<a name="RowDetail" href="../../../../../org/apache/juneau/console/views/RowDetail.html#RowDetail">RowDetail</a> d, Collection&lt;String&gt; names) {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonMap labels(RowDetail d, Collection&lt;String&gt; names) {
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">var</strong> explicit = d.resolvedLabels();
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> JsonMap();
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n : names)
@@ -222,7 +222,7 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">return</strong> out;
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 	}
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonMap counts(<a name="RowDetail" href="../../../../../org/apache/juneau/console/views/RowDetail.html#RowDetail">RowDetail</a> d, String id) {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonMap counts(RowDetail d, String id) {
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> JsonMap();
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t : d.tabList())
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 			<strong class="jxr_keyword">if</strong> (t.hasCounter())

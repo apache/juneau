@@ -103,7 +103,16 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertThrows(AssertionError.<strong class="jxr_keyword">class</strong>, () -&gt; a.hasNestedCard(<span class="jxr_string">"sw"</span>, <span class="jxr_string">"nope"</span>, <span class="jxr_string">"chart"</span>));
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertThrows(AssertionError.<strong class="jxr_keyword">class</strong>, () -&gt; a.hasCardOrder(<span class="jxr_string">"sw"</span>, <span class="jxr_string">"c"</span>));
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> findNested_a01_walksCards() {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> stacked = page(<span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"1"</span>,<span class="jxr_string">"title"</span>:<span class="jxr_string">"t"</span>,<span class="jxr_string">"nav"</span>:[],<span class="jxr_string">"activeNav"</span>:[],
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			 <span class="jxr_string">"cards"</span>:[{<span class="jxr_string">"id"</span>:<span class="jxr_string">"sw"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"switcher"</span>,<span class="jxr_string">"views"</span>:[
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			   {<span class="jxr_string">"id"</span>:<span class="jxr_string">"v"</span>,<span class="jxr_string">"label"</span>:<span class="jxr_string">"V"</span>,<span class="jxr_string">"cards"</span>:[{<span class="jxr_string">"id"</span>:<span class="jxr_string">"c1"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"html"</span>,<span class="jxr_string">"template"</span>:<span class="jxr_string">"t"</span>},{<span class="jxr_string">"id"</span>:<span class="jxr_string">"c2"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"chart"</span>,<span class="jxr_string">"helper"</span>:{<span class="jxr_string">"kind"</span>:<span class="jxr_string">"line"</span>}}]}]}]}
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			<span class="jxr_string">""</span><span class="jxr_string">");
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		PageContractAssert.assertPage(stacked).hasNestedCard(<span class="jxr_string">"sw"</span>, <span class="jxr_string">"c1"</span>, <span class="jxr_string">"html"</span>).hasNestedCard(<span class="jxr_string">"sw"</span>, <span class="jxr_string">"c2"</span>, <span class="jxr_string">"chart"</span>);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

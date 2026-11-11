@@ -78,42 +78,48 @@
 <span class="source-line-no">065</span><span id="line-65">      return frag;</span>
 <span class="source-line-no">066</span><span id="line-66">   }</span>
 <span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   @Override</span>
-<span class="source-line-no">069</span><span id="line-69">   public List&lt;Map&lt;String,Object&gt;&gt; nestedCards(JsonMap body) {</span>
-<span class="source-line-no">070</span><span id="line-70">      var out = new ArrayList&lt;Map&lt;String,Object&gt;&gt;();</span>
-<span class="source-line-no">071</span><span id="line-71">      if (body.get("views") instanceof List&lt;?&gt; views)</span>
-<span class="source-line-no">072</span><span id="line-72">         for (var v : views) {</span>
-<span class="source-line-no">073</span><span id="line-73">            if (! (v instanceof Map&lt;?,?&gt; vm))</span>
-<span class="source-line-no">074</span><span id="line-74">               continue;</span>
-<span class="source-line-no">075</span><span id="line-75">            add(out, vm.get("card"));</span>
-<span class="source-line-no">076</span><span id="line-76">            if (vm.get("sections") instanceof List&lt;?&gt; secs)</span>
-<span class="source-line-no">077</span><span id="line-77">               for (var s : secs)</span>
-<span class="source-line-no">078</span><span id="line-78">                  if (s instanceof Map&lt;?,?&gt; sm)</span>
-<span class="source-line-no">079</span><span id="line-79">                     add(out, sm.get("card"));</span>
-<span class="source-line-no">080</span><span id="line-80">         }</span>
-<span class="source-line-no">081</span><span id="line-81">      return out;</span>
-<span class="source-line-no">082</span><span id="line-82">   }</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">   @SuppressWarnings({</span>
-<span class="source-line-no">085</span><span id="line-85">      "unchecked" // Card maps are JSON objects, so their keys are strings.</span>
-<span class="source-line-no">086</span><span id="line-86">   })</span>
-<span class="source-line-no">087</span><span id="line-87">   private static void add(List&lt;Map&lt;String,Object&gt;&gt; out, Object card) {</span>
-<span class="source-line-no">088</span><span id="line-88">      if (card instanceof Map&lt;?,?&gt; m)</span>
-<span class="source-line-no">089</span><span id="line-89">         out.add((Map&lt;String,Object&gt;)m);</span>
-<span class="source-line-no">090</span><span id="line-90">   }</span>
-<span class="source-line-no">091</span><span id="line-91"></span>
-<span class="source-line-no">092</span><span id="line-92">   // A deep copy, so lifting a nested card never rewrites the authored body.</span>
-<span class="source-line-no">093</span><span id="line-93">   private static Object copy(Object o) {</span>
-<span class="source-line-no">094</span><span id="line-94">      if (o instanceof Map&lt;?,?&gt; m) {</span>
-<span class="source-line-no">095</span><span id="line-95">         var c = new LinkedHashMap&lt;String,Object&gt;();</span>
-<span class="source-line-no">096</span><span id="line-96">         m.forEach((k, v) -&gt; c.put(String.valueOf(k), copy(v)));</span>
-<span class="source-line-no">097</span><span id="line-97">         return c;</span>
-<span class="source-line-no">098</span><span id="line-98">      }</span>
-<span class="source-line-no">099</span><span id="line-99">      if (o instanceof List&lt;?&gt; l)</span>
-<span class="source-line-no">100</span><span id="line-100">         return new ArrayList&lt;&gt;(l.stream().map(SwitcherCardType::copy).toList());</span>
-<span class="source-line-no">101</span><span id="line-101">      return o;</span>
-<span class="source-line-no">102</span><span id="line-102">   }</span>
-<span class="source-line-no">103</span><span id="line-103">}</span>
+<span class="source-line-no">068</span><span id="line-68">   @SuppressWarnings({</span>
+<span class="source-line-no">069</span><span id="line-69">      "java:S3776" // Branching is inherent to walking a switcher body's views and sections.</span>
+<span class="source-line-no">070</span><span id="line-70">   })</span>
+<span class="source-line-no">071</span><span id="line-71">   @Override</span>
+<span class="source-line-no">072</span><span id="line-72">   public List&lt;Map&lt;String,Object&gt;&gt; nestedCards(JsonMap body) {</span>
+<span class="source-line-no">073</span><span id="line-73">      var out = new ArrayList&lt;Map&lt;String,Object&gt;&gt;();</span>
+<span class="source-line-no">074</span><span id="line-74">      if (body.get("views") instanceof List&lt;?&gt; views)</span>
+<span class="source-line-no">075</span><span id="line-75">         for (var v : views) {</span>
+<span class="source-line-no">076</span><span id="line-76">            if (! (v instanceof Map&lt;?,?&gt; vm))</span>
+<span class="source-line-no">077</span><span id="line-77">               continue;</span>
+<span class="source-line-no">078</span><span id="line-78">            add(out, vm.get("card"));</span>
+<span class="source-line-no">079</span><span id="line-79">            if (vm.get("cards") instanceof List&lt;?&gt; stacked)</span>
+<span class="source-line-no">080</span><span id="line-80">               for (var c : stacked)</span>
+<span class="source-line-no">081</span><span id="line-81">                  add(out, c);</span>
+<span class="source-line-no">082</span><span id="line-82">            if (vm.get("sections") instanceof List&lt;?&gt; secs)</span>
+<span class="source-line-no">083</span><span id="line-83">               for (var s : secs)</span>
+<span class="source-line-no">084</span><span id="line-84">                  if (s instanceof Map&lt;?,?&gt; sm)</span>
+<span class="source-line-no">085</span><span id="line-85">                     add(out, sm.get("card"));</span>
+<span class="source-line-no">086</span><span id="line-86">         }</span>
+<span class="source-line-no">087</span><span id="line-87">      return out;</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   @SuppressWarnings({</span>
+<span class="source-line-no">091</span><span id="line-91">      "unchecked" // Card maps are JSON objects, so their keys are strings.</span>
+<span class="source-line-no">092</span><span id="line-92">   })</span>
+<span class="source-line-no">093</span><span id="line-93">   private static void add(List&lt;Map&lt;String,Object&gt;&gt; out, Object card) {</span>
+<span class="source-line-no">094</span><span id="line-94">      if (card instanceof Map&lt;?,?&gt; m)</span>
+<span class="source-line-no">095</span><span id="line-95">         out.add((Map&lt;String,Object&gt;)m);</span>
+<span class="source-line-no">096</span><span id="line-96">   }</span>
+<span class="source-line-no">097</span><span id="line-97"></span>
+<span class="source-line-no">098</span><span id="line-98">   // A deep copy, so lifting a nested card never rewrites the authored body.</span>
+<span class="source-line-no">099</span><span id="line-99">   private static Object copy(Object o) {</span>
+<span class="source-line-no">100</span><span id="line-100">      if (o instanceof Map&lt;?,?&gt; m) {</span>
+<span class="source-line-no">101</span><span id="line-101">         var c = new LinkedHashMap&lt;String,Object&gt;();</span>
+<span class="source-line-no">102</span><span id="line-102">         m.forEach((k, v) -&gt; c.put(String.valueOf(k), copy(v)));</span>
+<span class="source-line-no">103</span><span id="line-103">         return c;</span>
+<span class="source-line-no">104</span><span id="line-104">      }</span>
+<span class="source-line-no">105</span><span id="line-105">      if (o instanceof List&lt;?&gt; l)</span>
+<span class="source-line-no">106</span><span id="line-106">         return new ArrayList&lt;&gt;(l.stream().map(SwitcherCardType::copy).toList());</span>
+<span class="source-line-no">107</span><span id="line-107">      return o;</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109">}</span>
 
 
 

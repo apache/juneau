@@ -945,23 +945,50 @@
 <a class="jxr_linenumber" name="L937" href="#L937">937</a> 		assertTrue(escaped.contains(<span class="jxr_string">"nonce=\&quot;a&amp;quot;b\&quot;"</span>), () -&gt; escaped);
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 	}
 <a class="jxr_linenumber" name="L939" href="#L939">939</a> 
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> 	@Test <strong class="jxr_keyword">void</strong> s07_schemeValidation() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		<strong class="jxr_keyword">var</strong> body = scheme(<span class="jxr_string">"/t?n=bogus"</span>, 500);
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> 		assertTrue(body.contains(<span class="jxr_string">"&lt;@console&gt; unknown scheme 'dim'.  Schemes: auto, light, dark."</span>), () -&gt; body);
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 		<strong class="jxr_keyword">var</strong> theme = scheme(<span class="jxr_string">"/t?n=theme-dark"</span>, 500);
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> 		assertTrue(theme.contains(<span class="jxr_string">"&lt;@console&gt; unknown theme name 'dark'.  Built-in themes: "</span>), () -&gt; theme);
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> 	}
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> 
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> 	@Test <strong class="jxr_keyword">void</strong> s08_explicitBeatsSpec() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		assertEquals(<span class="jxr_string">"&lt;html lang=\&quot;en\&quot; data-jc-scheme=\&quot;dark\&quot; data-jc-scheme-pin=\&quot;dark\&quot;&gt;"</span>, htmlTag(scheme(<span class="jxr_string">"/spec-light-attr-dark"</span>, 200)));
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 		assertEquals(<span class="jxr_string">"&lt;html lang=\&quot;en\&quot; data-jc-scheme=\&quot;light\&quot; data-jc-scheme-pin=\&quot;light\&quot;&gt;"</span>, htmlTag(scheme(<span class="jxr_string">"/spec-light"</span>, 200)));
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 	}
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 	@Test <strong class="jxr_keyword">void</strong> s09_specToggle_explicitAttrWins() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		assertEquals(<span class="jxr_string">"&lt;html lang=\&quot;en\&quot; data-jc-scheme-toggle&gt;"</span>, htmlTag(scheme(<span class="jxr_string">"/spec-toggle"</span>, 200)));
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		assertEquals(<span class="jxr_string">"&lt;html lang=\&quot;en\&quot;&gt;"</span>, htmlTag(scheme(<span class="jxr_string">"/spec-toggle-attr-false"</span>, 200)));
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> 	}
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> }
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 	<em class="jxr_comment">// symbol: references on icon= and favicon=</em>
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 	@Test <strong class="jxr_keyword">void</strong> symbol_a01_faviconResolved() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 		<strong class="jxr_keyword">var</strong> body = scheme(<span class="jxr_string">"/t?n=sym-favicon"</span>, 200);
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 		assertTrue(body.contains(<span class="jxr_string">"&lt;link rel=\&quot;icon\&quot; href=\&quot;/juneau-symbol/paw_print.svg\&quot;&gt;"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 	}
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 	@Test <strong class="jxr_keyword">void</strong> symbol_a02_iconPassesSymbolKey() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> 		<strong class="jxr_keyword">var</strong> logo = assertPage(scheme(<span class="jxr_string">"/t?n=sym-icon"</span>, 200)).contract().getMap(<span class="jxr_string">"header"</span>).getMap(<span class="jxr_string">"logo"</span>);
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		assertEquals(<span class="jxr_string">"paw_print"</span>, logo.getString(<span class="jxr_string">"symbol"</span>));
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		assertNull(logo.get(<span class="jxr_string">"src"</span>));
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 	}
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 	@Test <strong class="jxr_keyword">void</strong> symbol_a03_badNameRejected() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"sym-icon-bad"</span>, <span class="jxr_string">"sym-favicon-bad"</span>, <span class="jxr_string">"sym-favicon-empty"</span>}) {
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 			<strong class="jxr_keyword">var</strong> body = scheme(<span class="jxr_string">"/t?n="</span> + n, 500);
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 			assertTrue(body.contains(<span class="jxr_string">"symbol name"</span>), () -&gt; n + <span class="jxr_string">": "</span> + body);
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 		}
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 	}
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 	@Test <strong class="jxr_keyword">void</strong> symbol_a04_plainUrlUnchanged() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 		<strong class="jxr_keyword">var</strong> body = scheme(<span class="jxr_string">"/t?n=icon-url"</span>, 200);
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 		assertEquals(<span class="jxr_string">"/app/logo.svg"</span>, assertPage(body).contract().getMap(<span class="jxr_string">"header"</span>).getMap(<span class="jxr_string">"logo"</span>).getString(<span class="jxr_string">"src"</span>));
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 	}
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 	@Test <strong class="jxr_keyword">void</strong> s07_schemeValidation() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 		<strong class="jxr_keyword">var</strong> body = scheme(<span class="jxr_string">"/t?n=bogus"</span>, 500);
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 		assertTrue(body.contains(<span class="jxr_string">"&lt;@console&gt; unknown scheme 'dim'.  Schemes: auto, light, dark."</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 		<strong class="jxr_keyword">var</strong> theme = scheme(<span class="jxr_string">"/t?n=theme-dark"</span>, 500);
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> 		assertTrue(theme.contains(<span class="jxr_string">"&lt;@console&gt; unknown theme name 'dark'.  Built-in themes: "</span>), () -&gt; theme);
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 	}
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 	@Test <strong class="jxr_keyword">void</strong> s08_explicitBeatsSpec() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		assertEquals(<span class="jxr_string">"&lt;html lang=\&quot;en\&quot; data-jc-scheme=\&quot;dark\&quot; data-jc-scheme-pin=\&quot;dark\&quot;&gt;"</span>, htmlTag(scheme(<span class="jxr_string">"/spec-light-attr-dark"</span>, 200)));
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 		assertEquals(<span class="jxr_string">"&lt;html lang=\&quot;en\&quot; data-jc-scheme=\&quot;light\&quot; data-jc-scheme-pin=\&quot;light\&quot;&gt;"</span>, htmlTag(scheme(<span class="jxr_string">"/spec-light"</span>, 200)));
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> 	}
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> 	@Test <strong class="jxr_keyword">void</strong> s09_specToggle_explicitAttrWins() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 		assertEquals(<span class="jxr_string">"&lt;html lang=\&quot;en\&quot; data-jc-scheme-toggle&gt;"</span>, htmlTag(scheme(<span class="jxr_string">"/spec-toggle"</span>, 200)));
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 		assertEquals(<span class="jxr_string">"&lt;html lang=\&quot;en\&quot;&gt;"</span>, htmlTag(scheme(<span class="jxr_string">"/spec-toggle-attr-false"</span>, 200)));
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 	}
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -64,11 +64,11 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  			.idempotencyKey(<span class="jxr_string">"deadbeef"</span>);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> json = Json.of(modal);
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> expected = Json.to(<span class="jxr_string">""</span><span class="jxr_string">"
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"2"</span>,
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"3"</span>,
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  			 <span class="jxr_string">"title"</span>:<span class="jxr_string">"Acknowledge this incident?"</span>,
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  			 <span class="jxr_string">"fields"</span>:[{<span class="jxr_string">"label"</span>:<span class="jxr_string">"Incident"</span>,<span class="jxr_string">"value"</span>:<span class="jxr_string">"INC-42"</span>},{<span class="jxr_string">"label"</span>:<span class="jxr_string">"Title"</span>,<span class="jxr_string">"value"</span>:<span class="jxr_string">"API latency"</span>},
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			           {<span class="jxr_string">"label"</span>:<span class="jxr_string">"Service"</span>,<span class="jxr_string">"value"</span>:<span class="jxr_string">"gateway"</span>},{<span class="jxr_string">"label"</span>:<span class="jxr_string">"Current status"</span>,<span class="jxr_string">"value"</span>:<span class="jxr_string">"triggered"</span>}],
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			 <span class="jxr_string">"form"</span>:{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"2"</span>,<span class="jxr_string">"template"</span>:<span class="jxr_string">"servlet:/incidents/ack-form.ftl"</span>},
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			 <span class="jxr_string">"form"</span>:{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"3"</span>,<span class="jxr_string">"template"</span>:<span class="jxr_string">"servlet:/incidents/ack-form.ftl"</span>},
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  			 <span class="jxr_string">"idempotencyKey"</span>:<span class="jxr_string">"deadbeef"</span>}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<span class="jxr_string">""</span><span class="jxr_string">", Map.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		assertEquals(expected, Json.to(json, Map.<strong class="jxr_keyword">class</strong>), json);
@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<em class="jxr_comment">// contractVersion is NOT one of the omitted ones any more -- it is stamped by construction on</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<em class="jxr_comment">// every modal, confirm-only included.</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">var</strong> json = Json.of(ModalDef.create(<span class="jxr_string">"Really delete?"</span>));
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertEquals(Json.to(<span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;2\&quot;,\&quot;title\&quot;:\&quot;Really delete?\&quot;}"</span>, Map.<strong class="jxr_keyword">class</strong>), Json.to(json, Map.<strong class="jxr_keyword">class</strong>), json);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertEquals(Json.to(<span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;3\&quot;,\&quot;title\&quot;:\&quot;Really delete?\&quot;}"</span>, Map.<strong class="jxr_keyword">class</strong>), Json.to(json, Map.<strong class="jxr_keyword">class</strong>), json);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : List.of(<span class="jxr_string">"fields"</span>, <span class="jxr_string">"form"</span>, <span class="jxr_string">"idempotencyKey"</span>, <span class="jxr_string">"selfTargeted"</span>))
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  			assertFalse(json.contains(<span class="jxr_string">"\&quot;"</span> + k + <span class="jxr_string">"\&quot;"</span>), () -&gt; <span class="jxr_string">"unset field leaked: "</span> + k + <span class="jxr_string">"\n"</span> + json);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
@@ -135,7 +135,7 @@
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">var</strong> modal = ModalDef.create(<span class="jxr_string">"Really delete?"</span>).field(<span class="jxr_string">"Note"</span>, <span class="jxr_string">"gone"</span>).checked();
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertEquals(ModalDef.CONTRACT_VERSION, modal.contractVersion);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> json = Json.of(modal);
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertTrue(json.contains(<span class="jxr_string">"\&quot;contractVersion\&quot;:\&quot;2\&quot;"</span>), json);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertTrue(json.contains(<span class="jxr_string">"\&quot;contractVersion\&quot;:\&quot;3\&quot;"</span>), json);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	@Test <strong class="jxr_keyword">void</strong> a04_fieldNullValue_serializesLabelOnly() {
@@ -167,7 +167,7 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 	@Test <strong class="jxr_keyword">void</strong> c01_formDef_serializesTemplateOnly() {
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<em class="jxr_comment">// a pure FormDef golden with no modal in sight -- stamped by construction too.</em>
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> json = Json.of(FormDef.ofTemplate(<span class="jxr_string">"servlet:/x/form.ftl"</span>));
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertEquals(Json.to(<span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;2\&quot;,\&quot;template\&quot;:\&quot;servlet:/x/form.ftl\&quot;}"</span>, Map.<strong class="jxr_keyword">class</strong>), Json.to(json, Map.<strong class="jxr_keyword">class</strong>), json);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertEquals(Json.to(<span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;3\&quot;,\&quot;template\&quot;:\&quot;servlet:/x/form.ftl\&quot;}"</span>, Map.<strong class="jxr_keyword">class</strong>), Json.to(json, Map.<strong class="jxr_keyword">class</strong>), json);
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	@Test <strong class="jxr_keyword">void</strong> c02_formDef_reservedBeanTypeIsNotOnTheWireYet() {
@@ -186,7 +186,7 @@
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 			.field(FormDef.Input.of(<span class="jxr_string">"resolution"</span>, <span class="jxr_string">"Resolution comment"</span>, <span class="jxr_string">"textarea"</span>).required().value(<span class="jxr_string">"done"</span>));
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">var</strong> json = Json.of(form);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> expected = Json.to(<span class="jxr_string">""</span><span class="jxr_string">"
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"2"</span>,
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"3"</span>,
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 			 <span class="jxr_string">"fields"</span>:[{<span class="jxr_string">"name"</span>:<span class="jxr_string">"resolution"</span>,<span class="jxr_string">"label"</span>:<span class="jxr_string">"Resolution comment"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"textarea"</span>,<span class="jxr_string">"required"</span>:<strong class="jxr_keyword">true</strong>,<span class="jxr_string">"value"</span>:<span class="jxr_string">"done"</span>}]}
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<span class="jxr_string">""</span><span class="jxr_string">", Map.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertEquals(expected, Json.to(json, Map.<strong class="jxr_keyword">class</strong>), json);
@@ -326,7 +326,7 @@
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 			.field(FormDef.Input.of(<span class="jxr_string">"sev"</span>, <span class="jxr_string">"Severity"</span>, <span class="jxr_string">"select"</span>).options(
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 				FormDef.Input.Option.of(<span class="jxr_string">"p1"</span>, <span class="jxr_string">"P1"</span>), FormDef.Input.Option.of(<span class="jxr_string">"p2"</span>, <span class="jxr_string">"P2"</span>)).value(<span class="jxr_string">"p1"</span>)));
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">var</strong> expected = Json.to(<span class="jxr_string">""</span><span class="jxr_string">"
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"2"</span>,
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"3"</span>,
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 			 <span class="jxr_string">"fields"</span>:[{<span class="jxr_string">"name"</span>:<span class="jxr_string">"sev"</span>,<span class="jxr_string">"label"</span>:<span class="jxr_string">"Severity"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"select"</span>,<span class="jxr_string">"value"</span>:<span class="jxr_string">"p1"</span>,
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 			            <span class="jxr_string">"options"</span>:[{<span class="jxr_string">"value"</span>:<span class="jxr_string">"p1"</span>,<span class="jxr_string">"label"</span>:<span class="jxr_string">"P1"</span>},{<span class="jxr_string">"value"</span>:<span class="jxr_string">"p2"</span>,<span class="jxr_string">"label"</span>:<span class="jxr_string">"P2"</span>}]}]}
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<span class="jxr_string">""</span><span class="jxr_string">", Map.<strong class="jxr_keyword">class</strong>);
@@ -342,16 +342,16 @@
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 * against these in the views module's {@code ViewsJs_ContractVersion_Test}; bumping any two of the three makes</em>
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 * every form-bearing dialog refuse to open, so the literal is asserted here rather than compared to itself.</em>
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	@Test <strong class="jxr_keyword">void</strong> e01_contractVersionConstantsAreTwo() {
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		assertEquals(<span class="jxr_string">"2"</span>, FormDef.CONTRACT_VERSION);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		assertEquals(<span class="jxr_string">"2"</span>, ModalDef.CONTRACT_VERSION);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	@Test <strong class="jxr_keyword">void</strong> e01_contractVersionConstantsAreThree() {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		assertEquals(<span class="jxr_string">"3"</span>, FormDef.CONTRACT_VERSION);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		assertEquals(<span class="jxr_string">"3"</span>, ModalDef.CONTRACT_VERSION);
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 	}
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 	@Test <strong class="jxr_keyword">void</strong> e02_rawFormDefIsStamped() {
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<em class="jxr_comment">// a raw builder carries the version from construction, independent of checked().</em>
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> form = FormDef.create().field(FormDef.Input.of(<span class="jxr_string">"r"</span>, <span class="jxr_string">"R"</span>, <span class="jxr_string">"textarea"</span>));
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 		assertEquals(FormDef.CONTRACT_VERSION, form.contractVersion);
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		assertTrue(Json.of(form).contains(<span class="jxr_string">"\&quot;contractVersion\&quot;:\&quot;2\&quot;"</span>), Json.of(form));
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		assertTrue(Json.of(form).contains(<span class="jxr_string">"\&quot;contractVersion\&quot;:\&quot;3\&quot;"</span>), Json.of(form));
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 	}
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 	@Test <strong class="jxr_keyword">void</strong> e03_checkedStampsBothVersionsFirst() {
@@ -417,9 +417,9 @@
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<em class="jxr_comment">// stamping does not depend on ordering.</em>
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">var</strong> modal = ModalDef.create(<span class="jxr_string">"t"</span>).checked().form(FormDef.ofTemplate(<span class="jxr_string">"u"</span>));
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">var</strong> json = Json.of(modal);
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		assertTrue(json.contains(<span class="jxr_string">"\&quot;contractVersion\&quot;:\&quot;2\&quot;"</span>), json);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		assertTrue(json.contains(<span class="jxr_string">"\&quot;contractVersion\&quot;:\&quot;3\&quot;"</span>), json);
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">var</strong> formMap = (Map&lt;String,Object&gt;) Json.to(json, Map.<strong class="jxr_keyword">class</strong>).get(<span class="jxr_string">"form"</span>);
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		assertEquals(<span class="jxr_string">"2"</span>, formMap.get(<span class="jxr_string">"contractVersion"</span>));
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		assertEquals(<span class="jxr_string">"3"</span>, formMap.get(<span class="jxr_string">"contractVersion"</span>));
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 	}
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 	@Test <strong class="jxr_keyword">void</strong> e10_checkedVsUnchecked_formBearing_byteForByteEqual() {
@@ -442,7 +442,7 @@
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<em class="jxr_comment">// ActionResult already have.</em>
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">var</strong> parsed = Json.to(<span class="jxr_string">"{\&quot;title\&quot;:\&quot;t\&quot;}"</span>, ModalDef.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 		assertEquals(ModalDef.CONTRACT_VERSION, parsed.contractVersion);
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		assertTrue(Json.of(parsed).contains(<span class="jxr_string">"\&quot;contractVersion\&quot;:\&quot;2\&quot;"</span>), Json.of(parsed));
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		assertTrue(Json.of(parsed).contains(<span class="jxr_string">"\&quot;contractVersion\&quot;:\&quot;3\&quot;"</span>), Json.of(parsed));
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 	}
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 	@Test <strong class="jxr_keyword">void</strong> e13_deserializeExplicitWrongVersion_roundTrips() {
@@ -464,9 +464,9 @@
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">var</strong> badForm = FormDef.create().field(FormDef.Input.of(<span class="jxr_string">"sev"</span>, <span class="jxr_string">"Severity"</span>, <span class="jxr_string">"select"</span>));
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<strong class="jxr_keyword">var</strong> modal = ModalDef.create(<span class="jxr_string">"Pick one"</span>).form(badForm);
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">var</strong> json = Json.of(modal);
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		assertTrue(json.contains(<span class="jxr_string">"\&quot;contractVersion\&quot;:\&quot;2\&quot;"</span>), json);
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		assertTrue(json.contains(<span class="jxr_string">"\&quot;contractVersion\&quot;:\&quot;3\&quot;"</span>), json);
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">var</strong> formMap = (Map&lt;String,Object&gt;) Json.to(json, Map.<strong class="jxr_keyword">class</strong>).get(<span class="jxr_string">"form"</span>);
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		assertEquals(<span class="jxr_string">"2"</span>, formMap.get(<span class="jxr_string">"contractVersion"</span>));
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		assertEquals(<span class="jxr_string">"3"</span>, formMap.get(<span class="jxr_string">"contractVersion"</span>));
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 	}
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 	@Test <strong class="jxr_keyword">void</strong> e15_malformedForm_stillThrowsFromCheckedAndValidate() {
@@ -557,7 +557,7 @@
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 			.section(FormDef.Section.of(<span class="jxr_string">"basics"</span>, <span class="jxr_string">"Basics"</span>).field(FormDef.Input.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"Name"</span>, <span class="jxr_string">"text"</span>)))
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 			.section(FormDef.Section.of(<span class="jxr_string">"advanced"</span>, <span class="jxr_string">"Advanced"</span>).field(FormDef.Input.of(<span class="jxr_string">"notes"</span>, <span class="jxr_string">"Notes"</span>, <span class="jxr_string">"textarea"</span>))));
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">var</strong> expected = Json.to(<span class="jxr_string">""</span><span class="jxr_string">"
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 			{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"2"</span>,
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 			{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"3"</span>,
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 			 <span class="jxr_string">"sections"</span>:[{<span class="jxr_string">"id"</span>:<span class="jxr_string">"basics"</span>,<span class="jxr_string">"label"</span>:<span class="jxr_string">"Basics"</span>,<span class="jxr_string">"fields"</span>:[{<span class="jxr_string">"name"</span>:<span class="jxr_string">"name"</span>,<span class="jxr_string">"label"</span>:<span class="jxr_string">"Name"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"text"</span>}]},
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 			             {<span class="jxr_string">"id"</span>:<span class="jxr_string">"advanced"</span>,<span class="jxr_string">"label"</span>:<span class="jxr_string">"Advanced"</span>,<span class="jxr_string">"fields"</span>:[{<span class="jxr_string">"name"</span>:<span class="jxr_string">"notes"</span>,<span class="jxr_string">"label"</span>:<span class="jxr_string">"Notes"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"textarea"</span>}]}]}
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 			<span class="jxr_string">""</span><span class="jxr_string">", Map.<strong class="jxr_keyword">class</strong>);
@@ -583,7 +583,18 @@
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> 			i.actionId(<span class="jxr_string">"ack"</span>);
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 		<strong class="jxr_keyword">return</strong> i;
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> 	}
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> }
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	@Test <strong class="jxr_keyword">void</strong> date_b01_serialization() {
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<strong class="jxr_keyword">var</strong> modal = ModalDef.create(<span class="jxr_string">"t"</span>).form(FormDef.create().field(FormDef.Input.of(<span class="jxr_string">"shipDate"</span>, <span class="jxr_string">"Ship date"</span>, <span class="jxr_string">"date"</span>).value(<span class="jxr_string">"2026-11-10"</span>))).checked();
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">var</strong> json = Json.of(modal);
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		assertTrue(json.contains(<span class="jxr_string">"\&quot;type\&quot;:\&quot;date\&quot;"</span>), json);
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		assertTrue(json.contains(<span class="jxr_string">"\&quot;contractVersion\&quot;:\&quot;3\&quot;"</span>), json);
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	}
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	@Test <strong class="jxr_keyword">void</strong> contract_b02_modalVersion3() {
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		assertEquals(<span class="jxr_string">"3"</span>, ModalDef.CONTRACT_VERSION);
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	}
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

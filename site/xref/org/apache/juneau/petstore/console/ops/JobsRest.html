@@ -360,451 +360,457 @@
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 			.attr(<span class="jxr_string">"groomFileBytesUrl"</span>, file.bytesUrl);
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 	}
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> TerminalDef terminal(String id, String terminalId, String title) {
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">var</strong> def = TerminalDef.forMixin(id, MOUNT, terminalId).title(title);
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		def.inputId = <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// Output only: the groom terminals take no keystrokes.</em>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">return</strong> def.validate();
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<em class="jxr_javadoccomment">/** @return The restock intro as a chrome-free fragment. */</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	@RestGet(path=<span class="jxr_string">"/fragments/restock-help"</span>)
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<strong class="jxr_keyword">public</strong> <a name="View" href="../../../../../../org/apache/juneau/rest/server/view/View.html#View">View</a> restockHelp() {
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">return</strong> FreemarkerView.of(<span class="jxr_string">"fragments/restock-help.ftlh"</span>);
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 	}
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * The restock dialog's form source: a read-only GET returning the modal with a freshly minted self-targeted key.</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 * The dialog is the plain restock, so it asks only for counts and always runs with no wait and the default</em>
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 * {@value #DEFAULT_HOLD_MS} ms hold.  The timing knobs ({@code slowMs}, {@code holdMs}) belong to the job-log card,</em>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * which exists to demonstrate cancelling before and after the effect.</em>
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * @return The modal.</em>
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	@RestGet(path=<span class="jxr_string">"/restock-form"</span>)
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	<strong class="jxr_keyword">public</strong> ModalDef restockForm() {
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">var</strong> form = FormDef.create();
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : Species.values())
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			form.field(FormDef.Input.of(s.name(), s.name().charAt(0) + s.name().substring(1).toLowerCase() + <span class="jxr_string">" (0-50)"</span>, <span class="jxr_string">"text"</span>).value(<span class="jxr_string">"0"</span>));
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">return</strong> ModalDef.create(<span class="jxr_string">"Restock the store"</span>).form(form)
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			.idempotencyKey(IdempotencyKey.mintSelfTargeted(ACTION).value()).selfTargeted(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	}
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 * @return Submitted jobs, newest first, with their current state.</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	@RestGet(path=<span class="jxr_string">"/rows"</span>)
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<strong class="jxr_keyword">public</strong> List&lt;JsonMap&gt; rows() {
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">return</strong> submitted.stream().map(x -&gt; {
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			<strong class="jxr_keyword">var</strong> row = <strong class="jxr_keyword">new</strong> JsonMap(state(x.getString(<span class="jxr_string">"jobId"</span>))).append(x);
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			row.remove(<span class="jxr_string">"idempotencyKey"</span>);
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			<strong class="jxr_keyword">return</strong> row;
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		}).toList();
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * Submits a restock.</em>
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 * @param req The request.</em>
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 * @param res The response (202).</em>
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">	 * @param json The restock body (see {@link Restock#of(JsonMap)}).</em>
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * @return The job ref (202), or a 429 {@code app:job-limit} refusal whose message names the running count, so a</em>
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * 	JSON client such as the job-log card can show it.</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * @throws BadRequest On a missing key, an out-of-range count, or a bad {@code slowMs} or {@code holdMs} (see</em>
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * 	{@link Restock#of(JsonMap)}).</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	@RestPost(path=<span class="jxr_string">"/restock"</span>)
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	<strong class="jxr_keyword">public</strong> Object restock(RestRequest req, RestResponse res, @Content JsonMap json) {
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">var</strong> actor = ConsoleWrites.actor(req);
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">var</strong> body = Restock.of(json);
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">var</strong> k = body.idempotencyKey();
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">if</strong> (ib(k))
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Missing 'idempotencyKey'"</span>);
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">var</strong> key = IdempotencyKey.of(k, ACTION, k.equals(json.getString(<span class="jxr_string">"targetId"</span>)) ? k : ACTION);
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">if</strong> (body.perSpecies().isEmpty())
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Nothing to restock"</span>);
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		body.perSpecies().forEach((s, n) -&gt; {
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			<strong class="jxr_keyword">if</strong> (n == <strong class="jxr_keyword">null</strong> || n &lt; 1 || n &gt; 50)
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Count for '%s' must be between 1 and 50"</span>, s);
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		});
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">var</strong> limit = Integer.getInteger(LIMIT_PROPERTY, 2);
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">var</strong> registry = asyncJobRegistry();
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		AsyncJob job;
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">synchronized</strong> (submitted) {
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			<em class="jxr_comment">// Resolve the idempotency key first: a replay returns its existing job and never counts against the limit.</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<strong class="jxr_keyword">var</strong> prior = submitted.stream().filter(x -&gt; k.equals(x.getString(<span class="jxr_string">"idempotencyKey"</span>))).findFirst();
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			job = prior.flatMap(x -&gt; registry.get(x.getString(<span class="jxr_string">"jobId"</span>))).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">if</strong> (job == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 				prior.ifPresent(submitted::remove); <em class="jxr_comment">// The job aged out of the registry; this is a fresh submission.</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 				<strong class="jxr_keyword">var</strong> created = registry.runningCount() &gt;= limit ? <strong class="jxr_keyword">null</strong> : registry.tryCreate(key).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 				<strong class="jxr_keyword">if</strong> (created == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 					<strong class="jxr_keyword">return</strong> limitReached(res, registry.runningCount());
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 				job = created;
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 				submitted.addFirst(JsonMap.of(<span class="jxr_string">"jobId"</span>, created.id(), <span class="jxr_string">"submitted"</span>, created.createdAt().toString(), <span class="jxr_string">"request"</span>, body.perSpecies(), <span class="jxr_string">"idempotencyKey"</span>, k));
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 				<strong class="jxr_keyword">while</strong> (submitted.size() &gt; MAX_SUBMITTED)
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 					submitted.removeLast();
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 				pool.execute(() -&gt; run(created, body, () -&gt; store().restock(body.perSpecies(), <span class="jxr_string">"job:restock:"</span> + actor)));
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			}
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		}
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		res.setStatus(202);
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">return</strong> AsyncJobRef.of(job);
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	}
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ActionResult limitReached(RestResponse res, <strong class="jxr_keyword">int</strong> running) {
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		res.setStatus(429);
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">return</strong> ActionResult.refusal(<span class="jxr_string">"app:job-limit"</span>).message(f(<span class="jxr_string">"Job limit reached; '%s' running"</span>, running));
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	}
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * Runs one restock: the optional slow wait (cancellable, nothing changed yet), the restock itself, then the</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * after-effect hold.  Every step stops as soon as the job has settled (a cancel or the hard timeout).</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * @param job The job.</em>
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * @param body The restock.</em>
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 * @param effect The restock itself; returns the added pets.</em>
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> run(<a name="AsyncJob" href="../../../../../../org/apache/juneau/console/views/AsyncJob.html#AsyncJob">AsyncJob</a> job, Restock body, Supplier&lt;List&lt;Pet&gt;&gt; effect) {
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		run(job, body, effect, () -&gt; <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 	}
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * Same as {@link #run(AsyncJob, Restock, Supplier)}, but the success result carries a value, read after the</em>
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * effect: a row job returns its row's new state, which the card's {@code output} writes back into the row.</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * @param job The job.</em>
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * @param body The restock.</em>
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * @param effect The restock itself; returns the added pets.</em>
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * @param value The success result's value.</em>
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> run(<a name="AsyncJob" href="../../../../../../org/apache/juneau/console/views/AsyncJob.html#AsyncJob">AsyncJob</a> job, Restock body, Supplier&lt;List&lt;Pet&gt;&gt; effect, Supplier&lt;Object&gt; value) {
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">if</strong> (body.slowMs() &gt; 0) {
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 				job.progress(f(<span class="jxr_string">"Waiting %s ms before restocking"</span>, body.slowMs()));
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 				<strong class="jxr_keyword">if</strong> (! hold(job, body.slowMs()))
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 					<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			}
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 			<em class="jxr_comment">// One lock acquisition, shared with cancel and the timeout: a job settled after the wait is left as it was.</em>
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			<strong class="jxr_keyword">if</strong> (! job.markEffectStarted())
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 				<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<strong class="jxr_keyword">var</strong> total = body.perSpecies().values().stream().mapToInt(Integer::intValue).sum();
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			job.progress(f(<span class="jxr_string">"Restocking %s pets"</span>, total));
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">var</strong> pets = effect.get();
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			pets.forEach(p -&gt; job.progress(f(<span class="jxr_string">"Added %s"</span>, p.getName())));
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<strong class="jxr_keyword">if</strong> (hold(job, body.holdMs()))
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 				job.complete(ActionResult.success(value.get()).message(f(<span class="jxr_string">"Restocked %s pets"</span>, pets.size())));
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		} <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			Thread.currentThread().interrupt();
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 			job.complete(ActionResult.unknown().message(<span class="jxr_string">"Interrupted"</span>));
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 			job.complete(ActionResult.failure().message(e.getMessage()));
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		}
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	}
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	<em class="jxr_javadoccomment">/** Sleeps in short steps; returns &lt;jk&gt;false&lt;/jk&gt; as soon as the job has settled. */</em>
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> hold(<a name="AsyncJob" href="../../../../../../org/apache/juneau/console/views/AsyncJob.html#AsyncJob">AsyncJob</a> job, <strong class="jxr_keyword">long</strong> ms) <strong class="jxr_keyword">throws</strong> InterruptedException {
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> left = ms; left &gt; 0; left -= SLOW_STEP_MS) {
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 			<strong class="jxr_keyword">if</strong> (job.isTerminal())
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 			Thread.sleep(Math.min(SLOW_STEP_MS, left));
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		}
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">return</strong> ! job.isTerminal();
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 	}
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * @param id The job id.</em>
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 * @return {@code {state: RUNNING|DONE, result}}.</em>
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the job is unknown or has aged out.</em>
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	@RestGet(path=<span class="jxr_string">"/{id}"</span>)
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<strong class="jxr_keyword">public</strong> JsonMap job(@Path(<span class="jxr_string">"id"</span>) String id) {
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">if</strong> (asyncJobRegistry().get(id).isEmpty())
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"Unknown job '%s'"</span>, id);
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		<strong class="jxr_keyword">return</strong> state(id);
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	}
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 	<strong class="jxr_keyword">private</strong> JsonMap state(String id) {
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">var</strong> j = asyncJobRegistry().get(id);
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		<strong class="jxr_keyword">if</strong> (j.isEmpty())
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 			<strong class="jxr_keyword">return</strong> JsonMap.of(<span class="jxr_string">"state"</span>, <span class="jxr_string">"EXPIRED"</span>);
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		<strong class="jxr_keyword">return</strong> j.get().isTerminal()
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 			? JsonMap.of(<span class="jxr_string">"state"</span>, <span class="jxr_string">"DONE"</span>, <span class="jxr_string">"result"</span>, j.get().result())
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 			: JsonMap.of(<span class="jxr_string">"state"</span>, <span class="jxr_string">"RUNNING"</span>);
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	}
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	@Override <em class="jxr_comment">/* TerminalMixin */</em>
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;TerminalSource&gt; terminalSource(String id, RestRequest req) {
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 		<strong class="jxr_keyword">return</strong> groomRuns().source(id); <em class="jxr_comment">// The run id is an unguessable 128-bit secret; knowing it is the access rule.</em>
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 	}
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * The Groom dialog's form source.</em>
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 * @return The modal.</em>
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	@RestGet(path=<span class="jxr_string">"/groom-form"</span>)
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 	<strong class="jxr_keyword">public</strong> ModalDef groomForm() {
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		<strong class="jxr_keyword">var</strong> form = FormDef.create();
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		form.field(FormDef.Input.of(<span class="jxr_string">"pet"</span>, <span class="jxr_string">"Pet name"</span>, <span class="jxr_string">"text"</span>).value(<span class="jxr_string">"Rex"</span>));
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		form.field(FormDef.Input.of(<span class="jxr_string">"verbose"</span>, <span class="jxr_string">"Verbose (8000 extra lines)"</span>, <span class="jxr_string">"checkbox"</span>));
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">return</strong> ModalDef.create(<span class="jxr_string">"Groom a pet"</span>).form(form)
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 			.idempotencyKey(IdempotencyKey.mintSelfTargeted(GROOM_JOB).value()).selfTargeted(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	}
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 * Starts a groom run.</em>
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">	 * Accepts the API form {@code {pet, verbose}} or the dialog form {@code {action, targetId, idempotencyKey,</em>
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> <em class="jxr_javadoccomment">	 * fields:{pet, verbose}}}; a resubmit with the same {@code idempotencyKey} returns the same run.</em>
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 * @param json The body.</em>
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 * @return The new run's row.</em>
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 * @throws IOException If the run's temp file cannot be created.</em>
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	@RestPost(path=<span class="jxr_string">"/groom"</span>)
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 	<strong class="jxr_keyword">public</strong> ActionResult groom(@Content JsonMap json) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">var</strong> fields = json.getMap(<span class="jxr_string">"fields"</span>);
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">var</strong> src = fields != <strong class="jxr_keyword">null</strong> ? fields : json;
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">var</strong> run = groomRuns().start(src.getString(<span class="jxr_string">"pet"</span>), isOn(src.get(<span class="jxr_string">"verbose"</span>)), json.getString(<span class="jxr_string">"idempotencyKey"</span>));
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		<strong class="jxr_keyword">return</strong> ActionResult.success(run.row()).message(f(<span class="jxr_string">"Grooming %s"</span>, run.pet()));
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 	}
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isOn(Object v) {
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<strong class="jxr_keyword">var</strong> s = v == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : String.valueOf(v);
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"true"</span>.equals(s) || <span class="jxr_string">"on"</span>.equals(s);
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	}
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">	 * @return The groom runs, newest first.</em>
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 	@RestGet(path=<span class="jxr_string">"/groom-rows"</span>)
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 	<strong class="jxr_keyword">public</strong> List&lt;JsonMap&gt; groomRows() {
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<strong class="jxr_keyword">return</strong> groomRuns().list().stream().map(GroomRuns.Run::row).toList();
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 	}
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	<em class="jxr_comment">// Row jobs: a key bound to one row, issued by the server and checked on submit.</em>
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">	 * @return One row per species: {@code {id, species, available}}.</em>
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	@RestGet(path=<span class="jxr_string">"/species"</span>)
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	<strong class="jxr_keyword">public</strong> List&lt;JsonMap&gt; speciesRows() {
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(Species.values()).map(<strong class="jxr_keyword">this</strong>::speciesRow).toList();
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	}
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 * A species row's detail panel.</em>
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 * @param id The species name, for example {@code DOG}.</em>
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">	 * @return {@code {contractVersion, fields:{available, lastRestock}}}.</em>
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the species is unknown.</em>
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 	@RestGet(path=<span class="jxr_string">"/species/{id}"</span>)
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 	<strong class="jxr_keyword">public</strong> JsonMap speciesDetail(@Path(<span class="jxr_string">"id"</span>) String id) {
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<strong class="jxr_keyword">var</strong> s = species(id);
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		<strong class="jxr_keyword">var</strong> last = lastRestock.get(s);
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		<strong class="jxr_keyword">var</strong> fields = <strong class="jxr_keyword">new</strong> JsonMap().append(<span class="jxr_string">"available"</span>, available(s)).append(<span class="jxr_string">"lastRestock"</span>, last == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : last.toString());
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		<strong class="jxr_keyword">return</strong> RowDetail.response(fields);
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 	}
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> <em class="jxr_javadoccomment">	 * Issues a restock key bound to one species and the caller.</em>
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> <em class="jxr_javadoccomment">	 * A POST, so it sits behind the console's CSRF boundary like every other console write; it changes nothing but the</em>
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> <em class="jxr_javadoccomment">	 * key ledger.</em>
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> <em class="jxr_javadoccomment">	 * @param req The request.</em>
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> <em class="jxr_javadoccomment">	 * @param id The species name.</em>
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">	 * @return {@code {contractVersion, action, targetId, idempotencyKey}}.</em>
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the species is unknown.</em>
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 	@RestPost(path=<span class="jxr_string">"/species/{id}/key"</span>)
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; speciesKey(RestRequest req, @Path(<span class="jxr_string">"id"</span>) String id) {
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">var</strong> s = species(id);
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		<strong class="jxr_keyword">return</strong> JobKeyLedger.response(jobKeys().issue(RESTOCK_SPECIES, s.name(), ConsoleWrites.actor(req)));
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 	}
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> <em class="jxr_javadoccomment">	 * Restocks one species from its row's detail panel.</em>
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">	 * The species is the path's {@code {id}}, which must equal the body's {@code targetId}, which the key must be bound</em>
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">	 * to.  The body's {@code fields} supply only {@code count}; any other field (the panel's hidden {@code species}</em>
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">	 * included) is ignored.  A replay of a claimed key returns the same job, or a {@link JobKeyLedger#SPENT_CODE}</em>
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> <em class="jxr_javadoccomment">	 * refusal once the registry has aged the job out.</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> TerminalDef terminal(String id, String terminalId, String title) {
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">var</strong> def = TerminalDef.forMixin(id, MOUNT, terminalId).title(title);
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		def.inputId = <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// Output only: the groom terminals take no keystrokes.</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">return</strong> def.validate();
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	}
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 * The restock dialog's form source: a read-only GET returning the modal with a freshly minted self-targeted key.</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 * The dialog is the plain restock, so it asks only for counts and always runs with no wait and the default</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 * {@value #DEFAULT_HOLD_MS} ms hold.  The timing knobs ({@code slowMs}, {@code holdMs}) belong to the job-log card,</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 * which exists to demonstrate cancelling before and after the effect.</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 * @return The modal.</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	@RestGet(path=<span class="jxr_string">"/restock-form"</span>)
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	<strong class="jxr_keyword">public</strong> ModalDef restockForm() {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">var</strong> form = FormDef.create();
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : Species.values())
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			form.field(FormDef.Input.of(s.name(), s.name().charAt(0) + s.name().substring(1).toLowerCase() + <span class="jxr_string">" (0-50)"</span>, <span class="jxr_string">"text"</span>).value(<span class="jxr_string">"0"</span>));
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">return</strong> ModalDef.create(<span class="jxr_string">"Restock the store"</span>).form(form)
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			.idempotencyKey(IdempotencyKey.mintSelfTargeted(ACTION).value()).selfTargeted(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 * @return Submitted jobs, newest first, with their current state.</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	@RestGet(path=<span class="jxr_string">"/rows"</span>)
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	<strong class="jxr_keyword">public</strong> List&lt;JsonMap&gt; rows() {
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<strong class="jxr_keyword">return</strong> submitted.stream().map(x -&gt; {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<strong class="jxr_keyword">var</strong> row = <strong class="jxr_keyword">new</strong> JsonMap(state(x.getString(<span class="jxr_string">"jobId"</span>))).append(x);
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			row.remove(<span class="jxr_string">"idempotencyKey"</span>);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">return</strong> row;
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		}).toList();
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	}
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * Submits a restock.</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * @param req The request.</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * @param res The response (202).</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * @param json The restock body (see {@link Restock#of(JsonMap)}).</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * @return The job ref (202), or a 429 {@code app:job-limit} refusal whose message names the running count, so a</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * 	JSON client such as the job-log card can show it.</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * @throws BadRequest On a missing key, an out-of-range count, or a bad {@code slowMs} or {@code holdMs} (see</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 * 	{@link Restock#of(JsonMap)}).</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	@RestPost(path=<span class="jxr_string">"/restock"</span>)
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	<strong class="jxr_keyword">public</strong> Object restock(RestRequest req, RestResponse res, @Content JsonMap json) {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">var</strong> actor = ConsoleWrites.actor(req);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">var</strong> body = Restock.of(json);
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">var</strong> k = body.idempotencyKey();
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">if</strong> (ib(k))
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Missing 'idempotencyKey'"</span>);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> key = IdempotencyKey.of(k, ACTION, k.equals(json.getString(<span class="jxr_string">"targetId"</span>)) ? k : ACTION);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">if</strong> (body.perSpecies().isEmpty())
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Nothing to restock"</span>);
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		body.perSpecies().forEach((s, n) -&gt; {
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">if</strong> (n == <strong class="jxr_keyword">null</strong> || n &lt; 1 || n &gt; 50)
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Count for '%s' must be between 1 and 50"</span>, s);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		});
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">var</strong> limit = Integer.getInteger(LIMIT_PROPERTY, 2);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">var</strong> registry = asyncJobRegistry();
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		AsyncJob job;
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">synchronized</strong> (submitted) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<em class="jxr_comment">// Resolve the idempotency key first: a replay returns its existing job and never counts against the limit.</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			<strong class="jxr_keyword">var</strong> prior = submitted.stream().filter(x -&gt; k.equals(x.getString(<span class="jxr_string">"idempotencyKey"</span>))).findFirst();
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			job = prior.flatMap(x -&gt; registry.get(x.getString(<span class="jxr_string">"jobId"</span>))).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<strong class="jxr_keyword">if</strong> (job == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 				prior.ifPresent(submitted::remove); <em class="jxr_comment">// The job aged out of the registry; this is a fresh submission.</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 				<strong class="jxr_keyword">var</strong> created = registry.runningCount() &gt;= limit ? <strong class="jxr_keyword">null</strong> : registry.tryCreate(key).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 				<strong class="jxr_keyword">if</strong> (created == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 					<strong class="jxr_keyword">return</strong> limitReached(res, registry.runningCount());
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 				job = created;
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 				submitted.addFirst(JsonMap.of(<span class="jxr_string">"jobId"</span>, created.id(), <span class="jxr_string">"submitted"</span>, created.createdAt().toString(), <span class="jxr_string">"request"</span>, body.perSpecies(), <span class="jxr_string">"idempotencyKey"</span>, k));
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 				<strong class="jxr_keyword">while</strong> (submitted.size() &gt; MAX_SUBMITTED)
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 					submitted.removeLast();
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 				pool.execute(() -&gt; run(created, body, () -&gt; store().restock(body.perSpecies(), <span class="jxr_string">"job:restock:"</span> + actor)));
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			}
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		}
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		res.setStatus(202);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">return</strong> AsyncJobRef.of(job);
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	}
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ActionResult limitReached(RestResponse res, <strong class="jxr_keyword">int</strong> running) {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		res.setStatus(429);
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">return</strong> ActionResult.refusal(<span class="jxr_string">"app:job-limit"</span>).message(f(<span class="jxr_string">"Job limit reached; '%s' running"</span>, running));
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	}
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 * Runs one restock: the optional slow wait (cancellable, nothing changed yet), the restock itself, then the</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * after-effect hold.  Every step stops as soon as the job has settled (a cancel or the hard timeout).</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 * @param job The job.</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * @param body The restock.</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * @param effect The restock itself; returns the added pets.</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> run(<a name="AsyncJob" href="../../../../../../org/apache/juneau/console/views/AsyncJob.html#AsyncJob">AsyncJob</a> job, Restock body, Supplier&lt;List&lt;Pet&gt;&gt; effect) {
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		run(job, body, effect, () -&gt; <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * Same as {@link #run(AsyncJob, Restock, Supplier)}, but the success result carries a value, read after the</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 * effect: a row job returns its row's new state, which the card's {@code output} writes back into the row.</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * @param job The job.</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * @param body The restock.</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * @param effect The restock itself; returns the added pets.</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * @param value The success result's value.</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> run(<a name="AsyncJob" href="../../../../../../org/apache/juneau/console/views/AsyncJob.html#AsyncJob">AsyncJob</a> job, Restock body, Supplier&lt;List&lt;Pet&gt;&gt; effect, Supplier&lt;Object&gt; value) {
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			<strong class="jxr_keyword">if</strong> (body.slowMs() &gt; 0) {
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 				job.progress(f(<span class="jxr_string">"Waiting %s ms before restocking"</span>, body.slowMs()));
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 				<strong class="jxr_keyword">if</strong> (! hold(job, body.slowMs()))
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 					<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			}
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			<em class="jxr_comment">// One lock acquisition, shared with cancel and the timeout: a job settled after the wait is left as it was.</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<strong class="jxr_keyword">if</strong> (! job.markEffectStarted())
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<strong class="jxr_keyword">var</strong> total = body.perSpecies().values().stream().mapToInt(Integer::intValue).sum();
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			job.progress(f(<span class="jxr_string">"Restocking %s pets"</span>, total));
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 			<strong class="jxr_keyword">var</strong> pets = effect.get();
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 			pets.forEach(p -&gt; job.progress(f(<span class="jxr_string">"Added %s"</span>, p.getName())));
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 			<strong class="jxr_keyword">if</strong> (hold(job, body.holdMs()))
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 				job.complete(ActionResult.success(value.get()).message(f(<span class="jxr_string">"Restocked %s pets"</span>, pets.size())));
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 		} <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			Thread.currentThread().interrupt();
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			job.complete(ActionResult.unknown().message(<span class="jxr_string">"Interrupted"</span>));
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 			job.complete(ActionResult.failure().message(e.getMessage()));
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		}
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	}
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 	<em class="jxr_javadoccomment">/** Sleeps in short steps; returns &lt;jk&gt;false&lt;/jk&gt; as soon as the job has settled. */</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> hold(<a name="AsyncJob" href="../../../../../../org/apache/juneau/console/views/AsyncJob.html#AsyncJob">AsyncJob</a> job, <strong class="jxr_keyword">long</strong> ms) <strong class="jxr_keyword">throws</strong> InterruptedException {
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> left = ms; left &gt; 0; left -= SLOW_STEP_MS) {
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			<strong class="jxr_keyword">if</strong> (job.isTerminal())
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 			Thread.sleep(Math.min(SLOW_STEP_MS, left));
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		}
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<strong class="jxr_keyword">return</strong> ! job.isTerminal();
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	}
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 * @param id The job id.</em>
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">	 * @return {@code {state: RUNNING|DONE, result}}.</em>
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the job is unknown or has aged out.</em>
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 	@RestGet(path=<span class="jxr_string">"/{id}"</span>)
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 	<strong class="jxr_keyword">public</strong> JsonMap job(@Path(<span class="jxr_string">"id"</span>) String id) {
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">if</strong> (asyncJobRegistry().get(id).isEmpty())
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"Unknown job '%s'"</span>, id);
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		<strong class="jxr_keyword">return</strong> state(id);
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 	}
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 	<strong class="jxr_keyword">private</strong> JsonMap state(String id) {
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		<strong class="jxr_keyword">var</strong> j = asyncJobRegistry().get(id);
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		<strong class="jxr_keyword">if</strong> (j.isEmpty())
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 			<strong class="jxr_keyword">return</strong> JsonMap.of(<span class="jxr_string">"state"</span>, <span class="jxr_string">"EXPIRED"</span>);
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		<strong class="jxr_keyword">return</strong> j.get().isTerminal()
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 			? JsonMap.of(<span class="jxr_string">"state"</span>, <span class="jxr_string">"DONE"</span>, <span class="jxr_string">"result"</span>, j.get().result())
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 			: JsonMap.of(<span class="jxr_string">"state"</span>, <span class="jxr_string">"RUNNING"</span>);
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	}
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	@Override <em class="jxr_comment">/* TerminalMixin */</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;TerminalSource&gt; terminalSource(String id, RestRequest req) {
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<strong class="jxr_keyword">return</strong> groomRuns().source(id); <em class="jxr_comment">// The run id is an unguessable 128-bit secret; knowing it is the access rule.</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 	}
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">	 * The Groom dialog's form source.</em>
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">	 * @return The modal.</em>
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 	@RestGet(path=<span class="jxr_string">"/groom-form"</span>)
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	<strong class="jxr_keyword">public</strong> ModalDef groomForm() {
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<strong class="jxr_keyword">var</strong> form = FormDef.create();
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		form.field(FormDef.Input.of(<span class="jxr_string">"pet"</span>, <span class="jxr_string">"Pet name"</span>, <span class="jxr_string">"text"</span>).value(<span class="jxr_string">"Rex"</span>));
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		form.field(FormDef.Input.of(<span class="jxr_string">"verbose"</span>, <span class="jxr_string">"Verbose (8000 extra lines)"</span>, <span class="jxr_string">"checkbox"</span>));
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">return</strong> ModalDef.create(<span class="jxr_string">"Groom a pet"</span>).form(form)
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			.idempotencyKey(IdempotencyKey.mintSelfTargeted(GROOM_JOB).value()).selfTargeted(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	}
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 * Starts a groom run.</em>
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">	 * Accepts the API form {@code {pet, verbose}} or the dialog form {@code {action, targetId, idempotencyKey,</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">	 * fields:{pet, verbose}}}; a resubmit with the same {@code idempotencyKey} returns the same run.</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">	 * @param json The body.</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">	 * @return The new run's row.</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">	 * @throws IOException If the run's temp file cannot be created.</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 	@RestPost(path=<span class="jxr_string">"/groom"</span>)
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 	<strong class="jxr_keyword">public</strong> ActionResult groom(@Content JsonMap json) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">var</strong> fields = json.getMap(<span class="jxr_string">"fields"</span>);
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<strong class="jxr_keyword">var</strong> src = fields != <strong class="jxr_keyword">null</strong> ? fields : json;
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">var</strong> run = groomRuns().start(src.getString(<span class="jxr_string">"pet"</span>), isOn(src.get(<span class="jxr_string">"verbose"</span>)), json.getString(<span class="jxr_string">"idempotencyKey"</span>));
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">return</strong> ActionResult.success(run.row()).message(f(<span class="jxr_string">"Grooming %s"</span>, run.pet()));
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	}
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isOn(Object v) {
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">var</strong> s = v == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : String.valueOf(v);
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"true"</span>.equals(s) || <span class="jxr_string">"on"</span>.equals(s);
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 	}
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> <em class="jxr_javadoccomment">	 * @return The groom runs, newest first.</em>
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	@RestGet(path=<span class="jxr_string">"/groom-rows"</span>)
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	<strong class="jxr_keyword">public</strong> List&lt;JsonMap&gt; groomRows() {
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">return</strong> groomRuns().list().stream().map(GroomRuns.Run::row).toList();
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 	}
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	<em class="jxr_comment">// Row jobs: a key bound to one row, issued by the server and checked on submit.</em>
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">	 * @return One row per species: {@code {id, species, available}}.</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	@RestGet(path=<span class="jxr_string">"/species"</span>)
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	<strong class="jxr_keyword">public</strong> List&lt;JsonMap&gt; speciesRows() {
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(Species.values()).map(<strong class="jxr_keyword">this</strong>::speciesRow).toList();
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	}
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> <em class="jxr_javadoccomment">	 * A species row's detail panel.</em>
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> <em class="jxr_javadoccomment">	 * @param id The species name, for example {@code DOG}.</em>
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> <em class="jxr_javadoccomment">	 * @return {@code {contractVersion, fields:{available, lastRestock}}}.</em>
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the species is unknown.</em>
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 	@RestGet(path=<span class="jxr_string">"/species/{id}"</span>)
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 	<strong class="jxr_keyword">public</strong> JsonMap speciesDetail(@Path(<span class="jxr_string">"id"</span>) String id) {
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		<strong class="jxr_keyword">var</strong> s = species(id);
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 		<strong class="jxr_keyword">var</strong> last = lastRestock.get(s);
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">var</strong> fields = <strong class="jxr_keyword">new</strong> JsonMap().append(<span class="jxr_string">"available"</span>, available(s)).append(<span class="jxr_string">"lastRestock"</span>, last == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : last.toString());
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">return</strong> RowDetail.response(fields);
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 	}
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> <em class="jxr_javadoccomment">	 * Issues a restock key bound to one species and the caller.</em>
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">	 * A POST, so it sits behind the console's CSRF boundary like every other console write; it changes nothing but the</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">	 * key ledger.</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">	 * @param req The request.</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">	 * @param id The species name.</em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">	 * @return {@code {contractVersion, action, targetId, idempotencyKey}}.</em>
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the species is unknown.</em>
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 	@RestPost(path=<span class="jxr_string">"/species/{id}/key"</span>)
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; speciesKey(RestRequest req, @Path(<span class="jxr_string">"id"</span>) String id) {
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<strong class="jxr_keyword">var</strong> s = species(id);
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<strong class="jxr_keyword">return</strong> JobKeyLedger.response(jobKeys().issue(RESTOCK_SPECIES, s.name(), ConsoleWrites.actor(req)));
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 	}
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> <em class="jxr_javadoccomment">	 * Restocks one species from its row's detail panel.</em>
 <a class="jxr_linenumber" name="L625" href="#L625">625</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> <em class="jxr_javadoccomment">	 * @param req The request.</em>
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> <em class="jxr_javadoccomment">	 * @param res The response (202, or 409 on a refusal).</em>
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> <em class="jxr_javadoccomment">	 * @param id The species name.</em>
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> <em class="jxr_javadoccomment">	 * @param json The action envelope {@code {action, targetId, idempotencyKey, fields:{count}}}.</em>
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">	 * @return The job ref (202), a 409 refusal, or a 429 {@code app:job-limit} refusal.</em>
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the species is unknown.</em>
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">	 * @throws BadRequest If the envelope is malformed or {@code count} is not a whole number 1-50.</em>
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 	@RestPost(path=<span class="jxr_string">"/species/{id}/restock"</span>)
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	<strong class="jxr_keyword">public</strong> Object restockSpecies(RestRequest req, RestResponse res, @Path(<span class="jxr_string">"id"</span>) String id, @Content JsonMap json) {
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<strong class="jxr_keyword">var</strong> s = species(id);
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		<strong class="jxr_keyword">var</strong> submit = RowJobSubmit.parse(json);
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 		<strong class="jxr_keyword">if</strong> (! s.name().equals(submit.targetId()))
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 			<strong class="jxr_keyword">return</strong> refused(res, RowJobSubmit.bindingRefusal());
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		<strong class="jxr_keyword">var</strong> actor = ConsoleWrites.actor(req);
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<strong class="jxr_keyword">var</strong> ledger = jobKeys();
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">var</strong> registry = asyncJobRegistry();
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		AsyncJob job;
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<em class="jxr_comment">// The ledger's own monitor: the verify that reads the claim and the claim itself happen under one lock, so of</em>
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		<em class="jxr_comment">// two concurrent submits of one key the second sees the first's job and replays it instead of starting it again.</em>
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">synchronized</strong> (ledger) {
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			<strong class="jxr_keyword">var</strong> grant = submit.verify(ledger, RESTOCK_SPECIES, actor).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 			<strong class="jxr_keyword">if</strong> (grant == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 				<strong class="jxr_keyword">return</strong> refused(res, RowJobSubmit.bindingRefusal());
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 			<strong class="jxr_keyword">var</strong> claimed = grant.jobId().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 			<strong class="jxr_keyword">if</strong> (claimed != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 				<strong class="jxr_keyword">var</strong> r = replay(claimed, registry);
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 				res.setStatus(r instanceof ActionResult ? RowJobSubmit.REFUSAL_STATUS : 202);
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 				<strong class="jxr_keyword">return</strong> r;
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 			}
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			<em class="jxr_comment">// After the replay check: a replay answers its job even if this resubmit's fields have changed.</em>
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			<strong class="jxr_keyword">var</strong> body = <strong class="jxr_keyword">new</strong> Restock(Map.of(s, count(submit.fields())), grant.key().value(), 0,
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 				Math.max(0, Math.min(speciesHold != <strong class="jxr_keyword">null</strong> ? (<strong class="jxr_keyword">int</strong>) speciesHold.value().toMillis() : Integer.getInteger(SPECIES_HOLD_PROPERTY, DEFAULT_HOLD_MS), MAX_HOLD_MS)));
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 			<strong class="jxr_keyword">var</strong> created = registry.runningCount() &gt;= Integer.getInteger(LIMIT_PROPERTY, 2) ? <strong class="jxr_keyword">null</strong> : registry.tryCreate(grant.key()).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			<strong class="jxr_keyword">if</strong> (created == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 				<strong class="jxr_keyword">return</strong> limitReached(res, registry.runningCount());
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			ledger.claim(grant.key(), created.id());
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			job = created;
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 			remember(created, body);
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			pool.execute(() -&gt; run(created, body, () -&gt; restocked(s, body, actor), () -&gt; speciesRow(s)));
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 		}
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		res.setStatus(202);
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		<strong class="jxr_keyword">return</strong> AsyncJobRef.of(job);
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	}
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">	 * A claimed key's replay: its job's ref, or a {@link JobKeyLedger#SPENT_CODE} refusal once the registry has reaped</em>
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">	 * the job.  Never a second job: the key was spent on the first.</em>
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 * @param jobId The job the key was claimed for.</em>
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">	 * @param registry The registry.</em>
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">	 * @return The {@link AsyncJobRef}, or the refusal.</em>
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	<strong class="jxr_keyword">static</strong> Object replay(String jobId, <a name="AsyncJobRegistry" href="../../../../../../org/apache/juneau/console/views/AsyncJobRegistry.html#AsyncJobRegistry">AsyncJobRegistry</a> registry) {
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">return</strong> registry.get(jobId).&lt;Object&gt;map(AsyncJobRef::of)
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 			.orElseGet(() -&gt; ActionResult.refusal(JobKeyLedger.SPENT_CODE).message(<span class="jxr_string">"This key's job has aged out; fetch a new key"</span>));
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	}
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 	<strong class="jxr_keyword">private</strong> List&lt;Pet&gt; restocked(<a name="Species" href="../../../../../../org/apache/juneau/petstore/dto/Species.html#Species">Species</a> s, Restock body, String actor) {
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		<strong class="jxr_keyword">var</strong> pets = store().restock(body.perSpecies(), <span class="jxr_string">"job:restock-species:"</span> + actor);
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		lastRestock.put(s, PetstoreSeed.now());
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<strong class="jxr_keyword">return</strong> pets;
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> <em class="jxr_javadoccomment">	 * The species is the path's {@code {id}}, which must equal the body's {@code targetId}, which the key must be bound</em>
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> <em class="jxr_javadoccomment">	 * to.  The body's {@code fields} supply only {@code count}; any other field (the panel's hidden {@code species}</em>
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> <em class="jxr_javadoccomment">	 * included) is ignored.  A replay of a claimed key returns the same job, or a {@link JobKeyLedger#SPENT_CODE}</em>
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">	 * refusal once the registry has aged the job out.</em>
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">	 * @param req The request.</em>
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 * @param res The response (202, or 409 on a refusal).</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">	 * @param id The species name.</em>
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">	 * @param json The action envelope {@code {action, targetId, idempotencyKey, fields:{count}}}.</em>
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">	 * @return The job ref (202), a 409 refusal, or a 429 {@code app:job-limit} refusal.</em>
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the species is unknown.</em>
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> <em class="jxr_javadoccomment">	 * @throws BadRequest If the envelope is malformed or {@code count} is not a whole number 1-50.</em>
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	@RestPost(path=<span class="jxr_string">"/species/{id}/restock"</span>)
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 	<strong class="jxr_keyword">public</strong> Object restockSpecies(RestRequest req, RestResponse res, @Path(<span class="jxr_string">"id"</span>) String id, @Content JsonMap json) {
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">var</strong> s = species(id);
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		<strong class="jxr_keyword">var</strong> submit = RowJobSubmit.parse(json);
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<strong class="jxr_keyword">if</strong> (! s.name().equals(submit.targetId()))
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			<strong class="jxr_keyword">return</strong> refused(res, RowJobSubmit.bindingRefusal());
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">var</strong> actor = ConsoleWrites.actor(req);
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 		<strong class="jxr_keyword">var</strong> ledger = jobKeys();
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		<strong class="jxr_keyword">var</strong> registry = asyncJobRegistry();
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 		AsyncJob job;
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		<em class="jxr_comment">// The ledger's own monitor: the verify that reads the claim and the claim itself happen under one lock, so of</em>
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 		<em class="jxr_comment">// two concurrent submits of one key the second sees the first's job and replays it instead of starting it again.</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		<strong class="jxr_keyword">synchronized</strong> (ledger) {
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			<strong class="jxr_keyword">var</strong> grant = submit.verify(ledger, RESTOCK_SPECIES, actor).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			<strong class="jxr_keyword">if</strong> (grant == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 				<strong class="jxr_keyword">return</strong> refused(res, RowJobSubmit.bindingRefusal());
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			<strong class="jxr_keyword">var</strong> claimed = grant.jobId().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			<strong class="jxr_keyword">if</strong> (claimed != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 				<strong class="jxr_keyword">var</strong> r = replay(claimed, registry);
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 				res.setStatus(r instanceof ActionResult ? RowJobSubmit.REFUSAL_STATUS : 202);
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 				<strong class="jxr_keyword">return</strong> r;
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 			}
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			<em class="jxr_comment">// After the replay check: a replay answers its job even if this resubmit's fields have changed.</em>
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			<strong class="jxr_keyword">var</strong> body = <strong class="jxr_keyword">new</strong> Restock(Map.of(s, count(submit.fields())), grant.key().value(), 0,
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 				Math.max(0, Math.min(speciesHold != <strong class="jxr_keyword">null</strong> ? (<strong class="jxr_keyword">int</strong>) speciesHold.value().toMillis() : Integer.getInteger(SPECIES_HOLD_PROPERTY, DEFAULT_HOLD_MS), MAX_HOLD_MS)));
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			<strong class="jxr_keyword">var</strong> created = registry.runningCount() &gt;= Integer.getInteger(LIMIT_PROPERTY, 2) ? <strong class="jxr_keyword">null</strong> : registry.tryCreate(grant.key()).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			<strong class="jxr_keyword">if</strong> (created == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 				<strong class="jxr_keyword">return</strong> limitReached(res, registry.runningCount());
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 			ledger.claim(grant.key(), created.id());
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 			job = created;
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 			remember(created, body);
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 			pool.execute(() -&gt; run(created, body, () -&gt; restocked(s, body, actor), () -&gt; speciesRow(s)));
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 		}
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		res.setStatus(202);
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<strong class="jxr_keyword">return</strong> AsyncJobRef.of(job);
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 	}
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">	 * A claimed key's replay: its job's ref, or a {@link JobKeyLedger#SPENT_CODE} refusal once the registry has reaped</em>
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">	 * the job.  Never a second job: the key was spent on the first.</em>
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">	 * @param jobId The job the key was claimed for.</em>
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">	 * @param registry The registry.</em>
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> <em class="jxr_javadoccomment">	 * @return The {@link AsyncJobRef}, or the refusal.</em>
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	<strong class="jxr_keyword">static</strong> Object replay(String jobId, <a name="AsyncJobRegistry" href="../../../../../../org/apache/juneau/console/views/AsyncJobRegistry.html#AsyncJobRegistry">AsyncJobRegistry</a> registry) {
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		<strong class="jxr_keyword">return</strong> registry.get(jobId).&lt;Object&gt;map(AsyncJobRef::of)
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 			.orElseGet(() -&gt; ActionResult.refusal(JobKeyLedger.SPENT_CODE).message(<span class="jxr_string">"This key's job has aged out; fetch a new key"</span>));
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 	}
 <a class="jxr_linenumber" name="L689" href="#L689">689</a> 
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> <em class="jxr_javadoccomment">	 * A groom run's detail panel.</em>
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> <em class="jxr_javadoccomment">	 * @param id The run id.</em>
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> <em class="jxr_javadoccomment">	 * @return {@code {contractVersion, fields:&lt;the run's row&gt;}}.</em>
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the run is unknown.</em>
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> 	@RestGet(path=<span class="jxr_string">"/groom-runs/{id}"</span>)
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 	<strong class="jxr_keyword">public</strong> JsonMap groomRunDetail(@Path(<span class="jxr_string">"id"</span>) String id) {
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> 		<strong class="jxr_keyword">return</strong> RowDetail.response(groomRun(id).row());
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 	}
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">	 * Issues a regroom key bound to one groom run and the caller.</em>
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">	 * @param req The request.</em>
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">	 * @param id The run id.</em>
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">	 * @return {@code {contractVersion, action, targetId, idempotencyKey}}.</em>
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the run is unknown.</em>
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 	@RestPost(path=<span class="jxr_string">"/groom-runs/{id}/key"</span>)
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; groomRunKey(RestRequest req, @Path(<span class="jxr_string">"id"</span>) String id) {
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">var</strong> r = groomRun(id);
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		<strong class="jxr_keyword">return</strong> JobKeyLedger.response(jobKeys().issue(REGROOM, r.id(), ConsoleWrites.actor(req)));
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 	}
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> <em class="jxr_javadoccomment">	 * Grooms a run's pet again.</em>
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">	 * Ledger keys only, bound to the path's run: the pet comes from the server's run record, never the request.</em>
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">	 * {@code /groom} stays the dialog's self-targeted endpoint; one endpoint taking both kinds of key would be only as</em>
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> <em class="jxr_javadoccomment">	 * strong as the self-targeted one.  A replay returns the same new run while it is kept, then a</em>
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> <em class="jxr_javadoccomment">	 * {@link JobKeyLedger#SPENT_CODE} refusal once the run list has evicted it; never a second run.</em>
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 	<strong class="jxr_keyword">private</strong> List&lt;Pet&gt; restocked(<a name="Species" href="../../../../../../org/apache/juneau/petstore/dto/Species.html#Species">Species</a> s, Restock body, String actor) {
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">var</strong> pets = store().restock(body.perSpecies(), <span class="jxr_string">"job:restock-species:"</span> + actor);
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		lastRestock.put(s, PetstoreSeed.now());
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		<strong class="jxr_keyword">return</strong> pets;
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 	}
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> <em class="jxr_javadoccomment">	 * A groom run's detail panel.</em>
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> <em class="jxr_javadoccomment">	 * @param id The run id.</em>
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> <em class="jxr_javadoccomment">	 * @return {@code {contractVersion, fields:&lt;the run's row&gt;}}.</em>
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the run is unknown.</em>
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 	@RestGet(path=<span class="jxr_string">"/groom-runs/{id}"</span>)
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 	<strong class="jxr_keyword">public</strong> JsonMap groomRunDetail(@Path(<span class="jxr_string">"id"</span>) String id) {
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 		<strong class="jxr_keyword">return</strong> RowDetail.response(groomRun(id).row());
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 	}
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">	 * Issues a regroom key bound to one groom run and the caller.</em>
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> <em class="jxr_javadoccomment">	 * @param req The request.</em>
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 * @param id The run id.</em>
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">	 * @return {@code {contractVersion, action, targetId, idempotencyKey}}.</em>
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the run is unknown.</em>
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 	@RestPost(path=<span class="jxr_string">"/groom-runs/{id}/key"</span>)
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; groomRunKey(RestRequest req, @Path(<span class="jxr_string">"id"</span>) String id) {
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		<strong class="jxr_keyword">var</strong> r = groomRun(id);
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 		<strong class="jxr_keyword">return</strong> JobKeyLedger.response(jobKeys().issue(REGROOM, r.id(), ConsoleWrites.actor(req)));
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 	}
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> <em class="jxr_javadoccomment">	 * Grooms a run's pet again.</em>
 <a class="jxr_linenumber" name="L724" href="#L724">724</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L725" href="#L725">725</a> <em class="jxr_javadoccomment">	 * @param req The request.</em>
-<a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">	 * @param res The response (409 on a refusal).</em>
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> <em class="jxr_javadoccomment">	 * @param id The run id.</em>
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> <em class="jxr_javadoccomment">	 * @param json The action envelope {@code {action, targetId, idempotencyKey}}.</em>
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">	 * @return The new run's row, or a 409 refusal.</em>
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the key is unclaimed and the run is unknown.</em>
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> <em class="jxr_javadoccomment">	 * @throws BadRequest If the envelope is malformed.</em>
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> <em class="jxr_javadoccomment">	 * @throws IOException If the new run's temp file cannot be created.</em>
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> 	@RestPost(path=<span class="jxr_string">"/groom-runs/{id}/regroom"</span>)
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> 	<strong class="jxr_keyword">public</strong> ActionResult regroom(RestRequest req, RestResponse res, @Path(<span class="jxr_string">"id"</span>) String id, @Content JsonMap json) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> 		<strong class="jxr_keyword">var</strong> submit = RowJobSubmit.parse(json);
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> 		<strong class="jxr_keyword">if</strong> (! id.equals(submit.targetId()))
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> 			<strong class="jxr_keyword">return</strong> refused(res, RowJobSubmit.bindingRefusal());
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> 		<strong class="jxr_keyword">var</strong> ledger = jobKeys();
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> 		<em class="jxr_comment">// As restockSpecies: the claim is read and recorded under the ledger's lock.  The replay check comes before the</em>
-<a class="jxr_linenumber" name="L741" href="#L741">741</a> 		<em class="jxr_comment">// run lookup, because GroomRuns evicts the oldest runs first and a replay must still answer once its target is gone.</em>
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> 		<strong class="jxr_keyword">synchronized</strong> (ledger) {
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> 			<strong class="jxr_keyword">var</strong> grant = submit.verify(ledger, REGROOM, ConsoleWrites.actor(req)).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> 			<strong class="jxr_keyword">if</strong> (grant == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> 				<strong class="jxr_keyword">return</strong> refused(res, RowJobSubmit.bindingRefusal());
-<a class="jxr_linenumber" name="L746" href="#L746">746</a> 			<strong class="jxr_keyword">var</strong> claimed = grant.jobId().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> 			<strong class="jxr_keyword">if</strong> (claimed != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> 				<strong class="jxr_keyword">return</strong> groomRuns().get(claimed).map(x -&gt; ActionResult.success(x.row()).message(f(<span class="jxr_string">"Grooming %s again"</span>, x.pet())))
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> 					.orElseGet(() -&gt; refused(res, ActionResult.refusal(JobKeyLedger.SPENT_CODE).message(<span class="jxr_string">"This key's run has aged out; fetch a new key"</span>)));
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> 			<strong class="jxr_keyword">var</strong> again = groomRuns().start(groomRun(id).pet(), false, grant.key().value());
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> 			ledger.claim(grant.key(), again.id());
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> 			<strong class="jxr_keyword">return</strong> ActionResult.success(again.row()).message(f(<span class="jxr_string">"Grooming %s again"</span>, again.pet()));
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> 		}
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> 	}
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> 
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ActionResult refused(RestResponse res, ActionResult refusal) {
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> 		res.setStatus(RowJobSubmit.REFUSAL_STATUS);
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		<strong class="jxr_keyword">return</strong> refusal;
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 	}
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> 
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> remember(<a name="AsyncJob" href="../../../../../../org/apache/juneau/console/views/AsyncJob.html#AsyncJob">AsyncJob</a> job, Restock body) {
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 		<strong class="jxr_keyword">synchronized</strong> (submitted) {
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> 			submitted.addFirst(JsonMap.of(<span class="jxr_string">"jobId"</span>, job.id(), <span class="jxr_string">"submitted"</span>, job.createdAt().toString(), <span class="jxr_string">"request"</span>, body.perSpecies(), <span class="jxr_string">"idempotencyKey"</span>, body.idempotencyKey()));
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 			<strong class="jxr_keyword">while</strong> (submitted.size() &gt; MAX_SUBMITTED)
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 				submitted.removeLast();
-<a class="jxr_linenumber" name="L766" href="#L766">766</a> 		}
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> 	}
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> 
-<a class="jxr_linenumber" name="L769" href="#L769">769</a> 	<strong class="jxr_keyword">private</strong> JsonMap speciesRow(<a name="Species" href="../../../../../../org/apache/juneau/petstore/dto/Species.html#Species">Species</a> s) {
-<a class="jxr_linenumber" name="L770" href="#L770">770</a> 		<strong class="jxr_keyword">return</strong> JsonMap.of(<span class="jxr_string">"id"</span>, s.name(), <span class="jxr_string">"species"</span>, s.name(), <span class="jxr_string">"available"</span>, available(s));
-<a class="jxr_linenumber" name="L771" href="#L771">771</a> 	}
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> 
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">long</strong> available(<a name="Species" href="../../../../../../org/apache/juneau/petstore/dto/Species.html#Species">Species</a> s) {
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> 		<strong class="jxr_keyword">return</strong> store().getPets().stream().filter(p -&gt; p.getSpecies() == s &amp;&amp; p.getStatus() == PetStatus.AVAILABLE).count();
-<a class="jxr_linenumber" name="L775" href="#L775">775</a> 	}
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> 
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="Species" href="../../../../../../org/apache/juneau/petstore/dto/Species.html#Species">Species</a> species(String id) {
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : Species.values())
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> 			<strong class="jxr_keyword">if</strong> (s.name().equals(id))
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> 				<strong class="jxr_keyword">return</strong> s;
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"Unknown species '%s'"</span>, id);
-<a class="jxr_linenumber" name="L782" href="#L782">782</a> 	}
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> 
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 	<strong class="jxr_keyword">private</strong> GroomRuns.Run groomRun(String id) {
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 		<strong class="jxr_keyword">return</strong> groomRuns().get(id).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"Unknown groom run '%s'"</span>, id));
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> 	}
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> count(JsonMap fields) {
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		<strong class="jxr_keyword">var</strong> v = fields == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : fields.get(<span class="jxr_string">"count"</span>);
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 			<strong class="jxr_keyword">var</strong> n = v == <strong class="jxr_keyword">null</strong> ? 0 : Integer.parseInt(String.valueOf(v).trim());
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> 			<strong class="jxr_keyword">if</strong> (n &gt;= 1 &amp;&amp; n &lt;= 50)
-<a class="jxr_linenumber" name="L793" href="#L793">793</a> 				<strong class="jxr_keyword">return</strong> n;
-<a class="jxr_linenumber" name="L794" href="#L794">794</a> 		} <strong class="jxr_keyword">catch</strong> (NumberFormatException e) {
-<a class="jxr_linenumber" name="L795" href="#L795">795</a> 			<em class="jxr_comment">// Not a whole number (a decimal included): falls through to the 400 below.</em>
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		}
-<a class="jxr_linenumber" name="L797" href="#L797">797</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Field 'count' must be a whole number between 1 and 50"</span>);
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 	}
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> }
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">	 * Ledger keys only, bound to the path's run: the pet comes from the server's run record, never the request.</em>
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> <em class="jxr_javadoccomment">	 * {@code /groom} stays the dialog's self-targeted endpoint; one endpoint taking both kinds of key would be only as</em>
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> <em class="jxr_javadoccomment">	 * strong as the self-targeted one.  A replay returns the same new run while it is kept, then a</em>
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">	 * {@link JobKeyLedger#SPENT_CODE} refusal once the run list has evicted it; never a second run.</em>
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> <em class="jxr_javadoccomment">	 * @param req The request.</em>
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> <em class="jxr_javadoccomment">	 * @param res The response (409 on a refusal).</em>
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> <em class="jxr_javadoccomment">	 * @param id The run id.</em>
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> <em class="jxr_javadoccomment">	 * @param json The action envelope {@code {action, targetId, idempotencyKey}}.</em>
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> <em class="jxr_javadoccomment">	 * @return The new run's row, or a 409 refusal.</em>
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> <em class="jxr_javadoccomment">	 * @throws NotFound If the key is unclaimed and the run is unknown.</em>
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">	 * @throws BadRequest If the envelope is malformed.</em>
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> <em class="jxr_javadoccomment">	 * @throws IOException If the new run's temp file cannot be created.</em>
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 	@RestPost(path=<span class="jxr_string">"/groom-runs/{id}/regroom"</span>)
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 	<strong class="jxr_keyword">public</strong> ActionResult regroom(RestRequest req, RestResponse res, @Path(<span class="jxr_string">"id"</span>) String id, @Content JsonMap json) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 		<strong class="jxr_keyword">var</strong> submit = RowJobSubmit.parse(json);
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 		<strong class="jxr_keyword">if</strong> (! id.equals(submit.targetId()))
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 			<strong class="jxr_keyword">return</strong> refused(res, RowJobSubmit.bindingRefusal());
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 		<strong class="jxr_keyword">var</strong> ledger = jobKeys();
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 		<em class="jxr_comment">// As restockSpecies: the claim is read and recorded under the ledger's lock.  The replay check comes before the</em>
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 		<em class="jxr_comment">// run lookup, because GroomRuns evicts the oldest runs first and a replay must still answer once its target is gone.</em>
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 		<strong class="jxr_keyword">synchronized</strong> (ledger) {
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 			<strong class="jxr_keyword">var</strong> grant = submit.verify(ledger, REGROOM, ConsoleWrites.actor(req)).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 			<strong class="jxr_keyword">if</strong> (grant == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 				<strong class="jxr_keyword">return</strong> refused(res, RowJobSubmit.bindingRefusal());
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 			<strong class="jxr_keyword">var</strong> claimed = grant.jobId().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 			<strong class="jxr_keyword">if</strong> (claimed != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 				<strong class="jxr_keyword">return</strong> groomRuns().get(claimed).map(x -&gt; ActionResult.success(x.row()).message(f(<span class="jxr_string">"Grooming %s again"</span>, x.pet())))
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 					.orElseGet(() -&gt; refused(res, ActionResult.refusal(JobKeyLedger.SPENT_CODE).message(<span class="jxr_string">"This key's run has aged out; fetch a new key"</span>)));
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 			<strong class="jxr_keyword">var</strong> again = groomRuns().start(groomRun(id).pet(), false, grant.key().value());
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 			ledger.claim(grant.key(), again.id());
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 			<strong class="jxr_keyword">return</strong> ActionResult.success(again.row()).message(f(<span class="jxr_string">"Grooming %s again"</span>, again.pet()));
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		}
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 	}
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ActionResult refused(RestResponse res, ActionResult refusal) {
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 		res.setStatus(RowJobSubmit.REFUSAL_STATUS);
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		<strong class="jxr_keyword">return</strong> refusal;
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 	}
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> remember(<a name="AsyncJob" href="../../../../../../org/apache/juneau/console/views/AsyncJob.html#AsyncJob">AsyncJob</a> job, Restock body) {
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 		<strong class="jxr_keyword">synchronized</strong> (submitted) {
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 			submitted.addFirst(JsonMap.of(<span class="jxr_string">"jobId"</span>, job.id(), <span class="jxr_string">"submitted"</span>, job.createdAt().toString(), <span class="jxr_string">"request"</span>, body.perSpecies(), <span class="jxr_string">"idempotencyKey"</span>, body.idempotencyKey()));
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 			<strong class="jxr_keyword">while</strong> (submitted.size() &gt; MAX_SUBMITTED)
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 				submitted.removeLast();
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		}
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 	}
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 	<strong class="jxr_keyword">private</strong> JsonMap speciesRow(<a name="Species" href="../../../../../../org/apache/juneau/petstore/dto/Species.html#Species">Species</a> s) {
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 		<strong class="jxr_keyword">return</strong> JsonMap.of(<span class="jxr_string">"id"</span>, s.name(), <span class="jxr_string">"species"</span>, s.name(), <span class="jxr_string">"available"</span>, available(s));
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 	}
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">long</strong> available(<a name="Species" href="../../../../../../org/apache/juneau/petstore/dto/Species.html#Species">Species</a> s) {
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 		<strong class="jxr_keyword">return</strong> store().getPets().stream().filter(p -&gt; p.getSpecies() == s &amp;&amp; p.getStatus() == PetStatus.AVAILABLE).count();
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 	}
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="Species" href="../../../../../../org/apache/juneau/petstore/dto/Species.html#Species">Species</a> species(String id) {
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : Species.values())
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 			<strong class="jxr_keyword">if</strong> (s.name().equals(id))
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 				<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"Unknown species '%s'"</span>, id);
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 	}
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 	<strong class="jxr_keyword">private</strong> GroomRuns.Run groomRun(String id) {
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<strong class="jxr_keyword">return</strong> groomRuns().get(id).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"Unknown groom run '%s'"</span>, id));
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 	}
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> count(JsonMap fields) {
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 		<strong class="jxr_keyword">var</strong> v = fields == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : fields.get(<span class="jxr_string">"count"</span>);
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 			<strong class="jxr_keyword">var</strong> n = v == <strong class="jxr_keyword">null</strong> ? 0 : Integer.parseInt(String.valueOf(v).trim());
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 			<strong class="jxr_keyword">if</strong> (n &gt;= 1 &amp;&amp; n &lt;= 50)
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 				<strong class="jxr_keyword">return</strong> n;
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 		} <strong class="jxr_keyword">catch</strong> (NumberFormatException e) {
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 			<em class="jxr_comment">// Not a whole number (a decimal included): falls through to the 400 below.</em>
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 		}
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Field 'count' must be a whole number between 1 and 50"</span>);
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 	}
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

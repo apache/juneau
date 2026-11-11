@@ -99,39 +99,38 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  				<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  			<strong class="jxr_keyword">var</strong> kinds = <strong class="jxr_keyword">new</strong> HashMap&lt;String,String&gt;();
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  			<strong class="jxr_keyword">var</strong> blocks = <strong class="jxr_keyword">new</strong> HashMap&lt;String,ModelBlock&gt;();
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			<strong class="jxr_keyword">var</strong> last = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<strong class="jxr_keyword">var</strong> steps = (List&lt;Map&lt;String,Object&gt;&gt;)c.get(<span class="jxr_string">"build"</span>);
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<em class="jxr_comment">// Replay: each step must be accepted until the last one, which must be refused.</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; steps.size(); i++) {
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  				<strong class="jxr_keyword">var</strong> s = steps.get(i);
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  				<strong class="jxr_keyword">var</strong> ctor = (String)s.get(<span class="jxr_string">"ctor"</span>);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				<strong class="jxr_keyword">if</strong> (ctor != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 					<strong class="jxr_keyword">var</strong> k = kindOfCtor(ctor);
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 					<strong class="jxr_keyword">if</strong> (k != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 						kinds.put(<span class="jxr_string">"@"</span> + s.get(<span class="jxr_string">"as"</span>), k);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 						blocks.put(<span class="jxr_string">"@"</span> + s.get(<span class="jxr_string">"as"</span>), <strong class="jxr_keyword">new</strong> ModelBlock(k, ctor));
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 					}
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 					<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 				}
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 				<strong class="jxr_keyword">var</strong> on = (String)s.get(<span class="jxr_string">"on"</span>);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 				<strong class="jxr_keyword">var</strong> args = (List&lt;Object&gt;)s.get(<span class="jxr_string">"args"</span>);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				<strong class="jxr_keyword">var</strong> block = blocks.computeIfAbsent(on, p -&gt; <strong class="jxr_keyword">new</strong> ModelBlock(kinds.getOrDefault(p, kindOfPath(p)), p));
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 				Runnable r = <strong class="jxr_keyword">switch</strong> ((String)s.get(<span class="jxr_string">"call"</span>)) {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 					<strong class="jxr_keyword">case</strong> <span class="jxr_string">"bind"</span> -&gt; () -&gt; block.on((String)args.get(0), (HandlerRef)handlerOf(args.get(1)));
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 					<strong class="jxr_keyword">case</strong> <span class="jxr_string">"action"</span> -&gt; () -&gt; block.action(ModelAction.of((String)args.get(0)).handler((String)args.get(2)));
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 					<strong class="jxr_keyword">case</strong> <span class="jxr_string">"listen"</span> -&gt; () -&gt; block.subscribe((String)args.get(0), (HandlerRef)handlerOf(args.get(1)));
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 					<strong class="jxr_keyword">default</strong> -&gt; <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				};
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 				<strong class="jxr_keyword">if</strong> (r == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 					<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 				<strong class="jxr_keyword">if</strong> (i &lt; steps.size() - 1)
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 					r.run();
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 				<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 					assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, r::run, name + <span class="jxr_string">" must be refused by the Java builders"</span>);
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			}
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		}));
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> }
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			<strong class="jxr_keyword">var</strong> steps = (List&lt;Map&lt;String,Object&gt;&gt;)c.get(<span class="jxr_string">"build"</span>);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<em class="jxr_comment">// Replay: each step must be accepted until the last one, which must be refused.</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; steps.size(); i++) {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  				<strong class="jxr_keyword">var</strong> s = steps.get(i);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  				<strong class="jxr_keyword">var</strong> ctor = (String)s.get(<span class="jxr_string">"ctor"</span>);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  				<strong class="jxr_keyword">if</strong> (ctor != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 					<strong class="jxr_keyword">var</strong> k = kindOfCtor(ctor);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 					<strong class="jxr_keyword">if</strong> (k != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 						kinds.put(<span class="jxr_string">"@"</span> + s.get(<span class="jxr_string">"as"</span>), k);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 						blocks.put(<span class="jxr_string">"@"</span> + s.get(<span class="jxr_string">"as"</span>), <strong class="jxr_keyword">new</strong> ModelBlock(k, ctor));
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 					}
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 				}
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 				<strong class="jxr_keyword">var</strong> on = (String)s.get(<span class="jxr_string">"on"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 				<strong class="jxr_keyword">var</strong> args = (List&lt;Object&gt;)s.get(<span class="jxr_string">"args"</span>);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 				<strong class="jxr_keyword">var</strong> block = blocks.computeIfAbsent(on, p -&gt; <strong class="jxr_keyword">new</strong> ModelBlock(kinds.getOrDefault(p, kindOfPath(p)), p));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				Runnable r = <strong class="jxr_keyword">switch</strong> ((String)s.get(<span class="jxr_string">"call"</span>)) {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 					<strong class="jxr_keyword">case</strong> <span class="jxr_string">"bind"</span> -&gt; () -&gt; block.on((String)args.get(0), (HandlerRef)handlerOf(args.get(1)));
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 					<strong class="jxr_keyword">case</strong> <span class="jxr_string">"action"</span> -&gt; () -&gt; block.action(ModelAction.of((String)args.get(0)).handler((String)args.get(2)));
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 					<strong class="jxr_keyword">case</strong> <span class="jxr_string">"listen"</span> -&gt; () -&gt; block.subscribe((String)args.get(0), (HandlerRef)handlerOf(args.get(1)));
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 					<strong class="jxr_keyword">default</strong> -&gt; <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 				};
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				<strong class="jxr_keyword">if</strong> (r == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 					<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 				<strong class="jxr_keyword">if</strong> (i &lt; steps.size() - 1)
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 					r.run();
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 				<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 					assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, r::run, name + <span class="jxr_string">" must be refused by the Java builders"</span>);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			}
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		}));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

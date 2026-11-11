@@ -48,15 +48,15 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  	}
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  	@Test <strong class="jxr_keyword">void</strong> a03_hrefWithEndpointFormConfirm_rejected() {
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			RowDetail.inline().action(RowAction.link(<span class="jxr_string">"o"</span>,<span class="jxr_string">"/a"</span>).label(<span class="jxr_string">"O"</span>).endpoint(<span class="jxr_string">"/b"</span>)).toMap());
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			RowDetail.inline().action(RowAction.link(<span class="jxr_string">"o"</span>,<span class="jxr_string">"/a"</span>).label(<span class="jxr_string">"O"</span>).confirm(<span class="jxr_string">"sure"</span>)).toMap());
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">var</strong> withEndpoint = RowDetail.inline().action(RowAction.link(<span class="jxr_string">"o"</span>,<span class="jxr_string">"/a"</span>).label(<span class="jxr_string">"O"</span>).endpoint(<span class="jxr_string">"/b"</span>));
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">var</strong> withConfirm = RowDetail.inline().action(RowAction.link(<span class="jxr_string">"o"</span>,<span class="jxr_string">"/a"</span>).label(<span class="jxr_string">"O"</span>).confirm(<span class="jxr_string">"sure"</span>));
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; withEndpoint.toMap());
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; withConfirm.toMap());
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	@Test <strong class="jxr_keyword">void</strong> a04_iconOnlyAction_needsLabel() {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  			RowDetail.inline().action(RowAction.link(<span class="jxr_string">"o"</span>,<span class="jxr_string">"/a"</span>).icon(<span class="jxr_string">"link"</span>)).toMap());
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> iconOnly = RowDetail.inline().action(RowAction.link(<span class="jxr_string">"o"</span>,<span class="jxr_string">"/a"</span>).icon(<span class="jxr_string">"link"</span>));
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; iconOnly.toMap());
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	}
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	@Test <strong class="jxr_keyword">void</strong> a05_rowMenu_ignoresLinkActions() {

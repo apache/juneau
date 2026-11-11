@@ -122,7 +122,7 @@
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertEquals(5, p.waitFor(30, TimeUnit.SECONDS));
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertTrue(p.isDone());
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">var</strong> lines = events(p.eventsFile());
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertSize(() -&gt; lines.toString(), 4, lines);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertSize(lines::toString, 4, lines);
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertEquals(<span class="jxr_string">"{\&quot;ev\&quot;:\&quot;note\&quot;,\&quot;level\&quot;:\&quot;warn\&quot;,\&quot;text\&quot;:\&quot;runner exited without done, exit 5\&quot;}"</span>, lines.get(2));
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertEquals(<span class="jxr_string">"{\&quot;ev\&quot;:\&quot;done\&quot;,\&quot;status\&quot;:\&quot;fail\&quot;}"</span>, lines.get(3));
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> page = <strong class="jxr_keyword">new</strong> TerminalViewPage[1];

@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>RowDetails xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/org/apache/juneau/petstore/console/pages/RowDetails.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.petstore.console.pages;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.console.views.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.console.views.TableSpec.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.petstore.console.users.UsersRest.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.petstore.dto.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * The expandable row details of the console tables, shared by the page builders (which only need the declaration) and</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * the resources that serve them (which pass a real lookup).</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * A bean-backed detail lists its fields explicitly, so the resource that serves it never depends on having been</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * attached to a table.  Each field list equals the columns of the table it opens from, hidden ones included.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// A page builder attaches the declaration; the resource serves it with a store lookup.&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 	TableSpec.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;js&gt;"orders"&lt;/js&gt;).detail(RowDetails.&lt;jsm&gt;order&lt;/jsm&gt;());</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="RowDetails" href="../../../../../../org/apache/juneau/petstore/console/pages/RowDetails.html#RowDetails">RowDetails</a> {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> <a name="RowDetails" href="../../../../../../org/apache/juneau/petstore/console/pages/RowDetails.html#RowDetails">RowDetails</a>() {}
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; Function&lt;String,T&gt; none() {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">return</strong> id -&gt; <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	}
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<em class="jxr_javadoccomment">/** @return The Pets table detail, for building a page. */</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowDetail pet() {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">return</strong> pet(none());
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 * The Pets table detail: Details, this pet's orders and its history.</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">	 * @param lookup Finds a pet by row id, or returns &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * @return A new detail.</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowDetail pet(Function&lt;String,Pet&gt; lookup) {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">return</strong> RowDetail.fromBean(Pet.<strong class="jxr_keyword">class</strong>, lookup).basePath(<span class="jxr_string">"/console/pets"</span>).title(<span class="jxr_string">"{name}"</span>)
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			.section(<span class="jxr_string">"Details"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"name"</span>, <span class="jxr_string">"species"</span>, <span class="jxr_string">"status"</span>, <span class="jxr_string">"price"</span>, <span class="jxr_string">"tags"</span>)
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			.label(<span class="jxr_string">"price"</span>, <span class="jxr_string">"Price (USD)"</span>)
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			.tab(DetailTab.table(<span class="jxr_string">"Orders"</span>, ordersView(<span class="jxr_string">"pets-orders"</span>, <span class="jxr_string">"/console/pets/orders/rows"</span>)).id(<span class="jxr_string">"orders"</span>).scopeParam(<span class="jxr_string">"petId"</span>).countFromRows())
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			.tab(DetailTab.table(<span class="jxr_string">"History"</span>, historyView()).id(<span class="jxr_string">"history"</span>).scopeParam(<span class="jxr_string">"petId"</span>).countFromRows());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	}
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<em class="jxr_javadoccomment">/** @return The Sold table detail, for building a page. */</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowDetail soldPet() {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">return</strong> soldPet(none());
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * The Sold table detail: the columns that table shows, and this pet's orders.</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 * @param lookup Finds a pet by row id, or returns &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 * @return A new detail.</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowDetail soldPet(Function&lt;String,Pet&gt; lookup) {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">return</strong> RowDetail.fromBean(Pet.<strong class="jxr_keyword">class</strong>, lookup).key(<span class="jxr_string">"soldPet"</span>).basePath(<span class="jxr_string">"/console/pets"</span>).title(<span class="jxr_string">"{name}"</span>)
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			.section(<span class="jxr_string">"Details"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"name"</span>, <span class="jxr_string">"species"</span>, <span class="jxr_string">"price"</span>)
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			.label(<span class="jxr_string">"price"</span>, <span class="jxr_string">"Price (USD)"</span>)
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			.tab(DetailTab.table(<span class="jxr_string">"Orders"</span>, ordersView(<span class="jxr_string">"sold-orders"</span>, <span class="jxr_string">"/console/pets/orders/rows"</span>)).id(<span class="jxr_string">"orders"</span>).scopeParam(<span class="jxr_string">"petId"</span>).countFromRows());
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<em class="jxr_javadoccomment">/** @return The Orders and Store tables' detail, for building a page. */</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowDetail order() {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">return</strong> order(none());
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * The Orders and Store recent-orders detail: Details and the ordered pet.</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * @param lookup Finds an order by row id, or returns &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * @return A new detail.</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowDetail order(Function&lt;String,Order&gt; lookup) {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">return</strong> RowDetail.fromBean(Order.<strong class="jxr_keyword">class</strong>, lookup).basePath(<span class="jxr_string">"/console/orders"</span>).title(<span class="jxr_string">"Order {id}"</span>)
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			.section(<span class="jxr_string">"Details"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"petId"</span>, <span class="jxr_string">"shipDate"</span>, <span class="jxr_string">"status"</span>)
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			.label(<span class="jxr_string">"petId"</span>, <span class="jxr_string">"Pet"</span>)
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			.tab(DetailTab.table(<span class="jxr_string">"Pet"</span>, TableSpec.create(<span class="jxr_string">"order-pet"</span>).rowType(<span class="jxr_string">"Pet"</span>).dataMode(DataMode.CLIENT).dataUrl(<span class="jxr_string">"/console/orders/pet/rows"</span>)
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 				.columns(
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 					Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Id"</span>),
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 					Column.create(<span class="jxr_string">"name"</span>).label(<span class="jxr_string">"Name"</span>).href(<span class="jxr_string">"/console/pets/{id}/summary"</span>),
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 					Column.create(<span class="jxr_string">"species"</span>).label(<span class="jxr_string">"Species"</span>),
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 					Column.create(<span class="jxr_string">"status"</span>).label(<span class="jxr_string">"Status"</span>),
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 					Column.create(<span class="jxr_string">"price"</span>).label(<span class="jxr_string">"Price (USD)"</span>).render(Render.of(<span class="jxr_string">"decimal"</span>).meta(<span class="jxr_string">"places"</span>, 2))))
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 				.id(<span class="jxr_string">"pet"</span>).scopeParam(<span class="jxr_string">"orderId"</span>).countFromRows());
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<em class="jxr_javadoccomment">/** @return The Users table detail, for building a page. */</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowDetail user() {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">return</strong> user(none());
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	}
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 * The Users table detail: Details and the orders this user placed.  It serves {@code UserView}, so a password,</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment">	 * email or phone never leaves the server.</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">	 * @param lookup Finds a user by row id (the username), or returns &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 * @return A new detail.</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowDetail user(Function&lt;String,UserView&gt; lookup) {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">return</strong> RowDetail.fromBean(UserView.<strong class="jxr_keyword">class</strong>, lookup).key(<span class="jxr_string">"user"</span>).basePath(<span class="jxr_string">"/console/users"</span>).title(<span class="jxr_string">"{username}"</span>)
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			.section(<span class="jxr_string">"Details"</span>, <span class="jxr_string">"username"</span>, <span class="jxr_string">"firstName"</span>, <span class="jxr_string">"lastName"</span>, <span class="jxr_string">"userStatus"</span>)
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			.label(<span class="jxr_string">"userStatus"</span>, <span class="jxr_string">"Status"</span>)
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			.tab(DetailTab.table(<span class="jxr_string">"Orders"</span>, ordersView(<span class="jxr_string">"user-orders"</span>, <span class="jxr_string">"/console/users/orders/rows"</span>)).id(<span class="jxr_string">"orders"</span>).scopeParam(<span class="jxr_string">"username"</span>).countFromRows());
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	}
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<em class="jxr_javadoccomment">/** @return The Pending changes table detail. */</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowDetail change() {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">return</strong> RowDetail.inline().title(<span class="jxr_string">"Change {id}"</span>).section(<span class="jxr_string">"Details"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"summary"</span>, <span class="jxr_string">"author"</span>, <span class="jxr_string">"state"</span>, <span class="jxr_string">"message"</span>);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<em class="jxr_javadoccomment">/** @return The Audit table detail. */</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowDetail audit() {
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">return</strong> RowDetail.inline().title(<span class="jxr_string">"{action} {entity} {entityId}"</span>)
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			.section(<span class="jxr_string">"Details"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"at"</span>, <span class="jxr_string">"actor"</span>, <span class="jxr_string">"action"</span>, <span class="jxr_string">"entity"</span>, <span class="jxr_string">"entityId"</span>, <span class="jxr_string">"detail"</span>);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	}
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<em class="jxr_javadoccomment">/** @return The pet History table detail. */</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowDetail history() {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">return</strong> RowDetail.inline().title(<span class="jxr_string">"{action}"</span>).section(<span class="jxr_string">"Details"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"at"</span>, <span class="jxr_string">"actor"</span>, <span class="jxr_string">"action"</span>, <span class="jxr_string">"detail"</span>);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> TableSpec ordersView(String id, String dataUrl) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">return</strong> TableSpec.create(id).rowType(<span class="jxr_string">"Order"</span>).dataMode(DataMode.CLIENT).dataUrl(dataUrl)
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			.columns(
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 				Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Order"</span>).href(<span class="jxr_string">"/console/pets/{petId}/orders/{id}"</span>),
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 				Column.create(<span class="jxr_string">"shipDate"</span>).label(<span class="jxr_string">"Ship date"</span>).render(<span class="jxr_string">"date"</span>),
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				Column.create(<span class="jxr_string">"status"</span>).label(<span class="jxr_string">"Status"</span>).render(PillRenders.orderStatus()));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> TableSpec historyView() {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">return</strong> TableSpec.create(<span class="jxr_string">"pets-history"</span>).rowType(<span class="jxr_string">"AuditEntry"</span>).dataMode(DataMode.CLIENT).dataUrl(<span class="jxr_string">"/console/pets/history/rows"</span>)
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			.columns(
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 				Column.create(<span class="jxr_string">"at"</span>).label(<span class="jxr_string">"When"</span>).render(<span class="jxr_string">"timestamp"</span>),
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				Column.create(<span class="jxr_string">"actor"</span>).label(<span class="jxr_string">"Actor"</span>),
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 				Column.create(<span class="jxr_string">"action"</span>).label(<span class="jxr_string">"Action"</span>).render(PillRenders.auditAction()),
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				Column.create(<span class="jxr_string">"detail"</span>).label(<span class="jxr_string">"Detail"</span>));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

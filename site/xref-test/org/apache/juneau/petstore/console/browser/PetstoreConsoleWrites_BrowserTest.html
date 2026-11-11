@@ -246,7 +246,7 @@
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 				<span class="jxr_string">"actions"</span>, List.of(
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 					wait(<span class="jxr_string">"document.querySelector('#pets-body .juneau-view-select-checkbox:not(:disabled)')"</span>),
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 					eval(RECORD),
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 					eval(<span class="jxr_string">"(() =&gt; { const cb = document.querySelector('#pets-body .juneau-view-select-checkbox:not(:disabled)'); window.__sold = cb.closest('tr').cells[1].textContent.trim(); cb.click(); })()"</span>),
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 					eval(<span class="jxr_string">"(() =&gt; { const cb = document.querySelector('#pets-body .juneau-view-select-checkbox:not(:disabled)'); window.__sold = cb.closest('tr').dataset.juneauRowId; cb.click(); })()"</span>),
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 					wait(<span class="jxr_string">"document.querySelector('.juneau-view-bulk-toolbar:not([hidden]) .juneau-view-bulk-action-btn')"</span>),
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 					Map.of(<span class="jxr_string">"click"</span>, <span class="jxr_string">".juneau-view-bulk-action-btn"</span>),
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 					wait(<span class="jxr_string">"document.querySelector('"</span> + CONFIRM + <span class="jxr_string">"')"</span>),
