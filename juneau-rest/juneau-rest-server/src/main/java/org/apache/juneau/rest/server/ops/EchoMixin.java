@@ -266,7 +266,7 @@ public class EchoMixin {
 
 		var queryParams = new LinkedHashMap<String,String>();
 		for (var p : req.getQueryParams())
-			queryParams.put(p.getName(), p.asString().orElse(null));
+			queryParams.put(p.getName(), RedactedQueryParams.isSensitive(p.getName()) ? RedactedHeaders.REDACTED : p.asString().orElse(null));
 
 		var attributes = new LinkedHashMap<String,String>();
 		req.getAttributes().asMap().forEach((k, v) -> attributes.put(k, String.valueOf(v)));
@@ -276,7 +276,7 @@ public class EchoMixin {
 		Map<String,Object> out = m(
 			"method", req.getMethod(),
 			"path", sreq.getRequestURI(),
-			"queryString", sreq.getQueryString(),
+			"queryString", sreq.getQueryString() == null ? null : RedactedQueryParams.redactUri("?" + sreq.getQueryString()).substring(1),
 			"pathRemainder", remainder == null ? "" : remainder,
 			"headers", headers,
 			"queryParams", queryParams,

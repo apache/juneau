@@ -66,4 +66,33 @@ class ClassicRedirectCredentialGuard_Test {
 		guard.process(request, context);
 		assertNotNull(request.getFirstHeader("Authorization"), "the first request of an exchange only records the origin; nothing to compare against yet");
 	}
+
+	@Test
+	void a04_underscoreHostThenOtherHost_failsClosedAndStrips() {
+		// java.net.URI reports a null host for an underscore host name; comparing it must not throw and must not forward credentials.
+		var context = new BasicHttpContext();
+		var core = HttpCoreContext.adapt(context);
+		core.setTargetHost(new HttpHost("my_svc", 80, "http"));
+		var first = new BasicHttpRequest("GET", "/");
+		first.addHeader("Authorization", "Bearer secret");
+		assertDoesNotThrow(() -> guard.process(first, context));
+		core.setTargetHost(new HttpHost("other.example.com", 80, "http"));
+		var second = new BasicHttpRequest("GET", "/");
+		second.addHeader("Authorization", "Bearer secret");
+		assertDoesNotThrow(() -> guard.process(second, context));
+		assertNull(second.getFirstHeader("Authorization"));
+	}
+
+	@Test
+	void a05_otherHostThenUnderscoreHost_failsClosedAndStrips() {
+		var context = new BasicHttpContext();
+		var core = HttpCoreContext.adapt(context);
+		core.setTargetHost(new HttpHost("example.com", 80, "http"));
+		guard.process(new BasicHttpRequest("GET", "/"), context);
+		core.setTargetHost(new HttpHost("my_svc", 80, "http"));
+		var second = new BasicHttpRequest("GET", "/");
+		second.addHeader("Authorization", "Bearer secret");
+		assertDoesNotThrow(() -> guard.process(second, context));
+		assertNull(second.getFirstHeader("Authorization"));
+	}
 }

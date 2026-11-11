@@ -404,12 +404,36 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 */
 	protected void style(HtmlDocSerializerSession session, HtmlWriter<?> w, Object o) throws Exception {
 		var addSpace = Flag.create();
-		for (var s : session.getStylesheet())
-			w.sIf(addSpace.getAndSet()).append(3, "@import ").q().append(session.resolveUri(session.resolve(s))).q().appendln(";");
+		for (var s : session.getStylesheet()) {
+			// Resolved like the sibling style/script chrome (request-derived vars refused) and then checked, since the
+			// value is written inside a quoted CSS string: an unsafe value is dropped rather than emitted.
+			var uri = session.resolveUri(session.resolveScriptStyle(s));
+			if (isSafeStylesheetUri(uri))
+				w.sIf(addSpace.getAndSet()).append(3, "@import ").q().append(uri).q().appendln(";");
+		}
 		if (session.isNowrap())
 			w.appendln(3, "div.data * {white-space:nowrap;} ");
 		for (var s : session.getStyle())
 			w.sIf(addSpace.getAndSet()).appendln(3, session.resolveScriptStyle(s));
 		session.forEachWidget(x -> w.sIf(addSpace.getAndSet()).appendln(3, session.resolveScriptStyle(x.getStyle(session.getVarResolver()))));
+	}
+
+	// A stylesheet URI is written inside a quoted CSS string, so it must not contain a character that ends the string or the
+	// element, and an absolute one must be http(s); relative and root-relative references are allowed.
+	private static boolean isSafeStylesheetUri(String uri) {
+		if (uri == null || uri.isEmpty())
+			return false;
+		for (var i = 0; i < uri.length(); i++) {
+			var c = uri.charAt(i);
+			if (c < 0x20 || c == 0x7f || c == '"' || c == '\\' || c == '<' || c == '>' || c == '\'' || c == '(' || c == ')')
+				return false;
+		}
+		var colon = uri.indexOf(':');
+		var slash = uri.indexOf('/');
+		if (colon > 0 && (slash == -1 || colon < slash)) {
+			var scheme = uri.substring(0, colon);
+			return "http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme);
+		}
+		return true;
 	}
 }

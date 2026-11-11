@@ -44,7 +44,7 @@ class DialogFrame_BrowserTest extends TestBase {
 	private static final List<String> ORDERS = List.of("cv", "vc");
 
 	private static final String[] TOKENS = { "--jc-control-bg", "--jc-text", "--jc-border", "--jc-hover-bg", "--jc-link", "--jc-control-border", "--jc-accent",
-		"--jc-accent-wash", "--jc-btn-primary-bg", "--jc-on-btn-primary", "--jc-danger-text", "--jc-text-muted", "--jc-card-bg", "--jc-pill-neutral-bg" };
+		"--jc-accent-wash", "--jc-tab-selected-bg", "--jc-btn-primary-bg", "--jc-on-btn-primary", "--jc-danger-text", "--jc-text-muted", "--jc-card-bg", "--jc-pill-neutral-bg" };
 
 	/** Elements hovered (each recorded under {@code hover:<id>}). */
 	private static final List<String> HOVERED = List.of("dx", "p2", "f2", "wb", "fa");
@@ -232,8 +232,9 @@ class DialogFrame_BrowserTest extends TestBase {
 
 	@Test void a06_sectionTabSelectedIsWashWithAccentBar() {
 		for (var p : probes()) {
-			eq(p, p.tok("--jc-accent-wash"), p.rest("p1", "background-color"), "section tab selected fill = accent wash");
+			eq(p, p.tok("--jc-tab-selected-bg"), p.rest("p1", "background-color"), "section tab selected fill = opaque tab-selected bg");
 			eq(p, p.tok("--jc-card-bg"), p.rest("p2", "background-color"), "section tab unselected fill = card");
+			eq(p, p.tok("--jc-border"), p.rest("p2", "border-top-color"), "section tab unselected top border is neutral");
 			eq(p, p.tok("--jc-accent-wash"), p.hover("p2", "background-color"), "section tab unselected hover = wash");
 			eq(p, p.tok("--jc-link"), p.rest("p1", "color"), "section tab selected ink");
 			eq(p, "1px", p.rest("ps", "border-bottom-width"), "section strip carries the floor line");
@@ -254,7 +255,7 @@ class DialogFrame_BrowserTest extends TestBase {
 				eq(p, "14px", p.rest(id, "padding-left"), id + " padding-x");
 			}
 			eq(p, "0px", p.rest("f3", "border-bottom-width"), "rest tab bottom edge");
-			eq(p, p.tok("--jc-accent-wash"), p.rest("f1", "background-color"), "selected fill = accent wash");
+			eq(p, p.tok("--jc-tab-selected-bg"), p.rest("f1", "background-color"), "selected fill = opaque tab-selected bg");
 			eq(p, p.tok("--jc-card-bg"), p.rest("f2", "background-color"), "unselected fill = card");
 			eq(p, p.tok("--jc-accent-wash"), p.hover("f2", "background-color"), "unselected hover = wash");
 			eq(p, p.tok("--jc-link"), p.rest("f1", "color"), "selected ink");

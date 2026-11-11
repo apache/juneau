@@ -133,6 +133,16 @@ class BasicRestClientDebugFormatter_Test extends TestBase {
 		assertFalse(msg.contains("\nInjected: yes"), "header value must not forge a physical line: " + msg);
 	}
 
+	@Test
+	void b04_queryStringSecrets_maskedInLoggedUri() throws Exception {
+		var msg = runAndCapture(getClass().getName() + ".b04", Level.INFO,
+			RestClient.builder().transport(req -> responseBuilder(200, "ok").build()),
+			req -> req.queryData("access_token", "query-secret").queryData("page", "2"));
+		assertFalse(msg.contains("query-secret"), msg);
+		assertTrue(msg.contains("access_token=[REDACTED]"), msg);
+		assertTrue(msg.contains("page=2"), msg);
+	}
+
 	// -----------------------------------------------------------------------------------------
 	// c — secure-by-default body-dump master gate, renderability, scrubber
 	// -----------------------------------------------------------------------------------------

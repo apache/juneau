@@ -40,8 +40,10 @@ import jakarta.servlet.http.*;
 /**
  * JUnit automated testcase resource.
  */
+// The tests rethrow server-side assertion failures on the client, which needs the opt-in Thrown header.
 @Rest(
-	path="/testThirdPartyProxy"
+	path="/testThirdPartyProxy",
+	renderResponseStackTraces="true"
 )
 @SerializerConfig(addRootType="true",addBeanTypes="true")
 @SuppressWarnings({

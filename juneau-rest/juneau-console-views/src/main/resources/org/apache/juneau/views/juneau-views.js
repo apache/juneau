@@ -1411,7 +1411,7 @@
 		btn.appendChild(infoEl);
 
 		const icons = window.JuneauViews?.icons;
-		const caretMarkup = icons?.resolveIcon ? icons.resolveIcon("expand_more") : null;
+		const caretMarkup = icons?.resolveIcon ? icons.resolveIcon("expand_more_thin") : null;
 		const caretEl = document.createElement("span");
 		caretEl.className = "juneau-view-pagingpill-caret";
 		caretEl.setAttribute("aria-hidden", "true");
@@ -2054,24 +2054,6 @@
 				host.appendChild(row);
 			});
 		};
-		if (hasOperators) {
-			const helpList = document.createElement("div");
-			helpList.className = "juneau-view-col-search-popover-help";
-			fillOperatorRows(helpList);
-			instructions.appendChild(helpList);
-			const examples = columnSearchExamplesFor(helpMeta.type, helpMeta.operators);
-			if (examples.length) {
-				const exList = document.createElement("div");
-				exList.className = "juneau-view-col-search-popover-examples";
-				exList.setAttribute("aria-label", "Examples");
-				examples.forEach(function (ex) {
-					const code = document.createElement("code");
-					code.textContent = ex;
-					exList.appendChild(code);
-				});
-				instructions.appendChild(exList);
-			}
-		}
 		// offset-less dates/date-times are UTC on both engines (server parity), which a local-time user would
 		// not guess - say so on a client-filtered timestamp column.
 		if (dsl?.type === "timestamp") {
@@ -2160,7 +2142,21 @@
 			moreList = document.createElement("div");
 			moreList.className = "juneau-view-col-search-popover-more-list";
 			moreList.hidden = true;
-			if (hasOperators) fillOperatorRows(moreList);
+			if (hasOperators) {
+				fillOperatorRows(moreList);
+				const examples = columnSearchExamplesFor(helpMeta.type, helpMeta.operators);
+				if (examples.length) {
+					const exList = document.createElement("div");
+					exList.className = "juneau-view-col-search-popover-examples";
+					exList.setAttribute("aria-label", "Examples");
+					examples.forEach(function (ex) {
+						const code = document.createElement("code");
+						code.textContent = ex;
+						exList.appendChild(code);
+					});
+					moreList.appendChild(exList);
+				}
+			}
 			more.addEventListener("click", function () {
 				const open = moreList.hidden;
 				moreList.hidden = !open;

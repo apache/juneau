@@ -174,13 +174,14 @@ public final class PolicyEnforcedRedirects {
 				.uri(target2)
 				.remoteUrlPolicy(true, false)
 				.allowedAddressRanges(current.getAllowedAddressRanges())
+				.redirectStripHeaders(initial.getRedirectStripHeaders())
 				.timeout(current.getTimeout());
 			// Credential headers are forwarded only to the first origin (and never across an https -> http downgrade), so a hop
 			// that returns to it gets the caller's headers back.  They are taken from the initial request, not the previous hop's.
 			var stripCredentials = RedirectSecurity.shouldStripCredentials(initial.getUri(), target)
 				|| (left && ! safeMethod(rewriteToGet ? "GET" : current.getMethod()));
 			for (var h : initial.getHeaders())
-				if (! (stripCredentials && RedactedHeaders.isSensitive(h.name(), RedirectSecurity.stripOnCrossOrigin())))
+				if (! (stripCredentials && RedactedHeaders.isSensitive(h.name(), initial.getRedirectStripHeaders())))
 					builder.header(h.name(), h.value());
 			if (! rewriteToGet) {
 				var body = current.getBody();

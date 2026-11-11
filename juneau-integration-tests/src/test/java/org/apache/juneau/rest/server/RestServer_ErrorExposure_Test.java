@@ -56,4 +56,17 @@ class RestServer_ErrorExposure_Test extends TestBase {
 		var body = b.get("/boom").run().assertStatus(500).getContent().asString();
 		assertTrue(body.contains(SECRET), "Debug mode (renderResponseStackTraces=true) should render exception detail: " + body);
 	}
+
+	@Test void a03_productionMode_omitsThrownHeaderForUnplannedException() throws Exception {
+		var a = MockRestClient.buildLax(A.class);
+		var thrown = a.get("/boom").run().assertStatus(500).getHeader("Thrown").asString().orElse("");
+		assertFalse(thrown.contains("RuntimeException"), "Production Thrown header leaked the exception class: " + thrown);
+		assertFalse(thrown.contains("SECRET"), "Production Thrown header leaked the exception message: " + thrown);
+	}
+
+	@Test void a04_debugMode_includesThrownHeader() throws Exception {
+		var b = MockRestClient.buildLax(B.class);
+		var thrown = b.get("/boom").run().assertStatus(500).getHeader("Thrown").asString().orElse("");
+		assertTrue(thrown.contains("RuntimeException"), "Debug mode should include the Thrown header: " + thrown);
+	}
 }

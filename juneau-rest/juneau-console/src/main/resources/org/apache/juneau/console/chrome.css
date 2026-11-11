@@ -45,9 +45,11 @@
        --jc-page-bg / --jc-avatar-bg (their values are locked to
        gradient/color shapes by Theme's allowlist grammar, so a url() can
        never be their value).
-     - The logo is NOT a token. .jc-logo's background-image is a hard-coded
-       url("data:...") literal below; there is no --jc-logo custom property
-       anywhere in this file or the Theme API.
+     - The logo is NOT a token. .jc-logo-default's background-image is a
+       hard-coded url("data:...") literal below (.jc-logo itself is the bare
+       tile and paints no image; .jc-logo-image takes its URL inline from the
+       page spec); there is no --jc-logo custom property anywhere in this
+       file or the Theme API.
    ========================================================================== */
 
 * { box-sizing: border-box; }
@@ -141,10 +143,40 @@ a:hover { text-decoration: underline; }
   flex: 0 0 auto;
   border-radius: var(--jc-radius);
   background-color: var(--jc-header-bg);
+}
+
+/* Default mark: the stock drop, emitted only when a page asks for a logo but names neither a symbol nor an image. */
+.jc-logo-default {
   background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA0OCA0OCc+PHJlY3Qgd2lkdGg9JzQ4JyBoZWlnaHQ9JzQ4JyByeD0nMTAnIGZpbGw9JyMxNTg5RUUnLz48cGF0aCBkPSdNMjQgOGMtNyA2LTExIDEzLTExIDE5YTExIDExIDAgMCAwIDIyIDBjMC02LTQtMTMtMTEtMTl6JyBmaWxsPScjZmZmZmZmJyBmaWxsLW9wYWNpdHk9JzAuOTUnLz48cGF0aCBkPSdNMjQgMTR2MjAnIHN0cm9rZT0nIzE1ODlFRScgc3Ryb2tlLXdpZHRoPScxLjYnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjwvc3ZnPgo=");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 26px 26px;
+}
+
+/* Image mark: the page spec supplies the URL inline; this only places it. */
+.jc-logo-image {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 26px 26px;
+}
+
+/* Symbol mark: an inline SVG glyph in the on-accent colour on an accent tile, inset so the strokes clear the edge. */
+.jc-logo-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background-color: var(--jc-accent);
+  color: var(--jc-on-accent);
+}
+.jc-logo-symbol > svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .jc-brand-title {
@@ -1277,9 +1309,10 @@ table.dataTable.display > tbody > tr:hover {
 
 /* Shared strip widget - TAB-MODE (the global folder-tab look).  -views ships the neutral SHAPE (separate rounded tabs,
    floor line, only the selected tab overlapping it); this themes it.  Unselected tabs are card-white with a light
-   --jc-border edge; the ONE selected tab carries a 3px accent bar across its top (every tab reserves that bar as a
-   transparent top edge, so labels share a baseline), an accent edge, bold ink and the --jc-tab-selected-bg wash
-   (default: the accent wash), and joins the accent-bordered, card-filled pane below it.  Detail tabs, dialog sections and
+   --jc-border edge all round; the ONE selected tab carries a 3px accent bar across its top (every tab reserves that bar as a
+   neutral --jc-border top edge, so labels share a baseline and every tab reads as a closed folder tab), an accent edge,
+   bold ink and the OPAQUE --jc-tab-selected-bg (the accent wash pre-blended over the card, so the 1px overlap hides the
+   pane's top border and the tab opens into the pane), and joins the accent-bordered, card-filled pane below it.  Detail tabs, dialog sections and
    View Settings tabs all match these selectors, so they take the same look.  Each var(--jc-*) is the entire value of a color/background-color/border-color property
    (sink-property discipline - see file header). */
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] { border-bottom-color: var(--jc-border); }
@@ -1287,17 +1320,15 @@ table.dataTable.display > tbody > tr:hover {
 	background-color: var(--jc-card-bg);
 	color: var(--jc-pill-neutral-text);
 	border-color: var(--jc-border);
-	border-top-color: transparent;
 	border-radius: var(--jc-radius) var(--jc-radius) 0 0;
 }
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:hover:not(:disabled):not([aria-selected="true"]) {
 	background-color: var(--jc-accent-wash);
 	color: var(--jc-link);
 	border-color: var(--jc-border);
-	border-top-color: transparent;
 }
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn[aria-selected="true"] {
-	background-color: var(--jc-tab-selected-bg, var(--jc-accent-wash));
+	background-color: var(--jc-tab-selected-bg);
 	color: var(--jc-link);
 	border-color: var(--jc-accent);
 	border-bottom-color: transparent;
@@ -1437,19 +1468,20 @@ table.dataTable thead > tr > td.dt-ordering-desc .juneau-sort-desc {
 .juneau-view-col-search-icon.is-active { color: var(--jc-accent); }
 .juneau-view-col-search-popover {
   border-radius: var(--jc-radius);
-  border-color: var(--jc-control-border);
+  border-color: var(--jc-border);
   background-color: var(--jc-control-bg);
   color: var(--jc-text);
   box-shadow: var(--jc-popover-shadow, var(--jc-card-shadow));
 }
-.juneau-view-col-search-popover-title { color: var(--jc-accent); }
+.juneau-view-col-search-popover-title { color: var(--jc-text); }
 .juneau-view-col-search-popover-type { color: var(--jc-text-muted); }
+.juneau-view-col-search-popover-more-list { color: var(--jc-search-help-fg); }
 .juneau-view-col-search-popover-examples code {
   background-color: var(--jc-pill-neutral-bg);
-  color: var(--jc-text);
+  color: var(--jc-search-help-fg);
 }
 .juneau-view-col-search-popover-input {
-  border-color: var(--jc-control-border);
+  border-color: var(--jc-border);
   background-color: var(--jc-control-bg);
   color: var(--jc-text);
 }

@@ -325,4 +325,17 @@ class EchoMixin_AsMixin_Test extends TestBase {
 		var b = EchoMixin.create().bodyLimit(0L).build();
 		Assertions.assertEquals(0L, b.getBodyLimit());
 	}
+
+	/** Host with echo explicitly enabled, for the query-string redaction check. */
+	@Rest(mixins=EchoMixin.class)
+	public static class Q extends RestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public EchoMixin echo() { return EchoMixin.create().enabled().build(); }
+	}
+
+	@Test void q01_sensitiveQueryParamsAreRedacted() throws Exception {
+		var body = MockRestClient.buildLax(Q.class).get("/echo/x?access_token=SECRETVALUE&page=2").run().assertStatus(200).getContent().asString();
+		org.junit.jupiter.api.Assertions.assertFalse(body.contains("SECRETVALUE"), () -> "Echo must not reflect a sensitive query value; body: " + body);
+		org.junit.jupiter.api.Assertions.assertTrue(body.contains("page"), () -> "Non-sensitive params stay visible; body: " + body);
+	}
 }

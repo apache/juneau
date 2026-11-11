@@ -158,6 +158,12 @@ public enum ClassFormat {
 	 * treated as unresolvable.  This lets a deployment restrict which types may be materialized from parsed
 	 * input to an explicit allow-list.
 	 *
+	 * <p>
+	 * No guard is installed by default.  Deployments that parse input from untrusted sources and materialize
+	 * {@link Class} values from it should install one that permits only the expected types.  Classes are
+	 * resolved without running their static initializers either way, but an allow-list additionally bounds
+	 * which classes the input may load or name.
+	 *
 	 * @param value The guard predicate returning <jk>true</jk> for permitted class names, or <jk>null</jk> to
 	 * 	allow all names (the default).
 	 */

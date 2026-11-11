@@ -75,6 +75,9 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 	/** The set of header names whose values are masked. */
 	protected Set<String> redactedHeaders = DEFAULT_REDACTED_HEADERS;
 
+	/** The set of query parameter names whose values are masked in the logged URI. */
+	protected Set<String> redactedQueryParams = RedactedQueryParams.DEFAULT;
+
 	/** Optional body scrubber applied to body text when the master gate is set. */
 	protected RestDebugBodyScrubber bodyScrubber;
 
@@ -94,6 +97,30 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 	 */
 	public BasicRestClientDebugFormatter redactedHeaders(Collection<String> value) {
 		redactedHeaders = new LinkedHashSet<>(value);
+		return this;
+	}
+
+	/**
+	 * Overrides the set of query parameter names whose values are masked in the logged URI.
+	 *
+	 * @param value The new set of parameter names to mask (case-insensitive). Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public BasicRestClientDebugFormatter redactedQueryParams(Collection<String> value) {
+		redactedQueryParams = new LinkedHashSet<>(value);
+		return this;
+	}
+
+	/**
+	 * Extends the set of masked query parameter names additively (keeps the built-in protections).
+	 *
+	 * @param value The parameter names to add (case-insensitive). Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public BasicRestClientDebugFormatter addRedactedQueryParams(Collection<String> value) {
+		var s = new LinkedHashSet<>(redactedQueryParams);
+		s.addAll(value);
+		redactedQueryParams = s;
 		return this;
 	}
 
@@ -132,7 +159,7 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 	public String formatBasic(RestRequest req, RestResponse res) {
 		var uri = req.getUri();
 		var method = DebugTextSanitizer.sanitize(req.getMethod());
-		var uriStr = DebugTextSanitizer.sanitize(uri != null ? uri.toString() : "");
+		var uriStr = DebugTextSanitizer.sanitize(uri != null ? RedactedQueryParams.redactUri(uri.toString(), redactedQueryParams) : "");
 		var sb = new StringBuilder();
 		// Prepend the resolved correlation id (same effective-id order as the emit stamp): the confirmed echoed id
 		// when present, else the sent id.  Both are already safe to interpolate (client-minted Uuid7 values are safe;

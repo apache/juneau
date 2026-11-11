@@ -1415,6 +1415,16 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 			}
 		}
 
+		// Class.forName(String) runs static initializers; resolve without initializing.
+		if (inner() == Class.class) {
+			var cl = Thread.currentThread().getContextClassLoader();
+			try {
+				return (T)Class.forName(arg, false, cl != null ? cl : ClassMeta.class.getClassLoader());
+			} catch (ClassNotFoundException e) {
+				throw new ExecutableException(e, "Could not resolve class '%s'", arg);
+			}
+		}
+
 		if (fromStringMethod.isPresent())
 			return (T)fromStringMethod.get().invoke(null, arg);
 

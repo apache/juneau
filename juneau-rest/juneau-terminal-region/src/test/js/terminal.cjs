@@ -212,11 +212,11 @@ function logServer(log, o) {
 // @cases:pure
 
 test('f01_fontFitArithmeticAndClamp', function (t) {
-	expect(t.JT.fitFont(14, 700, 980) === 10, 'floor(14*700/980) = 10: ' + t.JT.fitFont(14, 700, 980));
-	expect(t.JT.fitFont(14, 1000, 700) === 20, 'floor(20) at the max');
-	expect(t.JT.fitFont(14, 3000, 700) === 20, 'clamped to 20');
-	expect(t.JT.fitFont(14, 100, 700) === 8, 'clamped to 8');
-	expect(t.JT.fitFont(14, 0, 700) === 14 && t.JT.fitFont(14, 700, 0) === 14, 'an unmeasured panel keeps the size');
+	expect(t.JT.fitFont(14, 700, 980, 14) === 10, 'floor(14*700/980) = 10: ' + t.JT.fitFont(14, 700, 980, 14));
+	expect(t.JT.fitFont(14, 1000, 700, 14) === 14, 'a screen that fits keeps the token size');
+	expect(t.JT.fitFont(10, 3000, 700, 12.5) === 12.5, 'never grows past the token');
+	expect(t.JT.fitFont(14, 100, 700, 14) === 8, 'clamped to 8');
+	expect(t.JT.fitFont(14, 0, 700, 14) === 14 && t.JT.fitFont(14, 700, 0, 14) === 14, 'an unmeasured panel keeps the size');
 });
 
 /** A host whose computed style serves the given --jc-term-font-size value. */
@@ -240,11 +240,12 @@ test('g03_readBaseFontInvalid', function (t) {
 		expect(t.JT.readBaseFont(fontHost(bad)) === 12.5, JSON.stringify(bad) + ' falls back to 12.5');
 });
 
-test('g04_fitFontStillClampsForAnyReference', function (t) {
+test('g04_fitFontNeverExceedsTheToken', function (t) {
 	for (const base of [12.5, 16]) {
-		expect(t.JT.fitFont(base, 3000, 700) === 20, 'clamped to 20 from ' + base);
-		expect(t.JT.fitFont(base, 100, 700) === 8, 'clamped to 8 from ' + base);
-		expect(t.JT.fitFont(base, 0, 700) === base, 'unmeasured panel keeps ' + base);
+		expect(t.JT.fitFont(base, 3000, 700, base) === base, 'wide panel stays at ' + base);
+		expect(t.JT.fitFont(8, 3000, 700, base) === base, 'recovers to ' + base + ' once it fits');
+		expect(t.JT.fitFont(base, 100, 700, base) === 8, 'clamped to 8 from ' + base);
+		expect(t.JT.fitFont(base, 0, 700, base) === base, 'unmeasured panel keeps ' + base);
 	}
 });
 

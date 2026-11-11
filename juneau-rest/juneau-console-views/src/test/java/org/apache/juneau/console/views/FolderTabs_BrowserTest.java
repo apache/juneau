@@ -65,12 +65,15 @@ class FolderTabs_BrowserTest extends org.apache.juneau.TestBase {
 				return getComputedStyle(t)[prop];
 			}
 			window.__probe = { toJSON: function () {
+				var sel = document.getElementById('t1').getBoundingClientRect(), pn = document.getElementById('pn').getBoundingClientRect();
+				var hit = document.elementFromPoint(sel.left + sel.width / 2, pn.top + 0.5);
 				return {
+					cover: { selBottom: sel.bottom, paneTop: pn.top, hit: hit ? hit.id : null },
 					tabs: { t1: snap('t1'), t2: snap('t2'), t3: snap('t3'), c1: snap('c1'), c2: snap('c2') },
 					pane: snap('pn'),
 					tok: {
 						accent: tok('var(--jc-accent)', 'color'), border: tok('var(--jc-border)', 'color'), card: tok('var(--jc-card-bg)', 'color'),
-						wash: tok('var(--jc-tab-selected-bg, var(--jc-accent-wash))', 'backgroundColor'), link: tok('var(--jc-link)', 'color')
+						wash: tok('var(--jc-tab-selected-bg)', 'backgroundColor'), link: tok('var(--jc-link)', 'color')
 					}
 				};
 			} };
@@ -131,7 +134,7 @@ class FolderTabs_BrowserTest extends org.apache.juneau.TestBase {
 		}
 	}
 
-	@Test void a02_unselectedTabsAreWhiteWithLightEdgeAndReservedBar() {
+	@Test void a02_unselectedTabsAreWhiteWithLightEdgeAndNeutralTopBorder() {
 		for (var s : SCHEMES) {
 			var p = probe(s);
 			for (var id : List.of("t2", "t3")) {
@@ -139,8 +142,16 @@ class FolderTabs_BrowserTest extends org.apache.juneau.TestBase {
 				assertEquals(tok(p, "card"), t.get("background-color"), s + ": " + id + " fill");
 				assertEquals(tok(p, "border"), t.get("border-left-color"), s + ": " + id + " edge");
 				assertEquals("3px", t.get("border-top-width"), s + ": " + id + " reserves the bar");
-				assertEquals("rgba(0, 0, 0, 0)", t.get("border-top-color"), s + ": " + id + " bar is transparent");
+				assertEquals(tok(p, "border"), t.get("border-top-color"), s + ": " + id + " has a neutral top border");
 			}
+		}
+	}
+
+	@Test void a06_selectedTabCoversThePanelTopBorder() {
+		for (var s : SCHEMES) {
+			@SuppressWarnings("unchecked") var c = (Map<String,Object>)probe(s).get("cover");
+			assertTrue(num(c, "selBottom") >= num(c, "paneTop") + 1 - 0.01, s + ": selected tab overlaps the pane's 1px top border " + c);
+			assertEquals("t1", c.get("hit"), s + ": the selected tab, not the pane border, paints at the pane's top edge");
 		}
 	}
 

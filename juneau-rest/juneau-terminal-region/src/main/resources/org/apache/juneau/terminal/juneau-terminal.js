@@ -59,7 +59,6 @@
 	const SLOW_LOAD_BYTES = 20 * 1024 * 1024;
 	const DEFAULT_FONT = 12.5;
 	const MIN_FONT = 8;
-	const MAX_FONT = 20;
 	const MAX_EVENT_PAGES = 100;
 	const NL = 0x0a;
 	const OFFSET = /^\d{1,16}$/;
@@ -117,11 +116,18 @@
 		return px > 0 ? px : DEFAULT_FONT;
 	}
 
-	/** The font size that makes a screen measured at {@code current} px fill the panel, clamped to 8-20. */
-	function fitFont(current, panelWidth, screenWidth) {
+	/**
+	 * The font size for a screen measured at {@code current} px in a panel {@code panelWidth} wide: {@code base} (the
+	 * token size) when the screen fits at that size, otherwise shrunk to fit, never below 8 and never above {@code base}.
+	 */
+	function fitFont(current, panelWidth, screenWidth, base) {
+		const max = base > 0 ? base : current;
 		if (!(panelWidth > 0) || !(screenWidth > 0)) // NOSONAR javascript:S1940 - NaN-safe negation; the inverted comparison differs for NaN
 			return current;
-		return Math.min(MAX_FONT, Math.max(MIN_FONT, Math.floor(current * panelWidth / screenWidth)));
+		const natural = screenWidth * max / current; // the screen's width at the token size
+		if (natural <= panelWidth)
+			return Math.max(MIN_FONT, max);
+		return Math.min(max, Math.max(MIN_FONT, Math.floor(max * panelWidth / natural)));
 	}
 
 	/** "2 MiB", "1.5 MiB", "512 KiB" or "10 B". */
@@ -1146,6 +1152,8 @@
 		host.appendChild(root);
 
 		let term = null;
+		let minCols = 1;
+		let fitted = false;
 		let match = null;
 		let ro = null;
 		let armed = false;
@@ -1156,9 +1164,21 @@
 			const xs = screen.querySelector(".xterm-screen");
 			if (!term || !xs)
 				return;
-			const size = fitFont(term.options.fontSize, screen.clientWidth, xs.getBoundingClientRect().width);
-			if (size !== term.options.fontSize)
+			const base = readBaseFont(host);
+			const current = term.options.fontSize;
+			const panel = screen.clientWidth;
+			const cell = xs.getBoundingClientRect().width / term.cols;
+			if (!(panel > 0) || !(cell > 0)) // NOSONAR javascript:S1940 - NaN-safe negation; the inverted comparison differs for NaN
+				return;
+			fitted = true;
+			// The font stays at the token size and the columns fill the panel; only a panel too narrow for the server's columns shrinks the font.
+			const baseCols = Math.floor(panel / (cell * base / current));
+			const size = baseCols >= minCols ? base : fitFont(current, panel, cell * minCols, base);
+			if (size !== current)
 				term.options.fontSize = size;
+			const cols = Math.max(minCols, baseCols);
+			if (cols !== term.cols)
+				term.resize(cols, term.rows);
 		}
 
 		const linkHandler = linkHandlerFor(win);
@@ -1176,6 +1196,8 @@
 			bannerSlow.textContent = st.banner?.slow ? " " + st.banner.slow : "";
 			if (input && (st.kind === "ok" || st.kind === "fail"))
 				input.runEnded();
+			if (!fitted)
+				fit(); // the fit in open() can run before the cell size exists; retry until one measures
 		}
 
 		function renderInput(v) {
@@ -1234,6 +1256,7 @@
 					term.onData(function (d) { input.onData(d); });
 					term.attachCustomKeyEventHandler(function (e) { return input.onKeyDown(e); });
 				}
+				minCols = cols;
 				term.open(screen);
 				// HTT: arming before the Terminal exists needs a live answer ahead of the first bytes fetch; no harness orders them that way.
 				if (armed)

@@ -42,7 +42,10 @@ class HeaderLogoNested_BrowserTest extends org.apache.juneau.TestBase {
 		<script>
 		window.__warned = 0;
 		(function () { var w = console.warn; console.warn = function () { if (/juneau-icons\\.js/.test(Array.prototype.join.call(arguments, " "))) window.__warned++; return w.apply(console, arguments); }; })();
-		window.__probe = { toJSON: function () { return { hasLogo: !!document.querySelector(".jc-logo-symbol"), warnings: window.__warned }; } };
+		window.__probe = { toJSON: function () { var m = document.querySelector(".jc-logo");
+			return { hasLogo: !!document.querySelector(".jc-logo-symbol"), warnings: window.__warned,
+				marks: document.querySelectorAll(".jc-logo").length, cls: m ? m.className : null,
+				bg: m ? getComputedStyle(m).backgroundImage : null, svg: !!(m && m.querySelector("svg")) }; } };
 		</script>
 		""";
 
@@ -61,7 +64,15 @@ class HeaderLogoNested_BrowserTest extends org.apache.juneau.TestBase {
 		f.page("late", ORIGIN + "/a/b/c", contractPage(CONTRACT, "", PROBE, "<script src=\"/views/juneau-icons.js?v=1\"></script>")).watchRequests();
 		// No icons script on the page at all.
 		f.page("none", ORIGIN + "/a/b/c", contractPage(CONTRACT, "", PROBE, "")).watchRequests();
+		// Each logo kind draws only its own image: the default drop, a page-supplied URL, or an inline symbol.
+		f.page("kind-default", ORIGIN + "/a/b/c", contractPage(contract("{}"), "", PROBE, ""));
+		f.page("kind-image", ORIGIN + "/a/b/c", contractPage(contract("{\"src\":\"/logo-test.png\"}"), "", PROBE, ""));
+		f.page("kind-symbol", ORIGIN + "/a/b/c", contractPage(CONTRACT, "", PROBE + "<script src=\"/views/juneau-icons.js?v=1\"></script>", ""));
 		report = f.run();
+	}
+
+	private static String contract(String logo) {
+		return "{\"contractVersion\":\"1\",\"title\":\"T\",\"header\":{\"title\":\"Pets\",\"logo\":" + logo + "},\"cards\":[]}";
 	}
 
 	private static List<String> paths(String name) {
@@ -94,6 +105,28 @@ class HeaderLogoNested_BrowserTest extends org.apache.juneau.TestBase {
 		assertTrue(paths("late").contains(SPRITE), () -> "requests: " + paths("late"));
 		assertEquals(Boolean.TRUE, probe("late").get("hasLogo"));
 		assertEquals(0, ((Number)probe("late").get("warnings")).intValue());
+	}
+
+	@Test void b01_symbolLogoPaintsNoBackgroundImage() {
+		var p = probe("kind-symbol");
+		assertEquals(1, ((Number)p.get("marks")).intValue());
+		assertEquals("none", p.get("bg"), "the symbol tile must not sit on the default drop");
+		assertEquals(Boolean.TRUE, p.get("svg"));
+		assertFalse(String.valueOf(p.get("cls")).contains("jc-logo-default"), () -> String.valueOf(p.get("cls")));
+	}
+
+	@Test void b02_defaultLogoShowsTheDrop() {
+		var p = probe("kind-default");
+		assertTrue(String.valueOf(p.get("cls")).contains("jc-logo-default"), () -> String.valueOf(p.get("cls")));
+		assertTrue(String.valueOf(p.get("bg")).contains("data:image/svg+xml"), () -> String.valueOf(p.get("bg")));
+	}
+
+	@Test void b03_imageLogoShowsOnlyItsUrl() {
+		var p = probe("kind-image");
+		assertEquals(1, ((Number)p.get("marks")).intValue());
+		assertTrue(String.valueOf(p.get("bg")).contains("/logo-test.png"), () -> String.valueOf(p.get("bg")));
+		assertFalse(String.valueOf(p.get("bg")).contains("data:image/svg+xml"), () -> String.valueOf(p.get("bg")));
+		assertFalse(String.valueOf(p.get("cls")).contains("jc-logo-default"), () -> String.valueOf(p.get("cls")));
 	}
 
 	private static Map<String,Object> probe(String name) {

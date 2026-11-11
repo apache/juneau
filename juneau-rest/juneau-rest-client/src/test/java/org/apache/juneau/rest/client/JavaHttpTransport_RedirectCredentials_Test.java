@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.bct.BctAssertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.net.*;
@@ -45,6 +46,7 @@ class JavaHttpTransport_RedirectCredentials_Test {
 	/** A JDK HttpClient that never touches the network: 302s {@code /cross} and {@code /same}, 200s anything else. */
 	private static final class RecordingHttpClient extends HttpClient {
 		final List<HttpRequest> sent = new ArrayList<>();
+		Redirect redirect = Redirect.NEVER;
 
 		@Override
 		public <T> HttpResponse<T> send(HttpRequest request, HttpResponse.BodyHandler<T> handler) {
@@ -79,7 +81,7 @@ class JavaHttpTransport_RedirectCredentials_Test {
 		@Override public <T> CompletableFuture<HttpResponse<T>> sendAsync(HttpRequest r, HttpResponse.BodyHandler<T> h, HttpResponse.PushPromiseHandler<T> p) { throw new UnsupportedOperationException(); }
 		@Override public Optional<CookieHandler> cookieHandler() { return Optional.empty(); }
 		@Override public Optional<Duration> connectTimeout() { return Optional.empty(); }
-		@Override public Redirect followRedirects() { return Redirect.NEVER; }
+		@Override public Redirect followRedirects() { return redirect; }
 		@Override public Optional<ProxySelector> proxy() { return Optional.empty(); }
 		@Override public SSLContext sslContext() { return null; }
 		@Override public SSLParameters sslParameters() { return new SSLParameters(); }
@@ -124,5 +126,34 @@ class JavaHttpTransport_RedirectCredentials_Test {
 		var client = run(ORIGIN_A + "/same");
 		assertList(client.sent.stream().map(HttpRequest::uri).toList(), ORIGIN_A + "/same", ORIGIN_A + "/echo");
 		assertList(headerNames(client.sent.get(1)), "Authorization", "Cookie", "Host", "X-Trace");
+	}
+
+	@Test void a03_nonPolicyRequestWithCredentials_throughAutoFollowingClient_isRefused() {
+		var client = new RecordingHttpClient();
+		client.redirect = HttpClient.Redirect.NORMAL;
+		var transport = JavaHttpTransport.builder().httpClient(client).build();
+		var req = TransportRequest.builder().method("GET").uri(ORIGIN_A + "/cross").header("Authorization", "Bearer secret-token").build();
+		assertThrows(TransportException.class, () -> transport.execute(req));
+		assertEquals(0, client.sent.size(), "nothing may be sent when the client would follow the redirect itself");
+	}
+
+	@Test void a04_nonPolicyRequestWithoutCredentials_throughAutoFollowingClient_isSent() throws Exception {
+		var client = new RecordingHttpClient();
+		client.redirect = HttpClient.Redirect.ALWAYS;
+		var transport = JavaHttpTransport.builder().httpClient(client).build();
+		var req = TransportRequest.builder().method("GET").uri(ORIGIN_A + "/echo").header("X-Trace", "t-1").build();
+		try (var res = transport.execute(req)) {
+			assertEquals(200, res.getStatusCode());
+		}
+	}
+
+	@Test void a05_extraStripHeader_isDroppedOnCrossOriginRedirect() throws Exception {
+		var client = new RecordingHttpClient();
+		var transport = JavaHttpTransport.builder().httpClient(client).build();
+		var req = TransportRequest.builder().method("GET").uri(ORIGIN_A + "/cross").remoteUrlPolicy(true, false)
+			.header("X-Api-Key", "k").header("X-Trace", "t-1").redirectStripHeaders(List.of("x-api-key")).build();
+		transport.execute(req).close();
+		assertList(headerNames(client.sent.get(0)), "Host", "X-Api-Key", "X-Trace");
+		assertList(headerNames(client.sent.get(1)), "Host", "X-Trace");
 	}
 }

@@ -1176,6 +1176,10 @@ public @interface Rest {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		For {@code multipart/form-data} requests the per-part and per-request size limits, and the in-memory threshold
+	 * 		before parts spill to disk, come from the servlet container's {@code MultipartConfigElement} (for example
+	 * 		{@code maxFileSize}, {@code maxRequestSize} and {@code fileSizeThreshold}); configure them there as well.
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>

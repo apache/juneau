@@ -679,12 +679,9 @@
 					const mark = el(doc, "div", "jc-logo jc-logo-symbol");
 					mark.setAttribute("role", "img");
 					mark.setAttribute("aria-label", logo.alt || h.title || "");
-					mark.style.width = mark.style.height = "1.5rem";
-					mark.style.color = "inherit";
 					const svg = doc.createElementNS("http://www.w3.org/2000/svg", "svg");
 					svg.setAttribute("viewBox", "0 0 24 24");
 					svg.setAttribute("aria-hidden", "true");
-					svg.setAttribute("style", "width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round");
 					const use = doc.createElementNS("http://www.w3.org/2000/svg", "use");
 					use.setAttribute("href", base + "juneau-symbols-lucide.svg#juneau-sym-" + logo.symbol);
 					svg.appendChild(use);
@@ -706,7 +703,7 @@
 			}
 			if (logo.src) {
 				if (isSafeHref(logo.src)) {
-					const img = el(doc, "div", "jc-logo");
+					const img = el(doc, "div", "jc-logo jc-logo-image");
 					img.setAttribute("role", "img");
 					img.setAttribute("aria-label", logo.alt || h.title || "");
 					img.setAttribute("style", "background-image:url('" + logo.src.replace(/['\\()\s]/g, encodeURIComponent) + "')");
@@ -714,6 +711,12 @@
 				} else {
 					fail(doc, "E-JS-9", logo.src, "header", "logo");
 				}
+			}
+			if (h.logo && !logo.symbol && !logo.src) {
+				const mark = el(doc, "div", "jc-logo jc-logo-default");
+				mark.setAttribute("role", "img");
+				mark.setAttribute("aria-label", logo.alt || h.title || "");
+				brand.appendChild(mark);
 			}
 			if (h.title) {
 				const t = el(doc, "span", "jc-brand-title");

@@ -489,6 +489,7 @@
 	reg("chevron_right_thin", "chevron_right_thin");
 	reg("first_page_thin", "first_page_thin");
 	reg("last_page_thin", "last_page_thin");
+	reg("expand_more_thin", "expand_more_thin");
 	reg("more_vert", "more");
 	reg("more", "more");
 	reg("sort", "sort", "juneau-view-col-sort-glyph");

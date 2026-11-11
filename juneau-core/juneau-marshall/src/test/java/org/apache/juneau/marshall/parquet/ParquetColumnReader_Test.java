@@ -202,4 +202,19 @@ class ParquetColumnReader_Test extends TestBase {
 		r.advance(); // past the end — no-op, must not throw
 		assertFalse(r.hasNext());
 	}
+
+	@Test
+	void z01_readFixedLenByteArray_rejectsOutOfRangeLength() throws Exception {
+		var r = new ParquetColumnReader(new byte[0], 1, 0);
+		r.advance();
+		assertThrows(IOException.class, () -> r.readFixedLenByteArray(-1));
+		assertThrows(IOException.class, () -> r.readFixedLenByteArray(Integer.MAX_VALUE));
+	}
+
+	@Test
+	void z02_readFixedLenByteArray_normalLength() throws Exception {
+		var r = new ParquetColumnReader(new byte[] {1, 2, 3, 4}, 1, 0);
+		r.advance();
+		assertArrayEquals(new byte[] {1, 2, 3, 4}, r.readFixedLenByteArray(4));
+	}
 }

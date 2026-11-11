@@ -43,6 +43,7 @@ html:root[data-jc-scheme="dark"] {
 	--jc-table-head-border-bottom: #8b919c;
 	--jc-detail-control-color: #9aa0ab;
 	--jc-detail-control-hover: #6cb0ff;
+	--jc-search-help-fg: #8ab8f0;
 	--jc-hover-bg: #2e323a;
 	--jc-danger-wash: #3a1f21;
 	--jc-success-wash: #1c3325;

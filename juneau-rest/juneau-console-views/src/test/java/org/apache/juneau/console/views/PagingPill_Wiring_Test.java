@@ -111,6 +111,13 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(fnBody.contains("pagingPillButton(\"Last page\", \"last_page_thin\","), fnBody);
 	}
 
+	/** The page-size caret is the thin chevron too, so it matches the stroke weight of the four nav buttons. */
+	@Test void b07_pageSizeCaret_usesTheThinChevron() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains("icons.resolveIcon(\"expand_more_thin\")"), "caret must resolve expand_more_thin");
+		assertFalse(body.contains("caretMarkup = icons?.resolveIcon ? icons.resolveIcon(\"expand_more\")"), "heavy caret still used");
+	}
+
 	@Test void b03_buildPagingPill_carriesPagingDataTestId() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fnBody = functionBody(body, "function buildPagingPill(");

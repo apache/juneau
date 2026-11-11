@@ -328,7 +328,7 @@ out.clientFilteredInline = I.isClientFiltered({ viewDef: { dataMode: 'server' },
 	I.openColumnSearchPopover(makeIcon(), colByName(t3, 'name'), t3.ctx, t3.table);
 	out.popoverTextHasTzHelp = !!popEl(t3.ctx).querySelector('.juneau-view-col-search-popover-tzhelp');
 	// Unregistered custom operators are hidden from the help list on a client-filtered table.
-	out.popoverHelpOpsBeforeRegister = popEl(t3.ctx).querySelector('.juneau-view-col-search-popover-help').querySelectorAll('.juneau-view-col-search-popover-help-op')
+	out.popoverHelpOpsBeforeRegister = popEl(t3.ctx).querySelector('.juneau-view-col-search-popover-more-list').querySelectorAll('.juneau-view-col-search-popover-help-op')
 		.map(function (r) { const c = r.querySelector('code'); return c ? c.textContent : null; });
 	I.closeColumnSearchPopover(t3.ctx);
 })();
@@ -351,7 +351,7 @@ out.clientFilteredInline = I.isClientFiltered({ viewDef: { dataMode: 'server' },
 	out.customRegisteredRows = visible(t);
 	const t2 = makeTable('client');
 	I.openColumnSearchPopover(makeIcon(), colByName(t2, 'name'), t2.ctx, t2.table);
-	out.popoverHelpOpsAfterRegister = popEl(t2.ctx).querySelector('.juneau-view-col-search-popover-help').querySelectorAll('.juneau-view-col-search-popover-help-op')
+	out.popoverHelpOpsAfterRegister = popEl(t2.ctx).querySelector('.juneau-view-col-search-popover-more-list').querySelectorAll('.juneau-view-col-search-popover-help-op')
 		.map(function (r) { const c = r.querySelector('code'); return c ? c.textContent : null; });
 	I.closeColumnSearchPopover(t2.ctx);
 	let threw = null;

@@ -45,7 +45,7 @@ class BrandMark_BrowserTest extends TestBase {
 		<style>#txt .jc-brand-title::before { content: ""; display: inline-block; width: 0.85em; height: 0.85em;
 			background-color: var(--jc-accent); border-radius: 0 70% 0 70%; transform: rotate(45deg); margin-right: 0.5rem; }</style>
 		<div class="jc-header" id="txt"><div class="jc-brand" id="b1"><span class="jc-brand-title" id="t1">Text only</span></div></div>
-		<div class="jc-header" id="logo"><a class="jc-brand" id="b2" href="/"><div class="jc-logo" id="l2" role="img" aria-label="Logo"></div><span class="jc-brand-title" id="t2">With logo</span></a></div>
+		<div class="jc-header" id="logo"><a class="jc-brand" id="b2" href="/"><div class="jc-logo jc-logo-default" id="l2" role="img" aria-label="Logo"></div><span class="jc-brand-title" id="t2">With logo</span></a></div>
 		""";
 
 	private static final String PROBE = """

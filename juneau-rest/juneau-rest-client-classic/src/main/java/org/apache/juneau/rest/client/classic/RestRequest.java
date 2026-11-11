@@ -2147,7 +2147,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 
 			if (RemoteUrlPolicyState.isActive())
 				ssrfGuarded = true;
-			var httpResponse = ssrfGuarded ? runWithPolicyRedirects() : client.run(target, request, context);
+			var httpResponse = ssrfGuarded ? runWithPolicyRedirects() : runOnce();
 			response = client.createResponse(this, httpResponse, parser2);
 
 			if (isDebug() || client.logRequests == DetailLevel.FULL)
@@ -2252,6 +2252,20 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				context.setAttribute(SsrfGuardMarker.ATTRIBUTE, previousMarker);
 				ClassicRedirectCredentialGuard.origin(context, previousOrigin);
 			}
+		}
+	}
+
+	// A context(...) setting can be reused across calls to different hosts: each call compares redirects with its own first
+	// origin, and leaves the context's recorded origin as it found it.
+	private HttpResponse runOnce() throws IOException {
+		if (context == null)
+			return client.run(target, request, context);
+		var previousOrigin = ClassicRedirectCredentialGuard.origin(context);
+		ClassicRedirectCredentialGuard.origin(context, null);
+		try {
+			return client.run(target, request, context);
+		} finally {
+			ClassicRedirectCredentialGuard.origin(context, previousOrigin);
 		}
 	}
 

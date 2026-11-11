@@ -31,7 +31,9 @@ html:root {
 	--jc-header-icon-color: #747474;
 	--jc-accent: #B42348;
 	--jc-accent-wash: rgba(180,35,72,0.1);
+	--jc-tab-selected-bg: #f8e9ed;
 	--jc-link: #8B1538;
+	--jc-search-help-fg: #2b6cb0;
 	--jc-text: #2a181c;
 	--jc-text-soft: #2a181ccc;
 	--jc-text-muted: #6e585c;
@@ -171,5 +173,6 @@ html:root {
 		--jc-focus: #e0557a;
 		--jc-accent-selected: #e0557a;
 		--jc-accent-wash: rgba(224,85,122,0.22);
+		--jc-tab-selected-bg: #4d313f;
 	}
 }

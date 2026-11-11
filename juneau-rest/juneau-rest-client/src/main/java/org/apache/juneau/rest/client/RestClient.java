@@ -100,6 +100,7 @@ public final class RestClient implements Closeable {
 	final Parser defaultParser;
 	final boolean allowPrivateUrls;
 	final RemoteUrlPolicy.AllowedRanges allowedAddressRanges;
+	final List<String> redirectStripHeaders;
 
 	private RestClient(Builder builder) {
 		this.transport = reqnn("transport",
@@ -117,6 +118,7 @@ public final class RestClient implements Closeable {
 		this.defaultParser = builder.defaultParser;
 		this.allowPrivateUrls = builder.allowPrivateUrls || Boolean.getBoolean(RemoteUrlPolicy.ALLOW_PRIVATE_URLS_PROPERTY);
 		this.allowedAddressRanges = RemoteUrlPolicy.AllowedRanges.of(builder.allowedAddressRanges.toArray(new String[0]));
+		this.redirectStripHeaders = List.copyOf(builder.redirectStripHeaders);
 	}
 
 	/**
@@ -412,6 +414,7 @@ public final class RestClient implements Closeable {
 		final List<Parser> parserList = l();
 		boolean allowPrivateUrls;
 		final List<String> allowedAddressRanges = l();
+		final List<String> redirectStripHeaders = l();
 		boolean sendRequestId = true;
 
 		private Builder() {}
@@ -487,6 +490,28 @@ public final class RestClient implements Closeable {
 		public Builder allowAddressRanges(String...value) {
 			if (value != null)
 				allowedAddressRanges.addAll(Arrays.asList(value));
+			return this;
+		}
+
+		/**
+		 * Adds header names that are removed when a request is replayed against another origin by a redirect.
+		 *
+		 * <p>
+		 * The names are added to the default credential set ({@link RedactedHeaders#DEFAULT}, e.g. {@code Authorization} and
+		 * {@code Cookie}); the default set is never reduced.  Use it for application-specific credential headers such as
+		 * {@code X-Api-Key}.  Calls accumulate.  Matching is case-insensitive.
+		 *
+		 * <h4 class='section'>Notes:</h4><ul>
+		 * 	<li class='note'>Applied by the Juneau-controlled redirect loop used for requests under the SSRF guardrail.  Redirect
+		 * 		guards that a transport installs on its own HTTP client use the default set.
+		 * </ul>
+		 *
+		 * @param value The header names. <jk>null</jk> or empty adds nothing.
+		 * @return This object.
+		 */
+		public Builder redirectStripHeaders(String...value) {
+			if (value != null)
+				redirectStripHeaders.addAll(Arrays.asList(value));
 			return this;
 		}
 

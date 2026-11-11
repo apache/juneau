@@ -83,7 +83,7 @@ class Terminal_BrowserTest extends TestBase {
 	@Test void a04_altScreenBoxIsDrawn() { ok("b04_altScreenBoxIsDrawn"); }
 	@Test void a05_scrollbackAndSearch() { ok("b05_scrollbackAndSearch"); }
 	@Test void a06_hashScrollsToTheStepOffset() { ok("b06_hashScrollsToTheStepOffset"); }
-	@Test void a07_fontScalesWithThePanelWhileColsAndRowsStay() { ok("b07_fontScalesWithThePanelWhileColsAndRowsStay"); }
+	@Test void a07_colsFillTheWidePanelAndFontShrinksOnlyWhenNarrow() { ok("b07_colsFillTheWidePanelAndFontShrinksOnlyWhenNarrow"); }
 	@Test void a08_osc52LeavesTheClipboardAlone() { ok("b08_osc52LeavesTheClipboardAlone"); }
 	@Test void a09_onlyHttpLinksOpen() { ok("b09_onlyHttpLinksOpen"); }
 	@Test void a10_rawLinkOnlyForHttpUrls() { ok("b10_rawLinkOnlyForHttpUrls"); }
@@ -108,9 +108,10 @@ class Terminal_BrowserTest extends TestBase {
 	@Test void a26_defaultEmptyMessage() { ok("b26_defaultEmptyMessage"); }
 	@Test void a27_followToggleButtonFlips() { ok("b27_followToggleButtonFlips"); }
 	@Test void a28_fontSizeTokenOverride() { ok("b28_fontSizeTokenOverride"); }
+	@Test void a29_widePanelFontEqualsToken() { ok("b29_widePanelFontEqualsToken"); }
 
 	@Test void z01_everyCaseHasAMethod() {
 		var cases = (Map<?,?>)report.get("cases");
-		assertSize(() -> "case count changed; add a method per new case: " + cases.keySet(), 29, cases);
+		assertSize(() -> "case count changed; add a method per new case: " + cases.keySet(), 30, cases);
 	}
 }

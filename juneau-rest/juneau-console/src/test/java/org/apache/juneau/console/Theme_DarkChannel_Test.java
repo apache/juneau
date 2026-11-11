@@ -67,24 +67,28 @@ class Theme_DarkChannel_Test extends TestBase {
 			"--jc-link", "#6cb4ff",
 			"--jc-focus", "#4aa3ff",
 			"--jc-accent-selected", "#4aa3ff",
-			"--jc-accent-wash", "rgba(21,137,238,0.22)");
+			"--jc-accent-wash", "rgba(21,137,238,0.22)",
+			"--jc-tab-selected-bg", "#213d58");
 		assertEquals(open, Theme.OPEN.getDarkTokens());
 		assertEquals(open, Theme.GRAY.getDarkTokens());
 		assertEquals(map(
 			"--jc-link", "#d9a65c",
 			"--jc-accent", "#b17d31",
 			"--jc-focus", "#a9772f",
-			"--jc-accent-wash", "rgba(169,119,47,0.25)"), Theme.LIGHT_BROWN.getDarkTokens());
+			"--jc-accent-wash", "rgba(169,119,47,0.25)",
+			"--jc-tab-selected-bg", "#453b2e"), Theme.LIGHT_BROWN.getDarkTokens());
 		assertEquals(map(
 			"--jc-link", "#f78fab",
 			"--jc-accent", "#e0557a",
 			"--jc-focus", "#e0557a",
 			"--jc-accent-selected", "#e0557a",
-			"--jc-accent-wash", "rgba(224,85,122,0.22)"), Theme.LIGHT_RED.getDarkTokens());
+			"--jc-accent-wash", "rgba(224,85,122,0.22)",
+			"--jc-tab-selected-bg", "#4d313f"), Theme.LIGHT_RED.getDarkTokens());
 		assertEquals(map(
 			"--jc-link", "#ff8a70",
 			"--jc-chrome-bg", "#7a1a05",
-			"--jc-accent-wash", "rgba(255,86,48,0.22)"), Theme.RED.getDarkTokens());
+			"--jc-accent-wash", "rgba(255,86,48,0.22)",
+			"--jc-tab-selected-bg", "#54312e"), Theme.RED.getDarkTokens());
 	}
 
 	@Test void a06_deriveFromCarriesDark() {

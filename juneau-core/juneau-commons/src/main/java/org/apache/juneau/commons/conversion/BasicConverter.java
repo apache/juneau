@@ -524,11 +524,31 @@ public class BasicConverter extends CachingConverter {
 	// Special-case conversions
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Resolves a class name without running its static initializer.
+	 *
+	 * <p>
+	 * {@link Class#forName(String)} initializes the class, which would let an input string trigger arbitrary
+	 * static-initializer code, so the three-argument form with {@code initialize=false} is used instead.
+	 */
+	private static Class<?> loadClassWithoutInit(String name) {
+		var cl = Thread.currentThread().getContextClassLoader();
+		if (cl == null)
+			cl = BasicConverter.class.getClassLoader();
+		try {
+			return Class.forName(name, false, cl);
+		} catch (ClassNotFoundException e) {
+			throw new IllegalArgumentException("Class not found: " + name, e);
+		}
+	}
+
 	private <I,O> Conversion<I,O> findSpecialConversion(Class<I> inType, Class<O> outType) {
 		if (inType == String.class && outType == TimeZone.class)
 			return (Conversion<I,O>) (Conversion<String,TimeZone>) (in, memberOf, session, args) -> TimeZone.getTimeZone(in);
 		if (TimeZone.class.isAssignableFrom(inType) && outType == String.class)
 			return (Conversion<I,O>) (Conversion<TimeZone,String>) (in, memberOf, session, args) -> in.getID();
+		if (inType == String.class && outType == Class.class)
+			return (Conversion<I,O>) (Conversion<String,Class<?>>) (in, memberOf, session, args) -> loadClassWithoutInit(in);
 		if (inType == String.class && outType == Locale.class)
 			return (Conversion<I,O>) (Conversion<String,Locale>) (in, memberOf, session, args) -> Locale.forLanguageTag(in.replace('_', '-'));
 		if (CharSequence.class.isAssignableFrom(inType) && outType == Boolean.class)

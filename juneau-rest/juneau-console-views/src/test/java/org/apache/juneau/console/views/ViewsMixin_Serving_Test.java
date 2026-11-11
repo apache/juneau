@@ -685,7 +685,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("function pack("), body);
 		for (var name : new String[]{
 				"content_copy", "csv", "table", "picture_as_pdf", "refresh", "manage_search", "unfold_less",
-				"first_page", "chevron_left", "chevron_right", "last_page", "first_page_thin", "chevron_left_thin", "chevron_right_thin", "last_page_thin", "tune", "filter_alt", "expand_more", "sort"})
+				"first_page", "chevron_left", "chevron_right", "last_page", "first_page_thin", "chevron_left_thin", "chevron_right_thin", "last_page_thin", "expand_more_thin", "tune", "filter_alt", "expand_more", "sort"})
 			assertTrue(body.contains("\"" + name + "\""), () -> "missing bundled glyph '" + name + "':\n" + body);
 	}
 

@@ -108,7 +108,7 @@ class ViewsJs_IconSprites_Test extends TestBase {
 		for (var stem : new String[]{
 			"copy", "csv", "spreadsheet", "pdf", "print", "refresh", "toggle_column_search", "collapse_all",
 			"settings", "columns", "chevronright", "chevronleft", "chevronup", "chevrondown",
-			"first_page", "last_page", "first_page_thin", "last_page_thin", "chevron_left_thin", "chevron_right_thin", "more", "sort", "filter", "search", "close", "download", "edit",
+			"first_page", "last_page", "first_page_thin", "last_page_thin", "chevron_left_thin", "chevron_right_thin", "expand_more_thin", "more", "sort", "filter", "search", "close", "download", "edit",
 			"plus", "play", "restore", "tune"
 		})
 			assertTrue(svg.contains("id=\"juneau-sym-" + stem + "\""),
@@ -236,7 +236,7 @@ class ViewsJs_IconSprites_Test extends TestBase {
 		var n2s = (Map<?,?>) s.get("nameToStem");
 		assertBean(n2s, "content_copy,table,picture_as_pdf,manage_search", "copy,spreadsheet,pdf,toggle_column_search");
 		// stems() returns the shipped stem catalog after load; it matches the injected sprite's symbol count.
-		assertBean(s, "stemsCount,namesCount", "43,44");
+		assertBean(s, "stemsCount,namesCount", "44,45");
 	}
 
 	@Test void b04_partialReplacement_replacedNamesWinAndTheRestFallThrough() {
@@ -315,7 +315,7 @@ class ViewsJs_IconSprites_Test extends TestBase {
 	@Test void c05_packDuringAnInFlightLoadDropsTheStaleLoadAndKeepsTheGateClosed() {
 		assertBean(scenario("s_pack"),
 			"freshInjectedOnce,staleNotInjected,staleResolvesToCurrent,stemsStillShipped,spriteSymbols,gateStaysClosed",
-			"true,true,true,43,44,true");
+			"true,true,true,44,45,true");
 	}
 
 	@Test void c06_materialPackLayersOverTheShippedSpriteSoMissingStemsFallBack() {

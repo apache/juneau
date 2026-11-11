@@ -26,6 +26,7 @@ import java.net.http.HttpRequest.*;
 import java.net.http.HttpResponse.*;
 import java.util.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
 
 /**
@@ -129,6 +130,7 @@ public final class JavaHttpTransport implements HttpTransport {
 	public TransportResponse execute(TransportRequest request) throws TransportException {
 		if (request.isSsrfGuardActive())
 			return executeWithPolicy(request);
+		requireNoUnguardedRedirects(request);
 		try {
 			return sendOnce(request);
 		} catch (StaleConnectionException e) {
@@ -147,6 +149,19 @@ public final class JavaHttpTransport implements HttpTransport {
 	@Override /* HttpTransport */
 	public boolean supportsUrlPolicy() {
 		return true;
+	}
+
+	// A caller-supplied HttpClient that follows redirects itself would replay the request, credential headers included, against
+	// a redirect target of another origin; the JDK client offers no hook to strip them.  Refuse (fail closed) rather than send.
+	private void requireNoUnguardedRedirects(TransportRequest request) throws TransportException {
+		if (httpClient.followRedirects() == Redirect.NEVER)
+			return;
+		for (var h : request.getHeaders())
+			if (RedactedHeaders.isSensitive(h.name(), request.getRedirectStripHeaders()))
+				throw new TransportException("Refusing to send a request carrying the credential header '" + h.name()
+					+ "' through a JavaHttpTransport whose HttpClient auto-follows redirects (" + httpClient.followRedirects()
+					+ "); the JDK client would forward it to a redirect target of another origin.  Build the HttpClient with "
+					+ "the default Redirect.NEVER, or pass the credential another way.");
 	}
 
 	// Runs the Juneau-controlled redirect loop, pinning each hop to a policy-allowed address.

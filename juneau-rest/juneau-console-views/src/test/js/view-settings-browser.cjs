@@ -315,7 +315,7 @@ async function dragAndDetail(page) {
 		const un = document.querySelector('.juneau-config-tab[aria-selected="false"]');
 		return { selBar: getComputedStyle(sel).boxShadow, selBg: getComputedStyle(sel).backgroundColor, unBg: getComputedStyle(un).backgroundColor,
 			dlgBg: getComputedStyle(document.querySelector('.juneau-config-dialog')).backgroundColor,
-			wash: (function () { const p = document.createElement('div'); p.style.backgroundColor = 'var(--jc-accent-wash)'; document.querySelector('.juneau-config-dialog').appendChild(p); const c = getComputedStyle(p).backgroundColor; p.remove(); return c; })() };
+			wash: (function () { const p = document.createElement('div'); p.style.backgroundColor = 'var(--jc-tab-selected-bg)'; document.querySelector('.juneau-config-dialog').appendChild(p); const c = getComputedStyle(p).backgroundColor; p.remove(); return c; })() };
 	});
 	return out;
 }
@@ -402,7 +402,7 @@ async function capture(page, dir, name) {
 				const un = document.querySelector('.juneau-config-tab[aria-selected="false"]');
 				return { selBar: getComputedStyle(sel).boxShadow, selBg: getComputedStyle(sel).backgroundColor, unBg: getComputedStyle(un).backgroundColor,
 					dlgBg: getComputedStyle(document.querySelector('.juneau-config-dialog')).backgroundColor,
-			wash: (function () { const p = document.createElement('div'); p.style.backgroundColor = 'var(--jc-accent-wash)'; document.querySelector('.juneau-config-dialog').appendChild(p); const c = getComputedStyle(p).backgroundColor; p.remove(); return c; })() };
+			wash: (function () { const p = document.createElement('div'); p.style.backgroundColor = 'var(--jc-tab-selected-bg)'; document.querySelector('.juneau-config-dialog').appendChild(p); const c = getComputedStyle(p).backgroundColor; p.remove(); return c; })() };
 			}) };
 			if (shotDir) await page.screenshot({ path: path.join(shotDir, 'chooser-open-dark.png') });
 			r.errors = errors;

@@ -37,8 +37,8 @@ class Theme_Red_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().keySet(), Theme.RED.getTokens().keySet());
 	}
 
-	@Test void a02_tokenCount_is136_mirroringOpensPin() {
-		assertSize(136, Theme.RED.getTokens());
+	@Test void a02_tokenCount_is138_mirroringOpensPin() {
+		assertSize(138, Theme.RED.getTokens());
 	}
 
 	@Test void a03_name_isRed() {

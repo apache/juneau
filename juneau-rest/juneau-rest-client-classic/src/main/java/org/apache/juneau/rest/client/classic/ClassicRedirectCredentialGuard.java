@@ -49,16 +49,23 @@ final class ClassicRedirectCredentialGuard implements HttpRequestInterceptor {
 		if (target == null)
 			return;
 		var current = originOf(target);
-		if (current == null)
-			return;
 		var origin = (URI)context.getAttribute(ATTR_ORIGIN);
 		if (origin == null) {
 			context.setAttribute(ATTR_ORIGIN, current);
 			return;
 		}
-		if (RedirectSecurity.shouldStripCredentials(origin, current))
+		if (shouldStrip(origin, current))
 			for (var name : RedirectSecurity.stripOnCrossOrigin())
 				request.removeHeaders(name);
+	}
+
+	// Fails closed: an origin that cannot be compared (no parsable host, e.g. an underscore host name) is treated as different.
+	private static boolean shouldStrip(URI origin, URI current) {
+		try {
+			return RedirectSecurity.shouldStripCredentials(origin, current);
+		} catch (IllegalArgumentException e) {
+			return true;
+		}
 	}
 
 	/**
@@ -88,11 +95,14 @@ final class ClassicRedirectCredentialGuard implements HttpRequestInterceptor {
 			context.setAttribute(ATTR_ORIGIN, origin);
 	}
 
+	// Placeholder origin for a target whose origin cannot be resolved; never comparable, so a later hop always strips.
+	private static final URI UNRESOLVED = URI.create("urn:unresolved-origin");
+
 	private static URI originOf(HttpHost host) {
 		try {
 			return URI.create(host.toURI());
 		} catch (IllegalArgumentException e) {
-			return null;
+			return UNRESOLVED;
 		}
 	}
 }

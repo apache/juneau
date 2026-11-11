@@ -120,6 +120,9 @@ async function open(page, fx, opts) {
 	await page.evaluate(function (o) {
 		if (o.hash)
 			window.location.hash = o.hash;
+		const T = window.Terminal;
+		window.__terms = [];
+		window.Terminal = function (x) { const t = new T(x); window.__terms.push(t); return t; };
 		window.__cleanup = window.JuneauTerminal.mount(document.getElementById('host'), o.opts);
 	}, { opts: { id: 't', bytesUrl: '/t/bytes', ...(fx.events ? { eventsUrl: '/t/events' } : {}), ...opts }, hash: fx.hash || null });
 	await page.waitForFunction(function () {
@@ -409,7 +412,7 @@ const CASES = [
 			return b && b.textContent !== 'Connecting' && b.textContent !== 'Running';
 		});
 		const o = await page.evaluate(function () { const t = window.__terms[0]; return { eol: t.options.convertEol, cols: t.cols, stdin: t.options.disableStdin }; });
-		expect(o.eol === true && o.cols === 80 && o.stdin === true, 'options: ' + JSON.stringify(o));
+		expect(o.eol === true && o.cols >= 80 && o.stdin === true, 'options: ' + JSON.stringify(o));
 		const r = await rows(page);
 		expect(r[0] === 'aa' && r[1] === 'bb', 'bare LF lines start at column 0: ' + JSON.stringify(r.slice(0, 3)));
 	}],
@@ -433,7 +436,7 @@ const CASES = [
 		});
 		expect(o.sb === 100000 && o.eol === false && o.blink === false && o.stdin === true, 'options: ' + JSON.stringify(o));
 	}],
-	['b07_fontScalesWithThePanelWhileColsAndRowsStay', async function (page) {
+	['b07_colsFillTheWidePanelAndFontShrinksOnlyWhenNarrow', async function (page) {
 		await open(page, { log: Buffer.from('x'.repeat(80) + '\r\n'), cols: 80, rows: 24 });
 		const measure = function () {
 			return page.evaluate(function () {
@@ -442,16 +445,18 @@ const CASES = [
 				return {
 					host: document.getElementById('host').getBoundingClientRect().width, screen: xs.width,
 					font: Number.parseFloat(getComputedStyle(rowsEl).fontSize), rows: rowsEl.children.length,
-					first: rowsEl.children[0].textContent.length
+					cols: window.__terms[0].cols, tok: window.JuneauTerminal.readBaseFont(document.getElementById('host'))
 				};
 			});
 		};
+		await page.evaluate(function () { document.getElementById('host').style.width = '1000px'; });
+		await page.waitForFunction(function () { return window.__terms[0].cols > 80; }, null, { timeout: 5000 });
 		const wide = await measure();
-		await page.evaluate(function () { document.getElementById('host').style.width = '500px'; });
+		await page.evaluate(function () { document.getElementById('host').style.width = '450px'; });
 		await page.waitForFunction(function (f) { return Number.parseFloat(getComputedStyle(document.querySelector('.xterm-rows')).fontSize) < f; }, wide.font, { timeout: 5000 });
 		const narrow = await measure();
-		expect(wide.rows === 24 && narrow.rows === 24, 'rows stay 24: ' + wide.rows + ' ' + narrow.rows);
-		expect(narrow.first === 80, 'the 80-column row is not rewrapped: ' + narrow.first);
+		expect(wide.font === wide.tok && wide.cols > 80, 'wide: token font, more columns: ' + JSON.stringify(wide));
+		expect(wide.rows === 24 && narrow.rows === 24 && narrow.cols === 80, 'rows stay 24, cols back to 80: ' + JSON.stringify(narrow));
 		expect(wide.screen <= wide.host && narrow.screen <= narrow.host, 'the screen fits: ' + JSON.stringify([wide, narrow]));
 		expect(narrow.font >= 8 && narrow.font < wide.font, 'the font shrinks: ' + wide.font + ' -> ' + narrow.font);
 	}],
@@ -465,7 +470,7 @@ const CASES = [
 		await open(page, { log: Buffer.from(osc8Link('javascript:alert(1)', 'BAD') + ' ' + osc8Link('https://example.org/ok', 'GOOD') + '\r\n'), cols: 80, rows: 24 });
 		const box = await page.evaluate(function () {
 			const r = document.querySelector('.xterm-screen').getBoundingClientRect();
-			return { x: r.left, y: r.top, w: r.width / 80, h: r.height / 24 };
+			return { x: r.left, y: r.top, w: r.width / window.__terms[0].cols, h: r.height / 24 };
 		});
 		const click = async function (col) {
 			const x = box.x + (col + 0.5) * box.w, y = box.y + 0.5 * box.h;
@@ -761,6 +766,17 @@ const CASES = [
 		});
 		expect(r.before === 'true' && r.off === 'false' && r.on === 'true', 'Follow toggles: ' + JSON.stringify(r));
 	}],
+	// On a wide panel the rendered font equals the token, not a scaled-up size.
+	['b29_widePanelFontEqualsToken', async function (page) {
+		await open(page, { log: Buffer.from('x\r\n'), cols: 40, rows: 5 });
+		await page.evaluate(function () { document.getElementById('host').style.width = '1600px'; });
+		await page.waitForTimeout(300);
+		const r = await page.evaluate(function () {
+			const tok = window.JuneauTerminal.readBaseFont(document.getElementById('host'));
+			return { tok: tok, font: Number.parseFloat(getComputedStyle(document.querySelector('.xterm-rows')).fontSize) };
+		});
+		expect(r.font === r.tok, 'font equals the token on a wide panel: ' + JSON.stringify(r));
+	}],
 	// The --jc-term-font-size token sets the starting font size.
 	['b28_fontSizeTokenOverride', async function (page) {
 		await open(page, { log: Buffer.from('hello\r\n') });
@@ -775,7 +791,7 @@ const CASES = [
 		});
 		await page.waitForFunction(function () { return window.__terms.length > 0; });
 		const size = await page.evaluate(function () { return window.__terms[0].options.fontSize; });
-		expect(size >= 8 && size <= 20, 'font size within the clamp: ' + size);
+		expect(size === 16, 'a wide panel keeps the token size: ' + size);
 		const start = await page.evaluate(function () { return window.JuneauTerminal.readBaseFont(document.getElementById('host')); });
 		expect(start === 16, 'readBaseFont reads the token: ' + start);
 	}]

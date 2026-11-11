@@ -127,8 +127,8 @@ class ColumnSearchPopoverStyle_BrowserTest extends org.apache.juneau.TestBase {
 		}
 	}
 
-	@Test void d01_titleUsesTheAccent() {
+	@Test void d01_titleUsesBodyText() {
 		for (var s : SCHEMES)
-			assertEquals(probe(s).get("accent"), probe(s).get("titleColor"), s);
+			assertNotEquals(probe(s).get("accent"), probe(s).get("titleColor"), s);
 	}
 }

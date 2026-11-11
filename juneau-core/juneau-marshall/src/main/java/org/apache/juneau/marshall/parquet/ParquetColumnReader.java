@@ -202,6 +202,9 @@ final class ParquetColumnReader {
 	byte[] readFixedLenByteArray(int length) throws IOException {
 		if (nextNull)
 			return new byte[0];
+		// The length comes from the file's schema metadata, so bound it like a length-prefixed byte array.
+		if (length < 0 || length > MAX_BYTE_ARRAY_LEN)
+			throw ioex("Fixed-length byte array length %s is outside 0..%s", length, MAX_BYTE_ARRAY_LEN);
 		var b = new byte[length];
 		var n = 0;
 		while (n < length) {

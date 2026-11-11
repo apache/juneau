@@ -50,7 +50,7 @@ class SymbolSprite_StemIds_Test extends TestBase {
 		"juneau-sym-chevronright", "juneau-sym-chevronup", "juneau-sym-close", "juneau-sym-collapse_all",
 		"juneau-sym-columns", "juneau-sym-copy", "juneau-sym-csv", "juneau-sym-download", "juneau-sym-edit",
 		"juneau-sym-filter", "juneau-sym-first_page", "juneau-sym-forceStop", "juneau-sym-grip", "juneau-sym-last_page",
-		"juneau-sym-chevron_left_thin", "juneau-sym-chevron_right_thin", "juneau-sym-first_page_thin", "juneau-sym-last_page_thin",
+		"juneau-sym-chevron_left_thin", "juneau-sym-chevron_right_thin", "juneau-sym-first_page_thin", "juneau-sym-last_page_thin", "juneau-sym-expand_more_thin",
 		"juneau-sym-link", "juneau-sym-more", "juneau-sym-new", "juneau-sym-openPr", "juneau-sym-pause", "juneau-sym-pdf",
 		"juneau-sym-play", "juneau-sym-plus", "juneau-sym-print",
 		"juneau-sym-push", "juneau-sym-refresh", "juneau-sym-restore", "juneau-sym-search", "juneau-sym-settings", "juneau-sym-sort",

@@ -128,7 +128,7 @@ function popHasClass(ctx, cls) { return (popEl(ctx).className || '').indexOf(cls
 	const col = fakeCol(0, headerCell('Status'));
 	I.openColumnSearchPopover(makeIcon(), col, ctx, env.el('table'));
 	// The shim has no descendant selectors, so read the code/span children off each help row directly.
-	const rows = popEl(ctx).querySelector('.juneau-view-col-search-popover-help').querySelectorAll('.juneau-view-col-search-popover-help-op');
+	const rows = popEl(ctx).querySelector('.juneau-view-col-search-popover-more-list').querySelectorAll('.juneau-view-col-search-popover-help-op');
 	out.helpOps = rows.map(function (r) { const c = r.querySelector('code'); return c ? c.textContent : null; });
 	out.helpTexts = rows.map(function (r) { const s = r.querySelector('span'); return s ? s.textContent : null; });
 	I.closeColumnSearchPopover(ctx);
@@ -145,7 +145,7 @@ function popHasClass(ctx, cls) { return (popEl(ctx).className || '').indexOf(cls
 	];
 	const col = fakeCol(0, headerCell('Status'));
 	I.openColumnSearchPopover(makeIcon(), col, ctx, env.el('table'));
-	const rows = popEl(ctx).querySelector('.juneau-view-col-search-popover-help').querySelectorAll('.juneau-view-col-search-popover-help-op');
+	const rows = popEl(ctx).querySelector('.juneau-view-col-search-popover-more-list').querySelectorAll('.juneau-view-col-search-popover-help-op');
 	out.fallbackOps = rows.map(function (r) { const c = r.querySelector('code'); return c ? c.textContent : null; });
 	out.fallbackTexts = rows.map(function (r) { const s = r.querySelector('span'); return s ? s.textContent : null; });
 	I.closeColumnSearchPopover(ctx);
@@ -434,8 +434,11 @@ function clickOn(ctx, cls) {
 	I.openColumnSearchPopover(makeIcon(), fakeCol(0, headerCell('Status')), ctx, env.el('table'));
 	const ins = popEl(ctx).querySelector('.juneau-view-col-search-popover-instructions');
 	out.instructionsHasBare = ins.querySelector('.juneau-view-col-search-popover-barehelp').textContent === 'Bare help.';
-	out.instructionsOps = ins.querySelector('.juneau-view-col-search-popover-help').querySelectorAll('.juneau-view-col-search-popover-help-op')
-		.map(function (r) { return r.querySelector('code').textContent; });
+	// Operator rows and example chips are not part of the instructions stack: they live only in the "?" panel.
+	out.instructionsHasOps = ins.querySelector('.juneau-view-col-search-popover-help-op') != null || ins.querySelector('.juneau-view-col-search-popover-examples') != null;
+	out.helpHiddenBeforeClick = popEl(ctx).querySelector('.juneau-view-col-search-popover-more-list').hidden === true;
+	clickOn(ctx, 'more');
+	out.helpShownAfterClick = popEl(ctx).querySelector('.juneau-view-col-search-popover-more-list').hidden === false;
 	I.closeColumnSearchPopover(ctx);
 	out.examplesText = examplesFor('text', ['$eq', '$or']);
 	out.examplesNumeric = examplesFor('numeric', ['$between', '$and', '$gt', '$lt']);
@@ -555,7 +558,7 @@ function clickOn(ctx, cls) {
 		const res = {
 			type: el.querySelector('.juneau-view-col-search-popover-type')?.textContent ?? null,
 			bare: !!el.querySelector('.juneau-view-col-search-popover-barehelp'),
-			ops: el.querySelector('.juneau-view-col-search-popover-help').querySelectorAll('.juneau-view-col-search-popover-help-op').map(function (r) { return r.querySelector('code').textContent; }),
+			ops: el.querySelector('.juneau-view-col-search-popover-more-list').querySelectorAll('.juneau-view-col-search-popover-help-op').map(function (r) { return r.querySelector('code').textContent; }),
 			examples: !!el.querySelector('.juneau-view-col-search-popover-examples')
 		};
 		I.closeColumnSearchPopover(ctx);

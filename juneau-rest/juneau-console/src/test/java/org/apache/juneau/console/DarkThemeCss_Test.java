@@ -52,7 +52,7 @@ class DarkThemeCss_Test extends TestBase {
 	 * token this layer does redefine or deliberately leaves.
 	 */
 	private static final Set<String> ACCENT_OR_INVARIANT = Set.of(
-		"--jc-accent", "--jc-accent-wash", "--jc-link", "--jc-focus", "--jc-accent-selected",
+		"--jc-accent", "--jc-accent-wash", "--jc-tab-selected-bg", "--jc-link", "--jc-focus", "--jc-accent-selected",
 		"--jc-btn-primary", "--jc-btn-primary-hover", "--jc-avatar-bg", "--jc-danger", "--jc-danger-strong", "--jc-success", "--jc-white",
 		"--jc-on-accent", "--jc-on-btn-primary",
 		// Derived aliases that stay live.

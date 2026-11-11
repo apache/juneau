@@ -145,7 +145,7 @@ class ViewsJs_Terminal_Test extends TestBase {
 	@Test void a07_readBaseFontDefault() { ok("g01_readBaseFontDefault"); }
 	@Test void a08_readBaseFontToken() { ok("g02_readBaseFontToken"); }
 	@Test void a09_readBaseFontInvalid() { ok("g03_readBaseFontInvalid"); }
-	@Test void a10_fitFontStillClampsForAnyReference() { ok("g04_fitFontStillClampsForAnyReference"); }
+	@Test void a10_fitFontNeverExceedsTheToken() { ok("g04_fitFontNeverExceedsTheToken"); }
 
 	@Test void z01_everyCasePasses() {
 		var r = r();

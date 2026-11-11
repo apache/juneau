@@ -2658,6 +2658,13 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.build();
 		 * </p>
 		 *
+		 * <h4 class='section'>Notes:</h4><ul>
+		 * 	<li class='warn'>A prebuilt client is used as-is: the redirect credential guard (which strips {@code Authorization},
+		 * 		{@code Cookie} and similar headers on a cross-origin redirect) and the SSRF guardrail are installed on the
+		 * 		builder that {@link #createHttpClient()} uses, so they are not present on a client passed here.  Build it from
+		 * 		{@link #httpClientBuilder()} instead, or disable redirect following on the prebuilt client.
+		 * </ul>
+		 *
 		 * @param value The {@link HttpClient} to be used to handle all HTTP communications with the target server.
 		 * 	<br>Can be <jk>null</jk> (a default client will be created).
 		 * @return This object.
@@ -2756,6 +2763,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		SSRF-guard-active {@code @Remote} call (one without the {@link #allowPrivateUrls(boolean) allowPrivateUrls}
 		 * 		opt-in).  Add interceptors with {@link HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)} on the
 		 * 		{@link #httpClientBuilder() HttpClientBuilder} instead.
+		 * 	<li class='warn'>For the same reason the redirect credential guard is not applied: credential headers are then
+		 * 		forwarded on a cross-origin redirect unless redirect following is disabled.
 		 * </ul>
 		 *
 		 * @param httpprocessor New property value.

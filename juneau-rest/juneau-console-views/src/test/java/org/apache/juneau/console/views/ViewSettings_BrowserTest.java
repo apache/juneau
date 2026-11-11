@@ -200,14 +200,14 @@ class ViewSettings_BrowserTest extends TestBase {
 		assertTrue(String.valueOf(c.get("detailSelected")).startsWith("Name"), c::toString);
 	}
 
-	@Test void c02_selectedTabIsWashWithAccentBar() {
+	@Test void c02_selectedTabIsSelectedFillWithoutBar() {
 		var t = obj(obj(report, "chooserLight"), "tabs");
 		assertNotEquals(t.get("selBg"), t.get("unBg"), t::toString);
 		assertEquals(t.get("wash"), t.get("selBg"), t::toString);
 		assertEquals("none", t.get("selBar"), t::toString);
 	}
 
-	@Test void c03_selectedTabIsWashWithAccentBar_dark() {
+	@Test void c03_selectedTabIsSelectedFillWithoutBar_dark() {
 		var t = obj(obj(report, "chooserDark"), "tabs");
 		assertNotEquals(t.get("selBg"), t.get("unBg"), t::toString);
 		assertEquals(t.get("wash"), t.get("selBg"), t::toString);

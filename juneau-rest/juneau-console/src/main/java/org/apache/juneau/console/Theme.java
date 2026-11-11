@@ -198,7 +198,9 @@ public final class Theme {
 		.token("--jc-header-icon-color", "#747474")
 		.token("--jc-accent", "#1589EE")
 		.token("--jc-accent-wash", "rgba(21,137,238,0.1)")
+		.token("--jc-tab-selected-bg", "#e8f3fd")
 		.token("--jc-link", "#015194")
+		.token("--jc-search-help-fg", "#2b6cb0")
 		.token("--jc-text", "#080707")
 		.token("--jc-text-soft", "#080707cc")
 		.token("--jc-text-muted", "#706e6b")
@@ -361,6 +363,7 @@ public final class Theme {
 		.dark("--jc-focus", "#4aa3ff")
 		.dark("--jc-accent-selected", "#4aa3ff")
 		.dark("--jc-accent-wash", "rgba(21,137,238,0.22)")
+		.dark("--jc-tab-selected-bg", "#213d58")
 		.build();
 
 	/**
@@ -385,6 +388,7 @@ public final class Theme {
 		.token("--jc-page-bg", "linear-gradient(180deg, #dccaa6 0%, #e8dcc4 22%, #f2ebdc 55%, #faf6ee 100%)")
 		.token("--jc-accent", "#a9772f")
 		.token("--jc-accent-wash", "rgba(169,119,47,0.1)")
+		.token("--jc-tab-selected-bg", "#f6f1ea")
 		.token("--jc-link", "#754d16")
 		.token("--jc-text", "#2e2415")
 		.token("--jc-text-soft", "#2e2415cc")
@@ -402,6 +406,7 @@ public final class Theme {
 		.dark("--jc-accent", "#b17d31")
 		.dark("--jc-focus", "#a9772f")
 		.dark("--jc-accent-wash", "rgba(169,119,47,0.25)")
+		.dark("--jc-tab-selected-bg", "#453b2e")
 		.build();
 
 	/**
@@ -432,6 +437,7 @@ public final class Theme {
 		.token("--jc-page-bg", "linear-gradient(180deg, #e8cfd3 0%, #f0dfe3 22%, #f6eef0 55%, #faf7f8 100%)")
 		.token("--jc-accent", "#B42348")
 		.token("--jc-accent-wash", "rgba(180,35,72,0.1)")
+		.token("--jc-tab-selected-bg", "#f8e9ed")
 		.token("--jc-link", "#8B1538")
 		.token("--jc-text", "#2a181c")
 		.token("--jc-text-soft", "#2a181ccc")
@@ -450,6 +456,7 @@ public final class Theme {
 		.dark("--jc-focus", "#e0557a")
 		.dark("--jc-accent-selected", "#e0557a")
 		.dark("--jc-accent-wash", "rgba(224,85,122,0.22)")
+		.dark("--jc-tab-selected-bg", "#4d313f")
 		.build();
 
 	/**
@@ -476,6 +483,7 @@ public final class Theme {
 		.token("--jc-page-bg", "linear-gradient(180deg, #f4f5f7 0%, #fafbfc 55%, #ffffff 100%)")
 		.token("--jc-accent", "#ff481f")                   // darker than the brand #FF5630 so the selected/hover edge clears 3:1 on its wash
 		.token("--jc-accent-wash", "rgba(255,86,48,0.1)")
+		.token("--jc-tab-selected-bg", "#ffeeea")
 		.token("--jc-link", "#BF2600")
 		.token("--jc-text", "#172B4D")
 		.token("--jc-text-soft", "#172B4Dcc")
@@ -495,6 +503,7 @@ public final class Theme {
 		.dark("--jc-link", "#ff8a70")
 		.dark("--jc-chrome-bg", "#7a1a05")
 		.dark("--jc-accent-wash", "rgba(255,86,48,0.22)")
+		.dark("--jc-tab-selected-bg", "#54312e")
 		.build();
 
 	/**

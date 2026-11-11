@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.console.freemarker.*;
 import org.apache.juneau.console.views.*;
@@ -83,15 +84,16 @@ public final class PetsPageBuilders {
 			.selectableWhen(RowActionEnabledRule.of("status", Op.NE, "SOLD", "Already sold."));
 		return TableSpec.create("pets").rowType("Pet").dataMode(DataMode.SERVER).dataUrl("/console/pets/query")
 			.columnConfig(true)
+			.operators(SearchOperatorSet.standard())
 			.urlState("ids")
 			.defaultOrder("id", Sort.ASC)
 			.pollIntervalMs(30_000)
 			.pausePollingWhileEditing(true)
 			.columns(
-				Column.create("id").label("Id"),
-				Column.create("name").label("Name").href("/console/pets/{id}/summary"),
-				Column.create("species").label("Species").render(PillRenders.species()),
-				Column.create("status").label("Status").render(PillRenders.petStatus()),
+				Column.create("id").label("Id").searchType(SearchType.NUMERIC),
+				Column.create("name").label("Name").href("/console/pets/{id}/summary").searchType(SearchType.TEXT),
+				Column.create("species").label("Species").render(PillRenders.species()).searchType(SearchType.ENUM),
+				Column.create("status").label("Status").render(PillRenders.petStatus()).searchType(SearchType.ENUM),
 				Column.create("price").label("Price (USD)").render(Render.of("decimal").meta("places", 2)),
 				Column.create("tags").label("Tags").defaultVisible(false))
 			.rowClass("status", Op.EQ, "SOLD", "is-muted")

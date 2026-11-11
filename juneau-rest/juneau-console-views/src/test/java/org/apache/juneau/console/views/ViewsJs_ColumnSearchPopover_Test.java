@@ -262,7 +262,8 @@ class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 
 	@Test void e04_instructionsAndExamples() {
 		var r = report();
-		assertBean(r, "instructionsHasBare,instructionsOps", "true,[$eq,$or]");
+		assertBean(r, "instructionsHasBare,instructionsHasOps", "true,false");
+		assertBean(r, "helpHiddenBeforeClick,helpShownAfterClick", "true,true");
 		assertBean(r, "examplesText", "[err,$or($eq(OPEN),$eq(CLOSED))]");
 		assertBean(r, "examplesNumeric", "[$between(1, 100),$and($gt(1),$lt(9))]");
 		assertBean(r, "examplesBareAlwaysShown", "[err]");

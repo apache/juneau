@@ -76,7 +76,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertTrue(body.contains(sel), body);
 		var st = body.indexOf(sel);
 		var rule = body.substring(st, body.indexOf("}", st));
-		assertTrue(rule.contains("background-color: var(--jc-tab-selected-bg, var(--jc-accent-wash))") && rule.contains("var(--jc-accent)"), rule);
+		assertTrue(rule.contains("background-color: var(--jc-tab-selected-bg)") && rule.contains("var(--jc-accent)"), rule);
 		assertFalse(rule.contains("--jc-accent-selected"), rule);
 	}
 
@@ -423,13 +423,13 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	@Test void j03_themeOpenTokenCount_pinned_unaffectedByAssetsFeature() {
-		// 136 = 106 plus the 30 --jc-pill-cat-N-* categorical pill tokens; 106 = 105 plus --jc-danger-strong (the filled-destructive hover fill); 105 = 100 (the 5 --jc-nav-tab-* / --jc-page-nav-child-padding-* tab-box tokens are the last five) = 70 (55 base + the 15 canonical --jc-pill-* status-chip tokens; the 15 legacy --jc-tag-* tokens are
+		// 138 = 136 plus --jc-tab-selected-bg and --jc-search-help-fg; 136 = 106 plus the 30 --jc-pill-cat-N-* categorical pill tokens; 106 = 105 plus --jc-danger-strong (the filled-destructive hover fill); 105 = 100 (the 5 --jc-nav-tab-* / --jc-page-nav-child-padding-* tab-box tokens are the last five) = 70 (55 base + the 15 canonical --jc-pill-* status-chip tokens; the 15 legacy --jc-tag-* tokens are
 		// RETAINED as var(--jc-pill-*) aliases for badges/avatars/frozen calendar) plus the 12 --jc-probe-* status
 		// probe tokens (4 statuses x bg/text/dot); the selected-probe ring reuses the existing --jc-accent-selected
 		// token, so the probe family adds exactly 12, not a ring token, plus the 18 --jc-chart-* tokens (8 series slots and 10 chart roles) read by juneau-charts.js.
 		assertBean(Theme.OPEN.getTokens(),
 			"size,--jc-main-bg,--jc-card-bg,--jc-card-padding,--jc-chrome-icon,--jc-text,--jc-text-soft,--jc-card-shadow,--jc-page-nav-hairline,--jc-page-nav-section-font-size,--jc-page-nav-child-font-size",
-			"136,#f5f6f9,#ffffff,16px 16px 8px,#666666,#080707,#080707cc,0 2px 2px rgba(0, 0, 0, 0.05),2px,13px,12px");
+			"138,#f5f6f9,#ffffff,16px 16px 8px,#666666,#080707,#080707cc,0 2px 2px rgba(0, 0, 0, 0.05),2px,13px,12px");
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-logo"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-page-bg-image"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-card-surface"));
@@ -774,7 +774,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 		var hover = "{ background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }";
 		assertContainsAll(css,
 			".juneau-view-ribbon-btn[aria-pressed=\"true\"] " + hover,
-			".juneau-view-ribbon-group[data-juneau-strip-mode=\"tab\"] .juneau-view-ribbon-btn[aria-selected=\"true\"] {\n\tbackground-color: var(--jc-tab-selected-bg, var(--jc-accent-wash));",
+			".juneau-view-ribbon-group[data-juneau-strip-mode=\"tab\"] .juneau-view-ribbon-btn[aria-selected=\"true\"] {\n\tbackground-color: var(--jc-tab-selected-bg);",
 			".juneau-view-ribbon-btn:active:not(:disabled) { background-color: var(--jc-accent); color: var(--jc-on-accent); }");
 		assertFalse(css.contains(".juneau-view-ribbon-btn[aria-pressed=\"true\"] { background-color: var(--jc-accent); color: var(--jc-on-accent);"),
 			() -> "pressed toggle must not keep the solid accent fill, css:\n" + css);

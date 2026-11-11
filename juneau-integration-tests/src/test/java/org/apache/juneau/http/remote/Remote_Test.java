@@ -309,8 +309,8 @@ class Remote_Test extends TestBase {
 		assertEquals("qux",x.getX4());
 	}
 
-	@Rest(path="/C4")
-	
+	// Typed rethrow on the @Remote client needs the Thrown header, which is opt-in.
+	@Rest(path="/C4", renderResponseStackTraces="true")
 	public static class C4a implements BasicJson5Config {
 		@RestOp
 		public String x1() throws C4c {

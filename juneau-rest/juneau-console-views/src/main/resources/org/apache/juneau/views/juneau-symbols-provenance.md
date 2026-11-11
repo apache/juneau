@@ -97,6 +97,7 @@ live `<use>` composition):
 | `chevron_right_thin` | `juneau-original` | `7c5b5621a67066c825a68908f5fca63adfdc3221c8f1690ec35ba11f4d4c3444` |
 | `first_page_thin` | `juneau-original` | `55c23fb0ab85bab7ac06dfb86ed51791ac0675faec25014221a0ba09a82022f4` |
 | `last_page_thin` | `juneau-original` | `09d27af90579a853415b5187b2e8f6d893f6ebcb8670cd674c19da8ed07833e1` |
+| `expand_more_thin` | `juneau-original` | `3e39e1dd23e3f48c01affcbf1ec9d0699bb69d94ebbe87f4c2d1d923ed0ab974` |
 | `grip` | `juneau-original` | `5f5b79925a3ac107dacabad195b9e34fccee9eda4503a26c0863d5810f513cfd` |
 | `last_page` | `original-artwork` | `947f6cc47850b1464d85465e214d58cd3a5d4ced84c90028c1780b389534909c` |
 | `link` | `juneau-original` | `5117de4b0677d59a14d241db8039890f57fe43dccd0fd82033a2dd9dc5ba2103` |
@@ -153,7 +154,7 @@ where the source console sprite draws the role, its artwork replaces the Juneau 
 them only because it searched for a same-named `first_page` / `chevronleft` symbol in the source console sprite and
 ignored the live `<use>` compositions of its `chevronright` symbol.
 
-**Thin paging chevrons.** `chevron_left_thin`, `chevron_right_thin`, `first_page_thin` and `last_page_thin` are original
+**Thin paging chevrons.** `chevron_left_thin`, `chevron_right_thin`, `first_page_thin`, `last_page_thin` and `expand_more_thin` (the page-size caret) are original
 single-stroke artwork (1.5 stroke, round caps, drawn in the 24 box) used by the paging pill; the heavier
 `chevronleft` / `chevronright` / `first_page` / `last_page` stay registered for other consumers.
 

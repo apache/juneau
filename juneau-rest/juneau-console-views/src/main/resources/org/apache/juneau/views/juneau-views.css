@@ -1057,6 +1057,8 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"]:not(:has(> .juneau-view-tabs-scroll)) {
 	overflow-x: auto;
 	overflow-y: hidden;
+	padding-bottom: 1px;          /* room for the selected tab's -1px overlap, which overflow would otherwise clip */
+	margin-bottom: -1px;          /* net layout unchanged; the overlap lands on the pane's top border */
 }
 
 /* The tab buttons' own scroll box: the strip above never clips, so the selected tab's overlap stays visible. */
@@ -1068,6 +1070,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	min-width: 0;
 	overflow-x: auto;
 	padding-bottom: 1px;          /* room for the selected tab's -1px overlap */
+	margin-bottom: -1px;          /* the box itself reaches 1px past the strip, so the overlap lands on the floor / pane border */
 }
 
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
@@ -1697,15 +1700,15 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 	text-align: left;
 }
 .juneau-view-col-search-popover-title {
-	font-weight: 600;
-	font-size: var(--jc-chrome-font-size-2);
+	font-weight: 700;
+	font-size: var(--jc-chrome-font-size-3);
 	margin-bottom: 6px;
 }
 .juneau-view-col-search-popover-input {
 	box-sizing: border-box;
 	width: 100%;
-	height: var(--jc-space-5);
-	padding: 0 6px;
+	height: var(--jc-chrome-control-height-compact);
+	padding: 0 8px;
 	font: inherit;
 	font-size: var(--jc-chrome-font-size-2);
 	border: 1px solid;
@@ -1730,8 +1733,8 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 .juneau-view-col-search-popover.is-invalid .juneau-view-col-search-popover-status {
 	color: var(--jc-chrome-danger, currentColor);
 }
-/* Operator help: one row per effective operator, its "$name" then the operator API's help text. */
-.juneau-view-col-search-popover-help {
+/* Operator help in the "?" panel under the buttons: smaller than body text, inked by --jc-search-help-fg. */
+.juneau-view-col-search-popover-more-list {
 	margin-top: 6px;
 	display: flex;
 	flex-direction: column;
@@ -1775,9 +1778,10 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 /* Compact footer buttons at the input's height; the "?" help mark is a small round icon at the trailing edge. */
 .juneau-view-col-search-popover-footer .jc-btn {
 	box-sizing: border-box;
-	height: var(--jc-space-5);
+	height: var(--jc-chrome-control-height-compact);
 	padding: 0 10px;
 	line-height: 1;
+	font-weight: 400;
 	font-size: var(--jc-chrome-font-size-2);
 }
 .juneau-view-col-search-popover-more {

@@ -64,7 +64,7 @@ class FolderTabs_Css_Test extends TestBase {
 
 	@Test void a02_selectedTab_washFill_joinsPanel() throws IOException {
 		var body = ruleBody(chromeCss(), SEL);
-		assertTrue(body.contains("background-color: var(--jc-tab-selected-bg, var(--jc-accent-wash))"), body);
+		assertTrue(body.contains("background-color: var(--jc-tab-selected-bg)"), body);
 		assertTrue(body.contains("border-bottom-color: transparent"), body);
 	}
 
@@ -72,10 +72,11 @@ class FolderTabs_Css_Test extends TestBase {
 		assertTrue(ruleBody(viewsCss(), SEL).contains("margin-bottom: -1px"));
 	}
 
-	@Test void a04_unselectedTab_whiteFill_transparentBar() throws IOException {
+	@Test void a04_unselectedTab_whiteFill_neutralTopBorder() throws IOException {
 		var body = ruleBody(chromeCss(), TAB_GROUP + " .juneau-view-ribbon-btn");
 		assertTrue(body.contains("background-color: var(--jc-card-bg)"), body);
-		assertTrue(body.contains("border-top-color: transparent"), body);
+		assertFalse(body.contains("border-top-color"), body);
+		assertTrue(body.contains("border-color: var(--jc-border)"), body);
 	}
 
 	@Test void a05_panel_hasAccentBorderAndCardFill() throws IOException {
@@ -133,6 +134,28 @@ class FolderTabs_Css_Test extends TestBase {
 
 	@Test void d01_popoverRounded() throws IOException {
 		assertTrue(ruleBody(chromeCss(), POP).contains("border-radius: var(--jc-radius)"));
+	}
+
+	@Test void d01b_popoverFrameIsThinBorderWithPopoverShadow() throws IOException {
+		var body = ruleBody(chromeCss(), POP);
+		assertTrue(body.contains("border-color: var(--jc-border)"), body);
+		assertTrue(body.contains("box-shadow: var(--jc-popover-shadow"), body);
+	}
+
+	@Test void d01c_titleIsBodyTextBold() throws IOException {
+		assertTrue(ruleBody(chromeCss(), POP + "-title").contains("color: var(--jc-text)"));
+		assertTrue(ruleBody(viewsCss(), POP + "-title").contains("font-weight: 700"));
+	}
+
+	@Test void d01d_helpUsesTheSearchHelpToken() throws IOException {
+		assertTrue(ruleBody(chromeCss(), POP + "-more-list").contains("color: var(--jc-search-help-fg)"));
+		assertTrue(ruleBody(viewsCss(), POP + "-more-list").contains("font-size: var(--jc-chrome-font-size-1)"));
+	}
+
+	@Test void d01e_inputAndButtonsAre28pxAndButtonsNormalWeight() throws IOException {
+		assertTrue(ruleBody(viewsCss(), POP + "-input").contains("height: var(--jc-chrome-control-height-compact)"));
+		var btn = ruleBody(viewsCss(), POP + "-footer .jc-btn");
+		assertTrue(btn.contains("height: var(--jc-chrome-control-height-compact)") && btn.contains("font-weight: 400"), btn);
 	}
 
 	@Test void d02_popoverWider() throws IOException {
