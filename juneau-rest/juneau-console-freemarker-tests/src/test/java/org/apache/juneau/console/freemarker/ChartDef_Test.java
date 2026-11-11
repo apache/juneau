@@ -280,6 +280,18 @@ class ChartDef_Test extends TestBase {
 		assertEquals(j("{threshold:200}"), map(ChartDef.line("t").src("/s").x("d").series("v", "V").largeData(200)).get("largeData"));
 	}
 
+	@Test void dataTab_a01_serialized() {
+		assertEquals(true, map(ChartDef.line("c").src("/s").x("d").series("v", "V").dataTab()).get("dataTab"));
+	}
+
+	@Test void dataTab_a02_defaultAbsent() {
+		assertFalse(map(ChartDef.line("c").src("/s").x("d").series("v", "V")).containsKey("dataTab"));
+	}
+
+	@Test void dataTab_a03_falseExplicit() {
+		assertEquals(false, map(ChartDef.line("c").src("/s").x("d").series("v", "V").dataTab(false)).get("dataTab"));
+	}
+
 	@Test void b15_partialFrames_needsSource() {
 		var target31 = ChartDef.line("t").src("/s").x("d").series("v", "V").partialFrames();
 		var e = assertThrows(IllegalArgumentException.class, target31::toCardSpec);

@@ -258,9 +258,9 @@ class ViewsJs_ClientColumnSearch_Test extends TestBase {
 		assertBean(report(), "popoverCommitClosed,popoverCommitRows,popoverCommitDraws", "true,[1,3],1");
 	}
 
-	@Test void d05_popover_bareLivePreview_andEscRevert() {
+	@Test void d05_popover_noLivePreview_andEscLeavesFilter() {
 		assertBean(report(), "popoverLiveRows,popoverLiveNative,popoverRevertRows,popoverRevertExpr",
-			"[1],,[0,1,2,3],");
+			"[0,1,2,3],,[0,1,2,3],");
 	}
 
 	@Test void d06_popover_utcNote_onlyOnTimestampColumns() {

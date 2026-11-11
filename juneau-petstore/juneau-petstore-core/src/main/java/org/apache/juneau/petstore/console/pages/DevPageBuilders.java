@@ -60,37 +60,22 @@ public final class DevPageBuilders {
 	public static PageSpec cards() {
 		var gauge = CardSpec.of(InventoryGaugeCardType.TYPE, "gauge").title("Dog inventory")
 			.body("species", "DOG").body("low", 20).body("high", 120);
+		var bands = ChartDef.bar("bands").title("Stock by species").src("/console/dev/cards/inventory/all")
+			.x("species").series("available", "Available").series("pending", "Pending").series("sold", "Sold", "ok")
+			.stacked(true).horizontal().decorate("petstore.stockTotals", null).on("click", "app.band-picked").dataTab().toCardSpec();
+		var prices = ChartDef.scatter("prices").title("Prices by pet").src("/console/dev/cards/prices")
+			.x("id", "number", "Pet").series("price", "Price")
+			.option("{dataZoom:[{type:'inside'},{type:'slider'}]}").publishZoom().toCardSpec();
 		return PageSpec.create().tab("dev/cards").init("/console/dev/cards/petstore-cards.js")
-			.card(CardSpec.of("kpi", "available").title("Pets available")
-				.body("label", "Pets available").body("dataUrl", "/console/dev/cards/stats/available"))
-			.card(gauge)
-			.card(ChartDef.bar("bands").title("Stock by species").src("/console/dev/cards/inventory/all")
-				.x("species").series("available", "Available").series("pending", "Pending").series("sold", "Sold")
-				.stacked(true).horizontal().decorate("petstore.stockTotals", null).on("click", "app.band-picked").toCardSpec())
-			.card(ChartDef.scatter("prices").title("Prices by pet").src("/console/dev/cards/prices")
-				.x("id", "number", "Pet").series("price", "Price")
-				.option("{dataZoom:[{type:'inside'},{type:'slider'}]}").publishZoom().toCardSpec())
-			.html("toolbar", "Card API", """
-				<div class="jc-prose">
-				<p>
-				<button type="button" class="jc-btn jc-btn-outline" data-cards-action="refresh">Refresh the gauge</button>
-				<button type="button" class="jc-btn jc-btn-outline" data-cards-action="api">Read the gauge API</button>
-				<button type="button" class="jc-btn jc-btn-outline" data-cards-action="cat">Show cats</button>
-				</p>
-				<output id="cards-api-result" aria-live="polite"></output>
-				</div>""")
-			.html("how", "Writing a card type", """
-				<div class="jc-prose">
-				<p>A card type is a JS class extending the console's Card, and optionally a Java class that validates the body and shapes what the handler
-				receives. Push classes onto <code>window.JuneauConsoleCards</code>; the queue works whether your script loads before
-				or after the console.</p>
-				<pre><code>class KpiCard extends JuneauConsole.Card {
-				  render() { ... }
-				}
-				(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(['kpi', KpiCard]);</code></pre>
-				<p>The gauge's Java side is <code>InventoryGaugeCardType</code>, registered with
-				<code>ConsoleFreemarkerMixin.create().cardType(new InventoryGaugeCardType())</code>.</p>
-				</div>""");
+			.card(SwitcherDef.create("cards-sw").style(SwitcherDef.STYLE_SLIDER).initialView("bands")
+				.view("available", "Pets available", v -> v.section(CardSpec.of("kpi", "available").title("Pets available")
+					.body("label", "Pets available").body("dataUrl", "/console/dev/cards/stats/available")))
+				.view("gauge", "Dog inventory", v -> v.section(gauge))
+				.view("bands", "Stock by species", v -> v.section(bands))
+				.view("prices", "Prices by pet", v -> v.section(prices))
+				.view("toolbar", "Card API", v -> v.section(CardSpec.html("toolbar").title("Card API").src("/console/dev/cards/fragments/toolbar")))
+				.view("how", "Writing a card type", v -> v.section(CardSpec.html("how").title("Writing a card type").src("/console/dev/cards/fragments/how")))
+				.toCardSpec());
 	}
 
 	/**

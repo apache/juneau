@@ -90,7 +90,7 @@
  * Copy, Load all and the input toggle are standard secondary buttons (.jc-btn, chrome.css).  This zero-specificity
  * fallback gives them an edge on a host that does not load chrome.css; .jc-btn wins wherever it is defined.
  */
-:where(.juneau-term-copy, .juneau-term-load-all, .juneau-term-input) {
+:where(.juneau-term-copy, .juneau-term-load-all, .juneau-term-input, .juneau-term-follow) {
 	padding: 2px var(--jc-space-2, 8px);
 	border: 1px solid var(--jc-border, currentColor);
 	border-radius: var(--jc-chrome-control-radius, 4px);
@@ -100,32 +100,14 @@
 	cursor: pointer;
 }
 
-/* Follow is a labelled checkbox drawn as a toggle: secondary edge when off, the selected (= hover) accent when on. */
-.juneau-term-follow {
-	display: inline-flex;
-	align-items: center;
-	gap: var(--jc-space-1, 4px);
-	padding: 2px var(--jc-space-2, 8px);
-	border: 1px solid var(--jc-border, currentColor);
-	border-radius: var(--jc-chrome-control-radius, 4px);
-	background: var(--jc-control-bg, transparent);
-	cursor: pointer;
-	user-select: none;
-}
-
-.juneau-term-follow:hover {
-	background: var(--jc-hover-bg, transparent);
+/*
+ * Follow is a .jc-btn toggle.  chrome.css styles aria-pressed only for button groups, table icon buttons and ribbon
+ * buttons, none of which match it, so the pressed state is drawn here.
+ */
+.juneau-term-follow[aria-pressed="true"] {
+	background-color: var(--jc-accent-wash, transparent);
+	color: var(--jc-link, inherit);
 	border-color: var(--jc-accent, currentColor);
-}
-
-.juneau-term-follow:has(input:checked) {
-	background: var(--jc-accent-wash, transparent);
-	border-color: var(--jc-accent, currentColor);
-	color: var(--jc-accent, inherit);
-}
-
-.juneau-term-follow input {
-	margin: 0;
 }
 
 /* The input toggle: a secondary button like Copy, with aria-pressed; pressed while input is live. */

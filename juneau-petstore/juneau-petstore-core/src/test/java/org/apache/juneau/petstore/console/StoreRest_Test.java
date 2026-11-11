@@ -72,8 +72,9 @@ class StoreRest_Test extends TestBase {
 
 	@Test void a01_cardOrder() throws Exception {
 		assertPage(page(client(), "/console/store")).isValid()
-			.hasCardOrder("welcome", "stats", "revenue", "revenue-sw", "orders-sw", "pets-sw", "hours")
+			.hasCardOrder("welcome", "revenue", "store-sw")
 			.hasCard("welcome", "html")
+			.hasCard("store-sw", "switcher").hasCardKey("store-sw", "/style", "slider")
 			.hasCard("stats", "datatables")
 			.hasCard("revenue", "kpi")
 			.hasCardKey("revenue", "/dataUrl", "/console/store/kpi/revenue")
@@ -81,7 +82,6 @@ class StoreRest_Test extends TestBase {
 			.hasCard("by-species", "chart")
 			.hasCard("by-status", "chart")
 			.hasCard("pets-map", "chart")
-			.hasCard("revenue-sw", "switcher").hasCard("orders-sw", "switcher").hasCard("pets-sw", "switcher")
 			.hasCard("revenue-chart", "chart")
 			.hasCard("hours", "html");
 		assertContainsAll(page(client(), "/console/store"), "/console/store/recent-orders", "/console/store/fragments/hours");
@@ -130,9 +130,9 @@ class StoreRest_Test extends TestBase {
 			.hasCardKey("by-status", "/src", "/console/store/stats/status")
 			.hasCardKey("by-status", "/x/field", "status")
 			.hasCardKey("by-status", "/series/0/field", "count")
-			.hasCardKey("revenue-sw", "/title", "Revenue, last 30 days")
-			.hasCardKey("orders-sw", "/title", "Orders, last 30 days")
-			.hasCardKey("pets-sw", "/title", "Pets")
+			.hasCardKey("by-species", "/dataTab", true)
+			.hasCardKey("by-status", "/dataTab", true)
+			.hasCardKey("pets-map", "/dataTab", true)
 			.hasCardKey("orders-trend", "/x/label", "Day")
 			.hasCardKey("orders-trend", "/series/0/label", "Placed")
 			.hasCardKey("orders-trend", "/series/1/label", "Delivered")
@@ -163,10 +163,17 @@ class StoreRest_Test extends TestBase {
 		for (var top : cards.elements(JsonMap.class)) {
 			if (! "switcher".equals(top.getString("type")))
 				continue;
+			var nested = new ArrayList<JsonMap>();
 			for (var v : top.getList("views").elements(JsonMap.class)) {
-				if (! v.containsKey("card") || ! "datatables".equals(v.getMap("card").getString("type")))
+				if (v.containsKey("card"))
+					nested.add(v.getMap("card"));
+				else
+					for (var sec : v.getList("sections").elements(JsonMap.class))
+						nested.add(sec.getMap("card"));
+			}
+			for (var card : nested) {
+				if (! "datatables".equals(card.getString("type")))
 					continue;
-				var card = v.getMap("card");
 				var t = card.getMap("table");
 				var row = list(json(), t.getString("dataUrl")).getMap(0);
 				for (var col : t.getList("columns").elements(JsonMap.class))
@@ -174,7 +181,7 @@ class StoreRest_Test extends TestBase {
 				checked.add(card.getString("id"));
 			}
 		}
-		assertEquals(List.of("revenue-data", "orders-data"), checked);
+		assertEquals(List.of("stats", "revenue-data", "orders-data"), checked);
 	}
 
 	/**

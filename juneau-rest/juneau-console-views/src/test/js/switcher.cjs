@@ -81,6 +81,10 @@ async function page(contract, opts) {
 		setTimeout: fn => fn(), clearTimeout: () => {}, setInterval: () => 0, clearInterval: () => {}
 	};
 	env.window.window = env.window;
+	const winListeners = {};
+	env.window.addEventListener = (t, fn) => { (winListeners[t] = winListeners[t] || []).push(fn); };
+	env.window.removeEventListener = (t, fn) => { winListeners[t] = (winListeners[t] || []).filter(f => f !== fn); };
+	if (opts.reduceMotion) env.window.matchMedia = () => ({ matches: true, addEventListener: () => {} });
 	env.window.document = doc;
 	env.window.localStorage = localStorage;
 	env.window.history = { state: null, replaceState: (s, t, u) => { hist.push(decodeURIComponent(String(u))); const q = String(u).indexOf('?'); env.window.location.search = q < 0 ? '' : String(u).slice(q); } };
@@ -92,7 +96,7 @@ async function page(contract, opts) {
 		env.window.JuneauConsoleCards = [['leaf', toCardClass(leaf)]];
 	vm.createContext(sandbox);
 	const load = ([name, src]) => vm.runInContext(src, sandbox, { filename: name }); // NOSONAR javascript:S1523 - loads the shipped scripts into a vm sandbox for the test
-	const r = { env, doc, errors, hist, renders, refreshes, destroys, store, sandbox, threw: null };
+	const r = { env, doc, winListeners, errors, hist, renders, refreshes, destroys, store, sandbox, threw: null };
 	try {
 		for (const s of sources) load(s);
 			if (opts.loadTwice) {
@@ -145,7 +149,7 @@ async function main() {
 		api(r).select('v3');
 		out.s1 = { afterMount, afterV3, final: r.renders.slice(), threw: r.threw, readyThrew: r.readyThrew, errors: r.errors };
 	}
-	// s2. The display is a labelled tab panel; the selector is a pane-less ribbon-mode strip.
+	// s2. The display is a labelled tab panel; the selector is a pane-less tab-mode strip (default style).
 	{
 		const r = await page(withSwitchers(baseSpec()));
 		const disp = r.doc.getElementById('sw1-display');
@@ -153,7 +157,7 @@ async function main() {
 		const first = labelled(), firstBtn = tabBtn(r, 'v1').id;
 		api(r).select('v3');
 		const second = labelled(), secondBtn = tabBtn(r, 'v3').id;
-		const sel = r.doc.getElementById('sw1').querySelector('[data-juneau-strip-mode="ribbon"]');
+		const sel = r.doc.getElementById('sw1').querySelector('[data-juneau-strip-mode="tab"][data-juneau-switcher-style="tabs"]');
 		out.s2 = { role: disp.getAttribute('role'), tabindex: disp.getAttribute('tabindex'),
 			first: first === firstBtn && !!first, second: second === secondBtn && second !== first,
 			mode: !!sel, controls: tabBtn(r, 'v1').getAttribute('aria-controls'),
@@ -251,6 +255,63 @@ async function main() {
 		const bad = await page(withSwitchers(baseSpec({ views: [
 			{ id: 'v1', label: 'One', card: leafCard('c1') }, { id: 'v2', label: 'Two', card: { id: 'inner', type: 'switcher', views: [] } }] })));
 		out.s11 = { before, apiBefore, same: cards.length === 1 && cards[0] === nested, hostId: nested.el.id, rejected: codeOf(() => bad.JC.cardApi('sw1').select('v2')) };
+	}
+	// s12. Style: tabs (default) puts the display inside the strip's panel; slider keeps the ribbon with a sibling display.
+	{
+		const r = await page(withSwitchers(baseSpec()));
+		const sel = r.doc.getElementById('sw1').querySelector('.juneau-switcher-selector');
+		const disp = r.doc.getElementById('sw1-display');
+		const tabs = { style: sel.getAttribute('data-juneau-switcher-style'), mode: sel.querySelector('[data-juneau-strip-mode]').getAttribute('data-juneau-strip-mode'),
+			panel: sel.hasAttribute('data-juneau-strip-panel'), inside: disp.parentNode === sel,
+			viewHost: !!disp.querySelector('.juneau-switcher-view') };
+		const r2 = await page(withSwitchers(baseSpec({ style: 'slider' })));
+		const sel2 = r2.doc.getElementById('sw1').querySelector('.juneau-switcher-selector');
+		const disp2 = r2.doc.getElementById('sw1-display');
+		const slider = { style: sel2.getAttribute('data-juneau-switcher-style'), mode: sel2.querySelector('[data-juneau-strip-mode]').getAttribute('data-juneau-strip-mode'),
+			panel: sel2.hasAttribute('data-juneau-strip-panel'), inside: disp2.parentNode === sel2, sibling: disp2.parentNode === sel2.parentNode };
+		out.s12 = { tabs, slider };
+	}
+	// s14. Stacked cards: a view holding `cards` mounts them all, in order, lazily, with one handle list and one teardown.
+	{
+		const spec = { id: 'sw1', type: 'switcher', title: 'Switch', views: [
+			{ id: 'v1', label: 'One', cards: [leafCard('k1'), leafCard('k2')] },
+			{ id: 'v2', label: 'Two', cards: [leafCard('k3'), leafCard('k4')] }] };
+		const r = await page(withSwitchers(spec));
+		const afterMount = r.renders.slice();
+		const host = r.doc.getElementById('sw1').querySelector('.juneau-switcher-view');
+		const hosts = ['k1', 'k2'].map(id => r.doc.getElementById(id));
+		const inSwitcher = hosts.map(h => !!h && h.hasAttribute('data-juneau-in-switcher'));
+		const order = hosts.map(h => !!h && h.parentNode === host);
+		const handles = api(r).switcher.view('v1').cards().map(c => c.id);
+		const beforeV2 = r.renders.slice();
+		api(r).select('v2');
+		const afterV2 = r.renders.slice();
+		const added = api(r).switcher.addView({ id: 'v3', label: 'Three', cards: [leafCard('k5'), leafCard('k6')] });
+		const bad = codeOf(() => api(r).switcher.addView({ id: 'v4', label: 'Four', card: leafCard('k7'), cards: [leafCard('k8')] }));
+		r.JC.destroyCard('sw1');
+		out.s14 = { afterMount, viewHostClass: host.className, inSwitcher, order, handles, beforeV2, afterV2, addedId: added.id, bad, destroyed: r.destroys.slice().sort() };
+	}
+	// s13. Slider thumb: created for slider only, follows the selection and resize, honours reduced motion.
+	{
+		const def = (b, k, v) => Object.defineProperty(b, k, { value: v, configurable: true });
+		const btns = r => Array.from(r.doc.getElementById('sw1').querySelectorAll('[data-tab-id]'));
+		const stub = r => btns(r).forEach((b, i) => { def(b, 'offsetLeft', i * 100); def(b, 'offsetWidth', 90); });
+		const thumbOf = r => r.doc.getElementById('sw1').querySelector('.juneau-switcher-thumb');
+		const rt = await page(withSwitchers(baseSpec()));
+		const r = await page(withSwitchers(baseSpec({ style: 'slider' })));
+		const th = thumbOf(r);
+		const created = !!th && th.parentNode.className.includes('juneau-view-ribbon-group') && th.getAttribute('aria-hidden') === 'true';
+		stub(r);
+		api(r).select('v2');
+		const moved = { transform: th.style.transform, width: th.style.width };
+		btns(r).forEach((b, i) => def(b, 'offsetLeft', i * 50 + 7));
+		(r.winListeners.resize || []).forEach(fn => fn({ type: 'resize' }));
+		const resized = th.style.transform;
+		const rr = await page(withSwitchers(baseSpec({ style: 'slider' })), { reduceMotion: true });
+		const calm = thumbOf(rr).style.transition;
+		const normal = thumbOf(r).style.transition || '';
+		r.JC.destroyCard('sw1');
+		out.s13 = { tabsHasThumb: !!thumbOf(rt), created, moved, resized, calm, normal, listenerGone: (r.winListeners.resize || []).length === 0 };
 	}
 }
 

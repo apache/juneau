@@ -158,8 +158,19 @@ const actions = (r, from) => r.fake.calls.slice(from || 0).filter(c => c[0] === 
 const cardError = (r, id) => text(r, id, '.jc-card-error');
 const key = (r, id, k) => one(r, id, '.jc-chart-plot').dispatch('keydown', { key: k, preventDefault() {} });
 
-// Opens a card's "Show data" table (the table body is built on open, not on every draw).
-const openTable = (r, id) => one(r, id, '.jc-chart-toggle').dispatch('click', {});
+// The data table is always built at draw time now (visually hidden, or in the Data tab), so there is nothing to open.
+const openTable = () => {};
+// A stand-in for helpers.tabStrip (the real one is covered by Helpers_Test): records the call and populates every pane.
+const fakeTabs = w => {
+	w.__tabCalls = [];
+	w.JuneauViews.helpers = { tabStrip(tabs, o) {
+		const d = w.document, wrap = d.createElement('div');
+		wrap.className = 'juneau-view-helper-tabstrip-wrapper';
+		w.__tabCalls.push({ labels: tabs.map(t => t.label), mode: o.mode, panes: o.panes, active: o.active });
+		for (const t of tabs) { const pane = d.createElement('div'); pane.className = 'fake-pane-' + t.id; t.populate(pane); wrap.appendChild(pane); }
+		return wrap;
+	} };
+};
 const ROWS = [{ day: 'Mon', placed: 3, delivered: 1 }, { day: 'Tue', placed: 5, delivered: 2 }, { day: 'Wed', placed: 4, delivered: 4 }];
 const LINE = {
 	id: 'c1', type: 'chart', title: 'Orders', kind: 'line', x: { field: 'day', label: 'Day' },
@@ -220,22 +231,35 @@ async function section(name, fn) {
 		};
 	});
 
-	// a02. The "Show data" table and the keyboard path.
+	// a02. The data table is always present, visually hidden, no toggle; and the keyboard path.
 	await section('table', async () => {
 		const r = await page({ cards: [LINE] });
-		const t = one(r, 'c1', '.jc-chart-toggle'), box = one(r, 'c1', '.jc-chart-table-box');
-		const before = { expanded: t.getAttribute('aria-expanded'), text: t.textContent, hidden: box.hidden, cells: all(r, 'c1', 'td').length };
-		const wiring = { controls: t.getAttribute('aria-controls'), boxId: box.id, tableName: one(r, 'c1', 'table').getAttribute('aria-labelledby'),
-			captionId: one(r, 'c1', '.jc-chart-caption').id };
-		t.dispatch('click', {});
-		const after = { expanded: t.getAttribute('aria-expanded'), text: t.textContent, hidden: box.hidden };
+		const table = one(r, 'c1', 'table'), sr = one(r, 'c1', '.jc-chart-sr');
+		const noToggle = one(r, 'c1', '.jc-chart-toggle') === null && !host(r, 'c1').textContent.includes('Show data');
+		const hidden = { inSr: !!sr && table.parentNode === sr || table.parentNode.parentNode === sr, inlineDisplay: sr.style.display || '', hiddenAttr: !!sr.hidden };
+		const wiring = { tableName: table.getAttribute('aria-labelledby'), captionId: one(r, 'c1', '.jc-chart-caption').id };
 		const head = all(r, 'c1', 'th').map(n => n.textContent), cells = all(r, 'c1', 'td').map(n => n.textContent);
 		const from = r.fake.calls.length;
 		key(r, 'c1', 'ArrowRight');
 		key(r, 'c1', 'ArrowRight');
 		key(r, 'c1', 'ArrowLeft');
-		return { before, after, wiring, head, cells, rows: all(r, 'c1', 'tr').length, noteHidden: one(r, 'c1', '.jc-chart-table-note').hidden,
+		return { noToggle, hidden, wiring, head, cells, rows: all(r, 'c1', 'tr').length, noteHidden: one(r, 'c1', '.jc-chart-table-note').hidden,
 			keys: actions(r, from) };
+	});
+
+	// a02b. dataTab renders Chart / Data folder tabs and no hidden duplicate; dataTab wins over a11y.table false; without the
+	// views toolkit it falls back to the hidden table.
+	await section('dataTab', async () => {
+		const r = await page({ cards: [card({ id: 'd', dataTab: true })] }, { afterLoad: fakeTabs });
+		const dataPane = one(r, 'd', '.fake-pane-data'), chartPane = one(r, 'd', '.fake-pane-chart');
+		const on = { calls: r.w.__tabCalls, tables: all(r, 'd', 'table').length, srBoxes: all(r, 'd', '.jc-chart-sr').length,
+			dataPaneTable: !!dataPane && dataPane.querySelector('table') !== null, chartPanePlot: !!chartPane && chartPane.querySelector('.jc-chart-plot') !== null,
+			cells: all(r, 'd', 'td').length, toggle: one(r, 'd', '.jc-chart-toggle') === null };
+		const w2 = await page({ cards: [card({ id: 'd', dataTab: true, a11y: { table: false } })] }, { afterLoad: fakeTabs });
+		const wins = { calls: w2.w.__tabCalls.length, tables: all(w2, 'd', 'table').length };
+		const w3 = await page({ cards: [card({ id: 'd', dataTab: true })] });
+		const fallback = { tables: all(w3, 'd', 'table').length, srBoxes: all(w3, 'd', '.jc-chart-sr').length, errors: w3.errors };
+		return { on, wins, fallback };
 	});
 
 	// a03. src rows through the per-draw fetch; a stacked horizontal bar.
@@ -1124,8 +1148,8 @@ async function section(name, fn) {
 		return { ratios, threw, isPromise: !!p && typeof p.then === 'function', rejected, log: r.errors.filter(e => e.includes('E-JS-103')) };
 	});
 
-	// a39. a refreshMs above the timer maximum is the maximum (no log); the data table is built on open and at redraw while open;
-	// fixed toggle label with aria-expanded, Home/End/Escape/blur on the keyboard walk.
+	// a39. a refreshMs above the timer maximum is the maximum (no log); the data table is rebuilt at every redraw;
+	// Home/End/Escape/blur on the keyboard walk.
 	await section('refreshMax', async () => {
 		const r = await page({ cards: [card({ id: 'big', data: undefined, src: '/api/b', refreshMs: 1e12 })] }, { fetch: () => ok(ROWS) });
 		return { ms: r.intervals.map(x => x.ms), log: r.errors };
@@ -1135,21 +1159,24 @@ async function section(name, fn) {
 		let n = 0;
 		const r = await page({ cards: [card({ id: 'lt', data: undefined, src: '/api/lt', refreshMs: 5000 })] }, { fetch: () => ok(Array.from({ length: ++n + 1 }, (_, i) => ({ day: 'd' + i, placed: n, delivered: 0 }))) });
 		const cells = () => all(r, 'lt', 'td').length;
-		const closed = { drawn: cells() };
+		const drawn = cells();
 		tick(r);
 		await flush();
-		const closedAfterRefresh = cells();
-		openTable(r, 'lt');
-		const opened = cells();
+		const afterRefresh = cells();
 		tick(r);
 		await flush();
-		const openedAfterRefresh = cells();
-		openTable(r, 'lt');
-		tick(r);
-		await flush();
-		const closedAgain = { expanded: one(r, 'lt', '.jc-chart-toggle').getAttribute('aria-expanded'), text: one(r, 'lt', '.jc-chart-toggle').textContent, hidden: one(r, 'lt', '.jc-chart-table-box').hidden };
-		openTable(r, 'lt');
-		return { closed, closedAfterRefresh, opened, openedAfterRefresh, closedAgain, reopened: cells() };
+		return { drawn, afterRefresh, afterSecond: cells() };
+	});
+
+	// a42. A horizontal bar grows with its category count (28px a row plus 56px); an explicit height is the minimum; vertical charts keep it.
+	await section('horizHeight', async () => {
+		const bars = (id, n, extra) => ({ id, type: 'chart', title: id, data: Array.from({ length: n }, (_, i) => ({ day: 'd' + i, placed: i })),
+			helper: { kind: 'bar', x: 'day', series: [{ field: 'placed' }], ...extra } });
+		const r = await page({ cards: [bars('many', 20, { orientation: 'horizontal' }), bars('few', 3, { orientation: 'horizontal' }),
+			bars('tall', 3, { orientation: 'horizontal' }), bars('vert', 20, {})] });
+		const h = id => one(r, id, '.jc-chart-canvas').style.height;
+		const r2 = await page({ cards: [{ ...bars('tall', 3, { orientation: 'horizontal' }), height: 900 }] });
+		return { many: h('many'), few: h('few'), vert: h('vert'), tall: one(r2, 'tall', '.jc-chart-canvas').style.height };
 	});
 
 	await section('keys', async () => {

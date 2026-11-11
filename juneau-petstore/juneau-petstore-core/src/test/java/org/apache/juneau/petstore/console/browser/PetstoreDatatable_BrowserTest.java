@@ -55,7 +55,7 @@ class PetstoreDatatable_BrowserTest extends TestBase {
 	private static final String PETS_ROW_COUNT = "document.querySelectorAll('#pets tbody tr[data-juneau-row-id]').length";
 
 	/** The Price column's index in the posted order (column 0 is the selection checkbox). */
-	private static final int PRICE_COLUMN = 5;
+	private static final int PRICE_COLUMN = 6;
 
 	private static Map<String,Map<String,Object>> report;
 

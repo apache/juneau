@@ -84,6 +84,7 @@ public final class PageCapture {
 		String title;
 		String subtitle;
 		String logoSrc;
+		String logoSymbol;
 		String logoHref;
 		String logoAlt;
 		boolean chrome;
@@ -96,6 +97,8 @@ public final class PageCapture {
 		public HeaderSpec subtitle(String v) { subtitle = v; return this; }
 		/** @param src Logo URL. @param href Link target, or <jk>null</jk>. @param alt Alt text, or <jk>null</jk>. @return This object. */
 		public HeaderSpec logo(String src, String href, String alt) { logoSrc = src; logoHref = href; logoAlt = alt; return this; }
+		/** @param name Built-in symbol name used as the logo. @param href Link target, or <jk>null</jk>. @param alt Alt text, or <jk>null</jk>. @return This object. */
+		public HeaderSpec logoSymbol(String name, String href, String alt) { logoSymbol = name; logoHref = href; logoAlt = alt; return this; }
 		/** @param v Whether the header and nav share the sticky {@code .jc-chrome} wrapper. @return This object. */
 		public HeaderSpec chrome(boolean v) { chrome = v; return this; }
 		/** @param label Link label. @param href Link target. @return This object. */
@@ -1110,9 +1113,10 @@ public final class PageCapture {
 		var m = new LinkedHashMap<String,Object>();
 		if (nn(header.title)) m.put("title", header.title);
 		if (nn(header.subtitle)) m.put("subtitle", header.subtitle);
-		if (nn(header.logoSrc)) {
+		if (nn(header.logoSrc) || nn(header.logoSymbol)) {
 			var l = new LinkedHashMap<String,Object>();
-			l.put("src", header.logoSrc);
+			if (nn(header.logoSymbol)) l.put("symbol", header.logoSymbol);
+			else l.put("src", header.logoSrc);
 			if (nn(header.logoHref)) l.put("href", header.logoHref);
 			if (nn(header.logoAlt)) l.put("alt", header.logoAlt);
 			m.put("logo", l);

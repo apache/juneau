@@ -114,7 +114,7 @@
 	 * ONE literal is compared against BOTH versions, so all three constants move together or nothing opens.  "2" adds
 	 * the optional FormDef.sections shape (a ribbon strip over one visible pane) alongside the flat fields list.
 	 */
-	const JUNEAU_DIALOG_FORM_CONTRACT_VERSION = "2";
+	const JUNEAU_DIALOG_FORM_CONTRACT_VERSION = "3";
 
 	/**
 	 * Row-selection/bulk-mutation feature's DOM attribute names - MUST equal ViewTable's constants of the same names
@@ -203,7 +203,7 @@
 
 	// View-level catalog keys copied verbatim onto view (defaultOrder is lifted separately).
 	const VIEW_KEYS = ["dataUrl", "rowType", "dataMode", "ribbon", "pollIntervalMs", "pausePollingWhileEditing",
-		"columnConfig", "cleanAddress", "primary", "copyLink", "rowActions", "rowClassRules", "urlState"];
+		"columnConfig", "cleanAddress", "primary", "copyLink", "rowActions", "rowClassRules", "urlState", "columnSearchHelpUrl"];
 
 	/**
 	 * Lift a datatables card's author catalog (`card.table`) into the SLOT_META envelope `paintSlotTable` consumes,
@@ -238,6 +238,7 @@
 
 		const envelope = { contractVersion: JUNEAU_SLOT_CONTRACT_VERSION, layout: catalog.layout || "wide", view: view };
 		if (hasRows) envelope.rows = catalog.rows;
+		if (catalog.rowIdField !== undefined) envelope.rowIdField = catalog.rowIdField;
 		if (catalog.selection !== undefined) {
 			const s = catalog.selection;
 			const sel = {
@@ -1918,7 +1919,43 @@
 		return "";
 	}
 
-	function openColumnSearchPopover(iconEl, col, ctx, table) {
+	/**
+	 * Worked examples shown in the column-search popover, keyed by the column's search type.  An example is
+	 * offered only when every `$operator` it uses is in the column's effective operator set.
+	 */
+	const COLUMN_SEARCH_EXAMPLES = {
+		text: ["err", "$or($eq(OPEN),$eq(CLOSED))"],
+		id: ["err", "$or($eq(OPEN),$eq(CLOSED))"],
+		numeric: ["$between(1, 100)", "$and($gt(1),$lt(9))"],
+		version: ["$prefix(2.1)", "$not($eq(1.0))"],
+		timestamp: ["$gt(2026-01-01)", "$between(2026-01-01, 2026-06-30)"],
+		enum: ["$eq(OPEN)", "$in(OPEN, CLOSED)"],
+		boolean: ["$eq(true)"]
+	};
+
+	/** The catalogued examples for `type` that the operator list `operators` can run (possibly empty). */
+	function columnSearchExamplesFor(type, operators) {
+		const names = new Set((operators || []).map(function (o) { return o?.name; }));
+		return (COLUMN_SEARCH_EXAMPLES[type] || []).filter(function (ex) {
+			return (ex.match(/\$[a-z]+/g) || []).every(function (n) { return names.has(n); });
+		});
+	}
+
+	/** Whether a column-search help URL is an absolute http(s) URL or a root-relative path that is safe to link. */
+	function isSafeColumnSearchHelpUrl(url) {
+		return typeof url === "string" && /^(https?:\/\/|\/)/i.test(url) && isSafeMarkdownHref(url);
+	}
+
+	/** Builds one footer button of the column-search popover. */
+	function columnSearchButton(suffix, label, primary) {
+		const b = document.createElement("button");
+		b.type = "button";
+		b.className = "juneau-view-col-search-popover-" + suffix + " jc-btn" + (primary ? " jc-btn-primary" : "");
+		b.textContent = label;
+		return b;
+	}
+
+	function openColumnSearchPopover(iconEl, col, ctx, table) { // NOSONAR javascript:S3776 -- one popover assembled in reading order; splitting it would scatter the DOM layout
 		closeColumnSearchPopover(ctx);
 		const header = typeof col.header === "function" ? col.header() : iconEl.closest("th,td");
 		const titleEl = header?.querySelector(".dt-column-title");
@@ -1926,7 +1963,6 @@
 		const current = getColumnExpr(ctx, col);
 		const meta = columnSearchMeta(ctx, col);
 		const search = window.JuneauViews?.search;
-		const serverSide = !isClientFiltered(ctx);
 		// Client-filtered DSL column: commits go through the strict server-parity gate.
 		const dsl = dslColumnInfo(ctx, col);
 		const strict = dsl ? function (t) { return compileColumnExpr(ctx, dsl, t); } : null;
@@ -1947,6 +1983,15 @@
 		status.setAttribute("role", "status");
 		status.setAttribute("aria-live", "polite");
 		el.appendChild(heading);
+		el.appendChild(input);
+		if (meta?.type) {
+			const typeLine = document.createElement("div");
+			typeLine.className = "juneau-view-col-search-popover-type";
+			typeLine.textContent = "Type: " + String(meta.type).toUpperCase();
+			el.appendChild(typeLine);
+		}
+		const instructions = document.createElement("div");
+		instructions.className = "juneau-view-col-search-popover-instructions";
 		// Per-type bare-value help: what a plain, non-"$operator" value means for a column
 		// of this type - sourced straight from `col.search.bareHelp` (SearchType.bareHelp(),
 		// serialized onto the catalog), so the wording stays in sync with that type automatically. Rendered BEFORE
@@ -1956,15 +2001,12 @@
 			const bareHelp = document.createElement("div");
 			bareHelp.className = "juneau-view-col-search-popover-barehelp";
 			bareHelp.textContent = String(meta.bareHelp);
-			el.appendChild(bareHelp);
+			instructions.appendChild(bareHelp);
 		}
-		el.appendChild(input);
-		el.appendChild(status);
 		// Operator help: rendered straight from the VIEW_META operator list so a developer's custom
 		// operator help shows exactly the way a built-in's does.  Absent when the column shipped no search metadata.
-		if (meta && Array.isArray(meta.operators) && meta.operators.length) {
-			const helpList = document.createElement("div");
-			helpList.className = "juneau-view-col-search-popover-help";
+		const hasOperators = !!(meta && Array.isArray(meta.operators) && meta.operators.length);
+		const fillOperatorRows = function (host) {
 			meta.operators.forEach(function (o) {
 				if (!o?.name) return;
 				// on a client-filtered table a custom operator is only offered once the page registered its predicate.
@@ -1977,9 +2019,26 @@
 				const desc = document.createElement("span");
 				desc.textContent = operatorHelpText(o, search);
 				row.appendChild(desc);
-				helpList.appendChild(row);
+				host.appendChild(row);
 			});
-			el.appendChild(helpList);
+		};
+		if (hasOperators) {
+			const helpList = document.createElement("div");
+			helpList.className = "juneau-view-col-search-popover-help";
+			fillOperatorRows(helpList);
+			instructions.appendChild(helpList);
+			const examples = columnSearchExamplesFor(meta.type, meta.operators);
+			if (examples.length) {
+				const exList = document.createElement("div");
+				exList.className = "juneau-view-col-search-popover-examples";
+				exList.setAttribute("aria-label", "Examples");
+				examples.forEach(function (ex) {
+					const code = document.createElement("code");
+					code.textContent = ex;
+					exList.appendChild(code);
+				});
+				instructions.appendChild(exList);
+			}
 		}
 		// offset-less dates/date-times are UTC on both engines (server parity), which a local-time user would
 		// not guess - say so on a client-filtered timestamp column.
@@ -1987,10 +2046,11 @@
 			const tz = document.createElement("div");
 			tz.className = "juneau-view-col-search-popover-tzhelp";
 			tz.textContent = "Dates and times without an offset are UTC (e.g. 2026-10-06 means 2026-10-06T00:00Z).";
-			el.appendChild(tz);
+			instructions.appendChild(tz);
 		}
+		el.appendChild(instructions);
+		el.appendChild(status);
 		let committed = false;
-		let dirtyApplied = false;   // whether a live preview has changed the APPLIED search away from `current`
 		const setStatus = function (kind, message) {
 			el.classList.toggle("is-invalid", kind === "invalid");
 			el.classList.toggle("is-incomplete", kind === "incomplete");
@@ -2007,19 +2067,15 @@
 			}
 			drawColumnExpr(ctx, r);
 			iconEl.classList.toggle("is-active", !!value);
-			dirtyApplied = value !== current;
 			return true;
 		};
-		// Live preview per keystroke: an emptied box clears the filter; a bare quick-filter previews live on a client
-		// table but waits for Enter/Apply on a server table (no fetch-per-keystroke); a `$`-expression NEVER previews
-		// - an incomplete draft must not blank the grid, and an out-of-set operator is a reject.
+		// Typing never filters: it only keeps the status line honest (a reject, or a `$`-draft still being typed).
+		// Apply / Enter is the one commit path.
 		const onInput = function () {
 			const d = evaluateColumnSearchDraft(input.value, meta, search, strict);
-			if (d.empty) { setStatus("", ""); applyValue(""); return; }
+			if (d.empty) { setStatus("", ""); return; }
 			if (d.rejected) { setStatus("invalid", rejectMessage(d)); return; }
-			if (d.dollar) { setStatus(d.incomplete ? "incomplete" : "", ""); return; }
-			setStatus("", "");
-			if (!serverSide) applyValue(d.trimmed);
+			setStatus(d.dollar && d.incomplete ? "incomplete" : "", "");
 		};
 		// Enter/Apply commit: empty clears; a `$`-expression must be complete, valid, and use only in-set operators;
 		// a bare quick-filter always commits.  A rejected or incomplete `$`-draft leaves the grid untouched.
@@ -2035,21 +2091,61 @@
 		input.addEventListener("keydown", function (e) {
 			if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); commit(); }
 		});
+		const footer = document.createElement("div");
+		footer.className = "juneau-view-col-search-popover-footer";
+		const applyBtn = columnSearchButton("apply", "Apply", true);
+		applyBtn.addEventListener("click", commit);
+		const cancelBtn = columnSearchButton("cancel", "Cancel", false);
+		cancelBtn.addEventListener("click", function () { closeColumnSearchPopover(ctx); });
+		const clearBtn = columnSearchButton("clear", "Clear", false);
+		clearBtn.addEventListener("click", function () {
+			if (!applyValue("")) return;
+			committed = true;
+			closeColumnSearchPopover(ctx);
+		});
+		footer.appendChild(applyBtn);
+		footer.appendChild(cancelBtn);
+		footer.appendChild(clearBtn);
+		// "?": a link to the table's documentation when one is configured and safe, otherwise a toggle for the
+		// full operator list.
+		let moreList = null;
+		if (isSafeColumnSearchHelpUrl(ctx?.viewDef?.columnSearchHelpUrl)) {
+			const more = document.createElement("a");
+			more.className = "juneau-view-col-search-popover-more";
+			more.textContent = "?";
+			more.setAttribute("href", ctx.viewDef.columnSearchHelpUrl);
+			more.setAttribute("target", "_blank");
+			more.setAttribute("rel", "noopener");
+			more.setAttribute("aria-label", "Search help (opens in a new tab)");
+			footer.appendChild(more);
+		} else {
+			const more = document.createElement("button");
+			more.type = "button";
+			more.className = "juneau-view-col-search-popover-more";
+			more.textContent = "?";
+			more.setAttribute("aria-label", "Show all search operators");
+			more.setAttribute("aria-expanded", "false");
+			moreList = document.createElement("div");
+			moreList.className = "juneau-view-col-search-popover-more-list";
+			moreList.hidden = true;
+			if (hasOperators) fillOperatorRows(moreList);
+			more.addEventListener("click", function () {
+				const open = moreList.hidden;
+				moreList.hidden = !open;
+				more.setAttribute("aria-expanded", open ? "true" : "false");
+			});
+			footer.appendChild(more);
+		}
+		el.appendChild(footer);
+		if (moreList) el.appendChild(moreList);
 		ctx._colSearchPopover = el;
 		pushLayer(el, {
 			kind: "menu", portal: true, lightDismiss: true, trapFocus: false, detachOnPop: true,
 			returnFocusTo: iconEl,
-			// Esc / click-away reverts: undo any live preview back to the value the popover opened with,
-			// unless Enter/Apply already committed.
+			// Esc, Cancel and click-away all leave the applied filter as it was; announce when the box held
+			// something that never reached the grid, unless Enter/Apply already committed.
 			onDismiss: function () {
 				if (ctx._colSearchPopover === el) ctx._colSearchPopover = null;
-				if (!committed && dirtyApplied) {
-					drawColumnExpr(ctx, setColumnExpr(ctx, col, current));
-					iconEl.classList.toggle("is-active", !!current);
-				}
-				// Announce a reverted or never-applied edit: covers both the live-preview revert above
-				// AND a `$`-draft/server-deferred value that never previewed at all, whenever the box no longer
-				// matches what actually reached the grid.
 				if (!committed && input.value.trim() !== String(current).trim())
 					announce(table, ANNOUNCE.searchNotApplied(title));
 			}
@@ -7207,12 +7303,12 @@
 	}
 
 	/**
-	 * Whether `type` is a legal FormDef.Input token the client paints (the 7-type allowlist: text, textarea, password,
-	 * checkbox, toggle, select, action).  Anything else is skipped so a hostile type token cannot become an element.
+	 * Whether `type` is a legal FormDef.Input token the client paints (the 8-type allowlist: text, textarea, password,
+	 * checkbox, toggle, select, date, action).  Anything else is skipped so a hostile type token cannot become an element.
 	 */
 	function isTypedFormInputType(type) {
 		return type === "text" || type === "textarea" || type === "password" || type === "checkbox"
-			|| type === "toggle" || type === "select" || type === "action";
+			|| type === "toggle" || type === "select" || type === "date" || type === "action";
 	}
 
 	/** Whether a checkbox/toggle prefill token means "checked": "true" (case-insensitive) or "on" (decision 9). */
@@ -7224,8 +7320,8 @@
 
 	/**
 	 * Paints ONE typed FormDef.Input control into `row` via createElement (never innerHTML).  Dispatches on the frozen
-	 * 7-type allowlist - text/textarea (native inputs), password (masked, never pre-filled), checkbox, toggle (checkbox + role=switch), select (native
-	 * &lt;select&gt; with &lt;option&gt; text via textContent), action (a &lt;button type=button&gt; that opens a nested
+	 * 8-type allowlist - text/textarea (native inputs), password (masked, never pre-filled), checkbox, toggle (checkbox + role=switch), select (native
+	 * &lt;select&gt; with &lt;option&gt; text via textContent), date (native date input, yyyy-mm-dd), action (a &lt;button type=button&gt; that opens a nested
 	 * dialog for the named RowAction).  Prefills use `.value` / `.checked`.  Unknown types are skipped (returns null).
 	 * A `type=action` whose id is absent from the enclosing view's `rowActions` catalog is painted DISABLED (a visible,
 	 * fail-closed refusal at paint time; never a throw).
@@ -7301,6 +7397,13 @@
 		return control;
 	}
 
+	// A native date input: the browser shows its own format hint; the value in and out is yyyy-mm-dd.
+	function buildDateFormControl() {
+		const control = document.createElement("input");
+		control.type = "date";
+		return control;
+	}
+
 	function applyTextFormControlPrefill(control, f) {
 		if (f.value != null) control.value = String(f.value);
 		if (f.maxLength != null) {
@@ -7322,13 +7425,14 @@
 		else if (type === "select") control = buildSelectFormControl(f);
 		else if (type === "checkbox" || type === "toggle") control = buildCheckboxFormControl(type, f);
 		else if (type === "password") control = buildPasswordFormControl();
+		else if (type === "date") control = buildDateFormControl();
 		else { control = document.createElement("input"); control.type = "text"; }
 
 		control.id = id;
 		control.name = String(f.name);
 		control.dataset.juneauFormField = String(f.name);
 		if (f.required) { control.required = true; control.setAttribute("aria-required", "true"); }
-		if (type === "select" && f.value != null) control.value = String(f.value);
+		if ((type === "select" || type === "date") && f.value != null) control.value = String(f.value);
 		if (type === "text" || type === "textarea") applyTextFormControlPrefill(control, f);
 		row.appendChild(control);
 		return control;
@@ -7687,7 +7791,16 @@
 		const value = el.value != null ? String(el.value) : "";
 		if (required && value.trim() === "") return "This field is required.";
 		if (value === "") return null;
+		if (tag === "input" && String(el.type).toLowerCase() === "date")
+			return isRealIsoDate(value) ? null : "Enter a valid date (yyyy-mm-dd).";
 		return validateTextControlValue(value, el.maxLength, el.dataset?.juneauPattern ?? null);
+	}
+
+	/** Whether `v` is a yyyy-mm-dd string naming a real calendar date. */
+	function isRealIsoDate(v) {
+		if (! /^\d{4}-\d{2}-\d{2}$/.test(v)) return false;
+		const d = new Date(v + "T00:00:00Z");
+		return ! Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === v;
 	}
 
 	function markControlInvalid(el, err, helpId, msg, fromConfirm) {
@@ -8919,7 +9032,7 @@
 		const priorCreatedRow = opts.createdRow;
 		opts.createdRow = function (rowEl, rowData, index) {
 			if (priorCreatedRow) priorCreatedRow(rowEl, rowData, index);
-			const field = ctx.selectionState?.rowIdField ?? null;
+			const field = ctx.selectionState?.rowIdField ?? ctx.table?.getAttribute?.(ROW_ID_FIELD_ATTR) ?? null;
 			stampRowId(rowEl, rowData, field);
 			applyRowActionPillGates(rowEl, rowData, viewDef);
 			applyInlineEditGates(rowEl, rowData, viewDef);
@@ -10310,6 +10423,8 @@
 			table.setAttribute(ROW_ID_FIELD_ATTR, envelope.selection.rowIdField);
 			table.setAttribute(SELECT_ALL_ATTR, envelope.selection.selectAll === false ? "0" : "1");
 			stampSelectionExtras(table, viewDef.id, envelope.selection);
+		} else if (envelope.rowIdField) {
+			table.setAttribute(ROW_ID_FIELD_ATTR, envelope.rowIdField);
 		}
 		if (envelope.bulk && bulkOk)
 			table.setAttribute(BULK_ATTR, "1");

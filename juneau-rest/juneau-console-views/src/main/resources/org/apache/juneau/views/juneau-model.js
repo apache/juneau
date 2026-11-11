@@ -1142,7 +1142,7 @@
 		view(id) { return this.views.find(v => v._id === String(id)) || null; }
 		get active() { return (this._activeId != null && this.view(this._activeId)) || this.views[0] || null; }
 		_applyRefresh() { const a = this.active; if (a) a.refresh(); }
-		// Adds a view ({id, label, card | sections}); the switcher card supplies the behaviour.
+		// Adds a view ({id, label, card | sections | cards}); the switcher card supplies the behaviour.
 		addView(def) { return this._guard("addView") ? hook(this, "addView", def) : undefined; }
 	}
 
@@ -1249,6 +1249,10 @@
 
 	// The card-level rules the Java builders enforce and the schema cannot express.
 	function cardRules(h, card, bad, cls, opts) {
+		if (card.type === "switcher" && card.style !== undefined && card.style !== "tabs" && card.style !== "slider") bad(h, "E-JS-121", "switcher style '" + card.style + "' must be 'tabs' or 'slider'");
+		if (card.type === "switcher" && Array.isArray(card.views)) for (const v of card.views) {
+			if (v && typeof v === "object" && [v.card, v.sections, v.cards].filter(x => x !== undefined).length > 1) bad(h, "E-JS-121", "switcher view '" + v.id + "' takes exactly one of card, sections or cards");
+		}
 		for (const s of card.subscribes || []) {
 			if (s && typeof s === "object" && s.as !== undefined && !(typeof s.as === "string" && ROLE_RE.test(s.as))) bad(h, "E-JS-121", "subscription to '" + s.topic + "': role '" + s.as + "' must match " + ROLE_RE.source);
 		}

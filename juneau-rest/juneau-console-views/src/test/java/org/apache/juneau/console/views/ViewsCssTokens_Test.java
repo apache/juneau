@@ -136,6 +136,13 @@ class ViewsCssTokens_Test extends TestBase {
 			assertEquals(e.getValue(), root.get(e.getKey()), e.getKey());
 	}
 
+	@Test void termFontSizeToken_a01() throws Exception {
+		var css = views();
+		assertEquals(1, css.split("--jc-term-font-size: 12\\.5px;", -1).length - 1);
+		assertEquals("12.5px", rootDecls(css).get("--jc-term-font-size"));
+		assertTrue(css.indexOf("--jc-term-bg:") < css.indexOf("--jc-term-font-size:"));
+	}
+
 	@Test void a02_noBareLightLiterals() throws Exception {
 		var v = views();
 		assertTokenSpent(v, "table.dataTable > thead > tr > td", "background-color");

@@ -352,6 +352,12 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 			.attr("groomFileBytesUrl", file.bytesUrl);
 	}
 
+	/** @return The restock intro as a chrome-free fragment. */
+	@RestGet(path="/fragments/restock-help")
+	public View restockHelp() {
+		return FreemarkerView.of("fragments/restock-help.ftlh");
+	}
+
 	private static TerminalDef terminal(String id, String terminalId, String title) {
 		var def = TerminalDef.forMixin(id, MOUNT, terminalId).title(title);
 		def.inputId = null; // Output only: the groom terminals take no keystrokes.

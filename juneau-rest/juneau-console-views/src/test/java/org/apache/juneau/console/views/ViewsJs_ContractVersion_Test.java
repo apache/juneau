@@ -82,6 +82,12 @@ class ViewsJs_ContractVersion_Test extends TestBase {
 			"the runtime must bake in the same literal the beans stamp, currently '" + ModalDef.CONTRACT_VERSION + "'");
 	}
 
+	@Test void a03_contractVersionIsThree() throws Exception {
+		assertEquals("3", FormDef.CONTRACT_VERSION);
+		assertEquals("3", ModalDef.CONTRACT_VERSION);
+		assertTrue(viewsJs().contains("const JUNEAU_DIALOG_FORM_CONTRACT_VERSION = \"3\";"));
+	}
+
 	private static Map<?,?> report;
 
 	@BeforeAll

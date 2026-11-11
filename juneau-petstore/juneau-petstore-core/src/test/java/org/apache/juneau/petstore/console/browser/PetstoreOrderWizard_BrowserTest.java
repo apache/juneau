@@ -30,10 +30,9 @@ import org.junit.jupiter.api.condition.*;
 import org.junit.jupiter.api.extension.*;
 
 /**
- * The Orders "+ New order" wizard in the real browser: the ribbon item opens the compact first step, its Review
- * button stacks the second step with the first step's inputs, and that step's Confirm places the order (it posts to
- * the endpoint and method its child action declares), closes both steps, shows the success banner under the
- * ribbon and redraws the table.
+ * The Orders "+ New order" wizard in the real browser: the ribbon item opens the compact dialog, the single
+ * compact dialog takes a pet and a date, its Confirm places the order, closes the dialog, shows the success banner
+ * under the ribbon and redraws the table.
  */
 @EnabledIfSystemProperty(named=PetstoreBrowser.GATE, matches="true", disabledReason=PetstoreBrowser.DISABLED)
 class PetstoreOrderWizard_BrowserTest extends TestBase {
@@ -74,22 +73,15 @@ class PetstoreOrderWizard_BrowserTest extends TestBase {
 				wait(NEW_ORDER + " && " + ROWS + " > 0 && " + TOTAL + " > 0"),
 				eval("window.__totalBefore = " + TOTAL),
 				eval(NEW_ORDER + ".click()"),
-				wait("document.querySelector('[data-juneau-form-field=review]')"),
+				wait("document.querySelector('[data-juneau-form-field=petId]')"),
 				eval("window.__step1 = " + TOP + ".querySelector('h2, [class*=title]').textContent"),
 				// Choose the second available pet and a ship date, as a user would.
 				eval("(() => { const f = " + FIELD + "('petId'); f.selectedIndex = 1; window.__petId = f.value; window.__petName = f.options[1].textContent;"
 					+ " f.dispatchEvent(new Event('input', {bubbles: true})); f.dispatchEvent(new Event('change', {bubbles: true}));"
 					+ " const d = " + FIELD + "('shipDate'); d.value = '" + shipDate + "';"
 					+ " d.dispatchEvent(new Event('input', {bubbles: true})); d.dispatchEvent(new Event('change', {bubbles: true})); })()"),
-				eval(FIELD + "('review').click()"),
-				wait("[...document.querySelectorAll('[role=dialog]')].length > 1 && " + TOP + ".querySelector('.juneau-view-dialog-confirm')"),
-				eval("window.__step2 = " + TOP + ".textContent"),
-				eval("window.__dialogs = document.querySelectorAll('[role=dialog]').length"),
-				eval("window.__compact = document.querySelectorAll('.petstore-dialog-compact').length"),
-				// The stacked step sits inside the viewport, not spilling off a narrow screen.
-				eval("window.__rect = JSON.stringify(" + TOP + ".getBoundingClientRect()) + ' vs ' + window.innerWidth + 'x' + window.innerHeight"),
-				eval("window.__offset = " + TOP + ".getBoundingClientRect().left - document.querySelectorAll('[role=dialog]')[0].getBoundingClientRect().left"),
-				eval("window.__fits = (r => r.left >= 0 && r.right <= window.innerWidth + 1 && r.top >= 0 && r.bottom <= window.innerHeight + 1)(" + TOP + ".getBoundingClientRect())"),
+				wait(TOP + ".querySelector('.juneau-view-dialog-confirm')"),
+				eval("window.__dateType = " + FIELD + "('shipDate').type"),
 				eval("window.__fontPx = parseFloat(getComputedStyle(document.querySelectorAll('[role=dialog]')[0]).fontSize)"),
 				eval("window.__innerWidth = window.innerWidth"),
 				eval("window.__firstRect = JSON.stringify(document.querySelectorAll('[role=dialog]')[0].getBoundingClientRect())"),
@@ -100,10 +92,10 @@ class PetstoreOrderWizard_BrowserTest extends TestBase {
 				// Sort by id, newest first, so the placed order is the first row.  With the View Settings gear the sort controls are Juneau's .juneau-view-col-sort-icon; the Id column is first.
 				eval("window.__orderId = /Placed order '(\\d+)'/.exec(document.body.textContent)[1]"),
 				eval("document.querySelector('th .juneau-view-col-sort-icon').click()"),
-				wait("document.querySelector('table tbody tr td')?.textContent.trim() === window.__orderId")),
+				wait("document.querySelector('table tbody tr td:nth-child(2)')?.textContent.trim() === window.__orderId")),
 			"queries", Map.ofEntries(
-				Map.entry("step1", "window.__step1"), Map.entry("step2", "window.__step2"), Map.entry("compact", "window.__compact"),
-				Map.entry("dialogs", "window.__dialogs"), Map.entry("fits", "window.__fits"), Map.entry("firstFits", "window.__firstFits"), Map.entry("firstWidth", "window.__firstWidth"), Map.entry("fontPx", "window.__fontPx"), Map.entry("innerWidth", "window.__innerWidth"), Map.entry("firstRect", "window.__firstRect"), Map.entry("rect", "window.__rect"), Map.entry("offset", "window.__offset"), Map.entry("petId", "window.__petId"),
+				Map.entry("step1", "window.__step1"), Map.entry("dateType", "window.__dateType"),
+				Map.entry("firstFits", "window.__firstFits"), Map.entry("firstWidth", "window.__firstWidth"), Map.entry("fontPx", "window.__fontPx"), Map.entry("innerWidth", "window.__innerWidth"), Map.entry("firstRect", "window.__firstRect"), Map.entry("petId", "window.__petId"),
 				Map.entry("petName", "window.__petName"), Map.entry("totalBefore", "window.__totalBefore"), Map.entry("totalAfter", TOTAL),
 				Map.entry("firstRow", "document.querySelector('table tbody tr').textContent"), Map.entry("orderId", "window.__orderId"),
 				Map.entry("backdrops", "document.querySelectorAll('.juneau-view-dialog-backdrop').length"),
@@ -126,20 +118,12 @@ class PetstoreOrderWizard_BrowserTest extends TestBase {
 	private static void verify(String name, String shipDate, String shown) {
 		var c = assertClean(report, name);
 		assertContains("New order", String.valueOf(query(c, "step1")));
-		// The second step reads back the first step's inputs: the chosen pet and the ship date.
-		var step2 = String.valueOf(query(c, "step2"));
-		assertContains("Review order", step2);
-		assertContains(String.valueOf(query(c, "petName")), step2);
-		assertContains(shipDate, step2);
-		assertEquals(2, ((Number)query(c, "dialogs")).intValue(), "both steps are stacked");
-		assertTrue((Integer)query(c, "compact") > 0);
-		assertTrue(((Number)query(c, "offset")).doubleValue() > 0, "the second step is offset from the first, so the two read as a stack");
-		assertEquals(Boolean.TRUE, query(c, "fits"), () -> "the stacked step must fit the viewport: " + query(c, "rect"));
+		assertTrue(! String.valueOf(query(c, "petName")).isEmpty(), "a pet was chosen");
+		assertEquals("date", query(c, "dateType"), "the ship date is a native date control");
+		assertTrue(! String.valueOf(query(c, "all")).contains("Review order"), "there is no review step");
 		assertEquals(Boolean.TRUE, query(c, "firstFits"), () -> "the compact first step must fit the viewport: " + query(c, "firstRect"));
 		var em = ((Number)query(c, "fontPx")).doubleValue();
 		var width = ((Number)query(c, "firstWidth")).doubleValue();
-		var offset = ((Number)query(c, "offset")).doubleValue();
-		assertEquals(1.5 * em, offset, 1.0, "the stack offset is one 1.5em shift");
 		if ("wide".equals(name))
 			assertTrue(width >= 28 * em - 1, "wide geometry keeps the 28em minimum width: " + width);
 		else
@@ -153,7 +137,7 @@ class PetstoreOrderWizard_BrowserTest extends TestBase {
 		var body = new org.apache.juneau.marshall.collections.JsonMap(String.valueOf(posted.get(0).get("postData")));
 		assertEquals(String.valueOf(query(c, "petId")), body.getMap("fields").getString("petId"));
 		assertEquals(shipDate, body.getMap("fields").getString("shipDate"));
-		// The committed write closes the whole stack - the first step too, not just the one that submitted - and
+		// The committed write closes the dialog and
 		// its outcome is the banner under the ribbon.
 		assertEquals(0, ((Number)query(c, "backdrops")).intValue());
 		assertContains("Placed order", String.valueOf(query(c, "banner")));

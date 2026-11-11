@@ -21,6 +21,7 @@
   dataUrl: '/console/pets/changes/query',
   columnConfig: true,
   defaultOrder: [ { key: 'id', dir: 'desc' } ],
+  detail: {"mode":"inline","title":"Change {id}","labels":{"id":"Change","summary":"Change summary","author":"Author","state":"State","message":"Message"},"tabs":[{"id":"details","kind":"fields","title":"Details","fields":["id","summary","author","state","message"]}]},
   columns: [
     { key: 'id', label: 'Change' },
     { key: 'summary', label: 'Change summary' },

@@ -56,11 +56,11 @@ class ModalDef_FormDef_Test extends TestBase {
 			.idempotencyKey("deadbeef");
 		var json = Json.of(modal);
 		var expected = Json.to("""
-			{"contractVersion":"2",
+			{"contractVersion":"3",
 			 "title":"Acknowledge this incident?",
 			 "fields":[{"label":"Incident","value":"INC-42"},{"label":"Title","value":"API latency"},
 			           {"label":"Service","value":"gateway"},{"label":"Current status","value":"triggered"}],
-			 "form":{"contractVersion":"2","template":"servlet:/incidents/ack-form.ftl"},
+			 "form":{"contractVersion":"3","template":"servlet:/incidents/ack-form.ftl"},
 			 "idempotencyKey":"deadbeef"}
 			""", Map.class);
 		assertEquals(expected, Json.to(json, Map.class), json);
@@ -80,7 +80,7 @@ class ModalDef_FormDef_Test extends TestBase {
 		// contractVersion is NOT one of the omitted ones any more -- it is stamped by construction on
 		// every modal, confirm-only included.
 		var json = Json.of(ModalDef.create("Really delete?"));
-		assertEquals(Json.to("{\"contractVersion\":\"2\",\"title\":\"Really delete?\"}", Map.class), Json.to(json, Map.class), json);
+		assertEquals(Json.to("{\"contractVersion\":\"3\",\"title\":\"Really delete?\"}", Map.class), Json.to(json, Map.class), json);
 		for (var k : List.of("fields", "form", "idempotencyKey", "selfTargeted"))
 			assertFalse(json.contains("\"" + k + "\""), () -> "unset field leaked: " + k + "\n" + json);
 	}
@@ -127,7 +127,7 @@ class ModalDef_FormDef_Test extends TestBase {
 		var modal = ModalDef.create("Really delete?").field("Note", "gone").checked();
 		assertEquals(ModalDef.CONTRACT_VERSION, modal.contractVersion);
 		var json = Json.of(modal);
-		assertTrue(json.contains("\"contractVersion\":\"2\""), json);
+		assertTrue(json.contains("\"contractVersion\":\"3\""), json);
 	}
 
 	@Test void a04_fieldNullValue_serializesLabelOnly() {
@@ -159,7 +159,7 @@ class ModalDef_FormDef_Test extends TestBase {
 	@Test void c01_formDef_serializesTemplateOnly() {
 		// a pure FormDef golden with no modal in sight -- stamped by construction too.
 		var json = Json.of(FormDef.ofTemplate("servlet:/x/form.ftl"));
-		assertEquals(Json.to("{\"contractVersion\":\"2\",\"template\":\"servlet:/x/form.ftl\"}", Map.class), Json.to(json, Map.class), json);
+		assertEquals(Json.to("{\"contractVersion\":\"3\",\"template\":\"servlet:/x/form.ftl\"}", Map.class), Json.to(json, Map.class), json);
 	}
 
 	@Test void c02_formDef_reservedBeanTypeIsNotOnTheWireYet() {
@@ -178,7 +178,7 @@ class ModalDef_FormDef_Test extends TestBase {
 			.field(FormDef.Input.of("resolution", "Resolution comment", "textarea").required().value("done"));
 		var json = Json.of(form);
 		var expected = Json.to("""
-			{"contractVersion":"2",
+			{"contractVersion":"3",
 			 "fields":[{"name":"resolution","label":"Resolution comment","type":"textarea","required":true,"value":"done"}]}
 			""", Map.class);
 		assertEquals(expected, Json.to(json, Map.class), json);
@@ -318,7 +318,7 @@ class ModalDef_FormDef_Test extends TestBase {
 			.field(FormDef.Input.of("sev", "Severity", "select").options(
 				FormDef.Input.Option.of("p1", "P1"), FormDef.Input.Option.of("p2", "P2")).value("p1")));
 		var expected = Json.to("""
-			{"contractVersion":"2",
+			{"contractVersion":"3",
 			 "fields":[{"name":"sev","label":"Severity","type":"select","value":"p1",
 			            "options":[{"value":"p1","label":"P1"},{"value":"p2","label":"P2"}]}]}
 			""", Map.class);
@@ -334,16 +334,16 @@ class ModalDef_FormDef_Test extends TestBase {
 	 * against these in the views module's {@code ViewsJs_ContractVersion_Test}; bumping any two of the three makes
 	 * every form-bearing dialog refuse to open, so the literal is asserted here rather than compared to itself.
 	 */
-	@Test void e01_contractVersionConstantsAreTwo() {
-		assertEquals("2", FormDef.CONTRACT_VERSION);
-		assertEquals("2", ModalDef.CONTRACT_VERSION);
+	@Test void e01_contractVersionConstantsAreThree() {
+		assertEquals("3", FormDef.CONTRACT_VERSION);
+		assertEquals("3", ModalDef.CONTRACT_VERSION);
 	}
 
 	@Test void e02_rawFormDefIsStamped() {
 		// a raw builder carries the version from construction, independent of checked().
 		var form = FormDef.create().field(FormDef.Input.of("r", "R", "textarea"));
 		assertEquals(FormDef.CONTRACT_VERSION, form.contractVersion);
-		assertTrue(Json.of(form).contains("\"contractVersion\":\"2\""), Json.of(form));
+		assertTrue(Json.of(form).contains("\"contractVersion\":\"3\""), Json.of(form));
 	}
 
 	@Test void e03_checkedStampsBothVersionsFirst() {
@@ -409,9 +409,9 @@ class ModalDef_FormDef_Test extends TestBase {
 		// stamping does not depend on ordering.
 		var modal = ModalDef.create("t").checked().form(FormDef.ofTemplate("u"));
 		var json = Json.of(modal);
-		assertTrue(json.contains("\"contractVersion\":\"2\""), json);
+		assertTrue(json.contains("\"contractVersion\":\"3\""), json);
 		var formMap = (Map<String,Object>) Json.to(json, Map.class).get("form");
-		assertEquals("2", formMap.get("contractVersion"));
+		assertEquals("3", formMap.get("contractVersion"));
 	}
 
 	@Test void e10_checkedVsUnchecked_formBearing_byteForByteEqual() {
@@ -434,7 +434,7 @@ class ModalDef_FormDef_Test extends TestBase {
 		// ActionResult already have.
 		var parsed = Json.to("{\"title\":\"t\"}", ModalDef.class);
 		assertEquals(ModalDef.CONTRACT_VERSION, parsed.contractVersion);
-		assertTrue(Json.of(parsed).contains("\"contractVersion\":\"2\""), Json.of(parsed));
+		assertTrue(Json.of(parsed).contains("\"contractVersion\":\"3\""), Json.of(parsed));
 	}
 
 	@Test void e13_deserializeExplicitWrongVersion_roundTrips() {
@@ -456,9 +456,9 @@ class ModalDef_FormDef_Test extends TestBase {
 		var badForm = FormDef.create().field(FormDef.Input.of("sev", "Severity", "select"));
 		var modal = ModalDef.create("Pick one").form(badForm);
 		var json = Json.of(modal);
-		assertTrue(json.contains("\"contractVersion\":\"2\""), json);
+		assertTrue(json.contains("\"contractVersion\":\"3\""), json);
 		var formMap = (Map<String,Object>) Json.to(json, Map.class).get("form");
-		assertEquals("2", formMap.get("contractVersion"));
+		assertEquals("3", formMap.get("contractVersion"));
 	}
 
 	@Test void e15_malformedForm_stillThrowsFromCheckedAndValidate() {
@@ -549,7 +549,7 @@ class ModalDef_FormDef_Test extends TestBase {
 			.section(FormDef.Section.of("basics", "Basics").field(FormDef.Input.of("name", "Name", "text")))
 			.section(FormDef.Section.of("advanced", "Advanced").field(FormDef.Input.of("notes", "Notes", "textarea"))));
 		var expected = Json.to("""
-			{"contractVersion":"2",
+			{"contractVersion":"3",
 			 "sections":[{"id":"basics","label":"Basics","fields":[{"name":"name","label":"Name","type":"text"}]},
 			             {"id":"advanced","label":"Advanced","fields":[{"name":"notes","label":"Notes","type":"textarea"}]}]}
 			""", Map.class);
@@ -574,5 +574,16 @@ class ModalDef_FormDef_Test extends TestBase {
 		else if (eq(type, "action"))
 			i.actionId("ack");
 		return i;
+	}
+
+	@Test void date_b01_serialization() {
+		var modal = ModalDef.create("t").form(FormDef.create().field(FormDef.Input.of("shipDate", "Ship date", "date").value("2026-11-10"))).checked();
+		var json = Json.of(modal);
+		assertTrue(json.contains("\"type\":\"date\""), json);
+		assertTrue(json.contains("\"contractVersion\":\"3\""), json);
+	}
+
+	@Test void contract_b02_modalVersion3() {
+		assertEquals("3", ModalDef.CONTRACT_VERSION);
 	}
 }

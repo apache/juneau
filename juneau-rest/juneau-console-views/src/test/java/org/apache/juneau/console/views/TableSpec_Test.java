@@ -126,4 +126,26 @@ class TableSpec_Test extends TestBase {
 		assertNull(TableSpec.create("slo").cssClass());
 		assertEquals("wide", TableSpec.create("slo").cssClass("wide").cssClass());
 	}
+
+	@Test void columnSearchHelpUrl_a01_serialized() {
+		var body = TableSpec.create("slo").dataUrl("/d").columns(Column.create("pod"))
+			.columnSearchHelpUrl("https://example.org/help").toCardBody();
+		assertEquals("https://example.org/help", body.get("columnSearchHelpUrl"));
+		var rel = TableSpec.create("slo").dataUrl("/d").columns(Column.create("pod"))
+			.columnSearchHelpUrl("/docs/search").toCardBody();
+		assertEquals("/docs/search", rel.get("columnSearchHelpUrl"));
+	}
+
+	@Test void columnSearchHelpUrl_a02_default_absent() {
+		var body = TableSpec.create("slo").dataUrl("/d").columns(Column.create("pod")).toCardBody();
+		assertFalse(body.containsKey("columnSearchHelpUrl"));
+	}
+
+	@Test void columnSearchHelpUrl_a03_rejectsOtherSchemes() {
+		var t = TableSpec.create("slo");
+		for (var bad : new String[]{"javascript:alert(1)", "", "//evil.example/x", "ftp://x"}) {
+			var ex = assertThrows(IllegalArgumentException.class, () -> t.columnSearchHelpUrl(bad));
+			assertTrue(ex.getMessage().startsWith("TableSpec 'slo' columnSearchHelpUrl must be an http(s) URL"), ex.getMessage());
+		}
+	}
 }

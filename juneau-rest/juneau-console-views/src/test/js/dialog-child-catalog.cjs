@@ -91,10 +91,10 @@ const dialogRefusalText = (env) => {
 function parentPayload(opts) {
 	const o = opts || {};
 	return {
-		contractVersion: '2',
+		contractVersion: '3',
 		title: 'Step 1',
 		form: {
-			contractVersion: '2',
+			contractVersion: '3',
 			fields: [
 				{ name: 'note', type: 'text', label: 'Note', value: 'typed-by-operator' },
 				{ name: 'secret', type: 'password', label: 'Secret' },
@@ -140,8 +140,8 @@ async function openParent(opts) {
 		if (method === 'GET' && url === PARENT_FORM) return Promise.resolve(jsonResponse(parentPayload(o)));
 		if (method === 'GET' && String(url).startsWith(CHILD_FORM))
 			return Promise.resolve(jsonResponse({
-				contractVersion: '2', title: 'Review',
-				form: { contractVersion: '2', fields: [{ name: 'note', type: 'text', label: 'Note' }] }
+				contractVersion: '3', title: 'Review',
+				form: { contractVersion: '3', fields: [{ name: 'note', type: 'text', label: 'Note' }] }
 			}));
 		return Promise.resolve(jsonResponse({ outcome: 'success' }));
 	});
@@ -428,8 +428,8 @@ async function openParent(opts) {
 			})));
 			if (method === 'GET' && String(url).startsWith(CHILD_FORM))
 				return Promise.resolve(jsonResponse({
-					contractVersion: '2', title: 'Review',
-					form: { contractVersion: '2', fields: [{ name: 'note', type: 'text', label: 'Note', value: 'n' }] }
+					contractVersion: '3', title: 'Review',
+					form: { contractVersion: '3', fields: [{ name: 'note', type: 'text', label: 'Note', value: 'n' }] }
 				}));
 			posts.push(String(url));
 			accepts.push(init?.headers?.Accept ?? null);

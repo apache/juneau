@@ -197,6 +197,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 
 		if (nn(catalog.get("bulk")) && n(catalog.get("selection")))
 			throw source.error("sets bulk without selection.");
+		checkRowIdField(source, catalog);
 		checkAggregateEndpoints(catalog);
 
 		var frag = new JsonMap();
@@ -207,6 +208,17 @@ public final class DatatablesCardType implements CardTypeHandler {
 		catalog.remove("visibleWhen");
 		frag.put("table", catalog);
 		return frag;
+	}
+
+	/** The table-level {@code rowIdField} is a non-blank string and, beside a selection, names the same field. */
+	private static void checkRowIdField(CardSource source, JsonMap catalog) {
+		var field = catalog.get("rowIdField");
+		if (n(field))
+			return;
+		if (! (field instanceof String f) || f.isBlank())
+			throw source.error("rowIdField must be a non-blank string.");
+		if (catalog.get("selection") instanceof Map<?,?> sel && nn(sel.get("rowIdField")) && ! f.equals(sel.get("rowIdField")))
+			throw source.error("rowIdField '%s' differs from selection rowIdField '%s'.", f, sel.get("rowIdField"));
 	}
 
 	/**
@@ -381,6 +393,13 @@ public final class DatatablesCardType implements CardTypeHandler {
 	/** E-31: a {@code contractVersion} key anywhere in the catalog (table, detail, quickStats, bulk) — JS stamps versions. */
 	private static void checkNoContractVersion(CardSource source, Object node, String where) {
 		if (node instanceof Map<?,?> m) {
+			// A nested-table tab carries a pre-built slot, whose contractVersion is part of its shape.
+			if ("table".equals(m.get("kind")) && m.get("nested") instanceof Map<?,?> nested) {
+				var rest = new LinkedHashMap<Object,Object>(m);
+				rest.remove("nested");
+				checkNoContractVersion(source, rest, where);
+				return;
+			}
 			if (m.containsKey("contractVersion"))
 				throw source.error("'%s' sets contractVersion; remove it, the console stamps contract versions.", where);
 			for (var e : m.entrySet())

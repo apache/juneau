@@ -1,0 +1,8 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"users","type":"datatables","table":{
+    "dataUrl":"/rest/users/data",
+    "columns":[{"key":"username","label":"Username"}],
+    "rowIdField":"username",
+    "detail":{"endpoint":"/rest/users/detail"}
+  }}
+]}

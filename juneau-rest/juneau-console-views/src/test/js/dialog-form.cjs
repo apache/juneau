@@ -17,7 +17,7 @@
 
 /*
  * dialog-form.cjs - always-on Node harness for the dialog FormDef painter: appendDialogForm builds
- * label+control rows via createElement for the 7-type allowlist (text/textarea/password/checkbox/toggle/select/action),
+ * label+control rows via createElement for the 8-type allowlist (text/textarea/password/checkbox/toggle/select/date/action),
  * unknown types are skipped, a type=action with a missing id is painted disabled, and collectDialogFormFields reads
  * text/textarea/select via .value and checkbox/toggle as explicit "true"/"false" while skipping action buttons.
  *
@@ -144,5 +144,32 @@ out.pw_autocomplete = pw?.getAttribute('autocomplete') === 'new-password';
 out.pw_notPrefilled = pw != null && (pw.value == null || pw.value === '');
 out.pw_required = pw?.required === true;
 out.pw_collectsTyped = (function () { pw.value = 'typed'; return I.collectDialogFormFields(dialog4).pw === 'typed'; })();
+
+// --- a type=date field paints a native date input; the value in and out is yyyy-mm-dd -------------------------
+const dialog5 = env.el('div');
+I.appendDialogForm(dialog5, { fields: [
+	{ name: 'ship', type: 'date', label: 'Ship date', value: '2026-11-10' },
+	{ name: 'opt', type: 'date', label: 'Optional date' },
+	{ name: 'req', type: 'date', label: 'Required date', required: true },
+	{ name: 'dt', type: 'datetime', label: 'Unknown' }
+] }, table, tr, ctx, 5);
+const ship = dialog5.querySelector('[data-juneau-form-field="ship"]');
+const opt = dialog5.querySelector('[data-juneau-form-field="opt"]');
+const dreq = dialog5.querySelector('[data-juneau-form-field="req"]');
+out.dateControlType = ship?.tagName === 'INPUT' && String(ship.type) === 'date';
+out.dateValueRoundTrip = ship?.value === '2026-11-10' && I.collectDialogFormFields(dialog5).ship === '2026-11-10';
+out.dateUnknownTypeStillSkipped = dialog5.querySelector('[data-juneau-form-field="dt"]') == null;
+opt.value = '';
+dreq.value = '2026-11-10';
+out.dateEmptyAllowed = I.validateDialogForm(dialog5, true) === true;
+dreq.value = '';
+const reqOk = I.validateDialogForm(dialog5, true) === false;
+out.dateRequiredEmptyRejected = reqOk
+	&& dialog5.querySelector('[data-juneau-error-for="req"]').textContent === 'This field is required.';
+dreq.value = '2026-11-10';
+// A real browser coerces an impossible date to ''; the harness's fake input keeps the raw string, so this drives the validator itself.
+opt.value = '2026-02-30';
+out.dateInvalidRejected = I.validateDialogForm(dialog5, true) === false
+	&& dialog5.querySelector('[data-juneau-error-for="opt"]').textContent === 'Enter a valid date (yyyy-mm-dd).';
 
 process.stdout.write(JSON.stringify(out));

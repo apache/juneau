@@ -224,4 +224,18 @@ class ViewsJs_DialogForm_Test extends TestBase {
 		assertEquals(true, r.get("pw_required"));
 		assertEquals(true, r.get("pw_collectsTyped"));
 	}
+
+	@Test void b07_datePaintedAsNativeDateInput() {
+		var r = report();
+		assertEquals(true, r.get("dateControlType"), r::toString);
+		assertEquals(true, r.get("dateValueRoundTrip"), r::toString);
+		assertEquals(true, r.get("dateUnknownTypeStillSkipped"), r::toString);
+	}
+
+	@Test void b08_dateValidation() {
+		var r = report();
+		assertEquals(true, r.get("dateEmptyAllowed"), r::toString);
+		assertEquals(true, r.get("dateRequiredEmptyRejected"), r::toString);
+		assertEquals(true, r.get("dateInvalidRejected"), r::toString);
+	}
 }

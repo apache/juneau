@@ -95,6 +95,7 @@ public final class PetsPageBuilders {
 				Column.create("price").label("Price (USD)").render(Render.of("decimal").meta("places", 2)),
 				Column.create("tags").label("Tags").defaultVisible(false))
 			.rowClass("status", Op.EQ, "SOLD", "is-muted")
+			.detail(RowDetails.pet())
 			.ribbon(Ribbons.standard()
 				.create(RibbonItem.dialog("add-pet").title("+ Add pet").symbol("plus")
 					.form("/console/pets/form").endpoint("/console/pets").method(Method.POST).onSuccess(OnSuccess.REDRAW))
@@ -128,6 +129,7 @@ public final class PetsPageBuilders {
 		return PageSpec.create().toolkit("views", "datatables-buttons")
 			.table(TableSpec.create("sold").rowType("Pet").dataMode(DataMode.CLIENT).dataUrl("/console/pets/sold/rows")
 				.columnConfig(true)
+				.detail(RowDetails.soldPet())
 				.columns(
 					Column.create("id").label("Id"),
 					Column.create("name").label("Name"),
@@ -210,7 +212,9 @@ public final class PetsPageBuilders {
 			}
 			default -> p.table(TableSpec.create("history").rowType("AuditEntry").dataMode(DataMode.CLIENT).dataUrl(href + "/history/rows")
 				.defaultOrder("at", Sort.DESC)
+				.detail(RowDetails.history())
 				.columns(
+					Column.create("id").label("Id").defaultVisible(false),
 					Column.create("at").label("When").render("timestamp"),
 					Column.create("actor").label("Actor"),
 					Column.create("action").label("Action").render(PillRenders.auditAction()),

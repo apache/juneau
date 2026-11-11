@@ -90,7 +90,9 @@
   dataMode: 'client',
   dataUrl: '/console/pets/${pet.id?c}/history/rows',
   defaultOrder: [ { key: 'at', dir: 'desc' } ],
+  detail: {"mode":"inline","title":"{action}","labels":{"id":"Id","at":"When","actor":"Actor","action":"Action","detail":"Detail"},"tabs":[{"id":"details","kind":"fields","title":"Details","fields":["id","at","actor","action","detail"]}]},
   columns: [
+    { key: 'id', label: 'Id', defaultVisible: false },
     { key: 'at', label: 'When', render: { id: 'timestamp' } },
     { key: 'actor', label: 'Actor' },
     { key: 'action', label: 'Action', render: { id: 'pill', meta: { tones: { CREATE: 'success', UPDATE: 'info', DELETE: 'error', DISCARD: 'warning', RESTOCK: 'info' } } } },

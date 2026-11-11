@@ -91,11 +91,11 @@ function flush() {
 function modalPayload(opts) {
 	const o = opts || {};
 	const m = {
-		contractVersion: '2',
+		contractVersion: '3',
 		title: 'Really do it?',
 		fields: o.fields || [{ label: 'Id', value: 'INC-1' }],
 		form: {
-			contractVersion: '2',
+			contractVersion: '3',
 			fields: [{ name: 'note', type: 'text', label: 'Note', value: 'typed-by-operator' }]
 		}
 	};
@@ -246,7 +246,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 			keepOpen: true,
 			submit: success({ resultForm: RECEIPT_URL }),
 			receipt: () => Promise.resolve(jsonResponse({
-				title: 'Nope', form: { contractVersion: '2', fields: [{ name: 'again', type: 'text', label: 'Again' }] }
+				title: 'Nope', form: { contractVersion: '3', fields: [{ name: 'again', type: 'text', label: 'Again' }] }
 			}))
 		});
 		const env = r.env;

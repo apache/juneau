@@ -22,6 +22,7 @@
   columnConfig: { tabs: [ 'columns', 'sort' ] },
   urlState: { day: {}, window: {} },
   defaultOrder: [ { key: 'id', dir: 'asc' } ],
+  detail: {"mode":"bean","endpoint":"/console/orders/row-detail/order/{id}","title":"Order {id}","labels":{"petId":"Pet","id":"Id","shipDate":"Ship date","status":"Status"},"tabs":[{"id":"details","kind":"fields","title":"Details","fields":["id","petId","shipDate","status"]},{"id":"pet","kind":"table","title":"Pet","nested":{"contractVersion":"2","parentScopeParam":"orderId","view":{"id":"order-pet","columns":[{"data":"id","title":"Id"},{"data":"name","title":"Name","render":{"id":"linked"},"href":"/console/pets/{id}/summary"},{"data":"species","title":"Species"},{"data":"status","title":"Status"},{"data":"price","title":"Price (USD)","render":{"id":"decimal","meta":{"places":2}}}]},"meta":{"contractVersion":"5","id":"order-pet","dataUrl":"/console/orders/pet/rows","dataMode":"client","rowType":"Pet","columns":[{"data":"id","title":"Id"},{"data":"name","title":"Name","render":{"id":"linked"},"href":"/console/pets/{id}/summary"},{"data":"species","title":"Species"},{"data":"status","title":"Status"},{"data":"price","title":"Price (USD)","render":{"id":"decimal","meta":{"places":2}}}]}},"count":"rows"}]},
   columns: [
     { key: 'id', label: 'Id' },
     { key: 'petId', label: 'Pet', href: '/console/pets/{petId}/summary' },

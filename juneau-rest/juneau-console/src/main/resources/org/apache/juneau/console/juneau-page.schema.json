@@ -146,9 +146,10 @@
     "logo": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["src"],
+      "oneOf": [ { "required": ["src"], "not": { "required": ["symbol"] } }, { "required": ["symbol"], "not": { "required": ["src"] } } ],
       "properties": {
         "src":  { "$ref": "#/$defs/url" },
+        "symbol": { "type": "string", "pattern": "^[a-z0-9_]{1,64}$" },
         "href": { "$ref": "#/$defs/url" },
         "alt":  { "type": "string" }
       }
@@ -272,6 +273,7 @@
         "type":  { "const": "switcher" },
         "id": true, "title": true, "class": true, "visibleWhen": true, "publishes": true, "subscribes": true, "model": true,
         "initialView": { "$ref": "#/$defs/id" },
+        "style": { "enum": ["tabs", "slider"], "default": "tabs" },
         "views": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/switcherView" } }
       },
       "required": ["type", "id", "views"],
@@ -284,6 +286,7 @@
         "label": { "type": "string", "minLength": 1 },
         "model": { "$ref": "#/$defs/model" },
         "card":  { "$ref": "#/$defs/nestedCard" },
+        "cards": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/nestedCard" } },
         "initialSection": { "$ref": "#/$defs/id" },
         "sections": {
           "type": "array", "minItems": 1,
@@ -302,7 +305,7 @@
       },
       "required": ["id", "label"],
       "additionalProperties": false,
-      "oneOf": [ { "required": ["card"] }, { "required": ["sections"] } ]
+      "oneOf": [ { "required": ["card"] }, { "required": ["sections"] }, { "required": ["cards"] } ]
     },
     "htmlCard": {
       "properties": {
@@ -346,12 +349,14 @@
         "pollIntervalMs":{ "type": "integer" },
         "pausePollingWhileEditing": { "type": "boolean" },
         "columnConfig":  { "anyOf": [ { "type": "boolean" }, { "type": "object" } ] },
+        "columnSearchHelpUrl": { "type": "string", "minLength": 1 },
         "cleanAddress":  { "type": "boolean" },
         "primary":       { "type": "boolean" },
         "copyLink":      { "type": "boolean" },
         "rowClassRules": { "type": "array", "items": { "type": "object" } },
         "rowActions":    { "type": "array", "items": { "$ref": "#/$defs/rowAction" } },
         "rows":          { "type": "array" },
+        "rowIdField":    { "type": "string", "minLength": 1 },
         "selection":     { "$ref": "#/$defs/selection" },
         "bulk":          { "$ref": "#/$defs/bulk" },
         "detail":        { "$ref": "#/$defs/rowDetail" },
@@ -822,6 +827,7 @@
         "theme": { "type": "string" },
         "largeData": { "type": "object" },
         "partialFrames": { "type": "boolean" },
+        "dataTab": { "type": "boolean", "default": false },
         "maps": { "type": "object", "additionalProperties": { "$ref": "#/$defs/url" } },
         "a11y": { "type": "object" },
         "data":  { "type": "array" },

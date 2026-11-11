@@ -69,7 +69,7 @@ class SwitcherDef_Test extends TestBase {
 	}
 
 	@Test void a04_viewWithoutSections() {
-		assertEquals("SwitcherDef 'sw' view 'v' requires a card or at least one section.",
+		assertEquals("SwitcherDef 'sw' view 'v' requires a card, sections or cards.",
 			msg(() -> SwitcherDef.create("sw").view("v", "V", v -> {}).toCardSpec()));
 	}
 
@@ -113,7 +113,7 @@ class SwitcherDef_Test extends TestBase {
 		view.put("sections", List.of(Map.of("id", "a", "label", "A", "card", chart("c2").toMap())));
 		var body = new LinkedHashMap<String,Object>();
 		body.put("views", List.of(view));
-		assertEquals("SwitcherDef 'sw' view 'v' takes either a card or sections, not both.", msg(() -> SwitcherDef.validate("sw", body)));
+		assertEquals("SwitcherDef 'sw' view 'v' takes exactly one of card, sections or cards.", msg(() -> SwitcherDef.validate("sw", body)));
 	}
 
 	@Test void a11_duplicateNestedCardId() {
@@ -143,5 +143,49 @@ class SwitcherDef_Test extends TestBase {
 		var m = SwitcherDef.create("sw").view("v", "V", v -> v.section(c)).toCardSpec().toMap();
 		var card = (Map<?,?>)((Map<?,?>)((List<?>)m.get("views")).get(0)).get("card");
 		assertEquals(c.toMap().get("publishes"), card.get("publishes"));
+	}
+
+	@Test void style_a01_defaultOmitted() {
+		var spec = SwitcherDef.create("sw").view("a", "A", v -> v.section(chart("c"))).toCardSpec();
+		assertFalse(spec.toMap().containsKey("style"));
+	}
+
+	@Test void style_a02_sliderSerialized() {
+		var spec = SwitcherDef.create("sw").style(SwitcherDef.STYLE_SLIDER).view("a", "A", v -> v.section(chart("c"))).toCardSpec();
+		assertEquals("slider", spec.toMap().get("style"));
+	}
+
+	@Test void style_a03_badValueRejected() {
+		var b = SwitcherDef.create("sw").style("pills").view("a", "A", v -> v.section(chart("c")));
+		assertEquals("SwitcherDef 'sw' style 'pills' must be one of tabs, slider.", msg(b::toCardSpec));
+	}
+
+	@Test void cards_a01_serialized() {
+		var m = SwitcherDef.create("sw").view("v", "V", v -> v.cards(chart("c1"), chart("c2"))).toCardSpec().toMap();
+		var v0 = (Map<?,?>)((List<?>)m.get("views")).get(0);
+		assertEquals(2, ((List<?>)v0.get("cards")).size());
+		assertFalse(v0.containsKey("card"));
+		assertFalse(v0.containsKey("sections"));
+	}
+
+	@Test void cards_a02_oneCardRejected() {
+		assertEquals("SwitcherDef 'sw' view 'v' cards needs at least two cards.",
+			msg(() -> SwitcherDef.create("sw").view("v", "V", v -> v.cards(chart("c1"))).toCardSpec()));
+	}
+
+	@Test void cards_a03_mixedRejected() {
+		assertEquals("SwitcherDef 'sw' view 'v' takes exactly one of card, sections or cards.",
+			msg(() -> SwitcherDef.create("sw").view("v", "V", v -> v.cards(chart("c1"), chart("c2")).section(chart("c3"))).toCardSpec()));
+	}
+
+	@Test void cards_a04_duplicateIdRejected() {
+		assertEquals("SwitcherDef 'sw' card id 'c1' is declared more than once.",
+			msg(() -> SwitcherDef.create("sw").view("v", "V", v -> v.cards(chart("c1"), chart("c1"))).toCardSpec()));
+	}
+
+	@Test void cards_a05_nestedSwitcherRejected() {
+		var inner = SwitcherDef.create("in").view("x", "X", v -> v.section(chart("c9"))).toCardSpec();
+		assertEquals("SwitcherDef 'sw' view 'v' cannot hold a switcher card ('in').",
+			msg(() -> SwitcherDef.create("sw").view("v", "V", v -> v.cards(chart("c1"), inner)).toCardSpec()));
 	}
 }

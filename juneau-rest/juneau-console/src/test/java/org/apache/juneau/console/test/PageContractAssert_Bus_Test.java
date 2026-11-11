@@ -95,4 +95,13 @@ class PageContractAssert_Bus_Test extends TestBase {
 		assertThrows(AssertionError.class, () -> a.hasNestedCard("sw", "nope", "chart"));
 		assertThrows(AssertionError.class, () -> a.hasCardOrder("sw", "c"));
 	}
+
+	@Test void findNested_a01_walksCards() {
+		var stacked = page("""
+			{"contractVersion":"1","title":"t","nav":[],"activeNav":[],
+			 "cards":[{"id":"sw","type":"switcher","views":[
+			   {"id":"v","label":"V","cards":[{"id":"c1","type":"html","template":"t"},{"id":"c2","type":"chart","helper":{"kind":"line"}}]}]}]}
+			""");
+		PageContractAssert.assertPage(stacked).hasNestedCard("sw", "c1", "html").hasNestedCard("sw", "c2", "chart");
+	}
 }

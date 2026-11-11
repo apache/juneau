@@ -76,6 +76,21 @@ class PetstoreConsoleShell_Test extends TestBase {
 		assertNotContains("Coming soon", page(client(), "/console/dev/cards"));
 	}
 
+	@Test void a08_headerUsesPawPrintSymbol() throws Exception {
+		var html = client().get("/console/store").accept("text/html").run().assertStatus(200).getContent().asString();
+		assertContains("rel=\"icon\"", html);
+		assertContains("juneau-symbol/paw_print.svg", html);
+		assertContains("paw_print", html);
+	}
+
+	@Test void a09_petPageFaviconResolves() throws Exception {
+		var html = client().get("/console/pets/1/summary").accept("text/html").run().assertStatus(200).getContent().asString();
+		var m = java.util.regex.Pattern.compile("rel=\"icon\"[^>]*href=\"([^\"]+)\"|href=\"([^\"]+paw_print[^\"]*)\"").matcher(html);
+		org.junit.jupiter.api.Assertions.assertTrue(m.find(), html.substring(0, Math.min(html.length(), 1500)));
+		var href = m.group(1) != null ? m.group(1) : m.group(2);
+		client().get(href).accept("image/svg+xml").run().assertStatus(200);
+	}
+
 	@Test void a07_missingStoreBeanFailsLoudly() {
 		var r = new StoreRest();
 		var e = org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class, r::store);

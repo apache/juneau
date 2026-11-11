@@ -65,6 +65,7 @@ class PetstoreTerminal_BrowserTest extends TestBase {
 			Map.of("name", "jobs", "path", "/console/ops/jobs?run=" + runId,
 				"actions", List.of(
 					// The run takes about 8 s at the test server's 150 ms period; the terminals follow it to the last lines.
+					Map.of("evaluate", select("jobs-sw", "groom")),
 					Map.of("waitFor", ROWS + ".includes('Trimmed nail 12 of 12')", "timeoutMs", 30000),
 					Map.of("waitFor", FILE_ROWS + ".includes('[51/52] step done')", "timeoutMs", 30000)),
 				"queries", Map.of(

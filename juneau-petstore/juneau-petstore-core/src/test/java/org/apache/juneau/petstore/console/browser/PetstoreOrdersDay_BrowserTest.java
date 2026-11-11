@@ -220,6 +220,7 @@ class PetstoreOrdersDay_BrowserTest extends TestBase {
 
 		// The plot's keyboard walk: End jumps to today, and one ArrowLeft per day back reaches the day under test.
 		var chartActions = new ArrayList<Map<String,Object>>();
+		chartActions.add(eval(select("store-sw", "orders")));
 		chartActions.add(wait(drawn));
 		chartActions.add(Map.of("press", List.of(PLOT, "End")));
 		for (var k = 0; k < daysBackA; k++)

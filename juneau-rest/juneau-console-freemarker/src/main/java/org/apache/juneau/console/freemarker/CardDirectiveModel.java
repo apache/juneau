@@ -71,7 +71,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	/** The shared-variable name this directive registers under. */
 	public static final String NAME = "card";
 
-	static final Set<String> ATTRS = Set.of("type", "id", "title", "src", "template", "requires", "class", "ref", "subscribes", "publishes", "sanitize");
+	static final Set<String> ATTRS = Set.of("type", "id", "title", "src", "template", "requires", "class", "ref", "subscribes", "publishes", "sanitize", "style", "dataTab");
 
 	static final Set<String> REMOVED_TYPES = Set.of("js", "json", "calendar");
 
@@ -147,6 +147,12 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		var cardType = type.isEmpty() ? "html" : type;
 		if (sanitize && (neq(cardType, "html") || src.isEmpty()))
 			throw FtlAttrLists.reject(f("<@card id='%s'> sanitize= applies only to an html card with src=.", authoredId));
+		var style = FtlAttrLists.scalar(p, "style");
+		if (! style.isEmpty() && neq(cardType, "switcher"))
+			throw FtlAttrLists.reject(f("<@card id='%s'> style= applies only to type=\"switcher\".", authoredId));
+		var dataTab = p.containsKey("dataTab") ? FtlAttrLists.strictBoolean(p, NAME, "dataTab", false) : null;
+		if (nn(dataTab) && neq(cardType, "chart"))
+			throw FtlAttrLists.reject(f("<@card id='%s'> dataTab= applies only to type=\"chart\".", authoredId));
 		var id = authoredId.isEmpty() && eq(cardType, "html") ? cap.nextCardId() : authoredId;
 		Map<String,Object> cardBody = Map.of();
 		if (eq(cardType, "terminal-view"))
@@ -154,7 +160,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		else if (eq(cardType, "html"))
 			htmlCard(cap, id, title, src, template, markup, cssClass, sanitize, pubsAttr, subsAttr);
 		else
-			cardBody = registryCard(cap, cardType, id, title, src, template, markup, cssClass, pubsAttr, subsAttr).bodyMap();
+			cardBody = registryCard(cap, cardType, id, title, src, template, markup, cssClass, style, dataTab, pubsAttr, subsAttr).bodyMap();
 		recordRequirements(cap, cardType, id, requires, cardBody);
 	}
 
@@ -187,7 +193,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	}
 
 	private static String firstOtherAttr(Map<String, TemplateModel> p) {
-		for (var a : List.of("type", "id", "title", "src", "template", "requires", "class", "subscribes", "publishes", "sanitize"))
+		for (var a : List.of("type", "id", "title", "src", "template", "requires", "class", "subscribes", "publishes", "sanitize", "style", "dataTab"))
 			if (p.containsKey(a))
 				return a;
 		return null;
@@ -284,7 +290,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		"java:S107" // Internal helper whose parameters are the render/validation context.
 	})
 	private CardSpec registryCard(PageCapture cap, String type, String id, String title, String src, String template,
-			String markup, String cssClass, Object pubs, Object subs) throws TemplateModelException {
+			String markup, String cssClass, String style, Boolean dataTab, Object pubs, Object subs) throws TemplateModelException {
 		if (id.isEmpty())
 			throw FtlAttrLists.reject(f("<@card type=\"%s\"> requires id=.", type));
 		var hasBody = ! markup.isBlank();
@@ -317,6 +323,12 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		JsonMap card;
 		try {
 			card = cardTypes.toCard(source.build());
+			if (! style.isEmpty()) {
+				SwitcherDef.validateStyle(id, style);
+				card.put("style", style);
+			}
+			if (nn(dataTab))
+				card.put("dataTab", dataTab);
 		} catch (IllegalArgumentException e) {
 			throw FtlAttrLists.reject(e.getMessage());
 		}

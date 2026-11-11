@@ -71,6 +71,17 @@ class PetstoreChart_BrowserTest extends TestBase {
 		pinned = Math.round((before + pet.get("price", Double.class)) * 100) / 100d;
 	}
 
+	/**
+	 * The vertical distances between consecutive top-level cards, and the card gap token resolved to pixels through a
+	 * probe element (the token may be a var() chain).
+	 */
+	private static final String GAPS = "(function () {"
+		+ " var p = document.createElement('div'); p.style.marginTop = 'var(--jc-card-gap)'; document.body.appendChild(p);"
+		+ " var want = parseFloat(getComputedStyle(p).marginTop); p.remove();"
+		+ " var cs = [...document.querySelectorAll('.jc-main > .jc-card')];"
+		+ " var got = []; for (var i = 1; i < cs.length; i++) got.push(cs[i].getBoundingClientRect().top - cs[i - 1].getBoundingClientRect().bottom);"
+		+ " return { want: want, got: got }; })()";
+
 	/** The decorated option a chart card drew, as a JS expression. */
 	private static String option(String id) {
 		return "window.JuneauConsole.cardApi('" + id + "').getOption()";
@@ -91,23 +102,39 @@ class PetstoreChart_BrowserTest extends TestBase {
 		report = run("chart", base, List.of(
 			Map.of("name", "store", "path", "/console/store",
 				"actions", List.of(
-					Map.of("waitFor", drawn("revenue-chart", "orders-trend", "by-species")),
-					Map.of("evaluate", "window.JuneauConsole.cardApi('pets-sw').select('status')"),
+					Map.of("waitFor", "!!window.JuneauConsole.cardApi('store-sw')"),
+					// Switcher views are built on first selection, so select each before reading its chart.
+					Map.of("evaluate", select("store-sw", "revenue")),
+					Map.of("waitFor", drawn("revenue-chart")),
+					Map.of("evaluate", select("store-sw", "orders")),
+					Map.of("waitFor", drawn("orders-trend")),
+					Map.of("evaluate", select("store-sw", "pets.species")),
+					Map.of("waitFor", drawn("by-species")),
+					Map.of("evaluate", select("store-sw", "pets.status")),
 					Map.of("waitFor", drawn("by-status")),
-					Map.of("evaluate", "window.JuneauConsole.cardApi('pets-sw').select('both')"),
+					Map.of("evaluate", select("store-sw", "pets.treemap")),
 					Map.of("waitFor", drawn("pets-map")),
+					Map.of("evaluate", select("store-sw", "pets.species")),
 					Map.of("waitFor", "!!document.querySelector('#revenue-body .petstore-kpi-value')")),
-				"queries", Map.of(
-					"trend", option("orders-trend") + ".series.map(function (s) { return s.name; })",
-					"speciesType", option("by-species") + ".series[0].type",
-					"statusType", option("by-status") + ".series[0].type",
-					"revenue", "document.querySelector('#revenue-body .petstore-kpi-value').textContent",
-					"revenueLabel", "document.querySelector('#revenue-body .petstore-kpi-label').textContent",
-					"live", "window.JuneauConsole.charts.__liveCount()"),
+				"queries", Map.ofEntries(
+					Map.entry("trend", option("orders-trend") + ".series.map(function (s) { return s.name; })"),
+					Map.entry("speciesType", option("by-species") + ".series[0].type"),
+					Map.entry("statusType", option("by-status") + ".series[0].type"),
+					Map.entry("revenue", "document.querySelector('#revenue-body .petstore-kpi-value').textContent"),
+					Map.entry("revenueLabel", "document.querySelector('#revenue-body .petstore-kpi-label').textContent"),
+					Map.entry("live", "window.JuneauConsole.charts.__liveCount()"),
+					Map.entry("toggles", "document.querySelectorAll('.jc-chart-toggle').length"),
+					Map.entry("showData", "[...document.querySelectorAll('button')].filter(b => /show data/i.test(b.textContent)).length"),
+					Map.entry("speciesTabs", "[...document.querySelectorAll('#by-species [role=tab]')].map(t => t.textContent.trim())"),
+					Map.entry("compact", "!!document.querySelector('#by-species [data-juneau-strip-compact], [data-juneau-strip-compact] #by-species')"),
+					Map.entry("gaps", GAPS)),
 				"fetches", Map.of("revenue", "/console/store/kpi/revenue")),
 			Map.of("name", "cards", "path", "/console/dev/cards",
 				"actions", List.of(
-					Map.of("waitFor", drawn("bands", "prices")),
+					Map.of("waitFor", drawn("bands")),
+					Map.of("evaluate", PetstoreBrowser.select("cards-sw", "prices")),
+					Map.of("waitFor", drawn("prices")),
+					Map.of("evaluate", PetstoreBrowser.select("cards-sw", "bands")),
 					Map.of("evaluate", "window.__picked = []; window.JuneauViews.bus.subscribe('app.band-picked', function (v) { window.__picked.push(v); }, { retained: false });"),
 					Map.of("press", List.of("#bands .jc-chart-plot", "ArrowRight")),
 					Map.of("press", List.of("#bands .jc-chart-plot", "Enter")),
@@ -143,6 +170,28 @@ class PetstoreChart_BrowserTest extends TestBase {
 		assertString("bar", query(c, "statusType"));
 		// Revenue, orders and the three pets views: a view the switcher has built stays alive when hidden.
 		assertEquals(5, ((Number)query(c, "live")).intValue());
+	}
+
+	@Test void a03_petsChartsHaveDataTabsAndNoShowDataButton() {
+		var c = assertClean(report, "store");
+		assertEquals(0, ((Number)query(c, "toggles")).intValue(), "no chart toggle button");
+		assertEquals(0, ((Number)query(c, "showData")).intValue(), "no Show data button");
+		var tabs = String.valueOf(query(c, "speciesTabs"));
+		assertContains("Chart", tabs);
+		assertContains("Data", tabs);
+		assertEquals(Boolean.TRUE, query(c, "compact"), "the nested Data tabs are compact");
+	}
+
+	@SuppressWarnings({
+		"unchecked" // gaps is a {want, got[]} object.
+	})
+	@Test void a04_topLevelCardsAreSeparatedByTheCardGap() {
+		var g = (Map<String,Object>)query(assertClean(report, "store"), "gaps");
+		var want = ((Number)g.get("want")).doubleValue();
+		var got = (List<Object>)g.get("got");
+		assertEquals(2, got.size(), "welcome, revenue and the switcher card");
+		for (var d : got)
+			assertEquals(want, ((Number)d).doubleValue(), 1.0);
 	}
 
 	@Test void a02_revenueTileShowsTheServerValue() throws Exception {

@@ -49,6 +49,8 @@ class PetstoreRowJobCancel_BrowserTest extends TestBase {
 	/** The DOG panel's job-log region. */
 	private static final String R = "#species-body .juneau-view-detail-panel .jc-joblog-region";
 
+	private static final Map<String,Object> SPECIES = Map.of("evaluate", select("jobs-sw", "species"));
+
 	private static Map<String,Object> wait(String js, int ms) {
 		return Map.of("waitFor", js, "timeoutMs", ms);
 	}
@@ -68,7 +70,7 @@ class PetstoreRowJobCancel_BrowserTest extends TestBase {
 			// The running form's submit button is its cancel; the second click lands in the restock's hold.
 			Map.of("name", "cancel", "path", "/console/ops/jobs",
 				"actions", List.of(
-					wait(DOG_ROW, 8000), toggleDog(), phase("idle", 8000),
+					SPECIES, wait(DOG_ROW, 8000), toggleDog(), phase("idle", 8000),
 					Map.of("click", R + " .jc-joblog-submit"),
 					phase("running", 8000),
 					Map.of("click", R + " .jc-joblog-submit"),
@@ -77,7 +79,7 @@ class PetstoreRowJobCancel_BrowserTest extends TestBase {
 			// One collapse and re-expand (the job's two stream slots); the re-attached view's button is the cancel.
 			Map.of("name", "reattachCancel", "path", "/console/ops/jobs",
 				"actions", List.of(
-					wait(DOG_ROW, 8000), toggleDog(), phase("idle", 8000),
+					SPECIES, wait(DOG_ROW, 8000), toggleDog(), phase("idle", 8000),
 					Map.of("click", R + " .jc-joblog-submit"),
 					phase("running", 8000),
 					toggleDog(), wait("!document.querySelector('" + R + "')", 4000),

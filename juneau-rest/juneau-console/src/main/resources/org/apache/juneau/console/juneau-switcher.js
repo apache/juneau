@@ -22,7 +22,7 @@
  * is shareable through the `sw` address-bar directive; the address wins over preferences, which win over the spec's
  * initialView / initialSection, which win over the first view.
  *
- * Spec:  { type: "switcher", id, title?, initialView?, views: [ { id, label, card | sections: [ { id, label, card } ],
+ * Spec:  { type: "switcher", id, title?, style? ("tabs" | "slider"), initialView?, views: [ { id, label, card | cards: [ ... ] | sections: [ { id, label, card } ],
  *          initialSection? } ] }
  * Nested cards are full cards (own bus topics, cardApi entry, lifecycle); a switcher cannot nest a switcher.
  */
@@ -69,8 +69,11 @@
 	var ID_RE = /^[A-Za-z][A-Za-z0-9_-]{0,63}$/;
 
 	function sectionsOf(view) {
+		if (view.cards) return [{ id: "main", label: view.label, cards: view.cards }];
 		return view.sections ? view.sections : [{ id: "main", label: view.label, card: view.card }];
 	}
+
+	function cardsOf(section) { return section.cards || [section.card]; }
 
 	class SwitcherCard extends (model.Card || (JC && JC.Card) || class {}) {
 		static lateBase = true;   // the shell puts the Card base under this class if it loaded first
@@ -81,6 +84,7 @@
 			(spec && Array.isArray(spec.views) ? spec.views : []).forEach(function (v) {
 				if (!v) return;
 				if (v.card) out.push(v.card);
+				if (Array.isArray(v.cards)) v.cards.forEach(function (c) { if (c) out.push(c); });
 				if (Array.isArray(v.sections)) v.sections.forEach(function (s) { if (s && s.card) out.push(s.card); });
 			});
 			return out;
@@ -106,14 +110,43 @@
 
 			var start = this._resolveStart();
 			this._start = start;
+			var style = spec.style === "slider" ? "slider" : "tabs";
+			this.styleName = style;
 			this.selector = helpers.tabStrip(this.views.map(function (v) { return { id: v.id, label: v.label }; }), {
-				mode: "ribbon", panes: false, controls: this.display.id, active: start.view,
+				mode: style === "slider" ? "ribbon" : "tab", panes: false, controls: this.display.id, active: start.view,
 				ariaLabel: spec.title || "Views",
 				onActivate: function (id, pane, reason) { self._show(id, reason); }
 			});
 			this.selector.className += " juneau-switcher-selector";
-			this.el.appendChild(this.selector);
-			this.el.appendChild(this.display);
+			this.selector.setAttribute("data-juneau-switcher-style", style);
+			if (style === "tabs") {
+				// Folder tabs: the display is the strip's own panel, so the selected tab joins it.
+				this.selector.setAttribute("data-juneau-strip-panel", "");
+				this.display.className += " juneau-view-helper-tabstrip-panes";
+				this.selector.appendChild(this.display);
+				this.el.appendChild(this.selector);
+			} else {
+				this.el.appendChild(this.selector);
+				this.el.appendChild(this.display);
+			}
+
+			if (style === "slider") {
+				var group = this.selector.querySelector(".juneau-view-ribbon-group");
+				this.thumb = this.document.createElement("span");
+				this.thumb.className = "juneau-switcher-thumb";
+				this.thumb.setAttribute("aria-hidden", "true");
+				group.insertBefore(this.thumb, group.firstChild);
+				var reduce = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+				if (reduce) this.thumb.style.transition = "none";
+				this._moveThumb = function () {
+					var btn = self._tabButton(self.activeView || start.view);
+					if (!btn || !self.thumb) return;
+					self.thumb.style.width = btn.offsetWidth + "px";
+					self.thumb.style.transform = "translateX(" + btn.offsetLeft + "px)";
+				};
+				this._onResize = function () { self._moveThumb(); };
+				window.addEventListener("resize", this._onResize);
+			}
 
 			this._makeHandles();
 			defaults[spec.id] = this._defaultKey();
@@ -124,6 +157,7 @@
 		}
 
 		destroy() {
+			if (this._onResize) window.removeEventListener("resize", this._onResize);
 			delete live[this.spec.id];
 			delete defaults[this.spec.id];
 			if (this.switcher) this.switcher._destroy();
@@ -212,6 +246,7 @@
 			}
 			b.host.hidden = false;
 			this.activeView = viewId;
+			if (this._moveThumb) this._moveThumb();
 			this.switcher._activeId = viewId;
 			if (reason === "initial" || !this._initialDone) return;
 			this.prefsStore.set("view", viewId);
@@ -227,7 +262,7 @@
 			if (secs.length === 1) {
 				b.activeSection = secs[0].id;
 				b.sectionBuilt[secs[0].id] = true;
-				b.handles.push(this._nest(secs[0].card, b.host, vh));
+				cardsOf(secs[0]).forEach(function (c) { b.handles.push(self._nest(c, b.host, vh)); });
 				return;
 			}
 			var first = this._firstSection(view);
@@ -310,8 +345,9 @@
 			if (!def || typeof def.id !== "string" || !ID_RE.test(def.id) || typeof def.label !== "string")
 				throw new Error("addView: a view needs a valid string id and a string label");
 			if (this.viewById[def.id]) throw new Error("addView: view '" + def.id + "' already exists");
-			if ((def.card && def.sections) || (!def.card && !def.sections)) throw new Error("addView: give either a card or sections");
-			if ((def.card && def.card.type === "switcher") || (def.sections || []).some(function (s) { return s.card && s.card.type === "switcher"; }))
+			if ((def.card ? 1 : 0) + (def.sections ? 1 : 0) + (def.cards ? 1 : 0) !== 1) throw new Error("addView: give exactly one of card, sections or cards");
+			if ((def.card && def.card.type === "switcher") || (def.cards || []).some(function (c) { return c && c.type === "switcher"; })
+				|| (def.sections || []).some(function (s) { return s.card && s.card.type === "switcher"; }))
 				throw new Error("addView: a switcher cannot hold a switcher");
 			this.views.push(def);
 			this.viewById[def.id] = def;

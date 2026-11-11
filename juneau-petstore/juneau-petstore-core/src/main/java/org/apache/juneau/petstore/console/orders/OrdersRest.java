@@ -62,7 +62,7 @@ import org.apache.juneau.console.widgets.*;
 	"java:S110", // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
 	"java:S1192" // Route paths and field names repeat as inline literals by design.
 })
-public class OrdersRest extends PetstoreConsolePage {
+public class OrdersRest extends PetstoreConsolePage implements RowDetailMixin {
 
 	private static final long serialVersionUID = 1L;
 
@@ -75,6 +75,37 @@ public class OrdersRest extends PetstoreConsolePage {
 	@RestGet(path="/")
 	public View page(RestRequest req) {
 		return builder(req) ? twin(req, OrdersPageBuilders.orders()) : FreemarkerView.of("orders.ftlh");
+	}
+
+	private final RowDetail orderDetail = RowDetails.order(this::lookup);
+
+	@Override
+	public Collection<RowDetail> rowDetails() {
+		return List.of(orderDetail);
+	}
+
+	private Order lookup(String id) {
+		try {
+			return store().getOrder(Long.parseLong(id));
+		} catch (@SuppressWarnings("unused") NumberFormatException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * The Pet tab of the order row detail: the pet an order is for, as a one-row table.
+	 *
+	 * @param orderId The order id.
+	 * @return The pet.
+	 * @throws NotFound If {@code orderId} is missing or names no order, or its pet is gone.
+	 */
+	@RestGet(path="/pet/rows")
+	public List<Pet> petRows(@Query("orderId") Long orderId) {
+		var order = orderId == null ? null : store().getOrder(orderId);
+		var pet = order == null ? null : store().getPet(order.getPetId());
+		if (pet == null)
+			throw new NotFound("Unknown order '%s'", orderId);
+		return List.of(pet);
 	}
 
 	/**
@@ -144,11 +175,10 @@ public class OrdersRest extends PetstoreConsolePage {
 	}
 
 	/**
-	 * The new-order wizard, step one: pick a pet that is for sale and an optional ship date.
+	 * The new-order dialog: pick a pet that is for sale and an optional ship date.
 	 *
 	 * <p>
-	 * The {@code review} button opens the stacked second step and carries these inputs to it as drafts.  That step's
-	 * Confirm posts to {@code /console/orders}, as declared on the child action.
+	 * The dialog submits to the ribbon item's endpoint.
 	 *
 	 * @return The modal, on the compact chrome.
 	 */
@@ -160,42 +190,8 @@ public class OrdersRest extends PetstoreConsolePage {
 			.forEach(p -> pet.option(String.valueOf(p.getId()), p.getName()));
 		var form = FormDef.create()
 			.field(pet)
-			.field(FormDef.Input.of("shipDate", "Ship date (yyyy-mm-dd)", "text"))
-			.field(FormDef.Input.of("review", "Review order", "action").actionId("review"));
-		return ModalDef.create("New order: choose a pet").chrome("compact")
-			.form(form)
-			.childAction(ModalDef.ChildAction.of("review", "Review order").form("/console/orders/review-form").carryDrafts(true)
-				// The stacked step's Confirm submits with the child's own endpoint and method; without them it sends nothing.
-				.endpoint("/console/orders").method("POST").onSuccess("redraw"));
-	}
-
-	/**
-	 * The new-order wizard, step two: the order about to be placed, read back from the first step's drafts.
-	 *
-	 * @param drafts The first step's inputs as JSON, carried by the dialog as {@code juneauDrafts}.
-	 * @return The modal, on the compact chrome, whose form re-posts the validated values.
-	 * @throws BadRequest If the drafts are missing, not JSON, or carry a bad ship date.
-	 * @throws NotFound If the pet does not exist.
-	 * @throws Conflict If the pet is not available.
-	 */
-	@RestGet(path="/review-form")
-	public ModalDef reviewForm(@Query("juneauDrafts") String drafts) {
-		if (ib(drafts))
-			throw new BadRequest("Missing order draft");
-		JsonMap m;
-		try {
-			m = new JsonMap(drafts);
-		} catch (Exception e) {
-			throw new BadRequest("Invalid order draft: '%s'", e.getMessage());
-		}
-		var pet = pet(m.getString("petId"));
-		var shipDate = shipDate(m.getString("shipDate"));
-		return ModalDef.create("Review order").chrome("compact")
-			.field("Pet", pet.getName())
-			.field("Ship date", shipDate == null ? "(none)" : shipDate)
-			.form(FormDef.create()
-				.field(FormDef.Input.of("petId", "Pet", "text").value(String.valueOf(pet.getId())))
-				.field(FormDef.Input.of("shipDate", "Ship date", "text").value(shipDate == null ? "" : shipDate)));
+			.field(FormDef.Input.of("shipDate", "Ship date", "date"));
+		return ModalDef.create("New order: choose a pet").chrome("compact").form(form);
 	}
 
 	/**

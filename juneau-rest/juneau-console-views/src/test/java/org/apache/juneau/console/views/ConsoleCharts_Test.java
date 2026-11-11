@@ -85,13 +85,12 @@ class ConsoleCharts_Test extends TestBase {
 		assertEquals(List.of(), r.get("errors"));
 	}
 
-	@Test void a02_line_tableToggleAndKeyboard() {
+	@Test void a02_line_hiddenTableNoToggleAndKeyboard() {
 		var r = part("table");
-		// The label is fixed; aria-expanded carries the state.  The table body is built on open, not at the first draw.
-		assertEquals(Map.of("expanded", "false", "text", "Show data", "hidden", true, "cells", 0), r.get("before"));
-		assertEquals(Map.of("expanded", "true", "text", "Show data", "hidden", false), r.get("after"));
-		// The toggle controls the table box; the table is named by the caption.
-		assertEquals(Map.of("controls", "jc-chart-table-box-c1", "boxId", "jc-chart-table-box-c1", "tableName", "jc-chart-caption-c1", "captionId", "jc-chart-caption-c1"), r.get("wiring"));
+		// No "Show data" button: the table is always there, clipped (not display:none), and named by the caption.
+		assertEquals(true, r.get("noToggle"));
+		assertEquals(Map.of("inSr", true, "inlineDisplay", "", "hiddenAttr", false), r.get("hidden"));
+		assertEquals(Map.of("tableName", "jc-chart-caption-c1", "captionId", "jc-chart-caption-c1"), r.get("wiring"));
 		assertEquals(List.of("day", "placed", "delivered"), r.get("head"));
 		assertEquals(List.of("Mon", "3", "1", "Tue", "5", "2", "Wed", "4", "4"), r.get("cells"));
 		assertEquals(4, num(r, "rows"));
@@ -102,6 +101,22 @@ class ConsoleCharts_Test extends TestBase {
 			+ "{\"type\":\"downplay\",\"seriesIndex\":0,\"dataIndex\":0},{\"type\":\"highlight\",\"seriesIndex\":0,\"dataIndex\":1},"
 			+ "{\"type\":\"showTip\",\"seriesIndex\":0,\"dataIndex\":1},{\"type\":\"downplay\",\"seriesIndex\":0,\"dataIndex\":1},"
 			+ "{\"type\":\"highlight\",\"seriesIndex\":0,\"dataIndex\":0},{\"type\":\"showTip\",\"seriesIndex\":0,\"dataIndex\":0}]", r.get("keys"));
+	}
+
+	@Test void a02b_dataTab_rendersChartAndDataTabs() {
+		var r = part("dataTab");
+		var on = (Map<?,?>)r.get("on");
+		assertEquals(List.of(Map.of("labels", List.of("Chart", "Data"), "mode", "tab", "panes", true, "active", "chart")), on.get("calls"));
+		assertEquals(1, num(on, "tables"));
+		assertEquals(0, num(on, "srBoxes"));
+		assertEquals(true, on.get("dataPaneTable"));
+		assertEquals(true, on.get("chartPanePlot"));
+		assertEquals(9, num(on, "cells"));
+		assertEquals(true, on.get("toggle"));
+		// dataTab wins over a11y.table:false.
+		assertEquals(Map.of("calls", 1, "tables", 1), r.get("wins"));
+		// Without the views toolkit the chart still renders, with the hidden table.
+		assertEquals(Map.of("tables", 1, "srBoxes", 1, "errors", List.of()), r.get("fallback"));
 	}
 
 	@Test void a03_bar_srcRowsStackedAndHorizontal() {
@@ -649,15 +664,17 @@ class ConsoleCharts_Test extends TestBase {
 		assertEquals(List.of(), r.get("log"));
 	}
 
-	@Test void a40_dataTable_isBuiltOnOpen() {
+	@Test void a40_dataTable_isRebuiltAtEveryDraw() {
 		var r = part("lazyTable");
-		// nothing is built while collapsed (not at draw, not at refresh); open builds it; a redraw while open rebuilds; closing stops it.
-		assertEquals(Map.of("drawn", 0), r.get("closed"));
-		assertEquals(0, num(r, "closedAfterRefresh"));
-		assertEquals(9, num(r, "opened"));
-		assertEquals(12, num(r, "openedAfterRefresh"));
-		assertEquals(Map.of("expanded", "false", "text", "Show data", "hidden", true), r.get("closedAgain"));
-		assertEquals(15, num(r, "reopened"));
+		// The hidden table is built at the first draw and rebuilt at each redraw (two rows, then three, then four, three columns each).
+		assertEquals(6, num(r, "drawn"));
+		assertEquals(9, num(r, "afterRefresh"));
+		assertEquals(12, num(r, "afterSecond"));
+	}
+
+	@Test void a42_horizontalBar_heightGrowsWithCategories() {
+		var r = part("horizHeight");
+		assertEquals(Map.of("many", "616px", "few", "240px", "vert", "240px", "tall", "900px"), r);
 	}
 
 	@Test void a41_keyboardWalk_homeEndEscapeBlur() {

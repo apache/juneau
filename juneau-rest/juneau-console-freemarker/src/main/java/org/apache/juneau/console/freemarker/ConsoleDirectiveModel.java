@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
+import java.util.regex.*;
 
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.console.*;
@@ -114,6 +115,11 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 
 		var icon = FtlAttrLists.scalar(p, "icon");
 		var favicon = FtlAttrLists.scalar(p, "favicon");
+		var iconSymbol = symbolName("icon", icon);
+		var faviconSymbol = symbolName("favicon", favicon);
+		if (nn(faviconSymbol))
+			favicon = req.getUriResolver().resolve("servlet:" + ViewsMixin.SYMBOL_SVG_PATH.replace("{file}", faviconSymbol + ".svg"));
+		var faviconHref = favicon;
 		var brand = FtlAttrLists.scalar(p, "brand");
 		var titleAttr = FtlAttrLists.scalar(p, "title");
 		var chrome = FtlAttrLists.strictBoolean(p, NAME, "chrome", false);
@@ -125,7 +131,9 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		cap.header(h -> {
 			if (! brand.isEmpty())
 				h.title(brand);
-			if (! icon.isEmpty())
+			if (nn(iconSymbol))
+				h.logoSymbol(iconSymbol, req.getUriResolver().resolve("context:/"), brand.isEmpty() ? null : brand);
+			else if (! icon.isEmpty())
 				h.logo(icon, req.getUriResolver().resolve("context:/"), brand.isEmpty() ? null : brand);
 			h.chrome(chrome);
 		});
@@ -212,8 +220,8 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 			out.write("<meta name=\"page-tab\" content=\"" + attrEscape(cap.tab()) + "\">\n");
 		if (hasCsrf)
 			out.write("<meta name=\"csrf-token\" content=\"" + attrEscape(metaToken) + "\">\n");
-		if (! favicon.isEmpty())
-			out.write("<link rel=\"icon\" href=\"" + attrEscape(favicon) + "\">\n");
+		if (! faviconHref.isEmpty())
+			out.write("<link rel=\"icon\" href=\"" + attrEscape(faviconHref) + "\">\n");
 		out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(ConsoleChromeMixin.chromeCssUrl(req)) + "\">\n");
 		out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(ConsoleChromeMixin.themeAssetUrl(req, "dark")) + "\">\n");
 		out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(cap.themeCssUrl) + "\">\n");
@@ -280,6 +288,18 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 	 * is trusted; a value of any other type under that name was set by request code, so no token is embedded.  Falls
 	 * back to the single string value for a filter that publishes only that.
 	 */
+	private static final Pattern SYMBOL_NAME = Pattern.compile("[a-z0-9_]{1,64}");
+
+	// Returns the symbol name when value is "symbol:<name>", null when it is not a symbol reference; rejects a bad name.
+	private static String symbolName(String attr, String value) throws TemplateModelException {
+		if (! value.startsWith("symbol:"))
+			return null;
+		var name = value.substring("symbol:".length());
+		if (! SYMBOL_NAME.matcher(name).matches())
+			throw FtlAttrLists.reject(f("<@console> %s='%s' needs a symbol name matching [a-z0-9_]{1,64}.", attr, value));
+		return name;
+	}
+
 	private static String csrfToken(RestRequest req) {
 		var supplier = req.getHttpServletRequest().getAttribute(RequestBoundaryFilter.TOKEN_SUPPLIER_ATTRIBUTE);
 		if (supplier instanceof RequestBoundaryFilter.TokenSupplier s)

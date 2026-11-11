@@ -19,7 +19,9 @@
   dataUrl: '/console/ops/audit/query',
   columnConfig: true,
   defaultOrder: [{ key: 'at', dir: 'desc' }],
+  detail: {"mode":"inline","title":"{action} {entity} {entityId}","labels":{"id":"Id","at":"When","actor":"Actor","action":"Action","entity":"Entity","entityId":"Id","detail":"Detail"},"tabs":[{"id":"details","kind":"fields","title":"Details","fields":["id","at","actor","action","entity","entityId","detail"]}]},
   columns: [
+    { key: 'id', label: 'Id', defaultVisible: false },
     { key: 'at', label: 'When', render: { id: 'timestamp' }, searchType: 'timestamp' },
     { key: 'actor', label: 'Actor', searchType: 'text' },
     { key: 'action', label: 'Action', render: { id: 'pill', meta: { tones: { CREATE: 'success', UPDATE: 'info', DELETE: 'error', DISCARD: 'warning', RESTOCK: 'info' } } }, searchType: 'text' },

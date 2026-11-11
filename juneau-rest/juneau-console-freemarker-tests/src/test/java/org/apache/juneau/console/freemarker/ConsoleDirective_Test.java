@@ -937,6 +937,33 @@ class ConsoleDirective_Test extends TestBase {
 		assertTrue(escaped.contains("nonce=\"a&quot;b\""), () -> escaped);
 	}
 
+	// -----------------------------------------------------------------------------------------------------------------
+	// symbol: references on icon= and favicon=
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void symbol_a01_faviconResolved() throws Exception {
+		var body = scheme("/t?n=sym-favicon", 200);
+		assertTrue(body.contains("<link rel=\"icon\" href=\"/juneau-symbol/paw_print.svg\">"), () -> body);
+	}
+
+	@Test void symbol_a02_iconPassesSymbolKey() throws Exception {
+		var logo = assertPage(scheme("/t?n=sym-icon", 200)).contract().getMap("header").getMap("logo");
+		assertEquals("paw_print", logo.getString("symbol"));
+		assertNull(logo.get("src"));
+	}
+
+	@Test void symbol_a03_badNameRejected() throws Exception {
+		for (var n : new String[]{"sym-icon-bad", "sym-favicon-bad", "sym-favicon-empty"}) {
+			var body = scheme("/t?n=" + n, 500);
+			assertTrue(body.contains("symbol name"), () -> n + ": " + body);
+		}
+	}
+
+	@Test void symbol_a04_plainUrlUnchanged() throws Exception {
+		var body = scheme("/t?n=icon-url", 200);
+		assertEquals("/app/logo.svg", assertPage(body).contract().getMap("header").getMap("logo").getString("src"));
+	}
+
 	@Test void s07_schemeValidation() throws Exception {
 		var body = scheme("/t?n=bogus", 500);
 		assertTrue(body.contains("<@console> unknown scheme 'dim'.  Schemes: auto, light, dark."), () -> body);

@@ -106,9 +106,11 @@ class Terminal_BrowserTest extends TestBase {
 
 	@Test void a25_notFoundShowsTheEmptyPanel() { ok("b25_notFoundShowsTheEmptyPanel"); }
 	@Test void a26_defaultEmptyMessage() { ok("b26_defaultEmptyMessage"); }
+	@Test void a27_followToggleButtonFlips() { ok("b27_followToggleButtonFlips"); }
+	@Test void a28_fontSizeTokenOverride() { ok("b28_fontSizeTokenOverride"); }
 
 	@Test void z01_everyCaseHasAMethod() {
 		var cases = (Map<?,?>)report.get("cases");
-		assertSize(() -> "case count changed; add a method per new case: " + cases.keySet(), 27, cases);
+		assertSize(() -> "case count changed; add a method per new case: " + cases.keySet(), 29, cases);
 	}
 }

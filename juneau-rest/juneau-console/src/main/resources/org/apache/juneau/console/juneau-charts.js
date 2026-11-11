@@ -466,6 +466,8 @@
 			if (x.label != null) xAxis.name = String(x.label);
 			const yAxis = yAxisOf(h);
 			const horizontal = h.orientation === "horizontal";
+			// A horizontal bar lists every category: no skipped labels, none hidden for overlap.
+			if (horizontal) xAxis.axisLabel = Object.assign({}, xAxis.axisLabel, { interval: 0, hideOverlap: false });
 			const series = seriesOf(h).map(s => {
 				const out = { id: s.field, name: s.label || s.field, type: type,
 					encode: horizontal ? { y: x.field, x: s.field } : { x: x.field, y: s.field } };
@@ -1489,15 +1491,19 @@
 		return out;
 	}
 
-	function heightOf(card) {
-		return Math.max(MIN_HEIGHT, Number(card.height) || DEFAULT_HEIGHT);
+	const ROW_PX = 28, AXIS_PAD = 56;
+
+	// A horizontal bar grows with its category count; an explicit height is the minimum, never a cap.
+	function heightOf(card, rows) {
+		const base = Math.max(MIN_HEIGHT, Number(card.height) || DEFAULT_HEIGHT);
+		return helperOf(card)?.orientation === "horizontal" && rows > 0 ? Math.max(base, rows * ROW_PX + AXIS_PAD) : base;
 	}
 
 	function a11yOf(card) {
 		return isObj(card.a11y) ? card.a11y : {};
 	}
 
-	// ---- J1. chrome: caption, banner, plot, overlay, the "Show data" table ----
+	// ---- J1. chrome: caption, banner, plot, overlay, the data table ----
 
 	function chrome(st) {
 		const doc = st.ctx.document, card = st.card;
@@ -1540,37 +1546,33 @@
 		plot.appendChild(overlay);
 		fig.appendChild(cap);
 		fig.appendChild(banner);
-		fig.appendChild(plot);
-		if (live) fig.appendChild(live);
-		st.toggle = st.box = st.note = st.table = null;
-		st.tableOpen = false;
-		if (a11yOf(card).table !== false) {
-			const toggle = htmlNode(doc, "button", "jc-chart-toggle");
-			toggle.setAttribute("type", "button");
-			toggle.setAttribute("aria-expanded", "false");
-			toggle.textContent = "Show data";
-			const box = htmlNode(doc, "div", "jc-chart-table-box");
-			box.id = "jc-chart-table-box-" + idrefOf(card.id);
-			toggle.setAttribute("aria-controls", box.id);
-			box.hidden = true;
+		st.box = st.note = st.table = null;
+		const views = window.JuneauViews;
+		st.dataTab = card.dataTab === true && typeof views?.helpers?.tabStrip === "function";
+		if (st.dataTab || a11yOf(card).table !== false) {
+			// The table is always built (at every draw): visually hidden for screen readers, or the Data tab's visible pane.
+			const box = htmlNode(doc, "div", st.dataTab ? "jc-chart-table-box" : "jc-chart-sr");
 			const note = htmlNode(doc, "p", "jc-chart-table-note");
 			note.hidden = true;
 			const table = htmlNode(doc, "table", "jc-chart-table");
 			table.setAttribute("aria-labelledby", cap.id);
 			box.appendChild(note);
 			box.appendChild(table);
-			// A fixed label; aria-expanded carries the state.  The table is built on open, not on every draw.
-			toggle.addEventListener("click", () => {
-				const open = toggle.getAttribute("aria-expanded") !== "true";
-				toggle.setAttribute("aria-expanded", String(open));
-				box.hidden = !open;
-				st.tableOpen = open;
-				if (open) buildTable(st);
-			});
-			fig.appendChild(toggle);
-			fig.appendChild(box);
-			Object.assign(st, { toggle: toggle, box: box, note: note, table: table });
+			Object.assign(st, { box: box, note: note, table: table });
 		}
+		if (st.dataTab) {
+			// Chart / Data folder tabs; the strip is the chart's own, never a switcher.
+			const tabs = views.helpers.tabStrip([
+				{ id: "chart", label: "Chart", populate: pane => { pane.appendChild(plot); } },
+				{ id: "data", label: "Data", populate: pane => { pane.appendChild(st.box); } }
+			], { mode: "tab", panes: true, active: "chart", ariaLabel: (card.title || "Chart") + " views" });
+			if (st.body.closest?.("[data-juneau-in-switcher]")) tabs.setAttribute("data-juneau-strip-compact", "");
+			fig.appendChild(tabs);
+		} else {
+			fig.appendChild(plot);
+		}
+		if (live) fig.appendChild(live);
+		if (st.box && !st.dataTab) fig.appendChild(st.box);
 		plot.addEventListener("keydown", ev => onKey(st, ev));
 		plot.addEventListener("blur", () => clearWalk(st));
 		st.body.appendChild(fig);
@@ -1634,10 +1636,10 @@
 		return text;
 	}
 
-	// The data table is lazy: a draw only records its frame; the DOM is built when the table is open.
+	// A draw records its frame and rebuilds the data table (hidden, or the Data tab's pane).
 	function fillTable(st, frame) {
 		st.tableFrame = frame;
-		if (st.table && st.tableOpen) buildTable(st);
+		if (st.table) buildTable(st);
 	}
 
 	function buildTable(st) {
@@ -1813,7 +1815,11 @@
 		ensureChrome(st);
 		setBanner(st, frame);
 		const first = !st.inst;
+		const wantH = heightOf(card, frame.rowCount) + "px";
+		const heightChanged = st.canvas.style.height !== wantH;
+		st.canvas.style.height = wantH;
 		if (first) initChart(st);
+		else if (heightChanged) st.inst.resize();
 		const inPlace = themed && !first;
 		// setTheme rebuilds the stored option, dropping a zoom range or legend selection the card does not publish: the view on
 		// screen is read back first and folded into the new option.

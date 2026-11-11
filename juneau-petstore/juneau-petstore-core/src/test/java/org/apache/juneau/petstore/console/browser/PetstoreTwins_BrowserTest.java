@@ -53,12 +53,22 @@ class PetstoreTwins_BrowserTest extends TestBase {
 	/*
 	 * Settled means every card has finished its own first render, not just left the loading state: each view table has
 	 * been wrapped by DataTables and has its header painted, and each chart has a drawn ECharts surface and a filled
-	 * caption (both written by the first draw, together with the chart's "Show data" table header).
+	 * caption (both written by the first draw).
 	 */
 	private static final String SETTLED = "!!document.querySelector('.jc-card, .jc-card-bare')"
 		+ " && !document.querySelector('[data-juneau-card-pending], .jc-card-loading')"
 		+ " && [...document.querySelectorAll('table.juneau-view-table')].every(t => t.closest('.dt-container, .dataTables_wrapper') && t.querySelector('thead th'))"
 		+ " && [...document.querySelectorAll('.jc-chart')].every(f => f.querySelector('.jc-chart-canvas canvas, .jc-chart-canvas svg') && f.querySelector('.jc-chart-caption')?.textContent.trim())";
+
+	/**
+	 * Switcher views are built on first selection, so a page with a switcher is compared only after every view and
+	 * section has been selected in turn (otherwise the settled check below is vacuous for charts in unbuilt views).
+	 */
+	private static final Map<String,List<String>> SWITCHERS = Map.of(
+		"/console/store", List.of("store-sw:recent", "store-sw:revenue.chart", "store-sw:revenue.data", "store-sw:orders.chart",
+			"store-sw:orders.data", "store-sw:pets.species", "store-sw:pets.status", "store-sw:pets.treemap", "store-sw:hours", "store-sw:recent"),
+		"/console/ops/jobs", List.of("jobs-sw:jobs", "jobs-sw:species", "jobs-sw:groom", "jobs-sw:restock"),
+		"/console/dev/cards", List.of("cards-sw:available", "cards-sw:gauge", "cards-sw:prices", "cards-sw:toolbar", "cards-sw:how", "cards-sw:bands"));
 
 	private static Map<String,Map<String,Object>> report;
 
@@ -68,8 +78,19 @@ class PetstoreTwins_BrowserTest extends TestBase {
 
 	private static Map<String,Object> theCase(String name, String path) {
 		// The Photo tab's <object> asks for the photo before there is one, so its 404 load is expected there only.
+		var actions = new ArrayList<Map<String,Object>>();
+		var bare = path.contains("?") ? path.substring(0, path.indexOf('?')) : path;
+		var selects = SWITCHERS.getOrDefault(bare, List.of());
+		actions.add(Map.of("waitFor", SETTLED, "timeoutMs", 8000));
+		for (var sel : selects) {
+			var i = sel.indexOf(':');
+			actions.add(Map.of("evaluate", select(sel.substring(0, i), sel.substring(i + 1))));
+			actions.add(Map.of("waitFor", SETTLED, "timeoutMs", 8000));
+		}
+		if (bare.equals("/console/store"))
+			actions.add(Map.of("waitFor", "document.querySelectorAll('.jc-chart').length >= 5", "timeoutMs", 8000));
 		return Map.of("name", name, "path", path, "allowFailedLoads", path.contains("/photo"),
-			"actions", List.of(Map.of("waitFor", SETTLED, "timeoutMs", 8000)),
+			"actions", actions,
 			"queries", Map.of("state", STATE));
 	}
 

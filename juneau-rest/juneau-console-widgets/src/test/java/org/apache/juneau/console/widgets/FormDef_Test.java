@@ -242,4 +242,41 @@ class FormDef_Test extends TestBase {
 		nullLabel.label = null;
 		assertRejected(nullLabel::validate, "label must not be null or blank");
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// date input type
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void date_a01_accepted() {
+		Input.of("shipDate", "Ship date", "date").validate();
+	}
+
+	@Test void date_a02_validValue() {
+		Input.of("shipDate", "Ship date", "date").value("2026-11-10").validate();
+	}
+
+	@Test void date_a03_badValueRejected() {
+		assertRejected(Input.of("shipDate", "Ship date", "date").value("2026-13-40")::validate, "FormDef.Input 'shipDate' value '2026-13-40' must be an ISO date (yyyy-MM-dd).");
+		assertRejected(Input.of("shipDate", "Ship date", "date").value("11/10/2026")::validate, "FormDef.Input 'shipDate' value '11/10/2026' must be an ISO date (yyyy-MM-dd).");
+	}
+
+	@Test void date_a04_forbiddenAttributes() {
+		var o = Input.of("d", "D", "date").option("a", "A");
+		assertRejected(o::validate, "options are only allowed on a select field.");
+		assertRejected(Input.of("d", "D", "date").pattern("x")::validate, "pattern is only allowed on a text/textarea field.");
+		assertRejected(Input.of("d", "D", "date").maxLength(5)::validate, "maxLength is only allowed on a text/textarea field.");
+		assertRejected(Input.of("d", "D", "date").actionId("a")::validate, "actionId is only allowed on an action field.");
+	}
+
+	@Test void date_a05_requiredAndHelpAllowed() {
+		Input.of("d", "D", "date").required().help("pick a day").validate();
+	}
+
+	@Test void date_a06_unknownTypeMessageListsDate() {
+		assertRejected(() -> Input.of("d", "D", "x"), "must be one of text, textarea, password, checkbox, toggle, select, date, action, not 'x'.");
+	}
+
+	@Test void contract_a01_version3() {
+		assertEquals("3", FormDef.CONTRACT_VERSION);
+	}
 }

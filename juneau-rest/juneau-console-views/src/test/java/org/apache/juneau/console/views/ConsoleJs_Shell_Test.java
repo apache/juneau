@@ -299,6 +299,30 @@ class ConsoleJs_Shell_Test extends TestBase {
 		}
 	}
 
+	@Test void logoSymbolRendersUse() {
+		var ok = map(map(r().get("logoSymbol")).get("ok"));
+		assertEquals(Boolean.TRUE, ok.get("mark"));
+		assertEquals("img", ok.get("role"));
+		assertEquals("Pets", ok.get("label"));
+		assertEquals(Boolean.TRUE, ok.get("svg"));
+		assertEquals("juneau-symbols-lucide.svg#juneau-sym-paw_print", ok.get("href"));
+		assertEquals(Boolean.FALSE, ok.get("bg"));
+		assertEquals("/ctx/juneau-symbols-lucide.svg#juneau-sym-paw_print", map(r().get("logoSymbol")).get("sibling"));
+	}
+
+	@Test void logoSymbolBadNameFailsLoud() {
+		var bad = map(map(r().get("logoSymbol")).get("bad"));
+		assertEquals(Boolean.FALSE, bad.get("mark"));
+		assertEquals(Boolean.FALSE, bad.get("svg"));
+		assertTrue(String.valueOf(bad.get("banner")).contains("invalid symbol name 'Bad Name' on header 'logo'"), () -> String.valueOf(bad));
+	}
+
+	@Test void logoSrcUnchanged() {
+		var src = map(map(r().get("logoSymbol")).get("src"));
+		assertEquals(Boolean.FALSE, src.get("mark"));
+		assertEquals(Boolean.TRUE, src.get("bg"));
+	}
+
 	@Test void a08c_hrefSafety_acceptedHrefsRenderUnchanged() {
 		var nav = map(map(r().get("hrefSafety")).get("nav"));
 		var expected = List.of("foo/bar", "/path/to/thing", "#frag", "https://example.com/ok", "mailto:a@example.com");

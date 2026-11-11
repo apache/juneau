@@ -521,4 +521,35 @@ out.errors = {};
 	out.hrefSafety.keydownListenerCountAfterTwoMounts = r.env.listenerCount('keydown');
 })();
 
+//----------------------------------------------------------------------------------------------------------------
+// Header logo from a built-in symbol: an svg <use> onto the Lucide sprite beside juneau-icons.js; a bad name is E-JS-128.
+//----------------------------------------------------------------------------------------------------------------
+(function logoSymbol() {
+	const before = (sandbox, env) => { env.document.createElementNS = (ns, tag) => env.document.createElement(tag); };
+	const tpl = [];
+	const mount = logo => {
+		const r = run(C({ header: { title: 'Pets', logo: logo } }), tpl, { before: before });
+		const mark = r.doc.querySelector('.jc-logo-symbol');
+		const use = r.doc.querySelector('use');
+		return { threw: r.threw, banner: bannerText(r.doc), mark: !!mark, role: mark?.getAttribute('role') ?? null,
+			label: mark?.getAttribute('aria-label') ?? null, svg: !!r.doc.querySelector('svg'), href: use?.getAttribute('href') ?? null,
+			bg: (r.doc.querySelector('.jc-logo')?.getAttribute('style') || '').includes('background-image') };
+	};
+	const withIcons = (logo, src) => {
+		const r = run(C({ header: { title: 'Pets', logo: logo } }), tpl, { before: (sb, env) => {
+			before(sb, env);
+			const s = env.document.createElement('script');
+			s.setAttribute('src', src);
+			env.document.body.appendChild(s);
+		} });
+		return r.doc.querySelector('use')?.getAttribute('href') ?? null;
+	};
+	out.logoSymbol = {
+		ok: mount({ symbol: 'paw_print', alt: 'Pets' }),
+		bad: mount({ symbol: 'Bad Name' }),
+		src: mount({ src: '/app/logo.svg' }),
+		sibling: withIcons({ symbol: 'paw_print' }, '/ctx/juneau-icons.js?v=1')
+	};
+})();
+
 process.stdout.write(JSON.stringify(out));

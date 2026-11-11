@@ -109,4 +109,29 @@ class SwitcherCardType_Test extends TestBase {
 		var e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(plain));
 		assertTrue(e.getMessage().contains("type='switcher' requires a JSON5 body."), e.getMessage());
 	}
+
+	@Test void style_a01_jsonBodyAccepted() {
+		var card = REG.toCard(src("{style:'slider'," + OK.substring(1)));
+		assertEquals("slider", card.get("style"));
+	}
+
+	@Test void style_a02_jsonBodyBadValueSameMessage() {
+		var e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(src("{style:'pills'," + OK.substring(1))));
+		assertTrue(e.getMessage().contains("SwitcherDef 'sw' style 'pills' must be one of tabs, slider."), e.getMessage());
+	}
+
+	private static final String STACKED = "{views:[{id:'a',label:'A',cards:[{id:'c1',type:'chart',src:'/x',kind:'line',x:{field:'d'},series:['n']},"
+		+ "{id:'d1',type:'datatables',dataMode:'client',dataUrl:'/x',columns:[{key:'k',label:'K'}]}]}]}";
+
+	@Test void cards_a01_jsonBodyLifted() {
+		var card = REG.toCard(src(STACKED));
+		var v0 = (Map<?,?>)((List<?>)card.get("views")).get(0);
+		assertEquals(2, ((List<?>)v0.get("cards")).size());
+	}
+
+	@Test void cards_a02_nestedCardsWalked() {
+		var card = REG.toCard(src(STACKED));
+		var ids = new SwitcherCardType().nestedCards(card).stream().map(m -> m.get("id")).toList();
+		assertEquals(List.of("c1", "d1"), ids);
+	}
 }

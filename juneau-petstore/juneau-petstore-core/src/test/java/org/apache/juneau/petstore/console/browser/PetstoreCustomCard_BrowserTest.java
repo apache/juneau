@@ -45,6 +45,17 @@ class PetstoreCustomCard_BrowserTest extends TestBase {
 
 	private static Map<String,Map<String,Object>> report;
 
+	// The switcher builds a view on first selection, so each card is brought up in turn before the probes query it.
+	private static List<Map<String,Object>> mountAll() {
+		return List.of(
+			Map.of("evaluate", PetstoreBrowser.select("cards-sw", "available")),
+			Map.of("waitFor", "document.querySelector('#available-body .petstore-kpi-value')"),
+			Map.of("evaluate", PetstoreBrowser.select("cards-sw", "gauge")),
+			Map.of("waitFor", "document.querySelector('#gauge-body meter')"),
+			Map.of("evaluate", PetstoreBrowser.select("cards-sw", "toolbar")),
+			Map.of("waitFor", "document.querySelector('[data-cards-action=\"refresh\"]')"));
+	}
+
 	private static final String RENDERED = "document.querySelector('#gauge-body meter') && document.querySelector('#available-body .petstore-kpi-value')";
 
 	// Stubs fetch so the gauge reads window.__stock and the kpi's read aborts, spies on announcements, and puts a
@@ -77,17 +88,23 @@ class PetstoreCustomCard_BrowserTest extends TestBase {
 		"Promise.resolve(window.JuneauConsole.refreshCard('available'))",
 		"  .then(function () { window.__kpiDone = true; }, function () { window.__kpiDone = true; });");
 
+	private static List<Map<String,Object>> concat(List<Map<String,Object>> a, List<Map<String,Object>> b) {
+		var l = new java.util.ArrayList<>(a);
+		l.addAll(b);
+		return l;
+	}
+
 	@BeforeAll
 	static void probe() throws Exception {
 		var base = PetstoreTestServer.awaitReady(server);
 		report = run("custom-card", base, List.of(
 			Map.of("name", "cards", "path", "/console/dev/cards",
-				"actions", List.of(
+				"actions", concat(mountAll(), List.of(
 					Map.of("waitFor", RENDERED),
 					Map.of("evaluate", "window.__mountedBefore = window.petstoreMounted.slice()"),
 					Map.of("click", "[data-cards-action=\"refresh\"]"),
 					Map.of("waitFor", "window.JuneauConsole.cardApi('gauge').reads() >= 2"),
-					Map.of("click", "[data-cards-action=\"api\"]")),
+					Map.of("click", "[data-cards-action=\"api\"]"))),
 				"queries", Map.of(
 					"kpi", "document.querySelector('#available-body .petstore-kpi-value').textContent",
 					"kpiLabel", "document.querySelector('#available-body .petstore-kpi-label').textContent",
@@ -97,16 +114,16 @@ class PetstoreCustomCard_BrowserTest extends TestBase {
 					"mountedBefore", "window.__mountedBefore",
 					"types", "window.JuneauConsole.cardTypes()")),
 			Map.of("name", "dup", "path", "/console/dev/cards", "allowFailedLoads", true,
-				"actions", List.of(
+				"actions", concat(mountAll(), List.of(
 					Map.of("waitFor", RENDERED),
-					Map.of("evaluate", "try { window.JuneauConsole.registerCard('kpi', class extends window.JuneauConsole.Card { render() {} }); window.__dup = 'none'; } catch (e) { window.__dup = e.code + ' ' + e.message; }")),
+					Map.of("evaluate", "try { window.JuneauConsole.registerCard('kpi', class extends window.JuneauConsole.Card { render() {} }); window.__dup = 'none'; } catch (e) { window.__dup = e.code + ' ' + e.message; }"))),
 				"queries", Map.of("dup", "window.__dup")),
 			Map.of("name", "stubbed", "path", "/console/dev/cards", "allowFailedLoads", true,
-				"actions", List.of(
+				"actions", concat(mountAll(), List.of(
 					Map.of("waitFor", RENDERED),
 					Map.of("evaluate", STUB),
 					Map.of("evaluate", READS),
-					Map.of("waitFor", "window.__gaugeDone === true && window.__kpiDone === true")),
+					Map.of("waitFor", "window.__gaugeDone === true && window.__kpiDone === true"))),
 				"queries", Map.of(
 					"lowStock", "window.__ann.filter(function (t) { return t.indexOf('DOG stock is below') === 0; }).length",
 					"decoyChildren", "document.querySelector('[data-decoy]').childElementCount",

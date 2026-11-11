@@ -241,6 +241,34 @@ class ViewsMixin_Serving_Test extends TestBase {
 			.assertContent().asString().isContains("juneau-views.css");
 	}
 
+	@Test void symbol_a01_known() throws Exception {
+		var body = cWithMixin.get("/juneau-symbol/paw_print.svg").run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("image/svg+xml")
+			.getContent().asString();
+		for (var want : new String[]{"<svg", "viewBox=\"0 0 24 24\"", "prefers-color-scheme", "#4a4a4a", "#c8c8c8", "<circle"})
+			assertTrue(body.contains(want), want + " missing in " + body);
+		assertFalse(body.contains("currentColor") || body.contains("<script"), body);
+	}
+
+	@Test void symbol_a02_unknown() throws Exception {
+		cWithMixin.get("/juneau-symbol/no_such_thing.svg").run().assertStatus(404);
+	}
+
+	@Test void symbol_a03_badName() throws Exception {
+		cWithMixin.get("/juneau-symbol/Paw-Print.svg").run().assertStatus(404);
+		cWithMixin.get("/juneau-symbol/" + "a".repeat(65) + ".svg").run().assertStatus(404);
+	}
+
+	@Test void symbol_a04_cacheHeader() throws Exception {
+		cWithMixin.get("/juneau-symbol/paw_print.svg").run().assertStatus(200).assertHeader("Cache-Control").is(ViewsMixin.CACHE_CONTROL);
+	}
+
+	@Test void symbol_a05_shippedFallback() throws Exception {
+		var body = cWithMixin.get("/juneau-symbol/cancel.svg").run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains("<path") && body.contains("<g class=\"f\">") && ! body.contains("currentColor"), body);
+	}
+
 	@Test void b05_arbitraryVersionQueryString_stillServes200() throws Exception {
 		// The ?v=... cache-buster is a browser cache key, not part of mixin routing - any value still resolves.
 		cWithMixin.get(ViewsMixin.VIEWS_JS_PATH + "?v=whatever").run().assertStatus(200);
@@ -933,7 +961,11 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var start = body.indexOf(sel + " {");
 		var region = body.substring(start, body.indexOf("}", start));
 		assertTrue(region.contains("border-bottom-width: 1px") && region.contains("border-bottom-style: solid"), region);   // the floor line
-		assertTrue(region.contains("overflow-x: auto"), region);           // scroll, no "more" menu
+		// Scroll, no "more" menu: the inner scroll box scrolls, and strips without one scroll on the group itself.
+		var scrollBox = body.indexOf(".juneau-view-tabs-scroll {");
+		assertTrue(scrollBox >= 0 && body.substring(scrollBox, body.indexOf("}", scrollBox)).contains("overflow-x: auto"), body);
+		var fallback = body.indexOf(sel + ":not(:has(> .juneau-view-tabs-scroll)) {");
+		assertTrue(fallback >= 0 && body.substring(fallback, body.indexOf("}", fallback)).contains("overflow-x: auto"), body);
 		assertTrue(region.contains("white-space: nowrap"), region);
 
 		// Only the selected tab overlaps the floor line (margin-bottom: -1px); unselected tabs do not.

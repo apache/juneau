@@ -73,6 +73,23 @@ public final class PetstoreBrowser {
 	private PetstoreBrowser() {}
 
 	/**
+	 * A JS expression that selects a switcher view and, when the address has a section ({@code view.section}), that
+	 * view's section tab.  Switcher views are built on first selection, so a probe must select before it reads a card.
+	 *
+	 * @param switcherId The switcher card id.
+	 * @param address A view id, or {@code view.section}.
+	 * @return The expression.
+	 */
+	public static String select(String switcherId, String address) {
+		var dot = address.indexOf('.');
+		var view = dot < 0 ? address : address.substring(0, dot);
+		var sb = new StringBuilder("(function () { var sw = window.JuneauConsole.cardApi('").append(switcherId).append("'); sw.select('").append(view).append("');");
+		if (dot >= 0)
+			sb.append(" var t = document.querySelector('#").append(switcherId).append(" [data-juneau-strip-mode=\"tab\"] [data-tab-id=\"").append(address.substring(dot + 1)).append("\"]'); if (t) t.click();");
+		return sb.append(" })()").toString();
+	}
+
+	/**
 	 * @param suite A short name for the files this run writes under {@code target/js}.
 	 * @param baseUrl The server base URL.
 	 * @param cases The cases.

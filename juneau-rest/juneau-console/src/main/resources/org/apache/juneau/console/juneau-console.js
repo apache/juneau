@@ -81,7 +81,8 @@
 		"E-JS-124": "page script '%s' failed to load: %s",
 		"E-JS-125": "page uses the client object model but juneau-model.js is not loaded",
 		"E-JS-126": "card '%s': switchers cannot be nested",
-		"E-JS-127": "nested card id '%s' is already in use"
+		"E-JS-127": "nested card id '%s' is already in use",
+		"E-JS-128": "invalid symbol name '%s' on %s '%s'"
 	};
 
 	class JuneauConsoleError extends Error {
@@ -234,6 +235,15 @@
 		if (t.charAt(0) === "/")
 			return !isProtocolRelativeUrl(t);
 		return lower.indexOf(":") < 0;
+	}
+
+	// The directory the views toolkit scripts load from; the sprite files are served beside juneau-icons.js.
+	function spriteBase(doc) {
+		for (const script of doc.querySelectorAll("script")) {
+			const m = /^(.*\/)?juneau-icons\.js(\?.*)?$/.exec(script.getAttribute("src") || "");
+			if (m) return m[1] || "";
+		}
+		return "";
 	}
 
 	function el(doc, tag, cls) {
@@ -554,6 +564,26 @@
 			} else {
 				if (logo.href) fail(doc, "E-JS-9", logo.href, "header", "logo");
 				brand = el(doc, "div", "jc-brand");
+			}
+			if (logo.symbol) {
+				if (/^[a-z0-9_]{1,64}$/.test(logo.symbol)) {
+					const mark = el(doc, "div", "jc-logo jc-logo-symbol");
+					mark.setAttribute("role", "img");
+					mark.setAttribute("aria-label", logo.alt || h.title || "");
+					mark.style.width = mark.style.height = "1.5rem";
+					mark.style.color = "inherit";
+					const svg = doc.createElementNS("http://www.w3.org/2000/svg", "svg");
+					svg.setAttribute("viewBox", "0 0 24 24");
+					svg.setAttribute("aria-hidden", "true");
+					svg.setAttribute("style", "width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round");
+					const use = doc.createElementNS("http://www.w3.org/2000/svg", "use");
+					use.setAttribute("href", spriteBase(doc) + "juneau-symbols-lucide.svg#juneau-sym-" + logo.symbol);
+					svg.appendChild(use);
+					mark.appendChild(svg);
+					brand.appendChild(mark);
+				} else {
+					fail(doc, "E-JS-128", logo.symbol, "header", "logo");
+				}
 			}
 			if (logo.src) {
 				if (isSafeHref(logo.src)) {
@@ -2043,6 +2073,7 @@
 		}
 		const host = el(doc, "div", "jc-card");
 		host.id = card.id;
+		if (pstate.type === "switcher") host.setAttribute("data-juneau-in-switcher", "");
 		if (typeof card.class === "string")
 			for (const t of card.class.split(/\s+/))
 				if (/^[A-Za-z_-][A-Za-z0-9_-]*$/.test(t)) host.classList.add(t);

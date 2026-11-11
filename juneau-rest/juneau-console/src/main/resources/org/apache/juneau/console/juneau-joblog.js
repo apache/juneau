@@ -320,7 +320,7 @@
 			st.inputs.push({ field: f, input: input });
 		}
 		const actions = node(doc, "div", "jc-joblog-actions");
-		const btn = node(doc, "button", "jc-joblog-submit");
+		const btn = node(doc, "button", "jc-btn jc-btn-primary jc-joblog-submit");
 		btn.type = "submit";
 		const newRun = node(doc, "button", "jc-joblog-newrun");
 		newRun.type = "button";
@@ -347,8 +347,9 @@
 		output.setAttribute("role", "log");
 		output.setAttribute("aria-live", "polite");
 		output.setAttribute("tabindex", "0");
-		const h = Number.isInteger(card.height) ? Math.max(MIN_HEIGHT, card.height) : DEFAULT_HEIGHT;
-		output.style.height = h + "px";
+		// The pane stays collapsed until the run starts or its first line arrives (see ensureOutputHeight).
+		st.outputHeight = Number.isInteger(card.height) ? Math.max(MIN_HEIGHT, card.height) : DEFAULT_HEIGHT;
+		st.heightApplied = false;
 		if (st.region) {
 			// A region has no shell announce region; this one reads its non-error banners and replay summaries.
 			const sr = node(doc, "span", "jc-joblog-sr");
@@ -403,6 +404,7 @@
 		st.phase = phase;
 		st.root.setAttribute("data-phase", phase);
 		const running = phase === "running";
+		if (running) ensureOutputHeight(st);
 		for (const x of st.inputs) x.input.disabled = phase !== "idle" && phase !== "keying";
 		// A view-only region (attached to a job another view started) has no submit; while the job runs it shows Cancel
 		// when the job can be cancelled from this page.
@@ -440,7 +442,15 @@
 		if (tone !== "error") st.announce(text);
 	}
 
+	// Gives the output pane its height, once: the first time the run starts or a line arrives.
+	function ensureOutputHeight(st) {
+		if (st.heightApplied) return;
+		st.heightApplied = true;
+		st.output.style.height = st.outputHeight + "px";
+	}
+
 	function addLine(st, text, cls) {
+		ensureOutputHeight(st);
 		const n = node(st.doc, "span", "jc-joblog-line" + (cls ? " " + cls : ""));
 		n.textContent = text;
 		st.output.appendChild(n);

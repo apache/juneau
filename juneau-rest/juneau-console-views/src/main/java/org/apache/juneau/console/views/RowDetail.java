@@ -61,6 +61,7 @@ public final class RowDetail implements Handled<RowDetail> {
 	private final Class<?> beanType;
 	private final Function<String,?> lookup;
 	private String key;
+	private String basePath = "";
 	private String title;
 	private String icon;
 	private RegionDef region;
@@ -162,6 +163,7 @@ public final class RowDetail implements Handled<RowDetail> {
 	public RowDetail copy() {
 		var c = new RowDetail(endpoint, mode, beanType, lookup, resolved);
 		c.key = key;
+		c.basePath = basePath;
 		c.title = title;
 		c.icon = icon;
 		c.region = region;
@@ -285,6 +287,23 @@ public final class RowDetail implements Handled<RowDetail> {
 	 */
 	public RowDetail key(String value) {
 		key = value;
+		return this;
+	}
+
+	/**
+	 * Sets the path of the resource that serves a bean-backed detail through {@link RowDetailMixin}.
+	 *
+	 * <p>
+	 * The endpoint becomes <c>{basePath}/row-detail/{key}/{id}</c>.  Without it the endpoint is relative to the site root.
+	 *
+	 * @param value A same-origin path with no placeholders, e.g. {@code "/console/pets"}.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is not a safe same-origin path.
+	 */
+	public RowDetail basePath(String value) {
+		if (value == null || value.contains("{") || ! RegionDef.isSafeDetailEndpoint(value))
+			throw iaex("RowDetail basePath '%s' is not a safe same-origin path.", value);
+		basePath = value.endsWith("/") ? value.substring(0, value.length() - 1) : value;
 		return this;
 	}
 
@@ -436,7 +455,7 @@ public final class RowDetail implements Handled<RowDetail> {
 	 *
 	 * @param tableId The table id, for error messages.
 	 * @param cols The table's columns.
-	 * @param rowIdField The table's selection row-id field, or <jk>null</jk>.
+	 * @param rowIdField The table's row-id field (explicit, else the selection's), or <jk>null</jk>.
 	 * @return The detail entry.
 	 * @throws IllegalStateException If a tabbed detail has no resolvable row id field.
 	 */
@@ -486,7 +505,7 @@ public final class RowDetail implements Handled<RowDetail> {
 			m.put("mode", mode);
 		var ep = endpoint;
 		if (ep == null && "bean".equals(mode))
-			ep = "/row-detail/" + key + "/{id}";
+			ep = basePath + "/row-detail/" + key + "/{id}";
 		if (ep != null)
 			m.put("endpoint", ep);
 		if (title != null)

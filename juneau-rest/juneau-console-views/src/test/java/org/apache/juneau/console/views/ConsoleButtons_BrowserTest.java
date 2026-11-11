@@ -45,7 +45,7 @@ class ConsoleButtons_BrowserTest extends TestBase {
 
 	private static final String[] TOKENS = { "--jc-control-bg", "--jc-text", "--jc-border", "--jc-hover-bg", "--jc-control-border", "--jc-accent",
 		"--jc-accent-wash", "--jc-btn-primary-bg", "--jc-btn-primary-bg-hover", "--jc-on-btn-primary", "--jc-danger",
-		"--jc-danger-strong", "--jc-danger-text", "--jc-danger-wash", "--jc-accent-selected", "--jc-on-accent", "--jc-link" };
+		"--jc-danger-strong", "--jc-danger-text", "--jc-danger-wash", "--jc-accent-selected", "--jc-on-accent", "--jc-link", "--jc-card-bg", "--jc-pill-neutral-bg" };
 
 	/** Elements probed at rest, and the elements hovered (each recorded under {@code hover:<id>}). */
 	private static final List<String> HOVERED = List.of("sec", "pri", "des", "dan", "lnk", "tib", "dis", "bare", "rb", "ds2", "dc", "dd");
@@ -84,7 +84,7 @@ class ConsoleButtons_BrowserTest extends TestBase {
 		(function () {
 			var PROPS = ['background-color', 'color', 'border-top-color', 'border-left-color', 'border-top-width', 'opacity',
 				'cursor', 'pointer-events', 'z-index', 'margin-left', 'width', 'height', 'border-top-left-radius',
-				'text-decoration-line', 'filter'];
+				'text-decoration-line', 'filter', 'box-shadow'];
 			var rec = {};
 			function snap(id) {
 				var cs = getComputedStyle(document.getElementById(id));
@@ -275,20 +275,27 @@ class ConsoleButtons_BrowserTest extends TestBase {
 		}
 	}
 
-	@Test void a11_dialogSectionSelectedLooksLikeHover() {
-		for (var p : probes())
-			for (var prop : List.of("background-color", "color", "border-top-color", "border-left-color"))
-				eq(p, p.hover("ds2", prop), p.rest("ds1", prop), "dialog section selected = hover: " + prop);
+	@Test void a11_dialogSectionSelectedIsFolderTabWithAccentBar() {
+		for (var p : probes()) {
+			eq(p, p.tok("--jc-card-bg"), p.rest("ds1", "background-color"), "dialog section selected fill = card");
+			eq(p, p.tok("--jc-pill-neutral-bg"), p.rest("ds2", "background-color"), "dialog section unselected fill = grey");
+			eq(p, p.tok("--jc-accent-wash"), p.hover("ds2", "background-color"), "dialog section unselected hover = wash");
+			var bar = String.valueOf(p.rest("ds1", "box-shadow"));
+			assertTrue(bar.contains(p.tok("--jc-accent")) && bar.contains("0px 3px 0px 0px inset"), () -> p.name() + ": dialog section accent bar: " + bar);
+		}
 	}
 
-	@Test void a12_tabsUseFolderWash() {
+	@Test void a12_tabsUseFolderCard() {
 		for (var p : probes()) {
 			for (var id : List.of("tab", "sub")) {
 				eq(p, p.tok("--jc-accent-selected"), p.rest(id, "background-color"), id + " solid selected fill");
 				eq(p, p.tok("--jc-on-accent"), p.rest(id, "color"), id + " selected ink");
 			}
-			// A tab-mode strip's selected tab wears the folder-tab wash, not the solid fill.
-			eq(p, p.tok("--jc-accent-wash"), p.rest("st1", "background-color"), "st1 folder-tab wash fill");
+			// A tab-mode strip's selected tab wears the card fill with an accent top bar, not the solid fill.
+			eq(p, p.tok("--jc-card-bg"), p.rest("st1", "background-color"), "st1 folder-tab card fill");
+			eq(p, p.tok("--jc-pill-neutral-bg"), p.rest("st2", "background-color"), "st2 unselected grey fill");
+			var bar = String.valueOf(p.rest("st1", "box-shadow"));
+			assertTrue(bar.contains(p.tok("--jc-accent")) && bar.contains("0px 3px 0px 0px inset"), () -> p.name() + ": st1 accent bar: " + bar);
 			eq(p, p.tok("--jc-link"), p.rest("st1", "color"), "st1 selected ink");
 		}
 	}

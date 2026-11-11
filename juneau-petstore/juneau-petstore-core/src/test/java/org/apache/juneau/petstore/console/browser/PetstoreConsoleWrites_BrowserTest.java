@@ -238,7 +238,7 @@ class PetstoreConsoleWrites_BrowserTest extends TestBase {
 				"actions", List.of(
 					wait("document.querySelector('#pets-body .juneau-view-select-checkbox:not(:disabled)')"),
 					eval(RECORD),
-					eval("(() => { const cb = document.querySelector('#pets-body .juneau-view-select-checkbox:not(:disabled)'); window.__sold = cb.closest('tr').cells[1].textContent.trim(); cb.click(); })()"),
+					eval("(() => { const cb = document.querySelector('#pets-body .juneau-view-select-checkbox:not(:disabled)'); window.__sold = cb.closest('tr').dataset.juneauRowId; cb.click(); })()"),
 					wait("document.querySelector('.juneau-view-bulk-toolbar:not([hidden]) .juneau-view-bulk-action-btn')"),
 					Map.of("click", ".juneau-view-bulk-action-btn"),
 					wait("document.querySelector('" + CONFIRM + "')"),

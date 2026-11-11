@@ -54,7 +54,7 @@ env.body.appendChild(table);
 const rc = { table: table, tr: tr };
 
 const within = function (h, sel) { return h.dialog.querySelector(sel); };
-const SECTIONED = { contractVersion: '2', sections: [
+const SECTIONED = { contractVersion: '3', sections: [
 	{ id: 'a', label: 'A', fields: [{ name: 'one', label: 'One' }] },
 	{ id: 'b', label: 'B', fields: [{ name: 'two', label: 'Two' }] }
 ] };

@@ -78,6 +78,18 @@ public class CustomCardsRest extends PetstoreConsolePage {
 		return builder(req) ? twin(req, DevPageBuilders.cards()) : FreemarkerView.of("cards.ftlh");
 	}
 
+	/** @return The Card API controls as a chrome-free fragment. */
+	@RestGet(path="/fragments/toolbar")
+	public View toolbar() {
+		return FreemarkerView.of("fragments/cards-toolbar.ftlh");
+	}
+
+	/** @return The card-type notes as a chrome-free fragment. */
+	@RestGet(path="/fragments/how")
+	public View how() {
+		return FreemarkerView.of("fragments/cards-how.ftlh");
+	}
+
 	/** @return The kpi card's number: how many pets are available. */
 	@RestGet(path="/stats/available")
 	public JsonMap available() {

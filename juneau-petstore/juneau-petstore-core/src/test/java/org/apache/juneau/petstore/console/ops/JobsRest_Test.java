@@ -268,10 +268,16 @@ class JobsRest_Test extends TestBase {
 
 	@Test void e01_restockCardIsAJobLog() throws Exception {
 		assertPage(PetstoreConsoleFixture.page(client(), "/console/ops/jobs"))
-			.hasCardOrder("restock-help", "restock", "jobs", "species", "groom-output", "groom-file", "groom-runs")
-			.hasCard("restock", "job-log")
+			.hasCardOrder("jobs-sw")
+			.hasNestedCard("jobs-sw", "restock-help", "html").hasNestedCard("jobs-sw", "restock", "job-log")
+			.hasNestedCard("jobs-sw", "groom-runs", "datatables")
+			.hasCardKey("jobs-sw", "/style", "slider")
 			.hasCardKey("restock", "/submit/endpoint", "/console/ops/jobs/restock")
 			.hasCardKey("restock", "/urlParam", "job");
+	}
+
+	@Test void e01b_restockHelpFragment() throws Exception {
+		client().get("/console/ops/jobs/fragments/restock-help").run().assertStatus(200).assertContent().isContains("Restock adds new available pets");
 	}
 
 	@Test void e02_flatCardShapeIsAccepted() throws Exception {

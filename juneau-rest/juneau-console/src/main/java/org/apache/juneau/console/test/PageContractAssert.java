@@ -521,7 +521,7 @@ public final class PageContractAssert {
 		return this;
 	}
 
-	// Depth-first through views[*].card and views[*].sections[*].card.
+	// Depth-first through views[*].card, views[*].sections[*].card and views[*].cards[*].
 	private static JsonMap findNested(JsonMap card, String id) {
 		if (! (card.get("views") instanceof List<?> views))
 			return null;
@@ -530,6 +530,8 @@ public final class PageContractAssert {
 				continue;
 			var candidates = new ArrayList<Object>();
 			candidates.add(vm.get("card"));
+			if (vm.get("cards") instanceof List<?> stacked)
+				candidates.addAll(stacked);
 			if (vm.get("sections") instanceof List<?> secs)
 				for (var s : secs)
 					if (s instanceof Map<?,?> sm)

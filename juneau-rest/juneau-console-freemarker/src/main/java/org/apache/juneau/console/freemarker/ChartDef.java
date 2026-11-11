@@ -69,7 +69,7 @@ public final class ChartDef {
 	private static final Set<String> DEDICATED = Set.of("id", "type", "title", "src", "kind", "data",
 		"series", "x", "y", "stacked", "orientation", "legend", "height", "refreshMs", "onClick", "emptyText", "label",
 		"value", "center", "visibleWhen", "source", "helper", "option", "patch", "decorators", "on", "group", "renderer",
-		"theme", "largeData", "partialFrames", "a11y", "maps", "scale", "symbolSize", "groupBy", "size", "color", "tileFields",
+		"theme", "largeData", "partialFrames", "dataTab", "a11y", "maps", "scale", "symbolSize", "groupBy", "size", "color", "tileFields",
 		"topicActions", "actions");
 
 	// An id that can be the namespace of a custom topic.
@@ -598,7 +598,22 @@ public final class ChartDef {
 	/** Draws partial frames during a chunked {@code source} load. @return This object. */
 	public ChartDef partialFrames() { body.put("partialFrames", true); return this; }
 
-	/** @param summary The figure caption, or <jk>null</jk> for the generated one. @param table Show the data-table toggle. @return This object. */
+	/**
+	 * Shows the chart's data as a visible Data tab beside the chart, in the same card.
+	 *
+	 * @return This object.
+	 */
+	public ChartDef dataTab() { return dataTab(true); }
+
+	/**
+	 * Shows or hides the Data tab.
+	 *
+	 * @param v Whether to show the data as a visible Data tab; off by default (a visually hidden table is always rendered for screen readers).
+	 * @return This object.
+	 */
+	public ChartDef dataTab(boolean v) { body.put("dataTab", v); return this; }
+
+	/** @param summary The figure caption, or <jk>null</jk> for the generated one. @param table Render the screen-reader data table (visually hidden unless {@link #dataTab() dataTab}). @return This object. */
 	public ChartDef a11y(String summary, boolean table) {
 		var m = new JsonMap();
 		if (nn(summary)) m.put("summary", summary);

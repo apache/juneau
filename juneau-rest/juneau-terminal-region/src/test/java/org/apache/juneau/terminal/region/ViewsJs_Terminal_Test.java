@@ -138,10 +138,18 @@ class ViewsJs_Terminal_Test extends TestBase {
 	@Test void j03_cardCannotOverrideTheme() { ok("t03_cardCannotOverrideTheme"); }
 	@Test void j04_themeChangedUpdates() { ok("t04_themeChangedUpdates"); }
 	@Test void j05_listenerRemovedOnCleanup() { ok("t05_listenerRemovedOnCleanup"); }
+	@Test void j06_mountUsesTokenAsStartFont() { ok("t06_mountUsesTokenAsStartFont"); }
+	@Test void j07_followIsAToggleButton() { ok("t07_followIsAToggleButton"); }
+	@Test void j08_followToggles() { ok("t08_followToggles"); }
+	@Test void j09_searchAndCopyClasses() { ok("t09_searchAndCopyClasses"); }
+	@Test void a07_readBaseFontDefault() { ok("g01_readBaseFontDefault"); }
+	@Test void a08_readBaseFontToken() { ok("g02_readBaseFontToken"); }
+	@Test void a09_readBaseFontInvalid() { ok("g03_readBaseFontInvalid"); }
+	@Test void a10_fitFontStillClampsForAnyReference() { ok("g04_fitFontStillClampsForAnyReference"); }
 
 	@Test void z01_everyCasePasses() {
 		var r = r();
-		assertSize(() -> "case count changed; add a method per new case: " + r.keySet(), 93, r);
+		assertSize(() -> "case count changed; add a method per new case: " + r.keySet(), 101, r);
 		for (var e : r.entrySet())
 			assertEquals(true, e.getValue(), () -> e.getKey() + " -> " + e.getValue());
 	}

@@ -49,16 +49,30 @@ public final class OpsPageBuilders {
 	 */
 	public static PageSpec jobs(TerminalDef groomOutput, TerminalDef groomFile) {
 		return PageSpec.create().tab("ops/jobs").toolkit("views", "datatables-buttons")
-			.html("restock-help", "Restocking", """
-				<div class="jc-prose"><p>Restock adds new available pets to the store as a background job; progress shows here until it finishes.
-				Submitting twice from the same dialog runs one job.  Give the card below a wait to see a cancel before anything changes, or a longer hold to see one after.</p></div>""")
-			.card(CardSpec.of("job-log", "restock").title("Restock inventory")
+			.card(SwitcherDef.create("jobs-sw").style(SwitcherDef.STYLE_SLIDER).initialView("restock")
+				.view("restock", "Restock", v -> v.cards(
+					CardSpec.html("restock-help").title("Restocking").src("/console/ops/jobs/fragments/restock-help"),
+					restockJobLog()))
+				.view("jobs", "Jobs", v -> v.section(SwitcherCards.table(jobsTable())))
+				.view("species", "Species", v -> v.section(SwitcherCards.table(speciesTable())))
+				.view("groom", "Groom", v -> v.cards(
+					CardSpec.of("terminal", "groom-output").title("Groom run").body("contractVersion", "1").body("terminal", groomOutput.toMap()),
+					CardSpec.of("terminal", "groom-file").title("Groom transcript (file)").body("contractVersion", "1").body("terminal", groomFile.toMap()),
+					SwitcherCards.table(groomRunsTable())))
+				.toCardSpec());
+	}
+
+	private static CardSpec restockJobLog() {
+		return CardSpec.of("job-log", "restock").title("Restock inventory")
 				.body("submit", Map.of("endpoint", "/console/ops/jobs/restock", "submitLabel", "Restock", "fields", List.of(
 					Map.of("name", "DOG", "label", "Dogs (0-50)", "type", "number", "default", 1),
 					Map.of("name", "slowMs", "label", "Wait before restocking (ms, 0-10000)", "type", "number", "default", 0),
 					Map.of("name", "holdMs", "label", "Hold after restocking (ms, 0-10000)", "type", "number", "default", 1000))))
-				.body("urlParam", "job"))
-			.table(TableSpec.create("jobs").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/rows")
+				.body("urlParam", "job");
+	}
+
+	private static TableSpec jobsTable() {
+		return TableSpec.create("jobs").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/rows")
 				.pollIntervalMs(2000)
 				.columnConfig(true)
 				.columns(
@@ -68,8 +82,11 @@ public final class OpsPageBuilders {
 					Column.create("result.message").label("Result"))
 				.ribbon(Ribbons.standard()
 					.create(RibbonItem.dialog("restock").title("Restock").endpoint("/console/ops/jobs/restock").method(Method.POST).form("/console/ops/jobs/restock-form"))
-					.build()))
-			.table(TableSpec.create("species").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/species")
+					.build());
+	}
+
+	private static TableSpec speciesTable() {
+		return TableSpec.create("species").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/species")
 				.pollIntervalMs(2000)
 				.columnConfig(true)
 				.columns(
@@ -83,10 +100,11 @@ public final class OpsPageBuilders {
 					.detail(JobLogRegion.Detail.of("fieldGrid", RegionDef.Field.of("available").label("Available")))
 					.output(JobLogRegion.Output.field("available").from("row.available"))
 					.toRegion()))
-				.ribbon(Ribbons.standard().build()))
-			.card(CardSpec.of("terminal", "groom-output").title("Groom run").body("terminal", groomOutput.toMap()))
-			.card(CardSpec.of("terminal", "groom-file").title("Groom transcript (file)").body("terminal", groomFile.toMap()))
-			.table(TableSpec.create("groom-runs").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/groom-rows")
+				.ribbon(Ribbons.standard().build());
+	}
+
+	private static TableSpec groomRunsTable() {
+		return TableSpec.create("groom-runs").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/groom-rows")
 				.columns(
 					Column.create("pet").label("Pet"),
 					Column.create("submitted").label("Submitted").render("timestamp"),
@@ -98,7 +116,7 @@ public final class OpsPageBuilders {
 				.ribbon(Ribbons.standard()
 					.create(RibbonItem.dialog("groom").title("Groom").endpoint("/console/ops/jobs/groom").method(Method.POST).form("/console/ops/jobs/groom-form"))
 					.refreshId("groom-refresh")
-					.build()));
+					.build());
 	}
 
 	/**
@@ -111,7 +129,9 @@ public final class OpsPageBuilders {
 			.table(TableSpec.create("audit").dataMode(DataMode.SERVER).dataUrl("/console/ops/audit/query")
 				.operators(SearchOperatorSet.standard())
 				.defaultOrder("at", Sort.DESC)
+				.detail(RowDetails.audit())
 				.columns(
+					Column.create("id").label("Id").defaultVisible(false),
 					Column.create("at").label("When").render("timestamp").searchType(SearchType.TIMESTAMP),
 					Column.create("actor").label("Actor").searchType(SearchType.TEXT),
 					Column.create("action").label("Action").render(PillRenders.auditAction()).searchType(SearchType.TEXT),

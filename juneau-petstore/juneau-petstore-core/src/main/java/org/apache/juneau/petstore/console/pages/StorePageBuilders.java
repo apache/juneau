@@ -108,7 +108,42 @@ public final class StorePageBuilders {
 				<div class="jc-prose"><p>Browse pets, place orders and review what changed. Every page here is built from the same
 				Juneau console pieces your own app can use.</p>
 				<p data-slot="welcome-note">Signed in as a guest.</p></div>""")
-			.table(TableSpec.create("stats").rowType("Order").dataMode(DataMode.CLIENT).dataUrl("/console/store/recent-orders")
+			.card(CardSpec.of("kpi", "revenue").title("Revenue")
+				.body("label", "Revenue today").body("dataUrl", "/console/store/kpi/revenue"))
+			.card(SwitcherDef.create("store-sw").style(SwitcherDef.STYLE_SLIDER).initialView("recent")
+				.view("recent", "Recent orders", v -> v.section(SwitcherCards.table(recentOrders(qs))))
+				.view("revenue", "Revenue", v -> v
+					.section("chart", "Chart", ChartDef.line("revenue-chart").src("/console/store/stats/revenue")
+						.x("day", null, "Day").series("revenue", "Revenue").toCardSpec())
+					.section("data", "Data", dataCard("revenue-data", "/console/store/stats/revenue", "day", "Day", "revenue", "Revenue"))
+					.initialSection("chart"))
+				.view("orders", "Orders", v -> v
+					.section("chart", "Chart", ChartDef.line("orders-trend").src("/console/store/stats/daily")
+						.x("day", null, "Day").series("placed", "Placed").series("delivered", "Delivered", "ok")
+						.onClickHref("/console/orders?state=day({day})").toCardSpec())
+					.section("data", "Data", dataCard("orders-data", "/console/store/stats/daily", "day", "Day", "placed", "Placed", "delivered", "Delivered"))
+					.initialSection("chart"))
+				.view("pets", "Pets", v -> v
+					.section("species", "Species", ChartDef.donut("by-species").src("/console/store/stats/species")
+						.label("species").value("count").center("total").dataTab().toCardSpec())
+					.section("status", "Status", ChartDef.bar("by-status").src("/console/store/stats/status")
+						.x("status").series("count", "Pets").dataTab().toCardSpec())
+					.section("treemap", "Treemap", ChartDef.treemap("pets-map").src("/console/store/stats/pets")
+						.groupBy("species", "status").label("name")
+						.colorBy("status", ChartDef.legendItem("AVAILABLE", "Available", "ok"),
+							ChartDef.legendItem("PENDING", "Pending", "warning"),
+							ChartDef.legendItem("SOLD", "Sold", null))
+						.tileFields("id", "name", "species", "status")
+						.onClickAction(PetsPageBuilders.editPetAction(OnSuccess.REDRAW)).dataTab().toCardSpec())
+					.initialSection("species"))
+				.view("hours", "Store hours", v -> v.section(CardSpec.html("hours").title("Store hours").src("/console/store/fragments/hours")))
+				.toCardSpec());
+	}
+
+	/** The Recent orders table: ribbon, row details and the quick-stat strip. */
+	private static TableSpec recentOrders(QuickStats qs) {
+		return TableSpec.create("stats").rowType("Order").dataMode(DataMode.CLIENT).dataUrl("/console/store/recent-orders")
+				.detail(RowDetails.order())
 				.columns(
 					Column.create("id").label("Order").href("/console/pets/{petId}/orders/{id}"),
 					Column.create("petId").label("Pet").href("/console/pets/{petId}/summary"),
@@ -120,34 +155,7 @@ public final class StorePageBuilders {
 						.form("/console/orders/new-form").endpoint("/console/orders").method(Method.POST).onSuccess(OnSuccess.REDRAW))
 					.export("excel", "pdf")
 					.build())
-				.quickStats("store", storeQuickStats(qs)), "Recent orders")
-			.card(CardSpec.of("kpi", "revenue").title("Revenue")
-				.body("label", "Revenue today").body("dataUrl", "/console/store/kpi/revenue"))
-			.card(SwitcherDef.create("revenue-sw").title("Revenue, last 30 days")
-				.view("chart", "Chart", v -> v.section(ChartDef.line("revenue-chart").src("/console/store/stats/revenue")
-					.x("day", null, "Day").series("revenue", "Revenue").toCardSpec()))
-				.view("data", "Data", v -> v.section(dataCard("revenue-data", "/console/store/stats/revenue", "day", "Day", "revenue", "Revenue")))
-				.initialView("chart").toCardSpec())
-			.card(SwitcherDef.create("orders-sw").title("Orders, last 30 days")
-				.view("chart", "Chart", v -> v.section(ChartDef.line("orders-trend").src("/console/store/stats/daily")
-					.x("day", null, "Day").series("placed", "Placed").series("delivered", "Delivered", "ok")
-					.onClickHref("/console/orders?state=day({day})").toCardSpec()))
-				.view("data", "Data", v -> v.section(dataCard("orders-data", "/console/store/stats/daily", "day", "Day", "placed", "Placed", "delivered", "Delivered")))
-				.initialView("chart").toCardSpec())
-			.card(SwitcherDef.create("pets-sw").title("Pets")
-				.view("species", "Species", v -> v.section(ChartDef.donut("by-species").src("/console/store/stats/species")
-					.label("species").value("count").center("total").toCardSpec()))
-				.view("status", "Status", v -> v.section(ChartDef.bar("by-status").src("/console/store/stats/status")
-					.x("status").series("count", "Pets").toCardSpec()))
-				.view("both", "Species and status", v -> v.section(ChartDef.treemap("pets-map").src("/console/store/stats/pets")
-					.groupBy("species", "status").label("name")
-					.colorBy("status", ChartDef.legendItem("AVAILABLE", "Available", "ok"),
-						ChartDef.legendItem("PENDING", "Pending", "warning"),
-						ChartDef.legendItem("SOLD", "Sold", null))
-					.tileFields("id", "name", "species", "status")
-					.onClickAction(PetsPageBuilders.editPetAction(OnSuccess.REDRAW)).toCardSpec()))
-				.initialView("species").toCardSpec())
-			.htmlSrc("hours", "Store hours", "/console/store/fragments/hours");
+				.quickStats("store", storeQuickStats(qs));
 	}
 
 	/** A datatables card for a nested switcher view: client-side rows from {@code dataUrl}, one plain column per {@code key,label} pair. */

@@ -21,12 +21,14 @@
   dataUrl: '/console/users/query',
   columnConfig: true,
   defaultOrder: [ { key: 'username', dir: 'asc' } ],
+  detail: {"mode":"bean","endpoint":"/console/users/row-detail/user/{id}","title":"{username}","labels":{"userStatus":"Status","username":"Username","firstName":"First name","lastName":"Last name"},"tabs":[{"id":"details","kind":"fields","title":"Details","fields":["username","firstName","lastName","userStatus"]},{"id":"orders","kind":"table","title":"Orders","nested":{"contractVersion":"2","parentScopeParam":"username","view":{"id":"user-orders","columns":[{"data":"id","title":"Order","render":{"id":"linked"},"href":"/console/pets/{petId}/orders/{id}"},{"data":"shipDate","title":"Ship date","render":{"id":"date"}},{"data":"status","title":"Status","render":{"id":"pill","meta":{"tones":{"PLACED":"info","APPROVED":"warning","DELIVERED":"success"}}}}]},"meta":{"contractVersion":"5","id":"user-orders","dataUrl":"/console/users/orders/rows","dataMode":"client","rowType":"Order","columns":[{"data":"id","title":"Order","render":{"id":"linked"},"href":"/console/pets/{petId}/orders/{id}"},{"data":"shipDate","title":"Ship date","render":{"id":"date"}},{"data":"status","title":"Status","render":{"id":"pill","meta":{"tones":{"PLACED":"info","APPROVED":"warning","DELIVERED":"success"}}}}]}},"count":"rows"}]},
   columns: [
     { key: 'username', label: 'Username' },
     { key: 'firstName', label: 'First name' },
     { key: 'lastName', label: 'Last name' },
     { key: 'userStatus', label: 'Status', render: { id: 'pill', meta: { tones: { ACTIVE: 'success', INACTIVE: 'neutral' } } } }
   ],
+  rowIdField: 'username',
   ribbon: [
     { type: 'search', id: 'search', group: 'search' },
     { type: 'dialog', id: 'add-user', title: '+ Add user', symbol: 'plus', group: 'entity',

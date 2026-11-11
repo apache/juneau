@@ -43,7 +43,7 @@ class PetstoreClientRibbon_BrowserTest extends TestBase {
 	 * The distinct species on the shown page (the third cell of each row).  Body cells carry no column hook, so the
 	 * column is found by position, which the page's fixed column list pins.
 	 */
-	private static final String SPECIES = "[...new Set([...document.querySelectorAll('#sold tbody tr[data-juneau-row-id] td:nth-child(3)')].map(td => td.textContent.trim()))]";
+	private static final String SPECIES = "[...new Set([...document.querySelectorAll('#sold tbody tr[data-juneau-row-id] td:nth-child(4)')].map(td => td.textContent.trim()))]";
 
 	/** The paging pill's total, from its {@code 1-25 of 87} text. */
 	private static final String TOTAL = "Number(document.querySelector('#sold-body .juneau-view-pagingpill-info').textContent.split(' of ')[1])";

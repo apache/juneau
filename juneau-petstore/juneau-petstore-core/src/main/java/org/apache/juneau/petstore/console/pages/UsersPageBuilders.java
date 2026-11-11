@@ -45,6 +45,8 @@ public final class UsersPageBuilders {
 		return PageSpec.create().tab("users").toolkit("views", "datatables-buttons", "datatables-export")
 			.table(TableSpec.create("users").rowType("User").dataMode(DataMode.SERVER).dataUrl("/console/users/query")
 				.defaultOrder("username", Sort.ASC)
+				.rowIdField("username")
+				.detail(RowDetails.user())
 				.columns(
 					Column.create("username").label("Username"),
 					Column.create("firstName").label("First name"),

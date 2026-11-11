@@ -45,7 +45,7 @@ class ModalDef_ChromeSteps_Test extends TestBase {
 			.step(ModalDef.Step.of("pick").title("Pick").confirmLabel("Next").field("Pet", "Rex"))
 			.step(ModalDef.Step.of("review").title("Review").field("Total", "5"));
 		var expected = Json.to("""
-			{"contractVersion":"2","title":"Wizard",
+			{"contractVersion":"3","title":"Wizard",
 			 "steps":[{"id":"pick","title":"Pick","confirmLabel":"Next","fields":[{"label":"Pet","value":"Rex"}]},
 			          {"id":"review","title":"Review","fields":[{"label":"Total","value":"5"}]}]}
 			""", Map.class);
@@ -81,8 +81,8 @@ class ModalDef_ChromeSteps_Test extends TestBase {
 
 	@Test void a08_nav_contractVersionUnchanged() {
 		Map<?,?> actual = Json.to(Json.of(ModalDef.create("t").nav(ModalDef.NAV_FOLDER)), Map.class);
-		assertEquals("2", actual.get("contractVersion"));
-		assertEquals("2", ModalDef.CONTRACT_VERSION);
+		assertEquals("3", actual.get("contractVersion"));
+		assertEquals("3", ModalDef.CONTRACT_VERSION);
 	}
 
 	@Test void b01_validate_blankChromeRejected() {

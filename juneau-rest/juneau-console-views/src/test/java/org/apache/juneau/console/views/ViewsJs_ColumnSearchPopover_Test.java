@@ -169,11 +169,10 @@ class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 		assertBean(r, "rejectDrawCount,rejectInvalidClass,rejectStatusText", "0,true,Not a valid search for this column.");
 	}
 
-	@Test void a04_bareQuickFilter_livesOnClientDefersOnServer() {
+	@Test void a04_bareQuickFilter_neverPreviews() {
 		var r = report();
-		// Bare input previews live on a client table... but is deferred on a server table until Enter/Apply.
-		assertBean(r, "bareClientInputApplied,bareServerInputApplied,bareServerCommitApplied", "abc,,abc");
-		assertTrue(((Number) r.get("bareClientInputDraws")).longValue() >= 1L, r::toString);
+		// Typing never filters, on a client or a server table; Enter/Apply commits.
+		assertBean(r, "bareClientInputApplied,bareClientInputDraws,bareClientCommitApplied,bareServerInputApplied,bareServerCommitApplied", ",0,abc,,abc");
 	}
 
 	@Test void a05_dollarExpression_deferredThenCommitsOnEnter() {
@@ -182,10 +181,10 @@ class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 		assertBean(r, "dollarInputApplied,dollarCommitApplied", ",$eq(OPEN)");
 	}
 
-	@Test void a06_escape_revertsLivePreview() {
+	@Test void a06_escape_leavesFilter() {
 		var r = report();
-		// Esc reverts the live preview back to the value the popover opened with.
-		assertBean(r, "revertPreApplied,revertPostApplied", "abc,");
+		// Typing never changes the filter, and Esc leaves it as it was.
+		assertBean(r, "revertPreApplied,revertPostApplied", ",");
 	}
 
 	@Test void a07_bareValueHelp_rendersBeforeOperatorHelp_andIsAbsentWithoutSearchMeta() {
@@ -228,10 +227,69 @@ class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 
 	@Test void d01_clientDslColumn_writesGoToTheStoreAndFixedPredicate() {
 		var r = report();
-		// with DataTables' search.fixed available, the live bare preview and the Enter commit both go to
+		// with DataTables' search.fixed available, typing changes nothing and the Enter commit goes to
 		// the per-table store + one "juneau-dsl" predicate (server semantics: $eq is exact and case-sensitive); native
 		// col.search() is never written, and a reopened popover starts from the store's value.
-		assertBean(r, "dslLiveNative,dslLiveFixedNames,dslLiveStore,dslLiveDraws,dslReopenValue,dslCommitStore,dslPredicateExact,dslPredicateCaseSensitive,dslCommitNative",
-			",[juneau-dsl],abc,1,abc,$eq(OPEN),true,true,");
+		assertBean(r, "dslLiveNative,dslLiveStore,dslLiveDraws,dslLiveFixedNames,dslEnterStore,dslEnterDraws,dslReopenValue,dslCommitStore,dslPredicateExact,dslPredicateCaseSensitive,dslCommitNative",
+			",,0,[juneau-dsl],abc,1,abc,$eq(OPEN),true,true,");
+	}
+
+	@Test void e01_footerButtons() {
+		var r = report();
+		assertBean(r, "footerOrder,footerApplyClass,footerCancelHasJcBtn,footerClearHasJcBtn,footerMoreAria,footerInFooter",
+			"[apply,cancel,clear,more],juneau-view-col-search-popover-apply jc-btn jc-btn-primary,true,true,false,true");
+	}
+
+	@Test void e02_tabOrder() {
+		assertBean(report(), "tabOrder", "[input,apply,cancel,clear,more]");
+	}
+
+	@Test void e03_typeLine() {
+		assertBean(report(), "typeLineText,typeLineAbsent", "Type: TEXT,true");
+	}
+
+	@Test void e04_instructionsAndExamples() {
+		var r = report();
+		assertBean(r, "instructionsHasBare,instructionsOps", "true,[$eq,$or]");
+		assertBean(r, "examplesText", "[err,$or($eq(OPEN),$eq(CLOSED))]");
+		assertBean(r, "examplesNumeric", "[$between(1, 100),$and($gt(1),$lt(9))]");
+		assertBean(r, "examplesBareAlwaysShown", "[err]");
+		assertNull(r.get("examplesFilteredByOperators"), r::toString);
+		assertNull(r.get("examplesUncatalogued"), r::toString);
+	}
+
+	@Test void e05_typingDoesNotFilter_applyCommits() {
+		assertBean(report(), "noLivePreviewApplied,noLivePreviewDraws,applyApplied,applyClosed,applyFocusReturned,applyNoAnnounce",
+			",0,abc,true,true,true");
+	}
+
+	@Test void e06_cancelAndEscLeaveFilter() {
+		assertBean(report(), "cancelApplied,cancelClosed,cancelAnnounced,escApplied,escClosed", "kept,true,true,kept,true");
+	}
+
+	@Test void e07_clearRemovesAndCloses() {
+		assertBean(report(), "clearApplied,clearClosed,clearIconInactive", ",true,true");
+	}
+
+	@Test void e08_incompleteExpressionNeverApplies() {
+		assertBean(report(), "statusIncompleteWhileTyping,statusIncompleteApplied,statusIncompleteStillOpen,statusIncompleteApplyBlocked", "true,,true,true");
+	}
+
+	@Test void e09_moreTogglesOperatorList() {
+		assertBean(report(), "moreTag,moreInitiallyHidden,moreExpandedAria,moreExpandedVisible,moreRows,moreCollapsedAria,moreCollapsedHidden",
+			"BUTTON,true,true,true,[$eq,$in],false,true");
+	}
+
+	@Test void e10_moreLinksToDocsWhenConfigured() {
+		var r = report();
+		assertBean(r, "moreLinkAbsolute", "{tag=A,href=https://example.com/search,target=_blank,rel=noopener}");
+		assertBean(r, "moreLinkRootRelative", "{tag=A,href=/docs/search,target=_blank,rel=noopener}");
+		assertEquals("BUTTON", ((Map<?,?>) r.get("moreLinkUnsafe")).get("tag"), r::toString);
+		assertEquals("BUTTON", ((Map<?,?>) r.get("moreLinkProtocolRelative")).get("tag"), r::toString);
+		assertEquals("BUTTON", ((Map<?,?>) r.get("moreLinkNone")).get("tag"), r::toString);
+	}
+
+	@Test void e11_helpUrlSurvivesCatalogLift() {
+		assertBean(report(), "viewKeysHasHelpUrl", "/docs/search");
 	}
 }

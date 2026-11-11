@@ -200,7 +200,8 @@ const out = {};
 			outputRole: o.getAttribute('role'),
 			ariaLive: o.getAttribute('aria-live'),
 			tabindex: o.getAttribute('tabindex'),
-			height: o.style.height,
+			height: o.style.height || '',
+			submitClass: one(r, '.jc-joblog-submit').className,
 			api: Object.getOwnPropertyNames(Object.getPrototypeOf(r.w.JuneauConsole.cardApi('rebuild'))).filter(k => k !== 'constructor').sort((a, b) => (a < b ? -1 : Number(a > b))),
 			version: r.w.JuneauJobLog?.version,
 			state: state(r),
@@ -213,8 +214,29 @@ const out = {};
 		const r = load();
 		r.mount([{ id: 'rebuild', type: 'job-log', submit: { endpoint: '/a' } }]);
 		await flush();
-		out.defaults = { submitText: text(r, '.jc-joblog-submit'), height: one(r, '.jc-joblog-output').style.height, inputs: all(r, '.jc-joblog-input').length };
+		out.defaults = { submitText: text(r, '.jc-joblog-submit'), height: one(r, '.jc-joblog-output').style.height || '', inputs: all(r, '.jc-joblog-input').length };
 	} catch (e) { const c = { crash: String(e?.stack || e) }; out.defaults = c; }
+
+	// 2b. The output pane starts collapsed; the run start gives it its height once.
+	try {
+		const r = load();
+		r.mount([CARD]);
+		await flush();
+		const atMount = one(r, '.jc-joblog-output').style.height || '';
+		fill(r, { reason: 'nightly' });
+		one(r, '.jc-joblog-form').dispatch('submit', { preventDefault: () => {} });
+		await flush();
+		const atRun = one(r, '.jc-joblog-output').style.height || '';
+		r.es[0].emit('progress', 'step 1');
+		const afterLine = one(r, '.jc-joblog-output').style.height || '';
+		const d = load();
+		d.mount([{ id: 'rebuild', type: 'job-log', submit: { endpoint: '/a' } }]);
+		await flush();
+		const defAtMount = one(d, '.jc-joblog-output').style.height || '';
+		one(d, '.jc-joblog-form').dispatch('submit', { preventDefault: () => {} });
+		await flush();
+		out.collapse = { atMount, atRun, afterLine, defAtMount, defAtRun: one(d, '.jc-joblog-output').style.height || '' };
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.collapse = c; }
 
 	// 3. Submit, stream, success.
 	try {

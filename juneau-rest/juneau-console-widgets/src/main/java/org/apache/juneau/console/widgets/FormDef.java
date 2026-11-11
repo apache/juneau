@@ -18,6 +18,8 @@ package org.apache.juneau.console.widgets;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.time.*;
+import java.time.format.*;
 import java.util.*;
 import java.util.regex.*;
 
@@ -43,7 +45,7 @@ import org.apache.juneau.commons.bean.*;
  * {@code <button>} elements via {@code createElement}.  Labels and option text use {@code textContent}; prefills use
  * {@code .value} / {@code .checked}.  The runtime never assigns {@code innerHTML} from this payload.  Only the
  * types on the allowlist ({@code text}, {@code textarea}, {@code password}, {@code checkbox}, {@code toggle}, {@code select},
- * {@code action}) are legal &mdash; that is the XSS bound: hostile prefill cannot become an element.
+ * {@code date}, {@code action}) are legal &mdash; that is the XSS bound: hostile prefill cannot become an element.
  * </p>
  * <p>
  * {@link #template} may name a server-side template for authors.  It is <b>not</b> a client HTML sink; the
@@ -85,14 +87,19 @@ import org.apache.juneau.commons.bean.*;
 })
 public class FormDef implements Widget {
 
-	/** The frozen form contract version.  Bumped only on a breaking wire change to this form contract. */
-	public static final String CONTRACT_VERSION = "2";
+	/**
+	 * The frozen form contract version.  Bumped only on a breaking wire change to this form contract.
+	 *
+	 * <p>
+	 * Bumped to 3 when the date input type joined the allowlist.
+	 */
+	public static final String CONTRACT_VERSION = "3";
 
 	/** The cap on the length of an author-supplied {@link Input#pattern} (ReDoS defense-in-depth). */
 	static final int PATTERN_MAX_LENGTH = 256;
 
 	/** The complete set of legal {@link Input#type} tokens. */
-	static final Set<String> INPUT_TYPES = Set.of("text", "textarea", "password", "checkbox", "toggle", "select", "action");
+	static final Set<String> INPUT_TYPES = Set.of("text", "textarea", "password", "checkbox", "toggle", "select", "date", "action");
 
 	/**
 	 * A single typed form input painted client-side with {@code createElement} (never {@code innerHTML}).
@@ -142,7 +149,7 @@ public class FormDef implements Widget {
 		/** The label shown next to the control. */
 		public String label;
 
-		/** One of {@code text}, {@code textarea}, {@code password}, {@code checkbox}, {@code toggle}, {@code select}, {@code action}. */
+		/** One of {@code text}, {@code textarea}, {@code password}, {@code checkbox}, {@code toggle}, {@code select}, {@code date}, {@code action}. */
 		public String type;
 
 		/** When {@link Boolean#TRUE}, the control is required.  Omitted from the wire otherwise. */
@@ -176,7 +183,7 @@ public class FormDef implements Widget {
 		 * 	<jk>null</jk> or blank.
 		 * @param label The visible label.  Must not be <jk>null</jk> or blank.
 		 * @param type One of {@code text}, {@code textarea}, {@code password}, {@code checkbox}, {@code toggle}, {@code select},
-		 * 	{@code action}.  <jk>null</jk> or blank defaults to {@code text}.
+		 * 	{@code date}, {@code action}.  <jk>null</jk> or blank defaults to {@code text}.
 		 * @return A new {@link Input}.
 		 * @throws IllegalArgumentException If {@code name} or {@code label} is blank, or {@code type} is not an
 		 * 	allowed token.
@@ -188,7 +195,7 @@ public class FormDef implements Widget {
 				throw iaex("FormDef.Input label must not be null or blank.");
 			var t = (ib(type)) ? "text" : type;
 			if (! INPUT_TYPES.contains(t))
-				throw iaex("FormDef.Input type must be one of text, textarea, password, checkbox, toggle, select, action, not '%s'.", t);
+				throw iaex("FormDef.Input type must be one of text, textarea, password, checkbox, toggle, select, date, action, not '%s'.", t);
 			var i = new Input();
 			i.name = name;
 			i.label = label;
@@ -337,6 +344,7 @@ public class FormDef implements Widget {
 			validateTextualOnlyFields(isTextual);
 			validatePattern();
 			validatePasswordValue();
+			validateDateValue(eq(t, "date"));
 			validateActionField(isAction);
 		}
 
@@ -344,7 +352,7 @@ public class FormDef implements Widget {
 		private String resolveType() {
 			var t = (ib(type)) ? "text" : type;
 			if (! INPUT_TYPES.contains(t))
-				throw iaex("FormDef.Input '%s' type must be one of text, textarea, password, checkbox, toggle, select, action, not '%s'.", name, t);
+				throw iaex("FormDef.Input '%s' type must be one of text, textarea, password, checkbox, toggle, select, date, action, not '%s'.", name, t);
 			return t;
 		}
 
@@ -385,6 +393,17 @@ public class FormDef implements Widget {
 		private void validatePasswordValue() {
 			if (eq(type, "password") && value != null)
 				throw iaex("FormDef.Input '%s' value is not allowed on a password field.", name);
+		}
+
+		/** A {@code date} field's value, when present, is an ISO calendar date. */
+		private void validateDateValue(boolean isDate) {
+			if (! isDate || value == null)
+				return;
+			try {
+				LocalDate.parse(value);
+			} catch (DateTimeParseException e) {
+				throw iaex("FormDef.Input '%s' value '%s' must be an ISO date (yyyy-MM-dd).", name, value);
+			}
 		}
 
 		/** Validates {@link #pattern} compiles and {@link #maxLength} is positive. */

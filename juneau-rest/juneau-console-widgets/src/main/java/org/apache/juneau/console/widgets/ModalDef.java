@@ -168,8 +168,11 @@ public class ModalDef implements Widget {
 	 * Moves in <b>lockstep</b> with {@link FormDef#CONTRACT_VERSION} and the runtime's baked-in literal: the runtime
 	 * compares one literal against both this version and the nested form's, so bumping any two of the three makes
 	 * every form-bearing dialog refuse to open.
+	 *
+	 * <p>
+	 * Bumped to 3 when the date input type joined the allowlist.
 	 */
-	public static final String CONTRACT_VERSION = "2";
+	public static final String CONTRACT_VERSION = "3";
 
 	/** The {@link Field#kind} token for an ordinary text value &mdash; the default when the field declares none. */
 	public static final String FIELD_KIND_TEXT = "text";

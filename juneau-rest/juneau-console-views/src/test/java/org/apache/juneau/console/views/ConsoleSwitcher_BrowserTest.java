@@ -24,6 +24,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.console.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
@@ -84,13 +85,13 @@ class ConsoleSwitcher_BrowserTest extends TestBase {
 		  p.chart1 = chartState(); p.addrDefault = decodeURIComponent(location.search); rec();
 		  tab('multi').click(); await frames(); rec();
 		  p.addrMulti = decodeURIComponent(location.search);
-		  p.subStrips = document.querySelectorAll('#sw1 [data-juneau-strip-mode="tab"]').length;
+		  p.subStrips = document.querySelectorAll('#sw1-display [data-juneau-strip-mode="tab"]').length;
 		  tab('s2').click(); await frames();
 		  p.addrSection = decodeURIComponent(location.search);
 		  p.prefSection = localStorage.getItem('juneau-card:sw1:switcher:section.multi');
 		  var sel = tab('s2'), uns = tab('s1'), panes = document.querySelector('#sw1 .juneau-view-helper-tabstrip-panes');
 		  var accentColor = accent(), cs = getComputedStyle(sel), cu = getComputedStyle(uns);
-		  p.look = { accent: accentColor, selWeight: cs.fontWeight, selBorderTop: cs.borderTopColor, selBorderTopWidth: cs.borderTopWidth, selBg: cs.backgroundColor,
+		  p.look = { accent: accentColor, selWeight: cs.fontWeight, selBorderTop: cs.borderTopColor, selBorderTopWidth: cs.borderTopWidth, selShadow: cs.boxShadow, selBg: cs.backgroundColor,
 		    unsBg: cu.backgroundColor, unsWeight: cu.fontWeight, panes: panes ? getComputedStyle(panes).borderTopColor : null };
 		  } catch (e) { window.__probe.error = String(e && e.stack || e); }
 		  var done = document.createElement('i'); done.id = 'done'; document.body.appendChild(done);
@@ -139,7 +140,7 @@ class ConsoleSwitcher_BrowserTest extends TestBase {
 		  await until(function () { return document.getElementById('sw1-display'); });
 		  await frames();
 		  p.active = window.JuneauConsole.cardApi('sw1').activeView;
-		  var sec = document.querySelector('#sw1 [data-juneau-strip-mode="tab"] [aria-selected="true"]');
+		  var sec = document.querySelector('#sw1-display [data-juneau-strip-mode="tab"] [aria-selected="true"]');
 		  p.section = sec ? sec.getAttribute('data-tab-id') : null;
 		  } catch (e) { window.__probe.error = String(e && e.stack || e); }
 		  var done = document.createElement('i'); done.id = 'done'; document.body.appendChild(done);
@@ -147,6 +148,46 @@ class ConsoleSwitcher_BrowserTest extends TestBase {
 		})();
 		</script>
 		""";
+
+	// Layout probes: slider thumb, borderless nested host, unclipped selected tab, card gap, and a datatables card in a switcher.
+	private static final String LAYOUT_SCRIPT = "<script>\n(function () {\n" + HELPERS + """
+		var p = window.__probe = {};
+		function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+		document.addEventListener('DOMContentLoaded', async function () { try {
+		  await until(function () { return tab('b') && tab('s2') && tab('slb'); });
+		  await frames();
+		  var t1 = document.getElementById('top1').getBoundingClientRect(), t2 = document.getElementById('top2').getBoundingClientRect();
+		  var g = document.createElement('i'); g.style.display = 'block'; g.style.height = 'var(--jc-card-gap, 1rem)'; document.body.appendChild(g);
+		  p.gap = { actual: t2.top - t1.bottom, token: g.getBoundingClientRect().height }; g.remove();
+		  var host = document.querySelector('.juneau-switcher-view .jc-card[data-juneau-in-switcher]'), hs = getComputedStyle(host);
+		  p.nested = { shadow: hs.boxShadow, padding: hs.paddingTop + ' ' + hs.paddingLeft, bg: hs.backgroundColor, attr: host.hasAttribute('data-juneau-in-switcher') };
+		  tab('s2').click(); await frames();
+		  var sel = tab('s2').getBoundingClientRect(), panes = document.querySelector('#swm .juneau-view-helper-tabstrip-panes').getBoundingClientRect();
+		  var grp = document.querySelector('#swm [data-juneau-strip-mode="tab"]');
+		  p.clip = { selBottom: sel.bottom, panesTop: panes.top, overflowY: getComputedStyle(grp).overflowY };
+		  tab('slb').click(); await wait(600); await frames();
+		  var th = document.querySelector('#sws .juneau-switcher-thumb'), st = tab('slb');
+		  p.thumb = { thumbX: th.getBoundingClientRect().left, tabX: st.getBoundingClientRect().left };
+		  tab('b').click(); await frames();
+		  } catch (e) { window.__probe.error = String(e && e.stack || e); }
+		  var done = document.createElement('i'); done.id = 'done'; document.body.appendChild(done);
+		});
+		})();
+		</script>
+		""";
+
+	private static String nestedTable() {
+		var t = TableSpec.create("nt").dataMode(TableSpec.DataMode.CLIENT).dataUrl("/api/nt")
+			.columns(Column.create("id").label("Id"), Column.create("name").label("Name"))
+			.ribbon(RibbonItem.collapseAll())
+			.quickStats("qs", QuickStat.of("q1", "Open", 3))
+			.detail(RowDetail.create("/api/nt/{id}/detail").title("Row {id}").tab(DetailTab.fields("Info", "name").id("info")));
+		var card = new LinkedHashMap<String,Object>();
+		card.put("id", "nt");
+		card.put("type", "datatables");
+		card.put("table", t.toCardBody());
+		return Json.of(card);
+	}
 
 	private static String leaf(String id) {
 		return "{\"id\":\"" + id + "\",\"type\":\"leaf\"}";
@@ -183,6 +224,14 @@ class ConsoleSwitcher_BrowserTest extends TestBase {
 		return switcher("sw1", null, view("chart", CHART), view("data", leaf("d1")), sections("multi", leaf("m1"), leaf("m2")));
 	}
 
+	private static String layoutCards() {
+		return leaf("top1") + "," + leaf("top2") + ","
+			+ switcher("swm", null, sections("multi", leaf("m1"), leaf("m2")))
+			+ "," + "{\"id\":\"sws\",\"type\":\"switcher\",\"style\":\"slider\",\"views\":["
+			+ "{\"id\":\"sla\",\"label\":\"A\",\"card\":" + leaf("sa1") + "},{\"id\":\"slb\",\"label\":\"B\",\"card\":" + leaf("sb1") + "}]}"
+			+ "," + switcher("swn", null, view("a", leaf("na1")), view("b", nestedTable()));
+	}
+
 	@BeforeAll
 	static void runPages() throws Exception {
 		var kbd = switcher("sw1", "mv", sections("mv", leaf("m1"), leaf("m2")), view("other", leaf("o1")));
@@ -206,6 +255,19 @@ class ConsoleSwitcher_BrowserTest extends TestBase {
 			.eval("JuneauConsole.cardApi('sw1').select('mv'); document.querySelector('#sw1 [data-juneau-strip-mode=\"tab\"] [data-tab-id=\"s1\"]').focus();")
 			.press("Shift")
 			.eval(rec("k3"))
+			.asset("/api/nt", "[{\"id\":\"p1\",\"name\":\"Rex\"}]", "application/json")
+			.asset("/api/nt/p1/detail", "{\"contractVersion\":\"1\",\"fields\":{\"name\":\"Rex\"}}", "application/json")
+			.page("layout", ORIGIN + "/layout", page(layoutCards(), LAYOUT_SCRIPT))
+			.waitFor("#done")
+			.waitFor("table[data-juneau-view=\"nt\"] tbody td.sorting_1")
+			.eval("var host = document.querySelector('.juneau-switcher-view [data-juneau-in-switcher] table[data-juneau-view=\"nt\"]');"
+				+ "window.__probe.inSwitcher = !!host;"
+				+ "window.__probe.statStrip = !!document.querySelector('[data-juneau-stat=\"q1\"]');"
+				+ "window.__probe.ribbon = !!document.querySelector('[data-juneau-ribbon-id=collapseAll]');"
+				+ "document.querySelector('table[data-juneau-view=\"nt\"] .juneau-view-detail-toggle').click();")
+			.eval("(async function () { await new Promise(function (r) { setTimeout(r, 1500); });"
+				+ "window.__probe.detailPanels = document.querySelectorAll('.juneau-view-detail-panel').length;"
+				+ "})()")
 			.page("two", ORIGIN + "/two", page(two, TWO_SCRIPT))
 			.waitFor("#done")
 			.page("prefView", ORIGIN + "/prefview", page(main(), PROBE_SCRIPT))
@@ -300,8 +362,40 @@ class ConsoleSwitcher_BrowserTest extends TestBase {
 		// The shipped selected folder tab is semibold (600); the stylesheet is the source of truth.
 		assertEquals("600", look.get("selWeight"), look::toString);
 		assertEquals("1px", look.get("selBorderTopWidth"), look::toString);
-		assertEquals(look.get("accent"), look.get("selBorderTop"), look::toString);
+		assertTrue(String.valueOf(look.get("selShadow")).contains(String.valueOf(look.get("accent"))), look::toString);
 		assertNotEquals(look.get("selBg"), look.get("unsBg"), look::toString);
-		assertEquals(look.get("accent"), look.get("panes"), look::toString);
+		assertEquals(look.get("panes"), look.get("selBorderTop"), look::toString);
+	}
+
+	@Test void slider_thumbMovesWithSelection() {
+		var t = m(p("layout").get("thumb"));
+		assertEquals(((Number)t.get("tabX")).doubleValue(), ((Number)t.get("thumbX")).doubleValue(), 1.0, t::toString);
+	}
+
+	@Test void tabs_nestedHostIsBorderless() {
+		var n = m(p("layout").get("nested"));
+		assertEquals(true, n.get("attr"), n::toString);
+		assertEquals("none", n.get("shadow"), n::toString);
+		assertEquals("0px 0px", n.get("padding"), n::toString);
+		assertEquals("rgba(0, 0, 0, 0)", n.get("bg"), n::toString);
+	}
+
+	@Test void selectedTabIsNotClipped() {
+		var c = m(p("layout").get("clip"));
+		assertTrue(((Number)c.get("selBottom")).doubleValue() >= ((Number)c.get("panesTop")).doubleValue() + 1, c::toString);
+		assertNotEquals("hidden", c.get("overflowY"), c::toString);
+	}
+
+	@Test void topLevelCards_gapEqualsToken() {
+		var g = m(p("layout").get("gap"));
+		assertEquals(((Number)g.get("token")).doubleValue(), ((Number)g.get("actual")).doubleValue(), 1.0, g::toString);
+	}
+
+	@Test void nestedDatatablesKeepsRowDetailRibbonQuickStats() {
+		var p = p("layout");
+		assertEquals(true, p.get("statStrip"), p::toString);
+		assertEquals(true, p.get("ribbon"), p::toString);
+		assertEquals(true, p.get("inSwitcher"), p::toString);
+		assertTrue(((Number)p.get("detailPanels")).intValue() >= 1, p::toString);
 	}
 }

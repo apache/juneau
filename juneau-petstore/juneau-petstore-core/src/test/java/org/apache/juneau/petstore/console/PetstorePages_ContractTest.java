@@ -19,6 +19,7 @@ package org.apache.juneau.petstore.console;
 import static org.apache.juneau.petstore.console.PetstoreConsoleFixture.*;
 import static org.apache.juneau.console.test.PageContractAssert.*;
 import static org.apache.juneau.bct.BctAssertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -46,27 +47,33 @@ public class PetstorePages_ContractTest extends TestBase {
 
 	static final List<Page> PAGES = List.of(
 		new Page("P1", "/console/store", p -> p.hasActiveNav("store")
-			.hasCardOrder("welcome", "stats", "revenue", "revenue-sw", "orders-sw", "pets-sw", "hours")
-			.hasCard("welcome", "html").hasCard("stats", "datatables").hasCard("revenue", "kpi").hasCardKey("stats", "/table/quickStats/id", "store")
+			.hasCardOrder("welcome", "revenue", "store-sw")
+			.hasCard("welcome", "html").hasCard("revenue", "kpi").hasCard("store-sw", "switcher")
+			.hasNestedCard("store-sw", "stats", "datatables").hasCardKey("stats", "/table/quickStats/id", "store")
 			.hasCardKey("stats", "/table/quickStats/items/3/type", "segmented").hasCardKey("stats", "/table/quickStats/items/4/type", "meter")
-			.hasCard("orders-trend", "chart").hasCard("by-species", "chart").hasCard("by-status", "chart")
-			.hasCard("pets-map", "chart").hasCard("revenue-sw", "switcher").hasCard("orders-sw", "switcher").hasCard("pets-sw", "switcher")
-			.hasNestedCard("pets-sw", "pets-map", "chart").hasNestedCard("orders-sw", "orders-trend", "chart")
-			.hasNestedCard("pets-sw", "by-species", "chart").hasNestedCard("pets-sw", "by-status", "chart")
-			.hasNestedCard("revenue-sw", "revenue-chart", "chart")
-			.hasCard("hours", "html")),
+			.hasNestedCard("store-sw", "revenue-chart", "chart").hasNestedCard("store-sw", "revenue-data", "datatables")
+			.hasNestedCard("store-sw", "orders-trend", "chart").hasNestedCard("store-sw", "orders-data", "datatables")
+			.hasNestedCard("store-sw", "by-species", "chart").hasNestedCard("store-sw", "by-status", "chart")
+			.hasNestedCard("store-sw", "pets-map", "chart").hasNestedCard("store-sw", "hours", "html")
+			.hasCardKey("store-sw", "/style", "slider")),
 		new Page("jobs", "/console/ops/jobs", p -> p.hasActiveNav("ops", "jobs")
-			.hasCardOrder("restock-help", "restock", "jobs", "species", "groom-output", "groom-file", "groom-runs")
-			.hasCard("restock", "job-log").hasCard("jobs", "datatables").hasCard("species", "datatables")
-			.hasCard("groom-output", "terminal").hasCard("groom-file", "terminal").hasCard("groom-runs", "datatables")),
+			.hasCardOrder("jobs-sw").hasCard("jobs-sw", "switcher")
+			.hasNestedCard("jobs-sw", "restock-help", "html").hasNestedCard("jobs-sw", "restock", "job-log")
+			.hasNestedCard("jobs-sw", "jobs", "datatables").hasNestedCard("jobs-sw", "species", "datatables")
+			.hasNestedCard("jobs-sw", "groom-output", "terminal").hasNestedCard("jobs-sw", "groom-file", "terminal")
+			.hasNestedCard("jobs-sw", "groom-runs", "datatables")
+			.hasCardKey("jobs-sw", "/style", "slider")),
 		new Page("audit", "/console/ops/audit", p -> p.hasActiveNav("ops", "audit").hasCard("audit", "datatables")),
 		new Page("flavors-html", "/console/dev/flavors/html", p -> p.hasActiveNav("dev", "flavors", "html").hasCardOrder("caption", "flavor")),
 		new Page("flavors-freemarker", "/console/dev/flavors/freemarker", p -> p.hasActiveNav("dev", "flavors", "freemarker").hasCardOrder("caption", "flavor")),
 		new Page("flavors-mustache", "/console/dev/flavors/mustache", p -> p.hasActiveNav("dev", "flavors", "mustache").hasCardOrder("caption", "flavor")),
 		new Page("flavors-react", "/console/dev/flavors/react", p -> p.hasActiveNav("dev", "flavors", "react").hasCardOrder("caption", "flavor")),
 		new Page("secure", "/console/dev/secure", p -> p.hasActiveNav("dev", "secure").hasCardOrder("about", "try")),
-		new Page("custom-cards", "/console/dev/cards", p -> p.hasActiveNav("dev", "cards").hasCardOrder("available", "gauge", "bands", "prices", "toolbar", "how")
-			.hasCard("available", "kpi").hasCard("gauge", "inventory-gauge")),
+		new Page("custom-cards", "/console/dev/cards", p -> p.hasActiveNav("dev", "cards").hasCardOrder("cards-sw").hasCard("cards-sw", "switcher")
+			.hasNestedCard("cards-sw", "available", "kpi").hasNestedCard("cards-sw", "gauge", "inventory-gauge")
+			.hasNestedCard("cards-sw", "bands", "chart").hasNestedCard("cards-sw", "prices", "chart")
+			.hasNestedCard("cards-sw", "toolbar", "html").hasNestedCard("cards-sw", "how", "html")
+			.hasCardKey("cards-sw", "/style", "slider").hasCardKey("bands", "/dataTab", true).hasCardKey("bands", "/series/2/tone", "ok")),
 		new Page("about", "/console/about", p -> p.hasActiveNav("about").hasCardOrder("overview", "links", "beans")),
 		new Page("themes", "/console/dev/themes", p -> p.hasActiveNav("dev", "themes").hasCardOrder("swatches", "picker", "authoring").hasTheme("open")),
 		new Page("P2", "/console/pets", p -> p.hasActiveNav("pets")
@@ -96,7 +103,7 @@ public class PetstorePages_ContractTest extends TestBase {
 			.hasCardKey("orders", "/table/urlState/day", Map.of())
 			.hasCardKey("orders", "/table/urlState/window", Map.of())
 			.hasCardKey("orders", "/table/columnConfig", Map.of("tabs", List.of("columns", "sort")))),
-		new Page("P11", "/console/users", p -> p.hasActiveNav("users").hasCard("users", "datatables").hasCardKey("users", "/table/dataMode", "server"))
+		new Page("P11", "/console/users", p -> p.hasActiveNav("users").hasCard("users", "datatables").hasCardKey("users", "/table/dataMode", "server").hasCardKey("users", "/table/rowIdField", "username"))
 		// Later tasks append rows here.
 	);
 
@@ -137,6 +144,13 @@ public class PetstorePages_ContractTest extends TestBase {
 	void a03_builder(Page p) throws Exception {
 		var a = assertPage(page(client, p.path() + "?builder")).isValid().hasContractVersion("1");
 		p.expect().accept(a);
+	}
+
+	@Test
+	void a02b_usersHasRowIdFieldAndNoSelection() throws Exception {
+		var t = assertPage(page(client, "/console/users")).card("users").getMap("table");
+		assertEquals("username", t.getString("rowIdField"));
+		assertFalse(t.containsKey("selection"));
 	}
 
 	@Test

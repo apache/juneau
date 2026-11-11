@@ -51,19 +51,20 @@ class CustomCardsRest_Test extends TestBase {
 		assertPage(page(client(), "/console/dev/cards"))
 			.isValid()
 			.hasActiveNav("dev", "cards")
-			.hasCardOrder("available", "gauge", "bands", "prices", "toolbar", "how");
+			.hasCardOrder("cards-sw")
+			.hasNestedCard("cards-sw", "available", "kpi").hasNestedCard("cards-sw", "how", "html");
 	}
 
 	@Test void a02_kpiCardPassesItsBodyThrough() throws Exception {
 		assertPage(page(client(), "/console/dev/cards"))
-			.hasCard("available", "kpi")
+			.hasNestedCard("cards-sw", "available", "kpi")
 			.hasCardKey("available", "/label", "Pets available")
 			.hasCardKey("available", "/dataUrl", "/console/dev/cards/stats/available");
 	}
 
 	@Test void a03_gaugeCardCarriesTheShapedFragment() throws Exception {
 		assertPage(page(client(), "/console/dev/cards"))
-			.hasCard("gauge", "inventory-gauge")
+			.hasNestedCard("cards-sw", "gauge", "inventory-gauge")
 			.hasCardKey("gauge", "/gauge/species", "DOG")
 			.hasCardKey("gauge", "/gauge/low", 20)
 			.hasCardKey("gauge", "/gauge/high", 120)
@@ -83,12 +84,16 @@ class CustomCardsRest_Test extends TestBase {
 	}
 
 	@Test void a05b_toolbarHasTheShowCatsButton() throws Exception {
-		assertContains("data-cards-action=\"cat\"", page(client(), "/console/dev/cards"));
+		assertContains("data-cards-action=\"cat\"", client().get("/console/dev/cards/fragments/toolbar").run().assertStatus(200).getContent().asString());
+	}
+
+	@Test void a05c_howFragmentIsServed() throws Exception {
+		assertContains("class KpiCard", client().get("/console/dev/cards/fragments/how").run().assertStatus(200).getContent().asString());
 	}
 
 	@Test void a06_bandsIsAStackedBarWithAnAppDecoratorAndClickTopic() throws Exception {
 		assertPage(page(client(), "/console/dev/cards"))
-			.hasCard("bands", "chart")
+			.hasNestedCard("cards-sw", "bands", "chart")
 			.hasCardSrc("bands", "/console/dev/cards/inventory/all")
 			.hasCardKey("bands", "/kind", "bar")
 			.hasCardKey("bands", "/x/field", "species")
@@ -104,7 +109,7 @@ class CustomCardsRest_Test extends TestBase {
 
 	@Test void a07_pricesIsAZoomableScatterThatPublishesItsWindow() throws Exception {
 		assertPage(page(client(), "/console/dev/cards"))
-			.hasCard("prices", "chart")
+			.hasNestedCard("cards-sw", "prices", "chart")
 			.hasCardSrc("prices", "/console/dev/cards/prices")
 			.hasCardKey("prices", "/helper/kind", "scatter")
 			.hasCardKey("prices", "/option/dataZoom/0/type", "inside")

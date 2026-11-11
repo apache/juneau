@@ -18,8 +18,6 @@ package org.apache.juneau.petstore.console.orders;
 
 import static org.apache.juneau.bct.BctAssertions.*;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -250,18 +248,14 @@ class OrdersRest_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// The two-step new-order wizard: pick a pet (step 1), then review it (a stacked step), both on the compact chrome.
+	// The single-step new-order dialog: pick a pet and a ship date, on the compact chrome.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static String drafts(String json) {
-		return "?juneauDrafts=" + URLEncoder.encode(json, StandardCharsets.UTF_8);
-	}
-
-	@Test void c01_newFormIsStepOne() throws Exception {
+	@Test void c01_newFormIsASingleStepWithADateField() throws Exception {
 		var m = new JsonMap(client().get("/console/orders/new-form").run().assertStatus(200).getContent().asString());
 		assertBean(m, "chrome,title", "compact,New order: choose a pet");
-		assertBean(m.getMap("form"), "fields{#{name}}", "{[{petId},{shipDate},{review}]}");
-		assertBean(m, "childActions{#{id,form,carryDrafts,endpoint,method,onSuccess}}", "{[{review,/console/orders/review-form,true,/console/orders,POST,redraw}]}");
+		assertBean(m.getMap("form"), "fields{#{name,type}}", "{[{petId,select},{shipDate,date}]}");
+		org.junit.jupiter.api.Assertions.assertFalse(m.containsKey("childActions"));
 	}
 
 	@Test void c02_stepOneOffersOnlyPetsThatAreForSale() throws Exception {
@@ -285,33 +279,6 @@ class OrdersRest_Test extends TestBase {
 	/** Removes a pet made by {@link #newPet}, so count-based tests are not skewed. */
 	private static void dropPet(MockRestClient c, long id) throws Exception {
 		c.delete("/console/pets/" + id).run().assertStatus(200);
-	}
-
-	@Test void c03_reviewFormIsTheStackedStepPrefilledFromTheDrafts() throws Exception {
-		var c = client();
-		var id = newPet(c, false);
-		try {
-			var m = new JsonMap(c.get("/console/orders/review-form" + drafts("{\"petId\":\"" + id + "\",\"shipDate\":\"2031-02-03\"}")).run().assertStatus(200).getContent().asString());
-			assertBean(m, "chrome,title", "compact,Review order");
-			assertContains("Wizpet", m.getList("fields").toString());
-			assertContains("2031-02-03", m.getList("fields").toString());
-			assertBean(m.getMap("form"), "fields{#{name,value}}", "{[{petId," + id + "},{shipDate,2031-02-03}]}");
-		} finally {
-			dropPet(c, id);
-		}
-	}
-
-	@Test void c04_reviewFormRefusesMissingOrUnknownDrafts() throws Exception {
-		var c = client();
-		var id = newPet(c, false);
-		try {
-			c.get("/console/orders/review-form").run().assertStatus(400).assertContent().isContains("Missing order draft");
-			c.get("/console/orders/review-form" + drafts("{\"petId\":\"99999\"}")).run().assertStatus(404).assertContent().isContains("Unknown pet '99999'");
-			c.get("/console/orders/review-form" + drafts("{\"petId\":\"" + id + "\",\"shipDate\":\"soon\"}")).run().assertStatus(400).assertContent().isContains("Invalid ship date 'soon'");
-			c.get("/console/orders/review-form" + drafts("{not json")).run().assertStatus(400).assertContent().isContains("Invalid order draft");
-		} finally {
-			dropPet(c, id);
-		}
 	}
 
 	@Test void c05_placeOrderFromTheDialogEnvelope() throws Exception {
@@ -345,7 +312,6 @@ class OrdersRest_Test extends TestBase {
 		var id = newPet(c, true);
 		try {
 			var msg = "Pet '" + id + "' is 'SOLD'; only an available pet can be ordered";
-			c.get("/console/orders/review-form" + drafts("{\"petId\":\"" + id + "\"}")).run().assertStatus(409).assertContent().isContains(msg);
 			c.post("/console/orders", "{\"fields\":{\"petId\":\"" + id + "\"}}").contentType("application/json").run().assertStatus(409).assertContent().isContains(msg);
 		} finally {
 			dropPet(c, id);

@@ -308,6 +308,14 @@ function selectedTabId(wrapper) {
 }
 
 await (async function tabStripTests() {
+	// tab mode wraps the tab buttons in an inner scroll box, so the group itself never clips the selected tab
+	const scrollWrap = H.tabStrip([{ id: 'a', label: 'A', pane: env.el('div') }, { id: 'b', label: 'B', pane: env.el('div') }], { mode: 'tab', panes: true });
+	const scrollGroup = scrollWrap.querySelector('.juneau-view-ribbon-group');
+	const scrollBox = scrollWrap.querySelector('.juneau-view-tabs-scroll');
+	out.tabStrip_scrollBoxWrapsTabs = !!scrollBox && scrollWrap.querySelectorAll('.juneau-view-ribbon-btn').every(b => b.parentNode === scrollBox)
+		&& scrollBox.parentNode === scrollGroup && !(scrollGroup.style && scrollGroup.style.overflow);
+	out.tabStrip_scrollBoxIsTablist = !!scrollBox && scrollBox.getAttribute('role') === 'tablist' && scrollGroup.getAttribute('role') === 'presentation';
+
 	// (viii) the one-argument eager form still works unchanged
 	const eagerPane = env.el('div'); eagerPane.textContent = 'eager content';
 	const eagerWrap = H.tabStrip([{ id: 'a', label: 'A', pane: eagerPane }]);

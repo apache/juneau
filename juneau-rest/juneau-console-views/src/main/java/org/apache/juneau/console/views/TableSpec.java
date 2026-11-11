@@ -124,8 +124,10 @@ public final class TableSpec implements Handled<TableSpec> {
 	private final List<RowAction> rowActions = new ArrayList<>();
 	private RowDetail detail;
 	private SelectionDef selection;
+	private String rowIdField;
 	private BulkMutateDef bulk;
 	private Long pollIntervalMs;
+	private String columnSearchHelpUrl;
 	private String quickStatsId;
 	private List<QuickStat> quickStats;
 	private boolean primary;
@@ -397,6 +399,23 @@ public final class TableSpec implements Handled<TableSpec> {
 	}
 
 	/**
+	 * Sets the row-id field without enabling selection.
+	 *
+	 * <p>
+	 * Names the row-data key that identifies each row, so a {@link #detail(RowDetail) row detail} can address its row
+	 * on a table that has no selection column.  The detail resolves its row id from this field first, then from the
+	 * {@link #selection(SelectionDef) selection}'s row-id field, then from a column named <js>"id"</js> or
+	 * <js>"name"</js>.  When a selection is also set, both must name the same field.
+	 *
+	 * @param value The row-data key. Can be <jk>null</jk> to clear it.
+	 * @return This object.
+	 */
+	public TableSpec rowIdField(String value) {
+		rowIdField = value;
+		return this;
+	}
+
+	/**
 	 * Sets the bulk-mutate opt-in. Requires {@link #selection(SelectionDef)} to also be set.
 	 *
 	 * @param value The bulk config. Can be <jk>null</jk> to clear it.
@@ -404,6 +423,20 @@ public final class TableSpec implements Handled<TableSpec> {
 	 */
 	public TableSpec bulk(BulkMutateDef value) {
 		bulk = value;
+		return this;
+	}
+
+	/**
+	 * Sets the help link shown in the column-search popover.
+	 *
+	 * @param v An {@code http(s)} URL or a root-relative path.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code v} is blank or uses any other scheme.
+	 */
+	public TableSpec columnSearchHelpUrl(String v) {
+		if (ib(v) || ! (v.startsWith("https://") || v.startsWith("http://") || (v.startsWith("/") && ! v.startsWith("//"))))
+			throw iaex("TableSpec '%s' columnSearchHelpUrl must be an http(s) URL or a root-relative path, not '%s'.", id, v);
+		columnSearchHelpUrl = v;
 		return this;
 	}
 
@@ -732,6 +765,10 @@ public final class TableSpec implements Handled<TableSpec> {
 				throw isex("TableSpec '%s' declares row action '%s' twice.", id, a.id);
 		if (bulk != null && selection == null)
 			throw isex("TableSpec '%s' sets bulk without selection.", id);
+		if (rowIdField != null && ib(rowIdField))
+			throw isex("TableSpec '%s' rowIdField must not be blank.", id);
+		if (rowIdField != null && selection != null && ! rowIdField.equals(selection.rowIdField()))
+			throw isex("TableSpec '%s' rowIdField '%s' differs from selection rowIdField '%s'.", id, rowIdField, selection.rowIdField());
 		if (bulk != null && (bulk.actions == null || bulk.actions.isEmpty()))
 			throw isex("TableSpec '%s' sets bulk with no actions.", id);
 		for (var a : rowActions)
@@ -776,6 +813,8 @@ public final class TableSpec implements Handled<TableSpec> {
 			t.put("rowType", rowType);
 		if (pollIntervalMs != null)
 			t.put("pollIntervalMs", pollIntervalMs);
+		if (columnSearchHelpUrl != null)
+			t.put("columnSearchHelpUrl", columnSearchHelpUrl);
 		if (primary)
 			t.put("primary", true);
 		if (columnConfig != null)
@@ -795,6 +834,8 @@ public final class TableSpec implements Handled<TableSpec> {
 			t.put("rowClassRules", List.copyOf(rowClassRules));
 		if (rowActions.stream().anyMatch(a -> a.href == null))
 			t.put("rowActions", plain(rowActions.stream().filter(a -> a.href == null).toList()));
+		if (rowIdField != null)
+			t.put("rowIdField", rowIdField);
 		if (selection != null) {
 			var s = new JsonMap();
 			s.put("rowIdField", selection.rowIdField());
@@ -812,7 +853,7 @@ public final class TableSpec implements Handled<TableSpec> {
 			t.put("bulk", b);
 		}
 		if (detail != null)
-			t.put("detail", detail.toMap(id, columns, selection == null ? null : selection.rowIdField()));
+			t.put("detail", detail.toMap(id, columns, rowIdField != null ? rowIdField : selection == null ? null : selection.rowIdField()));
 		var mm = model.toMap();
 		if (mm != null)
 			t.put("model", mm);

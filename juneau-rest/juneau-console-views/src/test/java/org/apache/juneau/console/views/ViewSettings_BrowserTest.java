@@ -175,18 +175,18 @@ class ViewSettings_BrowserTest extends TestBase {
 		assertTrue(String.valueOf(c.get("detailSelected")).startsWith("Name"), c::toString);
 	}
 
-	@Test void c02_selectedTabFillDiffersFromUnselectedAndDialog() {
+	@Test void c02_selectedTabJoinsDialogWithAccentBar() {
 		var t = obj(obj(report, "chooserLight"), "tabs");
 		assertNotEquals(t.get("selBg"), t.get("unBg"), t::toString);
-		assertNotEquals(t.get("selBg"), t.get("dlgBg"), t::toString);
-		assertEquals(t.get("wash"), t.get("selBg"), t::toString);
+		assertEquals(t.get("dlgBg"), t.get("selBg"), t::toString);
+		assertTrue(String.valueOf(t.get("selBar")).contains("0px 3px 0px 0px inset"), t::toString);
 	}
 
-	@Test void c03_selectedTabFillDiffersFromUnselectedAndDialog_dark() {
+	@Test void c03_selectedTabJoinsDialogWithAccentBar_dark() {
 		var t = obj(obj(report, "chooserDark"), "tabs");
 		assertNotEquals(t.get("selBg"), t.get("unBg"), t::toString);
-		assertNotEquals(t.get("selBg"), t.get("dlgBg"), t::toString);
-		assertEquals(t.get("wash"), t.get("selBg"), t::toString);
+		assertEquals(t.get("dlgBg"), t.get("selBg"), t::toString);
+		assertTrue(String.valueOf(t.get("selBar")).contains("0px 3px 0px 0px inset"), t::toString);
 	}
 
 	@Test void a04_footerIsResetThenCancelThenApply() {

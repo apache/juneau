@@ -56,6 +56,7 @@ class PetstoreCoverage_Test extends TestBase {
 		PetstoreDatatable_BrowserTest.class,
 		PetstoreTerminal_BrowserTest.class,
 		PetstorePetDetail_BrowserTest.class,
+		PetstoreRowDetails_BrowserTest.class,
 		PetstoreData_BrowserTest.class,
 		PetstoreTypedConfirm_BrowserTest.class,
 		PetstoreOrderWizard_BrowserTest.class,
@@ -152,8 +153,28 @@ class PetstoreCoverage_Test extends TestBase {
 		var c = client();
 		for (var p : PetstorePages_ContractTest.PAGE_PATHS)
 			for (var o : assertPage(page(c, p)).contract().getList("cards"))
-				used.add(((JsonMap)o).getString("type"));
+				collectTypes((JsonMap)o, used);
 		return used;
+	}
+
+	// A switcher hosts its cards in its views (one card, a stack of cards, or sections of one card each).
+	private static void collectTypes(JsonMap card, Set<String> used) {
+		used.add(card.getString("type"));
+		var views = card.getList("views");
+		if (views == null)
+			return;
+		for (var v : views) {
+			var view = (JsonMap)v;
+			if (view.get("card") instanceof JsonMap n)
+				collectTypes(n, used);
+			if (view.getList("cards") != null)
+				for (var n : view.getList("cards"))
+					collectTypes((JsonMap)n, used);
+			if (view.getList("sections") != null)
+				for (var sec : view.getList("sections"))
+					if (((JsonMap)sec).get("card") instanceof JsonMap n)
+						collectTypes(n, used);
+		}
 	}
 
 	@Test void b01_everyRegisteredCardTypeIsUsed() throws Exception {

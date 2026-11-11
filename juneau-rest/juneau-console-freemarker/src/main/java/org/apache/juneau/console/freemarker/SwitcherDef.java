@@ -53,11 +53,18 @@ public final class SwitcherDef {
 	/** The grammar of a view or section id. */
 	static final Pattern ID_GRAMMAR = Pattern.compile("^[A-Za-z][A-Za-z0-9_-]{0,63}$");
 
+	/** The default switcher style: a folder-tab strip joined to the display. */
+	public static final String STYLE_TABS = "tabs";
+
+	/** The segmented-control style: a pill track with a sliding thumb. */
+	public static final String STYLE_SLIDER = "slider";
+
 	private static final String DEFAULT_SECTION = "main";
 
 	private final String id;
 	private String title;
 	private String initialView;
+	private String style;
 	private final List<View> views = new ArrayList<>();
 
 	private SwitcherDef(String id) {
@@ -71,6 +78,21 @@ public final class SwitcherDef {
 
 	/** @param v The card title. @return This object. */
 	public SwitcherDef title(String v) { title = v; return this; }
+
+	/** @param v The switcher style, {@link #STYLE_TABS} (default) or {@link #STYLE_SLIDER}. @return This object. */
+	public SwitcherDef style(String v) { style = v; return this; }
+
+	/**
+	 * Validates a switcher style token.
+	 *
+	 * @param id The switcher id, used in the message.
+	 * @param v The style, or <jk>null</jk> for the default.
+	 * @throws IllegalArgumentException If the value is neither {@link #STYLE_TABS} nor {@link #STYLE_SLIDER}.
+	 */
+	public static void validateStyle(String id, Object v) {
+		if (nn(v) && ! STYLE_TABS.equals(v) && ! STYLE_SLIDER.equals(v))
+			throw iaex("SwitcherDef '%s' style '%s' must be one of tabs, slider.", id, v);
+	}
 
 	/** @param viewId The id of the view shown first when nothing else decides. @return This object. */
 	public SwitcherDef initialView(String viewId) { initialView = viewId; return this; }
@@ -103,6 +125,7 @@ public final class SwitcherDef {
 		private final String label;
 		private String initialSection;
 		private final List<Section> sections = new ArrayList<>();
+		private final List<CardSpec> stack = new ArrayList<>();
 		private final ModelBlock model;
 
 		private View(String id, String label) {
@@ -137,6 +160,17 @@ public final class SwitcherDef {
 			return this;
 		}
 
+		/**
+		 * Stacks the cards vertically in this view, with the card gap between them.
+		 *
+		 * @param cards The cards, two or more.
+		 * @return This object.
+		 */
+		public View cards(CardSpec...cards) {
+			stack.addAll(Arrays.asList(cards));
+			return this;
+		}
+
 		/** @param sectionId The section shown first when nothing else decides. @return This object. */
 		public View initialSection(String sectionId) { initialSection = sectionId; return this; }
 
@@ -145,6 +179,9 @@ public final class SwitcherDef {
 			m.put("id", id);
 			m.put("label", label);
 			if (nn(initialSection)) m.put("initialSection", initialSection);
+			// A mix is emitted as authored; validate() rejects it with the switcher's id in the message.
+			if (! stack.isEmpty())
+				m.put("cards", stack.stream().map(CardSpec::toMap).toList());
 			if (sections.size() == 1 && sections.get(0).implicit && sections.get(0).model.isEmpty()) {
 				m.put("card", sections.get(0).card.toMap());
 			} else if (! sections.isEmpty()) {
@@ -206,11 +243,13 @@ public final class SwitcherDef {
 		var vs = views.stream().map(View::toMap).toList();
 		var body = new LinkedHashMap<String,Object>();
 		if (nn(initialView)) body.put("initialView", initialView);
+		if (nn(style)) body.put("style", style);
 		body.put("views", vs);
 		validate(id, body);
 		var c = CardSpec.of("switcher", id);
 		if (nn(title)) c.title(title);
 		if (nn(initialView)) c.body("initialView", initialView);
+		if (nn(style)) c.body("style", style);
 		c.body("views", vs);
 		return c;
 	}
@@ -227,6 +266,7 @@ public final class SwitcherDef {
 	})
 	public static void validate(String id, Map<String,?> body) {
 		var who = "SwitcherDef '" + id + "'";
+		validateStyle(id, body.get("style"));
 		if (! (body.get("views") instanceof List<?> views) || views.isEmpty())
 			throw iaex("%s requires at least one view.", who);
 		var viewIds = new HashSet<String>();
@@ -243,13 +283,19 @@ public final class SwitcherDef {
 				throw iaex("%s view '%s' requires a string label.", who, vid);
 			var hasCard = v.get("card") != null;
 			var hasSections = v.get("sections") != null;
-			if (hasCard && hasSections)
-				throw iaex("%s view '%s' takes either a card or sections, not both.", who, vid);
-			if (! hasCard && (! (v.get("sections") instanceof List<?> l) || l.isEmpty()))
-				throw iaex("%s view '%s' requires a card or at least one section.", who, vid);
+			var hasCards = v.get("cards") != null;
+			if ((hasCard ? 1 : 0) + (hasSections ? 1 : 0) + (hasCards ? 1 : 0) > 1)
+				throw iaex("%s view '%s' takes exactly one of card, sections or cards.", who, vid);
+			if (! hasCard && ! hasCards && (! (v.get("sections") instanceof List<?> l) || l.isEmpty()))
+				throw iaex("%s view '%s' requires a card, sections or cards.", who, vid);
 			var sectionIds = new HashSet<String>();
 			if (hasCard) {
 				checkCard(who, vid, v.get("card"), cardIds);
+			} else if (hasCards) {
+				if (! (v.get("cards") instanceof List<?> stacked) || stacked.size() < 2)
+					throw iaex("%s view '%s' cards needs at least two cards.", who, vid);
+				for (var co : stacked)
+					checkCard(who, vid, co, cardIds);
 			} else {
 				for (var so : (List<?>)v.get("sections")) {
 					if (! (so instanceof Map<?,?> s))

@@ -78,6 +78,48 @@ class Switcher_Test extends TestBase {
 		assertEquals(true, s.get("subMode"));
 	}
 
+	@Test void s12_styleChoosesTabsOrSliderLayout() {
+		var s = scenario("s12");
+		@SuppressWarnings("unchecked") var tabs = (java.util.Map<String,Object>)s.get("tabs");
+		@SuppressWarnings("unchecked") var slider = (java.util.Map<String,Object>)s.get("slider");
+		assertEquals("tabs", tabs.get("style"));
+		assertEquals("tab", tabs.get("mode"));
+		assertEquals(true, tabs.get("panel"));
+		assertEquals(true, tabs.get("inside"));
+		assertEquals(true, tabs.get("viewHost"));
+		assertEquals("slider", slider.get("style"));
+		assertEquals("ribbon", slider.get("mode"));
+		assertEquals(false, slider.get("panel"));
+		assertEquals(true, slider.get("sibling"));
+	}
+
+	@Test void s13_sliderThumbFollowsSelectionResizeAndReducedMotion() {
+		var s = scenario("s13");
+		assertEquals(false, s.get("tabsHasThumb"));
+		assertEquals(true, s.get("created"));
+		@SuppressWarnings("unchecked") var moved = (java.util.Map<String,Object>)s.get("moved");
+		assertEquals("translateX(100px)", moved.get("transform"));
+		assertEquals("90px", moved.get("width"));
+		assertEquals("translateX(57px)", s.get("resized"));
+		assertEquals("none", s.get("calm"));
+		assertEquals("", s.get("normal"));
+		assertEquals(true, s.get("listenerGone"));
+	}
+
+	@Test void s14_stackedCardsMountInOrderLazilyWithOneTeardown() {
+		var s = scenario("s14");
+		assertEquals(List.of("k1", "k2"), s.get("afterMount"));
+		assertEquals("juneau-switcher-view", s.get("viewHostClass"));
+		assertEquals(List.of(true, true), s.get("inSwitcher"));
+		assertEquals(List.of(true, true), s.get("order"));
+		assertEquals(List.of("k1", "k2"), s.get("handles"));
+		assertEquals(List.of("k1", "k2"), s.get("beforeV2"));
+		assertEquals(List.of("k1", "k2", "k3", "k4"), s.get("afterV2"));
+		assertEquals("v3", s.get("addedId"));
+		assertNotNull(s.get("bad"));
+		assertEquals(List.of("k1", "k2", "k3", "k4"), s.get("destroyed"));
+	}
+
 	@Test void s04_stateComesFromAddressThenPrefsThenSpecThenFirst() {
 		var s = scenario("s4");
 		assertEquals("v2", s.get("url"));

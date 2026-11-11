@@ -76,7 +76,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertTrue(body.contains(sel), body);
 		var st = body.indexOf(sel);
 		var rule = body.substring(st, body.indexOf("}", st));
-		assertTrue(rule.contains("--jc-accent-wash"), rule);
+		assertTrue(rule.contains("background-color: var(--jc-card-bg)") && rule.contains("var(--jc-accent)"), rule);
 		assertFalse(rule.contains("--jc-accent-selected"), rule);
 	}
 
@@ -774,7 +774,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 		var hover = "{ background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }";
 		assertContainsAll(css,
 			".juneau-view-ribbon-btn[aria-pressed=\"true\"] " + hover,
-			".juneau-view-ribbon-group[data-juneau-strip-mode=\"tab\"] .juneau-view-ribbon-btn[aria-selected=\"true\"] {\n\tbackground-color: var(--jc-accent-wash);",
+			".juneau-view-ribbon-group[data-juneau-strip-mode=\"tab\"] .juneau-view-ribbon-btn[aria-selected=\"true\"] {\n\tbackground-color: var(--jc-card-bg);",
 			".juneau-view-ribbon-btn:active:not(:disabled) { background-color: var(--jc-accent); color: var(--jc-on-accent); }");
 		assertFalse(css.contains(".juneau-view-ribbon-btn[aria-pressed=\"true\"] { background-color: var(--jc-accent); color: var(--jc-on-accent);"),
 			() -> "pressed toggle must not keep the solid accent fill, css:\n" + css);

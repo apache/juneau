@@ -89,6 +89,14 @@ class PetstoreAsyncJob_BrowserTest extends TestBase {
 		+ " await " + CANCEL_REFS + ";"
 		+ " return out; })()";
 
+	/** A JS function expression: the vertical gap between two cards and the expected card gap, as {want, got}. */
+	private static final String GAP_BETWEEN = "(function (a, b) {"
+		+ " var p = document.createElement('div'); p.style.marginTop = 'var(--jc-card-gap)'; document.body.appendChild(p);"
+		+ " var want = parseFloat(getComputedStyle(p).marginTop); p.remove();"
+		+ " var card = function (id) { var e = document.getElementById(id); return (e.closest('.jc-card') || e).getBoundingClientRect(); };"
+		+ " var ra = card(a), rb = card(b);"
+		+ " return { want: want, got: rb.top - ra.bottom }; })";
+
 	private static Map<String,Object> wait(String js, int ms) {
 		return Map.of("waitFor", js, "timeoutMs", ms);
 	}
@@ -123,6 +131,7 @@ class PetstoreAsyncJob_BrowserTest extends TestBase {
 		report = run("async-job", base, List.of(
 			Map.of("name", "jobs", "path", "/console/ops/jobs", "allowFailedLoads", true,
 				"actions", List.of(
+					Map.of("evaluate", select("jobs-sw", "jobs")),
 					Map.of("waitFor", "document.querySelector('#jobs-body table')"),
 					Map.of("evaluate", "window.__submit = " + SUBMIT_TWICE),
 					Map.of("waitFor", "window.__jobId && document.querySelector('#jobs-body').textContent.includes(window.__jobId)", "timeoutMs", 15000)),
@@ -156,6 +165,20 @@ class PetstoreAsyncJob_BrowserTest extends TestBase {
 				// timeout, so the cancel always lands in the hold.
 				"actions", List.of(phase("idle", 8000), holdMs(2500), SUBMIT, line("Added", 8000), SUBMIT, phase("done", 10000)),
 				"queries", CARD_QUERIES),
+			// Layout of the switcher views: stacked-card gaps, the frozen control classes, and no overflow at 1280px.
+			Map.of("name", "layout", "path", "/console/ops/jobs", "viewport", List.of(1280, 800),
+				"actions", List.of(
+					Map.of("waitFor", "document.querySelector('#restock-help') && document.querySelector('#restock')"),
+					Map.of("evaluate", "window.__restockGap = " + GAP_BETWEEN + "('restock-help', 'restock')"),
+					Map.of("evaluate", select("jobs-sw", "groom")),
+					Map.of("waitFor", "document.querySelector('#groom-output') && document.querySelector('#groom-file') && document.querySelector('#groom-runs')"),
+					Map.of("waitFor", "document.querySelector('button.juneau-term-follow')"),
+					Map.of("evaluate", "window.__groomGaps = [" + GAP_BETWEEN + "('groom-output', 'groom-file'), " + GAP_BETWEEN + "('groom-file', 'groom-runs')]")),
+				"queries", Map.of(
+					"restockGap", "window.__restockGap", "groomGaps", "window.__groomGaps",
+					"submitClass", "document.querySelector('" + J + "-submit')?.className ?? null",
+					"follow", "(b => b ? [b.tagName, b.classList.contains('jc-btn'), b.hasAttribute('aria-pressed')].join() : null)(document.querySelector('button.juneau-term-follow'))",
+					"overflow", "document.querySelector('.jc-main').scrollWidth <= document.querySelector('.jc-main').clientWidth")),
 			// The third subscriber's 429 is expected.
 			Map.of("name", "subscriber-cap", "path", "/console/ops/jobs", "allowFailedLoads", true,
 				"actions", List.of(phase("idle", 8000), Map.of("evaluate", "window.__cap = " + OVER_THE_CAP)),
@@ -255,5 +278,23 @@ class PetstoreAsyncJob_BrowserTest extends TestBase {
 
 	@Test void b08_jobLimitIsShownOnTheCard() {
 		assertString("Job limit reached; '2' running", query(assertClean(report, "limit"), "banner"));
+	}
+
+	@SuppressWarnings({
+		"unchecked" // query values are JSON maps and lists.
+	})
+	@Test void c01_stackedCardsKeepTheCardGap() {
+		var c = assertClean(report, "layout");
+		var r = (Map<String,Object>)query(c, "restockGap");
+		assertEquals(((Number)r.get("want")).doubleValue(), ((Number)r.get("got")).doubleValue(), 1.0);
+		for (var g : (List<Map<String,Object>>)query(c, "groomGaps"))
+			assertEquals(((Number)g.get("want")).doubleValue(), ((Number)g.get("got")).doubleValue(), 1.0);
+	}
+
+	@Test void c02_frozenControlsAndNoOverflow() {
+		var c = assertClean(report, "layout");
+		assertContains("jc-btn-primary", query(c, "submitClass"));
+		assertString("BUTTON,true,true", query(c, "follow"));
+		assertEquals(true, query(c, "overflow"));
 	}
 }

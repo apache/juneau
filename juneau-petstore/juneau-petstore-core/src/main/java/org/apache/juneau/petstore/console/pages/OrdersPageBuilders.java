@@ -48,6 +48,7 @@ public final class OrdersPageBuilders {
 			.table(TableSpec.create("orders").rowType("Order").dataMode(DataMode.SERVER).dataUrl("/console/orders/query").urlState("day", "window")
 				.columnConfig(Map.of("tabs", List.of("columns", "sort")))
 				.defaultOrder("id", Sort.ASC)
+				.detail(RowDetails.order())
 				.columns(
 					Column.create("id").label("Id"),
 					Column.create("petId").label("Pet").href("/console/pets/{petId}/summary"),

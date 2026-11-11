@@ -82,6 +82,8 @@
 	--jc-term-fg: #e5e5e5;
 	--jc-term-cursor: #e5e5e5;
 	--jc-term-selection: rgba(255, 255, 255, 0.3);
+	/* Preferred terminal font size; the terminal scales it to the panel width within its clamps. */
+	--jc-term-font-size: 12.5px;
 	/* Secondary label ink (cell-popover label, card status and field names). */
 	--jc-label-text: #555555;
 	/* Search-box placeholder ink. */
@@ -127,6 +129,9 @@
 	--jc-card-border: #dddddd;
 	--jc-card-radius: 6px;
 	--jc-card-gap: 1rem;
+	--jc-tab-compact-font: 0.8125rem;
+	--jc-tab-compact-pad-y: 3px;
+	--jc-tab-compact-pad-x: 10px;
 	--jc-card-min: 280px;
 	--jc-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 	/*
@@ -1055,9 +1060,24 @@ table.dataTable thead .sorting_desc_disabled:after {
 	padding: 0 8px;
 	border-bottom-width: 1px;     /* floor line; colour is currentColor until chrome.css themes it */
 	border-bottom-style: solid;
+	white-space: nowrap;
+}
+
+/* Strips built without the inner scroll box (dialog sections, row-detail tabs) scroll on the strip itself. */
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"]:not(:has(> .juneau-view-tabs-scroll)) {
 	overflow-x: auto;
 	overflow-y: hidden;
-	white-space: nowrap;
+}
+
+/* The tab buttons' own scroll box: the strip above never clips, so the selected tab's overlap stays visible. */
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-tabs-scroll {
+	display: flex;
+	align-items: flex-end;
+	gap: var(--jc-space-1);
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow-x: auto;
+	padding-bottom: 1px;          /* room for the selected tab's -1px overlap */
 }
 
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
@@ -1074,7 +1094,6 @@ table.dataTable thead .sorting_desc_disabled:after {
 	margin-bottom: -1px;          /* the selected tab paints over the floor line */
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
-	border-bottom-color: transparent;
 	font-weight: 600;
 	z-index: 1;
 }
@@ -1091,6 +1110,12 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:focus-visible {
 	outline-offset: -3px;
+}
+
+/* Compact tabs: a chart nested in a switcher. */
+.juneau-view-helper-tabstrip-wrapper[data-juneau-strip-compact] .juneau-view-ribbon-btn {
+	font-size: var(--jc-tab-compact-font);
+	padding: var(--jc-tab-compact-pad-y) var(--jc-tab-compact-pad-x);
 }
 
 /*
@@ -1674,7 +1699,7 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 
 .juneau-view-col-search-popover {
 	min-width: 220px;
-	max-width: 340px;
+	max-width: min(440px, 92vw);
 	padding: 8px 10px;
 	border: 1px solid;
 	box-sizing: border-box;
@@ -1730,6 +1755,36 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 	flex: 0 0 auto;
 	font-family: var(--jc-chrome-font-mono, monospace);
 	opacity: 0.85;
+}
+
+/* Column type line under the heading. chrome.css supplies the ink. */
+.juneau-view-col-search-popover-type {
+	margin: 0 0 4px;
+	font-size: var(--jc-chrome-font-size-1);
+}
+/* Instructions stack: bare-value help, operator rows, examples. */
+.juneau-view-col-search-popover-instructions {
+	display: flex;
+	flex-direction: column;
+	gap: var(--jc-space-2);
+}
+.juneau-view-col-search-popover-examples code {
+	font-family: var(--jc-chrome-font-mono, monospace);
+	padding: 0 4px;
+	border-radius: 3px;
+}
+/* Footer row: the "more" disclosure sits at the trailing edge. */
+.juneau-view-col-search-popover-footer {
+	display: flex;
+	gap: var(--jc-space-2);
+	align-items: center;
+	margin-top: 6px;
+}
+.juneau-view-col-search-popover-more {
+	margin-left: auto;
+}
+.juneau-view-col-search-popover-more-list[hidden] {
+	display: none;
 }
 
 /* Live-announcer region: visually hidden, never removed by a popover's own teardown. */

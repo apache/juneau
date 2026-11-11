@@ -49,9 +49,10 @@ class ChartCard_BrowserTest extends TestBase {
 		(function () {
 		  var p = window.__probe = {
 		    clicks: [],
-		    get expanded() { var b = document.querySelector('#trend .jc-chart-toggle'); return b ? b.getAttribute('aria-expanded') : null; },
+		    get toggle() { return !!document.querySelector('#trend .jc-chart-toggle') || document.getElementById('trend').textContent.indexOf('Show data') >= 0; },
+		    get srHidden() { var t = document.querySelector('#trend .jc-chart-sr'); return !!t && t.getBoundingClientRect().width <= 1; },
 		    get tableRows() { return document.querySelectorAll('#trend .jc-chart-table tbody tr').length; },
-		    get tableVisible() { var t = document.querySelector('#trend .jc-chart-table-box'); return !!t && !t.hidden; },
+		    
 		    get hash() { return location.hash; }
 		  }, bus = window.JuneauViews.bus;
 		  bus.subscribe('app.picked', function (v) { p.clicks.push({ card: v.card, name: v.name, row: v.row }); }, { retained: false });
@@ -99,6 +100,37 @@ class ChartCard_BrowserTest extends TestBase {
 		    var d = t && t.getModel().getSeriesByIndex(0).getData();
 		    p.typed = d ? { count: d.count(), second: d.get('placed', 1), dayCode: d.get('day', 1),
 		      days: t.getModel().getComponent('xAxis', 0).getOrdinalMeta().categories.map(String) } : null;
+		    var done = document.createElement('i');
+		    done.id = 'done';
+		    document.body.appendChild(done);
+		  });
+		})();
+		</script>
+		""";
+
+	// The data-tab page script: the Chart and Data tabs switch which pane is showing.
+	private static final String DATATAB_STEPS = """
+		<script>
+		(function () {
+		  var p = window.__probe = {};
+		  function until(test, ms) {
+		    var end = Date.now() + (ms || 5000);
+		    return new Promise(function (res) {
+		      (function poll() { var v = test(); if (v || Date.now() > end) res(v); else requestAnimationFrame(poll); })();
+		    });
+		  }
+		  document.addEventListener('DOMContentLoaded', async function () {
+		    var p = window.__probe;
+		    function shown(sel) { var e = document.querySelector(sel); return !!e && e.getClientRects().length > 0; }
+		    function tabBtn(id) { return document.querySelector('#dt [data-tab-id="' + id + '"]'); }
+		    await until(function () { return tabBtn('data'); });
+		    var before = { plot: shown('#dt .jc-chart-plot'), table: shown('#dt .jc-chart-table') };
+		    tabBtn('data').click();
+		    await until(function () { return shown('#dt .jc-chart-table'); }, 2000);
+		    var onData = { plot: shown('#dt .jc-chart-plot'), table: shown('#dt .jc-chart-table') };
+		    tabBtn('chart').click();
+		    await until(function () { return shown('#dt .jc-chart-plot'); }, 2000);
+		    p.dataTab = { before: before, onData: onData, back: { plot: shown('#dt .jc-chart-plot'), table: shown('#dt .jc-chart-table') } };
 		    var done = document.createElement('i');
 		    done.id = 'done';
 		    document.body.appendChild(done);
@@ -225,7 +257,7 @@ class ChartCard_BrowserTest extends TestBase {
 		  window.fetch = function (url, init) {
 		    var u = String(url), m = (init && init.method) || 'GET', h = (init && init.headers) || {};
 		    var tok = h['X-Csrf-Token'] || null;
-		    if (m === 'GET' && u.indexOf('/t/form') === 0) { p.gets.push(u); return json({ contractVersion: '2', title: 'Edit', form: { contractVersion: '2', fields: [{ name: 'note', type: 'text', label: 'Note' }] } }); }
+		    if (m === 'GET' && u.indexOf('/t/form') === 0) { p.gets.push(u); return json({ contractVersion: '3', title: 'Edit', form: { contractVersion: '3', fields: [{ name: 'note', type: 'text', label: 'Note' }] } }); }
 		    if (m !== 'GET') {
 		      p.posts.push({ url: u, method: m, csrf: tok });
 		      if (u === '/t/requeue/a') return tok ? json({ outcome: 'success', message: 'requeued' }) : json({}, 403);
@@ -338,6 +370,8 @@ class ChartCard_BrowserTest extends TestBase {
 			+ "\"publishes\":[{\"topic\":\"app.picked\",\"retain\":false}],"
 			+ "\"patch\":{\"animation\":false,\"grid\":{\"top\":0,\"bottom\":0,\"left\":0,\"right\":0},\"legend\":{\"show\":false},"
 			+ "\"xAxis\":{\"show\":false},\"yAxis\":{\"show\":false,\"max\":4},\"series\":[{\"id\":\"v\",\"barWidth\":\"90%\"}]}}";
+		var dt = "{\"id\":\"dt\",\"type\":\"chart\",\"title\":\"Tabs\",\"dataTab\":true,\"helper\":{\"kind\":\"bar\",\"x\":\"k\",\"series\":[{\"field\":\"v\"}]},"
+			+ "\"data\":[{\"k\":\"a\",\"v\":4},{\"k\":\"b\",\"v\":2}]}";
 		// Two series, zoomable, so a zoom range and a legend deselect can be set before a theme change.
 		var zl = "{\"id\":\"zl\",\"type\":\"chart\",\"title\":\"Zoom\",\"kind\":\"line\",\"x\":{\"field\":\"day\",\"label\":\"Day\"},"
 			+ "\"series\":[{\"field\":\"placed\",\"label\":\"Placed\"},{\"field\":\"delivered\",\"label\":\"Delivered\"}],"
@@ -376,8 +410,11 @@ class ChartCard_BrowserTest extends TestBase {
 					TOKEN_OVERRIDE + before + STEPS, AFTER),
 				"caption", "#trend .jc-chart-caption")
 			.waitFor("#done")
-			.click("#trend .jc-chart-toggle")
 			.click("#pick .jc-chart-canvas")
+			.page("dataTab", ORIGIN + "/datatab",
+				contractPage("{\"contractVersion\":\"1\",\"title\":\"T\",\"cards\":[" + dt + "]}", "", actBefore + DATATAB_STEPS, AFTER),
+				"caption", "#dt .jc-chart-caption")
+			.waitFor("#done")
 			.page("treemap", ORIGIN + "/treemap",
 				contractPage("{\"contractVersion\":\"1\",\"title\":\"T\"," + topics + ",\"cards\":[" + tm + "]}", "", before + TREEMAP_STEPS, AFTER),
 				"legend", "#tm .jc-chart-caption")
@@ -419,11 +456,18 @@ class ChartCard_BrowserTest extends TestBase {
 		assertEquals("#123456", p.get("color0"));
 	}
 
-	@Test void a02_tableToggle() {
+	@Test void defaultHasNoVisibleToggle() {
 		var p = probe(report.get("charts"));
-		assertEquals("true", p.get("expanded"));
-		assertEquals(true, p.get("tableVisible"));
+		assertEquals(false, p.get("toggle"));
+		assertEquals(true, p.get("srHidden"));
 		assertEquals(2, p.get("tableRows"));
+	}
+
+	@Test void dataTab_tabsSwitchPanels() {
+		var t = (Map<?,?>)probe(report.get("dataTab")).get("dataTab");
+		assertEquals(Map.of("plot", true, "table", false), t.get("before"));
+		assertEquals(Map.of("plot", false, "table", true), t.get("onData"));
+		assertEquals(Map.of("plot", true, "table", false), t.get("back"));
 	}
 
 	@Test void a03_click_publishesAndNavigates() {

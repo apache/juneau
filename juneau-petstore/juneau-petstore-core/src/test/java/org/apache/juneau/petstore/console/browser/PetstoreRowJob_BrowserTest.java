@@ -67,6 +67,8 @@ class PetstoreRowJob_BrowserTest extends TestBase {
 
 	private static final String GROOM_COUNT = "fetch('/console/ops/jobs/groom-rows', {headers: {Accept: 'application/json'}}).then(r => r.json()).then(r => r.length)";
 
+	private static final Map<String,Object> SPECIES = Map.of("evaluate", select("jobs-sw", "species"));
+
 	private static Map<String,Object> wait(String js, int ms) {
 		return Map.of("waitFor", js, "timeoutMs", ms);
 	}
@@ -89,7 +91,7 @@ class PetstoreRowJob_BrowserTest extends TestBase {
 			// The retargeted submit's 409 is expected.
 			Map.of("name", "species", "path", "/console/ops/jobs", "allowFailedLoads", true,
 				"actions", List.of(
-					wait(DOG_ROW, 8000),
+					SPECIES, wait(DOG_ROW, 8000),
 					Map.of("evaluate", AVAILABLE + ".then(n => { window.__before = n; })"), wait("window.__before != null", 8000),
 					toggleDog(), phase("idle", 8000),
 					Map.of("fill", List.of(R + " .jc-joblog-input[name=count]", "3")),
@@ -113,7 +115,7 @@ class PetstoreRowJob_BrowserTest extends TestBase {
 					"retarget", "window.__retarget")),
 			Map.of("name", "reattach", "path", "/console/ops/jobs",
 				"actions", List.of(
-					wait(DOG_ROW, 8000), toggleDog(), phase("idle", 8000),
+					SPECIES, wait(DOG_ROW, 8000), toggleDog(), phase("idle", 8000),
 					Map.of("click", R + " .jc-joblog-submit"),
 					phase("running", 8000),
 					toggleDog(), wait("!document.querySelector('" + R + "')", 4000),
@@ -121,6 +123,7 @@ class PetstoreRowJob_BrowserTest extends TestBase {
 				"queries", Map.of("lines", "[...document.querySelectorAll('" + R + " .jc-joblog-line')].map(l => l.textContent)")),
 			Map.of("name", "regroom", "path", "/console/ops/jobs",
 				"actions", List.of(
+					Map.of("evaluate", select("jobs-sw", "groom")),
 					wait("document.querySelector('#groom-runs-body tbody tr .juneau-view-detail-toggle')", 8000),
 					Map.of("evaluate", GROOM_COUNT + ".then(n => { window.__runs = n; })"), wait("window.__runs != null", 8000),
 					Map.of("click", "#groom-runs-body tbody tr .juneau-view-detail-toggle"),

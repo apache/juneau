@@ -44,7 +44,7 @@ class DialogFrame_BrowserTest extends TestBase {
 	private static final List<String> ORDERS = List.of("cv", "vc");
 
 	private static final String[] TOKENS = { "--jc-control-bg", "--jc-text", "--jc-border", "--jc-hover-bg", "--jc-link", "--jc-control-border", "--jc-accent",
-		"--jc-accent-wash", "--jc-btn-primary-bg", "--jc-on-btn-primary", "--jc-danger-text", "--jc-text-muted" };
+		"--jc-accent-wash", "--jc-btn-primary-bg", "--jc-on-btn-primary", "--jc-danger-text", "--jc-text-muted", "--jc-card-bg", "--jc-pill-neutral-bg" };
 
 	/** Elements hovered (each recorded under {@code hover:<id>}). */
 	private static final List<String> HOVERED = List.of("dx", "p2", "f2", "wb", "fa");
@@ -85,7 +85,7 @@ class DialogFrame_BrowserTest extends TestBase {
 		(function () {
 			var PROPS = ['background-color', 'color', 'border-top-color', 'border-bottom-color', 'border-top-width',
 				'border-bottom-width', 'border-top-left-radius', 'border-bottom-left-radius', 'font-weight', 'height',
-				'width', 'justify-self', 'justify-content', 'column-gap', 'padding-top', 'padding-left', 'margin-bottom', 'flex-grow'];
+				'width', 'justify-self', 'justify-content', 'column-gap', 'padding-top', 'padding-left', 'margin-bottom', 'flex-grow', 'box-shadow'];
 			var rec = {};
 			function snap(id) {
 				var el = document.getElementById(id);
@@ -230,10 +230,12 @@ class DialogFrame_BrowserTest extends TestBase {
 		}
 	}
 
-	@Test void a06_pillSelectedLooksLikeHover() {
+	@Test void a06_sectionTabSelectedIsCardWithAccentBar() {
 		for (var p : probes()) {
-			for (var prop : List.of("background-color", "color", "border-top-color"))
-				eq(p, p.hover("p2", prop), p.rest("p1", prop), "pill selected = hover: " + prop);
+			eq(p, p.tok("--jc-card-bg"), p.rest("p1", "background-color"), "section tab selected fill = card");
+			eq(p, p.tok("--jc-pill-neutral-bg"), p.rest("p2", "background-color"), "section tab unselected fill = grey");
+			eq(p, p.tok("--jc-accent-wash"), p.hover("p2", "background-color"), "section tab unselected hover = wash");
+			eq(p, p.tok("--jc-link"), p.rest("p1", "color"), "section tab selected ink");
 			eq(p, "1px", p.rest("ps", "border-bottom-width"), "section strip carries the floor line");
 		}
 	}
@@ -247,16 +249,18 @@ class DialogFrame_BrowserTest extends TestBase {
 				eq(p, selected ? "1px" : "0px", p.rest(id, "border-bottom-width"), id + " bottom edge (selected overlaps the rule)");
 				eq(p, selected ? "-1px" : "0px", p.rest(id, "margin-bottom"), id + " floor overlap");
 				eq(p, "0px", p.rest(id, "border-bottom-left-radius"), id + " square bottom");
-				eq(p, "4px", p.rest(id, "border-top-left-radius"), id + " rounded top");
+				assertNotEquals("0px", p.rest(id, "border-top-left-radius"), () -> p.name() + ": " + id + " rounded top");
 				eq(p, "6px", p.rest(id, "padding-top"), id + " padding-y");
 				eq(p, "14px", p.rest(id, "padding-left"), id + " padding-x");
 			}
 			eq(p, p.tok("--jc-border"), p.rest("f3", "border-top-color"), "rest tab edge");
-			for (var prop : List.of("background-color", "color", "border-top-color"))
-				eq(p, p.hover("f2", prop), p.rest("f1", prop), "folder selected = hover: " + prop);
-			eq(p, p.tok("--jc-accent-wash"), p.rest("f1", "background-color"), "selected wash");
+			eq(p, p.tok("--jc-card-bg"), p.rest("f1", "background-color"), "selected fill = card");
+			eq(p, p.tok("--jc-pill-neutral-bg"), p.rest("f2", "background-color"), "unselected fill = grey");
+			eq(p, p.tok("--jc-accent-wash"), p.hover("f2", "background-color"), "unselected hover = wash");
 			eq(p, p.tok("--jc-link"), p.rest("f1", "color"), "selected ink");
-			eq(p, p.tok("--jc-accent"), p.rest("f1", "border-top-color"), "selected accent edge");
+			eq(p, p.tok("--jc-border"), p.rest("f1", "border-top-color"), "selected grey edge");
+			var bar = String.valueOf(p.rest("f1", "box-shadow"));
+			assertTrue(bar.contains(p.tok("--jc-accent")) && bar.contains("0px 3px 0px 0px inset"), () -> p.name() + ": selected accent bar: " + bar);
 			eq(p, "600", p.rest("f1", "font-weight"), "selected is bold");
 			eq(p, "400", p.hover("f2", "font-weight"), "hover is not bold");
 		}

@@ -18,6 +18,8 @@ package org.apache.juneau.petstore.console.users;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.util.*;
+
 import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
@@ -25,6 +27,7 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.console.pages.*;
 import org.apache.juneau.petstore.dto.*;
+import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.console.datatables.*;
 import org.apache.juneau.console.datatables.adapter.*;
@@ -53,7 +56,7 @@ import org.apache.juneau.console.widgets.*;
 	"java:S110", // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
 	"java:S1192" // Route paths and field names repeat as inline literals by design.
 })
-public class UsersRest extends PetstoreConsolePage {
+public class UsersRest extends PetstoreConsolePage implements RowDetailMixin {
 
 	private static final long serialVersionUID = 1L;
 
@@ -93,6 +96,35 @@ public class UsersRest extends PetstoreConsolePage {
 	@RestGet(path="/")
 	public View page(RestRequest req) {
 		return builder(req) ? twin(req, UsersPageBuilders.users()) : FreemarkerView.of("users.ftlh");
+	}
+
+	private final RowDetail userDetail = RowDetails.user(this::lookup);
+
+	@Override
+	public Collection<RowDetail> rowDetails() {
+		return List.of(userDetail);
+	}
+
+	private UserView lookup(String username) {
+		var u = store().getUser(username);
+		return u == null ? null : UserView.of(u);
+	}
+
+	/**
+	 * The Orders tab of the user row detail: the orders a user placed from the console, by id.
+	 *
+	 * @param username The username.
+	 * @return The orders, whose create was audited under this user.
+	 * @throws NotFound If {@code username} is missing or names no user.
+	 */
+	@RestGet(path="/orders/rows")
+	public List<Order> orderRows(@Query("username") String username) {
+		var u = require(username == null ? "" : username);
+		var actor = "console:" + u.getUsername();
+		var ids = store().getAudit().stream()
+			.filter(x -> "Order".equals(x.getEntity()) && "CREATE".equals(x.getAction()) && actor.equals(x.getActor()))
+			.map(AuditEntry::getEntityId).collect(java.util.stream.Collectors.toSet());
+		return store().getOrders().stream().filter(o -> ids.contains(String.valueOf(o.getId()))).sorted(Comparator.comparingLong(Order::getId)).toList();
 	}
 
 	/**

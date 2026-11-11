@@ -14,40 +14,20 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 --><@page tab="dev/cards" init=["/console/dev/cards/petstore-cards.js"]>
-<@card id="available" type="kpi" title="Pets available">{label:'Pets available', dataUrl:'/console/dev/cards/stats/available'}</@card>
-<@card id="gauge" type="inventory-gauge" title="Dog inventory">{species:'DOG', low:20, high:120}</@card>
-<@card type="chart" id="bands" title="Stock by species" src="/console/dev/cards/inventory/all" publishes="app.band-picked">
-{ kind: 'bar', x: { field: 'species' },
-  series: [ { field: 'available', label: 'Available' }, { field: 'pending', label: 'Pending' }, { field: 'sold', label: 'Sold' } ],
-  stacked: true, orientation: 'horizontal',
-  decorators: [ { use: 'petstore.stockTotals' } ],
-  on: { click: 'app.band-picked' } }
-</@card>
-<@card type="chart" id="prices" title="Prices by pet" src="/console/dev/cards/prices" publishes=[{"topic":"zoom:prices","retain":true}]>
-{ helper: { kind: 'scatter', x: { field: 'id', type: 'number', label: 'Pet' }, series: [ { field: 'price', label: 'Price' } ] },
-  option: { dataZoom: [ { type: 'inside' }, { type: 'slider' } ] } }
-</@card>
-<@card id="toolbar" title="Card API">
-<div class="jc-prose">
-<p>
-<button type="button" class="jc-btn jc-btn-outline" data-cards-action="refresh">Refresh the gauge</button>
-<button type="button" class="jc-btn jc-btn-outline" data-cards-action="api">Read the gauge API</button>
-<button type="button" class="jc-btn jc-btn-outline" data-cards-action="cat">Show cats</button>
-</p>
-<output id="cards-api-result" aria-live="polite"></output>
-</div>
-</@card>
-<@card id="how" title="Writing a card type">
-<div class="jc-prose">
-<p>A card type is a JS class extending the console's Card, and optionally a Java class that validates the body and shapes what the handler
-receives. Push classes onto <code>window.JuneauConsoleCards</code>; the queue works whether your script loads before
-or after the console.</p>
-<pre><code>class KpiCard extends JuneauConsole.Card {
-  render() { ... }
-}
-(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(['kpi', KpiCard]);</code></pre>
-<p>The gauge's Java side is <code>InventoryGaugeCardType</code>, registered with
-<code>ConsoleFreemarkerMixin.create().cardType(new InventoryGaugeCardType())</code>.</p>
-</div>
+<@card type="switcher" id="cards-sw" style="slider">
+{ initialView: 'bands',
+  views: [
+    { id: 'available', label: 'Pets available', card: { type: 'kpi', id: 'available', title: 'Pets available', label: 'Pets available', dataUrl: '/console/dev/cards/stats/available' } },
+    { id: 'gauge', label: 'Dog inventory', card: { type: 'inventory-gauge', id: 'gauge', title: 'Dog inventory', species: 'DOG', low: 20, high: 120 } },
+    { id: 'bands', label: 'Stock by species', card: { type: 'chart', id: 'bands', title: 'Stock by species', src: '/console/dev/cards/inventory/all',
+        publishes: [ { topic: 'app.band-picked', retain: false } ], kind: 'bar', x: { field: 'species' }, dataTab: true,
+        series: [ { field: 'available', label: 'Available' }, { field: 'pending', label: 'Pending' }, { field: 'sold', label: 'Sold', tone: 'ok' } ],
+        stacked: true, orientation: 'horizontal', decorators: [ { use: 'petstore.stockTotals' } ], on: { click: 'app.band-picked' } } },
+    { id: 'prices', label: 'Prices by pet', card: { type: 'chart', id: 'prices', title: 'Prices by pet', src: '/console/dev/cards/prices',
+        publishes: [ { topic: 'zoom:prices', retain: true } ],
+        helper: { kind: 'scatter', x: { field: 'id', type: 'number', label: 'Pet' }, series: [ { field: 'price', label: 'Price' } ] },
+        option: { dataZoom: [ { type: 'inside' }, { type: 'slider' } ] } } },
+    { id: 'toolbar', label: 'Card API', card: { type: 'html', id: 'toolbar', title: 'Card API', src: '/console/dev/cards/fragments/toolbar' } },
+    { id: 'how', label: 'Writing a card type', card: { type: 'html', id: 'how', title: 'Writing a card type', src: '/console/dev/cards/fragments/how' } } ] }
 </@card>
 </@page>

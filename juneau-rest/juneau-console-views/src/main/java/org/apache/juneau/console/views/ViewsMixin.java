@@ -18,7 +18,11 @@ package org.apache.juneau.console.views;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.nio.charset.*;
+import java.util.regex.*;
+
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.response.NotFound;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.console.*;
@@ -922,6 +926,50 @@ public class ViewsMixin {
 	)
 	public HttpResource getConsoleJs() {
 		return CONSOLE_ASSET_CACHE.serve(ConsoleChromeMixin.CONSOLE_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
+	}
+
+	/** The path of the single-symbol SVG route. */
+	public static final String SYMBOL_SVG_PATH = "/juneau-symbol/{file}";
+
+	private static final Pattern SYMBOL_NAME = Pattern.compile("[a-z0-9_]{1,64}");
+
+	/**
+	 * [GET /juneau-symbol/{name}.svg] &mdash; serve one built-in symbol as a standalone SVG, for use as a favicon.
+	 *
+	 * @param file The symbol file name, <c>{name}.svg</c> with the name matching <c>[a-z0-9_]{1,64}</c>.
+	 * @return The symbol as an {@link HttpResource}.
+	 * @throws NotFound If the name is malformed or no sprite defines it.
+	 */
+	@RestGet(
+		path=SYMBOL_SVG_PATH,
+		summary="Single built-in symbol as a standalone SVG",
+		description="A symbol from the Lucide or shipped sprite, with colours that follow prefers-color-scheme; for favicons.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getSymbol(@Path("file") String file) {
+		var name = file.endsWith(".svg") ? file.substring(0, file.length() - 4) : "";
+		if (! SYMBOL_NAME.matcher(name).matches())
+			throw new NotFound("Unknown symbol: " + name);
+		var open = "<symbol id=\"juneau-sym-" + name + "\"";
+		for (var resource : new String[]{SYMBOLS_LUCIDE_SVG_RESOURCE, SYMBOLS_SVG_RESOURCE}) {
+			var sprite = new String(ASSET_CACHE.bytes(resource), StandardCharsets.UTF_8);
+			var start = sprite.indexOf(open);
+			if (start < 0)
+				continue;
+			var innerStart = sprite.indexOf('>', start) + 1;
+			var inner = sprite.substring(innerStart, sprite.indexOf("</symbol>", innerStart));
+			// A symbol that fills with currentColor on its own tag passes that fill to its children through a wrapper group.
+			if (sprite.substring(start, innerStart).contains("fill=\"currentColor\""))
+				inner = "<g class=\"f\">" + inner + "</g>";
+			if (inner.contains("<script"))
+				break;
+			// A presentation attribute cannot hold a CSS variable, so currentColor becomes a class the embedded stylesheet colours.
+			var svg = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\">"
+				+ "<style>.s{stroke:#4a4a4a}.f{fill:#4a4a4a}@media (prefers-color-scheme:dark){.s{stroke:#c8c8c8}.f{fill:#c8c8c8}}</style>"
+				+ inner.replace("stroke=\"currentColor\"", "class=\"s\"").replace("fill=\"currentColor\"", "class=\"f\"") + "</svg>";
+			return ASSET_CACHE.wrap(svg.getBytes(StandardCharsets.UTF_8), SVG_CONTENT_TYPE, CACHE_CONTROL);
+		}
+		throw new NotFound("Unknown symbol: " + name);
 	}
 
 	/** Reads (and caches) the classpath asset and wraps it as a cacheable {@link HttpResource}. */

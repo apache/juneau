@@ -140,6 +140,14 @@ class DatatablesCardType_Test extends TestBase {
 		assertTrue(ex.getMessage().contains("sets contractVersion; remove it"), ex.getMessage());
 	}
 
+	@Test void contractVersion_allowedInNestedTabSlot() {
+		var ok = src("t", "{dataUrl:'/x', columns:[{key:'id'}], detail:{endpoint:'/x/{id}', tabs:[{id:'o', kind:'table', title:'O', nested:{contractVersion:'2', parentScopeParam:'parentId'}}]}}");
+		assertDoesNotThrow(() -> h.toFragment(ok));
+		var bad = src("t", "{dataUrl:'/x', columns:[{key:'id'}], detail:{endpoint:'/x/{id}', tabs:[{id:'o', kind:'table', title:'O', contractVersion:'2'}]}}");
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(bad));
+		assertTrue(ex.getMessage().contains("sets contractVersion; remove it"), ex.getMessage());
+	}
+
 	@Test void unknownSearchType_throwsE32() {
 		var arg7 = src("t", "{dataUrl:'/x', columns:[{key:'a', searchType:'bogus'}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
@@ -167,6 +175,23 @@ class DatatablesCardType_Test extends TestBase {
 			"{dataUrl:'/x', columns:[{key:'a'}], bulk:{actions:[{id:'x',endpoint:'/x'}]}}");
 		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(arg9));
 		assertEquals("<@card id='t'> sets bulk without selection.", ex.getMessage());
+	}
+
+	@Test void rowIdFieldWithoutSelection_passesThrough() {
+		var arg = src("t", "{dataUrl:'/x', columns:[{key:'a'}], rowIdField:'a'}");
+		assertEquals("a", ((Map<?,?>)h.toFragment(arg).get("table")).get("rowIdField"));
+	}
+
+	@Test void rowIdFieldBlank_throws() {
+		var arg = src("t", "{dataUrl:'/x', columns:[{key:'a'}], rowIdField:' '}");
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(arg));
+		assertEquals("<@card id='t'> rowIdField must be a non-blank string.", ex.getMessage());
+	}
+
+	@Test void rowIdFieldDiffersFromSelection_throws() {
+		var arg = src("t", "{dataUrl:'/x', columns:[{key:'a'},{key:'b'}], rowIdField:'a', selection:{rowIdField:'b'}}");
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(arg));
+		assertEquals("<@card id='t'> rowIdField 'a' differs from selection rowIdField 'b'.", ex.getMessage());
 	}
 
 	@Test void aggregateEndpointWithFieldToken_throwsE35_noCardPrefix() {
@@ -331,6 +356,11 @@ class DatatablesCardType_Test extends TestBase {
 			() -> h.toFragment(arg26));
 		assertTrue(poll.getMessage().contains("pollIntervalMs"), poll.getMessage());
 		assertDoesNotThrow(() -> h.toFragment(src("t", "{rows:[], dataMode:'client', columns:[{key:'a'}]}")));
+	}
+
+	@Test void columnSearchHelpUrl_survivesInTable() {
+		var frag = h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], columnSearchHelpUrl:'/docs/search'}"));
+		assertEquals("/docs/search", ((JsonMap) frag.get("table")).get("columnSearchHelpUrl"));
 	}
 
 	@Test void pageKey_isHoistedToFragment() {

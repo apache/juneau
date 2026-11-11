@@ -82,6 +82,18 @@ class CardDirective_Test extends TestBase {
 		public View cardHtmlTemplate() { return FreemarkerView.of("admin/page-card-html-template.ftlh"); }
 		@RestGet(path="/card-html-sanitize")
 		public View cardHtmlSanitize() { return FreemarkerView.of("admin/page-card-html-sanitize.ftlh"); }
+		@RestGet(path="/card-switcher-style")
+		public View cardSwitcherStyle() { return FreemarkerView.of("admin/page-card-switcher-style.ftlh"); }
+		@RestGet(path="/card-switcher-style-bad")
+		public View cardSwitcherStyleBad() { return FreemarkerView.of("admin/page-card-switcher-style-bad.ftlh"); }
+		@RestGet(path="/card-chart-datatab")
+		public View cardChartDataTab() { return FreemarkerView.of("admin/page-card-chart-datatab.ftlh"); }
+		@RestGet(path="/card-chart-datatab-bad")
+		public View cardChartDataTabBad() { return FreemarkerView.of("admin/page-card-chart-datatab-bad.ftlh"); }
+		@RestGet(path="/card-chart-datatab-badvalue")
+		public View cardChartDataTabBadValue() { return FreemarkerView.of("admin/page-card-chart-datatab-badvalue.ftlh"); }
+		@RestGet(path="/card-switcher-style-badvalue")
+		public View cardSwitcherStyleBadValue() { return FreemarkerView.of("admin/page-card-switcher-style-badvalue.ftlh"); }
 		@RestGet(path="/card-html-sanitize-bad")
 		public View cardHtmlSanitizeBad() { return FreemarkerView.of("admin/page-card-html-sanitize-bad.ftlh"); }
 	}
@@ -257,5 +269,59 @@ class CardDirective_Test extends TestBase {
 			var body = rsp.getContent().asString();
 			assertTrue(body.contains("<@card id='bad'> sanitize= applies only to an html card with src=."), () -> body);
 		}
+	}
+
+	@Test void style_a01_switcherAttrAccepted() throws Exception {
+		assertEquals("slider", card(get("/card-switcher-style"), "sw").getString("style"));
+	}
+
+	@Test void style_a02_attrRejectedOnOtherTypes() throws Exception {
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/card-switcher-style-bad").run()) {
+			rsp.assertStatus(500);
+			var body = rsp.getContent().asString();
+			assertTrue(body.contains("style= applies only to type=\"switcher\"."), () -> body);
+		}
+	}
+
+	@Test void style_a03_javaAndFtlParity() throws Exception {
+		var java = SwitcherDef.create("sw").style(SwitcherDef.STYLE_SLIDER)
+			.view("a", "A", v -> v.section(ChartDef.line("c1").src("/x").x("d").series("n", "N").toCardSpec())).toCardSpec().toMap();
+		assertEquals("slider", java.get("style"));
+		assertEquals(java.get("style"), card(get("/card-switcher-style"), "sw").get("style"));
+	}
+
+	@Test void style_a04_badValueRejectedWithSharedMessage() throws Exception {
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/card-switcher-style-badvalue").run()) {
+			rsp.assertStatus(500);
+			var body = rsp.getContent().asString();
+			assertTrue(body.contains("SwitcherDef 'sw' style 'pills' must be one of tabs, slider."), () -> body);
+		}
+	}
+
+	@Test void dataTab_a04_attrAccepted() throws Exception {
+		assertEquals(true, card(get("/card-chart-datatab"), "c").get("dataTab"));
+	}
+
+	@Test void dataTab_a05_attrRejectedOnOtherTypes() throws Exception {
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/card-chart-datatab-bad").run()) {
+			rsp.assertStatus(500);
+			var body = rsp.getContent().asString();
+			assertTrue(body.contains("dataTab= applies only to type=\"chart\"."), () -> body);
+		}
+	}
+
+	@Test void dataTab_a06_nonBooleanRejected() throws Exception {
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/card-chart-datatab-badvalue").run()) {
+			rsp.assertStatus(500);
+		}
+	}
+
+	@Test void dataTab_a07_javaFtlParity() throws Exception {
+		var java = ChartDef.bar("c").src("/s").x("k").series("v", "V").dataTab().toCardSpec().toMap();
+		assertEquals(java.get("dataTab"), card(get("/card-chart-datatab"), "c").get("dataTab"));
 	}
 }

@@ -262,7 +262,7 @@ const CASES = [
 		expect(r.region === 1, 'one xterm inside the region: ' + r.region);
 		expect((await rows(page))[0] === 'hello', 'first row');
 	}],
-	// Copy, Load all and the input toggle are standard .jc-btn buttons; Search stays an input; Follow is a toggle label.
+	// Copy, Load all and the input toggle are standard .jc-btn buttons; Search stays an input; Follow is a pressed-state toggle button.
 	// This page has no chrome.css, so the :where() fallback in juneau-terminal.css draws their edge.
 	['b24_toolbarControlsUseTheStandardButtonKinds', async function (page) {
 		await open(page, { log: Buffer.from('hello\r\n') });
@@ -275,13 +275,14 @@ const CASES = [
 				search: q('input.juneau-term-search').classList.contains('jc-btn'),
 				followTag: q('.juneau-term-follow').tagName,
 				copyEdge: cs('.juneau-term-copy').borderTopStyle + ' ' + cs('.juneau-term-copy').borderTopWidth,
-				followDisplay: cs('.juneau-term-follow').display,
+				followPressed: q('.juneau-term-follow').getAttribute('aria-pressed'),
+				searchInput: q('input.juneau-term-search').classList.contains('jc-input'),
 				followEdge: cs('.juneau-term-follow').borderTopStyle + ' ' + cs('.juneau-term-follow').borderTopWidth
 			};
 		});
 		expect(r.copy && r.loadAll, 'Copy and Load all carry jc-btn: ' + JSON.stringify(r));
-		expect(!r.search, 'the Search input does not carry jc-btn');
-		expect(r.followTag === 'LABEL' && r.followDisplay.endsWith('flex') && r.followEdge === 'solid 1px', 'Follow is a toggle-styled label: ' + JSON.stringify(r));
+		expect(!r.search && r.searchInput, 'the Search input carries jc-input, not jc-btn');
+		expect(r.followTag === 'BUTTON' && r.followPressed === 'true' && r.followEdge === 'solid 1px', 'Follow is a toggle button: ' + JSON.stringify(r));
 		expect(r.copyEdge === 'solid 1px', 'the fallback edge without chrome.css: ' + r.copyEdge);
 	}],
 	// The bytes endpoint answers 404: a one-line muted panel, no red badge, no toolbar, no screen.
@@ -345,7 +346,7 @@ const CASES = [
 			return Array.from(document.querySelectorAll('.xterm-rows > div')).some(function (d) { return d.textContent.indexOf('line 007') >= 0; });
 		}, null, { timeout: 5000 });
 		const st = await page.evaluate(function () {
-			return { follow: document.querySelector('.juneau-term-follow input').checked, invalid: document.querySelector('.juneau-term-search').getAttribute('aria-invalid') };
+			return { follow: document.querySelector('.juneau-term-follow').getAttribute('aria-pressed') === 'true', invalid: document.querySelector('.juneau-term-search').getAttribute('aria-invalid') };
 		});
 		expect(!st.follow && st.invalid === 'false', 'search turns follow off: ' + JSON.stringify(st));
 		await page.fill('.juneau-term-search', 'no such text');
@@ -746,6 +747,37 @@ const CASES = [
 		});
 		r.tones.forEach(function (t) { expect(t.ratio >= 4.5, 'legible under dark: ' + JSON.stringify(t)); });
 		expect(r.screen === 'rgb(13, 15, 18)', 'screen follows --jc-term-bg: ' + r.screen);
+	}],
+	// Follow is a pressed-state toggle: a click flips aria-pressed.
+	['b27_followToggleButtonFlips', async function (page) {
+		await open(page, { log: Buffer.from('hello\r\n') });
+		const r = await page.evaluate(function () {
+			const f = document.querySelector('button.juneau-term-follow');
+			const before = f.getAttribute('aria-pressed');
+			f.click();
+			const off = f.getAttribute('aria-pressed');
+			f.click();
+			return { before: before, off: off, on: f.getAttribute('aria-pressed') };
+		});
+		expect(r.before === 'true' && r.off === 'false' && r.on === 'true', 'Follow toggles: ' + JSON.stringify(r));
+	}],
+	// The --jc-term-font-size token sets the starting font size.
+	['b28_fontSizeTokenOverride', async function (page) {
+		await open(page, { log: Buffer.from('hello\r\n') });
+		await page.evaluate(function () {
+			window.__cleanup();
+			document.documentElement.style.setProperty('--jc-term-font-size', '16px');
+			document.getElementById('host').innerHTML = '';
+			window.__terms = [];
+			const T = window.Terminal;
+			window.Terminal = function (o) { const x = new T(o); window.__terms.push(x); return x; };
+			window.__cleanup = window.JuneauTerminal.mount(document.getElementById('host'), { id: 't2', bytesUrl: '/t/bytes' });
+		});
+		await page.waitForFunction(function () { return window.__terms.length > 0; });
+		const size = await page.evaluate(function () { return window.__terms[0].options.fontSize; });
+		expect(size >= 8 && size <= 20, 'font size within the clamp: ' + size);
+		const start = await page.evaluate(function () { return window.JuneauTerminal.readBaseFont(document.getElementById('host')); });
+		expect(start === 16, 'readBaseFont reads the token: ' + start);
 	}]
 ];
 

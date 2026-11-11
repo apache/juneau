@@ -184,6 +184,16 @@ class RowDetail_Test extends TestBase {
 		assertEquals("pet", RowDetail.fromBean(String.class, id -> id).key("pet").key());
 	}
 
+	@Test void b07b_basePath_prefixesBeanEndpoint() {
+		var d = RowDetail.fromBean(String.class, id -> id).key("pet").basePath("/console/pets").section("A", "length");
+		assertEquals("/console/pets/row-detail/pet/{id}", d.toMap().get("endpoint"));
+	}
+
+	@Test void b07c_basePath_rejectsUnsafe() {
+		assertThrows(IllegalArgumentException.class, () -> RowDetail.fromBean(String.class, id -> id).basePath("https://evil.example"));
+		assertThrows(IllegalArgumentException.class, () -> RowDetail.fromBean(String.class, id -> id).basePath("/a/{id}"));
+	}
+
 	@Test void b08_cacheNone_emitted_defaultOmitted() {
 		assertEquals("none", RowDetail.inline().cache(DetailTab.Cache.NONE).section("A", "x").toMap().get("cache"));
 		assertFalse(RowDetail.inline().section("A", "x").toMap().containsKey("cache"));
@@ -239,6 +249,31 @@ class RowDetail_Test extends TestBase {
 	@Test void d02_detailWithoutRowIdField_failsAtBuild() {
 		var t = TableSpec.create("t").dataUrl("/t").columns(Column.create("label")).detail(RowDetail.inline());
 		assertThrows(IllegalStateException.class, t::toCardBody);
+	}
+
+	@Test void d02b_explicitRowIdField_resolvesWithoutSelection() {
+		var t = TableSpec.create("t").dataUrl("/t").columns(Column.create("label")).rowIdField("label").detail(RowDetail.inline()).toCardBody();
+		assertEquals("label", t.get("rowIdField"));
+		assertFalse(t.containsKey("selection"));
+		assertEquals(List.of("label"), fieldsOf(t));
+	}
+
+	@Test void d02c_rowIdFieldMatchingSelection_ok() {
+		var t = TableSpec.create("t").dataUrl("/t").columns(Column.create("label")).rowIdField("label")
+			.selection(SelectionDef.create("label")).detail(RowDetail.inline()).toCardBody();
+		assertEquals("label", t.get("rowIdField"));
+	}
+
+	@Test void d02d_rowIdFieldDiffersFromSelection_failsValidation() {
+		var t = TableSpec.create("t").dataUrl("/t").columns(Column.create("label"), Column.create("x")).rowIdField("label")
+			.selection(SelectionDef.create("x"));
+		assertThrows(IllegalStateException.class, t::validate);
+	}
+
+	@Test void d02e_selectionRowIdField_usedBeforeFallbacks() {
+		var t = TableSpec.create("t").dataUrl("/t").columns(Column.create("label")).selection(SelectionDef.create("label")).detail(RowDetail.inline()).toCardBody();
+		assertFalse(t.containsKey("rowIdField"));
+		assertEquals(List.of("label"), fieldsOf(t));
 	}
 
 	@Test void d03_defaultFieldSet_includesHiddenByDefaultColumns() {

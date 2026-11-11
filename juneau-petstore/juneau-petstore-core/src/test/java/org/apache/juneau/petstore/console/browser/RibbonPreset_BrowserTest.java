@@ -46,8 +46,14 @@ class RibbonPreset_BrowserTest extends TestBase {
 	}
 
 	private static Map<String,Object> page(String name, String path, String body) {
+		return page(name, path, body, null);
+	}
+
+	/** @param select A script that selects the switcher view holding the table, or {@code null} when it is on the page. */
+	private static Map<String,Object> page(String name, String path, String body, String select) {
+		var wait = Map.<String,Object>of("waitFor", "document.querySelector('#" + body + " tbody tr[data-juneau-row-id]')");
 		return Map.of("name", name, "path", path,
-			"actions", List.of(Map.of("waitFor", "document.querySelector('#" + body + " tbody tr[data-juneau-row-id]')")),
+			"actions", select == null ? List.of(wait) : List.of(Map.of("evaluate", select), wait),
 			"queries", Map.of(
 				"ids", ids(body),
 				"icons", icons(body),
@@ -90,7 +96,7 @@ class RibbonPreset_BrowserTest extends TestBase {
 			page("pets", "/console/pets", "pets"),
 			page("petsBuilder", "/console/pets?builder", "pets"),
 			page("store", "/console/store", "stats"),
-			page("groom", "/console/ops/jobs", "groom-runs"),
+			page("groom", "/console/ops/jobs", "groom-runs", select("jobs-sw", "groom")),
 			columnsCase("petsColumns", "/console/pets", "pets", "price", "Price (USD)"),
 			columnsCase("storeColumns", "/console/store", "stats", "status", "Status"),
 			geometry("pets", "/console/pets", "pets")));
@@ -110,11 +116,10 @@ class RibbonPreset_BrowserTest extends TestBase {
 		return String.valueOf(query(assertClean(report, name), key));
 	}
 
-	@Test void a01_petsSlotOrderHasNoCollapse() {
+	@Test void a01_petsSlotOrderCarriesCollapseBecauseRowsExpand() {
 		for (var n : new String[] {"pets", "petsBuilder"}) {
 			var ids = q(n, "ids");
-			assertFalse(ids.contains("collapse"), () -> n + ": " + ids);
-			var order = List.of("search", "add-pet", "status", "species", "copy", "csv", "excel", "pdf", "link", "columns", "reset", "refresh");
+			var order = List.of("search", "add-pet", "status", "species", "copy", "csv", "excel", "pdf", "link", "collapse", "columns", "reset", "refresh");
 			var last = -1;
 			for (var id : order) {
 				var i = Arrays.asList(ids.split(",")).indexOf(id);
@@ -168,7 +173,7 @@ class RibbonPreset_BrowserTest extends TestBase {
 
 	@Test void a08_hiddenItemsLeaveNoHandleAndPollingDotIsLabelled() {
 		var c = assertClean(report, "petsGeometry");
-		assertEquals("0", String.valueOf(query(c, "collapseAnywhere")));
+		assertEquals("1", String.valueOf(query(c, "collapseAnywhere"))); // the rows expand, so the collapse control stays
 		var stale = String.valueOf(query(c, "stale"));
 		assertTrue(stale.startsWith("img|"), stale);
 		assertFalse(stale.endsWith("|null"), stale);

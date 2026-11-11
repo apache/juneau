@@ -71,12 +71,15 @@ import org.apache.juneau.console.widgets.*;
 @SuppressWarnings({
 	"java:S110" // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
 })
-public class PetsRest extends PetstoreConsolePage {
+public class PetsRest extends PetstoreConsolePage implements RowDetailMixin {
 
 	private static final long serialVersionUID = 1L;
 
 	/** The P4 tabs, in nav order. */
 	private static final List<String> TABS = List.of("summary", "photo", "orders", "history");
+
+	private final RowDetail petDetail = RowDetails.pet(this::lookup);
+	private final RowDetail soldDetail = RowDetails.soldPet(this::lookup);
 
 	/**
 	 * The Pets page.
@@ -107,6 +110,49 @@ public class PetsRest extends PetstoreConsolePage {
 	@RestGet(path="/sold/rows")
 	public List<Pet> soldRows() {
 		return store().getPets().stream().filter(x -> x.getStatus() == PetStatus.SOLD).sorted(Comparator.comparingLong(Pet::getId)).toList();
+	}
+
+	@Override
+	public Collection<RowDetail> rowDetails() {
+		return List.of(petDetail, soldDetail);
+	}
+
+	private Pet lookup(String id) {
+		try {
+			return store().getPet(Long.parseLong(id));
+		} catch (@SuppressWarnings("unused") NumberFormatException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * The Orders tab of the pet row detail: one pet's orders, by id.
+	 *
+	 * @param petId The pet id.
+	 * @return The orders.
+	 * @throws NotFound If {@code petId} is missing or names no pet.
+	 */
+	@RestGet(path="/orders/rows")
+	public List<Order> scopedOrderRows(@Query("petId") Long petId) {
+		return orderRows(requireScope(petId));
+	}
+
+	/**
+	 * The History tab of the pet row detail: one pet's audit rows, oldest first.
+	 *
+	 * @param petId The pet id.
+	 * @return The audit rows.
+	 * @throws NotFound If {@code petId} is missing or names no pet.
+	 */
+	@RestGet(path="/history/rows")
+	public List<AuditEntry> scopedHistoryRows(@Query("petId") Long petId) {
+		return historyRows(requireScope(petId));
+	}
+
+	private long requireScope(Long petId) {
+		if (petId == null)
+			throw new NotFound("Missing pet");
+		return require(petId).getId();
 	}
 
 	/**

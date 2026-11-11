@@ -111,7 +111,7 @@ class PetstoreTreemap_BrowserTest extends TestBase {
 
 	/** The steps that wait for the treemap to draw and install the page helper. */
 	private static List<Map<String,Object>> open() {
-		return List.of(eval("window.JuneauConsole.cardApi('pets-sw').select('both')"), wait(DRAWN), eval(TM), wait(READY), eval(RECORD));
+		return List.of(eval(select("store-sw", "pets.treemap")), wait(DRAWN), eval(TM), wait(READY), eval(RECORD));
 	}
 
 	@SafeVarargs
@@ -213,7 +213,8 @@ class PetstoreTreemap_BrowserTest extends TestBase {
 			assertTrue(placed.stream().anyMatch(x -> p.getString("name").equals(x.get("name"))
 				&& p.getString("status").equals(x.get("status")) && p.getString("species").equals(x.get("species"))),
 				() -> "pet " + p.getString("name") + " is not under status " + p.getString("status") + " under species " + p.getString("species") + ": " + placed);
-		assertEquals(4, ((Number)query(c, "live")).intValue());
+		// Only the Pets view is built (views build on first selection): its species chart and the treemap section.
+		assertEquals(2, ((Number)query(c, "live")).intValue());
 	}
 
 	@Test void a02_clickPetTile_opensEditDialog_prefilledWithThatPet() {

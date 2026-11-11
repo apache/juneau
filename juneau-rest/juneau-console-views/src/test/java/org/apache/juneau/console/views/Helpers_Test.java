@@ -237,6 +237,10 @@ class Helpers_Test extends TestBase {
 		assertAllTrue(report(), "tabStrip_eagerFormHasOneTab", "tabStrip_eagerFormPaneVisible");
 	}
 
+	@Test void g01b_tabStrip_tabMode_wrapsTabsInScrollBox() {
+		assertAllTrue(report(), "tabStrip_scrollBoxWrapsTabs", "tabStrip_scrollBoxIsTablist");
+	}
+
 	@Test void g02_tabStrip_lazyTab_doesNotPopulateBeforeFirstActivation() {
 		assertAllTrue(report(), "tabStrip_lazyDoesNotRunBeforeActivation", "tabStrip_lazyRunsOnActivation");
 	}

@@ -168,6 +168,8 @@ public final class ChartCardType implements CardTypeHandler {
 			throw source.error("type='chart' maps must be a JSON object.");
 		if (body.containsKey("partialFrames") && ! (body.get("partialFrames") instanceof Boolean))
 			throw source.error("type='chart' partialFrames must be a boolean.");
+		if (body.containsKey("dataTab") && ! (body.get("dataTab") instanceof Boolean))
+			throw source.error("type='chart' dataTab must be a boolean.");
 		for (var k : List.of("group", "theme"))
 			if (body.containsKey(k) && ! (body.get(k) instanceof String))
 				throw source.error("type='chart' %s must be a string.", k);

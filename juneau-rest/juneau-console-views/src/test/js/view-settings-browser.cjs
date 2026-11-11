@@ -242,7 +242,7 @@ async function dragAndDetail(page) {
 	out.tabs = await page.evaluate(() => {
 		const sel = document.querySelector('.juneau-config-tab[aria-selected="true"]');
 		const un = document.querySelector('.juneau-config-tab[aria-selected="false"]');
-		return { selBg: getComputedStyle(sel).backgroundColor, unBg: getComputedStyle(un).backgroundColor,
+		return { selBar: getComputedStyle(sel).boxShadow, selBg: getComputedStyle(sel).backgroundColor, unBg: getComputedStyle(un).backgroundColor,
 			dlgBg: getComputedStyle(document.querySelector('.juneau-config-dialog')).backgroundColor,
 			wash: (function () { const p = document.createElement('div'); p.style.backgroundColor = 'var(--jc-accent-wash)'; document.querySelector('.juneau-config-dialog').appendChild(p); const c = getComputedStyle(p).backgroundColor; p.remove(); return c; })() };
 	});
@@ -305,7 +305,7 @@ async function capture(page, dir, name) {
 			const r = { tabs: await page.evaluate(() => {
 				const sel = document.querySelector('.juneau-config-tab[aria-selected="true"]');
 				const un = document.querySelector('.juneau-config-tab[aria-selected="false"]');
-				return { selBg: getComputedStyle(sel).backgroundColor, unBg: getComputedStyle(un).backgroundColor,
+				return { selBar: getComputedStyle(sel).boxShadow, selBg: getComputedStyle(sel).backgroundColor, unBg: getComputedStyle(un).backgroundColor,
 					dlgBg: getComputedStyle(document.querySelector('.juneau-config-dialog')).backgroundColor,
 			wash: (function () { const p = document.createElement('div'); p.style.backgroundColor = 'var(--jc-accent-wash)'; document.querySelector('.juneau-config-dialog').appendChild(p); const c = getComputedStyle(p).backgroundColor; p.remove(); return c; })() };
 			}) };

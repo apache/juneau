@@ -10,7 +10,11 @@
     "type": "value"
   },
   "yAxis": {
-    "type": "category"
+    "type": "category",
+    "axisLabel": {
+      "interval": 0,
+      "hideOverlap": false
+    }
   },
   "series": [
     {

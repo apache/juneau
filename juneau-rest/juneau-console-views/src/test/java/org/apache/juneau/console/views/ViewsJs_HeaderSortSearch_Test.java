@@ -115,18 +115,17 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 	}
 
 	// Commit semantics live in openColumnSearchPopover: help rendered from the VIEW_META operator
-	// list, a `$`-expression deferred to Enter/Apply (never previewed), a bare quick-filter previewed live only off
-	// the server dataMode branch, an out-of-set operator rejected, and Esc/click-away reverting the live preview.
-	@Test void a05b_searchPopover_helpDeferralRejectAndRevert() throws Exception {
+	// list, no live preview (Apply/Enter/Clear commit), an out-of-set operator rejected, and Esc/Cancel/click-away
+	// leaving the applied filter untouched.
+	@Test void a05b_searchPopover_helpNoPreviewAndReject() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fn = functionBody(body, "function openColumnSearchPopover(");
 		assertTrue(fn.contains("juneau-view-col-search-popover-help"), fn);   // operator help list
 		assertTrue(fn.contains("meta.operators"), fn);                         // help sourced from VIEW_META
 		assertTrue(fn.contains("evaluateColumnSearchDraft"), fn);              // classify draft (dollar/reject/incomplete)
-		assertTrue(fn.contains("if (!serverSide) applyValue"), fn);            // bare preview only on client tables
-		assertTrue(fn.contains("if (d.dollar)"), fn);                          // $-expression is NOT previewed
 		assertTrue(fn.contains("Not a valid search for this column."), fn);    // reject message
-		assertTrue(fn.contains("drawColumnExpr(ctx, setColumnExpr(ctx, col, current))"), fn); // revert to opened-with value on dismiss
+		assertFalse(fn.contains("if (!serverSide) applyValue"), fn);           // no live preview
+		assertFalse(fn.contains("drawColumnExpr(ctx, setColumnExpr(ctx, col, current))"), fn);   // nothing to revert
 	}
 
 	// The draft classifier gates commit timing: leading "$" => deferred; an unparseable expression OR one naming an

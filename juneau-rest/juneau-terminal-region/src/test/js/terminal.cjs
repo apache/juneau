@@ -219,6 +219,35 @@ test('f01_fontFitArithmeticAndClamp', function (t) {
 	expect(t.JT.fitFont(14, 0, 700) === 14 && t.JT.fitFont(14, 700, 0) === 14, 'an unmeasured panel keeps the size');
 });
 
+/** A host whose computed style serves the given --jc-term-font-size value. */
+function fontHost(value) {
+	const cs = { getPropertyValue: function (n) { return n === '--jc-term-font-size' && value !== undefined ? value : ''; } };
+	return { ownerDocument: { defaultView: { getComputedStyle: function () { return cs; } } } };
+}
+
+test('g01_readBaseFontDefault', function (t) {
+	expect(t.JT.readBaseFont(fontHost(undefined)) === 12.5, 'no token gives 12.5');
+	expect(t.JT.readBaseFont({}) === 12.5, 'a host without a window gives 12.5');
+});
+
+test('g02_readBaseFontToken', function (t) {
+	expect(t.JT.readBaseFont(fontHost(' 16px ')) === 16, 'trimmed px value');
+	expect(t.JT.readBaseFont(fontHost('13.5px')) === 13.5, 'fractional px value');
+});
+
+test('g03_readBaseFontInvalid', function (t) {
+	for (const bad of ['large', '', '0px', '-3px', '2em'])
+		expect(t.JT.readBaseFont(fontHost(bad)) === 12.5, JSON.stringify(bad) + ' falls back to 12.5');
+});
+
+test('g04_fitFontStillClampsForAnyReference', function (t) {
+	for (const base of [12.5, 16]) {
+		expect(t.JT.fitFont(base, 3000, 700) === 20, 'clamped to 20 from ' + base);
+		expect(t.JT.fitFont(base, 100, 700) === 8, 'clamped to 8 from ' + base);
+		expect(t.JT.fitFont(base, 0, 700) === base, 'unmeasured panel keeps ' + base);
+	}
+});
+
 test('f02_parseHashAndFormatSize', function (t) {
 	expect(t.JT.parseHash('#build-O3400', 'build') === 3400, 'offset');
 	expect(t.JT.parseHash('#build-O0', 'build') === 0, 'zero');
@@ -1444,7 +1473,8 @@ function fakeEl(tag) {
 		setAttribute: function (k, v) { e.attrs[k] = v; },
 		getAttribute: function (k) { return Object.hasOwn(e.attrs, k) ? e.attrs[k] : null; },
 		removeAttribute: function (k) { delete e.attrs[k]; },
-		addEventListener: function () {}, removeEventListener: function () {}, focus: function () {},
+		addEventListener: function (n, f) { (e.listeners[n] ??= []).push(f); }, removeEventListener: function () {}, focus: function () {},
+		listeners: {},
 		querySelector: function () { return null; },
 		getBoundingClientRect: function () { return { width: 0 }; }
 	};
@@ -1491,7 +1521,7 @@ async function mountThemed(t, tokens, terminalOpts) {
 	await settle();
 	return {
 		created: created, tokens: tokens, cleanup: cleanup,
-		fire: function (name) { (listeners[name] || []).slice().forEach(function (f) { f({ type: name }); }); },
+		host: host, fire: function (name) { (listeners[name] || []).slice().forEach(function (f) { f({ type: name }); }); },
 		count: function (name) { return (listeners[name] || []).length; }
 	};
 }
@@ -1532,6 +1562,54 @@ test('t05_listenerRemovedOnCleanup', async function (t) {
 	m.tokens['--jc-term-bg'] = '#123456';
 	m.fire('juneau:theme-changed');
 	expect(m.created.term.options.theme.background === '#000000', 'a disposed terminal is not touched');
+});
+
+/** Finds the first element under {@code e} whose class list contains {@code cls}. */
+function findByClass(e, cls) {
+	if ((' ' + e.className + ' ').includes(' ' + cls + ' '))
+		return e;
+	for (const c of e.children || []) {
+		const r = findByClass(c, cls);
+		if (r)
+			return r;
+	}
+	return null;
+}
+
+test('t06_mountUsesTokenAsStartFont', async function (t) {
+	const m = await mountThemed(t, { '--jc-term-font-size': '13px' });
+	expect(m.created.ctorOptions.fontSize === 13, 'initial fontSize: ' + m.created.ctorOptions.fontSize);
+	m.cleanup();
+	const d = await mountThemed(t, {});
+	expect(d.created.ctorOptions.fontSize === 12.5, 'default fontSize: ' + d.created.ctorOptions.fontSize);
+	d.cleanup();
+});
+
+test('t07_followIsAToggleButton', async function (t) {
+	const m = await mountThemed(t, {});
+	const f = findByClass(m.host, 'juneau-term-follow');
+	expect(f.tagName === 'button' && f.className === 'jc-btn juneau-term-follow' && f.type === 'button', 'button element: ' + f.tagName + ' ' + f.className);
+	expect(f.getAttribute('aria-pressed') === 'true', 'pressed initially');
+	m.cleanup();
+});
+
+test('t08_followToggles', async function (t) {
+	const m = await mountThemed(t, {});
+	const f = findByClass(m.host, 'juneau-term-follow');
+	const bottoms = m.created.term.bottoms;
+	f.listeners.click[0]();
+	expect(f.getAttribute('aria-pressed') === 'false', 'click turns it off');
+	f.listeners.click[0]();
+	expect(f.getAttribute('aria-pressed') === 'true', 'click turns it on again');
+	expect(m.created.term.bottoms === bottoms + 1, 'turning follow on scrolls to the bottom');
+	m.cleanup();
+});
+
+test('t09_searchAndCopyClasses', async function (t) {
+	const m = await mountThemed(t, {});
+	expect(findByClass(m.host, 'juneau-term-search').className === 'jc-input juneau-term-search', 'search classes');
+	expect(findByClass(m.host, 'juneau-term-copy').className === 'jc-btn juneau-term-copy', 'copy classes unchanged');
+	m.cleanup();
 });
 
 // @cases:end

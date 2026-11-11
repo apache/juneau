@@ -1188,6 +1188,30 @@ check('fromJSON_card_ids_required_E121', () => {
 	eq(page.cards.map(c => c.id), ['ok']);
 	eq(page.findings.map(f => f.code), ['E-JS-121']);
 });
+const SW = style => ({ id: 'sw', type: 'switcher', ...(style === undefined ? {} : { style }), views: [{ id: 'a', label: 'A', card: { id: 'c1', type: 'html', template: 't' } }] });
+check('switcherStyleSlider', () => {
+	const w = load({ shell: true, ribbon: true });
+	for (const st of [undefined, 'tabs', 'slider']) eq(w.M.fromJSON(PAGE({ cards: [SW(st)] })).findings.map(f => f.code), [], String(st));
+});
+check('switcherStyleBad', () => {
+	const w = load({ shell: true, ribbon: true });
+	const f = w.M.fromJSON(PAGE({ cards: [SW('pills')] })).findings;
+	eq(f.map(x => x.code), ['E-JS-121']);
+	ok(/style/.test(f[0].message), f[0].message);
+});
+check('switcherViewCardsAccepted', () => {
+	const w = load({ shell: true, ribbon: true });
+	const sw = { id: 'sw', type: 'switcher', views: [{ id: 'a', label: 'A', cards: [{ id: 'c1', type: 'html', template: 't' }, { id: 'c2', type: 'html', template: 't' }] }] };
+	eq(w.M.fromJSON(PAGE({ cards: [sw] })).findings.map(f => f.code), []);
+});
+check('switcherViewCardsAndCardRejected', () => {
+	const w = load({ shell: true, ribbon: true });
+	const c = id => ({ id, type: 'html', template: 't' });
+	const sw = { id: 'sw', type: 'switcher', views: [{ id: 'a', label: 'A', card: c('c1'), cards: [c('c2'), c('c3')] }] };
+	const f = w.M.fromJSON(PAGE({ cards: [sw] })).findings;
+	eq(f.map(x => x.code), ['E-JS-121']);
+	ok(/exactly one of card, sections or cards/.test(f[0].message), f[0].message);
+});
 check('fromJSON_ribbon_item_ids_required_E121', () => {
 	const w = load({ shell: true, ribbon: true });
 	const page = w.M.fromJSON(PAGE({ cards: [{ id: 'c1', type: 'datatables', table: { ribbon: [{ type: 'divider' }, { type: 'action' }, { type: 'refresh' }, { type: 'action', id: 'go' }] } }] }));

@@ -76,6 +76,9 @@ public final class SwitcherCardType implements CardTypeHandler {
 				if (! (v instanceof Map<?,?> vm))
 					continue;
 				add(out, vm.get("card"));
+				if (vm.get("cards") instanceof List<?> stacked)
+					for (var c : stacked)
+						add(out, c);
 				if (vm.get("sections") instanceof List<?> secs)
 					for (var s : secs)
 						if (s instanceof Map<?,?> sm)

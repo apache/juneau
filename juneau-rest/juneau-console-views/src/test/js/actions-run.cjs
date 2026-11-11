@@ -80,7 +80,7 @@ const POST = { id: 'ack', label: 'Acknowledge', endpoint: '/x/{id}/ack', method:
 const ROW = { id: 'INC-7', region: 'east' };
 
 function dialogPayload(extra) {
-	return { contractVersion: '2', title: 'Step', form: { contractVersion: '2', fields: [{ name: 'note', type: 'text', label: 'Note' }] }, ...extra || {} };
+	return { contractVersion: '3', title: 'Step', form: { contractVersion: '3', fields: [{ name: 'note', type: 'text', label: 'Note' }] }, ...extra || {} };
 }
 const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.juneau-view-dialog-confirm');
 
@@ -365,7 +365,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		const DLG = { id: 'edit', label: 'Edit', endpoint: '/x/edit', method: 'POST', present: 'dialog', form: FORM_URL };
 		const OTHER = { id: 'other', label: 'Other', endpoint: '/x/other', method: 'POST', present: 'dialog', form: FORM_URL };
 		const respond = (url, method) => method === 'GET'
-			? Promise.resolve(jsonResponse(dialogPayload({ form: { contractVersion: '2', fields: [{ name: 'go', type: 'action', actionId: 'other', label: 'Go' }] } })))
+			? Promise.resolve(jsonResponse(dialogPayload({ form: { contractVersion: '3', fields: [{ name: 'go', type: 'action', actionId: 'other', label: 'Go' }] } })))
 			: Promise.resolve(jsonResponse({ outcome: 'success' }));
 		const s = setup({ respond: respond });
 		s.NS.actions.run(DLG, { host: s.host, row: ROW, catalog: [OTHER] });
@@ -418,7 +418,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		const A = { id: 'dup', label: 'A', endpoint: '/x/a', method: 'POST', present: 'dialog', form: '/x/a-form' };
 		const B = { id: 'dup', label: 'B', endpoint: '/x/b', method: 'POST', present: 'dialog', form: '/x/b-form' };
 		const respond = (url, method) => {
-			if (method === 'GET' && url === FORM_URL) return Promise.resolve(jsonResponse(dialogPayload({ form: { contractVersion: '2', fields: [{ name: 'go', type: 'action', actionId: 'dup', label: 'Go' }] } })));
+			if (method === 'GET' && url === FORM_URL) return Promise.resolve(jsonResponse(dialogPayload({ form: { contractVersion: '3', fields: [{ name: 'go', type: 'action', actionId: 'dup', label: 'Go' }] } })));
 			if (method === 'GET') return Promise.resolve(jsonResponse(dialogPayload()));
 			return Promise.resolve(jsonResponse({ outcome: 'success' }));
 		};
@@ -569,8 +569,8 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		const STACK = { id: 'edit', label: 'Edit', endpoint: '/x/edit', method: 'POST', present: 'dialog', form: '/x/stack-form' };
 		const OTHER = { id: 'other', label: 'Other', endpoint: '/x/other', method: 'POST', present: 'dialog', form: '/x/other-form' };
 		const stackResponder = (deep) => (url, method) => {
-			if (method === 'GET' && url === '/x/stack-form') return Promise.resolve(jsonResponse(dialogPayload({ form: { contractVersion: '2', fields: [BTN] } })));
-			if (method === 'GET' && url === '/x/other-form') return Promise.resolve(jsonResponse(dialogPayload(deep ? { form: { contractVersion: '2', fields: [BTN] } } : {})));
+			if (method === 'GET' && url === '/x/stack-form') return Promise.resolve(jsonResponse(dialogPayload({ form: { contractVersion: '3', fields: [BTN] } })));
+			if (method === 'GET' && url === '/x/other-form') return Promise.resolve(jsonResponse(dialogPayload(deep ? { form: { contractVersion: '3', fields: [BTN] } } : {})));
 			if (method === 'GET') return Promise.resolve(jsonResponse(dialogPayload()));
 			return Promise.resolve(jsonResponse({ outcome: 'success', message: 'saved' }));
 		};

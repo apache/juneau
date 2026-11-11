@@ -128,7 +128,7 @@ function popHasClass(ctx, cls) { return (popEl(ctx).className || '').indexOf(cls
 	const col = fakeCol(0, headerCell('Status'));
 	I.openColumnSearchPopover(makeIcon(), col, ctx, env.el('table'));
 	// The shim has no descendant selectors, so read the code/span children off each help row directly.
-	const rows = popEl(ctx).querySelectorAll('.juneau-view-col-search-popover-help-op');
+	const rows = popEl(ctx).querySelector('.juneau-view-col-search-popover-help').querySelectorAll('.juneau-view-col-search-popover-help-op');
 	out.helpOps = rows.map(function (r) { const c = r.querySelector('code'); return c ? c.textContent : null; });
 	out.helpTexts = rows.map(function (r) { const s = r.querySelector('span'); return s ? s.textContent : null; });
 	I.closeColumnSearchPopover(ctx);
@@ -145,7 +145,7 @@ function popHasClass(ctx, cls) { return (popEl(ctx).className || '').indexOf(cls
 	];
 	const col = fakeCol(0, headerCell('Status'));
 	I.openColumnSearchPopover(makeIcon(), col, ctx, env.el('table'));
-	const rows = popEl(ctx).querySelectorAll('.juneau-view-col-search-popover-help-op');
+	const rows = popEl(ctx).querySelector('.juneau-view-col-search-popover-help').querySelectorAll('.juneau-view-col-search-popover-help-op');
 	out.fallbackOps = rows.map(function (r) { const c = r.querySelector('code'); return c ? c.textContent : null; });
 	out.fallbackTexts = rows.map(function (r) { const s = r.querySelector('span'); return s ? s.textContent : null; });
 	I.closeColumnSearchPopover(ctx);
@@ -195,15 +195,17 @@ function popHasClass(ctx, cls) { return (popEl(ctx).className || '').indexOf(cls
 	I.closeColumnSearchPopover(ctx);
 })();
 
-// --- Scenario: a bare quick-filter previews LIVE on a client table --------------------------------------------
+// --- Scenario: a bare quick-filter does not preview on a client table; Enter commits it --------------------------------------------
 (function bareClient() {
 	const ctx = makeCtx('client');
 	const col = fakeCol(0, headerCell('Status'));
 	I.openColumnSearchPopover(makeIcon(), col, ctx, env.el('table'));
-	type(popInput(ctx), 'abc');
-	out.bareClientInputApplied = col.appliedValue();     // expect 'abc' - live
-	out.bareClientInputDraws = col.drawCount();          // expect >= 1
-	I.closeColumnSearchPopover(ctx);
+	const input = popInput(ctx);
+	type(input, 'abc');
+	out.bareClientInputApplied = col.appliedValue();     // expect '' - typing never filters
+	out.bareClientInputDraws = col.drawCount();          // expect 0
+	pressEnter(input);
+	out.bareClientCommitApplied = col.appliedValue();    // expect 'abc' - committed on Enter
 })();
 
 // --- Scenario: a bare quick-filter is DEFERRED on a server table (applied only on Enter) ----------------------
@@ -262,14 +264,14 @@ function wrappedTable() {
 	return { wrapper: wrapper, table: table };
 }
 
-// --- Scenario: Esc reverts a live preview back to the value the popover opened with, and announces it ---------
+// --- Scenario: Esc leaves the filter as it was and announces it ---------
 (function revert() {
 	const ctx = makeCtx('client');
 	const col = fakeCol(0, headerCell('Status'));
 	const w = wrappedTable();
 	I.openColumnSearchPopover(makeIcon(), col, ctx, w.table);
 	type(popInput(ctx), 'abc');
-	out.revertPreApplied = col.appliedValue();           // 'abc' live
+	out.revertPreApplied = col.appliedValue();           // '' - typing does not filter
 	env.dispatchDocument('keydown', { key: 'Escape' });
 	out.revertPostApplied = col.appliedValue();          // expect '' - reverted
 	const announcer = w.wrapper.nextSibling;
@@ -355,11 +357,13 @@ function wrappedTable() {
 	};
 	I.openColumnSearchPopover(makeIcon(), col, ctx, env.el('table'));
 	type(popInput(ctx), 'abc');
-	out.dslLiveNative = col.appliedValue();              // '' - the bare preview went to the predicate
-	out.dslLiveFixedNames = Object.keys(fixed);          // ['juneau-dsl']
-	out.dslLiveStore = I.getColumnExpr(ctx, col);        // 'abc'
-	out.dslLiveDraws = fixedDraws;                       // >= 1
+	out.dslLiveNative = col.appliedValue();              // '' - typing does not apply
+	out.dslLiveStore = I.getColumnExpr(ctx, col);        // '' - nothing committed yet
+	out.dslLiveDraws = fixedDraws;                       // 0
 	pressEnter(popInput(ctx));
+	out.dslLiveFixedNames = Object.keys(fixed);          // ['juneau-dsl'] once committed
+	out.dslEnterStore = I.getColumnExpr(ctx, col);       // 'abc'
+	out.dslEnterDraws = fixedDraws;                      // 1
 	I.openColumnSearchPopover(makeIcon(), col, ctx, env.el('table'));
 	out.dslReopenValue = popInput(ctx).value;            // 'abc' - the popover opens on the store's value
 	type(popInput(ctx), '$eq(OPEN)');
@@ -369,6 +373,175 @@ function wrappedTable() {
 	out.dslPredicateExact = !!fn && fn('OPEN', { status: 'OPEN' }) === true;
 	out.dslPredicateCaseSensitive = !!fn && fn('open', { status: 'open' }) === false;
 	out.dslCommitNative = col.appliedValue();
+})();
+
+// ===== footer, type line, instructions, examples, "?" =========================================================
+function ctxWith(type, operatorNames, extra) {
+	const ctx = makeCtx('client');
+	ctx.viewDef.columns[0].search = {
+		type: type,
+		operators: operatorNames.map(function (n) { return { name: n, help: 'Help for ' + n + '.', minArgs: 1, maxArgs: 1, combinator: false, custom: false }; }),
+		bareHelp: 'Bare help.'
+	};
+	if (extra) Object.assign(ctx.viewDef, extra);
+	return ctx;
+}
+function suffix(node) {
+	const m = /juneau-view-col-search-popover(-[a-z]+)?/.exec(node.className || '');
+	return node.tagName === 'INPUT' ? 'input' : (m && m[1] ? m[1].slice(1) : node.tagName);
+}
+function focusables(ctx) { return popEl(ctx).querySelectorAll('input,button,a'); }
+function clickOn(ctx, cls) {
+	popEl(ctx).querySelector('.juneau-view-col-search-popover-' + cls).dispatch('click', { preventDefault: function () { /* no-op */ }, stopPropagation: function () { /* no-op */ } });
+}
+
+(function footer() {
+	const ctx = ctxWith('text', ['$eq', '$or']);
+	I.openColumnSearchPopover(makeIcon(), fakeCol(0, headerCell('Status')), ctx, env.el('table'));
+	const buttons = popEl(ctx).querySelectorAll('button');
+	out.footerOrder = buttons.map(suffix);
+	out.footerApplyClass = buttons[0].className;
+	out.footerCancelHasJcBtn = (buttons[1].className || '').indexOf('jc-btn') >= 0;
+	out.footerClearHasJcBtn = (buttons[2].className || '').indexOf('jc-btn') >= 0;
+	out.footerMoreAria = popEl(ctx).querySelector('.juneau-view-col-search-popover-more').getAttribute('aria-expanded');
+	out.footerInFooter = popEl(ctx).querySelector('.juneau-view-col-search-popover-footer').querySelectorAll('button').length === 4;
+	out.tabOrder = focusables(ctx).map(suffix);
+	I.closeColumnSearchPopover(ctx);
+})();
+
+(function typeLine() {
+	const ctx = ctxWith('text', ['$eq']);
+	I.openColumnSearchPopover(makeIcon(), fakeCol(0, headerCell('Status')), ctx, env.el('table'));
+	out.typeLineText = popEl(ctx).querySelector('.juneau-view-col-search-popover-type').textContent;
+	I.closeColumnSearchPopover(ctx);
+	const ctx2 = makeCtx('client');
+	ctx2.viewDef.columns[0].search = null;
+	I.openColumnSearchPopover(makeIcon(), fakeCol(0, headerCell('Status')), ctx2, env.el('table'));
+	out.typeLineAbsent = popEl(ctx2).querySelector('.juneau-view-col-search-popover-type') == null;
+	I.closeColumnSearchPopover(ctx2);
+})();
+
+(function instructions() {
+	function examplesFor(type, ops) {
+		const ctx = ctxWith(type, ops);
+		I.openColumnSearchPopover(makeIcon(), fakeCol(0, headerCell('Status')), ctx, env.el('table'));
+		const ex = popEl(ctx).querySelector('.juneau-view-col-search-popover-examples');
+		const res = ex ? ex.childNodes.map(function (c) { return c.textContent; }) : null;
+		I.closeColumnSearchPopover(ctx);
+		return res;
+	}
+	const ctx = ctxWith('text', ['$eq', '$or']);
+	I.openColumnSearchPopover(makeIcon(), fakeCol(0, headerCell('Status')), ctx, env.el('table'));
+	const ins = popEl(ctx).querySelector('.juneau-view-col-search-popover-instructions');
+	out.instructionsHasBare = ins.querySelector('.juneau-view-col-search-popover-barehelp').textContent === 'Bare help.';
+	out.instructionsOps = ins.querySelector('.juneau-view-col-search-popover-help').querySelectorAll('.juneau-view-col-search-popover-help-op')
+		.map(function (r) { return r.querySelector('code').textContent; });
+	I.closeColumnSearchPopover(ctx);
+	out.examplesText = examplesFor('text', ['$eq', '$or']);
+	out.examplesNumeric = examplesFor('numeric', ['$between', '$and', '$gt', '$lt']);
+	out.examplesFilteredByOperators = examplesFor('numeric', ['$gt']);                 // no example fully supported
+	out.examplesBareAlwaysShown = examplesFor('text', ['$eq']);                        // 'err' only
+	out.examplesUncatalogued = examplesFor('bogus', ['$eq']);
+})();
+
+(function noLivePreviewAndCommit() {
+	const ctx = makeCtx('client');
+	const icon = makeIcon();
+	env.document.body.appendChild(icon);
+	const col = fakeCol(0, headerCell('Status'));
+	const w = wrappedTable();
+	I.openColumnSearchPopover(icon, col, ctx, w.table);
+	type(popInput(ctx), 'abc');
+	out.noLivePreviewApplied = col.appliedValue();
+	out.noLivePreviewDraws = col.drawCount();
+	clickOn(ctx, 'apply');
+	out.applyApplied = col.appliedValue();
+	out.applyClosed = ctx._colSearchPopover == null;
+	out.applyFocusReturned = env.getActive() === icon;
+	out.applyNoAnnounce = !w.wrapper.nextSibling || w.wrapper.nextSibling.textContent === '';
+})();
+
+(function cancelAndEsc() {
+	const ctx = makeCtx('client');
+	const col = fakeCol(0, headerCell('Status'));
+	col.search('kept');
+	const w = wrappedTable();
+	I.openColumnSearchPopover(makeIcon(), col, ctx, w.table);
+	type(popInput(ctx), 'abc');
+	clickOn(ctx, 'cancel');
+	out.cancelApplied = col.appliedValue();
+	out.cancelClosed = ctx._colSearchPopover == null;
+	out.cancelAnnounced = w.wrapper.nextSibling?.textContent === "Search for 'Status' not applied.";
+	const ctx2 = makeCtx('client');
+	const col2 = fakeCol(0, headerCell('Status'));
+	col2.search('kept');
+	I.openColumnSearchPopover(makeIcon(), col2, ctx2, wrappedTable().table);
+	type(popInput(ctx2), 'abc');
+	env.dispatchDocument('keydown', { key: 'Escape' });
+	out.escApplied = col2.appliedValue();
+	out.escClosed = ctx2._colSearchPopover == null;
+})();
+
+(function clearRemoves() {
+	const ctx = makeCtx('client');
+	const icon = makeIcon();
+	icon.classList.add('is-active');
+	const col = fakeCol(0, headerCell('Status'));
+	col.search('x');
+	I.openColumnSearchPopover(icon, col, ctx, env.el('table'));
+	clickOn(ctx, 'clear');
+	out.clearApplied = col.appliedValue();
+	out.clearClosed = ctx._colSearchPopover == null;
+	out.clearIconInactive = (icon.className || '').indexOf('is-active') < 0;
+})();
+
+(function incompleteStatusNoApply() {
+	const ctx = makeCtx('client');
+	const col = fakeCol(0, headerCell('Status'));
+	I.openColumnSearchPopover(makeIcon(), col, ctx, env.el('table'));
+	type(popInput(ctx), '$eq(');
+	out.statusIncompleteWhileTyping = popHasClass(ctx, 'is-incomplete');
+	out.statusIncompleteApplied = col.appliedValue();
+	clickOn(ctx, 'apply');
+	out.statusIncompleteStillOpen = ctx._colSearchPopover != null;
+	out.statusIncompleteApplyBlocked = col.appliedValue() === '';
+	I.closeColumnSearchPopover(ctx);
+})();
+
+(function moreToggles() {
+	const ctx = ctxWith('text', ['$eq', '$in']);
+	I.openColumnSearchPopover(makeIcon(), fakeCol(0, headerCell('Status')), ctx, env.el('table'));
+	const list = popEl(ctx).querySelector('.juneau-view-col-search-popover-more-list');
+	out.moreTag = popEl(ctx).querySelector('.juneau-view-col-search-popover-more').tagName;
+	out.moreInitiallyHidden = list.hidden === true;
+	clickOn(ctx, 'more');
+	out.moreExpandedAria = popEl(ctx).querySelector('.juneau-view-col-search-popover-more').getAttribute('aria-expanded');
+	out.moreExpandedVisible = list.hidden === false;
+	out.moreRows = list.querySelectorAll('.juneau-view-col-search-popover-help-op').map(function (r) { return r.querySelector('code').textContent; });
+	clickOn(ctx, 'more');
+	out.moreCollapsedAria = popEl(ctx).querySelector('.juneau-view-col-search-popover-more').getAttribute('aria-expanded');
+	out.moreCollapsedHidden = list.hidden === true;
+	I.closeColumnSearchPopover(ctx);
+})();
+
+(function moreLinks() {
+	function open(url) {
+		const ctx = ctxWith('text', ['$eq'], { columnSearchHelpUrl: url });
+		I.openColumnSearchPopover(makeIcon(), fakeCol(0, headerCell('Status')), ctx, env.el('table'));
+		const more = popEl(ctx).querySelector('.juneau-view-col-search-popover-more');
+		const res = { tag: more.tagName, href: more.getAttribute('href'), target: more.getAttribute('target'), rel: more.getAttribute('rel') };
+		I.closeColumnSearchPopover(ctx);
+		return res;
+	}
+	out.moreLinkAbsolute = open('https://example.com/search');
+	out.moreLinkRootRelative = open('/docs/search');
+	out.moreLinkUnsafe = open('javascript:alert(1)');
+	out.moreLinkProtocolRelative = open('//evil.example/x');
+	out.moreLinkNone = open(undefined);
+})();
+
+(function viewKeys() {
+	out.viewKeysHasHelpUrl = (NS.card.liftCatalog('t', { dataUrl: '/d', columns: [{ key: 'a', label: 'A' }], columnSearchHelpUrl: '/docs/search' }).view || {}).columnSearchHelpUrl;
 })();
 
 process.stdout.write(JSON.stringify(out));

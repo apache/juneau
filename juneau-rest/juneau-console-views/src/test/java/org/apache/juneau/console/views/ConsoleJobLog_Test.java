@@ -66,7 +66,8 @@ class ConsoleJobLog_Test extends TestBase {
 		assertEquals("log", r.get("outputRole"));
 		assertEquals("polite", r.get("ariaLive"));
 		assertEquals("0", r.get("tabindex"));
-		assertEquals("320px", r.get("height"));
+		assertEquals("", r.get("height"));
+		assertEquals("jc-btn jc-btn-primary jc-joblog-submit", r.get("submitClass"));
 		assertEquals(List.of("cancel", "destroy", "job", "phase", "refresh", "render"), r.get("api"));
 		assertEquals("1", r.get("version"));
 		var s = (Map<?,?>)r.get("state");
@@ -82,8 +83,17 @@ class ConsoleJobLog_Test extends TestBase {
 	@Test void a02_defaults() {
 		var r = part("defaults");
 		assertEquals("Run", r.get("submitText"));
-		assertEquals("240px", r.get("height"));
+		assertEquals("", r.get("height"));
 		assertEquals(0, ((Number)r.get("inputs")).intValue());
+	}
+
+	@Test void a02b_outputStartsCollapsedAndGetsItsHeightWhenTheRunStarts() {
+		var r = part("collapse");
+		assertEquals("", r.get("atMount"));
+		assertEquals("320px", r.get("atRun"));
+		assertEquals("320px", r.get("afterLine"));
+		assertEquals("", r.get("defAtMount"));
+		assertEquals("240px", r.get("defAtRun"));
 	}
 
 	@Test void a03_submitStreamSuccess() {

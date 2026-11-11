@@ -48,6 +48,7 @@ public final class ChangesPageBuilders {
 		return PageSpec.create().tab("pets/changes").toolkit("views", "datatables-buttons")
 			.table(TableSpec.create("changes").rowType("PendingChange").dataMode(DataMode.SERVER).dataUrl("/console/pets/changes/query")
 				.defaultOrder("id", Sort.DESC)
+				.detail(RowDetails.change())
 				.columns(
 					Column.create("id").label("Change"),
 					Column.create("summary").label("Change summary"),

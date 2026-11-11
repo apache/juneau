@@ -43,7 +43,7 @@ class PageContractSchema_Test extends TestBase {
 	@ParameterizedTest
 	@ValueSource(strings = {"valid-example.json", "valid-minimal.json", "valid-deep.json",
 		"valid-terminal-view.json", "valid-terminal-view-nopoll.json", "valid-terminal.json",
-		"valid-datatables-table.json", "valid-datatables-table-full.json", "valid-datatables-rows.json",
+		"valid-datatables-table.json", "valid-datatables-table-full.json", "valid-datatables-table-rowidfield.json", "valid-datatables-rows.json",
 		"valid-datatables-src.json", "valid-badge.json", "valid-badge-refreshes-allow-missing.json",
 		"valid-chart-src.json", "valid-chart-data.json", "valid-job-log.json",
 		"valid-html-src-sanitize.json", "valid-chart-bare.json", "valid-chart-option.json", "valid-chart-helper.json", "valid-chart-action-visiblewhen.json",
@@ -189,5 +189,14 @@ class PageContractSchema_Test extends TestBase {
 	@Test void a05_c2_schemaIdBumpedTo1_1() throws Exception {
 		var id = JsonMap.ofString(PageContractSchema.get().schemaJson()).getString("$id");
 		assertTrue(id.endsWith("1.1/juneau-page.schema.json") || id.endsWith("1.1"), () -> "expected $id to carry '1.1'; got '" + id + "'");
+	}
+
+	@Test void columnSearchHelpUrl_a01() throws Exception {
+		var base = fixture("valid-datatables-table.json");
+		var ok = base.replace("\"dataUrl\"", "\"columnSearchHelpUrl\":\"https://example.com/search\",\"dataUrl\"");
+		assertNotEquals(base, ok);
+		assertEquals(List.of(), PageContractSchema.get().validate(ok));
+		var bad = base.replace("\"dataUrl\"", "\"columnSearchHelpUrl\":5,\"dataUrl\"");
+		assertFalse(PageContractSchema.get().validate(bad).isEmpty());
 	}
 }

@@ -57,7 +57,7 @@
 	const DEFAULT_EMPTY_MESSAGE = "No terminal output.";
 	const DEFAULT_TAIL_BYTES = 2 * 1024 * 1024;
 	const SLOW_LOAD_BYTES = 20 * 1024 * 1024;
-	const BASE_FONT = 14;
+	const DEFAULT_FONT = 12.5;
 	const MIN_FONT = 8;
 	const MAX_FONT = 20;
 	const MAX_EVENT_PAGES = 100;
@@ -105,6 +105,16 @@
 			throw notFoundError();
 		if (!res.ok)
 			throw statusError(res.status);
+	}
+
+	/** The preferred font size (px) from the {@code --jc-term-font-size} token on {@code host}; {@code DEFAULT_FONT} when it is missing or not a positive px value. */
+	function readBaseFont(host) {
+		const win = host?.ownerDocument?.defaultView;
+		const cs = win && typeof win.getComputedStyle === "function" ? win.getComputedStyle(host) : null;
+		const raw = cs ? String(cs.getPropertyValue("--jc-term-font-size") || "").trim() : "";
+		const m = /^(\d+(?:\.\d+)?)px$/.exec(raw);
+		const px = m ? Number.parseFloat(m[1]) : Number.NaN;
+		return px > 0 ? px : DEFAULT_FONT;
 	}
 
 	/** The font size that makes a screen measured at {@code current} px fill the panel, clamped to 8-20. */
@@ -1084,18 +1094,15 @@
 		root.setAttribute("role", "region");
 		root.setAttribute("aria-label", isStr(opts.title) && opts.title ? opts.title : "Terminal");
 		const bar = el(doc, "div", "juneau-term-bar");
-		const search = el(doc, "input", "juneau-term-search");
+		const search = el(doc, "input", "jc-input juneau-term-search");
 		search.type = "search";
 		search.placeholder = "Search";
 		search.setAttribute("aria-label", "Search the terminal output");
 		const copy = el(doc, "button", "jc-btn juneau-term-copy", "Copy");
 		copy.type = "button";
-		const followLabel = el(doc, "label", "juneau-term-follow");
-		const follow = el(doc, "input");
-		follow.type = "checkbox";
-		follow.checked = true;
-		followLabel.appendChild(follow);
-		followLabel.appendChild(doc.createTextNode(" Follow"));
+		const follow = el(doc, "button", "jc-btn juneau-term-follow", "Follow");
+		follow.type = "button";
+		follow.setAttribute("aria-pressed", "true");
 		const reconnecting = el(doc, "span", "juneau-term-chip", "Reconnecting…");
 		reconnecting.hidden = true;
 		const badge = el(doc, "span", "juneau-term-badge");
@@ -1108,9 +1115,9 @@
 			inputChip = el(doc, "span", "juneau-term-chip juneau-term-chip--input");
 			inputChip.setAttribute("role", "status");
 			inputChip.hidden = true;
-			bar.append(search, copy, followLabel, reconnecting, toggle, inputChip, badge);
+			bar.append(search, copy, follow, reconnecting, toggle, inputChip, badge);
 		} else {
-			bar.append(search, copy, followLabel, reconnecting, badge);
+			bar.append(search, copy, follow, reconnecting, badge);
 		}
 		if (opts.bytesUrl.endsWith("/bytes")) {
 			const raw = el(doc, "a", "juneau-term-raw", "Raw");
@@ -1160,7 +1167,7 @@
 			badge.textContent = st.badge;
 			badge.className = "juneau-term-badge juneau-term-" + st.kind;
 			reconnecting.hidden = !st.reconnecting;
-			follow.checked = st.follow;
+			follow.setAttribute("aria-pressed", String(st.follow));
 			banner.hidden = st.empty || !st.banner;
 			bar.hidden = st.empty;
 			screen.hidden = st.empty;
@@ -1221,7 +1228,7 @@
 			open: function (cols, rows) {
 				term = new win.Terminal(xtermOptions({
 					cols: cols, rows: rows, scrollback: SCROLLBACK, disableStdin: !armed, allowProposedApi: false,
-					fontSize: BASE_FONT, cursorBlink: false, linkHandler: linkHandler, theme: termTheme(doc)
+					fontSize: readBaseFont(host), cursorBlink: false, linkHandler: linkHandler, theme: termTheme(doc)
 				}, opts.terminal));
 				if (input) {
 					term.onData(function (d) { input.onData(d); });
@@ -1268,7 +1275,11 @@
 			if (term?.hasSelection() && win.navigator.clipboard)
 				win.navigator.clipboard.writeText(term.getSelection()).catch(function () {});
 		});
-		follow.addEventListener("change", function () { engine.setFollow(follow.checked); });
+		follow.addEventListener("click", function () {
+			const on = follow.getAttribute("aria-pressed") !== "true";
+			follow.setAttribute("aria-pressed", String(on));
+			engine.setFollow(on);
+		});
 		loadAll.addEventListener("click", function () { engine.loadAll(); });
 
 		function onHash() {
@@ -1412,7 +1423,7 @@
 	}
 
 	window.JuneauTerminal = Object.freeze({
-		mount: mount, createEngine: createEngine, createInput: createInput, linkFor: linkFor, nudgeLinkFor: nudgeLinkFor, fitFont: fitFont,
+		mount: mount, createEngine: createEngine, createInput: createInput, linkFor: linkFor, nudgeLinkFor: nudgeLinkFor, fitFont: fitFont, readBaseFont: readBaseFont,
 		findNext: findNext, parseHash: parseHash, xtermOptions: xtermOptions,
 		formatSize: formatSize, linkHandlerFor: linkHandlerFor, handle: handle
 	});

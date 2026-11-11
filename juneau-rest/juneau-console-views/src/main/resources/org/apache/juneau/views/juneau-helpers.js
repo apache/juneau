@@ -1053,9 +1053,18 @@
 
 		const strip = document.createElement("div");
 		strip.className = "juneau-view-ribbon-group juneau-view-helper-tabstrip";
-		strip.setAttribute("role", "tablist");
 		strip.dataset.juneauStripMode = mode;
-		if (opts.ariaLabel) strip.setAttribute("aria-label", String(opts.ariaLabel));
+		// In tab mode the buttons sit in an inner scroll box so the strip itself never clips the selected tab's
+		// one-pixel overlap onto the panel; the box is then the tablist.  Ribbon mode keeps the strip as the tablist.
+		let list = strip;
+		if (mode === "tab") {
+			list = document.createElement("div");
+			list.className = "juneau-view-tabs-scroll";
+			strip.setAttribute("role", "presentation");
+			strip.appendChild(list);
+		}
+		list.setAttribute("role", "tablist");
+		if (opts.ariaLabel) list.setAttribute("aria-label", String(opts.ariaLabel));
 
 		const paneContainer = document.createElement("div");
 		paneContainer.className = "juneau-view-helper-tabstrip-panes";
@@ -1113,7 +1122,7 @@
 			} else if (opts.controls) {
 				btn.setAttribute("aria-controls", String(opts.controls));
 			}
-			strip.appendChild(btn);
+			list.appendChild(btn);
 
 			const entry = {
 				id: id, btn: btn, pane: pane, disabled: !!t.disabled,
@@ -1179,14 +1188,14 @@
 			if (typeof opts.onActivate === "function") opts.onActivate(target.id, target.pane, reason || "activate");
 		}
 
-		strip.addEventListener("click", function (e) {
+		list.addEventListener("click", function (e) {
 			const btn = e.target && typeof e.target.closest === "function" ? e.target.closest("[role=\"tab\"]") : null;
-			if (!btn || (typeof strip.contains === "function" && !strip.contains(btn)) || btn.disabled) return;
+			if (!btn || (typeof list.contains === "function" && !list.contains(btn)) || btn.disabled) return;
 			activate(btn.dataset.juneauStripTab, "click");
 			if (typeof btn.focus === "function") btn.focus();
 		});
 
-		strip.addEventListener("keydown", function (e) {
+		list.addEventListener("keydown", function (e) {
 			if (!e) return;
 			let idx = -1;
 			for (let i = 0; i < entries.length; i++) {
