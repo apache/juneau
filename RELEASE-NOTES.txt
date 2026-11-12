@@ -11,6 +11,20 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 9.2.3
+
+** Security
+
+    * This release fixes a number of security bugs and hardens input validation and error handling in the REST server, REST client, parsers and juneau-sc.
+        Upgrading is recommended.
+
+** Compatibility
+
+    * Server error responses: the "Thrown" response header and exception detail are sent only for BasicHttpException, @Response-annotated exceptions and RRPC calls,
+        or when @Rest(renderResponseStackTraces="true") is set. A client that relies on typed rethrow of other server exceptions needs that setting on the server.
+    * juneau-sc: the /configs endpoint now requires an API key. Set Security/apiKey in juneau-server-config.cfg and send it as
+        "Authorization: Bearer <key>" or "X-Api-Key: <key>".
+
 Release Notes - Juneau - Version 9.2.2
 
 ** Bug
