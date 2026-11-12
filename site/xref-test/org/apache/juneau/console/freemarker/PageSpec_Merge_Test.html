@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		}
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		@RestGet(path=<span class="jxr_string">"/assets-union"</span>)
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">public</strong> View assetsUnion(RestRequest req) {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">return</strong> PageSpec.create().toolkit(<span class="jxr_string">"alpha"</span>).css(<span class="jxr_string">"a.css"</span>).init(<span class="jxr_string">"one.js"</span>)
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">return</strong> PageSpec.create().toolkit(<span class="jxr_string">"alpha"</span>).css(<span class="jxr_string">"/a.css"</span>).init(<span class="jxr_string">"/one.js"</span>)
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 				.template(<span class="jxr_string">"admin/page-merge-assets.ftlh"</span>).view(req);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		}
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		@RestGet(path=<span class="jxr_string">"/title-spec-wins"</span>)
@@ -223,9 +223,9 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertTrue(body.indexOf(<span class="jxr_string">"alpha.css"</span>) &lt; body.indexOf(<span class="jxr_string">"beta.css"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		assertTrue(body.contains(<span class="jxr_string">"alpha.js"</span>) &amp;&amp; body.contains(<span class="jxr_string">"beta.js"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertTrue(body.indexOf(<span class="jxr_string">"alpha.js"</span>) &lt; body.indexOf(<span class="jxr_string">"beta.js"</span>), () -&gt; body);
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertTrue(body.contains(<span class="jxr_string">"href=\&quot;a.css\&quot;"</span>) &amp;&amp; body.contains(<span class="jxr_string">"href=\&quot;b.css\&quot;"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertTrue(body.contains(<span class="jxr_string">"href=\&quot;/a.css\&quot;"</span>) &amp;&amp; body.contains(<span class="jxr_string">"href=\&quot;/b.css\&quot;"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertTrue(body.indexOf(<span class="jxr_string">"a.css"</span>) &lt; body.indexOf(<span class="jxr_string">"b.css"</span>), () -&gt; body);
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertTrue(body.contains(<span class="jxr_string">"src=\&quot;one.js\&quot;"</span>) &amp;&amp; body.contains(<span class="jxr_string">"src=\&quot;two.js\&quot;"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertTrue(body.contains(<span class="jxr_string">"src=\&quot;/one.js\&quot;"</span>) &amp;&amp; body.contains(<span class="jxr_string">"src=\&quot;/two.js\&quot;"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		assertTrue(body.indexOf(<span class="jxr_string">"one.js"</span>) &lt; body.indexOf(<span class="jxr_string">"two.js"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 	}
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 
@@ -256,8 +256,8 @@
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 	@Test <strong class="jxr_keyword">void</strong> a13_css_duplicateWithinOneList_emittedOnce() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">var</strong> body = get(<span class="jxr_string">"/css-dup"</span>, 200);
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		assertEquals(body.indexOf(<span class="jxr_string">"href=\&quot;a.css\&quot;"</span>), body.lastIndexOf(<span class="jxr_string">"href=\&quot;a.css\&quot;"</span>), () -&gt; body);
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertTrue(body.contains(<span class="jxr_string">"href=\&quot;a.css\&quot;"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		assertEquals(body.indexOf(<span class="jxr_string">"href=\&quot;/a.css\&quot;"</span>), body.lastIndexOf(<span class="jxr_string">"href=\&quot;/a.css\&quot;"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertTrue(body.contains(<span class="jxr_string">"href=\&quot;/a.css\&quot;"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 	}
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 	@Test <strong class="jxr_keyword">void</strong> a14_bodyAttrs_specAndFtl_sameName_isRejected() <strong class="jxr_keyword">throws</strong> Exception {

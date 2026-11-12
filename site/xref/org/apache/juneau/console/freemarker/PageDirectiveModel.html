@@ -85,49 +85,53 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		}
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		cap.mergeTab(FtlAttrLists.scalar(p, <span class="jxr_string">"tab"</span>));
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		cap.mergeToolkit(toolkit);
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		cap.mergeCss(FtlAttrLists.list(p, NAME, <span class="jxr_string">"css"</span>));
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		cap.mergeInit(FtlAttrLists.list(p, NAME, <span class="jxr_string">"init"</span>));
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		cap.pageOpen = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			body.render(cap.pageBuffer());
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			cap.pageOpen = false;
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		}
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		cap.flushSegment();
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		resolveAssets(env, cap, packs);
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		env.include(env.getConfiguration().getTemplate(chromeTemplate));
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> css = FtlAttrLists.list(p, NAME, <span class="jxr_string">"css"</span>);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> init = FtlAttrLists.list(p, NAME, <span class="jxr_string">"init"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		FtlAttrLists.requireAbsoluteAssets(NAME, <span class="jxr_string">"css"</span>, css);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		FtlAttrLists.requireAbsoluteAssets(NAME, <span class="jxr_string">"init"</span>, init);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		cap.mergeCss(css);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		cap.mergeInit(init);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		cap.pageOpen = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			body.render(cap.pageBuffer());
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			cap.pageOpen = false;
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		}
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		cap.flushSegment();
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">if</strong> (! cap.consoleDone)
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  				<span class="jxr_string">"&lt;@page&gt; chrome template '%s' rendered no &lt;@console&gt;; the legacy chrome was removed in 10.0.0."</span>, chromeTemplate));
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * Resolves the page's toolkit and card-required packs into the capture's script and link tags.</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * Called after the page body (so the card requirements are known) against the merged toolkit list, so a pack named</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * only by a {@link PageSpec} still has its assets emitted.  Shared with {@code &lt;@console&gt;}, which runs it for a</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * page that never reached {@code &lt;@page&gt;} (a built page rendered straight through the chrome).</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * On the built-page path the template name used in diagnostics is the chrome template, not the page template.</em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> resolveAssets(Environment env, PageCapture cap, ToolkitPackRegistry packs) <strong class="jxr_keyword">throws</strong> TemplateException {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> roots = <strong class="jxr_keyword">new</strong> java.util.ArrayList&lt;&gt;(cap.toolkits());
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		roots.addAll(cap.requiredPacks());
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">var</strong> pageUrls = <strong class="jxr_keyword">new</strong> java.util.ArrayList&lt;String&gt;(cap.initScripts());
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			pageUrls.addAll(cap.cssHrefs());
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			cap.toolkitAssets(packs.resolve(roots, FreemarkerRenderScope.request(), pageUrls, env.getMainTemplate().getName()));
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException | IllegalStateException e) {
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(e.getMessage());
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		}
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> }
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		resolveAssets(env, cap, packs);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		env.include(env.getConfiguration().getTemplate(chromeTemplate));
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">if</strong> (! cap.consoleDone)
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 				<span class="jxr_string">"&lt;@page&gt; chrome template '%s' rendered no &lt;@console&gt;; the legacy chrome was removed in 10.0.0."</span>, chromeTemplate));
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * Resolves the page's toolkit and card-required packs into the capture's script and link tags.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * Called after the page body (so the card requirements are known) against the merged toolkit list, so a pack named</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * only by a {@link PageSpec} still has its assets emitted.  Shared with {@code &lt;@console&gt;}, which runs it for a</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * page that never reached {@code &lt;@page&gt;} (a built page rendered straight through the chrome).</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 * On the built-page path the template name used in diagnostics is the chrome template, not the page template.</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> resolveAssets(Environment env, PageCapture cap, ToolkitPackRegistry packs) <strong class="jxr_keyword">throws</strong> TemplateException {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">var</strong> roots = <strong class="jxr_keyword">new</strong> java.util.ArrayList&lt;&gt;(cap.toolkits());
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		roots.addAll(cap.requiredPacks());
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			<strong class="jxr_keyword">var</strong> pageUrls = <strong class="jxr_keyword">new</strong> java.util.ArrayList&lt;String&gt;(cap.initScripts());
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			pageUrls.addAll(cap.cssHrefs());
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			cap.toolkitAssets(packs.resolve(roots, FreemarkerRenderScope.request(), pageUrls, env.getMainTemplate().getName()));
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException | IllegalStateException e) {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(e.getMessage());
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		}
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

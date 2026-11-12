@@ -890,7 +890,7 @@
 <span class="source-line-no">877</span><span id="line-877">    */</span>
 <span class="source-line-no">878</span><span id="line-878">   public PageCapture mergeInit(List&lt;String&gt; srcs) {</span>
 <span class="source-line-no">879</span><span id="line-879">      for (var u : srcs)</span>
-<span class="source-line-no">880</span><span id="line-880">         if (! SafePathTemplate.isSameOriginPath(u))</span>
+<span class="source-line-no">880</span><span id="line-880">         if (! u.startsWith("context:") &amp;&amp; ! u.startsWith("servlet:") &amp;&amp; ! SafePathTemplate.isSameOriginPath(u))</span>
 <span class="source-line-no">881</span><span id="line-881">            throw iaex("page script must be a same-origin path; got '%s'.", u);</span>
 <span class="source-line-no">882</span><span id="line-882">      init = mergeUnion(init, srcs);</span>
 <span class="source-line-no">883</span><span id="line-883">      return this;</span>

@@ -885,7 +885,7 @@
 <a class="jxr_linenumber" name="L877" href="#L877">877</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L878" href="#L878">878</a> 	<strong class="jxr_keyword">public</strong> PageCapture mergeInit(List&lt;String&gt; srcs) {
 <a class="jxr_linenumber" name="L879" href="#L879">879</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> u : srcs)
-<a class="jxr_linenumber" name="L880" href="#L880">880</a> 			<strong class="jxr_keyword">if</strong> (! SafePathTemplate.isSameOriginPath(u))
+<a class="jxr_linenumber" name="L880" href="#L880">880</a> 			<strong class="jxr_keyword">if</strong> (! u.startsWith(<span class="jxr_string">"context:"</span>) &amp;&amp; ! u.startsWith(<span class="jxr_string">"servlet:"</span>) &amp;&amp; ! SafePathTemplate.isSameOriginPath(u))
 <a class="jxr_linenumber" name="L881" href="#L881">881</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"page script must be a same-origin path; got '%s'."</span>, u);
 <a class="jxr_linenumber" name="L882" href="#L882">882</a> 		init = mergeUnion(init, srcs);
 <a class="jxr_linenumber" name="L883" href="#L883">883</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;

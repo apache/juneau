@@ -175,28 +175,40 @@
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"v4Built"</span>));
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	}
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	@Test <strong class="jxr_keyword">void</strong> s09_refreshTouchesTheActiveViewOnlyAndNeverMounts() {
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s9"</span>);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertEquals(List.of(<span class="jxr_string">"c1"</span>), s.get(<span class="jxr_string">"refreshed"</span>));
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"rendersUnchanged"</span>));
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	@Test <strong class="jxr_keyword">void</strong> s10_destroyReleasesNestedCardsAndTheDirectiveEntry() {
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s10"</span>);
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		assertEquals(List.of(<span class="jxr_string">"c1"</span>, <span class="jxr_string">"c4"</span>), s.get(<span class="jxr_string">"destroyed"</span>));
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		assertEquals(<span class="jxr_string">"E-JS-22"</span>, s.get(<span class="jxr_string">"api"</span>));
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"source"</span>));
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	@Test <strong class="jxr_keyword">void</strong> s11_nestedCardsKeepTheirApiAndANestedSwitcherIsRejected() {
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s11"</span>);
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertEquals(0, ((Number)s.get(<span class="jxr_string">"before"</span>)).intValue());
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertEquals(<span class="jxr_string">"E-JS-22"</span>, s.get(<span class="jxr_string">"apiBefore"</span>));
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"same"</span>));
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertEquals(<span class="jxr_string">"c4"</span>, s.get(<span class="jxr_string">"hostId"</span>));
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertEquals(<span class="jxr_string">"E-JS-126"</span>, s.get(<span class="jxr_string">"rejected"</span>));
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> }
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	@Test <strong class="jxr_keyword">void</strong> s08b_selectAddressesSectionsAsViewSlashSection() {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s15"</span>);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertEquals(List.of(false, false, false), s.get(<span class="jxr_string">"bad"</span>));
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"viewOnly"</span>));
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		assertEquals(<span class="jxr_string">"v2.s1"</span>, s.get(<span class="jxr_string">"afterViewOnly"</span>));
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"ok"</span>));
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertEquals(<span class="jxr_string">"v2.s2"</span>, s.get(<span class="jxr_string">"built"</span>));
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertEquals(<span class="jxr_string">"v2.s1"</span>, s.get(<span class="jxr_string">"back"</span>));
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"direct"</span>));
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		assertEquals(<span class="jxr_string">"v2.s2"</span>, s.get(<span class="jxr_string">"directKey"</span>));
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	@Test <strong class="jxr_keyword">void</strong> s09_refreshTouchesTheActiveViewOnlyAndNeverMounts() {
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s9"</span>);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertEquals(List.of(<span class="jxr_string">"c1"</span>), s.get(<span class="jxr_string">"refreshed"</span>));
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"rendersUnchanged"</span>));
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	@Test <strong class="jxr_keyword">void</strong> s10_destroyReleasesNestedCardsAndTheDirectiveEntry() {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s10"</span>);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertEquals(List.of(<span class="jxr_string">"c1"</span>, <span class="jxr_string">"c4"</span>), s.get(<span class="jxr_string">"destroyed"</span>));
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertEquals(<span class="jxr_string">"E-JS-22"</span>, s.get(<span class="jxr_string">"api"</span>));
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"source"</span>));
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	}
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	@Test <strong class="jxr_keyword">void</strong> s11_nestedCardsKeepTheirApiAndANestedSwitcherIsRejected() {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s11"</span>);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertEquals(0, ((Number)s.get(<span class="jxr_string">"before"</span>)).intValue());
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertEquals(<span class="jxr_string">"E-JS-22"</span>, s.get(<span class="jxr_string">"apiBefore"</span>));
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"same"</span>));
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertEquals(<span class="jxr_string">"c4"</span>, s.get(<span class="jxr_string">"hostId"</span>));
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertEquals(<span class="jxr_string">"E-JS-126"</span>, s.get(<span class="jxr_string">"rejected"</span>));
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	}
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

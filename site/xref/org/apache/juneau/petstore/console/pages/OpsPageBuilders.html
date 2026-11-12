@@ -64,8 +64,8 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  				.view(<span class="jxr_string">"jobs"</span>, <span class="jxr_string">"Jobs"</span>, v -&gt; v.section(SwitcherCards.table(jobsTable())))
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  				.view(<span class="jxr_string">"species"</span>, <span class="jxr_string">"Species"</span>, v -&gt; v.section(SwitcherCards.table(speciesTable())))
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  				.view(<span class="jxr_string">"groom"</span>, <span class="jxr_string">"Groom"</span>, v -&gt; v.cards(
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  					CardSpec.of(<span class="jxr_string">"terminal"</span>, <span class="jxr_string">"groom-output"</span>).title(<span class="jxr_string">"Groom run"</span>).body(<span class="jxr_string">"contractVersion"</span>, <span class="jxr_string">"1"</span>).body(<span class="jxr_string">"terminal"</span>, groomOutput.toMap()),
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  					CardSpec.of(<span class="jxr_string">"terminal"</span>, <span class="jxr_string">"groom-file"</span>).title(<span class="jxr_string">"Groom transcript (file)"</span>).body(<span class="jxr_string">"contractVersion"</span>, <span class="jxr_string">"1"</span>).body(<span class="jxr_string">"terminal"</span>, groomFile.toMap()),
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  					CardSpec.of(<span class="jxr_string">"terminal"</span>, <span class="jxr_string">"groom-output"</span>).title(<span class="jxr_string">"Groom run"</span>).body(<span class="jxr_string">"terminal"</span>, groomOutput.toMap()),
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  					CardSpec.of(<span class="jxr_string">"terminal"</span>, <span class="jxr_string">"groom-file"</span>).title(<span class="jxr_string">"Groom transcript (file)"</span>).body(<span class="jxr_string">"terminal"</span>, groomFile.toMap()),
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  					SwitcherCards.table(groomRunsTable())))
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  				.toCardSpec());
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}

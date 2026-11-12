@@ -69,8 +69,8 @@
 <span class="source-line-no">056</span><span id="line-56">            .view("jobs", "Jobs", v -&gt; v.section(SwitcherCards.table(jobsTable())))</span>
 <span class="source-line-no">057</span><span id="line-57">            .view("species", "Species", v -&gt; v.section(SwitcherCards.table(speciesTable())))</span>
 <span class="source-line-no">058</span><span id="line-58">            .view("groom", "Groom", v -&gt; v.cards(</span>
-<span class="source-line-no">059</span><span id="line-59">               CardSpec.of("terminal", "groom-output").title("Groom run").body("contractVersion", "1").body("terminal", groomOutput.toMap()),</span>
-<span class="source-line-no">060</span><span id="line-60">               CardSpec.of("terminal", "groom-file").title("Groom transcript (file)").body("contractVersion", "1").body("terminal", groomFile.toMap()),</span>
+<span class="source-line-no">059</span><span id="line-59">               CardSpec.of("terminal", "groom-output").title("Groom run").body("terminal", groomOutput.toMap()),</span>
+<span class="source-line-no">060</span><span id="line-60">               CardSpec.of("terminal", "groom-file").title("Groom transcript (file)").body("terminal", groomFile.toMap()),</span>
 <span class="source-line-no">061</span><span id="line-61">               SwitcherCards.table(groomRunsTable())))</span>
 <span class="source-line-no">062</span><span id="line-62">            .toCardSpec());</span>
 <span class="source-line-no">063</span><span id="line-63">   }</span>

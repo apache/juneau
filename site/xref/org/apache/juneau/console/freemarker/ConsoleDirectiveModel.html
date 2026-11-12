@@ -244,7 +244,7 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> href : cap.vendorCss())
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 			out.write(<span class="jxr_string">"&lt;link rel=\&quot;stylesheet\&quot; href=\&quot;"</span> + attrEscape(href) + <span class="jxr_string">"\&quot; data-toolkit-css&gt;\n"</span>);
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> href : cap.cssHrefs())
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			out.write(<span class="jxr_string">"&lt;link rel=\&quot;stylesheet\&quot; href=\&quot;"</span> + attrEscape(href) + <span class="jxr_string">"\&quot;&gt;\n"</span>);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			out.write(<span class="jxr_string">"&lt;link rel=\&quot;stylesheet\&quot; href=\&quot;"</span> + attrEscape(resolveAsset(req, href)) + <span class="jxr_string">"\&quot;&gt;\n"</span>);
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> href : cap.runtimeCss())
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 			out.write(<span class="jxr_string">"&lt;link rel=\&quot;stylesheet\&quot; href=\&quot;"</span> + attrEscape(href) + <span class="jxr_string">"\&quot; data-toolkit-css&gt;\n"</span>);
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">if</strong> (nn(cap.head))
@@ -283,7 +283,7 @@
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">if</strong> (nn(cap.scriptsAfterToolkit))
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			out.write(cap.scriptsAfterToolkit);
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> src : cap.initScripts())
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			out.write(<span class="jxr_string">"&lt;script src=\&quot;"</span> + attrEscape(src) + <span class="jxr_string">"\&quot;&gt;&lt;/script&gt;\n"</span>);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			out.write(<span class="jxr_string">"&lt;script src=\&quot;"</span> + attrEscape(resolveAsset(req, src)) + <span class="jxr_string">"\&quot;&gt;&lt;/script&gt;\n"</span>);
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">if</strong> (nn(cap.scripts))
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			out.write(cap.scripts);
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 		out.write(<span class="jxr_string">"\n&lt;/body&gt;\n&lt;/html&gt;\n"</span>);
@@ -311,50 +311,55 @@
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">return</strong> name;
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 	}
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String csrfToken(RestRequest req) {
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">var</strong> supplier = req.getHttpServletRequest().getAttribute(RequestBoundaryFilter.TOKEN_SUPPLIER_ATTRIBUTE);
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">if</strong> (supplier instanceof RequestBoundaryFilter.TokenSupplier s)
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">return</strong> s.get();
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">if</strong> (supplier != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">return</strong> req.getAttribute(RequestBoundaryFilter.TOKEN_ATTRIBUTE).asString().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	}
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	<em class="jxr_javadoccomment">/** Minimal HTML-attribute escape for an author-/request-supplied value placed in a double-quoted attribute. */</em>
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String attrEscape(String s) {
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">return</strong> s.replace(<span class="jxr_string">"&amp;"</span>, <span class="jxr_string">"&amp;amp;"</span>).replace(<span class="jxr_string">"&lt;"</span>, <span class="jxr_string">"&amp;lt;"</span>).replace(<span class="jxr_string">"&gt;"</span>, <span class="jxr_string">"&amp;gt;"</span>).replace(<span class="jxr_string">"\&quot;"</span>, <span class="jxr_string">"&amp;quot;"</span>);
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<em class="jxr_comment">// A context: / servlet: page asset resolves against the request; an absolute path passes through.</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String resolveAsset(RestRequest req, String url) {
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">return</strong> url.startsWith(<span class="jxr_string">"context:"</span>) || url.startsWith(<span class="jxr_string">"servlet:"</span>) ? req.getUriResolver().resolve(url) : url;
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	}
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String csrfToken(RestRequest req) {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">var</strong> supplier = req.getHttpServletRequest().getAttribute(RequestBoundaryFilter.TOKEN_SUPPLIER_ATTRIBUTE);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">if</strong> (supplier instanceof RequestBoundaryFilter.TokenSupplier s)
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">return</strong> s.get();
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">if</strong> (supplier != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">return</strong> req.getAttribute(RequestBoundaryFilter.TOKEN_ATTRIBUTE).asString().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 	}
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * Fails fast when a page opts in to inline handlers under a CSP that would block them.  Every</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * {@code Content-Security-Policy} value already on the response is checked: its effective script directive</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * ({@code script-src}, else {@code default-src}) must list {@code 'unsafe-eval'}.  A header added after this point</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 * is not seen here; the client reports it as a loud failure instead.</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkInlineCsp(RestRequest req) {
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">var</strong> values = req.getResponse().getHttpServletResponse().getHeaders(<span class="jxr_string">"Content-Security-Policy"</span>);
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">if</strong> (values == <strong class="jxr_keyword">null</strong> || values.isEmpty())
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values)
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">if</strong> (! allowsEval(v))
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"allowInlineHandlers(true) needs 'unsafe-eval' in script-src; the response CSP is: "</span> + String.join(<span class="jxr_string">", "</span>, values));
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	}
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> allowsEval(String policy) {
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		String script = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		String dflt = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> d : policy.split(<span class="jxr_string">";"</span>)) {
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			<strong class="jxr_keyword">var</strong> t = d.trim();
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			<strong class="jxr_keyword">var</strong> lower = t.toLowerCase(java.util.Locale.ROOT);
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			<strong class="jxr_keyword">if</strong> (lower.equals(<span class="jxr_string">"script-src"</span>) || lower.startsWith(<span class="jxr_string">"script-src "</span>))
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 				script = t;
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (lower.equals(<span class="jxr_string">"default-src"</span>) || lower.startsWith(<span class="jxr_string">"default-src "</span>))
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 				dflt = t;
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		}
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">var</strong> effective = script != <strong class="jxr_keyword">null</strong> ? script : dflt;
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">return</strong> effective == <strong class="jxr_keyword">null</strong> || effective.toLowerCase(java.util.Locale.ROOT).contains(org.apache.juneau.http.header.ContentSecurityPolicy.Builder.UNSAFE_EVAL);
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	}
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> }
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	<em class="jxr_javadoccomment">/** Minimal HTML-attribute escape for an author-/request-supplied value placed in a double-quoted attribute. */</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String attrEscape(String s) {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">return</strong> s.replace(<span class="jxr_string">"&amp;"</span>, <span class="jxr_string">"&amp;amp;"</span>).replace(<span class="jxr_string">"&lt;"</span>, <span class="jxr_string">"&amp;lt;"</span>).replace(<span class="jxr_string">"&gt;"</span>, <span class="jxr_string">"&amp;gt;"</span>).replace(<span class="jxr_string">"\&quot;"</span>, <span class="jxr_string">"&amp;quot;"</span>);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	}
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">	 * Fails fast when a page opts in to inline handlers under a CSP that would block them.  Every</em>
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">	 * {@code Content-Security-Policy} value already on the response is checked: its effective script directive</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * ({@code script-src}, else {@code default-src}) must list {@code 'unsafe-eval'}.  A header added after this point</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 * is not seen here; the client reports it as a loud failure instead.</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkInlineCsp(RestRequest req) {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">var</strong> values = req.getResponse().getHttpServletResponse().getHeaders(<span class="jxr_string">"Content-Security-Policy"</span>);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">if</strong> (values == <strong class="jxr_keyword">null</strong> || values.isEmpty())
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values)
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			<strong class="jxr_keyword">if</strong> (! allowsEval(v))
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"allowInlineHandlers(true) needs 'unsafe-eval' in script-src; the response CSP is: "</span> + String.join(<span class="jxr_string">", "</span>, values));
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	}
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> allowsEval(String policy) {
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		String script = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		String dflt = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> d : policy.split(<span class="jxr_string">";"</span>)) {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">var</strong> t = d.trim();
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">var</strong> lower = t.toLowerCase(java.util.Locale.ROOT);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			<strong class="jxr_keyword">if</strong> (lower.equals(<span class="jxr_string">"script-src"</span>) || lower.startsWith(<span class="jxr_string">"script-src "</span>))
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 				script = t;
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (lower.equals(<span class="jxr_string">"default-src"</span>) || lower.startsWith(<span class="jxr_string">"default-src "</span>))
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 				dflt = t;
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		}
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">var</strong> effective = script != <strong class="jxr_keyword">null</strong> ? script : dflt;
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">return</strong> effective == <strong class="jxr_keyword">null</strong> || effective.toLowerCase(java.util.Locale.ROOT).contains(org.apache.juneau.http.header.ContentSecurityPolicy.Builder.UNSAFE_EVAL);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	}
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

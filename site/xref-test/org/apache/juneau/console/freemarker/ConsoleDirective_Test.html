@@ -391,7 +391,7 @@
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 		assertTrue(body.contains(<span class="jxr_string">"href=\&quot;/juneau-console/themes/juneau-theme-light-red.css"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 		assertEquals(1, count(body, <span class="jxr_string">"juneau-theme-light-red.css"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 		assertFalse(body.contains(<span class="jxr_string">"juneau-theme-open.css"</span>), () -&gt; body);
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		assertTrue(body.contains(<span class="jxr_string">"href=\&quot;a.css\&quot;"</span>) &amp;&amp; body.contains(<span class="jxr_string">"href=\&quot;b.css\&quot;"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		assertTrue(body.contains(<span class="jxr_string">"href=\&quot;/a.css\&quot;"</span>) &amp;&amp; body.contains(<span class="jxr_string">"href=\&quot;/b.css\&quot;"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 		assertTrue(body.contains(<span class="jxr_string">"extra-head.css"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertTrue(body.indexOf(<span class="jxr_string">"&lt;/head&gt;"</span>) &lt; body.indexOf(<span class="jxr_string">"&lt;body"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 
@@ -407,9 +407,9 @@
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<em class="jxr_comment">// Shell, then the end-of-body scripts in order.</em>
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertTrue(body.contains(<span class="jxr_string">"/juneau-console/juneau-console.js"</span>), () -&gt; body);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		assertTrue(body.indexOf(<span class="jxr_string">"juneau-console.js"</span>) &lt; body.indexOf(<span class="jxr_string">"src=\&quot;one.js\&quot;"</span>), () -&gt; body);
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		assertTrue(body.indexOf(<span class="jxr_string">"src=\&quot;one.js\&quot;"</span>) &lt; body.indexOf(<span class="jxr_string">"src=\&quot;two.js\&quot;"</span>), () -&gt; body);
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		assertTrue(body.indexOf(<span class="jxr_string">"src=\&quot;two.js\&quot;"</span>) &lt; body.indexOf(<span class="jxr_string">"extra-tail.js"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		assertTrue(body.indexOf(<span class="jxr_string">"juneau-console.js"</span>) &lt; body.indexOf(<span class="jxr_string">"src=\&quot;/one.js\&quot;"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		assertTrue(body.indexOf(<span class="jxr_string">"src=\&quot;/one.js\&quot;"</span>) &lt; body.indexOf(<span class="jxr_string">"src=\&quot;/two.js\&quot;"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		assertTrue(body.indexOf(<span class="jxr_string">"src=\&quot;/two.js\&quot;"</span>) &lt; body.indexOf(<span class="jxr_string">"extra-tail.js"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 		DualHatGuard.assertClean(body);
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 	}
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 
@@ -718,8 +718,8 @@
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 		assertTrue(body.contains(<span class="jxr_string">"&lt;title&gt;Doc Title&lt;/title&gt;"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 		assertTrue(body.contains(<span class="jxr_string">"&lt;body data-runtime-tab=\&quot;open\&quot;&gt;"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 		assertEquals(Boolean.TRUE, assertPage(body).contract().getMap(<span class="jxr_string">"header"</span>).get(<span class="jxr_string">"chrome"</span>));
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		assertTrue(body.indexOf(<span class="jxr_string">"app-early.css"</span>) &lt; body.indexOf(<span class="jxr_string">"href=\&quot;a.css\&quot;"</span>), () -&gt; body);
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		assertTrue(body.indexOf(<span class="jxr_string">"mid-toolkit.js"</span>) &lt; body.indexOf(<span class="jxr_string">"src=\&quot;one.js\&quot;"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		assertTrue(body.indexOf(<span class="jxr_string">"app-early.css"</span>) &lt; body.indexOf(<span class="jxr_string">"href=\&quot;/a.css\&quot;"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		assertTrue(body.indexOf(<span class="jxr_string">"mid-toolkit.js"</span>) &lt; body.indexOf(<span class="jxr_string">"src=\&quot;/one.js\&quot;"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L715" href="#L715">715</a> 		assertPage(body).isValid().hasFooterSlot(<span class="jxr_string">"content"</span>);
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 	}
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 
@@ -730,9 +730,9 @@
 <a class="jxr_linenumber" name="L722" href="#L722">722</a> 			rsp.assertStatus(200);
 <a class="jxr_linenumber" name="L723" href="#L723">723</a> 			body = rsp.getContent().asString();
 <a class="jxr_linenumber" name="L724" href="#L724">724</a> 		}
-<a class="jxr_linenumber" name="L725" href="#L725">725</a> 		<strong class="jxr_keyword">var</strong> order = List.of(<span class="jxr_string">"app-early.css"</span>, <span class="jxr_string">"dataTables.dataTables.min.css"</span>, <span class="jxr_string">"href=\&quot;page.css\&quot;"</span>, <span class="jxr_string">"juneau-views.css"</span>, <span class="jxr_string">"&lt;/head&gt;"</span>,
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 		<strong class="jxr_keyword">var</strong> order = List.of(<span class="jxr_string">"app-early.css"</span>, <span class="jxr_string">"dataTables.dataTables.min.css"</span>, <span class="jxr_string">"href=\&quot;/page.css\&quot;"</span>, <span class="jxr_string">"juneau-views.css"</span>, <span class="jxr_string">"&lt;/head&gt;"</span>,
 <a class="jxr_linenumber" name="L726" href="#L726">726</a> 			<span class="jxr_string">"juneau-console.js"</span>, <span class="jxr_string">"/jquery.min.js"</span>, <span class="jxr_string">"/js/dataTables.min.js"</span>, <span class="jxr_string">"juneau-datatables.js"</span>, <span class="jxr_string">"juneau-renders.js"</span>,
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> 			<span class="jxr_string">"juneau-views.js"</span>, <span class="jxr_string">"mid-toolkit.js"</span>, <span class="jxr_string">"src=\&quot;page-init.js\&quot;"</span>);
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 			<span class="jxr_string">"juneau-views.js"</span>, <span class="jxr_string">"mid-toolkit.js"</span>, <span class="jxr_string">"src=\&quot;/page-init.js\&quot;"</span>);
 <a class="jxr_linenumber" name="L728" href="#L728">728</a> 		<strong class="jxr_keyword">var</strong> last = -1;
 <a class="jxr_linenumber" name="L729" href="#L729">729</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : order) {
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> 			<strong class="jxr_keyword">var</strong> i2 = body.indexOf(s);

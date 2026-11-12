@@ -160,11 +160,11 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Test <strong class="jxr_keyword">void</strong> a21_pageAssets() {
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> html = render(<span class="jxr_string">"page-assets"</span>);
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertTrue(html.contains(<span class="jxr_string">"&lt;link rel=\&quot;stylesheet\&quot; href=\&quot;a.css\&quot;&gt;\n&lt;link rel=\&quot;stylesheet\&quot; href=\&quot;b.css\&quot;&gt;\n"</span>), html);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertTrue(html.contains(<span class="jxr_string">"&lt;link rel=\&quot;stylesheet\&quot; href=\&quot;/a.css\&quot;&gt;\n&lt;link rel=\&quot;stylesheet\&quot; href=\&quot;/b.css\&quot;&gt;\n"</span>), html);
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertTrue(html.contains(<span class="jxr_string">"data-toolkit-css&gt;"</span>), html);
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertTrue(html.contains(<span class="jxr_string">"data-toolkit-js&gt;&lt;/script&gt;"</span>), html);
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertTrue(html.indexOf(<span class="jxr_string">"data-toolkit-js"</span>) &lt; html.indexOf(<span class="jxr_string">"&lt;script src=\&quot;one.js\&quot;&gt;"</span>), html);
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertTrue(html.indexOf(<span class="jxr_string">"&lt;script src=\&quot;one.js\&quot;&gt;"</span>) &lt; html.indexOf(<span class="jxr_string">"&lt;script src=\&quot;two.js\&quot;&gt;"</span>), html);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertTrue(html.indexOf(<span class="jxr_string">"data-toolkit-js"</span>) &lt; html.indexOf(<span class="jxr_string">"&lt;script src=\&quot;/one.js\&quot;&gt;"</span>), html);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertTrue(html.indexOf(<span class="jxr_string">"&lt;script src=\&quot;/one.js\&quot;&gt;"</span>) &lt; html.indexOf(<span class="jxr_string">"&lt;script src=\&quot;/two.js\&quot;&gt;"</span>), html);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	@Test <strong class="jxr_keyword">void</strong> a22_wireOrder() {
@@ -182,9 +182,9 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 	@Test <strong class="jxr_keyword">void</strong> a22b_wireOrder_vendor() {
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">var</strong> html = render(<span class="jxr_string">"page-wire-order"</span>);
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> order = List.of(<span class="jxr_string">"dataTables.dataTables.min.css"</span>, <span class="jxr_string">"href=\&quot;page.css\&quot;"</span>, <span class="jxr_string">"juneau-views.css"</span>, <span class="jxr_string">"&lt;/head&gt;"</span>,
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> order = List.of(<span class="jxr_string">"dataTables.dataTables.min.css"</span>, <span class="jxr_string">"href=\&quot;/page.css\&quot;"</span>, <span class="jxr_string">"juneau-views.css"</span>, <span class="jxr_string">"&lt;/head&gt;"</span>,
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<span class="jxr_string">"juneau-console.js"</span>, <span class="jxr_string">"/jquery.min.js"</span>, <span class="jxr_string">"/js/dataTables.min.js"</span>, <span class="jxr_string">"juneau-datatables.js"</span>, <span class="jxr_string">"juneau-renders.js"</span>,
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<span class="jxr_string">"juneau-views.js"</span>, <span class="jxr_string">"juneau-helpers.js"</span>, <span class="jxr_string">"src=\&quot;page-init.js\&quot;"</span>);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<span class="jxr_string">"juneau-views.js"</span>, <span class="jxr_string">"juneau-helpers.js"</span>, <span class="jxr_string">"src=\&quot;/page-init.js\&quot;"</span>);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> last = -1;
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : order) {
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">var</strong> i = html.indexOf(s);
