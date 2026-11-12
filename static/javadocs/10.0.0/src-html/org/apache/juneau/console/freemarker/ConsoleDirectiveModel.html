@@ -249,7 +249,7 @@
 <span class="source-line-no">236</span><span id="line-236">      for (var href : cap.vendorCss())</span>
 <span class="source-line-no">237</span><span id="line-237">         out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\" data-toolkit-css&gt;\n");</span>
 <span class="source-line-no">238</span><span id="line-238">      for (var href : cap.cssHrefs())</span>
-<span class="source-line-no">239</span><span id="line-239">         out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\"&gt;\n");</span>
+<span class="source-line-no">239</span><span id="line-239">         out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(resolveAsset(req, href)) + "\"&gt;\n");</span>
 <span class="source-line-no">240</span><span id="line-240">      for (var href : cap.runtimeCss())</span>
 <span class="source-line-no">241</span><span id="line-241">         out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\" data-toolkit-css&gt;\n");</span>
 <span class="source-line-no">242</span><span id="line-242">      if (nn(cap.head))</span>
@@ -288,7 +288,7 @@
 <span class="source-line-no">275</span><span id="line-275">      if (nn(cap.scriptsAfterToolkit))</span>
 <span class="source-line-no">276</span><span id="line-276">         out.write(cap.scriptsAfterToolkit);</span>
 <span class="source-line-no">277</span><span id="line-277">      for (var src : cap.initScripts())</span>
-<span class="source-line-no">278</span><span id="line-278">         out.write("&lt;script src=\"" + attrEscape(src) + "\"&gt;&lt;/script&gt;\n");</span>
+<span class="source-line-no">278</span><span id="line-278">         out.write("&lt;script src=\"" + attrEscape(resolveAsset(req, src)) + "\"&gt;&lt;/script&gt;\n");</span>
 <span class="source-line-no">279</span><span id="line-279">      if (nn(cap.scripts))</span>
 <span class="source-line-no">280</span><span id="line-280">         out.write(cap.scripts);</span>
 <span class="source-line-no">281</span><span id="line-281">      out.write("\n&lt;/body&gt;\n&lt;/html&gt;\n");</span>
@@ -316,50 +316,55 @@
 <span class="source-line-no">303</span><span id="line-303">      return name;</span>
 <span class="source-line-no">304</span><span id="line-304">   }</span>
 <span class="source-line-no">305</span><span id="line-305"></span>
-<span class="source-line-no">306</span><span id="line-306">   private static String csrfToken(RestRequest req) {</span>
-<span class="source-line-no">307</span><span id="line-307">      var supplier = req.getHttpServletRequest().getAttribute(RequestBoundaryFilter.TOKEN_SUPPLIER_ATTRIBUTE);</span>
-<span class="source-line-no">308</span><span id="line-308">      if (supplier instanceof RequestBoundaryFilter.TokenSupplier s)</span>
-<span class="source-line-no">309</span><span id="line-309">         return s.get();</span>
-<span class="source-line-no">310</span><span id="line-310">      if (supplier != null)</span>
-<span class="source-line-no">311</span><span id="line-311">         return null;</span>
-<span class="source-line-no">312</span><span id="line-312">      return req.getAttribute(RequestBoundaryFilter.TOKEN_ATTRIBUTE).asString().orElse(null);</span>
-<span class="source-line-no">313</span><span id="line-313">   }</span>
-<span class="source-line-no">314</span><span id="line-314"></span>
-<span class="source-line-no">315</span><span id="line-315">   /** Minimal HTML-attribute escape for an author-/request-supplied value placed in a double-quoted attribute. */</span>
-<span class="source-line-no">316</span><span id="line-316">   private static String attrEscape(String s) {</span>
-<span class="source-line-no">317</span><span id="line-317">      return s.replace("&amp;", "&amp;amp;").replace("&lt;", "&amp;lt;").replace("&gt;", "&amp;gt;").replace("\"", "&amp;quot;");</span>
+<span class="source-line-no">306</span><span id="line-306">   // A context: / servlet: page asset resolves against the request; an absolute path passes through.</span>
+<span class="source-line-no">307</span><span id="line-307">   private static String resolveAsset(RestRequest req, String url) {</span>
+<span class="source-line-no">308</span><span id="line-308">      return url.startsWith("context:") || url.startsWith("servlet:") ? req.getUriResolver().resolve(url) : url;</span>
+<span class="source-line-no">309</span><span id="line-309">   }</span>
+<span class="source-line-no">310</span><span id="line-310"></span>
+<span class="source-line-no">311</span><span id="line-311">   private static String csrfToken(RestRequest req) {</span>
+<span class="source-line-no">312</span><span id="line-312">      var supplier = req.getHttpServletRequest().getAttribute(RequestBoundaryFilter.TOKEN_SUPPLIER_ATTRIBUTE);</span>
+<span class="source-line-no">313</span><span id="line-313">      if (supplier instanceof RequestBoundaryFilter.TokenSupplier s)</span>
+<span class="source-line-no">314</span><span id="line-314">         return s.get();</span>
+<span class="source-line-no">315</span><span id="line-315">      if (supplier != null)</span>
+<span class="source-line-no">316</span><span id="line-316">         return null;</span>
+<span class="source-line-no">317</span><span id="line-317">      return req.getAttribute(RequestBoundaryFilter.TOKEN_ATTRIBUTE).asString().orElse(null);</span>
 <span class="source-line-no">318</span><span id="line-318">   }</span>
 <span class="source-line-no">319</span><span id="line-319"></span>
-<span class="source-line-no">320</span><span id="line-320">   /**</span>
-<span class="source-line-no">321</span><span id="line-321">    * Fails fast when a page opts in to inline handlers under a CSP that would block them.  Every</span>
-<span class="source-line-no">322</span><span id="line-322">    * {@code Content-Security-Policy} value already on the response is checked: its effective script directive</span>
-<span class="source-line-no">323</span><span id="line-323">    * ({@code script-src}, else {@code default-src}) must list {@code 'unsafe-eval'}.  A header added after this point</span>
-<span class="source-line-no">324</span><span id="line-324">    * is not seen here; the client reports it as a loud failure instead.</span>
-<span class="source-line-no">325</span><span id="line-325">    */</span>
-<span class="source-line-no">326</span><span id="line-326">   private static void checkInlineCsp(RestRequest req) {</span>
-<span class="source-line-no">327</span><span id="line-327">      var values = req.getResponse().getHttpServletResponse().getHeaders("Content-Security-Policy");</span>
-<span class="source-line-no">328</span><span id="line-328">      if (values == null || values.isEmpty())</span>
-<span class="source-line-no">329</span><span id="line-329">         return;</span>
-<span class="source-line-no">330</span><span id="line-330">      for (var v : values)</span>
-<span class="source-line-no">331</span><span id="line-331">         if (! allowsEval(v))</span>
-<span class="source-line-no">332</span><span id="line-332">            throw new IllegalStateException("allowInlineHandlers(true) needs 'unsafe-eval' in script-src; the response CSP is: " + String.join(", ", values));</span>
-<span class="source-line-no">333</span><span id="line-333">   }</span>
-<span class="source-line-no">334</span><span id="line-334"></span>
-<span class="source-line-no">335</span><span id="line-335">   private static boolean allowsEval(String policy) {</span>
-<span class="source-line-no">336</span><span id="line-336">      String script = null;</span>
-<span class="source-line-no">337</span><span id="line-337">      String dflt = null;</span>
-<span class="source-line-no">338</span><span id="line-338">      for (var d : policy.split(";")) {</span>
-<span class="source-line-no">339</span><span id="line-339">         var t = d.trim();</span>
-<span class="source-line-no">340</span><span id="line-340">         var lower = t.toLowerCase(java.util.Locale.ROOT);</span>
-<span class="source-line-no">341</span><span id="line-341">         if (lower.equals("script-src") || lower.startsWith("script-src "))</span>
-<span class="source-line-no">342</span><span id="line-342">            script = t;</span>
-<span class="source-line-no">343</span><span id="line-343">         else if (lower.equals("default-src") || lower.startsWith("default-src "))</span>
-<span class="source-line-no">344</span><span id="line-344">            dflt = t;</span>
-<span class="source-line-no">345</span><span id="line-345">      }</span>
-<span class="source-line-no">346</span><span id="line-346">      var effective = script != null ? script : dflt;</span>
-<span class="source-line-no">347</span><span id="line-347">      return effective == null || effective.toLowerCase(java.util.Locale.ROOT).contains(org.apache.juneau.http.header.ContentSecurityPolicy.Builder.UNSAFE_EVAL);</span>
-<span class="source-line-no">348</span><span id="line-348">   }</span>
-<span class="source-line-no">349</span><span id="line-349">}</span>
+<span class="source-line-no">320</span><span id="line-320">   /** Minimal HTML-attribute escape for an author-/request-supplied value placed in a double-quoted attribute. */</span>
+<span class="source-line-no">321</span><span id="line-321">   private static String attrEscape(String s) {</span>
+<span class="source-line-no">322</span><span id="line-322">      return s.replace("&amp;", "&amp;amp;").replace("&lt;", "&amp;lt;").replace("&gt;", "&amp;gt;").replace("\"", "&amp;quot;");</span>
+<span class="source-line-no">323</span><span id="line-323">   }</span>
+<span class="source-line-no">324</span><span id="line-324"></span>
+<span class="source-line-no">325</span><span id="line-325">   /**</span>
+<span class="source-line-no">326</span><span id="line-326">    * Fails fast when a page opts in to inline handlers under a CSP that would block them.  Every</span>
+<span class="source-line-no">327</span><span id="line-327">    * {@code Content-Security-Policy} value already on the response is checked: its effective script directive</span>
+<span class="source-line-no">328</span><span id="line-328">    * ({@code script-src}, else {@code default-src}) must list {@code 'unsafe-eval'}.  A header added after this point</span>
+<span class="source-line-no">329</span><span id="line-329">    * is not seen here; the client reports it as a loud failure instead.</span>
+<span class="source-line-no">330</span><span id="line-330">    */</span>
+<span class="source-line-no">331</span><span id="line-331">   private static void checkInlineCsp(RestRequest req) {</span>
+<span class="source-line-no">332</span><span id="line-332">      var values = req.getResponse().getHttpServletResponse().getHeaders("Content-Security-Policy");</span>
+<span class="source-line-no">333</span><span id="line-333">      if (values == null || values.isEmpty())</span>
+<span class="source-line-no">334</span><span id="line-334">         return;</span>
+<span class="source-line-no">335</span><span id="line-335">      for (var v : values)</span>
+<span class="source-line-no">336</span><span id="line-336">         if (! allowsEval(v))</span>
+<span class="source-line-no">337</span><span id="line-337">            throw new IllegalStateException("allowInlineHandlers(true) needs 'unsafe-eval' in script-src; the response CSP is: " + String.join(", ", values));</span>
+<span class="source-line-no">338</span><span id="line-338">   }</span>
+<span class="source-line-no">339</span><span id="line-339"></span>
+<span class="source-line-no">340</span><span id="line-340">   private static boolean allowsEval(String policy) {</span>
+<span class="source-line-no">341</span><span id="line-341">      String script = null;</span>
+<span class="source-line-no">342</span><span id="line-342">      String dflt = null;</span>
+<span class="source-line-no">343</span><span id="line-343">      for (var d : policy.split(";")) {</span>
+<span class="source-line-no">344</span><span id="line-344">         var t = d.trim();</span>
+<span class="source-line-no">345</span><span id="line-345">         var lower = t.toLowerCase(java.util.Locale.ROOT);</span>
+<span class="source-line-no">346</span><span id="line-346">         if (lower.equals("script-src") || lower.startsWith("script-src "))</span>
+<span class="source-line-no">347</span><span id="line-347">            script = t;</span>
+<span class="source-line-no">348</span><span id="line-348">         else if (lower.equals("default-src") || lower.startsWith("default-src "))</span>
+<span class="source-line-no">349</span><span id="line-349">            dflt = t;</span>
+<span class="source-line-no">350</span><span id="line-350">      }</span>
+<span class="source-line-no">351</span><span id="line-351">      var effective = script != null ? script : dflt;</span>
+<span class="source-line-no">352</span><span id="line-352">      return effective == null || effective.toLowerCase(java.util.Locale.ROOT).contains(org.apache.juneau.http.header.ContentSecurityPolicy.Builder.UNSAFE_EVAL);</span>
+<span class="source-line-no">353</span><span id="line-353">   }</span>
+<span class="source-line-no">354</span><span id="line-354">}</span>
 
 
 
