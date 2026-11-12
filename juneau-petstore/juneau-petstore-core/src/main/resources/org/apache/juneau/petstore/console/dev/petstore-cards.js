@@ -75,8 +75,7 @@
 
 	// A custom URL-state directive: ?state=species(CAT) picks the gauge's species, and back/forward restores it.  The
 	// built-in directives drive a datatable; the gauge has none, so it reads and writes the directive itself.  The
-	// directive and its page listeners are set up when a gauge first renders, so a page that loads this script for
-	// its kpi alone (the Store) gets neither.
+	// directive and its page listeners are set up when a gauge first renders.
 
 	// The species the gauge accepts.  This must match the server's Species enum: the inventory endpoint rejects any
 	// other name, so a species added there must be added here too.

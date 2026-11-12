@@ -697,7 +697,10 @@ class TmuxPaneTest(PaneCase):
         proc = self.start("-k", "always", "-t", title, "--", "bash", "-c", "echo l1; echo l2; echo l3")
         pid = pane_id(proc)
         deadline = time.time() + 10
-        while "l3" not in self.tmux("capture-pane", "-p", "-t", pid) and time.time() < deadline:
+        # The leader resizes the window (which unzooms it) while it starts; "kept" is only set after that is over.
+        while (("l3" not in self.tmux("capture-pane", "-p", "-t", pid)
+                or not self.tmux("show-options", "-pqv", "-t", pid, "@tmux_state").startswith("kept"))
+               and time.time() < deadline):
             time.sleep(0.1)
         return proc, pid
 

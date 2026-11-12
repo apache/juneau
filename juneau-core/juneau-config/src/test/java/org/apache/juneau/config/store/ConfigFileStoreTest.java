@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
@@ -354,6 +355,24 @@ class ConfigFileStoreTest extends TestBase {
 		} finally {
 			deleteFile(outside.toFile());
 		}
+	}
+
+	@Test void c05_onFileEvent_rootDeleted_doesNotEscape() throws Exception {
+		var fs = FileStore.create().directory(DIR).build();
+		fs.write("X.cfg", null, "foo");
+		deleteFile(DIR);
+		var e = new WatchEvent<Path>() {
+			@Override public Kind<Path> kind() { return StandardWatchEventKinds.ENTRY_MODIFY; }
+			@Override public int count() { return 1; }
+			@Override public Path context() { return Path.of("X.cfg"); }
+		};
+		assertDoesNotThrow(() -> fs.onFileEvent(e));
+	}
+
+	@Test void c06_pathTraversal_stillRejectedAfterRootDeleted() throws Exception {
+		var fs = FileStore.create().directory(DIR).build();
+		deleteFile(DIR);
+		assertThrows(IllegalArgumentException.class, () -> fs.read("../x.cfg"));
 	}
 
 	private static void assertFileExists(String name) {

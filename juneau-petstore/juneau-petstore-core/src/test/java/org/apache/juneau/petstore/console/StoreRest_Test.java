@@ -396,9 +396,6 @@ class StoreRest_Test extends TestBase {
 			assertTrue(expected >= pet.getPrice() - 0.001, () -> "pinned order missing from the expected total");
 			assertTrue(expected > 0);
 			assertEquals(daily.getMap(daily.size() - 1).getInt("delivered"), delivered);
-			var kpi = new JsonMap(c.get("/console/store/kpi/revenue").run().assertStatus(200).getContent().asString());
-			assertBean(kpi, "label,unit", "Revenue today,USD");
-			assertEquals(Math.round(expected * 100) / 100d, kpi.get("value", Double.class), 0.001);
 		} finally {
 			store.deleteOrder(pinned.getId(), "test");
 		}

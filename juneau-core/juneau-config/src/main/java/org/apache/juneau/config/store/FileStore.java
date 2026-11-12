@@ -319,8 +319,14 @@ public class FileStore extends ConfigStore {
 				while (nn(key = watchService.take())) {
 					for (var event : key.pollEvents()) {
 						var kind = event.kind();
-						if (kind != OVERFLOW) // HTT - OVERFLOW events are rare in tests
-							FileStore.this.onFileEvent(((WatchEvent<Path>)event));
+						if (kind != OVERFLOW) { // HTT - OVERFLOW events are rare in tests
+							try {
+								FileStore.this.onFileEvent(((WatchEvent<Path>)event));
+							} catch (@SuppressWarnings("unused") IOException | IllegalArgumentException e) {
+								// The file or directory vanished (or became unreadable) between the event and its handling,
+								// e.g. while the watched directory is being deleted.  Skip the event; don't kill the watcher.
+							}
+						}
 					}
 					if (! key.reset()) // HTT - key always resets in test environment
 						break;
@@ -561,6 +567,9 @@ public class FileStore extends ConfigStore {
 				existing = existing.getParent();
 			if (existing != null && Files.exists(root) && ! existing.toRealPath().startsWith(root.toRealPath()))
 				throw new IllegalArgumentException(MSG_PATH_ESCAPE);
+		} catch (@SuppressWarnings("unused") NoSuchFileException e) {
+			// The path vanished between the existence probe and toRealPath() (e.g. concurrent delete).  Nothing left to
+			// resolve through a symlink, so this is not an escape; the lexical check above already passed.
 		} catch (@SuppressWarnings("unused") InvalidPathException | IOException e) {
 			throw new IllegalArgumentException(MSG_PATH_ESCAPE);
 		}

@@ -53,7 +53,6 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * 	GET /console/store/recent-orders     the ten newest orders
  * 	GET /console/store/stats/daily       {day, placed, delivered} for each recent day
  * 	GET /console/store/stats/revenue     {day, revenue} for each recent day
- * 	GET /console/store/kpi/revenue       {label, value, unit} for the revenue tile
  * 	GET /console/store/stats/species     {species, count} for each species
  * 	GET /console/store/stats/status      {status, count} for each status
  * 	GET /console/store/stats/pets        {id, name, species, status} for each pet
@@ -138,25 +137,6 @@ public class StoreRest extends PetstoreConsolePage {
 			rows.add(JsonMap.of("day", day, "revenue", Math.round(totals.getOrDefault(day, 0d) * 100) / 100d));
 		}
 		return rows;
-	}
-
-	/**
-	 * The revenue tile: the summed pet prices of the orders delivered today, by the store clock in UTC.
-	 *
-	 * @return {@code {label, value, unit}}, with the value rounded to cents.
-	 */
-	@RestGet(path="/kpi/revenue")
-	public JsonMap revenue() {
-		var today = LocalDate.ofInstant(store().clock().instant(), ZoneOffset.UTC).toString();
-		var total = 0d;
-		for (var o : store().getOrders()) {
-			if (o.getStatus() == OrderStatus.DELIVERED && today.equals(o.getShipDate())) {
-				var p = store().getPet(o.getPetId());
-				if (p != null)
-					total += p.getPrice();
-			}
-		}
-		return JsonMap.of("label", "Revenue today", "value", Math.round(total * 100) / 100d, "unit", "USD");
 	}
 
 	/** @return One row {@code {species, count}} per species, in enum order, zero counts included; pets with no species are not counted. */

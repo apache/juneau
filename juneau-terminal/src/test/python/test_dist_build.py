@@ -186,8 +186,9 @@ class BackendTest(Tmp):
         p = subprocess.run([uv, "venv", "-q", "--offline", "-p", "3.10", str(venv)], capture_output=True, text=True)
         if p.returncode != 0:
             need("python3.10-in-uv-cache")
-        p = subprocess.run([uv, "pip", "install", "-q", "--offline", str(self.tmp / WHEEL), "pytest"],
-                           capture_output=True, text=True, env={**os.environ, "VIRTUAL_ENV": str(venv)})
+        install = lambda *pkgs: subprocess.run([uv, "pip", "install", "-q", "--offline", *pkgs], capture_output=True,
+                                               text=True, env={**os.environ, "VIRTUAL_ENV": str(venv)})
+        p = install(str(self.tmp / WHEEL))
         self.assertEqual(p.returncode, 0, p.stderr)
         bin_dir = venv / "bin"
         env = {**os.environ, "HOME": str(self.tmp), "PYTHONDONTWRITEBYTECODE": "1"}
@@ -199,6 +200,10 @@ class BackendTest(Tmp):
         script = subprocess.run([str(bin_dir / "juneau-terminal"), "path", "bin", "watch-run.sh"], capture_output=True,
                                 text=True, env=env).stdout.strip()
         self.assertTrue(os.access(script, os.X_OK), script)
+        p = install("pytest")           # offline: only works when pytest is in the uv cache (not on every CI agent)
+        if p.returncode != 0:
+            need("pytest-in-uv-cache")
+            self.fail(p.stderr)
         suite = self.tmp / "suite"
         suite.mkdir()
         (suite / "test_a.py").write_text("def test_a():\n    pass\n")
