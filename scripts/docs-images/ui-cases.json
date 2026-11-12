@@ -54,7 +54,7 @@
 			"image": "topics/PetstoreJobs.Page.1.png",
 			"description": "The jobs page on its Groom view: the grooming run terminals and run table.",
 			"path": "/console/ops/jobs",
-			"viewport": [1280, 1000],
+			"viewport": [1280, 1100],
 			"initScript": "(() => { const t = Date.now(); Date.now = () => t; })()",
 			"actions": [
 				{"click": "[data-tab-id=\"groom\"]"},
@@ -132,6 +132,20 @@
 				{"click": "[data-tab-id=\"groom\"]"},
 				{"waitFor": "document.querySelector('#groom-file .juneau-term')"},
 				{"evaluate": "new Promise(r => setTimeout(r, 1000))"}
+			]
+		},
+		{
+			"id": "view-settings-dialog",
+			"image": "topics/RichTableViewsSettings.Dialog.1.png",
+			"description": "The View Settings dialog of the pets table, with the saved-views row and Reset to defaults.",
+			"path": "/console/pets",
+			"viewport": [1280, 900],
+			"selector": ".juneau-config-dialog",
+			"actions": [
+				{"waitFor": "document.querySelectorAll('#pets tbody tr').length >= 25"},
+				{"click": ".juneau-config-chooser-btn"},
+				{"waitFor": "document.querySelector('.juneau-config-dialog .juneau-config-reset')"},
+				{"evaluate": "new Promise(r => setTimeout(r, 700))"}
 			]
 		},
 		{

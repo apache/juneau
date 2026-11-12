@@ -262,7 +262,9 @@ def stage_built_javadocs(view, docs_dir, staged_before):
         return fail(view, f"Could not read the git state: {e}"), []
     if not built:
         return 0, []
-    code, _, err = git_out(docs_dir, 'add', '-A', '--', *built)
+    # -f: static/.gitignore ignores javadocs/, and git add refuses a pathspec under an ignored directory even when the
+    # file is tracked.  Every path here came from git diff or a non-ignored ls-files, so -f adds no ignored file.
+    code, _, err = git_out(docs_dir, 'add', '-A', '-f', '--', *built)
     if code != 0:
         unstage_regenerated(docs_dir, [p for p in built if p not in staged_before])
         return fail(view, f"git add failed: {err.strip()}"), []

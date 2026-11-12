@@ -378,6 +378,19 @@ def test_built_javadocs_are_staged_and_committed_but_other_build_output_is_not(d
     assert git(docs_jd, 'diff', '--name-only') == 'build-map.json'
 
 
+def test_tracked_javadocs_under_the_ignored_javadocs_dir_are_still_staged(docs_jd):
+    (docs_jd / 'static' / '.gitignore').write_text('/javadocs/\n', encoding='utf-8')
+    git(docs_jd, 'add', 'static/.gitignore')
+    git(docs_jd, 'commit', '-q', '-m', 'ignore javadocs')
+    fake_build(docs_jd)
+
+    code, paths = push.stage_built_javadocs(RecordingView(), docs_jd, set())
+
+    assert code == 0
+    assert sorted(paths) == [JD + 'A.html', JD + 'Gone.html']   # New.html is untracked and ignored: left alone
+    assert sorted(git(docs_jd, 'diff', '--cached', '--name-only').splitlines()) == sorted(paths)
+
+
 def test_nothing_built_stages_nothing(docs_jd):
     assert push.stage_built_javadocs(RecordingView(), docs_jd, set()) == (0, [])
     assert git(docs_jd, 'diff', '--cached', '--name-only') == ''
