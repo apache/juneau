@@ -111,171 +111,174 @@
 <span class="source-line-no">098</span><span id="line-98">      return builder(req) ? twin(req, UsersPageBuilders.users()) : FreemarkerView.of("users.ftlh");</span>
 <span class="source-line-no">099</span><span id="line-99">   }</span>
 <span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">   private final RowDetail userDetail = RowDetails.user(this::lookup);</span>
-<span class="source-line-no">102</span><span id="line-102"></span>
-<span class="source-line-no">103</span><span id="line-103">   @Override</span>
-<span class="source-line-no">104</span><span id="line-104">   public Collection&lt;RowDetail&gt; rowDetails() {</span>
-<span class="source-line-no">105</span><span id="line-105">      return List.of(userDetail);</span>
-<span class="source-line-no">106</span><span id="line-106">   }</span>
-<span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108">   private UserView lookup(String username) {</span>
-<span class="source-line-no">109</span><span id="line-109">      var u = store().getUser(username);</span>
-<span class="source-line-no">110</span><span id="line-110">      return u == null ? null : UserView.of(u);</span>
-<span class="source-line-no">111</span><span id="line-111">   }</span>
-<span class="source-line-no">112</span><span id="line-112"></span>
-<span class="source-line-no">113</span><span id="line-113">   /**</span>
-<span class="source-line-no">114</span><span id="line-114">    * The Orders tab of the user row detail: the orders a user placed from the console, by id.</span>
-<span class="source-line-no">115</span><span id="line-115">    *</span>
-<span class="source-line-no">116</span><span id="line-116">    * @param username The username.</span>
-<span class="source-line-no">117</span><span id="line-117">    * @return The orders, whose create was audited under this user.</span>
-<span class="source-line-no">118</span><span id="line-118">    * @throws NotFound If {@code username} is missing or names no user.</span>
-<span class="source-line-no">119</span><span id="line-119">    */</span>
-<span class="source-line-no">120</span><span id="line-120">   @RestGet(path="/orders/rows")</span>
-<span class="source-line-no">121</span><span id="line-121">   public List&lt;Order&gt; orderRows(@Query("username") String username) {</span>
-<span class="source-line-no">122</span><span id="line-122">      var u = require(username == null ? "" : username);</span>
-<span class="source-line-no">123</span><span id="line-123">      var actor = "console:" + u.getUsername();</span>
-<span class="source-line-no">124</span><span id="line-124">      var ids = store().getAudit().stream()</span>
-<span class="source-line-no">125</span><span id="line-125">         .filter(x -&gt; "Order".equals(x.getEntity()) &amp;&amp; "CREATE".equals(x.getAction()) &amp;&amp; actor.equals(x.getActor()))</span>
-<span class="source-line-no">126</span><span id="line-126">         .map(AuditEntry::getEntityId).collect(java.util.stream.Collectors.toSet());</span>
-<span class="source-line-no">127</span><span id="line-127">      return store().getOrders().stream().filter(o -&gt; ids.contains(String.valueOf(o.getId()))).sorted(Comparator.comparingLong(Order::getId)).toList();</span>
-<span class="source-line-no">128</span><span id="line-128">   }</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">   /**</span>
-<span class="source-line-no">131</span><span id="line-131">    * The add/edit dialog form.  The password field is write-only: it is never pre-filled.</span>
-<span class="source-line-no">132</span><span id="line-132">    *</span>
-<span class="source-line-no">133</span><span id="line-133">    * @param username The user to edit, or &lt;jk&gt;null&lt;/jk&gt; to add.</span>
-<span class="source-line-no">134</span><span id="line-134">    * @return The modal.</span>
-<span class="source-line-no">135</span><span id="line-135">    * @throws NotFound If {@code username} names no user.</span>
-<span class="source-line-no">136</span><span id="line-136">    */</span>
-<span class="source-line-no">137</span><span id="line-137">   @RestGet(path="/form")</span>
-<span class="source-line-no">138</span><span id="line-138">   public ModalDef form(@Query("username") String username) {</span>
-<span class="source-line-no">139</span><span id="line-139">      var u = username == null ? new User() : require(username);</span>
-<span class="source-line-no">140</span><span id="line-140">      var form = FormDef.create();</span>
-<span class="source-line-no">141</span><span id="line-141">      if (username == null)</span>
-<span class="source-line-no">142</span><span id="line-142">         form.field(FormDef.Input.of("username", "Username", "text").required());</span>
-<span class="source-line-no">143</span><span id="line-143">      form.field(FormDef.Input.of("firstName", "First name", "text").value(u.getFirstName()));</span>
-<span class="source-line-no">144</span><span id="line-144">      form.field(FormDef.Input.of("lastName", "Last name", "text").value(u.getLastName()));</span>
-<span class="source-line-no">145</span><span id="line-145">      var password = FormDef.Input.of("password", "Password", "password");</span>
-<span class="source-line-no">146</span><span id="line-146">      form.field(username == null ? password.required().help("Write-only; it is never shown again") : password.help("Leave blank to keep the current password"));</span>
-<span class="source-line-no">147</span><span id="line-147">      return ModalDef.create(username == null ? "Add user" : f("Edit '%s'", username)).form(form);</span>
-<span class="source-line-no">148</span><span id="line-148">   }</span>
-<span class="source-line-no">149</span><span id="line-149"></span>
-<span class="source-line-no">150</span><span id="line-150">   /**</span>
-<span class="source-line-no">151</span><span id="line-151">    * Server-mode DataTables query over all users, as password-free views.</span>
-<span class="source-line-no">152</span><span id="line-152">    *</span>
-<span class="source-line-no">153</span><span id="line-153">    * @param req The DataTables request.</span>
-<span class="source-line-no">154</span><span id="line-154">    * @return One page of users, or a 200 {@code error} envelope for a malformed search expression.</span>
-<span class="source-line-no">155</span><span id="line-155">    */</span>
-<span class="source-line-no">156</span><span id="line-156">   @RestPost(path="/query")</span>
-<span class="source-line-no">157</span><span id="line-157">   public DataTablesResults&lt;UserView&gt; query(@Content DataTablesRequest req) {</span>
-<span class="source-line-no">158</span><span id="line-158">      try (var s = VIEW_QUERY.getSession(store().getUsers().stream().map(UserView::of).toList())) {</span>
-<span class="source-line-no">159</span><span id="line-159">         return DataTablesQuery.run(req, s);</span>
-<span class="source-line-no">160</span><span id="line-160">      } catch (BeanQuerySyntaxException e) {</span>
-<span class="source-line-no">161</span><span id="line-161">         return DataTablesResults.error(req.getDraw(), e.getMessage());</span>
-<span class="source-line-no">162</span><span id="line-162">      }</span>
-<span class="source-line-no">163</span><span id="line-163">   }</span>
-<span class="source-line-no">164</span><span id="line-164"></span>
-<span class="source-line-no">165</span><span id="line-165">   /**</span>
-<span class="source-line-no">166</span><span id="line-166">    * @param username The username.</span>
-<span class="source-line-no">167</span><span id="line-167">    * @return The user, without the password.</span>
-<span class="source-line-no">168</span><span id="line-168">    * @throws NotFound If it does not exist.</span>
-<span class="source-line-no">169</span><span id="line-169">    */</span>
-<span class="source-line-no">170</span><span id="line-170">   @RestGet(path="/{username}")</span>
-<span class="source-line-no">171</span><span id="line-171">   public UserView get(@Path("username") String username) {</span>
-<span class="source-line-no">172</span><span id="line-172">      return UserView.of(require(username));</span>
-<span class="source-line-no">173</span><span id="line-173">   }</span>
-<span class="source-line-no">174</span><span id="line-174"></span>
-<span class="source-line-no">175</span><span id="line-175">   /**</span>
-<span class="source-line-no">176</span><span id="line-176">    * Creates a user.</span>
-<span class="source-line-no">177</span><span id="line-177">    *</span>
-<span class="source-line-no">178</span><span id="line-178">    * @param req The request (write gate, audit actor).</span>
-<span class="source-line-no">179</span><span id="line-179">    * @param body {@code {username, firstName, lastName, password}}, either plain or as the dialog envelope {@code {fields:{...}}}.</span>
-<span class="source-line-no">180</span><span id="line-180">    * @return The result toast, carrying the user without the password.</span>
-<span class="source-line-no">181</span><span id="line-181">    * @throws BadRequest On a blank username.</span>
-<span class="source-line-no">182</span><span id="line-182">    * @throws Conflict If the username is taken.</span>
-<span class="source-line-no">183</span><span id="line-183">    */</span>
-<span class="source-line-no">184</span><span id="line-184">   @RestPost(path="/")</span>
-<span class="source-line-no">185</span><span id="line-185">   public ActionResult create(RestRequest req, @Content JsonMap body) {</span>
-<span class="source-line-no">186</span><span id="line-186">      var actor = ConsoleWrites.actor(req);</span>
-<span class="source-line-no">187</span><span id="line-187">      var f = fields(body);</span>
-<span class="source-line-no">188</span><span id="line-188">      var username = f.getString("username");</span>
-<span class="source-line-no">189</span><span id="line-189">      if (ib(username))</span>
-<span class="source-line-no">190</span><span id="line-190">         throw new BadRequest("Username must not be blank");</span>
-<span class="source-line-no">191</span><span id="line-191">      if (store().getUser(username) != null)</span>
-<span class="source-line-no">192</span><span id="line-192">         throw new Conflict("User '%s' already exists", username);</span>
-<span class="source-line-no">193</span><span id="line-193">      var u = new User().setUsername(username).setFirstName(f.getString("firstName")).setLastName(f.getString("lastName"))</span>
-<span class="source-line-no">194</span><span id="line-194">         .setPassword(f.getString("password")).setUserStatus(status(f, UserStatus.ACTIVE));</span>
-<span class="source-line-no">195</span><span id="line-195">      store().createUser(u, actor);</span>
-<span class="source-line-no">196</span><span id="line-196">      return ActionResult.success(UserView.of(u)).message(f("Added '%s'", username));</span>
-<span class="source-line-no">197</span><span id="line-197">   }</span>
-<span class="source-line-no">198</span><span id="line-198"></span>
-<span class="source-line-no">199</span><span id="line-199">   /**</span>
-<span class="source-line-no">200</span><span id="line-200">    * Updates a user.  A field left out of the body, and a null or blank password, keep their stored values.</span>
-<span class="source-line-no">201</span><span id="line-201">    *</span>
-<span class="source-line-no">202</span><span id="line-202">    * @param req The request.</span>
-<span class="source-line-no">203</span><span id="line-203">    * @param username The username.</span>
-<span class="source-line-no">204</span><span id="line-204">    * @param body The new state, either plain or as the dialog envelope {@code {fields:{...}}}.</span>
-<span class="source-line-no">205</span><span id="line-205">    * @return The result toast, carrying the user without the password.</span>
-<span class="source-line-no">206</span><span id="line-206">    * @throws NotFound If the user does not exist.</span>
-<span class="source-line-no">207</span><span id="line-207">    */</span>
-<span class="source-line-no">208</span><span id="line-208">   @RestPut(path="/{username}")</span>
-<span class="source-line-no">209</span><span id="line-209">   public ActionResult update(RestRequest req, @Path("username") String username, @Content JsonMap body) {</span>
-<span class="source-line-no">210</span><span id="line-210">      var actor = ConsoleWrites.actor(req);</span>
-<span class="source-line-no">211</span><span id="line-211">      var old = require(username);</span>
-<span class="source-line-no">212</span><span id="line-212">      var f = fields(body);</span>
-<span class="source-line-no">213</span><span id="line-213">      var pw = f.getString("password");</span>
-<span class="source-line-no">214</span><span id="line-214">      var u = new User().setUsername(username)</span>
-<span class="source-line-no">215</span><span id="line-215">         .setFirstName(f.containsKey("firstName") ? f.getString("firstName") : old.getFirstName())</span>
-<span class="source-line-no">216</span><span id="line-216">         .setLastName(f.containsKey("lastName") ? f.getString("lastName") : old.getLastName())</span>
-<span class="source-line-no">217</span><span id="line-217">         .setEmail(old.getEmail()).setPhone(old.getPhone())</span>
-<span class="source-line-no">218</span><span id="line-218">         .setUserStatus(status(f, old.getUserStatus()))</span>
-<span class="source-line-no">219</span><span id="line-219">         .setPassword(pw == null || pw.isBlank() ? old.getPassword() : pw);</span>
-<span class="source-line-no">220</span><span id="line-220">      store().updateUser(u, actor);</span>
-<span class="source-line-no">221</span><span id="line-221">      return ActionResult.success(UserView.of(u)).message(f("Saved '%s'", username));</span>
-<span class="source-line-no">222</span><span id="line-222">   }</span>
-<span class="source-line-no">223</span><span id="line-223"></span>
-<span class="source-line-no">224</span><span id="line-224">   /**</span>
-<span class="source-line-no">225</span><span id="line-225">    * Deletes a user.</span>
-<span class="source-line-no">226</span><span id="line-226">    *</span>
-<span class="source-line-no">227</span><span id="line-227">    * @param req The request.</span>
-<span class="source-line-no">228</span><span id="line-228">    * @param username The username.</span>
-<span class="source-line-no">229</span><span id="line-229">    * @return The result toast.</span>
-<span class="source-line-no">230</span><span id="line-230">    * @throws NotFound If the user does not exist.</span>
-<span class="source-line-no">231</span><span id="line-231">    */</span>
-<span class="source-line-no">232</span><span id="line-232">   @RestDelete(path="/{username}")</span>
-<span class="source-line-no">233</span><span id="line-233">   public ActionResult delete(RestRequest req, @Path("username") String username) {</span>
-<span class="source-line-no">234</span><span id="line-234">      var actor = ConsoleWrites.actor(req);</span>
-<span class="source-line-no">235</span><span id="line-235">      require(username);</span>
-<span class="source-line-no">236</span><span id="line-236">      store().deleteUser(username, actor);</span>
-<span class="source-line-no">237</span><span id="line-237">      return ActionResult.success(null).message(f("Deleted '%s'", username));</span>
-<span class="source-line-no">238</span><span id="line-238">   }</span>
-<span class="source-line-no">239</span><span id="line-239"></span>
-<span class="source-line-no">240</span><span id="line-240">   private User require(String username) {</span>
-<span class="source-line-no">241</span><span id="line-241">      var u = store().getUser(username);</span>
-<span class="source-line-no">242</span><span id="line-242">      if (u == null)</span>
-<span class="source-line-no">243</span><span id="line-243">         throw new NotFound("Unknown user '%s'", username);</span>
-<span class="source-line-no">244</span><span id="line-244">      return u;</span>
-<span class="source-line-no">245</span><span id="line-245">   }</span>
-<span class="source-line-no">246</span><span id="line-246"></span>
-<span class="source-line-no">247</span><span id="line-247">   /** Unwraps the dialog envelope ({@code fields}) if present; otherwise the body is the form itself. */</span>
-<span class="source-line-no">248</span><span id="line-248">   private static JsonMap fields(JsonMap body) {</span>
-<span class="source-line-no">249</span><span id="line-249">      if (body == null)</span>
-<span class="source-line-no">250</span><span id="line-250">         return new JsonMap();</span>
-<span class="source-line-no">251</span><span id="line-251">      var f = body.getMap("fields");</span>
-<span class="source-line-no">252</span><span id="line-252">      return f != null ? f : body;</span>
-<span class="source-line-no">253</span><span id="line-253">   }</span>
-<span class="source-line-no">254</span><span id="line-254"></span>
-<span class="source-line-no">255</span><span id="line-255">   private static UserStatus status(JsonMap f, UserStatus dflt) {</span>
-<span class="source-line-no">256</span><span id="line-256">      var s = f.getString("userStatus");</span>
-<span class="source-line-no">257</span><span id="line-257">      if (ib(s))</span>
-<span class="source-line-no">258</span><span id="line-258">         return dflt;</span>
-<span class="source-line-no">259</span><span id="line-259">      try {</span>
-<span class="source-line-no">260</span><span id="line-260">         return UserStatus.valueOf(s);</span>
-<span class="source-line-no">261</span><span id="line-261">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">262</span><span id="line-262">         throw new BadRequest("Unknown user status '%s'", s);</span>
-<span class="source-line-no">263</span><span id="line-263">      }</span>
-<span class="source-line-no">264</span><span id="line-264">   }</span>
-<span class="source-line-no">265</span><span id="line-265">}</span>
+<span class="source-line-no">101</span><span id="line-101">   @SuppressWarnings({</span>
+<span class="source-line-no">102</span><span id="line-102">      "java:S1948" // Servlets are nominally Serializable, but these REST resources are never serialized.</span>
+<span class="source-line-no">103</span><span id="line-103">   })</span>
+<span class="source-line-no">104</span><span id="line-104">   private final RowDetail userDetail = RowDetails.user(this::lookup);</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">   @Override</span>
+<span class="source-line-no">107</span><span id="line-107">   public Collection&lt;RowDetail&gt; rowDetails() {</span>
+<span class="source-line-no">108</span><span id="line-108">      return List.of(userDetail);</span>
+<span class="source-line-no">109</span><span id="line-109">   }</span>
+<span class="source-line-no">110</span><span id="line-110"></span>
+<span class="source-line-no">111</span><span id="line-111">   private UserView lookup(String username) {</span>
+<span class="source-line-no">112</span><span id="line-112">      var u = store().getUser(username);</span>
+<span class="source-line-no">113</span><span id="line-113">      return u == null ? null : UserView.of(u);</span>
+<span class="source-line-no">114</span><span id="line-114">   }</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   /**</span>
+<span class="source-line-no">117</span><span id="line-117">    * The Orders tab of the user row detail: the orders a user placed from the console, by id.</span>
+<span class="source-line-no">118</span><span id="line-118">    *</span>
+<span class="source-line-no">119</span><span id="line-119">    * @param username The username.</span>
+<span class="source-line-no">120</span><span id="line-120">    * @return The orders, whose create was audited under this user.</span>
+<span class="source-line-no">121</span><span id="line-121">    * @throws NotFound If {@code username} is missing or names no user.</span>
+<span class="source-line-no">122</span><span id="line-122">    */</span>
+<span class="source-line-no">123</span><span id="line-123">   @RestGet(path="/orders/rows")</span>
+<span class="source-line-no">124</span><span id="line-124">   public List&lt;Order&gt; orderRows(@Query("username") String username) {</span>
+<span class="source-line-no">125</span><span id="line-125">      var u = require(username == null ? "" : username);</span>
+<span class="source-line-no">126</span><span id="line-126">      var actor = "console:" + u.getUsername();</span>
+<span class="source-line-no">127</span><span id="line-127">      var ids = store().getAudit().stream()</span>
+<span class="source-line-no">128</span><span id="line-128">         .filter(x -&gt; "Order".equals(x.getEntity()) &amp;&amp; "CREATE".equals(x.getAction()) &amp;&amp; actor.equals(x.getActor()))</span>
+<span class="source-line-no">129</span><span id="line-129">         .map(AuditEntry::getEntityId).collect(java.util.stream.Collectors.toSet());</span>
+<span class="source-line-no">130</span><span id="line-130">      return store().getOrders().stream().filter(o -&gt; ids.contains(String.valueOf(o.getId()))).sorted(Comparator.comparingLong(Order::getId)).toList();</span>
+<span class="source-line-no">131</span><span id="line-131">   }</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">   /**</span>
+<span class="source-line-no">134</span><span id="line-134">    * The add/edit dialog form.  The password field is write-only: it is never pre-filled.</span>
+<span class="source-line-no">135</span><span id="line-135">    *</span>
+<span class="source-line-no">136</span><span id="line-136">    * @param username The user to edit, or &lt;jk&gt;null&lt;/jk&gt; to add.</span>
+<span class="source-line-no">137</span><span id="line-137">    * @return The modal.</span>
+<span class="source-line-no">138</span><span id="line-138">    * @throws NotFound If {@code username} names no user.</span>
+<span class="source-line-no">139</span><span id="line-139">    */</span>
+<span class="source-line-no">140</span><span id="line-140">   @RestGet(path="/form")</span>
+<span class="source-line-no">141</span><span id="line-141">   public ModalDef form(@Query("username") String username) {</span>
+<span class="source-line-no">142</span><span id="line-142">      var u = username == null ? new User() : require(username);</span>
+<span class="source-line-no">143</span><span id="line-143">      var form = FormDef.create();</span>
+<span class="source-line-no">144</span><span id="line-144">      if (username == null)</span>
+<span class="source-line-no">145</span><span id="line-145">         form.field(FormDef.Input.of("username", "Username", "text").required());</span>
+<span class="source-line-no">146</span><span id="line-146">      form.field(FormDef.Input.of("firstName", "First name", "text").value(u.getFirstName()));</span>
+<span class="source-line-no">147</span><span id="line-147">      form.field(FormDef.Input.of("lastName", "Last name", "text").value(u.getLastName()));</span>
+<span class="source-line-no">148</span><span id="line-148">      var password = FormDef.Input.of("password", "Password", "password");</span>
+<span class="source-line-no">149</span><span id="line-149">      form.field(username == null ? password.required().help("Write-only; it is never shown again") : password.help("Leave blank to keep the current password"));</span>
+<span class="source-line-no">150</span><span id="line-150">      return ModalDef.create(username == null ? "Add user" : f("Edit '%s'", username)).form(form);</span>
+<span class="source-line-no">151</span><span id="line-151">   }</span>
+<span class="source-line-no">152</span><span id="line-152"></span>
+<span class="source-line-no">153</span><span id="line-153">   /**</span>
+<span class="source-line-no">154</span><span id="line-154">    * Server-mode DataTables query over all users, as password-free views.</span>
+<span class="source-line-no">155</span><span id="line-155">    *</span>
+<span class="source-line-no">156</span><span id="line-156">    * @param req The DataTables request.</span>
+<span class="source-line-no">157</span><span id="line-157">    * @return One page of users, or a 200 {@code error} envelope for a malformed search expression.</span>
+<span class="source-line-no">158</span><span id="line-158">    */</span>
+<span class="source-line-no">159</span><span id="line-159">   @RestPost(path="/query")</span>
+<span class="source-line-no">160</span><span id="line-160">   public DataTablesResults&lt;UserView&gt; query(@Content DataTablesRequest req) {</span>
+<span class="source-line-no">161</span><span id="line-161">      try (var s = VIEW_QUERY.getSession(store().getUsers().stream().map(UserView::of).toList())) {</span>
+<span class="source-line-no">162</span><span id="line-162">         return DataTablesQuery.run(req, s);</span>
+<span class="source-line-no">163</span><span id="line-163">      } catch (BeanQuerySyntaxException e) {</span>
+<span class="source-line-no">164</span><span id="line-164">         return DataTablesResults.error(req.getDraw(), e.getMessage());</span>
+<span class="source-line-no">165</span><span id="line-165">      }</span>
+<span class="source-line-no">166</span><span id="line-166">   }</span>
+<span class="source-line-no">167</span><span id="line-167"></span>
+<span class="source-line-no">168</span><span id="line-168">   /**</span>
+<span class="source-line-no">169</span><span id="line-169">    * @param username The username.</span>
+<span class="source-line-no">170</span><span id="line-170">    * @return The user, without the password.</span>
+<span class="source-line-no">171</span><span id="line-171">    * @throws NotFound If it does not exist.</span>
+<span class="source-line-no">172</span><span id="line-172">    */</span>
+<span class="source-line-no">173</span><span id="line-173">   @RestGet(path="/{username}")</span>
+<span class="source-line-no">174</span><span id="line-174">   public UserView get(@Path("username") String username) {</span>
+<span class="source-line-no">175</span><span id="line-175">      return UserView.of(require(username));</span>
+<span class="source-line-no">176</span><span id="line-176">   }</span>
+<span class="source-line-no">177</span><span id="line-177"></span>
+<span class="source-line-no">178</span><span id="line-178">   /**</span>
+<span class="source-line-no">179</span><span id="line-179">    * Creates a user.</span>
+<span class="source-line-no">180</span><span id="line-180">    *</span>
+<span class="source-line-no">181</span><span id="line-181">    * @param req The request (write gate, audit actor).</span>
+<span class="source-line-no">182</span><span id="line-182">    * @param body {@code {username, firstName, lastName, password}}, either plain or as the dialog envelope {@code {fields:{...}}}.</span>
+<span class="source-line-no">183</span><span id="line-183">    * @return The result toast, carrying the user without the password.</span>
+<span class="source-line-no">184</span><span id="line-184">    * @throws BadRequest On a blank username.</span>
+<span class="source-line-no">185</span><span id="line-185">    * @throws Conflict If the username is taken.</span>
+<span class="source-line-no">186</span><span id="line-186">    */</span>
+<span class="source-line-no">187</span><span id="line-187">   @RestPost(path="/")</span>
+<span class="source-line-no">188</span><span id="line-188">   public ActionResult create(RestRequest req, @Content JsonMap body) {</span>
+<span class="source-line-no">189</span><span id="line-189">      var actor = ConsoleWrites.actor(req);</span>
+<span class="source-line-no">190</span><span id="line-190">      var f = fields(body);</span>
+<span class="source-line-no">191</span><span id="line-191">      var username = f.getString("username");</span>
+<span class="source-line-no">192</span><span id="line-192">      if (ib(username))</span>
+<span class="source-line-no">193</span><span id="line-193">         throw new BadRequest("Username must not be blank");</span>
+<span class="source-line-no">194</span><span id="line-194">      if (store().getUser(username) != null)</span>
+<span class="source-line-no">195</span><span id="line-195">         throw new Conflict("User '%s' already exists", username);</span>
+<span class="source-line-no">196</span><span id="line-196">      var u = new User().setUsername(username).setFirstName(f.getString("firstName")).setLastName(f.getString("lastName"))</span>
+<span class="source-line-no">197</span><span id="line-197">         .setPassword(f.getString("password")).setUserStatus(status(f, UserStatus.ACTIVE));</span>
+<span class="source-line-no">198</span><span id="line-198">      store().createUser(u, actor);</span>
+<span class="source-line-no">199</span><span id="line-199">      return ActionResult.success(UserView.of(u)).message(f("Added '%s'", username));</span>
+<span class="source-line-no">200</span><span id="line-200">   }</span>
+<span class="source-line-no">201</span><span id="line-201"></span>
+<span class="source-line-no">202</span><span id="line-202">   /**</span>
+<span class="source-line-no">203</span><span id="line-203">    * Updates a user.  A field left out of the body, and a null or blank password, keep their stored values.</span>
+<span class="source-line-no">204</span><span id="line-204">    *</span>
+<span class="source-line-no">205</span><span id="line-205">    * @param req The request.</span>
+<span class="source-line-no">206</span><span id="line-206">    * @param username The username.</span>
+<span class="source-line-no">207</span><span id="line-207">    * @param body The new state, either plain or as the dialog envelope {@code {fields:{...}}}.</span>
+<span class="source-line-no">208</span><span id="line-208">    * @return The result toast, carrying the user without the password.</span>
+<span class="source-line-no">209</span><span id="line-209">    * @throws NotFound If the user does not exist.</span>
+<span class="source-line-no">210</span><span id="line-210">    */</span>
+<span class="source-line-no">211</span><span id="line-211">   @RestPut(path="/{username}")</span>
+<span class="source-line-no">212</span><span id="line-212">   public ActionResult update(RestRequest req, @Path("username") String username, @Content JsonMap body) {</span>
+<span class="source-line-no">213</span><span id="line-213">      var actor = ConsoleWrites.actor(req);</span>
+<span class="source-line-no">214</span><span id="line-214">      var old = require(username);</span>
+<span class="source-line-no">215</span><span id="line-215">      var f = fields(body);</span>
+<span class="source-line-no">216</span><span id="line-216">      var pw = f.getString("password");</span>
+<span class="source-line-no">217</span><span id="line-217">      var u = new User().setUsername(username)</span>
+<span class="source-line-no">218</span><span id="line-218">         .setFirstName(f.containsKey("firstName") ? f.getString("firstName") : old.getFirstName())</span>
+<span class="source-line-no">219</span><span id="line-219">         .setLastName(f.containsKey("lastName") ? f.getString("lastName") : old.getLastName())</span>
+<span class="source-line-no">220</span><span id="line-220">         .setEmail(old.getEmail()).setPhone(old.getPhone())</span>
+<span class="source-line-no">221</span><span id="line-221">         .setUserStatus(status(f, old.getUserStatus()))</span>
+<span class="source-line-no">222</span><span id="line-222">         .setPassword(pw == null || pw.isBlank() ? old.getPassword() : pw);</span>
+<span class="source-line-no">223</span><span id="line-223">      store().updateUser(u, actor);</span>
+<span class="source-line-no">224</span><span id="line-224">      return ActionResult.success(UserView.of(u)).message(f("Saved '%s'", username));</span>
+<span class="source-line-no">225</span><span id="line-225">   }</span>
+<span class="source-line-no">226</span><span id="line-226"></span>
+<span class="source-line-no">227</span><span id="line-227">   /**</span>
+<span class="source-line-no">228</span><span id="line-228">    * Deletes a user.</span>
+<span class="source-line-no">229</span><span id="line-229">    *</span>
+<span class="source-line-no">230</span><span id="line-230">    * @param req The request.</span>
+<span class="source-line-no">231</span><span id="line-231">    * @param username The username.</span>
+<span class="source-line-no">232</span><span id="line-232">    * @return The result toast.</span>
+<span class="source-line-no">233</span><span id="line-233">    * @throws NotFound If the user does not exist.</span>
+<span class="source-line-no">234</span><span id="line-234">    */</span>
+<span class="source-line-no">235</span><span id="line-235">   @RestDelete(path="/{username}")</span>
+<span class="source-line-no">236</span><span id="line-236">   public ActionResult delete(RestRequest req, @Path("username") String username) {</span>
+<span class="source-line-no">237</span><span id="line-237">      var actor = ConsoleWrites.actor(req);</span>
+<span class="source-line-no">238</span><span id="line-238">      require(username);</span>
+<span class="source-line-no">239</span><span id="line-239">      store().deleteUser(username, actor);</span>
+<span class="source-line-no">240</span><span id="line-240">      return ActionResult.success(null).message(f("Deleted '%s'", username));</span>
+<span class="source-line-no">241</span><span id="line-241">   }</span>
+<span class="source-line-no">242</span><span id="line-242"></span>
+<span class="source-line-no">243</span><span id="line-243">   private User require(String username) {</span>
+<span class="source-line-no">244</span><span id="line-244">      var u = store().getUser(username);</span>
+<span class="source-line-no">245</span><span id="line-245">      if (u == null)</span>
+<span class="source-line-no">246</span><span id="line-246">         throw new NotFound("Unknown user '%s'", username);</span>
+<span class="source-line-no">247</span><span id="line-247">      return u;</span>
+<span class="source-line-no">248</span><span id="line-248">   }</span>
+<span class="source-line-no">249</span><span id="line-249"></span>
+<span class="source-line-no">250</span><span id="line-250">   /** Unwraps the dialog envelope ({@code fields}) if present; otherwise the body is the form itself. */</span>
+<span class="source-line-no">251</span><span id="line-251">   private static JsonMap fields(JsonMap body) {</span>
+<span class="source-line-no">252</span><span id="line-252">      if (body == null)</span>
+<span class="source-line-no">253</span><span id="line-253">         return new JsonMap();</span>
+<span class="source-line-no">254</span><span id="line-254">      var f = body.getMap("fields");</span>
+<span class="source-line-no">255</span><span id="line-255">      return f != null ? f : body;</span>
+<span class="source-line-no">256</span><span id="line-256">   }</span>
+<span class="source-line-no">257</span><span id="line-257"></span>
+<span class="source-line-no">258</span><span id="line-258">   private static UserStatus status(JsonMap f, UserStatus dflt) {</span>
+<span class="source-line-no">259</span><span id="line-259">      var s = f.getString("userStatus");</span>
+<span class="source-line-no">260</span><span id="line-260">      if (ib(s))</span>
+<span class="source-line-no">261</span><span id="line-261">         return dflt;</span>
+<span class="source-line-no">262</span><span id="line-262">      try {</span>
+<span class="source-line-no">263</span><span id="line-263">         return UserStatus.valueOf(s);</span>
+<span class="source-line-no">264</span><span id="line-264">      } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">265</span><span id="line-265">         throw new BadRequest("Unknown user status '%s'", s);</span>
+<span class="source-line-no">266</span><span id="line-266">      }</span>
+<span class="source-line-no">267</span><span id="line-267">   }</span>
+<span class="source-line-no">268</span><span id="line-268">}</span>
 
 
 

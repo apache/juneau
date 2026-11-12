@@ -338,3 +338,63 @@ def test_the_dry_run_names_the_one_staging_exception(docs, capsys):
     out = capsys.readouterr().out
     assert 'check-ai-artifacts.py' in out and 'generate-ai-artifacts.py' in out
     assert 'stages nothing else' in out
+
+
+JD = 'static/javadocs/10.0.0/'
+
+
+@pytest.fixture
+def docs_jd(docs):
+    """docs with committed javadoc pages and a non-javadoc tracked file the 'build' will rewrite."""
+    (docs / 'static' / 'javadocs' / '10.0.0').mkdir(parents=True)
+    for name in ('A.html', 'B.html', 'Gone.html'):
+        (docs / JD / name).write_text('old', encoding='utf-8')
+    (docs / 'build-map.json').write_text('{}', encoding='utf-8')
+    git(docs, 'add', '-A')
+    git(docs, 'commit', '-q', '-m', 'javadoc fixtures')
+    return docs
+
+
+def fake_build(docs):
+    (docs / JD / 'A.html').write_text('new', encoding='utf-8')
+    (docs / JD / 'New.html').write_text('new', encoding='utf-8')
+    (docs / JD / 'Gone.html').unlink()
+    (docs / 'build-map.json').write_text('{"x":1}', encoding='utf-8')
+
+
+def test_built_javadocs_are_staged_and_committed_but_other_build_output_is_not(docs_jd):
+    fake_build(docs_jd)
+    view = RecordingView()
+
+    code, paths = push.stage_built_javadocs(view, docs_jd, set())
+
+    assert code == 0
+    assert sorted(paths) == [JD + 'A.html', JD + 'Gone.html', JD + 'New.html']
+    assert sorted(git(docs_jd, 'diff', '--cached', '--name-only').splitlines()) == sorted(paths)
+    assert any('Staged 3 regenerated javadoc files' in s for s in view.said)
+    assert git(docs_jd, 'diff', '--name-only') == 'build-map.json'
+    push.commit_and_push(view, docs_jd, 'm')
+    assert sorted(git(docs_jd, 'show', '--name-only', '--format=', 'HEAD').splitlines()) == sorted(paths)
+    assert git(docs_jd, 'diff', '--name-only') == 'build-map.json'
+
+
+def test_nothing_built_stages_nothing(docs_jd):
+    assert push.stage_built_javadocs(RecordingView(), docs_jd, set()) == (0, [])
+    assert git(docs_jd, 'diff', '--cached', '--name-only') == ''
+
+
+def test_a_failed_run_unstages_new_javadoc_paths_but_not_operator_staged_ones(docs_jd, monkeypatch):
+    (docs_jd / JD / 'B.html').write_text('reviewed', encoding='utf-8')
+    git(docs_jd, 'add', JD + 'B.html')
+
+    def failing_steps(args, view, stage, docs_dir, juneau_root, regenerated):
+        (docs_dir / JD / 'B.html').write_text('rebuilt', encoding='utf-8')
+        fake_build(docs_dir)
+        regenerated.extend(push.stage_built_javadocs(view, docs_dir, {JD + 'B.html'})[1])
+        assert JD + 'B.html' not in regenerated
+        return 1
+    monkeypatch.setattr(push, '_run_steps', failing_steps)
+
+    assert push.push_steps(argparse.Namespace(), RecordingView(), stage, docs_jd, None) == 1
+
+    assert git(docs_jd, 'diff', '--cached', '--name-only') == JD + 'B.html'

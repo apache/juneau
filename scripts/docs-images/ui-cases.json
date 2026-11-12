@@ -19,11 +19,11 @@
 		{
 			"id": "store-page",
 			"image": "topics/PetstoreStore.Page.1.png",
-			"description": "The whole store page: welcome, recent orders, revenue, the four charts and store hours.",
+			"description": "The store page as it opens: welcome card and the switcher showing Recent orders.",
 			"path": "/console/store",
-			"viewport": [1280, 2300],
+			"viewport": [1280, 700],
 			"actions": [
-				{"waitFor": "document.querySelectorAll('#stats tbody tr').length >= 10 && document.querySelectorAll('.jc-card canvas').length >= 4"},
+				{"waitFor": "document.querySelectorAll('#stats tbody tr').length >= 10"},
 				{"evaluate": "new Promise(r => setTimeout(r, 1500))"}
 			]
 		},
@@ -52,12 +52,13 @@
 		{
 			"id": "jobs-page",
 			"image": "topics/PetstoreJobs.Page.1.png",
-			"description": "The jobs page: restock form, job table, species table and the grooming job's output.",
+			"description": "The jobs page on its Groom view: the grooming run terminals and run table.",
 			"path": "/console/ops/jobs",
-			"viewport": [1280, 2420],
+			"viewport": [1280, 1000],
 			"initScript": "(() => { const t = Date.now(); Date.now = () => t; })()",
 			"actions": [
-				{"waitFor": "document.querySelectorAll('#species tbody tr').length >= 7 && document.querySelector('#groom-file .juneau-term')"},
+				{"click": "[data-tab-id=\"groom\"]"},
+				{"waitFor": "document.querySelector('#groom-file .juneau-term')"},
 				{"waitFor": "Array.from(document.querySelectorAll('span, div')).filter(e => !e.children.length && e.textContent.trim() === 'Done').length >= 2", "timeoutMs": 120000},
 				{"evaluate": "new Promise(r => setTimeout(r, 1000))"}
 			]
@@ -80,7 +81,7 @@
 			"viewport": [1280, 2300],
 			"selector": "#orders-trend",
 			"actions": [
-				{"waitFor": "document.querySelector('#orders-trend canvas')"},
+				{"click": "[data-tab-id=\"orders\"]"}, {"waitFor": "document.querySelector('#orders-trend canvas')"},
 				{"evaluate": "new Promise(r => setTimeout(r, 1500))"}
 			]
 		},
@@ -92,7 +93,7 @@
 			"viewport": [1280, 2300],
 			"selector": "#by-status",
 			"actions": [
-				{"waitFor": "document.querySelector('#by-status canvas')"},
+				{"click": "[data-tab-id=\"pets\"]"}, {"click": "[data-tab-id=\"status\"]"}, {"waitFor": "document.querySelector('#by-status canvas')"},
 				{"evaluate": "new Promise(r => setTimeout(r, 1500))"}
 			]
 		},
@@ -104,7 +105,7 @@
 			"viewport": [1280, 2300],
 			"selector": "#by-species",
 			"actions": [
-				{"waitFor": "document.querySelector('#by-species canvas')"},
+				{"click": "[data-tab-id=\"pets\"]"}, {"waitFor": "document.querySelector('#by-species canvas')"},
 				{"evaluate": "new Promise(r => setTimeout(r, 1500))"}
 			]
 		},
@@ -128,6 +129,7 @@
 			"viewport": [1280, 2420],
 			"selector": "#groom-file",
 			"actions": [
+				{"click": "[data-tab-id=\"groom\"]"},
 				{"waitFor": "document.querySelector('#groom-file .juneau-term')"},
 				{"evaluate": "new Promise(r => setTimeout(r, 1000))"}
 			]

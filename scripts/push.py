@@ -35,7 +35,8 @@ This script:
 1. Runs the Prechecks: git identity, branch docs, no unreviewed (unstaged or untracked) files, not behind upstream
 2. Regenerates stale AI artifacts (static/llms.txt, static/ai/) and stages exactly the files that run rewrote
 3. Runs build-docs.py (the one list of checks, plus the Docusaurus build); --staging unless --no-stage
-4. Commits whatever is already staged (it stages nothing else) and pushes docs to its upstream
+   Stages the javadoc pages that build rewrote (static/javadocs/) so they ride in the same commit
+4. Commits whatever is staged (it stages nothing else) and pushes docs to its upstream
 5. Stages the same build to asf-staging (release-docs-stage.py's fetch/copy/commit/push), unless --no-stage
 
 Usage:
@@ -243,6 +244,32 @@ def regenerate_ai_artifacts(view, docs_dir, juneau_root):
     return 0, written
 
 
+JAVADOC_PREFIX = 'static/javadocs/'
+
+
+def stage_built_javadocs(view, docs_dir, staged_before):
+    """
+    Stage the javadoc output the build wrote (new, modified or deleted files under static/javadocs/); returns
+    (exit code, paths newly staged by this run).
+
+    Provenance is the same as for the AI artifacts: the unreviewed-changes refusal passed before the build, so every
+    unstaged or untracked path now is build output.  A path the operator had staged before the run is re-added (it is
+    generated) but not returned, so a failed run never unstages it.
+    """
+    try:
+        built = [p for p in unreviewed_paths(docs_dir) if p.startswith(JAVADOC_PREFIX)]
+    except RuntimeError as e:
+        return fail(view, f"Could not read the git state: {e}"), []
+    if not built:
+        return 0, []
+    code, _, err = git_out(docs_dir, 'add', '-A', '--', *built)
+    if code != 0:
+        unstage_regenerated(docs_dir, [p for p in built if p not in staged_before])
+        return fail(view, f"git add failed: {err.strip()}"), []
+    view.say(f"Staged {len(built)} regenerated javadoc file{'s' if len(built) != 1 else ''} for this commit.")
+    return 0, [p for p in built if p not in staged_before]
+
+
 def unstage_regenerated(docs_dir, paths):
     """Unstage exactly the paths regenerate_ai_artifacts staged (a no-op once they are committed); the files stay on disk."""
     if paths:
@@ -277,6 +304,11 @@ def _run_steps(args, view, stage, docs_dir, juneau_root, regenerated):
     if code:
         return code
 
+    try:
+        staged_before = set(staged_paths(docs_dir))
+    except RuntimeError as e:
+        return fail(view, f"Could not read the index: {e}")
+
     view.banner("Building and checking the documentation")
     if args.no_stage:
         if not (stage.BUILD_SCRIPT).exists():
@@ -296,8 +328,12 @@ def _run_steps(args, view, stage, docs_dir, juneau_root, regenerated):
         if code is not None:
             return code
 
-    # The build can rewrite tracked files (artifact maps, the javadoc copy and index).  Those are build output, not
-    # reviewed work, so they are reported but never committed (only the index is) and never block.
+    # The build copies fresh javadocs into static/javadocs/: stage them so they ride in this commit.  Any other tracked
+    # file it rewrote (artifact maps, the javadoc index) is build output, not reviewed work: reported, never committed.
+    code, paths = stage_built_javadocs(view, docs_dir, staged_before)
+    regenerated.extend(paths)
+    if code:
+        return code
     try:
         built = unreviewed_paths(docs_dir)
     except RuntimeError:
@@ -330,7 +366,9 @@ def dry_run(args, view, stage, docs_dir):
           "the run fails before the commit)")
     print(f"  3. python3 scripts/build-docs.py {'--skip-maven' if args.no_stage else '--staging'} "
           "(every docs check, then the Docusaurus build)")
-    print(f"  4. Commit whatever is already staged: git commit -m \"{args.message}\" (stages nothing else)")
+    print(f"  3b. Stage the javadoc output the build wrote under {JAVADOC_PREFIX} (unstaged again if the run fails "
+          "before the commit; other build output is left unstaged)")
+    print(f"  4. Commit whatever is staged: git commit -m \"{args.message}\" (stages nothing else)")
     print(f"  5. Push {REQUIRED_BRANCH} to its upstream")
     if args.no_stage:
         print("  6. Staging skipped (--no-stage)")

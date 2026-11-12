@@ -407,7 +407,7 @@
 <span class="source-line-no">394</span><span id="line-394">   private static void checkNoContractVersion(CardSource source, Object node, String where) {</span>
 <span class="source-line-no">395</span><span id="line-395">      if (node instanceof Map&lt;?,?&gt; m) {</span>
 <span class="source-line-no">396</span><span id="line-396">         // A nested-table tab carries a pre-built slot, whose contractVersion is part of its shape.</span>
-<span class="source-line-no">397</span><span id="line-397">         if ("table".equals(m.get("kind")) &amp;&amp; m.get("nested") instanceof Map&lt;?,?&gt; nested) {</span>
+<span class="source-line-no">397</span><span id="line-397">         if ("table".equals(m.get("kind")) &amp;&amp; m.get("nested") instanceof Map&lt;?,?&gt;) {</span>
 <span class="source-line-no">398</span><span id="line-398">            var rest = new LinkedHashMap&lt;Object,Object&gt;(m);</span>
 <span class="source-line-no">399</span><span id="line-399">            rest.remove("nested");</span>
 <span class="source-line-no">400</span><span id="line-400">            checkNoContractVersion(source, rest, where);</span>

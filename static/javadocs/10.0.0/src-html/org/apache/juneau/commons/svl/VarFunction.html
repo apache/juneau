@@ -139,10 +139,13 @@
 <span class="source-line-no">126</span><span id="line-126">    * @return The result; &lt;jk&gt;null&lt;/jk&gt; means absent.</span>
 <span class="source-line-no">127</span><span id="line-127">    * @throws Exception Function-specific failure.</span>
 <span class="source-line-no">128</span><span id="line-128">    */</span>
-<span class="source-line-no">129</span><span id="line-129">   default Object invokeValue(VarResolverSession session, List&lt;Object&gt; args) throws Exception {</span>
-<span class="source-line-no">130</span><span id="line-130">      return invoke(session, args);</span>
-<span class="source-line-no">131</span><span id="line-131">   }</span>
-<span class="source-line-no">132</span><span id="line-132">}</span>
+<span class="source-line-no">129</span><span id="line-129">   @SuppressWarnings({</span>
+<span class="source-line-no">130</span><span id="line-130">      "java:S112" // Functions may fail with any checked exception; this is the public contract</span>
+<span class="source-line-no">131</span><span id="line-131">   })</span>
+<span class="source-line-no">132</span><span id="line-132">   default Object invokeValue(VarResolverSession session, List&lt;Object&gt; args) throws Exception {</span>
+<span class="source-line-no">133</span><span id="line-133">      return invoke(session, args);</span>
+<span class="source-line-no">134</span><span id="line-134">   }</span>
+<span class="source-line-no">135</span><span id="line-135">}</span>
 
 
 
