@@ -327,322 +327,331 @@
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 				<strong class="jxr_keyword">while</strong> (nn(key = watchService.take())) {
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> event : key.pollEvents()) {
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 						<strong class="jxr_keyword">var</strong> kind = event.kind();
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 						<strong class="jxr_keyword">if</strong> (kind != OVERFLOW) <em class="jxr_comment">// HTT - OVERFLOW events are rare in tests</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 							FileStore.<strong class="jxr_keyword">this</strong>.onFileEvent(((WatchEvent&lt;Path&gt;)event));
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 					}
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 					<strong class="jxr_keyword">if</strong> (! key.reset()) <em class="jxr_comment">// HTT - key always resets in test environment</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 						<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 				}
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) InterruptedException e) {
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 				Thread.currentThread().interrupt();
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) ClosedWatchServiceException e) {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 				<em class="jxr_comment">// Expected on shutdown: interrupt() closes the WatchService while take() is blocked in this loop.</em>
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 				<strong class="jxr_keyword">throw</strong> toRex(e); <em class="jxr_comment">// HTT - unexpected exception from watchService.take()</em>
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			}
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		}
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		@SuppressWarnings({
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			<span class="jxr_string">"java:S5738"</span> <em class="jxr_comment">// com.sun.nio.file.SensitivityWatchEventModifier is deprecated-for-removal but has no public JDK replacement for WatchService poll sensitivity; required for the watcher-sensitivity feature on JVMs that still honor it.</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		})
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">private</strong> WatchEvent.Modifier lookupModifier(<a name="WatcherSensitivity" href="../../../../../org/apache/juneau/config/store/WatcherSensitivity.html#WatcherSensitivity">WatcherSensitivity</a> s) {
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (s) {
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 					<strong class="jxr_keyword">case</strong> LOW -&gt; com.sun.nio.file.SensitivityWatchEventModifier.LOW;
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 					<strong class="jxr_keyword">case</strong> MEDIUM -&gt; com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 					<strong class="jxr_keyword">case</strong> HIGH -&gt; com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 				};
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) Exception e) {
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 				<em class="jxr_comment">/* Ignore */</em> <em class="jxr_comment">// HTT - SensitivityWatchEventModifier exists on all supported JVMs</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			}
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// HTT - return null is only reached if SensitivityWatchEventModifier is unavailable</em>
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		}
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	}
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<em class="jxr_javadoccomment">/** Default file store, all default values.*/</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> FileStore DEFAULT = FileStore.create().build();
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 * Creates a new builder for this object.</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 * @return A new builder.</em>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	}
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> enableWatcher;
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> updateOnWrite;
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Charset charset;
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String directory;
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String extensions;
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="WatcherSensitivity" href="../../../../../org/apache/juneau/config/store/WatcherSensitivity.html#WatcherSensitivity">WatcherSensitivity</a> watcherSensitivity;
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ConcurrentHashMap&lt;String,String&gt; cache = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ConcurrentHashMap&lt;String,String&gt; nameCache = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> File dir;
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] exts;
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> WatcherThread watcher;
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 						<strong class="jxr_keyword">if</strong> (kind != OVERFLOW) { <em class="jxr_comment">// HTT - OVERFLOW events are rare in tests</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 							<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 								FileStore.<strong class="jxr_keyword">this</strong>.onFileEvent(((WatchEvent&lt;Path&gt;)event));
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 							} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IOException | IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 								<em class="jxr_comment">// The file or directory vanished (or became unreadable) between the event and its handling,</em>
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 								<em class="jxr_comment">// e.g. while the watched directory is being deleted.  Skip the event; don't kill the watcher.</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 							}
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 						}
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 					}
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 					<strong class="jxr_keyword">if</strong> (! key.reset()) <em class="jxr_comment">// HTT - key always resets in test environment</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 						<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 				}
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) InterruptedException e) {
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 				Thread.currentThread().interrupt();
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) ClosedWatchServiceException e) {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 				<em class="jxr_comment">// Expected on shutdown: interrupt() closes the WatchService while take() is blocked in this loop.</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 				<strong class="jxr_keyword">throw</strong> toRex(e); <em class="jxr_comment">// HTT - unexpected exception from watchService.take()</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			}
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		}
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		@SuppressWarnings({
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<span class="jxr_string">"java:S5738"</span> <em class="jxr_comment">// com.sun.nio.file.SensitivityWatchEventModifier is deprecated-for-removal but has no public JDK replacement for WatchService poll sensitivity; required for the watcher-sensitivity feature on JVMs that still honor it.</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		})
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">private</strong> WatchEvent.Modifier lookupModifier(<a name="WatcherSensitivity" href="../../../../../org/apache/juneau/config/store/WatcherSensitivity.html#WatcherSensitivity">WatcherSensitivity</a> s) {
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (s) {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 					<strong class="jxr_keyword">case</strong> LOW -&gt; com.sun.nio.file.SensitivityWatchEventModifier.LOW;
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 					<strong class="jxr_keyword">case</strong> MEDIUM -&gt; com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 					<strong class="jxr_keyword">case</strong> HIGH -&gt; com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 				};
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) Exception e) {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 				<em class="jxr_comment">/* Ignore */</em> <em class="jxr_comment">// HTT - SensitivityWatchEventModifier exists on all supported JVMs</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			}
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// HTT - return null is only reached if SensitivityWatchEventModifier is unavailable</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		}
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<em class="jxr_javadoccomment">/** Default file store, all default values.*/</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> FileStore DEFAULT = FileStore.create().build();
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * Creates a new builder for this object.</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 * @return A new builder.</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	}
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> enableWatcher;
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> updateOnWrite;
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Charset charset;
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String directory;
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String extensions;
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="WatcherSensitivity" href="../../../../../org/apache/juneau/config/store/WatcherSensitivity.html#WatcherSensitivity">WatcherSensitivity</a> watcherSensitivity;
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	<strong class="jxr_keyword">public</strong> FileStore(Builder builder) {
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">super</strong>(builder);
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		directory = builder.directory;
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		extensions = builder.extensions;
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		charset = builder.charset;
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		enableWatcher = builder.enableWatcher;
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		updateOnWrite = builder.updateOnWrite;
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		watcherSensitivity = builder.watcherSensitivity;
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			dir = <strong class="jxr_keyword">new</strong> File(directory).getCanonicalFile();
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			dir.mkdirs();
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			exts = split(extensions).toArray(String[]::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			watcher = enableWatcher ? <strong class="jxr_keyword">new</strong> WatcherThread(dir, watcherSensitivity) : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">if</strong> (nn(watcher))
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 				watcher.start();
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<strong class="jxr_keyword">throw</strong> toRex(e); <em class="jxr_comment">// HTT - getCanonicalFile() IOException is not normally triggered</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		}
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	}
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	@Override <em class="jxr_comment">/* Overridden from Closeable */</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> close() {
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">if</strong> (nn(watcher))
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			watcher.interrupt();
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ConcurrentHashMap&lt;String,String&gt; cache = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ConcurrentHashMap&lt;String,String&gt; nameCache = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> File dir;
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] exts;
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> WatcherThread watcher;
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	<strong class="jxr_keyword">public</strong> FileStore(Builder builder) {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">super</strong>(builder);
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		directory = builder.directory;
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		extensions = builder.extensions;
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		charset = builder.charset;
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		enableWatcher = builder.enableWatcher;
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		updateOnWrite = builder.updateOnWrite;
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		watcherSensitivity = builder.watcherSensitivity;
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			dir = <strong class="jxr_keyword">new</strong> File(directory).getCanonicalFile();
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			dir.mkdirs();
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			exts = split(extensions).toArray(String[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			watcher = enableWatcher ? <strong class="jxr_keyword">new</strong> WatcherThread(dir, watcherSensitivity) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">if</strong> (nn(watcher))
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 				watcher.start();
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			<strong class="jxr_keyword">throw</strong> toRex(e); <em class="jxr_comment">// HTT - getCanonicalFile() IOException is not normally triggered</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		}
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 	}
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<strong class="jxr_keyword">public</strong> Builder copy() {
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	}
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStore */</em>
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">boolean</strong> exists(String name) {
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			<strong class="jxr_keyword">return</strong> Files.exists(resolveFile(name));
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			<strong class="jxr_keyword">return</strong> false; <em class="jxr_comment">// Relative names that escape the store directory are treated as not found.</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		}
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	}
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStore */</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> String read(String name) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		name = resolveName(name);
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">var</strong> p = resolveFile(name);
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">var</strong> pName = p.getFileName();
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">if</strong> (n(pName))
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Could not resolve a file name from path '%s'."</span>, p); <em class="jxr_comment">// Real NPE guard: getFileName() can return null when p resolves to a root path (e.g. a caller-supplied absolute name).</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		name = pName.toString();
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	@Override <em class="jxr_comment">/* Overridden from Closeable */</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> close() {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">if</strong> (nn(watcher))
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			watcher.interrupt();
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	}
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	<strong class="jxr_keyword">public</strong> Builder copy() {
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	}
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStore */</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">boolean</strong> exists(String name) {
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">return</strong> Files.exists(resolveFile(name));
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">return</strong> false; <em class="jxr_comment">// Relative names that escape the store directory are treated as not found.</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		}
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	}
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStore */</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> String read(String name) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		name = resolveName(name);
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">var</strong> s = cache.get(name);
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">if</strong> (nn(s))
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			<strong class="jxr_keyword">return</strong> s;
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		dir.mkdirs();
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">var</strong> p = resolveFile(name);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">var</strong> pName = p.getFileName();
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">if</strong> (n(pName))
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Could not resolve a file name from path '%s'."</span>, p); <em class="jxr_comment">// Real NPE guard: getFileName() can return null when p resolves to a root path (e.g. a caller-supplied absolute name).</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		name = pName.toString();
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<em class="jxr_comment">// If file doesn't exist, don't trigger creation.</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">if</strong> (! Files.exists(p))
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">var</strong> s = cache.get(name);
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">if</strong> (nn(s))
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">var</strong> isWritable = isWritable(p);
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">var</strong> oo = isWritable ? a(READ, WRITE, CREATE) : a(READ); <em class="jxr_comment">// HTT - read-only files require special OS setup</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> fc = FileChannel.open(p, oo)) {
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> lock = isWritable ? fc.lock() : <strong class="jxr_keyword">null</strong>) { <em class="jxr_comment">// HTT - null lock path requires read-only file</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 				<strong class="jxr_keyword">var</strong> buf = ByteBuffer.allocate(1024);
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 				<strong class="jxr_keyword">while</strong> (fc.read(buf) != -1) {
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 					sb.append(charset.decode((buf.flip()))); <em class="jxr_comment">// Fixes Java 11 issue involving overridden flip method.</em>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 					buf.clear();
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 				}
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 				s = sb.toString();
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 				cache.put(name, s);
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			}
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		}
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">return</strong> cache.get(name);
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStore */</em>
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> FileStore update(String name, String newContents) {
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		cache.put(name, newContents);
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">super</strong>.update(name, newContents);
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	}
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStore */</em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> String write(String name, String expectedContents, String newContents) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		name = resolveName(name);
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<em class="jxr_comment">// This is a no-op.</em>
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<strong class="jxr_keyword">if</strong> (eq(expectedContents, newContents))
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		dir.mkdirs();
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		dir.mkdirs();
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<em class="jxr_comment">// If file doesn't exist, don't trigger creation.</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">if</strong> (! Files.exists(p))
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<strong class="jxr_keyword">var</strong> isWritable = isWritable(p);
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">var</strong> oo = isWritable ? a(READ, WRITE, CREATE) : a(READ); <em class="jxr_comment">// HTT - read-only files require special OS setup</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> fc = FileChannel.open(p, oo)) {
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> lock = isWritable ? fc.lock() : <strong class="jxr_keyword">null</strong>) { <em class="jxr_comment">// HTT - null lock path requires read-only file</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 				<strong class="jxr_keyword">var</strong> buf = ByteBuffer.allocate(1024);
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 				<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 				<strong class="jxr_keyword">while</strong> (fc.read(buf) != -1) {
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 					sb.append(charset.decode((buf.flip()))); <em class="jxr_comment">// Fixes Java 11 issue involving overridden flip method.</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 					buf.clear();
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 				}
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 				s = sb.toString();
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 				cache.put(name, s);
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 			}
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		}
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">return</strong> cache.get(name);
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	}
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStore */</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> FileStore update(String name, String newContents) {
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		cache.put(name, newContents);
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		<strong class="jxr_keyword">super</strong>.update(name, newContents);
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	}
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStore */</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> String write(String name, String expectedContents, String newContents) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		name = resolveName(name);
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		<strong class="jxr_keyword">var</strong> p = resolveFile(name);
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		<strong class="jxr_keyword">var</strong> pName = p.getFileName();
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">if</strong> (n(pName))
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Could not resolve a file name from path '%s'."</span>, p); <em class="jxr_comment">// Real NPE guard: getFileName() can return null when p resolves to a root path (e.g. a caller-supplied absolute name).</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		name = pName.toString();
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		<em class="jxr_comment">// This is a no-op.</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		<strong class="jxr_keyword">if</strong> (eq(expectedContents, newContents))
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		dir.mkdirs();
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">var</strong> exists = Files.exists(p);
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 		<em class="jxr_comment">// Don't create the file if we're not going to match.</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 		<strong class="jxr_keyword">if</strong> ((! exists) &amp;&amp; ine(expectedContents))
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">var</strong> p = resolveFile(name);
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">var</strong> pName = p.getFileName();
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 		<strong class="jxr_keyword">if</strong> (n(pName))
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Could not resolve a file name from path '%s'."</span>, p); <em class="jxr_comment">// Real NPE guard: getFileName() can return null when p resolves to a root path (e.g. a caller-supplied absolute name).</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		name = pName.toString();
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		<strong class="jxr_keyword">if</strong> (isWritable(p)) {
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 			<strong class="jxr_keyword">if</strong> (newContents == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 				Files.delete(p);
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 			<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 				<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> fc = FileChannel.open(p, READ, WRITE, CREATE)) {
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 					<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> lock = fc.lock()) {
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 						<strong class="jxr_keyword">var</strong> currentContents = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 						<strong class="jxr_keyword">if</strong> (exists) {
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 							<strong class="jxr_keyword">var</strong> buf = ByteBuffer.allocate(1024);
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 							<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 							<strong class="jxr_keyword">while</strong> (fc.read(buf) != -1) {
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 								sb.append(charset.decode(buf.flip()));
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 								buf.clear();
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 							}
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 							currentContents = sb.toString();
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 						}
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 						<strong class="jxr_keyword">if</strong> (nn(expectedContents) &amp;&amp; neq(currentContents, expectedContents)) {
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 							<strong class="jxr_keyword">if</strong> (currentContents == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 								cache.remove(name);
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 							<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 								cache.put(name, currentContents);
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 							<strong class="jxr_keyword">return</strong> currentContents;
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 						}
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 						fc.position(0);
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 						fc.write(charset.encode(newContents));
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 						fc.truncate(fc.position()); <em class="jxr_comment">// Drop leftovers when the new contents are shorter.</em>
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 					}
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 				}
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 			}
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		}
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 		<strong class="jxr_keyword">if</strong> (updateOnWrite)
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 			update(name, newContents);
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 			cache.remove(name);  <em class="jxr_comment">// Invalidate the cache.</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	}
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">boolean</strong> isWritable(Path p) {
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 			<strong class="jxr_keyword">if</strong> (! Files.exists(p)) {
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 				Files.createDirectories(p.getParent());
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 				<strong class="jxr_keyword">if</strong> (! Files.exists(p) &amp;&amp; ! p.toFile().createNewFile()) { <em class="jxr_comment">// HTT - createNewFile() failure requires OS-level file system restrictions</em>
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 					<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Could not create file: %s"</span>, p);
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 				}
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 			}
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IOException e) {
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 			<strong class="jxr_keyword">return</strong> false; <em class="jxr_comment">// HTT - IOException from createDirectories/createNewFile requires OS-level restrictions</em>
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		}
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">return</strong> Files.isWritable(p);
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	}
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	<em class="jxr_comment">/*</em>
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_comment">	 * Rejects relative names that resolve (lexically) outside the configured directory, e.g. "../x".</em>
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_comment">	 * Absolute names are trusted configuration (e.g. @Rest(config="/abs/path.cfg")) and are allowed.</em>
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_comment">	 * Done before any file-system probe so escaping names are never even tested for existence.</em>
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_comment">	 */</em>
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkContained(String name) {
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 			<strong class="jxr_keyword">if</strong> (Path.of(name).isAbsolute())
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 				<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			<strong class="jxr_keyword">var</strong> root = dir.toPath().toAbsolutePath().normalize();
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			<strong class="jxr_keyword">var</strong> target = root.resolve(name).normalize();
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			<strong class="jxr_keyword">if</strong> (! target.startsWith(root))
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(MSG_PATH_ESCAPE);
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 			<em class="jxr_comment">// Symlinks: if the target (or its nearest existing ancestor) resolves outside the real root, reject.</em>
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 			<strong class="jxr_keyword">var</strong> existing = target;
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			<strong class="jxr_keyword">while</strong> (existing != <strong class="jxr_keyword">null</strong> &amp;&amp; ! Files.exists(existing))
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 				existing = existing.getParent();
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			<strong class="jxr_keyword">if</strong> (existing != <strong class="jxr_keyword">null</strong> &amp;&amp; Files.exists(root) &amp;&amp; ! existing.toRealPath().startsWith(root.toRealPath()))
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		<strong class="jxr_keyword">var</strong> exists = Files.exists(p);
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		<em class="jxr_comment">// Don't create the file if we're not going to match.</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		<strong class="jxr_keyword">if</strong> ((! exists) &amp;&amp; ine(expectedContents))
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">if</strong> (isWritable(p)) {
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			<strong class="jxr_keyword">if</strong> (newContents == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 				Files.delete(p);
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 			<strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 				<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> fc = FileChannel.open(p, READ, WRITE, CREATE)) {
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 					<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> lock = fc.lock()) {
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 						<strong class="jxr_keyword">var</strong> currentContents = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 						<strong class="jxr_keyword">if</strong> (exists) {
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 							<strong class="jxr_keyword">var</strong> buf = ByteBuffer.allocate(1024);
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 							<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 							<strong class="jxr_keyword">while</strong> (fc.read(buf) != -1) {
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 								sb.append(charset.decode(buf.flip()));
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 								buf.clear();
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 							}
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 							currentContents = sb.toString();
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 						}
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 						<strong class="jxr_keyword">if</strong> (nn(expectedContents) &amp;&amp; neq(currentContents, expectedContents)) {
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 							<strong class="jxr_keyword">if</strong> (currentContents == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 								cache.remove(name);
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 							<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 								cache.put(name, currentContents);
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 							<strong class="jxr_keyword">return</strong> currentContents;
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 						}
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 						fc.position(0);
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 						fc.write(charset.encode(newContents));
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 						fc.truncate(fc.position()); <em class="jxr_comment">// Drop leftovers when the new contents are shorter.</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 					}
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 				}
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 			}
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		}
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<strong class="jxr_keyword">if</strong> (updateOnWrite)
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 			update(name, newContents);
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 			cache.remove(name);  <em class="jxr_comment">// Invalidate the cache.</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 	}
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">boolean</strong> isWritable(Path p) {
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 			<strong class="jxr_keyword">if</strong> (! Files.exists(p)) {
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 				Files.createDirectories(p.getParent());
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 				<strong class="jxr_keyword">if</strong> (! Files.exists(p) &amp;&amp; ! p.toFile().createNewFile()) { <em class="jxr_comment">// HTT - createNewFile() failure requires OS-level file system restrictions</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 					<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Could not create file: %s"</span>, p);
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 				}
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 			}
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IOException e) {
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			<strong class="jxr_keyword">return</strong> false; <em class="jxr_comment">// HTT - IOException from createDirectories/createNewFile requires OS-level restrictions</em>
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		}
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		<strong class="jxr_keyword">return</strong> Files.isWritable(p);
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 	}
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	<em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_comment">	 * Rejects relative names that resolve (lexically) outside the configured directory, e.g. "../x".</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_comment">	 * Absolute names are trusted configuration (e.g. @Rest(config="/abs/path.cfg")) and are allowed.</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_comment">	 * Done before any file-system probe so escaping names are never even tested for existence.</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_comment">	 */</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkContained(String name) {
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 			<strong class="jxr_keyword">if</strong> (Path.of(name).isAbsolute())
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			<strong class="jxr_keyword">var</strong> root = dir.toPath().toAbsolutePath().normalize();
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 			<strong class="jxr_keyword">var</strong> target = root.resolve(name).normalize();
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			<strong class="jxr_keyword">if</strong> (! target.startsWith(root))
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(MSG_PATH_ESCAPE);
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) InvalidPathException | IOException e) {
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(MSG_PATH_ESCAPE);
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		}
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 	}
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 	<strong class="jxr_keyword">private</strong> Path resolveFile(String name) {
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<strong class="jxr_keyword">return</strong> dir.toPath().resolve(resolveName(name));
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	}
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">	 * Gets called when the watcher service on this store is triggered with a file system change.</em>
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">	 * @param e The file system event.</em>
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> onFileEvent(WatchEvent&lt;Path&gt; e) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<strong class="jxr_keyword">var</strong> fn = e.context().getFileName().toString();
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 			<em class="jxr_comment">// Symlinks: if the target (or its nearest existing ancestor) resolves outside the real root, reject.</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			<strong class="jxr_keyword">var</strong> existing = target;
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			<strong class="jxr_keyword">while</strong> (existing != <strong class="jxr_keyword">null</strong> &amp;&amp; ! Files.exists(existing))
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 				existing = existing.getParent();
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			<strong class="jxr_keyword">if</strong> (existing != <strong class="jxr_keyword">null</strong> &amp;&amp; Files.exists(root) &amp;&amp; ! existing.toRealPath().startsWith(root.toRealPath()))
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(MSG_PATH_ESCAPE);
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NoSuchFileException e) {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 			<em class="jxr_comment">// The path vanished between the existence probe and toRealPath() (e.g. concurrent delete).  Nothing left to</em>
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 			<em class="jxr_comment">// resolve through a symlink, so this is not an escape; the lexical check above already passed.</em>
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) InvalidPathException | IOException e) {
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(MSG_PATH_ESCAPE);
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		}
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 	}
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	<strong class="jxr_keyword">private</strong> Path resolveFile(String name) {
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">return</strong> dir.toPath().resolve(resolveName(name));
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	}
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		<strong class="jxr_keyword">var</strong> oldContents = cache.get(fn);
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		cache.remove(fn);
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		<strong class="jxr_keyword">var</strong> newContents = read(fn);
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<strong class="jxr_keyword">if</strong> (neq(oldContents, newContents)) { <em class="jxr_comment">// HTT - requires actual file system watcher event with content change</em>
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 			update(fn, newContents);
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		}
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 	}
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">	 * Gets called when the watcher service on this store is triggered with a file system change.</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 * @param e The file system event.</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> onFileEvent(WatchEvent&lt;Path&gt; e) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">var</strong> fn = e.context().getFileName().toString();
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> 
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStore */</em>
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 			.a(<span class="jxr_string">"charset"</span>, charset)
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 			.a(<span class="jxr_string">"extensions"</span>, extensions)
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 			.a(<span class="jxr_string">"updateOnWrite"</span>, updateOnWrite);
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 	}
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	@Override
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	<strong class="jxr_keyword">protected</strong> String resolveName(String name) {
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		checkContained(name);
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">if</strong> (! nameCache.containsKey(name)) {
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 			String n = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 			<em class="jxr_comment">// Does file exist as-is?</em>
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 			<strong class="jxr_keyword">if</strong> (fileExists(dir, name))
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 				n = name;
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 			<em class="jxr_comment">// Does name already have an extension?</em>
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 			<strong class="jxr_keyword">if</strong> (n == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ext : exts) {
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 					<strong class="jxr_keyword">if</strong> (hasExtension(name, ext)) {
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 						n = name;
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 						<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 					}
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 				}
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 			}
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 			<em class="jxr_comment">// Find file with the correct extension.</em>
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 			<strong class="jxr_keyword">if</strong> (n == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ext : exts) {
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 					<strong class="jxr_keyword">if</strong> (fileExists(dir, name + '.' + ext)) {
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 						n = name + '.' + ext;
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 						<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 					}
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 				}
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			}
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 			<em class="jxr_comment">// If file not found, use the default which is the name with the first extension.</em>
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 			<strong class="jxr_keyword">if</strong> (n == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 				n = exts.length == 0 ? name : (name + <span class="jxr_string">"."</span> + exts[0]);
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 			nameCache.put(name, n);
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 		}
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">return</strong> nameCache.get(name);
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 	}
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> }
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">var</strong> oldContents = cache.get(fn);
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		cache.remove(fn);
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<strong class="jxr_keyword">var</strong> newContents = read(fn);
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		<strong class="jxr_keyword">if</strong> (neq(oldContents, newContents)) { <em class="jxr_comment">// HTT - requires actual file system watcher event with content change</em>
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 			update(fn, newContents);
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		}
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 	}
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStore */</em>
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 			.a(<span class="jxr_string">"charset"</span>, charset)
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 			.a(<span class="jxr_string">"extensions"</span>, extensions)
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 			.a(<span class="jxr_string">"updateOnWrite"</span>, updateOnWrite);
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 	}
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	@Override
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 	<strong class="jxr_keyword">protected</strong> String resolveName(String name) {
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		checkContained(name);
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">if</strong> (! nameCache.containsKey(name)) {
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 			String n = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 			<em class="jxr_comment">// Does file exist as-is?</em>
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			<strong class="jxr_keyword">if</strong> (fileExists(dir, name))
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 				n = name;
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 			<em class="jxr_comment">// Does name already have an extension?</em>
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 			<strong class="jxr_keyword">if</strong> (n == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ext : exts) {
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 					<strong class="jxr_keyword">if</strong> (hasExtension(name, ext)) {
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 						n = name;
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 						<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 					}
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 				}
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			}
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 			<em class="jxr_comment">// Find file with the correct extension.</em>
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 			<strong class="jxr_keyword">if</strong> (n == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ext : exts) {
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 					<strong class="jxr_keyword">if</strong> (fileExists(dir, name + '.' + ext)) {
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 						n = name + '.' + ext;
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 						<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 					}
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 				}
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 			}
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 			<em class="jxr_comment">// If file not found, use the default which is the name with the first extension.</em>
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 			<strong class="jxr_keyword">if</strong> (n == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 				n = exts.length == 0 ? name : (name + <span class="jxr_string">"."</span> + exts[0]);
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 			nameCache.put(name, n);
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		}
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<strong class="jxr_keyword">return</strong> nameCache.get(name);
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 	}
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

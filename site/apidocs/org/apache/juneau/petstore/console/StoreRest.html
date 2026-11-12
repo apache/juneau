@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-66">StoreRest</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-65">StoreRest</a></span>
 <span class="extends-implements">extends <a href="PetstoreConsolePage.html" title="class in org.apache.juneau.petstore.console">PetstoreConsolePage</a></span></div>
 <div class="block">The Store page, the petstore dashboard, and the feeds its charts, tiles and fragments read.
 
@@ -118,7 +118,6 @@ loadScripts(document, 'script');</script>
    GET /console/store/recent-orders     the ten newest orders
    GET /console/store/stats/daily       {day, placed, delivered} for each recent day
    GET /console/store/stats/revenue     {day, revenue} for each recent day
-   GET /console/store/kpi/revenue       {label, value, unit} for the revenue tile
    GET /console/store/stats/species     {species, count} for each species
    GET /console/store/stats/status      {status, count} for each status
    GET /console/store/stats/pets        {id, name, species, status} for each pet
@@ -200,20 +199,15 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#recentOrders()" class="member-name-link">recentOrders</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#revenue()" class="member-name-link">revenue</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">The revenue tile: the summed pet prices of the orders delivered today, by the store clock in UTC.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#revenueByDay()" class="member-name-link">revenueByDay</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#species()" class="member-name-link">species</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#revenueByDay()" class="member-name-link">revenueByDay</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status()" class="member-name-link">status</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#species()" class="member-name-link">species</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status()" class="member-name-link">status</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -246,7 +240,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>StoreRest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-70">StoreRest</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-69">StoreRest</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -260,7 +254,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="page(org.apache.juneau.rest.server.RestRequest)">
 <h3>page</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../rest/server/view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-80">page</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../rest/server/view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-79">page</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Renders the Store page, with the quick-stat tile values computed from the store.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -273,7 +267,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="recentOrders()">
 <h3>recentOrders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-96">recentOrders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-95">recentOrders</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The 10 most recent orders, by ship date then id, newest first.</dd>
@@ -283,7 +277,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="daily()">
 <h3>daily</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-104">daily</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-103">daily</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>30 rows <code>{day, placed, delivered}</code> ending today, oldest first; an order counts on its ship date.</dd>
@@ -293,7 +287,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="revenueByDay()">
 <h3>revenueByDay</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-124">revenueByDay</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-123">revenueByDay</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>30 rows <code>{day, revenue}</code> ending today, oldest first; revenue sums the prices of the orders delivered on each ship date.</dd>
@@ -301,20 +295,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="revenue()">
-<h3>revenue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-148">revenue</a></span>()</div>
-<div class="block">The revenue tile: the summed pet prices of the orders delivered today, by the store clock in UTC.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd><code>{label, value, unit}</code>, with the value rounded to cents.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="species()">
 <h3>species</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-163">species</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-143">species</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>One row <code>{species, count}</code> per species, in enum order, zero counts included; pets with no species are not counted.</dd>
@@ -324,7 +307,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="status()">
 <h3>status</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-172">status</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-152">status</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>One row <code>{status, count}</code> per pet status, in enum order.</dd>
@@ -334,7 +317,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="pets()">
 <h3>pets</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-181">pets</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-161">pets</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>One row <code>{id, name, species, status}</code> per pet, by id; the treemap groups them and opens the edit dialog from a tile.</dd>
@@ -344,7 +327,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hours()">
 <h3>hours</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../rest/server/view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-190">hours</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../rest/server/view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/StoreRest.html#line-170">hours</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The store hours as a chrome-free fragment.</dd>

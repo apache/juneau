@@ -404,71 +404,68 @@
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 			assertTrue(expected &gt;= pet.getPrice() - 0.001, () -&gt; <span class="jxr_string">"pinned order missing from the expected total"</span>);
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 			assertTrue(expected &gt; 0);
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 			assertEquals(daily.getMap(daily.size() - 1).getInt(<span class="jxr_string">"delivered"</span>), delivered);
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">var</strong> kpi = <strong class="jxr_keyword">new</strong> JsonMap(c.get(<span class="jxr_string">"/console/store/kpi/revenue"</span>).run().assertStatus(200).getContent().asString());
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			assertBean(kpi, <span class="jxr_string">"label,unit"</span>, <span class="jxr_string">"Revenue today,USD"</span>);
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			assertEquals(Math.round(expected * 100) / 100d, kpi.get(<span class="jxr_string">"value"</span>, Double.<strong class="jxr_keyword">class</strong>), 0.001);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			store.deleteOrder(pinned.getId(), <span class="jxr_string">"test"</span>);
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		}
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	}
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	<em class="jxr_javadoccomment">/** A host whose store is seeded against a later fixed clock, as the running apps seed theirs against the current time. */</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	@Rest(children=PetstoreConsoleResource.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> LaterHost <strong class="jxr_keyword">extends</strong> BasicRestServletGroup {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Clock CLOCK = Clock.fixed(Instant.parse(<span class="jxr_string">"2027-03-01T12:00:00Z"</span>), ZoneOffset.UTC);
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> PetStore STORE = PetstoreSeed.create().clock(CLOCK).populate(<strong class="jxr_keyword">new</strong> PetStore(CLOCK));
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<em class="jxr_javadoccomment">/** @return The later-clock store. */</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		@Bean <strong class="jxr_keyword">public</strong> PetStore petStore() {
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">return</strong> STORE;
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		}
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	}
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	@Test <strong class="jxr_keyword">void</strong> d02_revenueSeriesOnLaterClockIsNonZero() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">var</strong> c = MockRestClient.create(LaterHost.<strong class="jxr_keyword">class</strong>).noTrace().ignoreErrors().header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).build();
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/stats/revenue"</span>);
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		assertSize(30, rows);
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		assertEquals(<span class="jxr_string">"2027-03-01"</span>, rows.getMap(29).getString(<span class="jxr_string">"day"</span>));
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">var</strong> total = StreamSupport.stream(rows.elements(JsonMap.<strong class="jxr_keyword">class</strong>).spliterator(), false).mapToDouble(r -&gt; r.get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>)).sum();
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		assertTrue(total &gt; 0, <span class="jxr_string">"revenue series was all zero"</span>);
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	}
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	@Test <strong class="jxr_keyword">void</strong> d01_revenueFeed() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<em class="jxr_comment">// Deliver one priced pet today and one a few days back, plus a placed order that must not count.</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">var</strong> store = store();
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">var</strong> pet = store.getPets().stream().filter(x -&gt; x.getPrice() &gt; 0).findFirst().orElseThrow();
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">var</strong> today = LocalDate.ofInstant(store.clock().instant(), ZoneOffset.UTC);
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">var</strong> earlier = today.minusDays(3).toString();
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">var</strong> made = <strong class="jxr_keyword">new</strong> ArrayList&lt;Long&gt;();
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		made.add(store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.DELIVERED).setShipDate(today.toString()), <span class="jxr_string">"test"</span>).getId());
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		made.add(store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.DELIVERED).setShipDate(earlier), <span class="jxr_string">"test"</span>).getId());
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		made.add(store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.PLACED).setShipDate(earlier), <span class="jxr_string">"test"</span>).getId());
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			<strong class="jxr_keyword">var</strong> c = json();
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/stats/revenue"</span>);
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			assertSize(30, rows);
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			assertEquals(today.toString(), rows.getMap(29).getString(<span class="jxr_string">"day"</span>));
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			assertEquals(today.minusDays(29).toString(), rows.getMap(0).getString(<span class="jxr_string">"day"</span>));
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<strong class="jxr_keyword">var</strong> prices = <strong class="jxr_keyword">new</strong> HashMap&lt;Long,Double&gt;();
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : list(c, <span class="jxr_string">"/petstore/pets"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				prices.put(p.getLong(<span class="jxr_string">"id"</span>), p.get(<span class="jxr_string">"price"</span>, Double.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			<strong class="jxr_keyword">var</strong> expected = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Double&gt;();
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : list(c, <span class="jxr_string">"/petstore/orders"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"DELIVERED"</span>.equals(o.getString(<span class="jxr_string">"status"</span>)) &amp;&amp; prices.containsKey(o.getLong(<span class="jxr_string">"petId"</span>)))
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 					expected.merge(o.getString(<span class="jxr_string">"shipDate"</span>), prices.get(o.getLong(<span class="jxr_string">"petId"</span>)), Double::sum);
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : rows.elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 				assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(List.of(<span class="jxr_string">"day"</span>, <span class="jxr_string">"revenue"</span>)), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(r.keySet()));
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 				assertEquals(Math.round(expected.getOrDefault(r.getString(<span class="jxr_string">"day"</span>), 0d) * 100) / 100d, r.get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>), 0.001, r.getString(<span class="jxr_string">"day"</span>));
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			}
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			assertTrue(rows.getMap(29).get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>) &gt;= pet.getPrice() - 0.001);
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			assertTrue(rows.getMap(26).get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>) &gt;= pet.getPrice() - 0.001);
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> id : made)
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 				store.deleteOrder(id, <span class="jxr_string">"test"</span>);
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		}
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	}
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> }
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			store.deleteOrder(pinned.getId(), <span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		}
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	}
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	<em class="jxr_javadoccomment">/** A host whose store is seeded against a later fixed clock, as the running apps seed theirs against the current time. */</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	@Rest(children=PetstoreConsoleResource.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> LaterHost <strong class="jxr_keyword">extends</strong> BasicRestServletGroup {
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Clock CLOCK = Clock.fixed(Instant.parse(<span class="jxr_string">"2027-03-01T12:00:00Z"</span>), ZoneOffset.UTC);
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> PetStore STORE = PetstoreSeed.create().clock(CLOCK).populate(<strong class="jxr_keyword">new</strong> PetStore(CLOCK));
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<em class="jxr_javadoccomment">/** @return The later-clock store. */</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		@Bean <strong class="jxr_keyword">public</strong> PetStore petStore() {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			<strong class="jxr_keyword">return</strong> STORE;
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		}
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	}
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	@Test <strong class="jxr_keyword">void</strong> d02_revenueSeriesOnLaterClockIsNonZero() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">var</strong> c = MockRestClient.create(LaterHost.<strong class="jxr_keyword">class</strong>).noTrace().ignoreErrors().header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).build();
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/stats/revenue"</span>);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		assertSize(30, rows);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertEquals(<span class="jxr_string">"2027-03-01"</span>, rows.getMap(29).getString(<span class="jxr_string">"day"</span>));
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">var</strong> total = StreamSupport.stream(rows.elements(JsonMap.<strong class="jxr_keyword">class</strong>).spliterator(), false).mapToDouble(r -&gt; r.get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>)).sum();
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		assertTrue(total &gt; 0, <span class="jxr_string">"revenue series was all zero"</span>);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	}
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 	@Test <strong class="jxr_keyword">void</strong> d01_revenueFeed() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<em class="jxr_comment">// Deliver one priced pet today and one a few days back, plus a placed order that must not count.</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">var</strong> store = store();
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">var</strong> pet = store.getPets().stream().filter(x -&gt; x.getPrice() &gt; 0).findFirst().orElseThrow();
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">var</strong> today = LocalDate.ofInstant(store.clock().instant(), ZoneOffset.UTC);
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">var</strong> earlier = today.minusDays(3).toString();
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">var</strong> made = <strong class="jxr_keyword">new</strong> ArrayList&lt;Long&gt;();
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		made.add(store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.DELIVERED).setShipDate(today.toString()), <span class="jxr_string">"test"</span>).getId());
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		made.add(store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.DELIVERED).setShipDate(earlier), <span class="jxr_string">"test"</span>).getId());
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		made.add(store.createOrder(<strong class="jxr_keyword">new</strong> org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.PLACED).setShipDate(earlier), <span class="jxr_string">"test"</span>).getId());
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			<strong class="jxr_keyword">var</strong> c = json();
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">var</strong> rows = list(c, <span class="jxr_string">"/console/store/stats/revenue"</span>);
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			assertSize(30, rows);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			assertEquals(today.toString(), rows.getMap(29).getString(<span class="jxr_string">"day"</span>));
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			assertEquals(today.minusDays(29).toString(), rows.getMap(0).getString(<span class="jxr_string">"day"</span>));
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<strong class="jxr_keyword">var</strong> prices = <strong class="jxr_keyword">new</strong> HashMap&lt;Long,Double&gt;();
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : list(c, <span class="jxr_string">"/petstore/pets"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 				prices.put(p.getLong(<span class="jxr_string">"id"</span>), p.get(<span class="jxr_string">"price"</span>, Double.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<strong class="jxr_keyword">var</strong> expected = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Double&gt;();
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : list(c, <span class="jxr_string">"/petstore/orders"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"DELIVERED"</span>.equals(o.getString(<span class="jxr_string">"status"</span>)) &amp;&amp; prices.containsKey(o.getLong(<span class="jxr_string">"petId"</span>)))
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 					expected.merge(o.getString(<span class="jxr_string">"shipDate"</span>), prices.get(o.getLong(<span class="jxr_string">"petId"</span>)), Double::sum);
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : rows.elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(List.of(<span class="jxr_string">"day"</span>, <span class="jxr_string">"revenue"</span>)), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(r.keySet()));
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 				assertEquals(Math.round(expected.getOrDefault(r.getString(<span class="jxr_string">"day"</span>), 0d) * 100) / 100d, r.get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>), 0.001, r.getString(<span class="jxr_string">"day"</span>));
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 			}
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			assertTrue(rows.getMap(29).get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>) &gt;= pet.getPrice() - 0.001);
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			assertTrue(rows.getMap(26).get(<span class="jxr_string">"revenue"</span>, Double.<strong class="jxr_keyword">class</strong>) &gt;= pet.getPrice() - 0.001);
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> id : made)
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 				store.deleteOrder(id, <span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		}
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	}
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
