@@ -167,6 +167,18 @@ class Switcher_Test extends TestBase {
 		assertEquals(true, s.get("v4Built"));
 	}
 
+	@Test void s08b_selectAddressesSectionsAsViewSlashSection() {
+		var s = scenario("s15");
+		assertEquals(List.of(false, false, false), s.get("bad"));
+		assertEquals(true, s.get("viewOnly"));
+		assertEquals("v2.s1", s.get("afterViewOnly"));
+		assertEquals(true, s.get("ok"));
+		assertEquals("v2.s2", s.get("built"));
+		assertEquals("v2.s1", s.get("back"));
+		assertEquals(true, s.get("direct"));
+		assertEquals("v2.s2", s.get("directKey"));
+	}
+
 	@Test void s09_refreshTouchesTheActiveViewOnlyAndNeverMounts() {
 		var s = scenario("s9");
 		assertEquals(List.of("c1"), s.get("refreshed"));

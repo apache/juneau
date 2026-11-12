@@ -152,11 +152,11 @@ class PageCapture_Contract_Test extends TestBase {
 
 	@Test void a21_pageAssets() {
 		var html = render("page-assets");
-		assertTrue(html.contains("<link rel=\"stylesheet\" href=\"a.css\">\n<link rel=\"stylesheet\" href=\"b.css\">\n"), html);
+		assertTrue(html.contains("<link rel=\"stylesheet\" href=\"/a.css\">\n<link rel=\"stylesheet\" href=\"/b.css\">\n"), html);
 		assertTrue(html.contains("data-toolkit-css>"), html);
 		assertTrue(html.contains("data-toolkit-js></script>"), html);
-		assertTrue(html.indexOf("data-toolkit-js") < html.indexOf("<script src=\"one.js\">"), html);
-		assertTrue(html.indexOf("<script src=\"one.js\">") < html.indexOf("<script src=\"two.js\">"), html);
+		assertTrue(html.indexOf("data-toolkit-js") < html.indexOf("<script src=\"/one.js\">"), html);
+		assertTrue(html.indexOf("<script src=\"/one.js\">") < html.indexOf("<script src=\"/two.js\">"), html);
 	}
 
 	@Test void a22_wireOrder() {
@@ -174,9 +174,9 @@ class PageCapture_Contract_Test extends TestBase {
 
 	@Test void a22b_wireOrder_vendor() {
 		var html = render("page-wire-order");
-		var order = List.of("dataTables.dataTables.min.css", "href=\"page.css\"", "juneau-views.css", "</head>",
+		var order = List.of("dataTables.dataTables.min.css", "href=\"/page.css\"", "juneau-views.css", "</head>",
 			"juneau-console.js", "/jquery.min.js", "/js/dataTables.min.js", "juneau-datatables.js", "juneau-renders.js",
-			"juneau-views.js", "juneau-helpers.js", "src=\"page-init.js\"");
+			"juneau-views.js", "juneau-helpers.js", "src=\"/page-init.js\"");
 		var last = -1;
 		for (var s : order) {
 			var i = html.indexOf(s);

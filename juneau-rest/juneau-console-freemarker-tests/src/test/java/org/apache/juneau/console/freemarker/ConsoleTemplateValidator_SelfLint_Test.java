@@ -41,6 +41,8 @@ class ConsoleTemplateValidator_SelfLint_Test extends TestBase {
 		"admin/page-cards-bogus.ftlh",    // CardDirective_Test.b03_unknownAttr_isRejected expects E-? unknown attribute
 		"admin/page-cards-format.ftlh",   // CardDirective_Test.b02_formatAttr_isRejected expects a format= rejection
 		"admin/page-theme-attr.ftlh",     // ThemeDirective_Test.d04_pageThemeAttr_isRejected expects E-? unknown attribute
+		"admin/page-rel-css.ftlh",     // PageAssetsAbsolute_Test expects the relative css= rejection
+		"admin/page-rel-init.ftlh",    // PageAssetsAbsolute_Test expects the relative init= rejection
 		"admin/page-unknown.ftlh",        // PageDirective_Test.a04_unknownAttr_isRejected expects E-? unknown attribute
 		"c1/bool-visible-tru.ftlh",       // NodeDirective_StrictBoolean_Test.a04_rejected_E5 expects E-5 strict-boolean
 		"c1/bool-visible-empty.ftlh",     // NodeDirective_StrictBoolean_Test.a04_rejected_E5 expects E-5 strict-boolean

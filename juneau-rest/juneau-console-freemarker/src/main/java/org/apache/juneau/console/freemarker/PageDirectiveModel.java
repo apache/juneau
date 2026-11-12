@@ -77,8 +77,12 @@ public final class PageDirectiveModel implements TemplateDirectiveModel {
 		}
 		cap.mergeTab(FtlAttrLists.scalar(p, "tab"));
 		cap.mergeToolkit(toolkit);
-		cap.mergeCss(FtlAttrLists.list(p, NAME, "css"));
-		cap.mergeInit(FtlAttrLists.list(p, NAME, "init"));
+		var css = FtlAttrLists.list(p, NAME, "css");
+		var init = FtlAttrLists.list(p, NAME, "init");
+		FtlAttrLists.requireAbsoluteAssets(NAME, "css", css);
+		FtlAttrLists.requireAbsoluteAssets(NAME, "init", init);
+		cap.mergeCss(css);
+		cap.mergeInit(init);
 
 		cap.pageOpen = true;
 		try {

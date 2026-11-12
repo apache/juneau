@@ -77,7 +77,7 @@ Juneau console pieces your own app can use.</p>
         { id: 'status', label: 'Status', card: { type: 'chart', id: 'by-status', src: '/console/store/stats/status', dataTab: true,
             kind: 'bar', x: { field: 'status' }, series: [ { field: 'count', label: 'Pets' } ] } },
         { id: 'treemap', label: 'Treemap', card: { type: 'chart', id: 'pets-map', src: '/console/store/stats/pets', dataTab: true,
-            publishes: [ { topic: 'pets-map.click', retain: false } ], on: { click: 'pets-map.click' },
+            publishes: 'pets-map.click', on: { click: 'pets-map.click' },
             helper: { kind: 'treemap', groupBy: ['species', 'status'], label: 'name',
               color: { field: 'status', legend: [
                 { value: 'AVAILABLE', label: 'Available', tone: 'ok' },

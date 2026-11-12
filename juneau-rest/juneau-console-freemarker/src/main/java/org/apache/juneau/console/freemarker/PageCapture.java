@@ -877,7 +877,7 @@ public final class PageCapture {
 	 */
 	public PageCapture mergeInit(List<String> srcs) {
 		for (var u : srcs)
-			if (! SafePathTemplate.isSameOriginPath(u))
+			if (! u.startsWith("context:") && ! u.startsWith("servlet:") && ! SafePathTemplate.isSameOriginPath(u))
 				throw iaex("page script must be a same-origin path; got '%s'.", u);
 		init = mergeUnion(init, srcs);
 		return this;

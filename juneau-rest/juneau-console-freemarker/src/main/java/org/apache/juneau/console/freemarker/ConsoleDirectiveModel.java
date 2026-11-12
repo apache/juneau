@@ -236,7 +236,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		for (var href : cap.vendorCss())
 			out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\" data-toolkit-css>\n");
 		for (var href : cap.cssHrefs())
-			out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\">\n");
+			out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(resolveAsset(req, href)) + "\">\n");
 		for (var href : cap.runtimeCss())
 			out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\" data-toolkit-css>\n");
 		if (nn(cap.head))
@@ -275,7 +275,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		if (nn(cap.scriptsAfterToolkit))
 			out.write(cap.scriptsAfterToolkit);
 		for (var src : cap.initScripts())
-			out.write("<script src=\"" + attrEscape(src) + "\"></script>\n");
+			out.write("<script src=\"" + attrEscape(resolveAsset(req, src)) + "\"></script>\n");
 		if (nn(cap.scripts))
 			out.write(cap.scripts);
 		out.write("\n</body>\n</html>\n");
@@ -301,6 +301,11 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		if (! SYMBOL_NAME.matcher(name).matches())
 			throw FtlAttrLists.reject(f("<@console> %s='%s' needs a symbol name matching [a-z0-9_]{1,64}.", attr, value));
 		return name;
+	}
+
+	// A context: / servlet: page asset resolves against the request; an absolute path passes through.
+	private static String resolveAsset(RestRequest req, String url) {
+		return url.startsWith("context:") || url.startsWith("servlet:") ? req.getUriResolver().resolve(url) : url;
 	}
 
 	private static String csrfToken(RestRequest req) {

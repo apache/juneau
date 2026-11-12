@@ -249,6 +249,16 @@
 	 */
 	--jc-chrome-icon: #666666;
 	/*
+	 * Override hooks the surfaces below read as var(--jc-x, fallback).  Declared here so each is a real, discoverable
+	 * token (a host theme re-values it at html:root, which out-specifies this :root).  Danger follows the theme's
+	 * text-ink role, so dark schemes get their lighter red; the mono stack is the generic monospace family; the
+	 * loading-region paint inherits currentColor unless a host supplies a colour.
+	 */
+	--jc-chrome-danger: var(--jc-danger-text, currentColor);
+	--jc-chrome-font-mono: monospace;
+	--jc-loading-region-color: currentColor;
+	--jc-loading-region-border: currentColor;
+	/*
 	 * Idle (unsorted) datatable header sort-glyph fill (reference-look follow-up).  The reference renders its idle
 	 * sort chevrons as DataTables' muted default - header ink `#3e3e3c` (its own `table.dataTable thead th`
 	 * rule) shown through `span.dt-column-order`'s idle `opacity: 0.125` (datatables.css).  Over

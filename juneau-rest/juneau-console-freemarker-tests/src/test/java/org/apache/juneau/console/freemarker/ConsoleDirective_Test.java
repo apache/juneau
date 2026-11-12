@@ -383,7 +383,7 @@ class ConsoleDirective_Test extends TestBase {
 		assertTrue(body.contains("href=\"/juneau-console/themes/juneau-theme-light-red.css"), () -> body);
 		assertEquals(1, count(body, "juneau-theme-light-red.css"), () -> body);
 		assertFalse(body.contains("juneau-theme-open.css"), () -> body);
-		assertTrue(body.contains("href=\"a.css\"") && body.contains("href=\"b.css\""), () -> body);
+		assertTrue(body.contains("href=\"/a.css\"") && body.contains("href=\"/b.css\""), () -> body);
 		assertTrue(body.contains("extra-head.css"), () -> body);
 		assertTrue(body.indexOf("</head>") < body.indexOf("<body"), () -> body);
 
@@ -399,9 +399,9 @@ class ConsoleDirective_Test extends TestBase {
 
 		// Shell, then the end-of-body scripts in order.
 		assertTrue(body.contains("/juneau-console/juneau-console.js"), () -> body);
-		assertTrue(body.indexOf("juneau-console.js") < body.indexOf("src=\"one.js\""), () -> body);
-		assertTrue(body.indexOf("src=\"one.js\"") < body.indexOf("src=\"two.js\""), () -> body);
-		assertTrue(body.indexOf("src=\"two.js\"") < body.indexOf("extra-tail.js"), () -> body);
+		assertTrue(body.indexOf("juneau-console.js") < body.indexOf("src=\"/one.js\""), () -> body);
+		assertTrue(body.indexOf("src=\"/one.js\"") < body.indexOf("src=\"/two.js\""), () -> body);
+		assertTrue(body.indexOf("src=\"/two.js\"") < body.indexOf("extra-tail.js"), () -> body);
 		DualHatGuard.assertClean(body);
 	}
 
@@ -710,8 +710,8 @@ class ConsoleDirective_Test extends TestBase {
 		assertTrue(body.contains("<title>Doc Title</title>"), () -> body);
 		assertTrue(body.contains("<body data-runtime-tab=\"open\">"), () -> body);
 		assertEquals(Boolean.TRUE, assertPage(body).contract().getMap("header").get("chrome"));
-		assertTrue(body.indexOf("app-early.css") < body.indexOf("href=\"a.css\""), () -> body);
-		assertTrue(body.indexOf("mid-toolkit.js") < body.indexOf("src=\"one.js\""), () -> body);
+		assertTrue(body.indexOf("app-early.css") < body.indexOf("href=\"/a.css\""), () -> body);
+		assertTrue(body.indexOf("mid-toolkit.js") < body.indexOf("src=\"/one.js\""), () -> body);
 		assertPage(body).isValid().hasFooterSlot("content");
 	}
 
@@ -722,9 +722,9 @@ class ConsoleDirective_Test extends TestBase {
 			rsp.assertStatus(200);
 			body = rsp.getContent().asString();
 		}
-		var order = List.of("app-early.css", "dataTables.dataTables.min.css", "href=\"page.css\"", "juneau-views.css", "</head>",
+		var order = List.of("app-early.css", "dataTables.dataTables.min.css", "href=\"/page.css\"", "juneau-views.css", "</head>",
 			"juneau-console.js", "/jquery.min.js", "/js/dataTables.min.js", "juneau-datatables.js", "juneau-renders.js",
-			"juneau-views.js", "mid-toolkit.js", "src=\"page-init.js\"");
+			"juneau-views.js", "mid-toolkit.js", "src=\"/page-init.js\"");
 		var last = -1;
 		for (var s : order) {
 			var i2 = body.indexOf(s);

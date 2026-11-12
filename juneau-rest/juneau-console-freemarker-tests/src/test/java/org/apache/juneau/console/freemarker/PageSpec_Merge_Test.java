@@ -138,7 +138,7 @@ class PageSpec_Merge_Test extends TestBase {
 		}
 		@RestGet(path="/assets-union")
 		public View assetsUnion(RestRequest req) {
-			return PageSpec.create().toolkit("alpha").css("a.css").init("one.js")
+			return PageSpec.create().toolkit("alpha").css("/a.css").init("/one.js")
 				.template("admin/page-merge-assets.ftlh").view(req);
 		}
 		@RestGet(path="/title-spec-wins")
@@ -215,9 +215,9 @@ class PageSpec_Merge_Test extends TestBase {
 		assertTrue(body.indexOf("alpha.css") < body.indexOf("beta.css"), () -> body);
 		assertTrue(body.contains("alpha.js") && body.contains("beta.js"), () -> body);
 		assertTrue(body.indexOf("alpha.js") < body.indexOf("beta.js"), () -> body);
-		assertTrue(body.contains("href=\"a.css\"") && body.contains("href=\"b.css\""), () -> body);
+		assertTrue(body.contains("href=\"/a.css\"") && body.contains("href=\"/b.css\""), () -> body);
 		assertTrue(body.indexOf("a.css") < body.indexOf("b.css"), () -> body);
-		assertTrue(body.contains("src=\"one.js\"") && body.contains("src=\"two.js\""), () -> body);
+		assertTrue(body.contains("src=\"/one.js\"") && body.contains("src=\"/two.js\""), () -> body);
 		assertTrue(body.indexOf("one.js") < body.indexOf("two.js"), () -> body);
 	}
 
@@ -248,8 +248,8 @@ class PageSpec_Merge_Test extends TestBase {
 
 	@Test void a13_css_duplicateWithinOneList_emittedOnce() throws Exception {
 		var body = get("/css-dup", 200);
-		assertEquals(body.indexOf("href=\"a.css\""), body.lastIndexOf("href=\"a.css\""), () -> body);
-		assertTrue(body.contains("href=\"a.css\""), () -> body);
+		assertEquals(body.indexOf("href=\"/a.css\""), body.lastIndexOf("href=\"/a.css\""), () -> body);
+		assertTrue(body.contains("href=\"/a.css\""), () -> body);
 	}
 
 	@Test void a14_bodyAttrs_specAndFtl_sameName_isRejected() throws Exception {

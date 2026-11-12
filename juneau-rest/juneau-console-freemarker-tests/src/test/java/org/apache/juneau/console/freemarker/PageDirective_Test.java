@@ -155,11 +155,11 @@ class PageDirective_Test extends TestBase {
 			body = rsp.getContent().asString();
 		}
 		assertTrue(body.contains("name=\"page-tab\"") && body.contains("content=\"home\""), () -> body);
-		assertTrue(body.contains("href=\"a.css\""), () -> body);
-		assertTrue(body.contains("href=\"b.css\""), () -> body);
+		assertTrue(body.contains("href=\"/a.css\""), () -> body);
+		assertTrue(body.contains("href=\"/b.css\""), () -> body);
 		assertTrue(body.indexOf("a.css") < body.indexOf("b.css"), () -> body);
-		assertTrue(body.contains("src=\"one.js\""), () -> body);
-		assertTrue(body.contains("src=\"two.js\""), () -> body);
+		assertTrue(body.contains("src=\"/one.js\""), () -> body);
+		assertTrue(body.contains("src=\"/two.js\""), () -> body);
 		assertTrue(body.indexOf("one.js") < body.indexOf("two.js"), () -> body);
 		assertFalse(body.contains("data-toolkit-js"), "omit toolkit= means no pack");
 		assertPage(body).isValid().hasActiveNav("home");
@@ -172,9 +172,9 @@ class PageDirective_Test extends TestBase {
 			rsp.assertStatus(200);
 			body = rsp.getContent().asString();
 		}
-		assertTrue(body.contains("href=\"a.css\"") && body.contains("href=\"b.css\""), () -> body);
+		assertTrue(body.contains("href=\"/a.css\"") && body.contains("href=\"/b.css\""), () -> body);
 		assertTrue(body.indexOf("a.css") < body.indexOf("b.css"), () -> body);
-		assertTrue(body.contains("src=\"one.js\"") && body.contains("src=\"two.js\""), () -> body);
+		assertTrue(body.contains("src=\"/one.js\"") && body.contains("src=\"/two.js\""), () -> body);
 		assertTrue(body.indexOf("one.js") < body.indexOf("two.js"), () -> body);
 	}
 

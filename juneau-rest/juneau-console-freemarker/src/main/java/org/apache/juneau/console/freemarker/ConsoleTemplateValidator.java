@@ -88,6 +88,8 @@ public final class ConsoleTemplateValidator {
 	})
 	private static final Pattern TAG = Pattern.compile("<(/?)@([A-Za-z_]\\w*(?:\\.[A-Za-z_]\\w*)?)((?:\"[^\"]*\"|'[^']*'|[^>\"'])*?)(/?)>");
 	private static final Pattern ATTR = Pattern.compile("([A-Za-z_]\\w*)\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s\"'/>]+))");
+	private static final Pattern PAGE_ASSET = Pattern.compile("\\b(init|css)\\s*=\\s*(?:\\[([^\\]]*)\\]|\"([^\"]*)\"|'([^']*)')");
+	private static final Pattern QUOTED = Pattern.compile("\"([^\"]*)\"|'([^']*)'");
 	private static final Pattern MACRO = Pattern.compile("<#macro\\s+([A-Za-z_]\\w*)");
 	private static final Pattern INCLUDE = Pattern.compile("<#include\\s+\"([^\"]+)\"");
 	private static final Pattern IMPORT = Pattern.compile("<#import\\s+\"[^\"]+\"\\s+as\\s+([A-Za-z_]\\w*)");
@@ -364,6 +366,7 @@ public final class ConsoleTemplateValidator {
 							consoleAt = at;
 					}
 					case MainDirectiveModel.NAME -> mains++;
+					case PageDirectiveModel.NAME -> checkPageAssets(out, name, lines, at, m.group(3));
 					default -> { /* slots, theme, token, page: nothing beyond the attribute checks above */ }
 				}
 			}
@@ -393,6 +396,37 @@ public final class ConsoleTemplateValidator {
 
 		out.sort(Comparator.comparingInt(Finding::line).thenComparingInt(Finding::column));
 		return out;
+	}
+
+	// Flags a literal init=/css= entry that is neither absolute nor a context:/servlet: URI.  Lists holding an
+	// expression (a call or ${...}) are skipped: their entries are not literals.
+	private static void checkPageAssets(List<Finding> out, String name, int[] lines, int at, String attrText) {
+		var m = PAGE_ASSET.matcher(attrText);
+		while (m.find()) {
+			var attr = m.group(1);
+			var entries = new ArrayList<String>();
+			if (nn(m.group(2))) {
+				var body = m.group(2);
+				if (body.contains("(") || body.contains("${"))
+					continue;
+				var q = QUOTED.matcher(body);
+				while (q.find())
+					entries.add(nn(q.group(1)) ? q.group(1) : q.group(2));
+			} else {
+				var v = nn(m.group(3)) ? m.group(3) : m.group(4);
+				if (v.contains("${"))
+					continue;
+				for (var part : v.split(",")) {
+					var t = part.trim();
+					if (! t.isEmpty())
+						entries.add(t);
+				}
+			}
+			for (var e : entries)
+				if (! FtlAttrLists.isAbsoluteAsset(e))
+					add(out, name, lines, at, "relative-page-asset", f(
+						"<@page> %s= entry '%s' must be absolute (start with '/') or a context: / servlet: URI.", attr, e));
+		}
 	}
 
 	/**

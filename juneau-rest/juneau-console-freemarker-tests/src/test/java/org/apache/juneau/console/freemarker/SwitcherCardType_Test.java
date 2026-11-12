@@ -77,6 +77,34 @@ class SwitcherCardType_Test extends TestBase {
 		assertFalse(d.containsKey("dataUrl"));
 	}
 
+	@Test void a06b_nestedTerminalDefaultsContractVersion() {
+		var card = REG.toCard(src("{views:[{id:'a',label:'A',card:{id:'t1',type:'terminal',terminal:{bytesUrl:'/t/juneau-terminal/r1/bytes'}}}]}"));
+		var t = new SwitcherCardType().nestedCards(card).get(0);
+		assertEquals("terminal", t.get("type"));
+		assertNotNull(t.get("terminal"));
+	}
+
+	@Test void a06c_nestedTerminalStillRejectsAWrongContractVersion() {
+		var bad = src("{views:[{id:'a',label:'A',card:{id:'t1',type:'terminal',contractVersion:'2',terminal:{bytesUrl:'/b'}}}]}");
+		var e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(bad));
+		assertTrue(e.getMessage().contains("requires contractVersion: '1'; got '2'"), e.getMessage());
+	}
+
+	@Test void a06d_nestedPublishesAcceptsStringShorthand() {
+		var card = REG.toCard(src("{views:[{id:'a',label:'A',card:{id:'c1',type:'chart',src:'/x',kind:'line',x:{field:'d'},series:['n'],"
+			+ "publishes:'app.one, app.two!retain', on:{click:'app.one'}}}]}"));
+		var c = new SwitcherCardType().nestedCards(card).get(0);
+		assertEquals(List.of(Map.of("topic", "app.one", "retain", false), Map.of("topic", "app.two", "retain", true)), c.get("publishes"));
+	}
+
+	@Test void a06e_nestedPublishesObjectFormUnchanged() {
+		var card = REG.toCard(src("{views:[{id:'a',label:'A',card:{id:'c1',type:'chart',src:'/x',kind:'line',x:{field:'d'},series:['n'],"
+			+ "publishes:[{topic:'app.one',retain:true}]}}]}"));
+		var c = new SwitcherCardType().nestedCards(card).get(0);
+		assertEquals(1, ((List<?>)c.get("publishes")).size());
+		assertEquals("app.one", ((Map<?,?>)((List<?>)c.get("publishes")).get(0)).get("topic"));
+	}
+
 	@Test void a07_authoredBodyNotMutated() {
 		var s = src(OK);
 		REG.toCard(s);

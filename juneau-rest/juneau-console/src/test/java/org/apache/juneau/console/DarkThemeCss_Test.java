@@ -58,7 +58,8 @@ class DarkThemeCss_Test extends TestBase {
 		// Derived aliases that stay live.
 		"--jc-btn-primary-bg", "--jc-btn-primary-bg-hover", "--jc-page-nav-accent", "--jc-nav-bg",
 		"--jc-header-icon-text", "--jc-tone-info", "--jc-tone-success", "--jc-tone-warning", "--jc-tone-error",
-		"--jc-chrome-button-border", "--jc-chrome-disabled-border", "--jc-chrome-control-border");
+		"--jc-chrome-button-border", "--jc-chrome-disabled-border", "--jc-chrome-control-border",
+		"--jc-chrome-danger");
 
 	private static String read(String resource) throws IOException {
 		try (var in = DarkThemeCss_Test.class.getResourceAsStream(resource)) {

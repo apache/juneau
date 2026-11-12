@@ -13,7 +13,7 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><@console brand="Juneau Petstore" icon="symbol:paw_print" title=(pageTitle!"") theme=(petstoreTheme!"open") schemeToggle=true themeSelector=true favicon="/console/store/juneau-symbol/paw_print.svg">
+--><@console brand="Juneau Petstore" icon="symbol:paw_print" title=(pageTitle!"") theme=(petstoreTheme!"open") schemeToggle=true themeSelector=true favicon="symbol:paw_print">
 <#-- P4 pages pass the viewer's roles for the row-action visibleWhen rules; other pages have no roles. -->
 <#if roles??><@facts>{ viewer: { roles: [ <#list roles as r>'${r}'<#sep>, </#list> ] } }</@facts></#if>
 <@scripts phase="after-toolkit"><script src="${assetUrl('/console/petstore.js')}"></script></@scripts>

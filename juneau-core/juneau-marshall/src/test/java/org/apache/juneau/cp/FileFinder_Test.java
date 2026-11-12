@@ -83,7 +83,7 @@ public class FileFinder_Test extends TestBase {
 			assertContains("[home:/files/test1/dir/dir/"+p+"]", read(x," / files/test1/dir/dir/"+p+" / "));
 		}
 
-		var badPatterns = a("files/test1/bad.txt","files/test1/../test1/_a.txt","files/test1/%2E%2E/test1/_a.txt","files/bad.txt",null,"",".","..","%2E","%2E%2E","j.class","k.properties");
+		var badPatterns = a("files/test1/bad.txt","files/test1/../test1/_a.txt","files/test1/%2E%2E/test1/_a.txt","files/bad.txt",null,"",".","..","%2E","%2E%2E","j.class","j_ja.class","j_ja_JP.class","k.properties","k_ja.properties","k_ja_JP.properties");
 
 		for (var p : badPatterns) {
 			assertNull(read(x,p));
@@ -151,7 +151,7 @@ public class FileFinder_Test extends TestBase {
 			assertContains("[home:/files/test1/dir/dir/"+pJaJP+"]", read(x,"/test1/dir/dir/"+p+"/",JAPAN));
 		}
 
-		var badPatterns = a("test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".","..","j.class","k.properties");
+		var badPatterns = a("test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".","..","j.class","j_ja.class","j_ja_JP.class","k.properties","k_ja.properties","k_ja_JP.properties");
 
 		for (var p : badPatterns) {
 			assertNull(read(x,p,null));

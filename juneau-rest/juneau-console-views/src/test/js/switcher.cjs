@@ -291,6 +291,21 @@ async function main() {
 		r.JC.destroyCard('sw1');
 		out.s14 = { afterMount, viewHostClass: host.className, inSwitcher, order, handles, beforeV2, afterV2, addedId: added.id, bad, destroyed: r.destroys.slice().sort((a, b) => a.localeCompare(b)) };
 	}
+	// s15. select("view/section") reaches a section: it builds the view, opens the section, and rejects unknown ids.
+	{
+		const r = await page(withSwitchers(baseSpec()));
+		const bad = [api(r).select('v2/nope'), api(r).select('nope/s1'), api(r).select('v1/s1')];
+		const viewOnly = api(r).select('v2');
+		const afterViewOnly = r.JC.cardApi('sw1')._currentKey();
+		const ok = api(r).select('v2/s2');
+		const built = r.JC.cardApi('sw1')._currentKey();
+		api(r).select('v1');
+		api(r).select('v2/s1');
+		const back = r.JC.cardApi('sw1')._currentKey();
+		const fresh = await page(withSwitchers(baseSpec()));
+		const direct = fresh.JC.cardApi('sw1').select('v2/s2');
+		out.s15 = { bad, viewOnly, afterViewOnly, ok, built, back, direct, directKey: fresh.JC.cardApi('sw1')._currentKey(), directRenders: fresh.renders.slice() };
+	}
 	// s13. Slider thumb: created for slider only, follows the selection and resize, honours reduced motion.
 	{
 		const def = (b, k, v) => Object.defineProperty(b, k, { value: v, configurable: true });

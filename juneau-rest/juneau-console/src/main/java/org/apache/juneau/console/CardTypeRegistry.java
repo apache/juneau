@@ -187,6 +187,12 @@ public final class CardTypeRegistry {
 			else
 				body.put(e.getKey(), e.getValue());
 		}
+		// A nested terminal card takes the contract version a top-level one implies.
+		if ("terminal".equals(type))
+			body.putIfAbsent("contractVersion", "1");
+		var publishes = body.get("publishes");
+		if (publishes != null)
+			body.put("publishes", publications(publishes));
 		var source = CardSource.create(type, id).bodyMap(body);
 		if (m.get("title") instanceof String t)
 			source.title(t);
@@ -198,6 +204,30 @@ public final class CardTypeRegistry {
 		lifted.putAll(kept);
 		m.clear();
 		m.putAll(lifted);
+	}
+
+	// The string shorthand {@code "t,u!retain"} (a comma list; {@code !retain} retains that topic) becomes the
+	// {topic, retain} maps the object form spells out; maps and anything else pass through untouched.
+	private static Object publications(Object v) {
+		var items = v instanceof Collection<?> c ? List.copyOf(c) : List.of(v);
+		var out = new ArrayList<Object>();
+		for (var o : items) {
+			if (! (o instanceof String s)) {
+				out.add(o);
+				continue;
+			}
+			for (var part : s.split(",")) {
+				var t = part.trim();
+				if (t.isEmpty())
+					continue;
+				var retain = t.endsWith("!retain");
+				var m = new LinkedHashMap<String,Object>();
+				m.put("topic", retain ? t.substring(0, t.length() - 7) : t);
+				m.put("retain", retain);
+				out.add(m);
+			}
+		}
+		return out;
 	}
 
 	/** Builds a {@link CardTypeRegistry} on top of an existing one, or from scratch. */

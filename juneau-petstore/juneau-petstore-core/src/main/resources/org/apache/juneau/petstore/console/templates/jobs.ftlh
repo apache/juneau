@@ -95,8 +95,8 @@
       ]
     } },
     { id: 'groom', label: 'Groom', cards: [
-        { type: 'terminal', id: 'groom-output', title: 'Groom run', contractVersion: '1', terminal: { bytesUrl: '${groomBytesUrl?json_string?no_esc}', title: 'Groom log' } },
-        { type: 'terminal', id: 'groom-file', title: 'Groom transcript (file)', contractVersion: '1', terminal: { bytesUrl: '${groomFileBytesUrl?json_string?no_esc}', title: 'Transcript file' } },
+        { type: 'terminal', id: 'groom-output', title: 'Groom run', terminal: { bytesUrl: '${groomBytesUrl?json_string?no_esc}', title: 'Groom log' } },
+        { type: 'terminal', id: 'groom-file', title: 'Groom transcript (file)', terminal: { bytesUrl: '${groomFileBytesUrl?json_string?no_esc}', title: 'Transcript file' } },
         { type: 'datatables', id: 'groom-runs',
           dataMode: 'client',
           dataUrl: '/console/ops/jobs/groom-rows',

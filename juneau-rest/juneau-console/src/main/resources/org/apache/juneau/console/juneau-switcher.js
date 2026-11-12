@@ -165,10 +165,17 @@
 			if (!leaving && typeof U.syncPage === "function") U.syncPage();
 		}
 
-		/** Selects a view by id; returns false for an unknown id. */
-		select(viewId) {
-			if (!this.viewById[viewId]) return false;
+		/** Selects a view by id, or a section of a view as "view/section"; returns false for an unknown id. */
+		select(target) {
+			var slash = typeof target === "string" ? target.indexOf("/") : -1;
+			var viewId = slash < 0 ? target : target.slice(0, slash);
+			var view = this.viewById[viewId];
+			if (!view) return false;
+			var sectionId = slash < 0 ? null : target.slice(slash + 1);
+			if (sectionId !== null && !this._pickSection(view, sectionId)) return false;
 			this.selector.juneauTabs.activate(viewId);
+			var b = this.built[viewId];
+			if (sectionId !== null && b && b.subStrip) b.subStrip.juneauTabs.activate(sectionId);
 			return true;
 		}
 

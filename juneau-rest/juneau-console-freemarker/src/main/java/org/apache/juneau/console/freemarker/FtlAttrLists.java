@@ -99,6 +99,34 @@ final class FtlAttrLists {
 	}
 
 	/**
+	 * Returns whether a page asset URL is absolute: a root-relative path ({@code /...}, not protocol-relative) or a
+	 * {@code context:} / {@code servlet:} URI.  A bare name such as {@code one.js} resolves against the page URL and
+	 * breaks on nested paths.
+	 *
+	 * @param url The URL.  Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the URL is an allowed form.
+	 */
+	static boolean isAbsoluteAsset(String url) {
+		if (n(url))
+			return false;
+		return (url.startsWith("/") && ! url.startsWith("//")) || url.startsWith("context:") || url.startsWith("servlet:");
+	}
+
+	/**
+	 * Rejects any page asset entry that is not absolute.
+	 *
+	 * @param directive The directive name, without {@code <@}.
+	 * @param name The attribute name.
+	 * @param values The entries.
+	 * @throws TemplateModelException If an entry is relative.
+	 */
+	static void requireAbsoluteAssets(String directive, String name, List<String> values) throws TemplateModelException {
+		for (var v : values)
+			if (! isAbsoluteAsset(v))
+				throw reject(f("<@%s> %s= entry '%s' must be absolute (start with '/') or a context: / servlet: URI.", directive, name, v));
+	}
+
+	/**
 	 * Hash-valued attribute (used by {@code <@console facts=>}): absent gives an empty map; a hash is deep-unwrapped and
 	 * its keys stringified.  Any other shape is rejected.
 	 *

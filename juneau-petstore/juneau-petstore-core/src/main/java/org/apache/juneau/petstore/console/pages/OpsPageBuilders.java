@@ -56,8 +56,8 @@ public final class OpsPageBuilders {
 				.view("jobs", "Jobs", v -> v.section(SwitcherCards.table(jobsTable())))
 				.view("species", "Species", v -> v.section(SwitcherCards.table(speciesTable())))
 				.view("groom", "Groom", v -> v.cards(
-					CardSpec.of("terminal", "groom-output").title("Groom run").body("contractVersion", "1").body("terminal", groomOutput.toMap()),
-					CardSpec.of("terminal", "groom-file").title("Groom transcript (file)").body("contractVersion", "1").body("terminal", groomFile.toMap()),
+					CardSpec.of("terminal", "groom-output").title("Groom run").body("terminal", groomOutput.toMap()),
+					CardSpec.of("terminal", "groom-file").title("Groom transcript (file)").body("terminal", groomFile.toMap()),
 					SwitcherCards.table(groomRunsTable())))
 				.toCardSpec());
 	}

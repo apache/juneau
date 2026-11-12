@@ -13,6 +13,6 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><@page tab="home" toolkit="views" css="page.css" init="page-init.js">
+--><@page tab="home" toolkit="views" css="/page.css" init="/page-init.js">
 <@card type="datatables" id="rel">{ dataUrl: '/rest/rel/data', columns: [ { key: 'name', label: 'Name' } ] }</@card>
 </@page>
