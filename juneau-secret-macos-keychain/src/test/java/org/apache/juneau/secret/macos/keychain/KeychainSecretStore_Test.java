@@ -454,7 +454,9 @@ class KeychainSecretStore_Test {
 
 	@Test void e04_processRunnerInterrupted() throws IOException {
 		assumeTrue(posixShellAvailable(), "POSIX shell not available");
-		var script = fakeSecurity("exit 0");
+		// The child must still be running when waitFor is called: waitFor returns at once for an exited process
+		// without checking the interrupt flag, so a script that exits immediately makes this test racy.
+		var script = fakeSecurity("exec sleep 5");
 		try {
 			var store = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, 5L, script.getAbsolutePath());
 			Thread.currentThread().interrupt();
