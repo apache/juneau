@@ -225,39 +225,41 @@
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	@Test <strong class="jxr_keyword">void</strong> f01_foldErrorResurfacesStrict() {
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">var</strong> s = seg(STRICT, <span class="jxr_string">"1/0"</span>);
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertNull(s.fold(STRICT));
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertThrows(ExprException.<strong class="jxr_keyword">class</strong>, () -&gt; s.resolve(STRICT.createSession(), <strong class="jxr_keyword">new</strong> StringBuilder()));
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	@Test <strong class="jxr_keyword">void</strong> f02_foldFallThroughNotBakedIn() {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<em class="jxr_comment">// No operator functions registered, so evaluation falls through at fold time.</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">var</strong> vr = VarResolver.create().defaultVars().build();
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> s = seg(vr, <span class="jxr_string">"1+2"</span>);
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		assertNull(s.fold(vr));
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		s.resolve(vr.createSession(), sb);
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		assertEquals(<span class="jxr_string">"#{1+2}"</span>, sb.toString());
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	}
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	@Test <strong class="jxr_keyword">void</strong> g01_fallThroughIsVerbatim() {
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		assertEquals(<span class="jxr_string">"#{ nosuch( 1 ) }"</span>, render(LENIENT, <span class="jxr_string">" nosuch( 1 ) "</span>));
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		assertEquals(<span class="jxr_string">"#{nosuch(${ST:a}, 'b')}"</span>, render(LENIENT, <span class="jxr_string">"nosuch(${ST:a}, 'b')"</span>));
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	}
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	@Test <strong class="jxr_keyword">void</strong> h01_isStable() {
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertFalse(VarTemplateCompiler.isStable(<strong class="jxr_keyword">null</strong>, false));
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		assertFalse(VarTemplateCompiler.isStable(<strong class="jxr_keyword">new</strong> UnstableVar(), false));
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		assertFalse(VarTemplateCompiler.isStable(<strong class="jxr_keyword">new</strong> StableVar(), <strong class="jxr_keyword">true</strong>));
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertFalse(VarTemplateCompiler.isStable(<strong class="jxr_keyword">new</strong> StableStreamed(), false));
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertTrue(VarTemplateCompiler.isStable(<strong class="jxr_keyword">new</strong> StableVar(), false));
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	}
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	@Test <strong class="jxr_keyword">void</strong> i01_identifiersResolveToNullToday() {
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<em class="jxr_comment">// Pins current behaviour: no render-scope hook yet, so bare identifiers (other than 'this') are null.</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertEquals(<span class="jxr_string">""</span>, render(LENIENT, <span class="jxr_string">"someIdent"</span>));
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		assertEquals(<span class="jxr_string">""</span>, render(STRICT, <span class="jxr_string">"someIdent"</span>));
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		assertEquals(<span class="jxr_string">"x"</span>, render(LENIENT, <span class="jxr_string">"someIdent ?: 'x'"</span>));
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	}
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> }
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">var</strong> session = STRICT.createSession();
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		assertThrows(ExprException.<strong class="jxr_keyword">class</strong>, () -&gt; s.resolve(session, sb));
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	}
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	@Test <strong class="jxr_keyword">void</strong> f02_foldFallThroughNotBakedIn() {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<em class="jxr_comment">// No operator functions registered, so evaluation falls through at fold time.</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">var</strong> vr = VarResolver.create().defaultVars().build();
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">var</strong> s = seg(vr, <span class="jxr_string">"1+2"</span>);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		assertNull(s.fold(vr));
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		s.resolve(vr.createSession(), sb);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		assertEquals(<span class="jxr_string">"#{1+2}"</span>, sb.toString());
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	}
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	@Test <strong class="jxr_keyword">void</strong> g01_fallThroughIsVerbatim() {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertEquals(<span class="jxr_string">"#{ nosuch( 1 ) }"</span>, render(LENIENT, <span class="jxr_string">" nosuch( 1 ) "</span>));
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertEquals(<span class="jxr_string">"#{nosuch(${ST:a}, 'b')}"</span>, render(LENIENT, <span class="jxr_string">"nosuch(${ST:a}, 'b')"</span>));
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	@Test <strong class="jxr_keyword">void</strong> h01_isStable() {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		assertFalse(VarTemplateCompiler.isStable(<strong class="jxr_keyword">null</strong>, false));
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertFalse(VarTemplateCompiler.isStable(<strong class="jxr_keyword">new</strong> UnstableVar(), false));
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertFalse(VarTemplateCompiler.isStable(<strong class="jxr_keyword">new</strong> StableVar(), <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		assertFalse(VarTemplateCompiler.isStable(<strong class="jxr_keyword">new</strong> StableStreamed(), false));
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertTrue(VarTemplateCompiler.isStable(<strong class="jxr_keyword">new</strong> StableVar(), false));
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	@Test <strong class="jxr_keyword">void</strong> i01_identifiersResolveToNullToday() {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<em class="jxr_comment">// Pins current behaviour: no render-scope hook yet, so bare identifiers (other than 'this') are null.</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		assertEquals(<span class="jxr_string">""</span>, render(LENIENT, <span class="jxr_string">"someIdent"</span>));
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		assertEquals(<span class="jxr_string">""</span>, render(STRICT, <span class="jxr_string">"someIdent"</span>));
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertEquals(<span class="jxr_string">"x"</span>, render(LENIENT, <span class="jxr_string">"someIdent ?: 'x'"</span>));
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	}
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

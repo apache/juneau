@@ -959,81 +959,84 @@
 <span class="source-line-no">946</span><span id="line-946">      description="A symbol from the Lucide or shipped sprite, with colours that follow prefers-color-scheme; for favicons.",</span>
 <span class="source-line-no">947</span><span id="line-947">      swagger=@OpSwagger(ignore=true)</span>
 <span class="source-line-no">948</span><span id="line-948">   )</span>
-<span class="source-line-no">949</span><span id="line-949">   public HttpResource getSymbol(@Path("file") String file) {</span>
-<span class="source-line-no">950</span><span id="line-950">      var name = file.endsWith(".svg") ? file.substring(0, file.length() - 4) : "";</span>
-<span class="source-line-no">951</span><span id="line-951">      if (! SYMBOL_NAME.matcher(name).matches())</span>
-<span class="source-line-no">952</span><span id="line-952">         throw new NotFound("Unknown symbol: " + name);</span>
-<span class="source-line-no">953</span><span id="line-953">      var open = "&lt;symbol id=\"juneau-sym-" + name + "\"";</span>
-<span class="source-line-no">954</span><span id="line-954">      for (var resource : new String[]{SYMBOLS_LUCIDE_SVG_RESOURCE, SYMBOLS_SVG_RESOURCE}) {</span>
-<span class="source-line-no">955</span><span id="line-955">         var sprite = new String(ASSET_CACHE.bytes(resource), StandardCharsets.UTF_8);</span>
-<span class="source-line-no">956</span><span id="line-956">         var start = sprite.indexOf(open);</span>
-<span class="source-line-no">957</span><span id="line-957">         if (start &lt; 0)</span>
-<span class="source-line-no">958</span><span id="line-958">            continue;</span>
-<span class="source-line-no">959</span><span id="line-959">         var innerStart = sprite.indexOf('&gt;', start) + 1;</span>
-<span class="source-line-no">960</span><span id="line-960">         var inner = sprite.substring(innerStart, sprite.indexOf("&lt;/symbol&gt;", innerStart));</span>
-<span class="source-line-no">961</span><span id="line-961">         // A symbol that fills with currentColor on its own tag passes that fill to its children through a wrapper group.</span>
-<span class="source-line-no">962</span><span id="line-962">         if (sprite.substring(start, innerStart).contains("fill=\"currentColor\""))</span>
-<span class="source-line-no">963</span><span id="line-963">            inner = "&lt;g class=\"f\"&gt;" + inner + "&lt;/g&gt;";</span>
-<span class="source-line-no">964</span><span id="line-964">         if (inner.contains("&lt;script"))</span>
-<span class="source-line-no">965</span><span id="line-965">            break;</span>
-<span class="source-line-no">966</span><span id="line-966">         // A presentation attribute cannot hold a CSS variable, so currentColor becomes a class the embedded stylesheet colours.</span>
-<span class="source-line-no">967</span><span id="line-967">         var svg = "&lt;svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\"&gt;"</span>
-<span class="source-line-no">968</span><span id="line-968">            + "&lt;style&gt;.s{stroke:#4a4a4a}.f{fill:#4a4a4a}@media (prefers-color-scheme:dark){.s{stroke:#c8c8c8}.f{fill:#c8c8c8}}&lt;/style&gt;"</span>
-<span class="source-line-no">969</span><span id="line-969">            + inner.replace("stroke=\"currentColor\"", "class=\"s\"").replace("fill=\"currentColor\"", "class=\"f\"") + "&lt;/svg&gt;";</span>
-<span class="source-line-no">970</span><span id="line-970">         return ASSET_CACHE.wrap(svg.getBytes(StandardCharsets.UTF_8), SVG_CONTENT_TYPE, CACHE_CONTROL);</span>
-<span class="source-line-no">971</span><span id="line-971">      }</span>
-<span class="source-line-no">972</span><span id="line-972">      throw new NotFound("Unknown symbol: " + name);</span>
-<span class="source-line-no">973</span><span id="line-973">   }</span>
-<span class="source-line-no">974</span><span id="line-974"></span>
-<span class="source-line-no">975</span><span id="line-975">   /** Reads (and caches) the classpath asset and wraps it as a cacheable {@link HttpResource}. */</span>
-<span class="source-line-no">976</span><span id="line-976">   private static HttpResource serve(String resource, String contentType) {</span>
-<span class="source-line-no">977</span><span id="line-977">      return ASSET_CACHE.serve(resource, contentType, CACHE_CONTROL);</span>
-<span class="source-line-no">978</span><span id="line-978">   }</span>
-<span class="source-line-no">979</span><span id="line-979"></span>
-<span class="source-line-no">980</span><span id="line-980">   /**</span>
-<span class="source-line-no">981</span><span id="line-981">    * Selects the cache that owns the given asset path: the two relocated widget assets hash and version through</span>
-<span class="source-line-no">982</span><span id="line-982">    * the widget module's cache (see {@link #WIDGET_ASSET_CACHE}), the DataTables glue through the datatables</span>
-<span class="source-line-no">983</span><span id="line-983">    * module's (see {@link #DATATABLES_ASSET_CACHE}), everything else through this module's own.</span>
-<span class="source-line-no">984</span><span id="line-984">    */</span>
-<span class="source-line-no">985</span><span id="line-985">   private static ClasspathAssetCache cacheFor(String path) {</span>
-<span class="source-line-no">986</span><span id="line-986">      if (eqa(path, CALENDAR_JS_PATH, CALENDAR_CSS_PATH))</span>
-<span class="source-line-no">987</span><span id="line-987">         return WIDGET_ASSET_CACHE;</span>
-<span class="source-line-no">988</span><span id="line-988">      if (eq(path, DATATABLES_JS_PATH))</span>
-<span class="source-line-no">989</span><span id="line-989">         return DATATABLES_ASSET_CACHE;</span>
-<span class="source-line-no">990</span><span id="line-990">      return ASSET_CACHE;</span>
-<span class="source-line-no">991</span><span id="line-991">   }</span>
-<span class="source-line-no">992</span><span id="line-992"></span>
-<span class="source-line-no">993</span><span id="line-993">   /** Maps a public asset path constant to its classpath resource constant (content-hashing only; routing itself is by {@code @RestGet(path=...)}). */</span>
-<span class="source-line-no">994</span><span id="line-994">   @SuppressWarnings({</span>
-<span class="source-line-no">995</span><span id="line-995">      "java:S3776" // Flat path-to-resource lookup table; one branch per asset, no nesting.</span>
-<span class="source-line-no">996</span><span id="line-996">   })</span>
-<span class="source-line-no">997</span><span id="line-997">   private static String resourceFor(String path) {</span>
-<span class="source-line-no">998</span><span id="line-998">      if (eq(path, VIEWS_JS_PATH)) return VIEWS_JS_RESOURCE;</span>
-<span class="source-line-no">999</span><span id="line-999">      if (eq(path, RIBBON_JS_PATH)) return RIBBON_JS_RESOURCE;</span>
-<span class="source-line-no">1000</span><span id="line-1000">      if (eq(path, RENDERS_JS_PATH)) return RENDERS_JS_RESOURCE;</span>
-<span class="source-line-no">1001</span><span id="line-1001">      if (eq(path, VIEWS_CSS_PATH)) return VIEWS_CSS_RESOURCE;</span>
-<span class="source-line-no">1002</span><span id="line-1002">      if (eq(path, ICONS_JS_PATH)) return ICONS_JS_RESOURCE;</span>
-<span class="source-line-no">1003</span><span id="line-1003">      if (eq(path, SEARCH_JS_PATH)) return SEARCH_JS_RESOURCE;</span>
-<span class="source-line-no">1004</span><span id="line-1004">      if (eq(path, PAGESTATE_JS_PATH)) return PAGESTATE_JS_RESOURCE;</span>
-<span class="source-line-no">1005</span><span id="line-1005">      if (eq(path, URLSTATE_JS_PATH)) return URLSTATE_JS_RESOURCE;</span>
-<span class="source-line-no">1006</span><span id="line-1006">      if (eq(path, BUS_JS_PATH)) return BUS_JS_RESOURCE;</span>
-<span class="source-line-no">1007</span><span id="line-1007">      if (eq(path, MODEL_JS_PATH)) return MODEL_JS_RESOURCE;</span>
-<span class="source-line-no">1008</span><span id="line-1008">      if (eq(path, MODEL_INLINE_JS_PATH)) return MODEL_INLINE_JS_RESOURCE;</span>
-<span class="source-line-no">1009</span><span id="line-1009">      if (eq(path, SYMBOLS_SVG_PATH)) return SYMBOLS_SVG_RESOURCE;</span>
-<span class="source-line-no">1010</span><span id="line-1010">      if (eq(path, SYMBOLS_MATERIAL_SVG_PATH)) return SYMBOLS_MATERIAL_SVG_RESOURCE;</span>
-<span class="source-line-no">1011</span><span id="line-1011">      if (eq(path, SYMBOLS_LUCIDE_SVG_PATH)) return SYMBOLS_LUCIDE_SVG_RESOURCE;</span>
-<span class="source-line-no">1012</span><span id="line-1012">      if (eq(path, REGIONS_JS_PATH)) return REGIONS_JS_RESOURCE;</span>
-<span class="source-line-no">1013</span><span id="line-1013">      if (eq(path, HELPERS_JS_PATH)) return HELPERS_JS_RESOURCE;</span>
-<span class="source-line-no">1014</span><span id="line-1014">      if (eq(path, DATA_JS_PATH)) return DATA_JS_RESOURCE;</span>
-<span class="source-line-no">1015</span><span id="line-1015">      if (eq(path, RUN_VIEW_JS_PATH)) return RUN_VIEW_JS_RESOURCE;</span>
-<span class="source-line-no">1016</span><span id="line-1016">      if (eq(path, CONFIG_JS_PATH)) return CONFIG_JS_RESOURCE;</span>
-<span class="source-line-no">1017</span><span id="line-1017">      if (eq(path, CONFIG_CSS_PATH)) return CONFIG_CSS_RESOURCE;</span>
-<span class="source-line-no">1018</span><span id="line-1018">      if (eq(path, CALENDAR_JS_PATH)) return CALENDAR_JS_RESOURCE;</span>
-<span class="source-line-no">1019</span><span id="line-1019">      if (eq(path, CALENDAR_CSS_PATH)) return CALENDAR_CSS_RESOURCE;</span>
-<span class="source-line-no">1020</span><span id="line-1020">      if (eq(path, DATATABLES_JS_PATH)) return DATATABLES_JS_RESOURCE;</span>
-<span class="source-line-no">1021</span><span id="line-1021">      throw new IllegalArgumentException("Unknown asset path: " + path);</span>
-<span class="source-line-no">1022</span><span id="line-1022">   }</span>
-<span class="source-line-no">1023</span><span id="line-1023">}</span>
+<span class="source-line-no">949</span><span id="line-949">   @SuppressWarnings({</span>
+<span class="source-line-no">950</span><span id="line-950">      "java:S135" // Sprite search skips missing symbols and stops at an unsafe one; each exit is distinct.</span>
+<span class="source-line-no">951</span><span id="line-951">   })</span>
+<span class="source-line-no">952</span><span id="line-952">   public HttpResource getSymbol(@Path("file") String file) {</span>
+<span class="source-line-no">953</span><span id="line-953">      var name = file.endsWith(".svg") ? file.substring(0, file.length() - 4) : "";</span>
+<span class="source-line-no">954</span><span id="line-954">      if (! SYMBOL_NAME.matcher(name).matches())</span>
+<span class="source-line-no">955</span><span id="line-955">         throw new NotFound("Unknown symbol: " + name);</span>
+<span class="source-line-no">956</span><span id="line-956">      var open = "&lt;symbol id=\"juneau-sym-" + name + "\"";</span>
+<span class="source-line-no">957</span><span id="line-957">      for (var resource : new String[]{SYMBOLS_LUCIDE_SVG_RESOURCE, SYMBOLS_SVG_RESOURCE}) {</span>
+<span class="source-line-no">958</span><span id="line-958">         var sprite = new String(ASSET_CACHE.bytes(resource), StandardCharsets.UTF_8);</span>
+<span class="source-line-no">959</span><span id="line-959">         var start = sprite.indexOf(open);</span>
+<span class="source-line-no">960</span><span id="line-960">         if (start &lt; 0)</span>
+<span class="source-line-no">961</span><span id="line-961">            continue;</span>
+<span class="source-line-no">962</span><span id="line-962">         var innerStart = sprite.indexOf('&gt;', start) + 1;</span>
+<span class="source-line-no">963</span><span id="line-963">         var inner = sprite.substring(innerStart, sprite.indexOf("&lt;/symbol&gt;", innerStart));</span>
+<span class="source-line-no">964</span><span id="line-964">         // A symbol that fills with currentColor on its own tag passes that fill to its children through a wrapper group.</span>
+<span class="source-line-no">965</span><span id="line-965">         if (sprite.substring(start, innerStart).contains("fill=\"currentColor\""))</span>
+<span class="source-line-no">966</span><span id="line-966">            inner = "&lt;g class=\"f\"&gt;" + inner + "&lt;/g&gt;";</span>
+<span class="source-line-no">967</span><span id="line-967">         if (inner.contains("&lt;script"))</span>
+<span class="source-line-no">968</span><span id="line-968">            break;</span>
+<span class="source-line-no">969</span><span id="line-969">         // A presentation attribute cannot hold a CSS variable, so currentColor becomes a class the embedded stylesheet colours.</span>
+<span class="source-line-no">970</span><span id="line-970">         var svg = "&lt;svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\"&gt;"</span>
+<span class="source-line-no">971</span><span id="line-971">            + "&lt;style&gt;.s{stroke:#4a4a4a}.f{fill:#4a4a4a}@media (prefers-color-scheme:dark){.s{stroke:#c8c8c8}.f{fill:#c8c8c8}}&lt;/style&gt;"</span>
+<span class="source-line-no">972</span><span id="line-972">            + inner.replace("stroke=\"currentColor\"", "class=\"s\"").replace("fill=\"currentColor\"", "class=\"f\"") + "&lt;/svg&gt;";</span>
+<span class="source-line-no">973</span><span id="line-973">         return ASSET_CACHE.wrap(svg.getBytes(StandardCharsets.UTF_8), SVG_CONTENT_TYPE, CACHE_CONTROL);</span>
+<span class="source-line-no">974</span><span id="line-974">      }</span>
+<span class="source-line-no">975</span><span id="line-975">      throw new NotFound("Unknown symbol: " + name);</span>
+<span class="source-line-no">976</span><span id="line-976">   }</span>
+<span class="source-line-no">977</span><span id="line-977"></span>
+<span class="source-line-no">978</span><span id="line-978">   /** Reads (and caches) the classpath asset and wraps it as a cacheable {@link HttpResource}. */</span>
+<span class="source-line-no">979</span><span id="line-979">   private static HttpResource serve(String resource, String contentType) {</span>
+<span class="source-line-no">980</span><span id="line-980">      return ASSET_CACHE.serve(resource, contentType, CACHE_CONTROL);</span>
+<span class="source-line-no">981</span><span id="line-981">   }</span>
+<span class="source-line-no">982</span><span id="line-982"></span>
+<span class="source-line-no">983</span><span id="line-983">   /**</span>
+<span class="source-line-no">984</span><span id="line-984">    * Selects the cache that owns the given asset path: the two relocated widget assets hash and version through</span>
+<span class="source-line-no">985</span><span id="line-985">    * the widget module's cache (see {@link #WIDGET_ASSET_CACHE}), the DataTables glue through the datatables</span>
+<span class="source-line-no">986</span><span id="line-986">    * module's (see {@link #DATATABLES_ASSET_CACHE}), everything else through this module's own.</span>
+<span class="source-line-no">987</span><span id="line-987">    */</span>
+<span class="source-line-no">988</span><span id="line-988">   private static ClasspathAssetCache cacheFor(String path) {</span>
+<span class="source-line-no">989</span><span id="line-989">      if (eqa(path, CALENDAR_JS_PATH, CALENDAR_CSS_PATH))</span>
+<span class="source-line-no">990</span><span id="line-990">         return WIDGET_ASSET_CACHE;</span>
+<span class="source-line-no">991</span><span id="line-991">      if (eq(path, DATATABLES_JS_PATH))</span>
+<span class="source-line-no">992</span><span id="line-992">         return DATATABLES_ASSET_CACHE;</span>
+<span class="source-line-no">993</span><span id="line-993">      return ASSET_CACHE;</span>
+<span class="source-line-no">994</span><span id="line-994">   }</span>
+<span class="source-line-no">995</span><span id="line-995"></span>
+<span class="source-line-no">996</span><span id="line-996">   /** Maps a public asset path constant to its classpath resource constant (content-hashing only; routing itself is by {@code @RestGet(path=...)}). */</span>
+<span class="source-line-no">997</span><span id="line-997">   @SuppressWarnings({</span>
+<span class="source-line-no">998</span><span id="line-998">      "java:S3776" // Flat path-to-resource lookup table; one branch per asset, no nesting.</span>
+<span class="source-line-no">999</span><span id="line-999">   })</span>
+<span class="source-line-no">1000</span><span id="line-1000">   private static String resourceFor(String path) {</span>
+<span class="source-line-no">1001</span><span id="line-1001">      if (eq(path, VIEWS_JS_PATH)) return VIEWS_JS_RESOURCE;</span>
+<span class="source-line-no">1002</span><span id="line-1002">      if (eq(path, RIBBON_JS_PATH)) return RIBBON_JS_RESOURCE;</span>
+<span class="source-line-no">1003</span><span id="line-1003">      if (eq(path, RENDERS_JS_PATH)) return RENDERS_JS_RESOURCE;</span>
+<span class="source-line-no">1004</span><span id="line-1004">      if (eq(path, VIEWS_CSS_PATH)) return VIEWS_CSS_RESOURCE;</span>
+<span class="source-line-no">1005</span><span id="line-1005">      if (eq(path, ICONS_JS_PATH)) return ICONS_JS_RESOURCE;</span>
+<span class="source-line-no">1006</span><span id="line-1006">      if (eq(path, SEARCH_JS_PATH)) return SEARCH_JS_RESOURCE;</span>
+<span class="source-line-no">1007</span><span id="line-1007">      if (eq(path, PAGESTATE_JS_PATH)) return PAGESTATE_JS_RESOURCE;</span>
+<span class="source-line-no">1008</span><span id="line-1008">      if (eq(path, URLSTATE_JS_PATH)) return URLSTATE_JS_RESOURCE;</span>
+<span class="source-line-no">1009</span><span id="line-1009">      if (eq(path, BUS_JS_PATH)) return BUS_JS_RESOURCE;</span>
+<span class="source-line-no">1010</span><span id="line-1010">      if (eq(path, MODEL_JS_PATH)) return MODEL_JS_RESOURCE;</span>
+<span class="source-line-no">1011</span><span id="line-1011">      if (eq(path, MODEL_INLINE_JS_PATH)) return MODEL_INLINE_JS_RESOURCE;</span>
+<span class="source-line-no">1012</span><span id="line-1012">      if (eq(path, SYMBOLS_SVG_PATH)) return SYMBOLS_SVG_RESOURCE;</span>
+<span class="source-line-no">1013</span><span id="line-1013">      if (eq(path, SYMBOLS_MATERIAL_SVG_PATH)) return SYMBOLS_MATERIAL_SVG_RESOURCE;</span>
+<span class="source-line-no">1014</span><span id="line-1014">      if (eq(path, SYMBOLS_LUCIDE_SVG_PATH)) return SYMBOLS_LUCIDE_SVG_RESOURCE;</span>
+<span class="source-line-no">1015</span><span id="line-1015">      if (eq(path, REGIONS_JS_PATH)) return REGIONS_JS_RESOURCE;</span>
+<span class="source-line-no">1016</span><span id="line-1016">      if (eq(path, HELPERS_JS_PATH)) return HELPERS_JS_RESOURCE;</span>
+<span class="source-line-no">1017</span><span id="line-1017">      if (eq(path, DATA_JS_PATH)) return DATA_JS_RESOURCE;</span>
+<span class="source-line-no">1018</span><span id="line-1018">      if (eq(path, RUN_VIEW_JS_PATH)) return RUN_VIEW_JS_RESOURCE;</span>
+<span class="source-line-no">1019</span><span id="line-1019">      if (eq(path, CONFIG_JS_PATH)) return CONFIG_JS_RESOURCE;</span>
+<span class="source-line-no">1020</span><span id="line-1020">      if (eq(path, CONFIG_CSS_PATH)) return CONFIG_CSS_RESOURCE;</span>
+<span class="source-line-no">1021</span><span id="line-1021">      if (eq(path, CALENDAR_JS_PATH)) return CALENDAR_JS_RESOURCE;</span>
+<span class="source-line-no">1022</span><span id="line-1022">      if (eq(path, CALENDAR_CSS_PATH)) return CALENDAR_CSS_RESOURCE;</span>
+<span class="source-line-no">1023</span><span id="line-1023">      if (eq(path, DATATABLES_JS_PATH)) return DATATABLES_JS_RESOURCE;</span>
+<span class="source-line-no">1024</span><span id="line-1024">      throw new IllegalArgumentException("Unknown asset path: " + path);</span>
+<span class="source-line-no">1025</span><span id="line-1025">   }</span>
+<span class="source-line-no">1026</span><span id="line-1026">}</span>
 
 
 

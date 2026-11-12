@@ -352,12 +352,15 @@
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; parts.size(); i++) {
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 				<strong class="jxr_keyword">if</strong> (i &gt; 0) sb.append(sep);
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 				<strong class="jxr_keyword">var</strong> p = parts.get(i);
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 				sb.append(p instanceof Double || p instanceof Float ? ArithmeticFunctions.render(((Number)p).doubleValue()) : p == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : p.toString());
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			}
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			<strong class="jxr_keyword">return</strong> sb.toString();
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		}
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> }
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 				<strong class="jxr_keyword">if</strong> (p instanceof Double || p instanceof Float)
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 					sb.append(ArithmeticFunctions.render(((Number)p).doubleValue()));
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 				<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 					sb.append(p == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : p.toString());
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			}
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		}
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	}
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

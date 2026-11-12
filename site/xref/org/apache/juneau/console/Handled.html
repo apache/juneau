@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * @param a The action.</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">default</strong> T action(<a name="ModelAction" href="../../../../org/apache/juneau/console/ModelAction.html#ModelAction">ModelAction</a> a) {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">default</strong> T action(ModelAction a) {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		modelBlock().action(a);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">return</strong> self();
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
@@ -111,7 +111,7 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * @param handler The handler.</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">default</strong> T on(String event, <a name="HandlerRef" href="../../../../org/apache/juneau/console/HandlerRef.html#HandlerRef">HandlerRef</a> handler) {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">default</strong> T on(String event, HandlerRef handler) {
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		modelBlock().on(event, handler);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">return</strong> self();
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
@@ -134,7 +134,7 @@
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * @param handler The handler.</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">default</strong> T subscribe(String topic, <a name="HandlerRef" href="../../../../org/apache/juneau/console/HandlerRef.html#HandlerRef">HandlerRef</a> handler) {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">default</strong> T subscribe(String topic, HandlerRef handler) {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		modelBlock().subscribe(topic, handler);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">return</strong> self();
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}

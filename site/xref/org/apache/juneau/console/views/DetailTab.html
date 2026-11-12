@@ -133,18 +133,18 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">private</strong> RegionDef region;
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<strong class="jxr_keyword">private</strong> Function&lt;String,Integer&gt; counter;
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">private</strong> List&lt;VisibilityRule&gt; visibleWhen;
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ModelBlock" href="../../../../../org/apache/juneau/console/ModelBlock.html#ModelBlock">ModelBlock</a> model;
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ModelBlock model;
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">private</strong> DetailTab(Kind kind, String title) {
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">if</strong> (ib(title))
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"DetailTab title must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">this</strong>.kind = kind;
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">this</strong>.title = title;
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">this</strong>.model = <strong class="jxr_keyword">new</strong> <a name="ModelBlock" href="../../../../../org/apache/juneau/console/ModelBlock.html#ModelBlock">ModelBlock</a>(<span class="jxr_string">"detailtab"</span>, title);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">this</strong>.model = <strong class="jxr_keyword">new</strong> ModelBlock(<span class="jxr_string">"detailtab"</span>, title);
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@Override <em class="jxr_comment">/* Handled */</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">public</strong> <a name="ModelBlock" href="../../../../../org/apache/juneau/console/ModelBlock.html#ModelBlock">ModelBlock</a> modelBlock() { <strong class="jxr_keyword">return</strong> model; }
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">public</strong> ModelBlock modelBlock() { <strong class="jxr_keyword">return</strong> model; }
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	@Override <em class="jxr_comment">/* Handled */</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<strong class="jxr_keyword">public</strong> DetailTab self() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }

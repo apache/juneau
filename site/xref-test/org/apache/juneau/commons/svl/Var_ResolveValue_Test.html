@@ -107,11 +107,11 @@
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(<span class="jxr_string">"a!"</span>, v.resolveValue(session(), <span class="jxr_string">"a"</span>));
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@Test <strong class="jxr_keyword">void</strong> a02_overrideReturnsTyped() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@Test <strong class="jxr_keyword">void</strong> a02_overrideReturnsTyped() {
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertEquals(5, <strong class="jxr_keyword">new</strong> TypedVar().resolveValue(session(), <span class="jxr_string">"5"</span>));
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> a03_nullMeansAbsent() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> a03_nullMeansAbsent() {
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertNull(<strong class="jxr_keyword">new</strong> TypedVar().resolveValue(session(), <span class="jxr_string">""</span>));
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 

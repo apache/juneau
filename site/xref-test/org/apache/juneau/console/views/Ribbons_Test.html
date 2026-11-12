@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> a07_without_rejects_unknown_and_type_aliases() {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bad : List.of(<span class="jxr_string">"nope"</span>, <span class="jxr_string">"collapseAll"</span>, <span class="jxr_string">"resetDefaults"</span>, <span class="jxr_string">"columnSettings"</span>, <span class="jxr_string">"linkButton"</span>, <span class="jxr_string">"create"</span>)) {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">var</strong> builder = Ribbons.standard().without(bad);
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; builder.build(), bad);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, builder::build, bad);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  			assertTrue(e.getMessage().contains(<span class="jxr_string">"collapse"</span>) &amp;&amp; e.getMessage().contains(<span class="jxr_string">"columns"</span>), <span class="jxr_string">"lists valid ids: "</span> + e.getMessage());
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		}
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	}

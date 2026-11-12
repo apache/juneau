@@ -128,15 +128,15 @@
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<em class="jxr_comment">// G4 - BigInteger exact serialization (no silent longValue() truncation).</em>
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	@Test <strong class="jxr_keyword">void</strong> c01_bigInteger_longRangeEmitsInt64() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	@Test <strong class="jxr_keyword">void</strong> c01_bigInteger_longRangeEmitsInt64() {
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertEquals(<span class="jxr_string">"D3 7F FF FF FF FF FF FF FF"</span>, toSpacedHex(mp(<strong class="jxr_keyword">new</strong> BigInteger(<span class="jxr_string">"9223372036854775807"</span>))));
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	@Test <strong class="jxr_keyword">void</strong> c02_bigInteger_2pow63EmitsUint64() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	@Test <strong class="jxr_keyword">void</strong> c02_bigInteger_2pow63EmitsUint64() {
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertEquals(<span class="jxr_string">"CF 80 00 00 00 00 00 00 00"</span>, toSpacedHex(mp(<strong class="jxr_keyword">new</strong> BigInteger(<span class="jxr_string">"9223372036854775808"</span>))));
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test <strong class="jxr_keyword">void</strong> c03_bigInteger_maxUint64EmitsUint64() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test <strong class="jxr_keyword">void</strong> c03_bigInteger_maxUint64EmitsUint64() {
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertEquals(<span class="jxr_string">"CF FF FF FF FF FF FF FF FF"</span>, toSpacedHex(mp(<strong class="jxr_keyword">new</strong> BigInteger(<span class="jxr_string">"18446744073709551615"</span>))));
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 
@@ -193,15 +193,15 @@
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<em class="jxr_comment">// G9 - lone/unpaired UTF-16 surrogate emitted as U+FFFD (matches String.getBytes(UTF_8)).</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	@Test <strong class="jxr_keyword">void</strong> e01_loneLowSurrogateEmitsReplacementChar() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	@Test <strong class="jxr_keyword">void</strong> e01_loneLowSurrogateEmitsReplacementChar() {
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertEquals(<span class="jxr_string">"A3 EF BF BD"</span>, toSpacedHex(mp(<span class="jxr_string">"\uDC00"</span>)));
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	@Test <strong class="jxr_keyword">void</strong> e02_loneHighSurrogateAtEndEmitsReplacementChar() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	@Test <strong class="jxr_keyword">void</strong> e02_loneHighSurrogateAtEndEmitsReplacementChar() {
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertEquals(<span class="jxr_string">"A3 EF BF BD"</span>, toSpacedHex(mp(<span class="jxr_string">"\uD800"</span>)));
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 	}
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	@Test <strong class="jxr_keyword">void</strong> e03_validSurrogatePairStillEmits4Bytes() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	@Test <strong class="jxr_keyword">void</strong> e03_validSurrogatePairStillEmits4Bytes() {
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<em class="jxr_comment">// U+1F600 GRINNING FACE -&gt; F0 9F 98 80.</em>
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertEquals(<span class="jxr_string">"A4 F0 9F 98 80"</span>, toSpacedHex(mp(<span class="jxr_string">"\uD83D\uDE00"</span>)));
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 	}

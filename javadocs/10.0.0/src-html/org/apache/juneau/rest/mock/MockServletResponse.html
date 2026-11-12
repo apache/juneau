@@ -160,7 +160,7 @@
 <span class="source-line-no">147</span><span id="line-147">   public int getStatus() { return sc; }</span>
 <span class="source-line-no">148</span><span id="line-148"></span>
 <span class="source-line-no">149</span><span id="line-149">   @Override /* Overridden from HttpServletResponse */</span>
-<span class="source-line-no">150</span><span id="line-150">   public PrintWriter getWriter() throws IOException { return new PrintWriter(new OutputStreamWriter(getOutputStream(), characterEncoding)); }</span>
+<span class="source-line-no">150</span><span id="line-150">   public PrintWriter getWriter() throws IOException { return new PrintWriter(new OutputStreamWriter(getOutputStream(), characterEncoding == null ? "UTF-8" : characterEncoding)); }</span>
 <span class="source-line-no">151</span><span id="line-151"></span>
 <span class="source-line-no">152</span><span id="line-152">   /**</span>
 <span class="source-line-no">153</span><span id="line-153">    * Fluent setter for {@link #setHeader(String,String)}.</span>
@@ -273,7 +273,7 @@
 <span class="source-line-no">260</span><span id="line-260">   private void updateContentTypeHeader() {</span>
 <span class="source-line-no">261</span><span id="line-261">      var contentType = getContentType();</span>
 <span class="source-line-no">262</span><span id="line-262">      String charset = characterEncoding;</span>
-<span class="source-line-no">263</span><span id="line-263">      if (nn(contentType) &amp;&amp; nn(charset)) {</span>
+<span class="source-line-no">263</span><span id="line-263">      if (contentType != null &amp;&amp; charset != null) {</span>
 <span class="source-line-no">264</span><span id="line-264">         if (contentType.indexOf("charset=") != -1)</span>
 <span class="source-line-no">265</span><span id="line-265">            contentType = contentType.replaceAll("\\;\\s*charset=.*", "");</span>
 <span class="source-line-no">266</span><span id="line-266">         if (neqic("UTF-8", charset))</span>

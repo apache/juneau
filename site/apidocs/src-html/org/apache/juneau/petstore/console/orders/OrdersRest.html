@@ -90,272 +90,275 @@
 <span class="source-line-no">077</span><span id="line-77">      return builder(req) ? twin(req, OrdersPageBuilders.orders()) : FreemarkerView.of("orders.ftlh");</span>
 <span class="source-line-no">078</span><span id="line-78">   }</span>
 <span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">   private final RowDetail orderDetail = RowDetails.order(this::lookup);</span>
-<span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82">   @Override</span>
-<span class="source-line-no">083</span><span id="line-83">   public Collection&lt;RowDetail&gt; rowDetails() {</span>
-<span class="source-line-no">084</span><span id="line-84">      return List.of(orderDetail);</span>
-<span class="source-line-no">085</span><span id="line-85">   }</span>
-<span class="source-line-no">086</span><span id="line-86"></span>
-<span class="source-line-no">087</span><span id="line-87">   private Order lookup(String id) {</span>
-<span class="source-line-no">088</span><span id="line-88">      try {</span>
-<span class="source-line-no">089</span><span id="line-89">         return store().getOrder(Long.parseLong(id));</span>
-<span class="source-line-no">090</span><span id="line-90">      } catch (@SuppressWarnings("unused") NumberFormatException e) {</span>
-<span class="source-line-no">091</span><span id="line-91">         return null;</span>
-<span class="source-line-no">092</span><span id="line-92">      }</span>
-<span class="source-line-no">093</span><span id="line-93">   }</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">   /**</span>
-<span class="source-line-no">096</span><span id="line-96">    * The Pet tab of the order row detail: the pet an order is for, as a one-row table.</span>
-<span class="source-line-no">097</span><span id="line-97">    *</span>
-<span class="source-line-no">098</span><span id="line-98">    * @param orderId The order id.</span>
-<span class="source-line-no">099</span><span id="line-99">    * @return The pet.</span>
-<span class="source-line-no">100</span><span id="line-100">    * @throws NotFound If {@code orderId} is missing or names no order, or its pet is gone.</span>
-<span class="source-line-no">101</span><span id="line-101">    */</span>
-<span class="source-line-no">102</span><span id="line-102">   @RestGet(path="/pet/rows")</span>
-<span class="source-line-no">103</span><span id="line-103">   public List&lt;Pet&gt; petRows(@Query("orderId") Long orderId) {</span>
-<span class="source-line-no">104</span><span id="line-104">      var order = orderId == null ? null : store().getOrder(orderId);</span>
-<span class="source-line-no">105</span><span id="line-105">      var pet = order == null ? null : store().getPet(order.getPetId());</span>
-<span class="source-line-no">106</span><span id="line-106">      if (pet == null)</span>
-<span class="source-line-no">107</span><span id="line-107">         throw new NotFound("Unknown order '%s'", orderId);</span>
-<span class="source-line-no">108</span><span id="line-108">      return List.of(pet);</span>
-<span class="source-line-no">109</span><span id="line-109">   }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   /**</span>
-<span class="source-line-no">112</span><span id="line-112">    * Server-mode DataTables query over all orders.</span>
-<span class="source-line-no">113</span><span id="line-113">    *</span>
-<span class="source-line-no">114</span><span id="line-114">    * &lt;p&gt;</span>
-<span class="source-line-no">115</span><span id="line-115">    * The optional {@code day} query parameter ({@code yyyy-mm-dd}) narrows the orders to those whose ship date falls in</span>
-<span class="source-line-no">116</span><span id="line-116">    * that day's window, before the request's own column filters apply, so the two combine.  A missing, blank or</span>
-<span class="source-line-no">117</span><span id="line-117">    * malformed value is ignored.</span>
-<span class="source-line-no">118</span><span id="line-118">    *</span>
-<span class="source-line-no">119</span><span id="line-119">    * &lt;p&gt;</span>
-<span class="source-line-no">120</span><span id="line-120">    * The optional {@code start} and {@code end} query parameters (the {@code window} URL-state directive's defaults;</span>
-<span class="source-line-no">121</span><span id="line-121">    * each a {@code yyyy-mm-dd} date or an ISO date-time, whose calendar date is used) keep the orders whose ship date</span>
-<span class="source-line-no">122</span><span id="line-122">    * falls between them, both days included, and either may be given alone.  A bound that is blank or malformed is</span>
-<span class="source-line-no">123</span><span id="line-123">    * ignored.  An order with no readable ship date is outside any window that has a usable bound.  The window and</span>
-<span class="source-line-no">124</span><span id="line-124">    * {@code day} combine with each other and with the request's own column filters.</span>
-<span class="source-line-no">125</span><span id="line-125">    *</span>
-<span class="source-line-no">126</span><span id="line-126">    * @param req The DataTables request.</span>
-<span class="source-line-no">127</span><span id="line-127">    * @param day The day to keep, or {@code null}.</span>
-<span class="source-line-no">128</span><span id="line-128">    * @param start The first ship day to keep, or {@code null}.</span>
-<span class="source-line-no">129</span><span id="line-129">    * @param end The last ship day to keep, or {@code null}.</span>
-<span class="source-line-no">130</span><span id="line-130">    * @return One page of orders, or a 200 {@code error} envelope for a malformed search expression.</span>
-<span class="source-line-no">131</span><span id="line-131">    */</span>
-<span class="source-line-no">132</span><span id="line-132">   @RestPost(path="/query")</span>
-<span class="source-line-no">133</span><span id="line-133">   public DataTablesResults&lt;Order&gt; query(@Content DataTablesRequest req, @Query("day") @Schema(aev=true) String day,</span>
-<span class="source-line-no">134</span><span id="line-134">         @Query("start") @Schema(aev=true) String start, @Query("end") @Schema(aev=true) String end) {</span>
-<span class="source-line-no">135</span><span id="line-135">      var wanted = parseDay(day);</span>
-<span class="source-line-no">136</span><span id="line-136">      var from = shipDay(start);</span>
-<span class="source-line-no">137</span><span id="line-137">      var to = shipDay(end);</span>
-<span class="source-line-no">138</span><span id="line-138">      var orders = store().getOrders();</span>
-<span class="source-line-no">139</span><span id="line-139">      if (wanted != null)</span>
-<span class="source-line-no">140</span><span id="line-140">         orders = orders.stream().filter(o -&gt; wanted.equals(shipDay(o.getShipDate()))).toList();</span>
-<span class="source-line-no">141</span><span id="line-141">      if (from != null || to != null)</span>
-<span class="source-line-no">142</span><span id="line-142">         orders = orders.stream().filter(o -&gt; inWindow(shipDay(o.getShipDate()), from, to)).toList();</span>
-<span class="source-line-no">143</span><span id="line-143">      try (var s = PetStore.ORDER_QUERY.getSession(orders)) {</span>
-<span class="source-line-no">144</span><span id="line-144">         return DataTablesQuery.run(req, s);</span>
-<span class="source-line-no">145</span><span id="line-145">      } catch (BeanQuerySyntaxException e) {</span>
-<span class="source-line-no">146</span><span id="line-146">         return DataTablesResults.error(req.getDraw(), e.getMessage());</span>
-<span class="source-line-no">147</span><span id="line-147">      }</span>
-<span class="source-line-no">148</span><span id="line-148">   }</span>
-<span class="source-line-no">149</span><span id="line-149"></span>
-<span class="source-line-no">150</span><span id="line-150">   /** Whether a ship day is inside the window; either bound may be {@code null} (open), and no ship day is never inside. */</span>
-<span class="source-line-no">151</span><span id="line-151">   private static boolean inWindow(LocalDate shipped, LocalDate from, LocalDate to) {</span>
-<span class="source-line-no">152</span><span id="line-152">      return shipped != null &amp;&amp; (from == null || ! shipped.isBefore(from)) &amp;&amp; (to == null || ! shipped.isAfter(to));</span>
-<span class="source-line-no">153</span><span id="line-153">   }</span>
-<span class="source-line-no">154</span><span id="line-154"></span>
-<span class="source-line-no">155</span><span id="line-155">   private static LocalDate parseDay(String value) {</span>
-<span class="source-line-no">156</span><span id="line-156">      if (value == null)</span>
-<span class="source-line-no">157</span><span id="line-157">         return null;</span>
-<span class="source-line-no">158</span><span id="line-158">      try {</span>
-<span class="source-line-no">159</span><span id="line-159">         return LocalDate.parse(value.trim());</span>
-<span class="source-line-no">160</span><span id="line-160">      } catch (@SuppressWarnings("unused") DateTimeException e) {</span>
-<span class="source-line-no">161</span><span id="line-161">         return null;</span>
-<span class="source-line-no">162</span><span id="line-162">      }</span>
-<span class="source-line-no">163</span><span id="line-163">   }</span>
-<span class="source-line-no">164</span><span id="line-164"></span>
-<span class="source-line-no">165</span><span id="line-165">   /** The calendar date of an order's ship date, which is an ISO date or an ISO date-time; {@code null} if it is neither. */</span>
-<span class="source-line-no">166</span><span id="line-166">   private static LocalDate shipDay(String value) {</span>
-<span class="source-line-no">167</span><span id="line-167">      var day = parseDay(value);</span>
-<span class="source-line-no">168</span><span id="line-168">      if (day != null || value == null)</span>
-<span class="source-line-no">169</span><span id="line-169">         return day;</span>
-<span class="source-line-no">170</span><span id="line-170">      try {</span>
-<span class="source-line-no">171</span><span id="line-171">         return DateTimeFormatter.ISO_DATE_TIME.parse(value.trim(), LocalDate::from);</span>
-<span class="source-line-no">172</span><span id="line-172">      } catch (@SuppressWarnings("unused") DateTimeException e) {</span>
-<span class="source-line-no">173</span><span id="line-173">         return null;</span>
-<span class="source-line-no">174</span><span id="line-174">      }</span>
-<span class="source-line-no">175</span><span id="line-175">   }</span>
-<span class="source-line-no">176</span><span id="line-176"></span>
-<span class="source-line-no">177</span><span id="line-177">   /**</span>
-<span class="source-line-no">178</span><span id="line-178">    * The new-order dialog: pick a pet that is for sale and an optional ship date.</span>
-<span class="source-line-no">179</span><span id="line-179">    *</span>
-<span class="source-line-no">180</span><span id="line-180">    * &lt;p&gt;</span>
-<span class="source-line-no">181</span><span id="line-181">    * The dialog submits to the ribbon item's endpoint.</span>
+<span class="source-line-no">080</span><span id="line-80">   @SuppressWarnings({</span>
+<span class="source-line-no">081</span><span id="line-81">      "java:S1948" // Servlets are nominally Serializable, but these REST resources are never serialized.</span>
+<span class="source-line-no">082</span><span id="line-82">   })</span>
+<span class="source-line-no">083</span><span id="line-83">   private final RowDetail orderDetail = RowDetails.order(this::lookup);</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">   @Override</span>
+<span class="source-line-no">086</span><span id="line-86">   public Collection&lt;RowDetail&gt; rowDetails() {</span>
+<span class="source-line-no">087</span><span id="line-87">      return List.of(orderDetail);</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   private Order lookup(String id) {</span>
+<span class="source-line-no">091</span><span id="line-91">      try {</span>
+<span class="source-line-no">092</span><span id="line-92">         return store().getOrder(Long.parseLong(id));</span>
+<span class="source-line-no">093</span><span id="line-93">      } catch (@SuppressWarnings("unused") NumberFormatException e) {</span>
+<span class="source-line-no">094</span><span id="line-94">         return null;</span>
+<span class="source-line-no">095</span><span id="line-95">      }</span>
+<span class="source-line-no">096</span><span id="line-96">   }</span>
+<span class="source-line-no">097</span><span id="line-97"></span>
+<span class="source-line-no">098</span><span id="line-98">   /**</span>
+<span class="source-line-no">099</span><span id="line-99">    * The Pet tab of the order row detail: the pet an order is for, as a one-row table.</span>
+<span class="source-line-no">100</span><span id="line-100">    *</span>
+<span class="source-line-no">101</span><span id="line-101">    * @param orderId The order id.</span>
+<span class="source-line-no">102</span><span id="line-102">    * @return The pet.</span>
+<span class="source-line-no">103</span><span id="line-103">    * @throws NotFound If {@code orderId} is missing or names no order, or its pet is gone.</span>
+<span class="source-line-no">104</span><span id="line-104">    */</span>
+<span class="source-line-no">105</span><span id="line-105">   @RestGet(path="/pet/rows")</span>
+<span class="source-line-no">106</span><span id="line-106">   public List&lt;Pet&gt; petRows(@Query("orderId") Long orderId) {</span>
+<span class="source-line-no">107</span><span id="line-107">      var order = orderId == null ? null : store().getOrder(orderId);</span>
+<span class="source-line-no">108</span><span id="line-108">      var pet = order == null ? null : store().getPet(order.getPetId());</span>
+<span class="source-line-no">109</span><span id="line-109">      if (pet == null)</span>
+<span class="source-line-no">110</span><span id="line-110">         throw new NotFound("Unknown order '%s'", orderId);</span>
+<span class="source-line-no">111</span><span id="line-111">      return List.of(pet);</span>
+<span class="source-line-no">112</span><span id="line-112">   }</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">   /**</span>
+<span class="source-line-no">115</span><span id="line-115">    * Server-mode DataTables query over all orders.</span>
+<span class="source-line-no">116</span><span id="line-116">    *</span>
+<span class="source-line-no">117</span><span id="line-117">    * &lt;p&gt;</span>
+<span class="source-line-no">118</span><span id="line-118">    * The optional {@code day} query parameter ({@code yyyy-mm-dd}) narrows the orders to those whose ship date falls in</span>
+<span class="source-line-no">119</span><span id="line-119">    * that day's window, before the request's own column filters apply, so the two combine.  A missing, blank or</span>
+<span class="source-line-no">120</span><span id="line-120">    * malformed value is ignored.</span>
+<span class="source-line-no">121</span><span id="line-121">    *</span>
+<span class="source-line-no">122</span><span id="line-122">    * &lt;p&gt;</span>
+<span class="source-line-no">123</span><span id="line-123">    * The optional {@code start} and {@code end} query parameters (the {@code window} URL-state directive's defaults;</span>
+<span class="source-line-no">124</span><span id="line-124">    * each a {@code yyyy-mm-dd} date or an ISO date-time, whose calendar date is used) keep the orders whose ship date</span>
+<span class="source-line-no">125</span><span id="line-125">    * falls between them, both days included, and either may be given alone.  A bound that is blank or malformed is</span>
+<span class="source-line-no">126</span><span id="line-126">    * ignored.  An order with no readable ship date is outside any window that has a usable bound.  The window and</span>
+<span class="source-line-no">127</span><span id="line-127">    * {@code day} combine with each other and with the request's own column filters.</span>
+<span class="source-line-no">128</span><span id="line-128">    *</span>
+<span class="source-line-no">129</span><span id="line-129">    * @param req The DataTables request.</span>
+<span class="source-line-no">130</span><span id="line-130">    * @param day The day to keep, or {@code null}.</span>
+<span class="source-line-no">131</span><span id="line-131">    * @param start The first ship day to keep, or {@code null}.</span>
+<span class="source-line-no">132</span><span id="line-132">    * @param end The last ship day to keep, or {@code null}.</span>
+<span class="source-line-no">133</span><span id="line-133">    * @return One page of orders, or a 200 {@code error} envelope for a malformed search expression.</span>
+<span class="source-line-no">134</span><span id="line-134">    */</span>
+<span class="source-line-no">135</span><span id="line-135">   @RestPost(path="/query")</span>
+<span class="source-line-no">136</span><span id="line-136">   public DataTablesResults&lt;Order&gt; query(@Content DataTablesRequest req, @Query("day") @Schema(aev=true) String day,</span>
+<span class="source-line-no">137</span><span id="line-137">         @Query("start") @Schema(aev=true) String start, @Query("end") @Schema(aev=true) String end) {</span>
+<span class="source-line-no">138</span><span id="line-138">      var wanted = parseDay(day);</span>
+<span class="source-line-no">139</span><span id="line-139">      var from = shipDay(start);</span>
+<span class="source-line-no">140</span><span id="line-140">      var to = shipDay(end);</span>
+<span class="source-line-no">141</span><span id="line-141">      var orders = store().getOrders();</span>
+<span class="source-line-no">142</span><span id="line-142">      if (wanted != null)</span>
+<span class="source-line-no">143</span><span id="line-143">         orders = orders.stream().filter(o -&gt; wanted.equals(shipDay(o.getShipDate()))).toList();</span>
+<span class="source-line-no">144</span><span id="line-144">      if (from != null || to != null)</span>
+<span class="source-line-no">145</span><span id="line-145">         orders = orders.stream().filter(o -&gt; inWindow(shipDay(o.getShipDate()), from, to)).toList();</span>
+<span class="source-line-no">146</span><span id="line-146">      try (var s = PetStore.ORDER_QUERY.getSession(orders)) {</span>
+<span class="source-line-no">147</span><span id="line-147">         return DataTablesQuery.run(req, s);</span>
+<span class="source-line-no">148</span><span id="line-148">      } catch (BeanQuerySyntaxException e) {</span>
+<span class="source-line-no">149</span><span id="line-149">         return DataTablesResults.error(req.getDraw(), e.getMessage());</span>
+<span class="source-line-no">150</span><span id="line-150">      }</span>
+<span class="source-line-no">151</span><span id="line-151">   }</span>
+<span class="source-line-no">152</span><span id="line-152"></span>
+<span class="source-line-no">153</span><span id="line-153">   /** Whether a ship day is inside the window; either bound may be {@code null} (open), and no ship day is never inside. */</span>
+<span class="source-line-no">154</span><span id="line-154">   private static boolean inWindow(LocalDate shipped, LocalDate from, LocalDate to) {</span>
+<span class="source-line-no">155</span><span id="line-155">      return shipped != null &amp;&amp; (from == null || ! shipped.isBefore(from)) &amp;&amp; (to == null || ! shipped.isAfter(to));</span>
+<span class="source-line-no">156</span><span id="line-156">   }</span>
+<span class="source-line-no">157</span><span id="line-157"></span>
+<span class="source-line-no">158</span><span id="line-158">   private static LocalDate parseDay(String value) {</span>
+<span class="source-line-no">159</span><span id="line-159">      if (value == null)</span>
+<span class="source-line-no">160</span><span id="line-160">         return null;</span>
+<span class="source-line-no">161</span><span id="line-161">      try {</span>
+<span class="source-line-no">162</span><span id="line-162">         return LocalDate.parse(value.trim());</span>
+<span class="source-line-no">163</span><span id="line-163">      } catch (@SuppressWarnings("unused") DateTimeException e) {</span>
+<span class="source-line-no">164</span><span id="line-164">         return null;</span>
+<span class="source-line-no">165</span><span id="line-165">      }</span>
+<span class="source-line-no">166</span><span id="line-166">   }</span>
+<span class="source-line-no">167</span><span id="line-167"></span>
+<span class="source-line-no">168</span><span id="line-168">   /** The calendar date of an order's ship date, which is an ISO date or an ISO date-time; {@code null} if it is neither. */</span>
+<span class="source-line-no">169</span><span id="line-169">   private static LocalDate shipDay(String value) {</span>
+<span class="source-line-no">170</span><span id="line-170">      var day = parseDay(value);</span>
+<span class="source-line-no">171</span><span id="line-171">      if (day != null || value == null)</span>
+<span class="source-line-no">172</span><span id="line-172">         return day;</span>
+<span class="source-line-no">173</span><span id="line-173">      try {</span>
+<span class="source-line-no">174</span><span id="line-174">         return DateTimeFormatter.ISO_DATE_TIME.parse(value.trim(), LocalDate::from);</span>
+<span class="source-line-no">175</span><span id="line-175">      } catch (@SuppressWarnings("unused") DateTimeException e) {</span>
+<span class="source-line-no">176</span><span id="line-176">         return null;</span>
+<span class="source-line-no">177</span><span id="line-177">      }</span>
+<span class="source-line-no">178</span><span id="line-178">   }</span>
+<span class="source-line-no">179</span><span id="line-179"></span>
+<span class="source-line-no">180</span><span id="line-180">   /**</span>
+<span class="source-line-no">181</span><span id="line-181">    * The new-order dialog: pick a pet that is for sale and an optional ship date.</span>
 <span class="source-line-no">182</span><span id="line-182">    *</span>
-<span class="source-line-no">183</span><span id="line-183">    * @return The modal, on the compact chrome.</span>
-<span class="source-line-no">184</span><span id="line-184">    */</span>
-<span class="source-line-no">185</span><span id="line-185">   @RestGet(path="/new-form")</span>
-<span class="source-line-no">186</span><span id="line-186">   public ModalDef newForm() {</span>
-<span class="source-line-no">187</span><span id="line-187">      var pet = FormDef.Input.of("petId", "Pet", "select").required();</span>
-<span class="source-line-no">188</span><span id="line-188">      store().getPets().stream().filter(p -&gt; p.getStatus() == PetStatus.AVAILABLE)</span>
-<span class="source-line-no">189</span><span id="line-189">         .sorted(Comparator.comparingLong(Pet::getId))</span>
-<span class="source-line-no">190</span><span id="line-190">         .forEach(p -&gt; pet.option(String.valueOf(p.getId()), p.getName()));</span>
-<span class="source-line-no">191</span><span id="line-191">      var form = FormDef.create()</span>
-<span class="source-line-no">192</span><span id="line-192">         .field(pet)</span>
-<span class="source-line-no">193</span><span id="line-193">         .field(FormDef.Input.of("shipDate", "Ship date", "date"));</span>
-<span class="source-line-no">194</span><span id="line-194">      return ModalDef.create("New order: choose a pet").chrome("compact").form(form);</span>
-<span class="source-line-no">195</span><span id="line-195">   }</span>
-<span class="source-line-no">196</span><span id="line-196"></span>
-<span class="source-line-no">197</span><span id="line-197">   /**</span>
-<span class="source-line-no">198</span><span id="line-198">    * Places a new order.</span>
-<span class="source-line-no">199</span><span id="line-199">    *</span>
-<span class="source-line-no">200</span><span id="line-200">    * @param req The request (audit actor).</span>
-<span class="source-line-no">201</span><span id="line-201">    * @param body The order, as the plain {@code {petId, shipDate}} or the dialog envelope {@code {fields:{...}}}.</span>
-<span class="source-line-no">202</span><span id="line-202">    * @return The result toast, carrying the stored order.</span>
-<span class="source-line-no">203</span><span id="line-203">    * @throws BadRequest On a missing body, non-object {@code fields}, missing pet or a bad ship date.</span>
-<span class="source-line-no">204</span><span id="line-204">    * @throws NotFound If the pet does not exist.</span>
-<span class="source-line-no">205</span><span id="line-205">    * @throws Conflict If the pet is not available.</span>
-<span class="source-line-no">206</span><span id="line-206">    */</span>
-<span class="source-line-no">207</span><span id="line-207">   @RestPost(path="/")</span>
-<span class="source-line-no">208</span><span id="line-208">   public ActionResult create(RestRequest req, @Content JsonMap body) {</span>
-<span class="source-line-no">209</span><span id="line-209">      var actor = ConsoleWrites.actor(req);</span>
-<span class="source-line-no">210</span><span id="line-210">      if (body == null)</span>
-<span class="source-line-no">211</span><span id="line-211">         throw new BadRequest("Missing order body");</span>
-<span class="source-line-no">212</span><span id="line-212">      JsonMap fields;</span>
-<span class="source-line-no">213</span><span id="line-213">      try {</span>
-<span class="source-line-no">214</span><span id="line-214">         fields = body.getMap("fields");</span>
-<span class="source-line-no">215</span><span id="line-215">      } catch (Exception e) {</span>
-<span class="source-line-no">216</span><span id="line-216">         throw new BadRequest("Invalid order fields: '%s'", e.getMessage());</span>
-<span class="source-line-no">217</span><span id="line-217">      }</span>
-<span class="source-line-no">218</span><span id="line-218">      if (fields == null &amp;&amp; body.get("fields") != null)</span>
-<span class="source-line-no">219</span><span id="line-219">         throw new BadRequest("Invalid order fields: '%s'", body.get("fields"));</span>
-<span class="source-line-no">220</span><span id="line-220">      var f = fields != null ? fields : body;</span>
-<span class="source-line-no">221</span><span id="line-221">      var pet = pet(f.getString("petId"));</span>
-<span class="source-line-no">222</span><span id="line-222">      var order = new Order().setPetId(pet.getId()).setShipDate(shipDate(f.getString("shipDate"))).setStatus(OrderStatus.PLACED);</span>
-<span class="source-line-no">223</span><span id="line-223">      var stored = store().createOrder(order, actor);</span>
-<span class="source-line-no">224</span><span id="line-224">      return ActionResult.success(stored).message(f("Placed order '%s' for '%s'", stored.getId(), pet.getName()));</span>
-<span class="source-line-no">225</span><span id="line-225">   }</span>
-<span class="source-line-no">226</span><span id="line-226"></span>
-<span class="source-line-no">227</span><span id="line-227">   private Pet pet(String id) {</span>
-<span class="source-line-no">228</span><span id="line-228">      if (ib(id))</span>
-<span class="source-line-no">229</span><span id="line-229">         throw new BadRequest("Missing pet");</span>
-<span class="source-line-no">230</span><span id="line-230">      Pet p = null;</span>
-<span class="source-line-no">231</span><span id="line-231">      try {</span>
-<span class="source-line-no">232</span><span id="line-232">         p = store().getPet(Long.parseLong(id.trim()));</span>
-<span class="source-line-no">233</span><span id="line-233">      } catch (NumberFormatException e) {</span>
-<span class="source-line-no">234</span><span id="line-234">         throw new BadRequest("Invalid pet '%s'", id);</span>
-<span class="source-line-no">235</span><span id="line-235">      }</span>
-<span class="source-line-no">236</span><span id="line-236">      if (p == null)</span>
-<span class="source-line-no">237</span><span id="line-237">         throw new NotFound("Unknown pet '%s'", id);</span>
-<span class="source-line-no">238</span><span id="line-238">      if (p.getStatus() != PetStatus.AVAILABLE)</span>
-<span class="source-line-no">239</span><span id="line-239">         throw new Conflict("Pet '%s' is '%s'; only an available pet can be ordered", id, p.getStatus());</span>
-<span class="source-line-no">240</span><span id="line-240">      return p;</span>
-<span class="source-line-no">241</span><span id="line-241">   }</span>
-<span class="source-line-no">242</span><span id="line-242"></span>
-<span class="source-line-no">243</span><span id="line-243">   private static String shipDate(String value) {</span>
-<span class="source-line-no">244</span><span id="line-244">      if (ib(value))</span>
-<span class="source-line-no">245</span><span id="line-245">         return null;</span>
-<span class="source-line-no">246</span><span id="line-246">      try {</span>
-<span class="source-line-no">247</span><span id="line-247">         return LocalDate.parse(value.trim()).toString();</span>
-<span class="source-line-no">248</span><span id="line-248">      } catch (DateTimeException e) {</span>
-<span class="source-line-no">249</span><span id="line-249">         throw new BadRequest("Invalid ship date '%s'", value);</span>
-<span class="source-line-no">250</span><span id="line-250">      }</span>
-<span class="source-line-no">251</span><span id="line-251">   }</span>
-<span class="source-line-no">252</span><span id="line-252"></span>
-<span class="source-line-no">253</span><span id="line-253">   /**</span>
-<span class="source-line-no">254</span><span id="line-254">    * Approves a placed order.</span>
-<span class="source-line-no">255</span><span id="line-255">    *</span>
-<span class="source-line-no">256</span><span id="line-256">    * @param req The request.</span>
-<span class="source-line-no">257</span><span id="line-257">    * @param id The order id.</span>
-<span class="source-line-no">258</span><span id="line-258">    * @return The result toast, carrying the order.</span>
-<span class="source-line-no">259</span><span id="line-259">    * @throws NotFound If the order does not exist.</span>
-<span class="source-line-no">260</span><span id="line-260">    * @throws Conflict If it is not {@code PLACED}.</span>
-<span class="source-line-no">261</span><span id="line-261">    */</span>
-<span class="source-line-no">262</span><span id="line-262">   @RestPost(path="/{id}/approve")</span>
-<span class="source-line-no">263</span><span id="line-263">   public ActionResult approve(RestRequest req, @Path("id") long id) {</span>
-<span class="source-line-no">264</span><span id="line-264">      return transition(req, id, "approve", OrderStatus.PLACED, OrderStatus.APPROVED);</span>
-<span class="source-line-no">265</span><span id="line-265">   }</span>
-<span class="source-line-no">266</span><span id="line-266"></span>
-<span class="source-line-no">267</span><span id="line-267">   /**</span>
-<span class="source-line-no">268</span><span id="line-268">    * Delivers an approved order.</span>
-<span class="source-line-no">269</span><span id="line-269">    *</span>
-<span class="source-line-no">270</span><span id="line-270">    * @param req The request.</span>
-<span class="source-line-no">271</span><span id="line-271">    * @param id The order id.</span>
-<span class="source-line-no">272</span><span id="line-272">    * @return The result toast, carrying the order.</span>
-<span class="source-line-no">273</span><span id="line-273">    * @throws NotFound If the order does not exist.</span>
-<span class="source-line-no">274</span><span id="line-274">    * @throws Conflict If it is not {@code APPROVED}.</span>
-<span class="source-line-no">275</span><span id="line-275">    */</span>
-<span class="source-line-no">276</span><span id="line-276">   @RestPost(path="/{id}/deliver")</span>
-<span class="source-line-no">277</span><span id="line-277">   public ActionResult deliver(RestRequest req, @Path("id") long id) {</span>
-<span class="source-line-no">278</span><span id="line-278">      return transition(req, id, "deliver", OrderStatus.APPROVED, OrderStatus.DELIVERED);</span>
-<span class="source-line-no">279</span><span id="line-279">   }</span>
-<span class="source-line-no">280</span><span id="line-280"></span>
-<span class="source-line-no">281</span><span id="line-281">   /**</span>
-<span class="source-line-no">282</span><span id="line-282">    * The cancel dialog form: a reason and whether to notify the customer.</span>
-<span class="source-line-no">283</span><span id="line-283">    *</span>
-<span class="source-line-no">284</span><span id="line-284">    * @param id The order id.</span>
-<span class="source-line-no">285</span><span id="line-285">    * @return The modal.</span>
-<span class="source-line-no">286</span><span id="line-286">    * @throws NotFound If the order does not exist.</span>
-<span class="source-line-no">287</span><span id="line-287">    */</span>
-<span class="source-line-no">288</span><span id="line-288">   @RestGet(path="/{id}/cancel-form")</span>
-<span class="source-line-no">289</span><span id="line-289">   public ModalDef cancelForm(@Path("id") long id) {</span>
-<span class="source-line-no">290</span><span id="line-290">      require(id);</span>
-<span class="source-line-no">291</span><span id="line-291">      return ModalDef.create(f("Cancel order '%s'", id))</span>
-<span class="source-line-no">292</span><span id="line-292">         .form(FormDef.create()</span>
-<span class="source-line-no">293</span><span id="line-293">            .field(FormDef.Input.of("reason", "Reason", "text"))</span>
-<span class="source-line-no">294</span><span id="line-294">            .field(FormDef.Input.of("notify", "Notify the customer", "checkbox")));</span>
-<span class="source-line-no">295</span><span id="line-295">   }</span>
-<span class="source-line-no">296</span><span id="line-296"></span>
-<span class="source-line-no">297</span><span id="line-297">   /**</span>
-<span class="source-line-no">298</span><span id="line-298">    * Deletes (cancels) an order.</span>
-<span class="source-line-no">299</span><span id="line-299">    *</span>
-<span class="source-line-no">300</span><span id="line-300">    * @param req The request.</span>
-<span class="source-line-no">301</span><span id="line-301">    * @param id The order id.</span>
-<span class="source-line-no">302</span><span id="line-302">    * @return The result toast.</span>
-<span class="source-line-no">303</span><span id="line-303">    * @throws BadRequest If the optional body is not a JSON object.</span>
-<span class="source-line-no">304</span><span id="line-304">    * @throws NotFound If the order does not exist.</span>
-<span class="source-line-no">305</span><span id="line-305">    */</span>
-<span class="source-line-no">306</span><span id="line-306">   @RestDelete(path="/{id}")</span>
-<span class="source-line-no">307</span><span id="line-307">   public ActionResult cancel(RestRequest req, @Path("id") long id) {</span>
-<span class="source-line-no">308</span><span id="line-308">      var actor = ConsoleWrites.actor(req);</span>
-<span class="source-line-no">309</span><span id="line-309">      require(id);</span>
-<span class="source-line-no">310</span><span id="line-310">      var reason = reason(req);</span>
-<span class="source-line-no">311</span><span id="line-311">      store().deleteOrder(id, actor, reason);</span>
-<span class="source-line-no">312</span><span id="line-312">      return ActionResult.success(null).message(f("Cancelled order '%s'", id));</span>
-<span class="source-line-no">313</span><span id="line-313">   }</span>
-<span class="source-line-no">314</span><span id="line-314"></span>
-<span class="source-line-no">315</span><span id="line-315">   /** The optional body: the cancel dialog envelope {@code {fields:{reason, notify}}}, or {@code {reason}} from a plain API call. */</span>
-<span class="source-line-no">316</span><span id="line-316">   private static String reason(RestRequest req) {</span>
-<span class="source-line-no">317</span><span id="line-317">      try {</span>
-<span class="source-line-no">318</span><span id="line-318">         var text = req.getContent().asString();</span>
-<span class="source-line-no">319</span><span id="line-319">         if (ib(text))</span>
-<span class="source-line-no">320</span><span id="line-320">            return null;</span>
-<span class="source-line-no">321</span><span id="line-321">         var body = new JsonMap(text);</span>
-<span class="source-line-no">322</span><span id="line-322">         var fields = body.getMap("fields");</span>
-<span class="source-line-no">323</span><span id="line-323">         return (fields != null ? fields : body).getString("reason");</span>
-<span class="source-line-no">324</span><span id="line-324">      } catch (Exception e) {</span>
-<span class="source-line-no">325</span><span id="line-325">         throw new BadRequest("Invalid cancel body: '%s'", e.getMessage());</span>
-<span class="source-line-no">326</span><span id="line-326">      }</span>
-<span class="source-line-no">327</span><span id="line-327">   }</span>
-<span class="source-line-no">328</span><span id="line-328"></span>
-<span class="source-line-no">329</span><span id="line-329">   private ActionResult transition(RestRequest req, long id, String verb, OrderStatus from, OrderStatus to) {</span>
-<span class="source-line-no">330</span><span id="line-330">      var actor = ConsoleWrites.actor(req);</span>
-<span class="source-line-no">331</span><span id="line-331">      var o = require(id);</span>
-<span class="source-line-no">332</span><span id="line-332">      if (o.getStatus() != from)</span>
-<span class="source-line-no">333</span><span id="line-333">         throw new Conflict("Order '%s' is '%s'; cannot '%s'", id, o.getStatus(), verb);</span>
-<span class="source-line-no">334</span><span id="line-334">      // Update a copy: the live order must not change unless the store accepts the write.</span>
-<span class="source-line-no">335</span><span id="line-335">      var next = new Order().setId(o.getId()).setPetId(o.getPetId()).setShipDate(o.getShipDate()).setStatus(to);</span>
-<span class="source-line-no">336</span><span id="line-336">      return ActionResult.success(store().updateOrder(next, actor)).message(f("Order '%s' %s", id, to));</span>
-<span class="source-line-no">337</span><span id="line-337">   }</span>
-<span class="source-line-no">338</span><span id="line-338"></span>
-<span class="source-line-no">339</span><span id="line-339">   private Order require(long id) {</span>
-<span class="source-line-no">340</span><span id="line-340">      var o = store().getOrder(id);</span>
-<span class="source-line-no">341</span><span id="line-341">      if (o == null)</span>
-<span class="source-line-no">342</span><span id="line-342">         throw new NotFound("Unknown order '%s'", id);</span>
-<span class="source-line-no">343</span><span id="line-343">      return o;</span>
-<span class="source-line-no">344</span><span id="line-344">   }</span>
-<span class="source-line-no">345</span><span id="line-345">}</span>
+<span class="source-line-no">183</span><span id="line-183">    * &lt;p&gt;</span>
+<span class="source-line-no">184</span><span id="line-184">    * The dialog submits to the ribbon item's endpoint.</span>
+<span class="source-line-no">185</span><span id="line-185">    *</span>
+<span class="source-line-no">186</span><span id="line-186">    * @return The modal, on the compact chrome.</span>
+<span class="source-line-no">187</span><span id="line-187">    */</span>
+<span class="source-line-no">188</span><span id="line-188">   @RestGet(path="/new-form")</span>
+<span class="source-line-no">189</span><span id="line-189">   public ModalDef newForm() {</span>
+<span class="source-line-no">190</span><span id="line-190">      var pet = FormDef.Input.of("petId", "Pet", "select").required();</span>
+<span class="source-line-no">191</span><span id="line-191">      store().getPets().stream().filter(p -&gt; p.getStatus() == PetStatus.AVAILABLE)</span>
+<span class="source-line-no">192</span><span id="line-192">         .sorted(Comparator.comparingLong(Pet::getId))</span>
+<span class="source-line-no">193</span><span id="line-193">         .forEach(p -&gt; pet.option(String.valueOf(p.getId()), p.getName()));</span>
+<span class="source-line-no">194</span><span id="line-194">      var form = FormDef.create()</span>
+<span class="source-line-no">195</span><span id="line-195">         .field(pet)</span>
+<span class="source-line-no">196</span><span id="line-196">         .field(FormDef.Input.of("shipDate", "Ship date", "date"));</span>
+<span class="source-line-no">197</span><span id="line-197">      return ModalDef.create("New order: choose a pet").chrome("compact").form(form);</span>
+<span class="source-line-no">198</span><span id="line-198">   }</span>
+<span class="source-line-no">199</span><span id="line-199"></span>
+<span class="source-line-no">200</span><span id="line-200">   /**</span>
+<span class="source-line-no">201</span><span id="line-201">    * Places a new order.</span>
+<span class="source-line-no">202</span><span id="line-202">    *</span>
+<span class="source-line-no">203</span><span id="line-203">    * @param req The request (audit actor).</span>
+<span class="source-line-no">204</span><span id="line-204">    * @param body The order, as the plain {@code {petId, shipDate}} or the dialog envelope {@code {fields:{...}}}.</span>
+<span class="source-line-no">205</span><span id="line-205">    * @return The result toast, carrying the stored order.</span>
+<span class="source-line-no">206</span><span id="line-206">    * @throws BadRequest On a missing body, non-object {@code fields}, missing pet or a bad ship date.</span>
+<span class="source-line-no">207</span><span id="line-207">    * @throws NotFound If the pet does not exist.</span>
+<span class="source-line-no">208</span><span id="line-208">    * @throws Conflict If the pet is not available.</span>
+<span class="source-line-no">209</span><span id="line-209">    */</span>
+<span class="source-line-no">210</span><span id="line-210">   @RestPost(path="/")</span>
+<span class="source-line-no">211</span><span id="line-211">   public ActionResult create(RestRequest req, @Content JsonMap body) {</span>
+<span class="source-line-no">212</span><span id="line-212">      var actor = ConsoleWrites.actor(req);</span>
+<span class="source-line-no">213</span><span id="line-213">      if (body == null)</span>
+<span class="source-line-no">214</span><span id="line-214">         throw new BadRequest("Missing order body");</span>
+<span class="source-line-no">215</span><span id="line-215">      JsonMap fields;</span>
+<span class="source-line-no">216</span><span id="line-216">      try {</span>
+<span class="source-line-no">217</span><span id="line-217">         fields = body.getMap("fields");</span>
+<span class="source-line-no">218</span><span id="line-218">      } catch (Exception e) {</span>
+<span class="source-line-no">219</span><span id="line-219">         throw new BadRequest("Invalid order fields: '%s'", e.getMessage());</span>
+<span class="source-line-no">220</span><span id="line-220">      }</span>
+<span class="source-line-no">221</span><span id="line-221">      if (fields == null &amp;&amp; body.get("fields") != null)</span>
+<span class="source-line-no">222</span><span id="line-222">         throw new BadRequest("Invalid order fields: '%s'", body.get("fields"));</span>
+<span class="source-line-no">223</span><span id="line-223">      var f = fields != null ? fields : body;</span>
+<span class="source-line-no">224</span><span id="line-224">      var pet = pet(f.getString("petId"));</span>
+<span class="source-line-no">225</span><span id="line-225">      var order = new Order().setPetId(pet.getId()).setShipDate(shipDate(f.getString("shipDate"))).setStatus(OrderStatus.PLACED);</span>
+<span class="source-line-no">226</span><span id="line-226">      var stored = store().createOrder(order, actor);</span>
+<span class="source-line-no">227</span><span id="line-227">      return ActionResult.success(stored).message(f("Placed order '%s' for '%s'", stored.getId(), pet.getName()));</span>
+<span class="source-line-no">228</span><span id="line-228">   }</span>
+<span class="source-line-no">229</span><span id="line-229"></span>
+<span class="source-line-no">230</span><span id="line-230">   private Pet pet(String id) {</span>
+<span class="source-line-no">231</span><span id="line-231">      if (ib(id))</span>
+<span class="source-line-no">232</span><span id="line-232">         throw new BadRequest("Missing pet");</span>
+<span class="source-line-no">233</span><span id="line-233">      Pet p = null;</span>
+<span class="source-line-no">234</span><span id="line-234">      try {</span>
+<span class="source-line-no">235</span><span id="line-235">         p = store().getPet(Long.parseLong(id.trim()));</span>
+<span class="source-line-no">236</span><span id="line-236">      } catch (NumberFormatException e) {</span>
+<span class="source-line-no">237</span><span id="line-237">         throw new BadRequest("Invalid pet '%s'", id);</span>
+<span class="source-line-no">238</span><span id="line-238">      }</span>
+<span class="source-line-no">239</span><span id="line-239">      if (p == null)</span>
+<span class="source-line-no">240</span><span id="line-240">         throw new NotFound("Unknown pet '%s'", id);</span>
+<span class="source-line-no">241</span><span id="line-241">      if (p.getStatus() != PetStatus.AVAILABLE)</span>
+<span class="source-line-no">242</span><span id="line-242">         throw new Conflict("Pet '%s' is '%s'; only an available pet can be ordered", id, p.getStatus());</span>
+<span class="source-line-no">243</span><span id="line-243">      return p;</span>
+<span class="source-line-no">244</span><span id="line-244">   }</span>
+<span class="source-line-no">245</span><span id="line-245"></span>
+<span class="source-line-no">246</span><span id="line-246">   private static String shipDate(String value) {</span>
+<span class="source-line-no">247</span><span id="line-247">      if (ib(value))</span>
+<span class="source-line-no">248</span><span id="line-248">         return null;</span>
+<span class="source-line-no">249</span><span id="line-249">      try {</span>
+<span class="source-line-no">250</span><span id="line-250">         return LocalDate.parse(value.trim()).toString();</span>
+<span class="source-line-no">251</span><span id="line-251">      } catch (DateTimeException e) {</span>
+<span class="source-line-no">252</span><span id="line-252">         throw new BadRequest("Invalid ship date '%s'", value);</span>
+<span class="source-line-no">253</span><span id="line-253">      }</span>
+<span class="source-line-no">254</span><span id="line-254">   }</span>
+<span class="source-line-no">255</span><span id="line-255"></span>
+<span class="source-line-no">256</span><span id="line-256">   /**</span>
+<span class="source-line-no">257</span><span id="line-257">    * Approves a placed order.</span>
+<span class="source-line-no">258</span><span id="line-258">    *</span>
+<span class="source-line-no">259</span><span id="line-259">    * @param req The request.</span>
+<span class="source-line-no">260</span><span id="line-260">    * @param id The order id.</span>
+<span class="source-line-no">261</span><span id="line-261">    * @return The result toast, carrying the order.</span>
+<span class="source-line-no">262</span><span id="line-262">    * @throws NotFound If the order does not exist.</span>
+<span class="source-line-no">263</span><span id="line-263">    * @throws Conflict If it is not {@code PLACED}.</span>
+<span class="source-line-no">264</span><span id="line-264">    */</span>
+<span class="source-line-no">265</span><span id="line-265">   @RestPost(path="/{id}/approve")</span>
+<span class="source-line-no">266</span><span id="line-266">   public ActionResult approve(RestRequest req, @Path("id") long id) {</span>
+<span class="source-line-no">267</span><span id="line-267">      return transition(req, id, "approve", OrderStatus.PLACED, OrderStatus.APPROVED);</span>
+<span class="source-line-no">268</span><span id="line-268">   }</span>
+<span class="source-line-no">269</span><span id="line-269"></span>
+<span class="source-line-no">270</span><span id="line-270">   /**</span>
+<span class="source-line-no">271</span><span id="line-271">    * Delivers an approved order.</span>
+<span class="source-line-no">272</span><span id="line-272">    *</span>
+<span class="source-line-no">273</span><span id="line-273">    * @param req The request.</span>
+<span class="source-line-no">274</span><span id="line-274">    * @param id The order id.</span>
+<span class="source-line-no">275</span><span id="line-275">    * @return The result toast, carrying the order.</span>
+<span class="source-line-no">276</span><span id="line-276">    * @throws NotFound If the order does not exist.</span>
+<span class="source-line-no">277</span><span id="line-277">    * @throws Conflict If it is not {@code APPROVED}.</span>
+<span class="source-line-no">278</span><span id="line-278">    */</span>
+<span class="source-line-no">279</span><span id="line-279">   @RestPost(path="/{id}/deliver")</span>
+<span class="source-line-no">280</span><span id="line-280">   public ActionResult deliver(RestRequest req, @Path("id") long id) {</span>
+<span class="source-line-no">281</span><span id="line-281">      return transition(req, id, "deliver", OrderStatus.APPROVED, OrderStatus.DELIVERED);</span>
+<span class="source-line-no">282</span><span id="line-282">   }</span>
+<span class="source-line-no">283</span><span id="line-283"></span>
+<span class="source-line-no">284</span><span id="line-284">   /**</span>
+<span class="source-line-no">285</span><span id="line-285">    * The cancel dialog form: a reason and whether to notify the customer.</span>
+<span class="source-line-no">286</span><span id="line-286">    *</span>
+<span class="source-line-no">287</span><span id="line-287">    * @param id The order id.</span>
+<span class="source-line-no">288</span><span id="line-288">    * @return The modal.</span>
+<span class="source-line-no">289</span><span id="line-289">    * @throws NotFound If the order does not exist.</span>
+<span class="source-line-no">290</span><span id="line-290">    */</span>
+<span class="source-line-no">291</span><span id="line-291">   @RestGet(path="/{id}/cancel-form")</span>
+<span class="source-line-no">292</span><span id="line-292">   public ModalDef cancelForm(@Path("id") long id) {</span>
+<span class="source-line-no">293</span><span id="line-293">      require(id);</span>
+<span class="source-line-no">294</span><span id="line-294">      return ModalDef.create(f("Cancel order '%s'", id))</span>
+<span class="source-line-no">295</span><span id="line-295">         .form(FormDef.create()</span>
+<span class="source-line-no">296</span><span id="line-296">            .field(FormDef.Input.of("reason", "Reason", "text"))</span>
+<span class="source-line-no">297</span><span id="line-297">            .field(FormDef.Input.of("notify", "Notify the customer", "checkbox")));</span>
+<span class="source-line-no">298</span><span id="line-298">   }</span>
+<span class="source-line-no">299</span><span id="line-299"></span>
+<span class="source-line-no">300</span><span id="line-300">   /**</span>
+<span class="source-line-no">301</span><span id="line-301">    * Deletes (cancels) an order.</span>
+<span class="source-line-no">302</span><span id="line-302">    *</span>
+<span class="source-line-no">303</span><span id="line-303">    * @param req The request.</span>
+<span class="source-line-no">304</span><span id="line-304">    * @param id The order id.</span>
+<span class="source-line-no">305</span><span id="line-305">    * @return The result toast.</span>
+<span class="source-line-no">306</span><span id="line-306">    * @throws BadRequest If the optional body is not a JSON object.</span>
+<span class="source-line-no">307</span><span id="line-307">    * @throws NotFound If the order does not exist.</span>
+<span class="source-line-no">308</span><span id="line-308">    */</span>
+<span class="source-line-no">309</span><span id="line-309">   @RestDelete(path="/{id}")</span>
+<span class="source-line-no">310</span><span id="line-310">   public ActionResult cancel(RestRequest req, @Path("id") long id) {</span>
+<span class="source-line-no">311</span><span id="line-311">      var actor = ConsoleWrites.actor(req);</span>
+<span class="source-line-no">312</span><span id="line-312">      require(id);</span>
+<span class="source-line-no">313</span><span id="line-313">      var reason = reason(req);</span>
+<span class="source-line-no">314</span><span id="line-314">      store().deleteOrder(id, actor, reason);</span>
+<span class="source-line-no">315</span><span id="line-315">      return ActionResult.success(null).message(f("Cancelled order '%s'", id));</span>
+<span class="source-line-no">316</span><span id="line-316">   }</span>
+<span class="source-line-no">317</span><span id="line-317"></span>
+<span class="source-line-no">318</span><span id="line-318">   /** The optional body: the cancel dialog envelope {@code {fields:{reason, notify}}}, or {@code {reason}} from a plain API call. */</span>
+<span class="source-line-no">319</span><span id="line-319">   private static String reason(RestRequest req) {</span>
+<span class="source-line-no">320</span><span id="line-320">      try {</span>
+<span class="source-line-no">321</span><span id="line-321">         var text = req.getContent().asString();</span>
+<span class="source-line-no">322</span><span id="line-322">         if (ib(text))</span>
+<span class="source-line-no">323</span><span id="line-323">            return null;</span>
+<span class="source-line-no">324</span><span id="line-324">         var body = new JsonMap(text);</span>
+<span class="source-line-no">325</span><span id="line-325">         var fields = body.getMap("fields");</span>
+<span class="source-line-no">326</span><span id="line-326">         return (fields != null ? fields : body).getString("reason");</span>
+<span class="source-line-no">327</span><span id="line-327">      } catch (Exception e) {</span>
+<span class="source-line-no">328</span><span id="line-328">         throw new BadRequest("Invalid cancel body: '%s'", e.getMessage());</span>
+<span class="source-line-no">329</span><span id="line-329">      }</span>
+<span class="source-line-no">330</span><span id="line-330">   }</span>
+<span class="source-line-no">331</span><span id="line-331"></span>
+<span class="source-line-no">332</span><span id="line-332">   private ActionResult transition(RestRequest req, long id, String verb, OrderStatus from, OrderStatus to) {</span>
+<span class="source-line-no">333</span><span id="line-333">      var actor = ConsoleWrites.actor(req);</span>
+<span class="source-line-no">334</span><span id="line-334">      var o = require(id);</span>
+<span class="source-line-no">335</span><span id="line-335">      if (o.getStatus() != from)</span>
+<span class="source-line-no">336</span><span id="line-336">         throw new Conflict("Order '%s' is '%s'; cannot '%s'", id, o.getStatus(), verb);</span>
+<span class="source-line-no">337</span><span id="line-337">      // Update a copy: the live order must not change unless the store accepts the write.</span>
+<span class="source-line-no">338</span><span id="line-338">      var next = new Order().setId(o.getId()).setPetId(o.getPetId()).setShipDate(o.getShipDate()).setStatus(to);</span>
+<span class="source-line-no">339</span><span id="line-339">      return ActionResult.success(store().updateOrder(next, actor)).message(f("Order '%s' %s", id, to));</span>
+<span class="source-line-no">340</span><span id="line-340">   }</span>
+<span class="source-line-no">341</span><span id="line-341"></span>
+<span class="source-line-no">342</span><span id="line-342">   private Order require(long id) {</span>
+<span class="source-line-no">343</span><span id="line-343">      var o = store().getOrder(id);</span>
+<span class="source-line-no">344</span><span id="line-344">      if (o == null)</span>
+<span class="source-line-no">345</span><span id="line-345">         throw new NotFound("Unknown order '%s'", id);</span>
+<span class="source-line-no">346</span><span id="line-346">      return o;</span>
+<span class="source-line-no">347</span><span id="line-347">   }</span>
+<span class="source-line-no">348</span><span id="line-348">}</span>
 
 
 

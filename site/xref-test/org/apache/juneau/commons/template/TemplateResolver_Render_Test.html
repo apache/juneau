@@ -118,61 +118,63 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Test <strong class="jxr_keyword">void</strong> a15_foreignParsedTemplateRejected() {
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> other = TemplateResolver.create().build();
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; TemplateResolver.DEFAULT.render(other.parse(<span class="jxr_string">"x"</span>), Map.of()));
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@Test <strong class="jxr_keyword">void</strong> a16_allowFunctionsIsAdditive() {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">var</strong> tr = TemplateResolver.create().allowFunctions(<span class="jxr_string">"repeat"</span>).build();
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertEquals(<span class="jxr_string">"ababX"</span>, r(tr, <span class="jxr_string">"#{repeat('ab', 2)}#{upper('x')}"</span>, Map.of()));
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@Test <strong class="jxr_keyword">void</strong> a17_allowOnlyFunctionsReplaces() {
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">var</strong> tr = TemplateResolver.create().allowOnlyFunctions(<span class="jxr_string">"upper"</span>, <span class="jxr_string">"$op.*"</span>).build();
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertEquals(<span class="jxr_string">"X #{join(',', list('a'))}"</span>, r(tr, <span class="jxr_string">"#{upper('x')} #{join(',', list('a'))}"</span>, Map.of()));
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@Test <strong class="jxr_keyword">void</strong> a18_wildcardRejected() {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; TemplateResolver.create().allowFunctions(<span class="jxr_string">"*"</span>));
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; TemplateResolver.create().allowOnlyFunctions(<span class="jxr_string">"*"</span>));
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test <strong class="jxr_keyword">void</strong> a19_mapRowSizeShadowsScope() {
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<em class="jxr_comment">// Pins current behavior: a map row's synthetic size does not fall back to a scope entry named size.</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> rows = List.of(row(<span class="jxr_string">"1"</span>, <span class="jxr_string">"a"</span>));
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertEquals(<span class="jxr_string">"2"</span>, r(TemplateResolver.DEFAULT, <span class="jxr_string">"#{join(',', rows.![size])}"</span>, Map.of(<span class="jxr_string">"rows"</span>, rows, <span class="jxr_string">"size"</span>, <span class="jxr_string">"OUTER"</span>)));
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	@Test <strong class="jxr_keyword">void</strong> a20_noDestinationDoesNotEncode() {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertEquals(<span class="jxr_string">"&lt;b&gt;"</span>, r(TemplateResolver.DEFAULT, <span class="jxr_string">"${a}"</span>, Map.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"&lt;b&gt;"</span>)));
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	@Test <strong class="jxr_keyword">void</strong> a21_ulLenientTruncates() {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> tr = TemplateResolver.create().maxCollectionSize(2).destination(Destinations.PLAIN_TEXT).build();
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertEquals(<span class="jxr_string">"- 1\n- 2"</span>, r(tr, <span class="jxr_string">"#{ul(xs)}"</span>, Map.of(<span class="jxr_string">"xs"</span>, List.of(1, 2, 3, 4))));
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	}
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	@Test <strong class="jxr_keyword">void</strong> a22_ulStrictThrows() {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">var</strong> tr = TemplateResolver.create().maxCollectionSize(2).strict(<strong class="jxr_keyword">true</strong>).build();
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; r(tr, <span class="jxr_string">"#{ul(xs)}"</span>, Map.of(<span class="jxr_string">"xs"</span>, List.of(1, 2, 3))));
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	@Test <strong class="jxr_keyword">void</strong> a23_olTableTakeJoinCapped() {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> tr = TemplateResolver.create().maxCollectionSize(2).destination(Destinations.PLAIN_TEXT).build();
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> xs = Map.&lt;String,Object&gt;of(<span class="jxr_string">"xs"</span>, List.of(1, 2, 3, 4));
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertEquals(<span class="jxr_string">"1. 1\n2. 2"</span>.replace(<span class="jxr_string">"&#92;&#92;n"</span>, <span class="jxr_string">"\n"</span>), r(tr, <span class="jxr_string">"#{ol(xs)}"</span>, xs));
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertEquals(<span class="jxr_string">"1,2"</span>, r(tr, <span class="jxr_string">"#{join(',', xs)}"</span>, xs));
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertEquals(<span class="jxr_string">"[1,2]"</span>, r(TemplateResolver.create().maxCollectionSize(2).build(), <span class="jxr_string">"#{take(xs, 3)}"</span>, xs));
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> rows = Map.&lt;String,Object&gt;of(<span class="jxr_string">"rows"</span>, List.of(List.of(<span class="jxr_string">"a"</span>), List.of(<span class="jxr_string">"b"</span>), List.of(<span class="jxr_string">"c"</span>)));
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertEquals(2, r(tr, <span class="jxr_string">"#{table(list('H'), rows)}"</span>, rows).split(<span class="jxr_string">"\n"</span>).length - 2);
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	}
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	@Test <strong class="jxr_keyword">void</strong> a24_joinAndTakeStrictThrow() {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">var</strong> tr = TemplateResolver.create().maxCollectionSize(2).strict(<strong class="jxr_keyword">true</strong>).build();
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> xs = Map.&lt;String,Object&gt;of(<span class="jxr_string">"xs"</span>, List.of(1, 2, 3));
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; r(tr, <span class="jxr_string">"#{join(',', xs)}"</span>, xs));
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; r(tr, <span class="jxr_string">"#{take(xs, 1)}"</span>, xs));
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> }
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> parsed = other.parse(<span class="jxr_string">"x"</span>);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; TemplateResolver.DEFAULT.render(parsed, Map.of()));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test <strong class="jxr_keyword">void</strong> a16_allowFunctionsIsAdditive() {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> tr = TemplateResolver.create().allowFunctions(<span class="jxr_string">"repeat"</span>).build();
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertEquals(<span class="jxr_string">"ababX"</span>, r(tr, <span class="jxr_string">"#{repeat('ab', 2)}#{upper('x')}"</span>, Map.of()));
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	}
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	@Test <strong class="jxr_keyword">void</strong> a17_allowOnlyFunctionsReplaces() {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> tr = TemplateResolver.create().allowOnlyFunctions(<span class="jxr_string">"upper"</span>, <span class="jxr_string">"$op.*"</span>).build();
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertEquals(<span class="jxr_string">"X #{join(',', list('a'))}"</span>, r(tr, <span class="jxr_string">"#{upper('x')} #{join(',', list('a'))}"</span>, Map.of()));
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	@Test <strong class="jxr_keyword">void</strong> a18_wildcardRejected() {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> b = TemplateResolver.create();
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; b.allowFunctions(<span class="jxr_string">"*"</span>));
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; b.allowOnlyFunctions(<span class="jxr_string">"*"</span>));
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	@Test <strong class="jxr_keyword">void</strong> a19_mapRowSizeShadowsScope() {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<em class="jxr_comment">// Pins current behavior: a map row's synthetic size does not fall back to a scope entry named size.</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> rows = List.of(row(<span class="jxr_string">"1"</span>, <span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertEquals(<span class="jxr_string">"2"</span>, r(TemplateResolver.DEFAULT, <span class="jxr_string">"#{join(',', rows.![size])}"</span>, Map.of(<span class="jxr_string">"rows"</span>, rows, <span class="jxr_string">"size"</span>, <span class="jxr_string">"OUTER"</span>)));
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Test <strong class="jxr_keyword">void</strong> a20_noDestinationDoesNotEncode() {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertEquals(<span class="jxr_string">"&lt;b&gt;"</span>, r(TemplateResolver.DEFAULT, <span class="jxr_string">"${a}"</span>, Map.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"&lt;b&gt;"</span>)));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	@Test <strong class="jxr_keyword">void</strong> a21_ulLenientTruncates() {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> tr = TemplateResolver.create().maxCollectionSize(2).destination(Destinations.PLAIN_TEXT).build();
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(<span class="jxr_string">"- 1\n- 2"</span>, r(tr, <span class="jxr_string">"#{ul(xs)}"</span>, Map.of(<span class="jxr_string">"xs"</span>, List.of(1, 2, 3, 4))));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> a22_ulStrictThrows() {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> tr = TemplateResolver.create().maxCollectionSize(2).strict(<strong class="jxr_keyword">true</strong>).build();
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; r(tr, <span class="jxr_string">"#{ul(xs)}"</span>, Map.of(<span class="jxr_string">"xs"</span>, List.of(1, 2, 3))));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Test <strong class="jxr_keyword">void</strong> a23_olTableTakeJoinCapped() {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> tr = TemplateResolver.create().maxCollectionSize(2).destination(Destinations.PLAIN_TEXT).build();
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">var</strong> xs = Map.&lt;String,Object&gt;of(<span class="jxr_string">"xs"</span>, List.of(1, 2, 3, 4));
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertEquals(<span class="jxr_string">"1. 1\n2. 2"</span>.replace(<span class="jxr_string">"&#92;&#92;n"</span>, <span class="jxr_string">"\n"</span>), r(tr, <span class="jxr_string">"#{ol(xs)}"</span>, xs));
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertEquals(<span class="jxr_string">"1,2"</span>, r(tr, <span class="jxr_string">"#{join(',', xs)}"</span>, xs));
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertEquals(<span class="jxr_string">"[1,2]"</span>, r(TemplateResolver.create().maxCollectionSize(2).build(), <span class="jxr_string">"#{take(xs, 3)}"</span>, xs));
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">var</strong> rows = Map.&lt;String,Object&gt;of(<span class="jxr_string">"rows"</span>, List.of(List.of(<span class="jxr_string">"a"</span>), List.of(<span class="jxr_string">"b"</span>), List.of(<span class="jxr_string">"c"</span>)));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertEquals(2, r(tr, <span class="jxr_string">"#{table(list('H'), rows)}"</span>, rows).split(<span class="jxr_string">"\n"</span>).length - 2);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	}
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	@Test <strong class="jxr_keyword">void</strong> a24_joinAndTakeStrictThrow() {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">var</strong> tr = TemplateResolver.create().maxCollectionSize(2).strict(<strong class="jxr_keyword">true</strong>).build();
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> xs = Map.&lt;String,Object&gt;of(<span class="jxr_string">"xs"</span>, List.of(1, 2, 3));
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; r(tr, <span class="jxr_string">"#{join(',', xs)}"</span>, xs));
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; r(tr, <span class="jxr_string">"#{take(xs, 1)}"</span>, xs));
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	}
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

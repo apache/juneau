@@ -156,7 +156,7 @@
 <span class="source-line-no">143</span><span id="line-143">      static final FileFilter FILE_FILTER = f2 -&gt; f2.isDirectory() || f2.getName().endsWith(".log");</span>
 <span class="source-line-no">144</span><span id="line-144">      static final Comparator&lt;FileResource&gt; FILE_COMPARATOR = (o1, o2) -&gt; {</span>
 <span class="source-line-no">145</span><span id="line-145">         int c = o1.getType().compareTo(o2.getType());</span>
-<span class="source-line-no">146</span><span id="line-146">         return c != 0 ? c : o1.getName().compareTo(o2.getName());</span>
+<span class="source-line-no">146</span><span id="line-146">         return c == 0 ? o1.getName().compareTo(o2.getName()) : c;</span>
 <span class="source-line-no">147</span><span id="line-147">      };</span>
 <span class="source-line-no">148</span><span id="line-148">      private final File f;</span>
 <span class="source-line-no">149</span><span id="line-149">      private final String path;</span>

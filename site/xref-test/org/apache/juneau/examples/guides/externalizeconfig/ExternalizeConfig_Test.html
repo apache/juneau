@@ -38,14 +38,14 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  		assertEquals(GuideRegion.read(<span class="jxr_string">"ExternalizeConfig/run-output.txt"</span>, <span class="jxr_string">"output"</span>), GuideRegion.normalize(ConfigDemo.run()));
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  	}
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	@Test <strong class="jxr_keyword">void</strong> a02_iniAndYamlAgree() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	@Test <strong class="jxr_keyword">void</strong> a02_iniAndYamlAgree() {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		<strong class="jxr_keyword">var</strong> ini = Config.create(<span class="jxr_string">"ExternalizeConfig/app.ini"</span>).store(ClasspathStore.DEFAULT).build();
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">var</strong> yaml = Config.create(<span class="jxr_string">"ExternalizeConfig/app.yaml"</span>).store(ClasspathStore.DEFAULT).build();
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> key : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"server/host"</span>, <span class="jxr_string">"server/port"</span>, <span class="jxr_string">"server/baseUrl"</span>, <span class="jxr_string">"database/user"</span>, <span class="jxr_string">"database/poolSize"</span>})
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  			assertEquals(ini.get(key).asString().orElse(<strong class="jxr_keyword">null</strong>), yaml.get(key).asString().orElse(<strong class="jxr_keyword">null</strong>), key);
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	}
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@Test <strong class="jxr_keyword">void</strong> a03_licenseHeaderIsJustComments() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@Test <strong class="jxr_keyword">void</strong> a03_licenseHeaderIsJustComments() {
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<strong class="jxr_keyword">var</strong> ini = Config.create(<span class="jxr_string">"ExternalizeConfig/app.ini"</span>).store(ClasspathStore.DEFAULT).build();
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  		assertEquals(<span class="jxr_string">"[, server, database]"</span>, ini.getSectionNames().toString());
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	}

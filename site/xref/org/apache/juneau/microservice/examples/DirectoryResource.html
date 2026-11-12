@@ -264,7 +264,7 @@
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 		@Override <em class="jxr_comment">/* Overridden from Comparator */</em>
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compare(FileResource o1, FileResource o2) {
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 			<strong class="jxr_keyword">int</strong> c = o1.getType().compareTo(o2.getType());
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">return</strong> c != 0 ? c : o1.getName().compareTo(o2.getName());
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">return</strong> c == 0 ? o1.getName().compareTo(o2.getName()) : c;
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 		}
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 	}
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 

@@ -151,15 +151,15 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">private</strong> String cssClass;
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; urlState = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ModelBlock" href="../../../../../org/apache/juneau/console/ModelBlock.html#ModelBlock">ModelBlock</a> model;
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ModelBlock model;
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<strong class="jxr_keyword">private</strong> TableSpec(String id) {
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">this</strong>.id = id;
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">this</strong>.model = <strong class="jxr_keyword">new</strong> <a name="ModelBlock" href="../../../../../org/apache/juneau/console/ModelBlock.html#ModelBlock">ModelBlock</a>(<span class="jxr_string">"table"</span>, id);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">this</strong>.model = <strong class="jxr_keyword">new</strong> ModelBlock(<span class="jxr_string">"table"</span>, id);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Override <em class="jxr_comment">/* Handled */</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<strong class="jxr_keyword">public</strong> <a name="ModelBlock" href="../../../../../org/apache/juneau/console/ModelBlock.html#ModelBlock">ModelBlock</a> modelBlock() { <strong class="jxr_keyword">return</strong> model; }
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<strong class="jxr_keyword">public</strong> ModelBlock modelBlock() { <strong class="jxr_keyword">return</strong> model; }
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 	@Override <em class="jxr_comment">/* Handled */</em>
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<strong class="jxr_keyword">public</strong> TableSpec self() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
@@ -891,25 +891,29 @@
 <a class="jxr_linenumber" name="L883" href="#L883">883</a> 			b.put(<span class="jxr_string">"actions"</span>, plain(bulk.actions));
 <a class="jxr_linenumber" name="L884" href="#L884">884</a> 			t.put(<span class="jxr_string">"bulk"</span>, b);
 <a class="jxr_linenumber" name="L885" href="#L885">885</a> 		}
-<a class="jxr_linenumber" name="L886" href="#L886">886</a> 		<strong class="jxr_keyword">if</strong> (detail != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L887" href="#L887">887</a> 			t.put(<span class="jxr_string">"detail"</span>, detail.toMap(id, columns, rowIdField != <strong class="jxr_keyword">null</strong> ? rowIdField : selection == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : selection.rowIdField()));
-<a class="jxr_linenumber" name="L888" href="#L888">888</a> 		<strong class="jxr_keyword">var</strong> mm = model.toMap();
-<a class="jxr_linenumber" name="L889" href="#L889">889</a> 		<strong class="jxr_keyword">if</strong> (mm != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L890" href="#L890">890</a> 			t.put(<span class="jxr_string">"model"</span>, mm);
-<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		<strong class="jxr_keyword">if</strong> (quickStats != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L892" href="#L892">892</a> 			<strong class="jxr_keyword">var</strong> q = <strong class="jxr_keyword">new</strong> JsonMap();
-<a class="jxr_linenumber" name="L893" href="#L893">893</a> 			q.put(<span class="jxr_string">"id"</span>, quickStatsId);
-<a class="jxr_linenumber" name="L894" href="#L894">894</a> 			q.put(<span class="jxr_string">"items"</span>, quickStats.stream().map(QuickStat::toMap).toList());
-<a class="jxr_linenumber" name="L895" href="#L895">895</a> 			t.put(<span class="jxr_string">"quickStats"</span>, q);
-<a class="jxr_linenumber" name="L896" href="#L896">896</a> 		}
-<a class="jxr_linenumber" name="L897" href="#L897">897</a> 		<strong class="jxr_keyword">return</strong> t;
-<a class="jxr_linenumber" name="L898" href="#L898">898</a> 	}
-<a class="jxr_linenumber" name="L899" href="#L899">899</a> 
-<a class="jxr_linenumber" name="L900" href="#L900">900</a> 	<em class="jxr_javadoccomment">/** Converts a bean (or list of beans) to the plain maps, lists and scalars a parsed JSON body would hold. */</em>
-<a class="jxr_linenumber" name="L901" href="#L901">901</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object plain(Object bean) {
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		<strong class="jxr_keyword">return</strong> Json.to(Json.of(bean), Object.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> 	}
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> }
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 		<strong class="jxr_keyword">if</strong> (detail != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 			<strong class="jxr_keyword">var</strong> detailRowIdField = rowIdField;
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 			<strong class="jxr_keyword">if</strong> (detailRowIdField == <strong class="jxr_keyword">null</strong> &amp;&amp; selection != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 				detailRowIdField = selection.rowIdField();
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 			t.put(<span class="jxr_string">"detail"</span>, detail.toMap(id, columns, detailRowIdField));
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		}
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 		<strong class="jxr_keyword">var</strong> mm = model.toMap();
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 		<strong class="jxr_keyword">if</strong> (mm != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 			t.put(<span class="jxr_string">"model"</span>, mm);
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 		<strong class="jxr_keyword">if</strong> (quickStats != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> 			<strong class="jxr_keyword">var</strong> q = <strong class="jxr_keyword">new</strong> JsonMap();
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 			q.put(<span class="jxr_string">"id"</span>, quickStatsId);
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 			q.put(<span class="jxr_string">"items"</span>, quickStats.stream().map(QuickStat::toMap).toList());
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> 			t.put(<span class="jxr_string">"quickStats"</span>, q);
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 		}
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 		<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 	}
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 	<em class="jxr_javadoccomment">/** Converts a bean (or list of beans) to the plain maps, lists and scalars a parsed JSON body would hold. */</em>
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object plain(Object bean) {
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 		<strong class="jxr_keyword">return</strong> Json.to(Json.of(bean), Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 	}
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

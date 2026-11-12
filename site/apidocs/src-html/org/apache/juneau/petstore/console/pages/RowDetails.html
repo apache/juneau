@@ -51,128 +51,131 @@
 <span class="source-line-no">038</span><span id="line-38"> *    TableSpec.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;js&gt;"orders"&lt;/js&gt;).detail(RowDetails.&lt;jsm&gt;order&lt;/jsm&gt;());</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;/p&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> */</span>
-<span class="source-line-no">041</span><span id="line-41">public final class RowDetails {</span>
-<span class="source-line-no">042</span><span id="line-42"></span>
-<span class="source-line-no">043</span><span id="line-43">   private RowDetails() {}</span>
-<span class="source-line-no">044</span><span id="line-44"></span>
-<span class="source-line-no">045</span><span id="line-45">   private static &lt;T&gt; Function&lt;String,T&gt; none() {</span>
-<span class="source-line-no">046</span><span id="line-46">      return id -&gt; null;</span>
-<span class="source-line-no">047</span><span id="line-47">   }</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   /** @return The Pets table detail, for building a page. */</span>
-<span class="source-line-no">050</span><span id="line-50">   public static RowDetail pet() {</span>
-<span class="source-line-no">051</span><span id="line-51">      return pet(none());</span>
-<span class="source-line-no">052</span><span id="line-52">   }</span>
-<span class="source-line-no">053</span><span id="line-53"></span>
-<span class="source-line-no">054</span><span id="line-54">   /**</span>
-<span class="source-line-no">055</span><span id="line-55">    * The Pets table detail: Details, this pet's orders and its history.</span>
-<span class="source-line-no">056</span><span id="line-56">    *</span>
-<span class="source-line-no">057</span><span id="line-57">    * @param lookup Finds a pet by row id, or returns &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">058</span><span id="line-58">    * @return A new detail.</span>
-<span class="source-line-no">059</span><span id="line-59">    */</span>
-<span class="source-line-no">060</span><span id="line-60">   public static RowDetail pet(Function&lt;String,Pet&gt; lookup) {</span>
-<span class="source-line-no">061</span><span id="line-61">      return RowDetail.fromBean(Pet.class, lookup).basePath("/console/pets").title("{name}").columns(3)</span>
-<span class="source-line-no">062</span><span id="line-62">         .section("Details", "id", "name", "species", "status", "price", "tags")</span>
-<span class="source-line-no">063</span><span id="line-63">         .label("price", "Price (USD)")</span>
-<span class="source-line-no">064</span><span id="line-64">         .tab(DetailTab.table("Orders", ordersView("pets-orders", "/console/pets/orders/rows")).id("orders").scopeParam("petId").countFromRows())</span>
-<span class="source-line-no">065</span><span id="line-65">         .tab(DetailTab.table("History", historyView()).id("history").scopeParam("petId").countFromRows());</span>
-<span class="source-line-no">066</span><span id="line-66">   }</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   /** @return The Sold table detail, for building a page. */</span>
-<span class="source-line-no">069</span><span id="line-69">   public static RowDetail soldPet() {</span>
-<span class="source-line-no">070</span><span id="line-70">      return soldPet(none());</span>
-<span class="source-line-no">071</span><span id="line-71">   }</span>
-<span class="source-line-no">072</span><span id="line-72"></span>
-<span class="source-line-no">073</span><span id="line-73">   /**</span>
-<span class="source-line-no">074</span><span id="line-74">    * The Sold table detail: the columns that table shows, and this pet's orders.</span>
-<span class="source-line-no">075</span><span id="line-75">    *</span>
-<span class="source-line-no">076</span><span id="line-76">    * @param lookup Finds a pet by row id, or returns &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">077</span><span id="line-77">    * @return A new detail.</span>
-<span class="source-line-no">078</span><span id="line-78">    */</span>
-<span class="source-line-no">079</span><span id="line-79">   public static RowDetail soldPet(Function&lt;String,Pet&gt; lookup) {</span>
-<span class="source-line-no">080</span><span id="line-80">      return RowDetail.fromBean(Pet.class, lookup).key("soldPet").basePath("/console/pets").title("{name}").columns(3)</span>
-<span class="source-line-no">081</span><span id="line-81">         .section("Details", "id", "name", "species", "price")</span>
-<span class="source-line-no">082</span><span id="line-82">         .label("price", "Price (USD)")</span>
-<span class="source-line-no">083</span><span id="line-83">         .tab(DetailTab.table("Orders", ordersView("sold-orders", "/console/pets/orders/rows")).id("orders").scopeParam("petId").countFromRows());</span>
-<span class="source-line-no">084</span><span id="line-84">   }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   /** @return The Orders and Store tables' detail, for building a page. */</span>
-<span class="source-line-no">087</span><span id="line-87">   public static RowDetail order() {</span>
-<span class="source-line-no">088</span><span id="line-88">      return order(none());</span>
-<span class="source-line-no">089</span><span id="line-89">   }</span>
-<span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">   /**</span>
-<span class="source-line-no">092</span><span id="line-92">    * The Orders and Store recent-orders detail: Details and the ordered pet.</span>
-<span class="source-line-no">093</span><span id="line-93">    *</span>
-<span class="source-line-no">094</span><span id="line-94">    * @param lookup Finds an order by row id, or returns &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">095</span><span id="line-95">    * @return A new detail.</span>
-<span class="source-line-no">096</span><span id="line-96">    */</span>
-<span class="source-line-no">097</span><span id="line-97">   public static RowDetail order(Function&lt;String,Order&gt; lookup) {</span>
-<span class="source-line-no">098</span><span id="line-98">      return RowDetail.fromBean(Order.class, lookup).basePath("/console/orders").title("Order {id}").columns(2)</span>
-<span class="source-line-no">099</span><span id="line-99">         .section("Details", "id", "petId", "shipDate", "status")</span>
-<span class="source-line-no">100</span><span id="line-100">         .label("petId", "Pet")</span>
-<span class="source-line-no">101</span><span id="line-101">         .tab(DetailTab.table("Pet", TableSpec.create("order-pet").rowType("Pet").dataMode(DataMode.CLIENT).dataUrl("/console/orders/pet/rows")</span>
-<span class="source-line-no">102</span><span id="line-102">            .columns(</span>
-<span class="source-line-no">103</span><span id="line-103">               Column.create("id").label("Id"),</span>
-<span class="source-line-no">104</span><span id="line-104">               Column.create("name").label("Name").href("/console/pets/{id}/summary"),</span>
-<span class="source-line-no">105</span><span id="line-105">               Column.create("species").label("Species"),</span>
-<span class="source-line-no">106</span><span id="line-106">               Column.create("status").label("Status"),</span>
-<span class="source-line-no">107</span><span id="line-107">               Column.create("price").label("Price (USD)").render(Render.of("decimal").meta("places", 2))))</span>
-<span class="source-line-no">108</span><span id="line-108">            .id("pet").scopeParam("orderId").countFromRows());</span>
-<span class="source-line-no">109</span><span id="line-109">   }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   /** @return The Users table detail, for building a page. */</span>
-<span class="source-line-no">112</span><span id="line-112">   public static RowDetail user() {</span>
-<span class="source-line-no">113</span><span id="line-113">      return user(none());</span>
-<span class="source-line-no">114</span><span id="line-114">   }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   /**</span>
-<span class="source-line-no">117</span><span id="line-117">    * The Users table detail: Details and the orders this user placed.  It serves {@code UserView}, so a password,</span>
-<span class="source-line-no">118</span><span id="line-118">    * email or phone never leaves the server.</span>
-<span class="source-line-no">119</span><span id="line-119">    *</span>
-<span class="source-line-no">120</span><span id="line-120">    * @param lookup Finds a user by row id (the username), or returns &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">121</span><span id="line-121">    * @return A new detail.</span>
-<span class="source-line-no">122</span><span id="line-122">    */</span>
-<span class="source-line-no">123</span><span id="line-123">   public static RowDetail user(Function&lt;String,UserView&gt; lookup) {</span>
-<span class="source-line-no">124</span><span id="line-124">      return RowDetail.fromBean(UserView.class, lookup).key("user").basePath("/console/users").title("{username}").columns(2)</span>
-<span class="source-line-no">125</span><span id="line-125">         .section("Details", "username", "firstName", "lastName", "userStatus")</span>
-<span class="source-line-no">126</span><span id="line-126">         .label("userStatus", "Status")</span>
-<span class="source-line-no">127</span><span id="line-127">         .tab(DetailTab.table("Orders", ordersView("user-orders", "/console/users/orders/rows")).id("orders").scopeParam("username").countFromRows());</span>
-<span class="source-line-no">128</span><span id="line-128">   }</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">   /** @return The Pending changes table detail. */</span>
-<span class="source-line-no">131</span><span id="line-131">   public static RowDetail change() {</span>
-<span class="source-line-no">132</span><span id="line-132">      return RowDetail.inline().title("Change {id}").section("Details", "id", "summary", "author", "state", "message");</span>
-<span class="source-line-no">133</span><span id="line-133">   }</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">   /** @return The Audit table detail. */</span>
-<span class="source-line-no">136</span><span id="line-136">   public static RowDetail audit() {</span>
-<span class="source-line-no">137</span><span id="line-137">      return RowDetail.inline().title("{action} {entity} {entityId}")</span>
-<span class="source-line-no">138</span><span id="line-138">         .section("Details", "id", "at", "actor", "action", "entity", "entityId", "detail");</span>
-<span class="source-line-no">139</span><span id="line-139">   }</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   /** @return The pet History table detail. */</span>
-<span class="source-line-no">142</span><span id="line-142">   public static RowDetail history() {</span>
-<span class="source-line-no">143</span><span id="line-143">      return RowDetail.inline().title("{action}").section("Details", "id", "at", "actor", "action", "detail");</span>
-<span class="source-line-no">144</span><span id="line-144">   }</span>
-<span class="source-line-no">145</span><span id="line-145"></span>
-<span class="source-line-no">146</span><span id="line-146">   private static TableSpec ordersView(String id, String dataUrl) {</span>
-<span class="source-line-no">147</span><span id="line-147">      return TableSpec.create(id).rowType("Order").dataMode(DataMode.CLIENT).dataUrl(dataUrl)</span>
-<span class="source-line-no">148</span><span id="line-148">         .columns(</span>
-<span class="source-line-no">149</span><span id="line-149">            Column.create("id").label("Order").href("/console/pets/{petId}/orders/{id}").searchType(SearchType.NUMERIC),</span>
-<span class="source-line-no">150</span><span id="line-150">            Column.create("shipDate").label("Ship date").render("date").searchType(SearchType.TEXT),</span>
-<span class="source-line-no">151</span><span id="line-151">            Column.create("status").label("Status").render(PillRenders.orderStatus()).searchType(SearchType.ENUM));</span>
-<span class="source-line-no">152</span><span id="line-152">   }</span>
-<span class="source-line-no">153</span><span id="line-153"></span>
-<span class="source-line-no">154</span><span id="line-154">   private static TableSpec historyView() {</span>
-<span class="source-line-no">155</span><span id="line-155">      return TableSpec.create("pets-history").rowType("AuditEntry").dataMode(DataMode.CLIENT).dataUrl("/console/pets/history/rows")</span>
-<span class="source-line-no">156</span><span id="line-156">         .columns(</span>
-<span class="source-line-no">157</span><span id="line-157">            Column.create("at").label("When").render("timestamp").searchType(SearchType.TEXT),</span>
-<span class="source-line-no">158</span><span id="line-158">            Column.create("actor").label("Actor").searchType(SearchType.TEXT),</span>
-<span class="source-line-no">159</span><span id="line-159">            Column.create("action").label("Action").render(PillRenders.auditAction()).searchType(SearchType.ENUM),</span>
-<span class="source-line-no">160</span><span id="line-160">            Column.create("detail").label("Detail").searchType(SearchType.TEXT));</span>
-<span class="source-line-no">161</span><span id="line-161">   }</span>
-<span class="source-line-no">162</span><span id="line-162">}</span>
+<span class="source-line-no">041</span><span id="line-41">@SuppressWarnings({</span>
+<span class="source-line-no">042</span><span id="line-42">   "java:S1192" // Column and field names repeat as inline literals by design.</span>
+<span class="source-line-no">043</span><span id="line-43">})</span>
+<span class="source-line-no">044</span><span id="line-44">public final class RowDetails {</span>
+<span class="source-line-no">045</span><span id="line-45"></span>
+<span class="source-line-no">046</span><span id="line-46">   private RowDetails() {}</span>
+<span class="source-line-no">047</span><span id="line-47"></span>
+<span class="source-line-no">048</span><span id="line-48">   private static &lt;T&gt; Function&lt;String,T&gt; none() {</span>
+<span class="source-line-no">049</span><span id="line-49">      return id -&gt; null;</span>
+<span class="source-line-no">050</span><span id="line-50">   }</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">   /** @return The Pets table detail, for building a page. */</span>
+<span class="source-line-no">053</span><span id="line-53">   public static RowDetail pet() {</span>
+<span class="source-line-no">054</span><span id="line-54">      return pet(none());</span>
+<span class="source-line-no">055</span><span id="line-55">   }</span>
+<span class="source-line-no">056</span><span id="line-56"></span>
+<span class="source-line-no">057</span><span id="line-57">   /**</span>
+<span class="source-line-no">058</span><span id="line-58">    * The Pets table detail: Details, this pet's orders and its history.</span>
+<span class="source-line-no">059</span><span id="line-59">    *</span>
+<span class="source-line-no">060</span><span id="line-60">    * @param lookup Finds a pet by row id, or returns &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">061</span><span id="line-61">    * @return A new detail.</span>
+<span class="source-line-no">062</span><span id="line-62">    */</span>
+<span class="source-line-no">063</span><span id="line-63">   public static RowDetail pet(Function&lt;String,Pet&gt; lookup) {</span>
+<span class="source-line-no">064</span><span id="line-64">      return RowDetail.fromBean(Pet.class, lookup).basePath("/console/pets").title("{name}").columns(3)</span>
+<span class="source-line-no">065</span><span id="line-65">         .section("Details", "id", "name", "species", "status", "price", "tags")</span>
+<span class="source-line-no">066</span><span id="line-66">         .label("price", "Price (USD)")</span>
+<span class="source-line-no">067</span><span id="line-67">         .tab(DetailTab.table("Orders", ordersView("pets-orders", "/console/pets/orders/rows")).id("orders").scopeParam("petId").countFromRows())</span>
+<span class="source-line-no">068</span><span id="line-68">         .tab(DetailTab.table("History", historyView()).id("history").scopeParam("petId").countFromRows());</span>
+<span class="source-line-no">069</span><span id="line-69">   }</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">   /** @return The Sold table detail, for building a page. */</span>
+<span class="source-line-no">072</span><span id="line-72">   public static RowDetail soldPet() {</span>
+<span class="source-line-no">073</span><span id="line-73">      return soldPet(none());</span>
+<span class="source-line-no">074</span><span id="line-74">   }</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">   /**</span>
+<span class="source-line-no">077</span><span id="line-77">    * The Sold table detail: the columns that table shows, and this pet's orders.</span>
+<span class="source-line-no">078</span><span id="line-78">    *</span>
+<span class="source-line-no">079</span><span id="line-79">    * @param lookup Finds a pet by row id, or returns &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">080</span><span id="line-80">    * @return A new detail.</span>
+<span class="source-line-no">081</span><span id="line-81">    */</span>
+<span class="source-line-no">082</span><span id="line-82">   public static RowDetail soldPet(Function&lt;String,Pet&gt; lookup) {</span>
+<span class="source-line-no">083</span><span id="line-83">      return RowDetail.fromBean(Pet.class, lookup).key("soldPet").basePath("/console/pets").title("{name}").columns(3)</span>
+<span class="source-line-no">084</span><span id="line-84">         .section("Details", "id", "name", "species", "price")</span>
+<span class="source-line-no">085</span><span id="line-85">         .label("price", "Price (USD)")</span>
+<span class="source-line-no">086</span><span id="line-86">         .tab(DetailTab.table("Orders", ordersView("sold-orders", "/console/pets/orders/rows")).id("orders").scopeParam("petId").countFromRows());</span>
+<span class="source-line-no">087</span><span id="line-87">   }</span>
+<span class="source-line-no">088</span><span id="line-88"></span>
+<span class="source-line-no">089</span><span id="line-89">   /** @return The Orders and Store tables' detail, for building a page. */</span>
+<span class="source-line-no">090</span><span id="line-90">   public static RowDetail order() {</span>
+<span class="source-line-no">091</span><span id="line-91">      return order(none());</span>
+<span class="source-line-no">092</span><span id="line-92">   }</span>
+<span class="source-line-no">093</span><span id="line-93"></span>
+<span class="source-line-no">094</span><span id="line-94">   /**</span>
+<span class="source-line-no">095</span><span id="line-95">    * The Orders and Store recent-orders detail: Details and the ordered pet.</span>
+<span class="source-line-no">096</span><span id="line-96">    *</span>
+<span class="source-line-no">097</span><span id="line-97">    * @param lookup Finds an order by row id, or returns &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">098</span><span id="line-98">    * @return A new detail.</span>
+<span class="source-line-no">099</span><span id="line-99">    */</span>
+<span class="source-line-no">100</span><span id="line-100">   public static RowDetail order(Function&lt;String,Order&gt; lookup) {</span>
+<span class="source-line-no">101</span><span id="line-101">      return RowDetail.fromBean(Order.class, lookup).basePath("/console/orders").title("Order {id}").columns(2)</span>
+<span class="source-line-no">102</span><span id="line-102">         .section("Details", "id", "petId", "shipDate", "status")</span>
+<span class="source-line-no">103</span><span id="line-103">         .label("petId", "Pet")</span>
+<span class="source-line-no">104</span><span id="line-104">         .tab(DetailTab.table("Pet", TableSpec.create("order-pet").rowType("Pet").dataMode(DataMode.CLIENT).dataUrl("/console/orders/pet/rows")</span>
+<span class="source-line-no">105</span><span id="line-105">            .columns(</span>
+<span class="source-line-no">106</span><span id="line-106">               Column.create("id").label("Id"),</span>
+<span class="source-line-no">107</span><span id="line-107">               Column.create("name").label("Name").href("/console/pets/{id}/summary"),</span>
+<span class="source-line-no">108</span><span id="line-108">               Column.create("species").label("Species"),</span>
+<span class="source-line-no">109</span><span id="line-109">               Column.create("status").label("Status"),</span>
+<span class="source-line-no">110</span><span id="line-110">               Column.create("price").label("Price (USD)").render(Render.of("decimal").meta("places", 2))))</span>
+<span class="source-line-no">111</span><span id="line-111">            .id("pet").scopeParam("orderId").countFromRows());</span>
+<span class="source-line-no">112</span><span id="line-112">   }</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">   /** @return The Users table detail, for building a page. */</span>
+<span class="source-line-no">115</span><span id="line-115">   public static RowDetail user() {</span>
+<span class="source-line-no">116</span><span id="line-116">      return user(none());</span>
+<span class="source-line-no">117</span><span id="line-117">   }</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">   /**</span>
+<span class="source-line-no">120</span><span id="line-120">    * The Users table detail: Details and the orders this user placed.  It serves {@code UserView}, so a password,</span>
+<span class="source-line-no">121</span><span id="line-121">    * email or phone never leaves the server.</span>
+<span class="source-line-no">122</span><span id="line-122">    *</span>
+<span class="source-line-no">123</span><span id="line-123">    * @param lookup Finds a user by row id (the username), or returns &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">124</span><span id="line-124">    * @return A new detail.</span>
+<span class="source-line-no">125</span><span id="line-125">    */</span>
+<span class="source-line-no">126</span><span id="line-126">   public static RowDetail user(Function&lt;String,UserView&gt; lookup) {</span>
+<span class="source-line-no">127</span><span id="line-127">      return RowDetail.fromBean(UserView.class, lookup).key("user").basePath("/console/users").title("{username}").columns(2)</span>
+<span class="source-line-no">128</span><span id="line-128">         .section("Details", "username", "firstName", "lastName", "userStatus")</span>
+<span class="source-line-no">129</span><span id="line-129">         .label("userStatus", "Status")</span>
+<span class="source-line-no">130</span><span id="line-130">         .tab(DetailTab.table("Orders", ordersView("user-orders", "/console/users/orders/rows")).id("orders").scopeParam("username").countFromRows());</span>
+<span class="source-line-no">131</span><span id="line-131">   }</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">   /** @return The Pending changes table detail. */</span>
+<span class="source-line-no">134</span><span id="line-134">   public static RowDetail change() {</span>
+<span class="source-line-no">135</span><span id="line-135">      return RowDetail.inline().title("Change {id}").section("Details", "id", "summary", "author", "state", "message");</span>
+<span class="source-line-no">136</span><span id="line-136">   }</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">   /** @return The Audit table detail. */</span>
+<span class="source-line-no">139</span><span id="line-139">   public static RowDetail audit() {</span>
+<span class="source-line-no">140</span><span id="line-140">      return RowDetail.inline().title("{action} {entity} {entityId}")</span>
+<span class="source-line-no">141</span><span id="line-141">         .section("Details", "id", "at", "actor", "action", "entity", "entityId", "detail");</span>
+<span class="source-line-no">142</span><span id="line-142">   }</span>
+<span class="source-line-no">143</span><span id="line-143"></span>
+<span class="source-line-no">144</span><span id="line-144">   /** @return The pet History table detail. */</span>
+<span class="source-line-no">145</span><span id="line-145">   public static RowDetail history() {</span>
+<span class="source-line-no">146</span><span id="line-146">      return RowDetail.inline().title("{action}").section("Details", "id", "at", "actor", "action", "detail");</span>
+<span class="source-line-no">147</span><span id="line-147">   }</span>
+<span class="source-line-no">148</span><span id="line-148"></span>
+<span class="source-line-no">149</span><span id="line-149">   private static TableSpec ordersView(String id, String dataUrl) {</span>
+<span class="source-line-no">150</span><span id="line-150">      return TableSpec.create(id).rowType("Order").dataMode(DataMode.CLIENT).dataUrl(dataUrl)</span>
+<span class="source-line-no">151</span><span id="line-151">         .columns(</span>
+<span class="source-line-no">152</span><span id="line-152">            Column.create("id").label("Order").href("/console/pets/{petId}/orders/{id}").searchType(SearchType.NUMERIC),</span>
+<span class="source-line-no">153</span><span id="line-153">            Column.create("shipDate").label("Ship date").render("date").searchType(SearchType.TEXT),</span>
+<span class="source-line-no">154</span><span id="line-154">            Column.create("status").label("Status").render(PillRenders.orderStatus()).searchType(SearchType.ENUM));</span>
+<span class="source-line-no">155</span><span id="line-155">   }</span>
+<span class="source-line-no">156</span><span id="line-156"></span>
+<span class="source-line-no">157</span><span id="line-157">   private static TableSpec historyView() {</span>
+<span class="source-line-no">158</span><span id="line-158">      return TableSpec.create("pets-history").rowType("AuditEntry").dataMode(DataMode.CLIENT).dataUrl("/console/pets/history/rows")</span>
+<span class="source-line-no">159</span><span id="line-159">         .columns(</span>
+<span class="source-line-no">160</span><span id="line-160">            Column.create("at").label("When").render("timestamp").searchType(SearchType.TEXT),</span>
+<span class="source-line-no">161</span><span id="line-161">            Column.create("actor").label("Actor").searchType(SearchType.TEXT),</span>
+<span class="source-line-no">162</span><span id="line-162">            Column.create("action").label("Action").render(PillRenders.auditAction()).searchType(SearchType.ENUM),</span>
+<span class="source-line-no">163</span><span id="line-163">            Column.create("detail").label("Detail").searchType(SearchType.TEXT));</span>
+<span class="source-line-no">164</span><span id="line-164">   }</span>
+<span class="source-line-no">165</span><span id="line-165">}</span>
 
 
 

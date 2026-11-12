@@ -94,9 +94,9 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test <strong class="jxr_keyword">void</strong> a09_petPageFaviconResolves() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> html = client().get(<span class="jxr_string">"/console/pets/1/summary"</span>).accept(<span class="jxr_string">"text/html"</span>).run().assertStatus(200).getContent().asString();
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> m = java.util.regex.Pattern.compile(<span class="jxr_string">"rel=\&quot;icon\&quot;[^&gt;]*href=\&quot;([^\&quot;]+)\&quot;|href=\&quot;([^\&quot;]+paw_print[^\&quot;]*)\&quot;"</span>).matcher(html);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> m = java.util.regex.Pattern.compile(<span class="jxr_string">"href=\&quot;([^\&quot;]*paw_print[^\&quot;]*)\&quot;"</span>).matcher(html);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		org.junit.jupiter.api.Assertions.assertTrue(m.find(), html.substring(0, Math.min(html.length(), 1500)));
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> href = m.group(1) != <strong class="jxr_keyword">null</strong> ? m.group(1) : m.group(2);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> href = m.group(1);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		client().get(href).accept(<span class="jxr_string">"image/svg+xml"</span>).run().assertStatus(200);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  

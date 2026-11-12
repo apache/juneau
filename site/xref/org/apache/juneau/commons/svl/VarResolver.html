@@ -531,7 +531,7 @@
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 		<strong class="jxr_keyword">this</strong>.maxCollectionSize = builder.maxCollectionSize;
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 		<strong class="jxr_keyword">this</strong>.maxExprDepth = builder.maxExprDepth;
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 		<strong class="jxr_keyword">this</strong>.customValueFormatter = builder.valueFormatter;
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<strong class="jxr_keyword">this</strong>.valueFormatter = builder.valueFormatter != <strong class="jxr_keyword">null</strong> ? builder.valueFormatter : <strong class="jxr_keyword">new</strong> <a name="JsonValueFormatter" href="../../../../../org/apache/juneau/commons/svl/JsonValueFormatter.html#JsonValueFormatter">JsonValueFormatter</a>(builder.maxCollectionSize, builder.strict);
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<strong class="jxr_keyword">this</strong>.valueFormatter = builder.valueFormatter != <strong class="jxr_keyword">null</strong> ? builder.valueFormatter : <strong class="jxr_keyword">new</strong> JsonValueFormatter(builder.maxCollectionSize, builder.strict);
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">this</strong>.vars = builder.vars.stream().map(x -&gt; toVar(builder.beanStore(), x)).toArray(Var[]::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> ConcurrentSkipListMap&lt;String,Var&gt;();

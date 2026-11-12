@@ -896,25 +896,29 @@
 <span class="source-line-no">883</span><span id="line-883">         b.put("actions", plain(bulk.actions));</span>
 <span class="source-line-no">884</span><span id="line-884">         t.put("bulk", b);</span>
 <span class="source-line-no">885</span><span id="line-885">      }</span>
-<span class="source-line-no">886</span><span id="line-886">      if (detail != null)</span>
-<span class="source-line-no">887</span><span id="line-887">         t.put("detail", detail.toMap(id, columns, rowIdField != null ? rowIdField : selection == null ? null : selection.rowIdField()));</span>
-<span class="source-line-no">888</span><span id="line-888">      var mm = model.toMap();</span>
-<span class="source-line-no">889</span><span id="line-889">      if (mm != null)</span>
-<span class="source-line-no">890</span><span id="line-890">         t.put("model", mm);</span>
-<span class="source-line-no">891</span><span id="line-891">      if (quickStats != null) {</span>
-<span class="source-line-no">892</span><span id="line-892">         var q = new JsonMap();</span>
-<span class="source-line-no">893</span><span id="line-893">         q.put("id", quickStatsId);</span>
-<span class="source-line-no">894</span><span id="line-894">         q.put("items", quickStats.stream().map(QuickStat::toMap).toList());</span>
-<span class="source-line-no">895</span><span id="line-895">         t.put("quickStats", q);</span>
-<span class="source-line-no">896</span><span id="line-896">      }</span>
-<span class="source-line-no">897</span><span id="line-897">      return t;</span>
-<span class="source-line-no">898</span><span id="line-898">   }</span>
-<span class="source-line-no">899</span><span id="line-899"></span>
-<span class="source-line-no">900</span><span id="line-900">   /** Converts a bean (or list of beans) to the plain maps, lists and scalars a parsed JSON body would hold. */</span>
-<span class="source-line-no">901</span><span id="line-901">   private static Object plain(Object bean) {</span>
-<span class="source-line-no">902</span><span id="line-902">      return Json.to(Json.of(bean), Object.class);</span>
-<span class="source-line-no">903</span><span id="line-903">   }</span>
-<span class="source-line-no">904</span><span id="line-904">}</span>
+<span class="source-line-no">886</span><span id="line-886">      if (detail != null) {</span>
+<span class="source-line-no">887</span><span id="line-887">         var detailRowIdField = rowIdField;</span>
+<span class="source-line-no">888</span><span id="line-888">         if (detailRowIdField == null &amp;&amp; selection != null)</span>
+<span class="source-line-no">889</span><span id="line-889">            detailRowIdField = selection.rowIdField();</span>
+<span class="source-line-no">890</span><span id="line-890">         t.put("detail", detail.toMap(id, columns, detailRowIdField));</span>
+<span class="source-line-no">891</span><span id="line-891">      }</span>
+<span class="source-line-no">892</span><span id="line-892">      var mm = model.toMap();</span>
+<span class="source-line-no">893</span><span id="line-893">      if (mm != null)</span>
+<span class="source-line-no">894</span><span id="line-894">         t.put("model", mm);</span>
+<span class="source-line-no">895</span><span id="line-895">      if (quickStats != null) {</span>
+<span class="source-line-no">896</span><span id="line-896">         var q = new JsonMap();</span>
+<span class="source-line-no">897</span><span id="line-897">         q.put("id", quickStatsId);</span>
+<span class="source-line-no">898</span><span id="line-898">         q.put("items", quickStats.stream().map(QuickStat::toMap).toList());</span>
+<span class="source-line-no">899</span><span id="line-899">         t.put("quickStats", q);</span>
+<span class="source-line-no">900</span><span id="line-900">      }</span>
+<span class="source-line-no">901</span><span id="line-901">      return t;</span>
+<span class="source-line-no">902</span><span id="line-902">   }</span>
+<span class="source-line-no">903</span><span id="line-903"></span>
+<span class="source-line-no">904</span><span id="line-904">   /** Converts a bean (or list of beans) to the plain maps, lists and scalars a parsed JSON body would hold. */</span>
+<span class="source-line-no">905</span><span id="line-905">   private static Object plain(Object bean) {</span>
+<span class="source-line-no">906</span><span id="line-906">      return Json.to(Json.of(bean), Object.class);</span>
+<span class="source-line-no">907</span><span id="line-907">   }</span>
+<span class="source-line-no">908</span><span id="line-908">}</span>
 
 
 

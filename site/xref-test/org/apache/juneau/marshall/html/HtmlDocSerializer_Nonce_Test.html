@@ -40,13 +40,13 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  		<strong class="jxr_keyword">return</strong> s.createSession().nonce(nonce).build().writeToString(o);
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  	}
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	@Test <strong class="jxr_keyword">void</strong> a01_nonceStampedOnStyleAndScript() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	@Test <strong class="jxr_keyword">void</strong> a01_nonceStampedOnStyleAndScript() {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">var</strong> html = serialize(<span class="jxr_string">"R4nd0mT0k3n"</span>, <span class="jxr_string">"x"</span>);
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  		assertTrue(html.contains(<span class="jxr_string">"&lt;style nonce=\&quot;R4nd0mT0k3n\&quot;&gt;"</span>), () -&gt; <span class="jxr_string">"Missing nonce on style: "</span> + html);
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  		assertTrue(html.contains(<span class="jxr_string">"&lt;script nonce=\&quot;R4nd0mT0k3n\&quot;&gt;"</span>), () -&gt; <span class="jxr_string">"Missing nonce on script: "</span> + html);
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	}
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	@Test <strong class="jxr_keyword">void</strong> a02_noNonceLeavesPlainTags() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	@Test <strong class="jxr_keyword">void</strong> a02_noNonceLeavesPlainTags() {
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">var</strong> html = serialize(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"x"</span>);
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assertTrue(html.contains(<span class="jxr_string">"&lt;style&gt;"</span>), () -&gt; <span class="jxr_string">"Expected plain style tag: "</span> + html);
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertTrue(html.contains(<span class="jxr_string">"&lt;script&gt;"</span>), () -&gt; <span class="jxr_string">"Expected plain script tag: "</span> + html);

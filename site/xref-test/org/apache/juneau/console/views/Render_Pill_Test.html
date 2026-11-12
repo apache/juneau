@@ -173,7 +173,7 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> sut8 = Render.of(<span class="jxr_string">"tag"</span>);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; sut8.tone(<span class="jxr_string">"A"</span>, StatusTone.INFO));
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> sut9 = Render.of(<span class="jxr_string">"tag"</span>);
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; sut9.categorical());
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, sut9::categorical);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> sut10 = Render.of(<span class="jxr_string">"tag"</span>);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; sut10.category(<span class="jxr_string">"A"</span>, 1));
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 	}

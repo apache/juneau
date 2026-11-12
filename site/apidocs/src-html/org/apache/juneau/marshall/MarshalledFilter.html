@@ -113,9 +113,9 @@
 <span class="source-line-no">100</span><span id="line-100">      private ClassInfo stopClass;</span>
 <span class="source-line-no">101</span><span id="line-101">      private boolean unsortedProperties;</span>
 <span class="source-line-no">102</span><span id="line-102">      private boolean fluentSetters;</span>
-<span class="source-line-no">103</span><span id="line-103">      private BeanInstantiator.Builder&lt;PropertyNamer&gt; propertyNamer = BeanInstantiator.of(PropertyNamer.class);</span>
+<span class="source-line-no">103</span><span id="line-103">      private final BeanInstantiator.Builder&lt;PropertyNamer&gt; propertyNamer = BeanInstantiator.of(PropertyNamer.class);</span>
 <span class="source-line-no">104</span><span id="line-104">      private List&lt;ClassInfo&gt; dictionary;</span>
-<span class="source-line-no">105</span><span id="line-105">      private BeanInstantiator.Builder&lt;BeanInterceptor&gt; interceptor = BeanInstantiator.of(BeanInterceptor.class);</span>
+<span class="source-line-no">105</span><span id="line-105">      private final BeanInstantiator.Builder&lt;BeanInterceptor&gt; interceptor = BeanInstantiator.of(BeanInterceptor.class);</span>
 <span class="source-line-no">106</span><span id="line-106"></span>
 <span class="source-line-no">107</span><span id="line-107">      /**</span>
 <span class="source-line-no">108</span><span id="line-108">       * Constructor for bean filters.</span>

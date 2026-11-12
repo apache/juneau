@@ -954,81 +954,84 @@
 <a class="jxr_linenumber" name="L946" href="#L946">946</a> 		description=<span class="jxr_string">"A symbol from the Lucide or shipped sprite, with colours that follow prefers-color-scheme; for favicons."</span>,
 <a class="jxr_linenumber" name="L947" href="#L947">947</a> 		swagger=@OpSwagger(ignore=<strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L948" href="#L948">948</a> 	)
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> getSymbol(@Path(<span class="jxr_string">"file"</span>) String file) {
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 		<strong class="jxr_keyword">var</strong> name = file.endsWith(<span class="jxr_string">".svg"</span>) ? file.substring(0, file.length() - 4) : <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		<strong class="jxr_keyword">if</strong> (! SYMBOL_NAME.matcher(name).matches())
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"Unknown symbol: "</span> + name);
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		<strong class="jxr_keyword">var</strong> open = <span class="jxr_string">"&lt;symbol id=\&quot;juneau-sym-"</span> + name + <span class="jxr_string">"\&quot;"</span>;
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> resource : <strong class="jxr_keyword">new</strong> String[]{SYMBOLS_LUCIDE_SVG_RESOURCE, SYMBOLS_SVG_RESOURCE}) {
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> 			<strong class="jxr_keyword">var</strong> sprite = <strong class="jxr_keyword">new</strong> String(ASSET_CACHE.bytes(resource), StandardCharsets.UTF_8);
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> 			<strong class="jxr_keyword">var</strong> start = sprite.indexOf(open);
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> 			<strong class="jxr_keyword">if</strong> (start &lt; 0)
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> 				<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> 			<strong class="jxr_keyword">var</strong> innerStart = sprite.indexOf('&gt;', start) + 1;
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 			<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">inner</strong> = sprite.substring(innerStart, sprite.indexOf(<span class="jxr_string">"&lt;/symbol&gt;"</span>, innerStart));
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 			<em class="jxr_comment">// A symbol that fills with currentColor on its own tag passes that fill to its children through a wrapper group.</em>
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 			<strong class="jxr_keyword">if</strong> (sprite.substring(start, innerStart).contains(<span class="jxr_string">"fill=\&quot;currentColor\&quot;"</span>))
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 				<strong class="jxr_keyword">inner</strong> = <span class="jxr_string">"&lt;g class=\&quot;f\&quot;&gt;"</span> + <strong class="jxr_keyword">inner</strong> + <span class="jxr_string">"&lt;/g&gt;"</span>;
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 			<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">inner</strong>.contains(<span class="jxr_string">"&lt;script"</span>))
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 				<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 			<em class="jxr_comment">// A presentation attribute cannot hold a CSS variable, so currentColor becomes a class the embedded stylesheet colours.</em>
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> 			<strong class="jxr_keyword">var</strong> svg = <span class="jxr_string">"&lt;svg xmlns=\&quot;http://www.w3.org/2000/svg\&quot; viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot;&gt;"</span>
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> 				+ <span class="jxr_string">"&lt;style&gt;.s{stroke:#4a4a4a}.f{fill:#4a4a4a}@media (prefers-color-scheme:dark){.s{stroke:#c8c8c8}.f{fill:#c8c8c8}}&lt;/style&gt;"</span>
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> 				+ <strong class="jxr_keyword">inner</strong>.replace(<span class="jxr_string">"stroke=\&quot;currentColor\&quot;"</span>, <span class="jxr_string">"class=\&quot;s\&quot;"</span>).replace(<span class="jxr_string">"fill=\&quot;currentColor\&quot;"</span>, <span class="jxr_string">"class=\&quot;f\&quot;"</span>) + <span class="jxr_string">"&lt;/svg&gt;"</span>;
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> 			<strong class="jxr_keyword">return</strong> ASSET_CACHE.wrap(svg.getBytes(StandardCharsets.UTF_8), SVG_CONTENT_TYPE, CACHE_CONTROL);
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> 		}
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"Unknown symbol: "</span> + name);
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 	}
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> 
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> 	<em class="jxr_javadoccomment">/** Reads (and caches) the classpath asset and wraps it as a cacheable {@link HttpResource}. */</em>
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="HttpResource" href="../../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> serve(String resource, String contentType) {
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> 		<strong class="jxr_keyword">return</strong> ASSET_CACHE.serve(resource, contentType, CACHE_CONTROL);
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 	}
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> <em class="jxr_javadoccomment">	 * Selects the cache that owns the given asset path: the two relocated widget assets hash and version through</em>
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> <em class="jxr_javadoccomment">	 * the widget module's cache (see {@link #WIDGET_ASSET_CACHE}), the DataTables glue through the datatables</em>
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> <em class="jxr_javadoccomment">	 * module's (see {@link #DATATABLES_ASSET_CACHE}), everything else through this module's own.</em>
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="ClasspathAssetCache" href="../../../../../org/apache/juneau/rest/server/util/ClasspathAssetCache.html#ClasspathAssetCache">ClasspathAssetCache</a> cacheFor(String path) {
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		<strong class="jxr_keyword">if</strong> (eqa(path, CALENDAR_JS_PATH, CALENDAR_CSS_PATH))
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 			<strong class="jxr_keyword">return</strong> WIDGET_ASSET_CACHE;
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 		<strong class="jxr_keyword">if</strong> (eq(path, DATATABLES_JS_PATH))
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 			<strong class="jxr_keyword">return</strong> DATATABLES_ASSET_CACHE;
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 		<strong class="jxr_keyword">return</strong> ASSET_CACHE;
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 	}
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 	<em class="jxr_javadoccomment">/** Maps a public asset path constant to its classpath resource constant (content-hashing only; routing itself is by {@code @RestGet(path=...)}). */</em>
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> 		<span class="jxr_string">"java:S3776"</span> <em class="jxr_comment">// Flat path-to-resource lookup table; one branch per asset, no nesting.</em>
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> 	})
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String resourceFor(String path) {
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> 		<strong class="jxr_keyword">if</strong> (eq(path, VIEWS_JS_PATH)) <strong class="jxr_keyword">return</strong> VIEWS_JS_RESOURCE;
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		<strong class="jxr_keyword">if</strong> (eq(path, RIBBON_JS_PATH)) <strong class="jxr_keyword">return</strong> RIBBON_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		<strong class="jxr_keyword">if</strong> (eq(path, RENDERS_JS_PATH)) <strong class="jxr_keyword">return</strong> RENDERS_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		<strong class="jxr_keyword">if</strong> (eq(path, VIEWS_CSS_PATH)) <strong class="jxr_keyword">return</strong> VIEWS_CSS_RESOURCE;
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		<strong class="jxr_keyword">if</strong> (eq(path, ICONS_JS_PATH)) <strong class="jxr_keyword">return</strong> ICONS_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		<strong class="jxr_keyword">if</strong> (eq(path, SEARCH_JS_PATH)) <strong class="jxr_keyword">return</strong> SEARCH_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		<strong class="jxr_keyword">if</strong> (eq(path, PAGESTATE_JS_PATH)) <strong class="jxr_keyword">return</strong> PAGESTATE_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		<strong class="jxr_keyword">if</strong> (eq(path, URLSTATE_JS_PATH)) <strong class="jxr_keyword">return</strong> URLSTATE_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		<strong class="jxr_keyword">if</strong> (eq(path, BUS_JS_PATH)) <strong class="jxr_keyword">return</strong> BUS_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		<strong class="jxr_keyword">if</strong> (eq(path, MODEL_JS_PATH)) <strong class="jxr_keyword">return</strong> MODEL_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 		<strong class="jxr_keyword">if</strong> (eq(path, MODEL_INLINE_JS_PATH)) <strong class="jxr_keyword">return</strong> MODEL_INLINE_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 		<strong class="jxr_keyword">if</strong> (eq(path, SYMBOLS_SVG_PATH)) <strong class="jxr_keyword">return</strong> SYMBOLS_SVG_RESOURCE;
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		<strong class="jxr_keyword">if</strong> (eq(path, SYMBOLS_MATERIAL_SVG_PATH)) <strong class="jxr_keyword">return</strong> SYMBOLS_MATERIAL_SVG_RESOURCE;
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 		<strong class="jxr_keyword">if</strong> (eq(path, SYMBOLS_LUCIDE_SVG_PATH)) <strong class="jxr_keyword">return</strong> SYMBOLS_LUCIDE_SVG_RESOURCE;
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 		<strong class="jxr_keyword">if</strong> (eq(path, REGIONS_JS_PATH)) <strong class="jxr_keyword">return</strong> REGIONS_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 		<strong class="jxr_keyword">if</strong> (eq(path, HELPERS_JS_PATH)) <strong class="jxr_keyword">return</strong> HELPERS_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		<strong class="jxr_keyword">if</strong> (eq(path, DATA_JS_PATH)) <strong class="jxr_keyword">return</strong> DATA_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		<strong class="jxr_keyword">if</strong> (eq(path, RUN_VIEW_JS_PATH)) <strong class="jxr_keyword">return</strong> RUN_VIEW_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		<strong class="jxr_keyword">if</strong> (eq(path, CONFIG_JS_PATH)) <strong class="jxr_keyword">return</strong> CONFIG_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 		<strong class="jxr_keyword">if</strong> (eq(path, CONFIG_CSS_PATH)) <strong class="jxr_keyword">return</strong> CONFIG_CSS_RESOURCE;
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 		<strong class="jxr_keyword">if</strong> (eq(path, CALENDAR_JS_PATH)) <strong class="jxr_keyword">return</strong> CALENDAR_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 		<strong class="jxr_keyword">if</strong> (eq(path, CALENDAR_CSS_PATH)) <strong class="jxr_keyword">return</strong> CALENDAR_CSS_RESOURCE;
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 		<strong class="jxr_keyword">if</strong> (eq(path, DATATABLES_JS_PATH)) <strong class="jxr_keyword">return</strong> DATATABLES_JS_RESOURCE;
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Unknown asset path: "</span> + path);
-<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 	}
-<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> }
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> 		<span class="jxr_string">"java:S135"</span> <em class="jxr_comment">// Sprite search skips missing symbols and stops at an unsafe one; each exit is distinct.</em>
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 	})
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> getSymbol(@Path(<span class="jxr_string">"file"</span>) String file) {
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		<strong class="jxr_keyword">var</strong> name = file.endsWith(<span class="jxr_string">".svg"</span>) ? file.substring(0, file.length() - 4) : <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		<strong class="jxr_keyword">if</strong> (! SYMBOL_NAME.matcher(name).matches())
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"Unknown symbol: "</span> + name);
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 		<strong class="jxr_keyword">var</strong> open = <span class="jxr_string">"&lt;symbol id=\&quot;juneau-sym-"</span> + name + <span class="jxr_string">"\&quot;"</span>;
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> resource : <strong class="jxr_keyword">new</strong> String[]{SYMBOLS_LUCIDE_SVG_RESOURCE, SYMBOLS_SVG_RESOURCE}) {
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 			<strong class="jxr_keyword">var</strong> sprite = <strong class="jxr_keyword">new</strong> String(ASSET_CACHE.bytes(resource), StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 			<strong class="jxr_keyword">var</strong> start = sprite.indexOf(open);
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 			<strong class="jxr_keyword">if</strong> (start &lt; 0)
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 			<strong class="jxr_keyword">var</strong> innerStart = sprite.indexOf('&gt;', start) + 1;
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 			<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">inner</strong> = sprite.substring(innerStart, sprite.indexOf(<span class="jxr_string">"&lt;/symbol&gt;"</span>, innerStart));
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 			<em class="jxr_comment">// A symbol that fills with currentColor on its own tag passes that fill to its children through a wrapper group.</em>
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 			<strong class="jxr_keyword">if</strong> (sprite.substring(start, innerStart).contains(<span class="jxr_string">"fill=\&quot;currentColor\&quot;"</span>))
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 				<strong class="jxr_keyword">inner</strong> = <span class="jxr_string">"&lt;g class=\&quot;f\&quot;&gt;"</span> + <strong class="jxr_keyword">inner</strong> + <span class="jxr_string">"&lt;/g&gt;"</span>;
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 			<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">inner</strong>.contains(<span class="jxr_string">"&lt;script"</span>))
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 			<em class="jxr_comment">// A presentation attribute cannot hold a CSS variable, so currentColor becomes a class the embedded stylesheet colours.</em>
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 			<strong class="jxr_keyword">var</strong> svg = <span class="jxr_string">"&lt;svg xmlns=\&quot;http://www.w3.org/2000/svg\&quot; viewBox=\&quot;0 0 24 24\&quot; fill=\&quot;none\&quot;&gt;"</span>
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> 				+ <span class="jxr_string">"&lt;style&gt;.s{stroke:#4a4a4a}.f{fill:#4a4a4a}@media (prefers-color-scheme:dark){.s{stroke:#c8c8c8}.f{fill:#c8c8c8}}&lt;/style&gt;"</span>
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 				+ <strong class="jxr_keyword">inner</strong>.replace(<span class="jxr_string">"stroke=\&quot;currentColor\&quot;"</span>, <span class="jxr_string">"class=\&quot;s\&quot;"</span>).replace(<span class="jxr_string">"fill=\&quot;currentColor\&quot;"</span>, <span class="jxr_string">"class=\&quot;f\&quot;"</span>) + <span class="jxr_string">"&lt;/svg&gt;"</span>;
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 			<strong class="jxr_keyword">return</strong> ASSET_CACHE.wrap(svg.getBytes(StandardCharsets.UTF_8), SVG_CONTENT_TYPE, CACHE_CONTROL);
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 		}
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"Unknown symbol: "</span> + name);
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 	}
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> 
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 	<em class="jxr_javadoccomment">/** Reads (and caches) the classpath asset and wraps it as a cacheable {@link HttpResource}. */</em>
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="HttpResource" href="../../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> serve(String resource, String contentType) {
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 		<strong class="jxr_keyword">return</strong> ASSET_CACHE.serve(resource, contentType, CACHE_CONTROL);
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 	}
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> <em class="jxr_javadoccomment">	 * Selects the cache that owns the given asset path: the two relocated widget assets hash and version through</em>
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> <em class="jxr_javadoccomment">	 * the widget module's cache (see {@link #WIDGET_ASSET_CACHE}), the DataTables glue through the datatables</em>
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> <em class="jxr_javadoccomment">	 * module's (see {@link #DATATABLES_ASSET_CACHE}), everything else through this module's own.</em>
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="ClasspathAssetCache" href="../../../../../org/apache/juneau/rest/server/util/ClasspathAssetCache.html#ClasspathAssetCache">ClasspathAssetCache</a> cacheFor(String path) {
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 		<strong class="jxr_keyword">if</strong> (eqa(path, CALENDAR_JS_PATH, CALENDAR_CSS_PATH))
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 			<strong class="jxr_keyword">return</strong> WIDGET_ASSET_CACHE;
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		<strong class="jxr_keyword">if</strong> (eq(path, DATATABLES_JS_PATH))
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 			<strong class="jxr_keyword">return</strong> DATATABLES_ASSET_CACHE;
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 		<strong class="jxr_keyword">return</strong> ASSET_CACHE;
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> 	}
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> 	<em class="jxr_javadoccomment">/** Maps a public asset path constant to its classpath resource constant (content-hashing only; routing itself is by {@code @RestGet(path=...)}). */</em>
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> 		<span class="jxr_string">"java:S3776"</span> <em class="jxr_comment">// Flat path-to-resource lookup table; one branch per asset, no nesting.</em>
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 	})
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String resourceFor(String path) {
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		<strong class="jxr_keyword">if</strong> (eq(path, VIEWS_JS_PATH)) <strong class="jxr_keyword">return</strong> VIEWS_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		<strong class="jxr_keyword">if</strong> (eq(path, RIBBON_JS_PATH)) <strong class="jxr_keyword">return</strong> RIBBON_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		<strong class="jxr_keyword">if</strong> (eq(path, RENDERS_JS_PATH)) <strong class="jxr_keyword">return</strong> RENDERS_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		<strong class="jxr_keyword">if</strong> (eq(path, VIEWS_CSS_PATH)) <strong class="jxr_keyword">return</strong> VIEWS_CSS_RESOURCE;
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		<strong class="jxr_keyword">if</strong> (eq(path, ICONS_JS_PATH)) <strong class="jxr_keyword">return</strong> ICONS_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		<strong class="jxr_keyword">if</strong> (eq(path, SEARCH_JS_PATH)) <strong class="jxr_keyword">return</strong> SEARCH_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		<strong class="jxr_keyword">if</strong> (eq(path, PAGESTATE_JS_PATH)) <strong class="jxr_keyword">return</strong> PAGESTATE_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 		<strong class="jxr_keyword">if</strong> (eq(path, URLSTATE_JS_PATH)) <strong class="jxr_keyword">return</strong> URLSTATE_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 		<strong class="jxr_keyword">if</strong> (eq(path, BUS_JS_PATH)) <strong class="jxr_keyword">return</strong> BUS_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		<strong class="jxr_keyword">if</strong> (eq(path, MODEL_JS_PATH)) <strong class="jxr_keyword">return</strong> MODEL_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 		<strong class="jxr_keyword">if</strong> (eq(path, MODEL_INLINE_JS_PATH)) <strong class="jxr_keyword">return</strong> MODEL_INLINE_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 		<strong class="jxr_keyword">if</strong> (eq(path, SYMBOLS_SVG_PATH)) <strong class="jxr_keyword">return</strong> SYMBOLS_SVG_RESOURCE;
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 		<strong class="jxr_keyword">if</strong> (eq(path, SYMBOLS_MATERIAL_SVG_PATH)) <strong class="jxr_keyword">return</strong> SYMBOLS_MATERIAL_SVG_RESOURCE;
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		<strong class="jxr_keyword">if</strong> (eq(path, SYMBOLS_LUCIDE_SVG_PATH)) <strong class="jxr_keyword">return</strong> SYMBOLS_LUCIDE_SVG_RESOURCE;
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		<strong class="jxr_keyword">if</strong> (eq(path, REGIONS_JS_PATH)) <strong class="jxr_keyword">return</strong> REGIONS_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		<strong class="jxr_keyword">if</strong> (eq(path, HELPERS_JS_PATH)) <strong class="jxr_keyword">return</strong> HELPERS_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 		<strong class="jxr_keyword">if</strong> (eq(path, DATA_JS_PATH)) <strong class="jxr_keyword">return</strong> DATA_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 		<strong class="jxr_keyword">if</strong> (eq(path, RUN_VIEW_JS_PATH)) <strong class="jxr_keyword">return</strong> RUN_VIEW_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 		<strong class="jxr_keyword">if</strong> (eq(path, CONFIG_JS_PATH)) <strong class="jxr_keyword">return</strong> CONFIG_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 		<strong class="jxr_keyword">if</strong> (eq(path, CONFIG_CSS_PATH)) <strong class="jxr_keyword">return</strong> CONFIG_CSS_RESOURCE;
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 		<strong class="jxr_keyword">if</strong> (eq(path, CALENDAR_JS_PATH)) <strong class="jxr_keyword">return</strong> CALENDAR_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 		<strong class="jxr_keyword">if</strong> (eq(path, CALENDAR_CSS_PATH)) <strong class="jxr_keyword">return</strong> CALENDAR_CSS_RESOURCE;
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 		<strong class="jxr_keyword">if</strong> (eq(path, DATATABLES_JS_PATH)) <strong class="jxr_keyword">return</strong> DATATABLES_JS_RESOURCE;
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Unknown asset path: "</span> + path);
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 	}
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

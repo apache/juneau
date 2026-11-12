@@ -226,158 +226,163 @@
 <span class="source-line-no">213</span><span id="line-213">         var patterns = new ArrayList&lt;&gt;(replaced ? only : SafeFunctions.patterns());</span>
 <span class="source-line-no">214</span><span id="line-214">         patterns.addAll(extra);</span>
 <span class="source-line-no">215</span><span id="line-215">         b.allowFunctions(patterns.toArray(new String[0]));</span>
-<span class="source-line-no">216</span><span id="line-216">         var r = renderer != null ? renderer : (destination == null ? null : destination.renderer());</span>
-<span class="source-line-no">217</span><span id="line-217">         var e = destination == null ? null : destination.encoder();</span>
-<span class="source-line-no">218</span><span id="line-218">         return new TemplateResolver(b.build(), r, e, new JsonValueFormatter(maxCollectionSize, strict));</span>
-<span class="source-line-no">219</span><span id="line-219">      }</span>
-<span class="source-line-no">220</span><span id="line-220">   }</span>
-<span class="source-line-no">221</span><span id="line-221"></span>
-<span class="source-line-no">222</span><span id="line-222">   private final VarResolver resolver;</span>
-<span class="source-line-no">223</span><span id="line-223">   private final UnaryOperator&lt;String&gt; encoder;</span>
-<span class="source-line-no">224</span><span id="line-224">   private final Function&lt;Object,String&gt; formatter;</span>
-<span class="source-line-no">225</span><span id="line-225"></span>
-<span class="source-line-no">226</span><span id="line-226">   private TemplateResolver(VarResolver resolver, StructureRenderer renderer, UnaryOperator&lt;String&gt; encoder, Function&lt;Object,String&gt; baseFormatter) {</span>
-<span class="source-line-no">227</span><span id="line-227">      this.resolver = resolver;</span>
-<span class="source-line-no">228</span><span id="line-228">      this.encoder = encoder;</span>
-<span class="source-line-no">229</span><span id="line-229">      this.formatter = renderer == null ? null : new StructureFormatter(renderer, baseFormatter);</span>
-<span class="source-line-no">230</span><span id="line-230">   }</span>
-<span class="source-line-no">231</span><span id="line-231"></span>
-<span class="source-line-no">232</span><span id="line-232">   /** Sends structures to the renderer and everything else to the base formatter. */</span>
-<span class="source-line-no">233</span><span id="line-233">   private record StructureFormatter(StructureRenderer renderer, Function&lt;Object,String&gt; base) implements Function&lt;Object,String&gt; {</span>
-<span class="source-line-no">234</span><span id="line-234">      @Override public String apply(Object o) {</span>
-<span class="source-line-no">235</span><span id="line-235">         return o instanceof Structure s ? renderer.render(s, base) : base.apply(o);</span>
-<span class="source-line-no">236</span><span id="line-236">      }</span>
-<span class="source-line-no">237</span><span id="line-237">   }</span>
-<span class="source-line-no">238</span><span id="line-238"></span>
-<span class="source-line-no">239</span><span id="line-239">   /**</span>
-<span class="source-line-no">240</span><span id="line-240">    * Parses a template.</span>
-<span class="source-line-no">241</span><span id="line-241">    *</span>
-<span class="source-line-no">242</span><span id="line-242">    * @param template The template text.  May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">243</span><span id="line-243">    * @return The parsed template.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">244</span><span id="line-244">    * @throws ExprException In strict mode, if the template is malformed or uses an unknown or denied function.</span>
-<span class="source-line-no">245</span><span id="line-245">    *    In lenient mode nothing is thrown.</span>
-<span class="source-line-no">246</span><span id="line-246">    */</span>
-<span class="source-line-no">247</span><span id="line-247">   public ParsedTemplate parse(String template) {</span>
-<span class="source-line-no">248</span><span id="line-248">      return new ParsedTemplate(resolver.compile(template), this);</span>
-<span class="source-line-no">249</span><span id="line-249">   }</span>
-<span class="source-line-no">250</span><span id="line-250"></span>
-<span class="source-line-no">251</span><span id="line-251">   /**</span>
-<span class="source-line-no">252</span><span id="line-252">    * Renders a template using the default value encoder of the configured destination (none if there is no destination).</span>
-<span class="source-line-no">253</span><span id="line-253">    *</span>
-<span class="source-line-no">254</span><span id="line-254">    * @param template The template.  Must not be &lt;jk&gt;null&lt;/jk&gt;, and must have been parsed by this resolver.</span>
-<span class="source-line-no">255</span><span id="line-255">    * @param scope The names the template can read.  May be &lt;jk&gt;null&lt;/jk&gt; (no names).</span>
-<span class="source-line-no">256</span><span id="line-256">    * @return The rendered text.</span>
-<span class="source-line-no">257</span><span id="line-257">    * @throws IllegalArgumentException If the template was parsed by a different resolver.</span>
-<span class="source-line-no">258</span><span id="line-258">    */</span>
-<span class="source-line-no">259</span><span id="line-259">   public String render(ParsedTemplate template, Map&lt;String,?&gt; scope) {</span>
-<span class="source-line-no">260</span><span id="line-260">      return render(template, scope, null);</span>
-<span class="source-line-no">261</span><span id="line-261">   }</span>
-<span class="source-line-no">262</span><span id="line-262"></span>
-<span class="source-line-no">263</span><span id="line-263">   /**</span>
-<span class="source-line-no">264</span><span id="line-264">    * Renders a template.</span>
-<span class="source-line-no">265</span><span id="line-265">    *</span>
-<span class="source-line-no">266</span><span id="line-266">    * @param template The template.  Must not be &lt;jk&gt;null&lt;/jk&gt;, and must have been parsed by this resolver.</span>
-<span class="source-line-no">267</span><span id="line-267">    * @param scope The names the template can read.  May be &lt;jk&gt;null&lt;/jk&gt; (no names).</span>
-<span class="source-line-no">268</span><span id="line-268">    * @param valueEncoder The value encoder.  Overrides the destination's encoder; &lt;jk&gt;null&lt;/jk&gt; uses the destination's.</span>
-<span class="source-line-no">269</span><span id="line-269">    * @return The rendered text.</span>
-<span class="source-line-no">270</span><span id="line-270">    */</span>
-<span class="source-line-no">271</span><span id="line-271">   public String render(ParsedTemplate template, Map&lt;String,?&gt; scope, UnaryOperator&lt;String&gt; valueEncoder) {</span>
-<span class="source-line-no">272</span><span id="line-272">      Objects.requireNonNull(template, "template must not be null");</span>
-<span class="source-line-no">273</span><span id="line-273">      if (template.owner() != this)</span>
-<span class="source-line-no">274</span><span id="line-274">         throw iaex("template was parsed by a different TemplateResolver");</span>
-<span class="source-line-no">275</span><span id="line-275">      var session = resolver.createSession().scope(scope == null ? n -&gt; null : n -&gt; n == null ? null : scope.get(n));</span>
-<span class="source-line-no">276</span><span id="line-276">      if (formatter != null)</span>
-<span class="source-line-no">277</span><span id="line-277">         session.valueFormatter(formatter);</span>
-<span class="source-line-no">278</span><span id="line-278">      return template.template().resolve(session, valueEncoder != null ? valueEncoder : encoder);</span>
-<span class="source-line-no">279</span><span id="line-279">   }</span>
-<span class="source-line-no">280</span><span id="line-280"></span>
-<span class="source-line-no">281</span><span id="line-281">   /**</span>
-<span class="source-line-no">282</span><span id="line-282">    * Checks a template against a catalog without rendering it.  Never throws.</span>
-<span class="source-line-no">283</span><span id="line-283">    *</span>
-<span class="source-line-no">284</span><span id="line-284">    * &lt;p&gt;</span>
-<span class="source-line-no">285</span><span id="line-285">    * Reports, in source order: an identifier not in the catalog, a row field not in its list's catalog, a row field read</span>
-<span class="source-line-no">286</span><span id="line-286">    * through a name that is not a declared list, an unknown or denied function (unless the catalog allows them), an</span>
-<span class="source-line-no">287</span><span id="line-287">    * unknown var, and a marker that does not compile.  The key of a &lt;c&gt;${name}&lt;/c&gt; or &lt;c&gt;${name:default}&lt;/c&gt; reference is</span>
-<span class="source-line-no">288</span><span id="line-288">    * checked like an identifier, so &lt;c&gt;${secret}&lt;/c&gt; is a problem when &lt;c&gt;secret&lt;/c&gt; is not declared; a key that is</span>
-<span class="source-line-no">289</span><span id="line-289">    * itself computed (&lt;c&gt;${${x}}&lt;/c&gt;) is read as written and is reported as unknown.  The default text after &lt;c&gt;:&lt;/c&gt; is</span>
-<span class="source-line-no">290</span><span id="line-290">    * not checked.</span>
-<span class="source-line-no">291</span><span id="line-291">    *</span>
-<span class="source-line-no">292</span><span id="line-292">    * @param template The template text.  May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">293</span><span id="line-293">    * @param catalog The catalog.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">294</span><span id="line-294">    * @return The problems.  Empty if the template is clean.</span>
-<span class="source-line-no">295</span><span id="line-295">    */</span>
-<span class="source-line-no">296</span><span id="line-296">   public List&lt;TemplateProblem&gt; check(String template, TemplateCatalog catalog) {</span>
-<span class="source-line-no">297</span><span id="line-297">      Objects.requireNonNull(catalog, "catalog must not be null");</span>
-<span class="source-line-no">298</span><span id="line-298">      return check(compileOrProblems(template), catalog);</span>
-<span class="source-line-no">299</span><span id="line-299">   }</span>
-<span class="source-line-no">300</span><span id="line-300"></span>
-<span class="source-line-no">301</span><span id="line-301">   /** A compiled template, or the one problem that stopped it compiling. */</span>
-<span class="source-line-no">302</span><span id="line-302">   private record Compiled(VarTemplate template, List&lt;TemplateProblem&gt; failure) {}</span>
-<span class="source-line-no">303</span><span id="line-303"></span>
-<span class="source-line-no">304</span><span id="line-304">   private Compiled compileOrProblems(String template) {</span>
-<span class="source-line-no">305</span><span id="line-305">      try {</span>
-<span class="source-line-no">306</span><span id="line-306">         return new Compiled(resolver.compile(template), null);</span>
-<span class="source-line-no">307</span><span id="line-307">      } catch (ExprException e) {</span>
-<span class="source-line-no">308</span><span id="line-308">         var at = Math.max(0, e.getPos());</span>
-<span class="source-line-no">309</span><span id="line-309">         return new Compiled(null, List.of(new TemplateProblem(at, at + 1, e.getBaseMessage())));</span>
-<span class="source-line-no">310</span><span id="line-310">      }</span>
-<span class="source-line-no">311</span><span id="line-311">   }</span>
-<span class="source-line-no">312</span><span id="line-312"></span>
-<span class="source-line-no">313</span><span id="line-313">   private List&lt;TemplateProblem&gt; check(Compiled c, TemplateCatalog catalog) {</span>
-<span class="source-line-no">314</span><span id="line-314">      if (c.failure() != null)</span>
-<span class="source-line-no">315</span><span id="line-315">         return c.failure();</span>
-<span class="source-line-no">316</span><span id="line-316">      var t = c.template();</span>
-<span class="source-line-no">317</span><span id="line-317">      var out = new ArrayList&lt;TemplateProblem&gt;();</span>
-<span class="source-line-no">318</span><span id="line-318">      for (var r : t.references())</span>
-<span class="source-line-no">319</span><span id="line-319">         switch (r.kind()) {</span>
-<span class="source-line-no">320</span><span id="line-320">            case SYNTAX -&gt; out.add(new TemplateProblem(r.start(), r.end(), r.name()));</span>
-<span class="source-line-no">321</span><span id="line-321">            case VAR -&gt; {</span>
-<span class="source-line-no">322</span><span id="line-322">               if (! r.bound())</span>
-<span class="source-line-no">323</span><span id="line-323">                  out.add(new TemplateProblem(r.start(), r.end(), "unknown var '" + r.name() + "'"));</span>
-<span class="source-line-no">324</span><span id="line-324">            }</span>
-<span class="source-line-no">325</span><span id="line-325">            case FUNCTION -&gt; {</span>
-<span class="source-line-no">326</span><span id="line-326">               if (! r.bound() &amp;&amp; ! catalog.allowUnknownFunctions())</span>
-<span class="source-line-no">327</span><span id="line-327">                  out.add(new TemplateProblem(r.start(), r.end(), "unknown or denied function '" + r.name() + "'"));</span>
-<span class="source-line-no">328</span><span id="line-328">            }</span>
-<span class="source-line-no">329</span><span id="line-329">            case IDENT -&gt; checkIdent(r, catalog, out);</span>
-<span class="source-line-no">330</span><span id="line-330">         }</span>
-<span class="source-line-no">331</span><span id="line-331">      out.sort(Comparator.comparingInt(TemplateProblem::start));</span>
-<span class="source-line-no">332</span><span id="line-332">      return out;</span>
-<span class="source-line-no">333</span><span id="line-333">   }</span>
-<span class="source-line-no">334</span><span id="line-334"></span>
-<span class="source-line-no">335</span><span id="line-335">   private static void checkIdent(TemplateReference r, TemplateCatalog catalog, List&lt;TemplateProblem&gt; out) {</span>
-<span class="source-line-no">336</span><span id="line-336">      var name = r.name();</span>
-<span class="source-line-no">337</span><span id="line-337">      var list = r.listName();</span>
-<span class="source-line-no">338</span><span id="line-338">      if (list == null) {</span>
-<span class="source-line-no">339</span><span id="line-339">         if (! catalog.hasName(name))</span>
-<span class="source-line-no">340</span><span id="line-340">            out.add(new TemplateProblem(r.start(), r.end(), "unknown name '" + name + "'"));</span>
-<span class="source-line-no">341</span><span id="line-341">      } else if (catalog.isList(list)) {</span>
-<span class="source-line-no">342</span><span id="line-342">         var rows = catalog.rowFields(list);</span>
-<span class="source-line-no">343</span><span id="line-343">         if (rows != null &amp;&amp; ! rows.has(name) &amp;&amp; ! catalog.hasName(name))</span>
-<span class="source-line-no">344</span><span id="line-344">            out.add(new TemplateProblem(r.start(), r.end(), "unknown field '" + name + "' in list '" + list + "'"));</span>
-<span class="source-line-no">345</span><span id="line-345">      } else if (catalog.hasName(list)) {</span>
-<span class="source-line-no">346</span><span id="line-346">         out.add(new TemplateProblem(r.start(), r.end(), "'" + list + "' is not a declared list"));</span>
-<span class="source-line-no">347</span><span id="line-347">      }</span>
-<span class="source-line-no">348</span><span id="line-348">      // An unknown list name is reported where it is read, so it is not repeated for each row field.</span>
-<span class="source-line-no">349</span><span id="line-349">   }</span>
-<span class="source-line-no">350</span><span id="line-350"></span>
-<span class="source-line-no">351</span><span id="line-351">   /**</span>
-<span class="source-line-no">352</span><span id="line-352">    * Like {@link #check(String, TemplateCatalog)} but throws.</span>
-<span class="source-line-no">353</span><span id="line-353">    *</span>
-<span class="source-line-no">354</span><span id="line-354">    * @param template The template text.  May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">355</span><span id="line-355">    * @param catalog The catalog.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">356</span><span id="line-356">    * @return The parsed template, if it is clean.</span>
-<span class="source-line-no">357</span><span id="line-357">    * @throws TemplateValidationException If there are problems.</span>
-<span class="source-line-no">358</span><span id="line-358">    */</span>
-<span class="source-line-no">359</span><span id="line-359">   public ParsedTemplate validate(String template, TemplateCatalog catalog) {</span>
-<span class="source-line-no">360</span><span id="line-360">      Objects.requireNonNull(catalog, "catalog must not be null");</span>
-<span class="source-line-no">361</span><span id="line-361">      var c = compileOrProblems(template);</span>
-<span class="source-line-no">362</span><span id="line-362">      var problems = check(c, catalog);</span>
-<span class="source-line-no">363</span><span id="line-363">      if (! problems.isEmpty())</span>
-<span class="source-line-no">364</span><span id="line-364">         throw new TemplateValidationException(problems);</span>
-<span class="source-line-no">365</span><span id="line-365">      return new ParsedTemplate(c.template(), this);</span>
-<span class="source-line-no">366</span><span id="line-366">   }</span>
-<span class="source-line-no">367</span><span id="line-367">}</span>
+<span class="source-line-no">216</span><span id="line-216">         var r = renderer;</span>
+<span class="source-line-no">217</span><span id="line-217">         if (r == null &amp;&amp; destination != null)</span>
+<span class="source-line-no">218</span><span id="line-218">            r = destination.renderer();</span>
+<span class="source-line-no">219</span><span id="line-219">         var e = destination == null ? null : destination.encoder();</span>
+<span class="source-line-no">220</span><span id="line-220">         return new TemplateResolver(b.build(), r, e, new JsonValueFormatter(maxCollectionSize, strict));</span>
+<span class="source-line-no">221</span><span id="line-221">      }</span>
+<span class="source-line-no">222</span><span id="line-222">   }</span>
+<span class="source-line-no">223</span><span id="line-223"></span>
+<span class="source-line-no">224</span><span id="line-224">   private final VarResolver resolver;</span>
+<span class="source-line-no">225</span><span id="line-225">   private final UnaryOperator&lt;String&gt; encoder;</span>
+<span class="source-line-no">226</span><span id="line-226">   private final Function&lt;Object,String&gt; formatter;</span>
+<span class="source-line-no">227</span><span id="line-227"></span>
+<span class="source-line-no">228</span><span id="line-228">   private TemplateResolver(VarResolver resolver, StructureRenderer renderer, UnaryOperator&lt;String&gt; encoder, Function&lt;Object,String&gt; baseFormatter) {</span>
+<span class="source-line-no">229</span><span id="line-229">      this.resolver = resolver;</span>
+<span class="source-line-no">230</span><span id="line-230">      this.encoder = encoder;</span>
+<span class="source-line-no">231</span><span id="line-231">      this.formatter = renderer == null ? null : new StructureFormatter(renderer, baseFormatter);</span>
+<span class="source-line-no">232</span><span id="line-232">   }</span>
+<span class="source-line-no">233</span><span id="line-233"></span>
+<span class="source-line-no">234</span><span id="line-234">   /** Sends structures to the renderer and everything else to the base formatter. */</span>
+<span class="source-line-no">235</span><span id="line-235">   private record StructureFormatter(StructureRenderer renderer, Function&lt;Object,String&gt; base) implements Function&lt;Object,String&gt; {</span>
+<span class="source-line-no">236</span><span id="line-236">      @Override public String apply(Object o) {</span>
+<span class="source-line-no">237</span><span id="line-237">         return o instanceof Structure s ? renderer.render(s, base) : base.apply(o);</span>
+<span class="source-line-no">238</span><span id="line-238">      }</span>
+<span class="source-line-no">239</span><span id="line-239">   }</span>
+<span class="source-line-no">240</span><span id="line-240"></span>
+<span class="source-line-no">241</span><span id="line-241">   /**</span>
+<span class="source-line-no">242</span><span id="line-242">    * Parses a template.</span>
+<span class="source-line-no">243</span><span id="line-243">    *</span>
+<span class="source-line-no">244</span><span id="line-244">    * @param template The template text.  May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">245</span><span id="line-245">    * @return The parsed template.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">246</span><span id="line-246">    * @throws ExprException In strict mode, if the template is malformed or uses an unknown or denied function.</span>
+<span class="source-line-no">247</span><span id="line-247">    *    In lenient mode nothing is thrown.</span>
+<span class="source-line-no">248</span><span id="line-248">    */</span>
+<span class="source-line-no">249</span><span id="line-249">   public ParsedTemplate parse(String template) {</span>
+<span class="source-line-no">250</span><span id="line-250">      return new ParsedTemplate(resolver.compile(template), this);</span>
+<span class="source-line-no">251</span><span id="line-251">   }</span>
+<span class="source-line-no">252</span><span id="line-252"></span>
+<span class="source-line-no">253</span><span id="line-253">   /**</span>
+<span class="source-line-no">254</span><span id="line-254">    * Renders a template using the default value encoder of the configured destination (none if there is no destination).</span>
+<span class="source-line-no">255</span><span id="line-255">    *</span>
+<span class="source-line-no">256</span><span id="line-256">    * @param template The template.  Must not be &lt;jk&gt;null&lt;/jk&gt;, and must have been parsed by this resolver.</span>
+<span class="source-line-no">257</span><span id="line-257">    * @param scope The names the template can read.  May be &lt;jk&gt;null&lt;/jk&gt; (no names).</span>
+<span class="source-line-no">258</span><span id="line-258">    * @return The rendered text.</span>
+<span class="source-line-no">259</span><span id="line-259">    * @throws IllegalArgumentException If the template was parsed by a different resolver.</span>
+<span class="source-line-no">260</span><span id="line-260">    */</span>
+<span class="source-line-no">261</span><span id="line-261">   public String render(ParsedTemplate template, Map&lt;String,?&gt; scope) {</span>
+<span class="source-line-no">262</span><span id="line-262">      return render(template, scope, null);</span>
+<span class="source-line-no">263</span><span id="line-263">   }</span>
+<span class="source-line-no">264</span><span id="line-264"></span>
+<span class="source-line-no">265</span><span id="line-265">   /**</span>
+<span class="source-line-no">266</span><span id="line-266">    * Renders a template.</span>
+<span class="source-line-no">267</span><span id="line-267">    *</span>
+<span class="source-line-no">268</span><span id="line-268">    * @param template The template.  Must not be &lt;jk&gt;null&lt;/jk&gt;, and must have been parsed by this resolver.</span>
+<span class="source-line-no">269</span><span id="line-269">    * @param scope The names the template can read.  May be &lt;jk&gt;null&lt;/jk&gt; (no names).</span>
+<span class="source-line-no">270</span><span id="line-270">    * @param valueEncoder The value encoder.  Overrides the destination's encoder; &lt;jk&gt;null&lt;/jk&gt; uses the destination's.</span>
+<span class="source-line-no">271</span><span id="line-271">    * @return The rendered text.</span>
+<span class="source-line-no">272</span><span id="line-272">    */</span>
+<span class="source-line-no">273</span><span id="line-273">   public String render(ParsedTemplate template, Map&lt;String,?&gt; scope, UnaryOperator&lt;String&gt; valueEncoder) {</span>
+<span class="source-line-no">274</span><span id="line-274">      Objects.requireNonNull(template, "template must not be null");</span>
+<span class="source-line-no">275</span><span id="line-275">      if (template.owner() != this)</span>
+<span class="source-line-no">276</span><span id="line-276">         throw iaex("template was parsed by a different TemplateResolver");</span>
+<span class="source-line-no">277</span><span id="line-277">      Function&lt;String,Object&gt; lookup = n -&gt; n == null ? null : scope.get(n);</span>
+<span class="source-line-no">278</span><span id="line-278">      if (scope == null)</span>
+<span class="source-line-no">279</span><span id="line-279">         lookup = n -&gt; null;</span>
+<span class="source-line-no">280</span><span id="line-280">      var session = resolver.createSession().scope(lookup);</span>
+<span class="source-line-no">281</span><span id="line-281">      if (formatter != null)</span>
+<span class="source-line-no">282</span><span id="line-282">         session.valueFormatter(formatter);</span>
+<span class="source-line-no">283</span><span id="line-283">      return template.template().resolve(session, valueEncoder != null ? valueEncoder : encoder);</span>
+<span class="source-line-no">284</span><span id="line-284">   }</span>
+<span class="source-line-no">285</span><span id="line-285"></span>
+<span class="source-line-no">286</span><span id="line-286">   /**</span>
+<span class="source-line-no">287</span><span id="line-287">    * Checks a template against a catalog without rendering it.  Never throws.</span>
+<span class="source-line-no">288</span><span id="line-288">    *</span>
+<span class="source-line-no">289</span><span id="line-289">    * &lt;p&gt;</span>
+<span class="source-line-no">290</span><span id="line-290">    * Reports, in source order: an identifier not in the catalog, a row field not in its list's catalog, a row field read</span>
+<span class="source-line-no">291</span><span id="line-291">    * through a name that is not a declared list, an unknown or denied function (unless the catalog allows them), an</span>
+<span class="source-line-no">292</span><span id="line-292">    * unknown var, and a marker that does not compile.  The key of a &lt;c&gt;${name}&lt;/c&gt; or &lt;c&gt;${name:default}&lt;/c&gt; reference is</span>
+<span class="source-line-no">293</span><span id="line-293">    * checked like an identifier, so &lt;c&gt;${secret}&lt;/c&gt; is a problem when &lt;c&gt;secret&lt;/c&gt; is not declared; a key that is</span>
+<span class="source-line-no">294</span><span id="line-294">    * itself computed (&lt;c&gt;${${x}}&lt;/c&gt;) is read as written and is reported as unknown.  The default text after &lt;c&gt;:&lt;/c&gt; is</span>
+<span class="source-line-no">295</span><span id="line-295">    * not checked.</span>
+<span class="source-line-no">296</span><span id="line-296">    *</span>
+<span class="source-line-no">297</span><span id="line-297">    * @param template The template text.  May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">298</span><span id="line-298">    * @param catalog The catalog.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">299</span><span id="line-299">    * @return The problems.  Empty if the template is clean.</span>
+<span class="source-line-no">300</span><span id="line-300">    */</span>
+<span class="source-line-no">301</span><span id="line-301">   public List&lt;TemplateProblem&gt; check(String template, TemplateCatalog catalog) {</span>
+<span class="source-line-no">302</span><span id="line-302">      Objects.requireNonNull(catalog, "catalog must not be null");</span>
+<span class="source-line-no">303</span><span id="line-303">      return check(compileOrProblems(template), catalog);</span>
+<span class="source-line-no">304</span><span id="line-304">   }</span>
+<span class="source-line-no">305</span><span id="line-305"></span>
+<span class="source-line-no">306</span><span id="line-306">   /** A compiled template, or the one problem that stopped it compiling. */</span>
+<span class="source-line-no">307</span><span id="line-307">   private record Compiled(VarTemplate template, List&lt;TemplateProblem&gt; failure) {}</span>
+<span class="source-line-no">308</span><span id="line-308"></span>
+<span class="source-line-no">309</span><span id="line-309">   private Compiled compileOrProblems(String template) {</span>
+<span class="source-line-no">310</span><span id="line-310">      try {</span>
+<span class="source-line-no">311</span><span id="line-311">         return new Compiled(resolver.compile(template), null);</span>
+<span class="source-line-no">312</span><span id="line-312">      } catch (ExprException e) {</span>
+<span class="source-line-no">313</span><span id="line-313">         var at = Math.max(0, e.getPos());</span>
+<span class="source-line-no">314</span><span id="line-314">         return new Compiled(null, List.of(new TemplateProblem(at, at + 1, e.getBaseMessage())));</span>
+<span class="source-line-no">315</span><span id="line-315">      }</span>
+<span class="source-line-no">316</span><span id="line-316">   }</span>
+<span class="source-line-no">317</span><span id="line-317"></span>
+<span class="source-line-no">318</span><span id="line-318">   private List&lt;TemplateProblem&gt; check(Compiled c, TemplateCatalog catalog) {</span>
+<span class="source-line-no">319</span><span id="line-319">      if (c.failure() != null)</span>
+<span class="source-line-no">320</span><span id="line-320">         return c.failure();</span>
+<span class="source-line-no">321</span><span id="line-321">      var t = c.template();</span>
+<span class="source-line-no">322</span><span id="line-322">      var out = new ArrayList&lt;TemplateProblem&gt;();</span>
+<span class="source-line-no">323</span><span id="line-323">      for (var r : t.references())</span>
+<span class="source-line-no">324</span><span id="line-324">         switch (r.kind()) {</span>
+<span class="source-line-no">325</span><span id="line-325">            case SYNTAX -&gt; out.add(new TemplateProblem(r.start(), r.end(), r.name()));</span>
+<span class="source-line-no">326</span><span id="line-326">            case VAR -&gt; {</span>
+<span class="source-line-no">327</span><span id="line-327">               if (! r.bound())</span>
+<span class="source-line-no">328</span><span id="line-328">                  out.add(new TemplateProblem(r.start(), r.end(), "unknown var '" + r.name() + "'"));</span>
+<span class="source-line-no">329</span><span id="line-329">            }</span>
+<span class="source-line-no">330</span><span id="line-330">            case FUNCTION -&gt; {</span>
+<span class="source-line-no">331</span><span id="line-331">               if (! r.bound() &amp;&amp; ! catalog.allowUnknownFunctions())</span>
+<span class="source-line-no">332</span><span id="line-332">                  out.add(new TemplateProblem(r.start(), r.end(), "unknown or denied function '" + r.name() + "'"));</span>
+<span class="source-line-no">333</span><span id="line-333">            }</span>
+<span class="source-line-no">334</span><span id="line-334">            case IDENT -&gt; checkIdent(r, catalog, out);</span>
+<span class="source-line-no">335</span><span id="line-335">         }</span>
+<span class="source-line-no">336</span><span id="line-336">      out.sort(Comparator.comparingInt(TemplateProblem::start));</span>
+<span class="source-line-no">337</span><span id="line-337">      return out;</span>
+<span class="source-line-no">338</span><span id="line-338">   }</span>
+<span class="source-line-no">339</span><span id="line-339"></span>
+<span class="source-line-no">340</span><span id="line-340">   private static void checkIdent(TemplateReference r, TemplateCatalog catalog, List&lt;TemplateProblem&gt; out) {</span>
+<span class="source-line-no">341</span><span id="line-341">      var name = r.name();</span>
+<span class="source-line-no">342</span><span id="line-342">      var list = r.listName();</span>
+<span class="source-line-no">343</span><span id="line-343">      if (list == null) {</span>
+<span class="source-line-no">344</span><span id="line-344">         if (! catalog.hasName(name))</span>
+<span class="source-line-no">345</span><span id="line-345">            out.add(new TemplateProblem(r.start(), r.end(), "unknown name '" + name + "'"));</span>
+<span class="source-line-no">346</span><span id="line-346">      } else if (catalog.isList(list)) {</span>
+<span class="source-line-no">347</span><span id="line-347">         var rows = catalog.rowFields(list);</span>
+<span class="source-line-no">348</span><span id="line-348">         if (rows != null &amp;&amp; ! rows.has(name) &amp;&amp; ! catalog.hasName(name))</span>
+<span class="source-line-no">349</span><span id="line-349">            out.add(new TemplateProblem(r.start(), r.end(), "unknown field '" + name + "' in list '" + list + "'"));</span>
+<span class="source-line-no">350</span><span id="line-350">      } else if (catalog.hasName(list)) {</span>
+<span class="source-line-no">351</span><span id="line-351">         out.add(new TemplateProblem(r.start(), r.end(), "'" + list + "' is not a declared list"));</span>
+<span class="source-line-no">352</span><span id="line-352">      }</span>
+<span class="source-line-no">353</span><span id="line-353">      // An unknown list name is reported where it is read, so it is not repeated for each row field.</span>
+<span class="source-line-no">354</span><span id="line-354">   }</span>
+<span class="source-line-no">355</span><span id="line-355"></span>
+<span class="source-line-no">356</span><span id="line-356">   /**</span>
+<span class="source-line-no">357</span><span id="line-357">    * Like {@link #check(String, TemplateCatalog)} but throws.</span>
+<span class="source-line-no">358</span><span id="line-358">    *</span>
+<span class="source-line-no">359</span><span id="line-359">    * @param template The template text.  May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">360</span><span id="line-360">    * @param catalog The catalog.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">361</span><span id="line-361">    * @return The parsed template, if it is clean.</span>
+<span class="source-line-no">362</span><span id="line-362">    * @throws TemplateValidationException If there are problems.</span>
+<span class="source-line-no">363</span><span id="line-363">    */</span>
+<span class="source-line-no">364</span><span id="line-364">   public ParsedTemplate validate(String template, TemplateCatalog catalog) {</span>
+<span class="source-line-no">365</span><span id="line-365">      Objects.requireNonNull(catalog, "catalog must not be null");</span>
+<span class="source-line-no">366</span><span id="line-366">      var c = compileOrProblems(template);</span>
+<span class="source-line-no">367</span><span id="line-367">      var problems = check(c, catalog);</span>
+<span class="source-line-no">368</span><span id="line-368">      if (! problems.isEmpty())</span>
+<span class="source-line-no">369</span><span id="line-369">         throw new TemplateValidationException(problems);</span>
+<span class="source-line-no">370</span><span id="line-370">      return new ParsedTemplate(c.template(), this);</span>
+<span class="source-line-no">371</span><span id="line-371">   }</span>
+<span class="source-line-no">372</span><span id="line-372">}</span>
 
 
 
