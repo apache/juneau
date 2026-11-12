@@ -127,7 +127,7 @@ _COMMA_SPACE_RE = re.compile(r',[ \t]+')
 _HAS_LETTER_OR_WILDCARD_RE = re.compile(r'[A-Za-z?]')
 
 
-def _find_generic_end(text, pos):
+def _find_generic_end(text, pos):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
     """
     text[pos] == '<'. Try to find the index just past the matching
     top-level '>' for a "generic-shaped" span starting at pos, walking

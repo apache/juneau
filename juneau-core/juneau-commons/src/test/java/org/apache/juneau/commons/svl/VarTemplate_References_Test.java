@@ -107,6 +107,7 @@ class VarTemplate_References_Test extends TestBase {
 	}
 
 	@Test void a13_listIsUnmodifiable() {
-		assertThrows(UnsupportedOperationException.class, () -> refs("${a}").add(null));
+		var refs = refs("${a}");
+		assertThrows(UnsupportedOperationException.class, () -> refs.add(null));
 	}
 }

@@ -38,6 +38,9 @@ import org.apache.juneau.petstore.dto.*;
  * 	TableSpec.<jsm>create</jsm>(<js>"orders"</js>).detail(RowDetails.<jsm>order</jsm>());
  * </p>
  */
+@SuppressWarnings({
+	"java:S1192" // Column and field names repeat as inline literals by design.
+})
 public final class RowDetails {
 
 	private RowDetails() {}

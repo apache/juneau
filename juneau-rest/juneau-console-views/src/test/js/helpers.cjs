@@ -314,7 +314,7 @@ await (async function tabStripTests() {
 	const scrollGroup = scrollWrap.querySelector('.juneau-view-ribbon-group');
 	const scrollBox = scrollWrap.querySelector('.juneau-view-tabs-scroll');
 	out.tabStrip_scrollBoxWrapsTabs = !!scrollBox && scrollWrap.querySelectorAll('.juneau-view-ribbon-btn').every(b => b.parentNode === scrollBox)
-		&& scrollBox.parentNode === scrollGroup && !(scrollGroup.style && scrollGroup.style.overflow);
+		&& scrollBox.parentNode === scrollGroup && !scrollGroup.style?.overflow;
 	out.tabStrip_scrollBoxIsTablist = !!scrollBox && scrollBox.getAttribute('role') === 'tablist' && scrollGroup.getAttribute('role') === 'presentation';
 
 	// (viii) the one-argument eager form still works unchanged

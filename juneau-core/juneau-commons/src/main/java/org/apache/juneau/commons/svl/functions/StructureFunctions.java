@@ -37,6 +37,9 @@ import org.apache.juneau.commons.svl.*;
  * {@code table(header, rows)} requires every row to have exactly as many cells as the header has columns, and no
  * null header element; otherwise a {@link VarResolverException} is thrown.
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicated function-name literals read more clearly inline than as constants
+})
 public final class StructureFunctions {
 
 	private StructureFunctions() {}
@@ -53,7 +56,8 @@ public final class StructureFunctions {
 	/** Base class: string form is the structure's text. */
 	abstract static class Base implements VarFunction {
 		private final String name;
-		private final int min, max;
+		private final int min;
+		private final int max;
 
 		Base(String name, int min, int max) {
 			this.name = name;
@@ -78,12 +82,6 @@ public final class StructureFunctions {
 		if (args.size() == 1 && args.get(0) instanceof Collection<?> c)
 			return CollectionFunctions.bounded(session, fn, c);
 		return CollectionFunctions.bounded(session, fn, args);
-	}
-
-	private static List<?> listArg(VarResolverSession session, String fn, int idx, Object o) {
-		if (o instanceof Collection<?> c)
-			return CollectionFunctions.bounded(session, fn, c);
-		throw new VarResolverException("Function '%s' argument %s must be a list but got %s", fn, idx + 1, o == null ? "null" : o.getClass().getSimpleName());
 	}
 
 	/** {@code #{ul(items...)}} or {@code #{ul(list)}}. */
@@ -111,6 +109,11 @@ public final class StructureFunctions {
 	public static class Table extends Base {
 		/** Constructor. */
 		public Table() { super("table", 2, 2); }
+		private static List<?> listArg(VarResolverSession session, String fn, int idx, Object o) {
+			if (o instanceof Collection<?> c)
+				return CollectionFunctions.bounded(session, fn, c);
+			throw new VarResolverException("Function '%s' argument %s must be a list but got %s", fn, idx + 1, o == null ? "null" : o.getClass().getSimpleName());
+		}
 		@Override public Object invokeValue(VarResolverSession session, List<Object> args) {
 			var cols = new ArrayList<String>();
 			for (var o : listArg(session, "table", 0, args.get(0))) {

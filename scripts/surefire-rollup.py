@@ -39,7 +39,7 @@ def parse_xml_dir(directory: Path) -> BucketStats:
     stats = BucketStats()
     if not directory.exists():
         return stats
-    for xml_file in sorted(directory.glob("TEST-*.xml")):
+    for xml_file in sorted(directory.glob("TEST-*.xml")):  # NOSONAR python:S1192 -- glob pattern reads clearer inline than a constant
         root = ET.parse(xml_file).getroot()
         stats.tests += int(root.attrib.get("tests", 0))
         stats.seconds += float(root.attrib.get("time", 0.0))
@@ -65,9 +65,9 @@ def source_content(module_dir: Path, class_name: str) -> str:
 def container_bucket(module_dir: Path, class_name: str) -> str:
     content = source_content(module_dir, class_name)
     if "SpringbootTest" in content:
-        return "container.springboot"
+        return "container.springboot"  # NOSONAR python:S1192 -- bucket names read clearer inline than constants
     if "JettyMicroserviceTest" in content:
-        return "container.jetty"
+        return "container.jetty"  # NOSONAR python:S1192 -- bucket names read clearer inline than constants
     lower = class_name.lower()
     if "springboot" in lower:
         return "container.springboot"

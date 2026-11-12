@@ -28,6 +28,9 @@ import java.util.regex.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Contract event and kind names repeat as inline literals by design.
+})
 public final class ModelBlock {
 
 	private static final Pattern TEMPLATE = Pattern.compile("\\{(rowKey|tabId|cardId)}");
@@ -218,6 +221,9 @@ public final class ModelBlock {
 	 *
 	 * @return The map, or <jk>null</jk> when empty so that builders not using the model emit unchanged JSON.
 	 */
+	@SuppressWarnings({
+		"java:S1168" // Null is the documented contract so that builders not using the model emit unchanged JSON.
+	})
 	public Map<String,Object> toMap() {
 		if (isEmpty())
 			return null;

@@ -100,9 +100,9 @@ public class MarshalledFilter implements BeanFilter {
 		private ClassInfo stopClass;
 		private boolean unsortedProperties;
 		private boolean fluentSetters;
-		private BeanInstantiator.Builder<PropertyNamer> propertyNamer = BeanInstantiator.of(PropertyNamer.class);
+		private final BeanInstantiator.Builder<PropertyNamer> propertyNamer = BeanInstantiator.of(PropertyNamer.class);
 		private List<ClassInfo> dictionary;
-		private BeanInstantiator.Builder<BeanInterceptor> interceptor = BeanInstantiator.of(BeanInterceptor.class);
+		private final BeanInstantiator.Builder<BeanInterceptor> interceptor = BeanInstantiator.of(BeanInterceptor.class);
 
 		/**
 		 * Constructor for bean filters.

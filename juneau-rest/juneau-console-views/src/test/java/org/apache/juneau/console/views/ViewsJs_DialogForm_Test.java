@@ -35,6 +35,9 @@ import org.junit.jupiter.api.*;
  * disabled, and {@code collectDialogFormFields} reads text/textarea/select via {@code .value} and checkbox/toggle as
  * explicit {@code "true"}/{@code "false"} while skipping action buttons.
  */
+@SuppressWarnings({
+	"java:S5976" // Each test drives a distinct field type through the painter; a parameterized test would obscure the per-type assertions.
+})
 class ViewsJs_DialogForm_Test extends TestBase {
 
 	private static String viewsJs() throws IOException {

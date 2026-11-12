@@ -40,7 +40,8 @@ class VarResolver_StrictMode_Test extends TestBase {
 	}
 
 	@Test void a03_rejectsNonPositive() {
-		assertThrows(IllegalArgumentException.class, () -> VarResolver.create().maxCollectionSize(0));
-		assertThrows(IllegalArgumentException.class, () -> VarResolver.create().maxExprDepth(-1));
+		var b = VarResolver.create();
+		assertThrows(IllegalArgumentException.class, () -> b.maxCollectionSize(0));
+		assertThrows(IllegalArgumentException.class, () -> b.maxExprDepth(-1));
 	}
 }

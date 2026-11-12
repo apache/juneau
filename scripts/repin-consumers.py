@@ -204,7 +204,7 @@ def verify_consumer(label: str, repo_dir: Path, env: dict) -> bool:
     return False
 
 
-def main() -> int:
+def main() -> int:  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
     parser = argparse.ArgumentParser(
         description=(
             "Rebuild Apache Juneau's HEAD and install it into the shared ~/.m2, so the "

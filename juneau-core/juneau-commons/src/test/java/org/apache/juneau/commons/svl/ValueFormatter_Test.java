@@ -210,7 +210,8 @@ class ValueFormatter_Test extends TestBase {
 	@Test void f03_foldTimeFailureFallsThroughToRender() {
 		var vr = VarResolver.create().defaultFunctions().valueFormatter(o -> { throw new IllegalStateException("boom"); }).build();
 		var tpl = vr.compile("#{1+1}");   // compile must not throw
-		assertThrows(ExprException.class, () -> tpl.resolve(vr.createSession()));
+		var session = vr.createSession();
+		assertThrows(ExprException.class, () -> tpl.resolve(session));
 	}
 
 	// Folding vs per-render override

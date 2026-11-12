@@ -50,7 +50,7 @@ COMPILE_NOISE = re.compile(
     r"|not abstract and does not override|is not public in|unreported exception|already defined"
 )
 
-DIAGNOSTIC = re.compile(r"^(?P<file>.+\.java):(?P<line>\d+): (?P<kind>error|warning): (?P<msg>.*)$")
+DIAGNOSTIC = re.compile(r"^(?P<file>[^:]+\.java):(?P<line>\d+): (?P<kind>error|warning): (?P<msg>.*)$")
 UNKNOWN_TAG = re.compile(r"^unknown tag: (?P<name>\S+)$")
 GROUPS = ("html", "accessibility")
 

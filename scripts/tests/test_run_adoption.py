@@ -177,7 +177,8 @@ def test_test_py_routing_flags_work_without_markers(test_mod, fake_mvn, monkeypa
     monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "none")
     monkeypatch.setenv("JUNEAU_TERMINAL_FULL_LOG", str(log))
     code, out = test_mod.run_command("mvn test", "tests", "Java Tests")
-    assert code == 0 and out == "fake mvn: test\n"
+    assert code == 0
+    assert out == "fake mvn: test\n"
     assert log.read_text() == "fake mvn: test\n"
     assert "fake mvn" not in capfd.readouterr().out
 
@@ -290,7 +291,8 @@ def test_push_markers_off_prints_no_markers_and_reaches_the_commit(push_mod, gat
     monkeypatch.setattr(sys, "argv", ["push.py", "a message"])
     assert push_mod.main() == 0
     assert "##terminal" not in capsys.readouterr().out
-    assert "identity" in gates.calls and "commit" in gates.calls
+    assert "identity" in gates.calls
+    assert "commit" in gates.calls
 
 
 def test_push_full_run_emits_push_mode_and_done_ok(push_mod, gates, monkeypatch, capsys):
@@ -358,7 +360,8 @@ def test_push_test_only_fallback_runs_mvn_test_as_a_maven_step(push_mod, gates, 
     assert push_mod.main() == 0
     tests = [k for cmd, k in calls if cmd == ["mvn", "test"]]
     assert len(tests) == 1
-    assert tests[0]["tool"] == "maven" and tests[0]["step_id"] == "tests"
+    assert tests[0]["tool"] == "maven"
+    assert tests[0]["step_id"] == "tests"
 
 
 def test_run_test_script_markers_off_is_the_plain_subprocess_run(push_mod, monkeypatch, tmp_path):
@@ -1005,7 +1008,8 @@ def test_push_does_not_mutate_os_environ_for_the_child(push_mod, gates, monkeypa
     assert push_mod.main() == 0
     assert env["JUNEAU_PUSH_ACTIVE"] == "1"
     assert later == [(None, None)]
-    assert "JUNEAU_PUSH_ACTIVE" not in os.environ and "JUNEAU_TERMINAL_N_BASE" not in os.environ
+    assert "JUNEAU_PUSH_ACTIVE" not in os.environ
+    assert "JUNEAU_TERMINAL_N_BASE" not in os.environ
 
 
 def test_push_reserves_exactly_four_numbers_for_test_py(push_mod, gates, monkeypatch, capsys):
@@ -1038,7 +1042,8 @@ def test_push_plain_ctrl_c_in_the_session_exits_130(push_mod, gates, monkeypatch
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 130
     out = capsys.readouterr().out
-    assert "❌ Cancelled." in out and "Traceback" not in out
+    assert "❌ Cancelled." in out
+    assert "Traceback" not in out
 
 
 @pytest.mark.parametrize("argv, expected", [
@@ -1075,7 +1080,7 @@ def test_push_plan_puts_the_opt_in_gates_first_and_forced_browser_tests_after_te
         (script_dir / name).touch()
     (tmp_path / "juneau-docs").mkdir()
     args = argparse.Namespace(tracker_audit=True, skip_tests=False, js_tests=True, test_only=False)
-    assert [step_id for step_id, _ in push_mod.push_plan(args, script_dir, script_dir.parent, False)] == [
+    assert [step_id for step_id, _ in push_mod.push_plan(args, script_dir, False)] == [
         "prechecks", "tracker", "bom", "build", "tests", "perf", "py-tests", "js-tests", "traces", "install", "commit", "push"]
 
 
@@ -1178,4 +1183,5 @@ def test_the_timing_row_reads_the_test_store_not_the_push_store(push_mod, consol
     report = store.path.with_name("test-timings.txt")
     assert timing["summary"].endswith(f"→ {report}")
     text = report.read_text(encoding="utf-8")
-    assert "160.0s" in text and "999" not in text
+    assert "160.0s" in text
+    assert "999" not in text

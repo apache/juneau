@@ -97,7 +97,8 @@ def test_auto_enabled_skips_with_notice_when_prereqs_missing(test_mod, monkeypat
     monkeypatch.setattr(test_mod, "js_prereq_problem", lambda: "node not found on the PATH")
     calls = []
     rc = test_mod.maybe_run_js_tests(False, False, ["a/src/x.js"], runner=lambda: calls.append(1) or (0, ""))
-    assert rc == 0 and calls == []
+    assert rc == 0
+    assert calls == []
     assert "skipping Browser Tests" in capsys.readouterr().out
 
 
@@ -112,7 +113,8 @@ def test_explicit_fails_when_prereqs_missing(test_mod, monkeypatch, capsys):
     monkeypatch.setattr(test_mod, "js_prereq_problem", lambda: "node not found on the PATH")
     calls = []
     rc = test_mod.maybe_run_js_tests(True, False, [], runner=lambda: calls.append(1) or (0, ""))
-    assert rc == 1 and calls == []
+    assert rc == 1
+    assert calls == []
     assert "--js-tests requested but cannot run" in capsys.readouterr().out
 
 
@@ -142,7 +144,8 @@ def test_test_py_rejects_conflicting_flags(test_mod, monkeypatch, capsys):
 
 
 def test_test_py_help_documents_flags(test_mod):
-    assert "--js-tests" in test_mod.USAGE and "--no-js-tests" in test_mod.USAGE
+    assert "--js-tests" in test_mod.USAGE
+    assert "--no-js-tests" in test_mod.USAGE
 
 
 def test_test_py_accepts_flags(test_mod, monkeypatch):
@@ -154,12 +157,15 @@ def test_test_py_accepts_flags(test_mod, monkeypatch):
 
 def test_push_py_doc_documents_flags():
     doc = (SCRIPTS_DIR / "push.md").read_text()
-    assert "`--js-tests`" in doc and "`--no-js-tests`" in doc
+    assert "`--js-tests`" in doc
+    assert "`--no-js-tests`" in doc
 
 
 def test_push_build_test_command_forwards_flags(push_mod):
     base = push_mod.build_test_command("t.py", argparse.Namespace(js_tests=False, no_js_tests=False))
-    assert "--js-tests" not in base and "--no-js-tests" not in base and base[2] == "--full"
+    assert "--js-tests" not in base
+    assert "--no-js-tests" not in base
+    assert base[2] == "--full"
     assert "--js-tests" in push_mod.build_test_command("t.py", argparse.Namespace(js_tests=True, no_js_tests=False))
     assert "--no-js-tests" in push_mod.build_test_command("t.py", argparse.Namespace(js_tests=False, no_js_tests=True))
 
@@ -193,7 +199,8 @@ def test_no_js_tests_flag_skips_the_row_with_the_flag(test_mod, skipped_rows):
 def test_missing_node_skips_the_row_with_the_reason(test_mod, monkeypatch, skipped_rows):
     monkeypatch.setattr(test_mod.shutil, "which", lambda t: None if t == "node" else "/bin/" + t)
     assert test_mod.maybe_run_js_tests(False, False, ["a/src/x.js"], runner=lambda: (1, "")) == 0
-    assert len(skipped_rows) == 1 and "node not found on the PATH" in skipped_rows[0]
+    assert len(skipped_rows) == 1
+    assert "node not found on the PATH" in skipped_rows[0]
 
 
 def test_a_run_or_a_forced_failure_draws_no_skip_row(test_mod, monkeypatch, skipped_rows):
@@ -230,7 +237,7 @@ def test_skip_row_is_a_skipped_browser_tests_row(test_mod, monkeypatch):
 @pytest.mark.parametrize("js_tests", [False, True])
 def test_push_always_plans_the_browser_tests_row(push_mod, js_tests):
     args = argparse.Namespace(test_only=True, tracker_audit=False, skip_tests=False, js_tests=js_tests)
-    ids = [step_id for step_id, _ in push_mod.push_plan(args, SCRIPTS_DIR, SCRIPTS_DIR.parent, False)]
+    ids = [step_id for step_id, _ in push_mod.push_plan(args, SCRIPTS_DIR, False)]
     assert ids.index("js-tests") == ids.index("py-tests") + 1
 
 
@@ -238,7 +245,8 @@ def test_push_always_plans_the_browser_tests_row(push_mod, js_tests):
 def test_concurrent_command_runs_one_f_process_per_module(test_mod):
     cmd = test_mod.js_tests_concurrent_command()
     for module, pattern in test_mod.JS_TEST_MODULES:
-        assert f"-f {module}/pom.xml" in cmd and f"-Dtest='{pattern}'" in cmd
+        assert f"-f {module}/pom.xml" in cmd
+        assert f"-Dtest='{pattern}'" in cmd
         assert f"[{module}] " in cmd                       # live output is labelled per module
     assert cmd.count("mvn -o -Pjs-tests") == len(test_mod.JS_TEST_MODULES)   # offline: upstream modules come from ~/.m2
     assert "-Djuneau.jsTests.forks=2" in cmd

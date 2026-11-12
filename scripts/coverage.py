@@ -116,11 +116,11 @@ def die(msg):
     sys.exit(1)
 
 
-def find_maven_module(path: Path) -> Path:
+def find_maven_module(path: Path) -> Path | None:
     """Walk up from path to find the nearest directory containing a pom.xml."""
     p = path if path.is_dir() else path.parent
     while p != REPO_ROOT.parent:
-        if (p / "pom.xml").exists() and p != REPO_ROOT:
+        if (p / "pom.xml").exists() and p != REPO_ROOT:  # NOSONAR python:S1192 -- pom.xml marker name reads clearer inline than a constant
             return p
         p = p.parent
     return None
@@ -606,7 +606,7 @@ def by_module_report(xml_path: Path):  # NOSONAR python:S3776 -- Cognitive compl
     name_w = max(len(n) for n in names)
 
     header = f"{'Module':<{name_w}}  {'Files':>6}  {'Branch%':>7}  {'BrMiss':>7}  {'Instr%':>7}  {'InstrMiss':>9}  {'HTT':>5}"
-    print(f"\nPer-module coverage (HTT-adjusted, sorted by branch % ascending):\n")
+    print("\nPer-module coverage (HTT-adjusted, sorted by branch % ascending):\n")
     print(header)
     print("-" * len(header))
 
@@ -627,7 +627,7 @@ def by_module_report(xml_path: Path):  # NOSONAR python:S3776 -- Cognitive compl
     print()
 
 
-def main():  # NOSONAR: always returns 0 by design — standard POSIX exit code for success
+def main():  # NOSONAR python:S3516,python:S3776 -- always returns 0 by design (standard POSIX success code); complexity acceptable for this CLI dispatcher
     args = sys.argv[1:]
     if not args or "--help" in args or "-h" in args:
         print(USAGE)

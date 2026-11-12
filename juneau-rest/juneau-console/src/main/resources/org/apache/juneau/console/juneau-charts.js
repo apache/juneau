@@ -467,7 +467,7 @@
 			const yAxis = yAxisOf(h);
 			const horizontal = h.orientation === "horizontal";
 			// A horizontal bar lists every category: no skipped labels, none hidden for overlap.
-			if (horizontal) xAxis.axisLabel = Object.assign({}, xAxis.axisLabel, { interval: 0, hideOverlap: false });
+			if (horizontal) xAxis.axisLabel = { ...xAxis.axisLabel, interval: 0, hideOverlap: false };
 			const series = seriesOf(h).map(s => {
 				const out = { id: s.field, name: s.label || s.field, type: type,
 					encode: horizontal ? { y: x.field, x: s.field } : { x: x.field, y: s.field } };
@@ -1566,7 +1566,7 @@
 				{ id: "chart", label: "Chart", populate: pane => { pane.appendChild(plot); } },
 				{ id: "data", label: "Data", populate: pane => { pane.appendChild(st.box); } }
 			], { mode: "tab", panes: true, active: "chart", ariaLabel: (card.title || "Chart") + " views" });
-			if (st.body.closest?.("[data-juneau-in-switcher]")) tabs.setAttribute("data-juneau-strip-compact", "");
+			if (st.body.closest?.("[data-juneau-in-switcher]")) tabs.setAttribute("data-juneau-strip-compact", ""); // NOSONAR javascript:S7761 - sibling attributes of this strip are set the same way
 			fig.appendChild(tabs);
 		} else {
 			fig.appendChild(plot);
@@ -2639,7 +2639,7 @@
 	// through the same render pipeline a chart card uses, with no page bus and no card shell.  Returns the render promise;
 	// a missing element or ECharts is a rejection, never a half-built chart.
 	function mount(el, card, rows) {
-		if (!el || el.nodeType !== 1 || typeof el.appendChild !== "function")
+		if (el?.nodeType !== 1 || typeof el.appendChild !== "function")
 			return Promise.reject(new Error("JuneauCharts.mount needs an element to draw into"));
 		if (!isObj(card)) return Promise.reject(new Error("JuneauCharts.mount needs a chart description"));
 		const doc = el.ownerDocument || document;
@@ -2668,7 +2668,7 @@
 				t.appendChild(box);
 			}
 		};
-		try {
+		try { // NOSONAR javascript:S4822 - render may throw synchronously before returning its promise
 			return Promise.resolve(render(spec, el, ctx)).then(() => states.get(el)?.inst || null);
 		} catch (e) {
 			return Promise.reject(e);
@@ -2695,7 +2695,7 @@
 		// The pipeline without setOption: the option a card would draw, with $fn markers resolved.
 		// A throwing ctx (a getter) is a rejection too: build() always returns a promise.
 		build: (card, frame, ctx) => {
-			try {
+			try { // NOSONAR javascript:S4822 - pipeline may throw synchronously before returning its promise
 				return pipeline(card, frame, decoratorCtx(card, ctx)).then(r => r.option);
 			} catch (e) {
 				return Promise.reject(e);
@@ -2723,7 +2723,7 @@
 	queued.forEach(queueEntry);
 
 	/** The chart card: one ECharts instance per card, driven by the page bus (the `data` role and the chart ops). */
-	class ChartCard extends (window.JuneauViews?.model?.Card || window.JuneauConsole?.Card || class {}) {
+	class ChartCard extends (window.JuneauViews?.model?.Card || window.JuneauConsole?.Card || class {}) { // NOSONAR javascript:S2094 - placeholder base until the shell supplies Card
 		static lateBase = true;   // the shell puts the Card base under this class if it loaded first
 		static roles = { data: "dataRole" };
 		static ops = OP_METHODS;
@@ -2741,7 +2741,7 @@
 		/** A copy of the option last drawn, or null before the first draw. */
 		getOption() {
 			const st = states.get(this.el);
-			return st && st.marked ? copyOption(st.marked) : null;
+			return st?.marked ? copyOption(st.marked) : null;
 		}
 		/** The live ECharts instance, or null before the first draw. */
 		chart() {

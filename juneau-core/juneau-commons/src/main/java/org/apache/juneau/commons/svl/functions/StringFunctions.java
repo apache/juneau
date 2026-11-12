@@ -344,7 +344,10 @@ public final class StringFunctions {
 			for (var i = 0; i < parts.size(); i++) {
 				if (i > 0) sb.append(sep);
 				var p = parts.get(i);
-				sb.append(p instanceof Double || p instanceof Float ? ArithmeticFunctions.render(((Number)p).doubleValue()) : p == null ? "" : p.toString());
+				if (p instanceof Double || p instanceof Float)
+					sb.append(ArithmeticFunctions.render(((Number)p).doubleValue()));
+				else
+					sb.append(p == null ? "" : p.toString());
 			}
 			return sb.toString();
 		}

@@ -99,11 +99,11 @@ class Var_ResolveValue_Test extends TestBase {
 		assertEquals("a!", v.resolveValue(session(), "a"));
 	}
 
-	@Test void a02_overrideReturnsTyped() throws Exception {
+	@Test void a02_overrideReturnsTyped() {
 		assertEquals(5, new TypedVar().resolveValue(session(), "5"));
 	}
 
-	@Test void a03_nullMeansAbsent() throws Exception {
+	@Test void a03_nullMeansAbsent() {
 		assertNull(new TypedVar().resolveValue(session(), ""));
 	}
 

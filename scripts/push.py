@@ -713,7 +713,7 @@ def commit_and_push(
     pre_commit_hook=None,
     step_prefix="",
     row_labels=("Commit", "Push"),
-):
+):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
     """
     Commit whatever is already staged and push, treating "nothing staged" and "nothing to push"
     as two different things (the bug this replaces reported success without ever pushing).
@@ -871,7 +871,7 @@ def main():
 #: are test.py's rows; the others are this script's.
 PLAN_LABELS = {
     "prechecks": "Prechecks", "tracker": "Tracker", "container-tags": "Tags",
-    "bom": "BOM", "javadoc-html": "Javadoc HTML", "build": "Compile", "tests": "Java Tests", "perf": "Perf", "py-tests": "Python Tests",
+    "bom": "BOM", "javadoc-html": "Javadoc HTML", "build": "Compile", "tests": "Java Tests", "perf": "Perf", "py-tests": "Python Tests",  # NOSONAR python:S1192 -- step label literals read clearer inline than constants
     "js-tests": "Browser Tests", "traces": "Traces", "timing": "Timing",
     "install": "Install", "commit": "Commit", "push": "Push",
 }
@@ -880,7 +880,7 @@ PLAN_LABELS = {
 TEST_PY_NUMBERED_STEPS = ("build", "tests", "py-tests", "js-tests")
 
 
-def push_plan(args, script_dir, juneau_root, console):
+def push_plan(args, script_dir, console):
     """The top-level steps this run will take, in order, as (id, label) pairs, for the console's pending rows and
     Overall figure."""
     ids = [] if args.test_only else ["prechecks"]
@@ -1151,7 +1151,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
                        header=session_header("Juneau", current_branch(juneau_root)),
                        lines=session_lines(None if args.test_only else args.message, jdk_line),
                        mode="test" if args.test_only else "push", repo=juneau_root,
-                       plan=push_plan(args, script_dir, juneau_root, console))
+                       plan=push_plan(args, script_dir, console))
 
 
 def _push_steps(s, args, run, console, script_dir, juneau_root):

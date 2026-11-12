@@ -810,7 +810,8 @@ def test_append_test_run_history_is_called_once_after_a_passing_test_step(push_m
     assert push_module.main() == 0
     assert len(calls) == 1
     root, wall = calls[0]
-    assert root == Path(push_module.__file__).resolve().parent.parent and isinstance(wall, int)
+    assert root == Path(push_module.__file__).resolve().parent.parent
+    assert isinstance(wall, int)
 
 
 @pytest.mark.parametrize("test_py", [True, False], ids=["test.py", "mvn-fallback"])
@@ -1130,7 +1131,8 @@ class TestPrechecks:
         assert flow.gates == []
         out = capsys.readouterr().out
         assert "git stash push && git pull --rebase && git stash pop --index" in out
-        assert "--ff-only" not in out and "--autostash" not in out
+        assert "--ff-only" not in out
+        assert "--autostash" not in out
 
     def test_unreviewed_changes_refuse_before_any_gate(self, flow, repo, capsys):
         (repo / "README.md").write_text("edited\n", encoding="utf-8")
@@ -1140,7 +1142,8 @@ class TestPrechecks:
         assert flow.gates == []
         out = capsys.readouterr().out
         assert "✗ unreviewed: 2 paths are not staged" in out
-        assert "README.md" in out and "new.txt" in out
+        assert "README.md" in out
+        assert "new.txt" in out
         assert "Nothing was built, committed or pushed." in out
         assert "git stash push -- " in out
 
@@ -1281,7 +1284,7 @@ class TestPushPlanTestPyRows:
         scripts.mkdir()
         (scripts / "test.py").write_text("", encoding="utf-8")
         args = argparse.Namespace(test_only=True, tracker_audit=False, skip_tests=False)
-        return [step_id for step_id, _ in push_module.push_plan(args, scripts, tmp_path / "juneau", False)]
+        return [step_id for step_id, _ in push_module.push_plan(args, scripts, False)]
 
     def test_perf_is_a_pending_row_between_java_and_python_tests(self, push_module, tmp_path):
         ids = self._plan_ids(push_module, tmp_path)
@@ -1307,7 +1310,7 @@ class TestJavadocHtmlStep:
         scripts.mkdir()
         (scripts / "test.py").write_text("", encoding="utf-8")
         args = argparse.Namespace(test_only=True, tracker_audit=False, skip_tests=False)
-        plan = lambda: [i for i, _ in push_module.push_plan(args, scripts, tmp_path / "juneau", False)]
+        plan = lambda: [i for i, _ in push_module.push_plan(args, scripts, False)]
         assert "javadoc-html" not in plan()
         (scripts / "check-javadoc-html.py").write_text("", encoding="utf-8")
         ids = plan()
@@ -1449,7 +1452,8 @@ class TestPackagingToolsCheck:
         hint = " ".join(verdict.hint)
         assert "https://docs.astral.sh/uv/" in hint
         assert "uv tool install --native-tls twine" in hint
-        assert "ruby" in hint and "brew install ruby" in hint
+        assert "ruby" in hint
+        assert "brew install ruby" in hint
         assert "brew install node" not in hint        # npm is present
         assert "Nothing ran." in hint
 

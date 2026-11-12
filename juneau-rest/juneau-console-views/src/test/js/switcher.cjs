@@ -82,7 +82,7 @@ async function page(contract, opts) {
 	};
 	env.window.window = env.window;
 	const winListeners = {};
-	env.window.addEventListener = (t, fn) => { (winListeners[t] = winListeners[t] || []).push(fn); };
+	env.window.addEventListener = (t, fn) => { winListeners[t] = winListeners[t] || []; winListeners[t].push(fn); };
 	env.window.removeEventListener = (t, fn) => { winListeners[t] = (winListeners[t] || []).filter(f => f !== fn); };
 	if (opts.reduceMotion) env.window.matchMedia = () => ({ matches: true, addEventListener: () => {} });
 	env.window.document = doc;
@@ -99,7 +99,7 @@ async function page(contract, opts) {
 	const r = { env, doc, winListeners, errors, hist, renders, refreshes, destroys, store, sandbox, threw: null };
 	try {
 		for (const s of sources) load(s);
-			if (opts.loadTwice) {
+		if (opts.loadTwice) {
 			try { load(switcherSrc); } catch (e) { r.secondLoadThrew = e.code || String(e); }
 		}
 	} catch (e) {
@@ -261,14 +261,14 @@ async function main() {
 		const r = await page(withSwitchers(baseSpec()));
 		const sel = r.doc.getElementById('sw1').querySelector('.juneau-switcher-selector');
 		const disp = r.doc.getElementById('sw1-display');
-		const tabs = { style: sel.getAttribute('data-juneau-switcher-style'), mode: sel.querySelector('[data-juneau-strip-mode]').getAttribute('data-juneau-strip-mode'),
-			panel: sel.hasAttribute('data-juneau-strip-panel'), inside: disp.parentNode === sel,
+		const tabs = { style: sel.getAttribute('data-juneau-switcher-style'), mode: sel.querySelector('[data-juneau-strip-mode]').getAttribute('data-juneau-strip-mode'), // NOSONAR javascript:S7761 - the test DOM shim has no dataset
+			panel: sel.hasAttribute('data-juneau-strip-panel'), inside: disp.parentNode === sel, // NOSONAR javascript:S7761 - the test DOM shim has no dataset
 			viewHost: !!disp.querySelector('.juneau-switcher-view') };
 		const r2 = await page(withSwitchers(baseSpec({ style: 'slider' })));
 		const sel2 = r2.doc.getElementById('sw1').querySelector('.juneau-switcher-selector');
 		const disp2 = r2.doc.getElementById('sw1-display');
-		const slider = { style: sel2.getAttribute('data-juneau-switcher-style'), mode: sel2.querySelector('[data-juneau-strip-mode]').getAttribute('data-juneau-strip-mode'),
-			panel: sel2.hasAttribute('data-juneau-strip-panel'), inside: disp2.parentNode === sel2, sibling: disp2.parentNode === sel2.parentNode };
+		const slider = { style: sel2.getAttribute('data-juneau-switcher-style'), mode: sel2.querySelector('[data-juneau-strip-mode]').getAttribute('data-juneau-strip-mode'), // NOSONAR javascript:S7761 - the test DOM shim has no dataset
+			panel: sel2.hasAttribute('data-juneau-strip-panel'), inside: disp2.parentNode === sel2, sibling: disp2.parentNode === sel2.parentNode }; // NOSONAR javascript:S7761 - the test DOM shim has no dataset
 		out.s12 = { tabs, slider };
 	}
 	// s14. Stacked cards: a view holding `cards` mounts them all, in order, lazily, with one handle list and one teardown.
@@ -280,7 +280,7 @@ async function main() {
 		const afterMount = r.renders.slice();
 		const host = r.doc.getElementById('sw1').querySelector('.juneau-switcher-view');
 		const hosts = ['k1', 'k2'].map(id => r.doc.getElementById(id));
-		const inSwitcher = hosts.map(h => !!h && h.hasAttribute('data-juneau-in-switcher'));
+		const inSwitcher = hosts.map(h => !!h && h.hasAttribute('data-juneau-in-switcher')); // NOSONAR javascript:S7761 - the test DOM shim has no dataset
 		const order = hosts.map(h => !!h && h.parentNode === host);
 		const handles = api(r).switcher.view('v1').cards().map(c => c.id);
 		const beforeV2 = r.renders.slice();
@@ -289,7 +289,7 @@ async function main() {
 		const added = api(r).switcher.addView({ id: 'v3', label: 'Three', cards: [leafCard('k5'), leafCard('k6')] });
 		const bad = codeOf(() => api(r).switcher.addView({ id: 'v4', label: 'Four', card: leafCard('k7'), cards: [leafCard('k8')] }));
 		r.JC.destroyCard('sw1');
-		out.s14 = { afterMount, viewHostClass: host.className, inSwitcher, order, handles, beforeV2, afterV2, addedId: added.id, bad, destroyed: r.destroys.slice().sort() };
+		out.s14 = { afterMount, viewHostClass: host.className, inSwitcher, order, handles, beforeV2, afterV2, addedId: added.id, bad, destroyed: r.destroys.slice().sort((a, b) => a.localeCompare(b)) };
 	}
 	// s13. Slider thumb: created for slider only, follows the selection and resize, honours reduced motion.
 	{

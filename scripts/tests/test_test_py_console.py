@@ -101,7 +101,8 @@ def test_perf_breaches_are_warn_notes_and_new_modules_one_info_note(test_mod, bu
     assert end["summary"] == f"⚠ 2 over baseline · 2 without one → {report}"
     assert end["status"] == "ok"
     text = report.read_text(encoding="utf-8")
-    assert "PERF-GUARD FAIL [mod-a]" in text and "PERF-GUARD WARN [mod-c]" in text
+    assert "PERF-GUARD FAIL [mod-a]" in text
+    assert "PERF-GUARD WARN [mod-c]" in text
     assert "PERF-GUARD SUMMARY: 2 module(s) checked, 1 regression(s), 2 new/unknown." in text
 
 
@@ -242,7 +243,8 @@ def test_test_py_opens_one_toolkit_session_and_one_done(test_mod, monkeypatch, c
     events = [line for line in out.splitlines() if line.startswith("##terminal ")]
     assert sum('"ev":"run"' in e.replace(" ", "") for e in events) == 1
     dones = [e for e in events if '"ev":"done"' in e.replace(" ", "")]
-    assert len(dones) == 1 and '"fail"' in dones[0]
+    assert len(dones) == 1
+    assert '"fail"' in dones[0]
 
 
 def test_ctrl_c_with_a_console_ends_cancelled(test_mod, bus, monkeypatch):

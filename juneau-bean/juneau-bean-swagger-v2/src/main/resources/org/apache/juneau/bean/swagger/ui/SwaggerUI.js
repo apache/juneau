@@ -16,7 +16,7 @@
 /* Toggles visibility of tag-group block */
 function toggleTagBlock(e) {
 	e = e.parentNode;
-	var isOpen = e.classList.contains("tag-block-open");
+	const isOpen = e.classList.contains("tag-block-open");
 	if (isOpen) {
 		e.classList.add("tag-block-closed");
 		e.classList.remove("tag-block-open");
@@ -29,7 +29,7 @@ function toggleTagBlock(e) {
 /* Toggles visibility of operation block */
 function toggleOpBlock(e) {
 	e = e.parentNode;
-	var isOpen = e.classList.contains("op-block-open");
+	const isOpen = e.classList.contains("op-block-open");
 	if (isOpen) {
 		e.classList.add("op-block-closed");
 		e.classList.remove("op-block-open");
@@ -41,13 +41,13 @@ function toggleOpBlock(e) {
 
 /* Shows an example */
 function selectExample(e) {
-	var dataName = e.value;
-	var examplesNode = e.parentNode.parentNode;
-	var divs = examplesNode.getElementsByTagName("div");
+	const dataName = e.value;
+	const examplesNode = e.parentNode.parentNode;
+	const divs = examplesNode.getElementsByTagName("div");
 	
-	for (var i in divs) {
-		var div = divs[i];
-		if (div.getAttribute("data-name") == dataName) {
+	for (const i in divs) {
+		const div = divs[i];
+		if (div.dataset.name == dataName) {
 			div.classList.add("active");
 		} else {
 			div.classList.remove("active");

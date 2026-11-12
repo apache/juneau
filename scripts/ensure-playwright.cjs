@@ -29,11 +29,11 @@
  * The cache is keyed by the whole spec set, so a petstore entry never satisfies the views module's larger set, or the
  * reverse.  Exits with npm's status when it had to run it.
  */
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const crypto = require('crypto');
-const { spawnSync } = require('child_process');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const crypto = require('node:crypto');
+const { spawnSync } = require('node:child_process');
 
 const [dir, npm, ...specs] = process.argv.slice(2);
 if (!dir || !npm || specs.length === 0) {
@@ -53,7 +53,7 @@ function installed(modules) {
 		const { name, version } = parse(spec);
 		try {
 			return JSON.parse(fs.readFileSync(path.join(modules, name, 'package.json'), 'utf8')).version === version;
-		} catch (e) {
+		} catch (e) { // NOSONAR javascript:S2486 - an unreadable or absent package.json means not installed
 			return false;
 		}
 	});
@@ -65,7 +65,7 @@ if (installed(modules)) {
 	process.exit(0);
 }
 
-const key = crypto.createHash('sha256').update([...specs].sort().join('\n')).digest('hex').slice(0, 16);
+const key = crypto.createHash('sha256').update([...specs].sort((a, b) => a.localeCompare(b)).join('\n')).digest('hex').slice(0, 16);
 const cacheRoot = process.env.JUNEAU_JS_TESTS_CACHE || path.join(os.homedir(), '.cache', 'juneau-js-tests');
 const cached = path.join(cacheRoot, key, 'node_modules');
 

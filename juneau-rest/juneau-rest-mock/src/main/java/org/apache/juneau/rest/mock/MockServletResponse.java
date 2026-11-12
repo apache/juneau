@@ -147,7 +147,7 @@ public class MockServletResponse implements HttpServletResponse {
 	public int getStatus() { return sc; }
 
 	@Override /* Overridden from HttpServletResponse */
-	public PrintWriter getWriter() throws IOException { return new PrintWriter(new OutputStreamWriter(getOutputStream(), characterEncoding)); }
+	public PrintWriter getWriter() throws IOException { return new PrintWriter(new OutputStreamWriter(getOutputStream(), characterEncoding == null ? "UTF-8" : characterEncoding)); }
 
 	/**
 	 * Fluent setter for {@link #setHeader(String,String)}.
@@ -260,7 +260,7 @@ public class MockServletResponse implements HttpServletResponse {
 	private void updateContentTypeHeader() {
 		var contentType = getContentType();
 		String charset = characterEncoding;
-		if (nn(contentType) && nn(charset)) {
+		if (contentType != null && charset != null) {
 			if (contentType.indexOf("charset=") != -1)
 				contentType = contentType.replaceAll("\\;\\s*charset=.*", "");
 			if (neqic("UTF-8", charset))

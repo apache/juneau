@@ -68,7 +68,7 @@ def is_test_module(project_path):
     return name == "juneau-integration-tests" or name.endswith("-ftest")
 
 
-def discover_projects(root_dir):
+def discover_projects(root_dir):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
     """
     Walk the reactor groups and standalone roots; return (source_projects, test_projects)
     as lists of paths relative to root_dir.
@@ -84,7 +84,7 @@ def discover_projects(root_dir):
         for child in sorted(group_dir.iterdir()):
             if not child.is_dir():
                 continue
-            if (child / "pom.xml").exists():
+            if (child / "pom.xml").exists():  # NOSONAR python:S1192 -- pom.xml marker name reads clearer inline than a constant
                 candidates.append(child)
     for standalone in STANDALONE_PROJECTS:
         standalone_dir = Path(root_dir) / standalone

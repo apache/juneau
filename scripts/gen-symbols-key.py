@@ -48,7 +48,7 @@ INK = "#16325c"
 PAPER = "#ffffff"
 TITLE = "Juneau symbols"
 
-SYMBOL_RE = re.compile(r"<symbol\s.*?</symbol>", re.S)
+SYMBOL_RE = re.compile(r"<symbol\s[^<]*(?:<(?!/symbol>)[^<]*)*</symbol>")
 SYMBOL_ID_RE = re.compile(r'<symbol\s+id="([^"]+)"')
 SYMBOL_VIEWBOX_RE = re.compile(r'<symbol\s+[^>]*viewBox="([^"]+)"')
 

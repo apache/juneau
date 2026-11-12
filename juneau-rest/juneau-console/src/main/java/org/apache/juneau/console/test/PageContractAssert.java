@@ -62,7 +62,9 @@ import org.apache.juneau.console.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicated literals read more clearly inline than as constants.
+	"java:S1192", // Duplicated literals read more clearly inline than as constants.
+	"java:S1168", // Null means "not found" for the private lookup helpers; callers test for it.
+	"java:S3776" // Contract walkers branch once per structural case; splitting them obscures the traversal.
 })
 public final class PageContractAssert {
 

@@ -303,7 +303,7 @@ class ConfigFileStoreTest extends TestBase {
 		assertEquals("initial", fs.read("M.cfg"));
 	}
 
-	@Test void c01_pathTraversal_rejected() throws Exception {
+	@Test void c01_pathTraversal_rejected() {
 		var fs = FileStore.create().directory(DIR).build();
 		assertFalse(fs.exists("../x"));
 		assertThrows(IllegalArgumentException.class, () -> fs.read("../x"));

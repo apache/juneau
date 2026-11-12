@@ -117,4 +117,4 @@ const MOUNT = (off) => {
 		await browser.close();
 	}
 	process.stdout.write(JSON.stringify(report, null, 2) + '\n');
-})().catch((e) => { process.stderr.write(String(e && e.stack || e) + '\n'); process.exit(1); });
+})().catch((e) => { process.stderr.write(String(e?.stack || e) + '\n'); process.exit(1); });

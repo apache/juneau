@@ -43,6 +43,11 @@ import org.apache.juneau.commons.svl.functions.*;
  * 	<li>{@link #URL_COMPONENT}: percent-encodes for a URL path segment or query component.
  * </ul>
  */
+@SuppressWarnings({
+	"java:S127", // The markdown encoder skips ahead past a digit run by assigning the loop counter
+	"java:S135", // Encoder loops use continue to skip dropped characters
+	"java:S3776" // Encoders and renderers dispatch over every structure kind in one place
+})
 public final class Destinations {
 
 	/** HTML. */
@@ -101,7 +106,7 @@ public final class Destinations {
 				case '\b' -> sb.append("\\b");
 				case '\f' -> sb.append("\\f");
 				default -> {
-					if (c < 0x20 || c == 0x7f || c == ' ' || c == ' ')
+					if (c < 0x20 || c == 0x7f || c == 0x2028 || c == 0x2029)
 						sb.append(String.format("\\u%04x", (int)c));
 					else
 						sb.append(c);
@@ -127,7 +132,7 @@ public final class Destinations {
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
 			if (Character.isWhitespace(c)) {
-				space = sb.length() > 0 || space;
+				space = ! sb.isEmpty() || space;
 				continue;
 			}
 			if (c < 0x20 || c == 0x7f)
@@ -138,7 +143,7 @@ public final class Destinations {
 			}
 			sb.append(c);
 		}
-		if (space && sb.length() > 0)
+		if (space && ! sb.isEmpty())
 			sb.append(' ');
 		var t = sb.toString();
 		var out = new StringBuilder(t.length() + 8);
@@ -318,7 +323,7 @@ public final class Destinations {
 	}
 
 	private static void line(StringBuilder sb, String s) {
-		if (sb.length() > 0)
+		if (! sb.isEmpty())
 			sb.append('\n');
 		sb.append(s);
 	}

@@ -45,6 +45,10 @@ import org.apache.juneau.commons.svl.functions.*;
  * decimal point, so {@code -0.0} is written as {@code 0}.  The characters U+007F, U+2028 and U+2029 and all control
  * characters below U+0020 are escaped as {@code \\uXXXX}; lone surrogates are written as-is.
  */
+@SuppressWarnings({
+	"java:S135", // Container writers use break to stop at the size limit,
+	"java:S3776" // Value writer dispatches over every supported value kind
+})
 public class JsonValueFormatter implements Function<Object,String> {
 
 	/** Default maximum container nesting depth. */
@@ -194,7 +198,11 @@ public class JsonValueFormatter implements Function<Object,String> {
 		return new Iterator<>() {
 			int i;
 			@Override public boolean hasNext() { return i < n; }
-			@Override public Object next() { return Array.get(array, i++); }
+			@Override public Object next() {
+				if (i >= n)
+					throw new NoSuchElementException();
+				return Array.get(array, i++);
+			}
 		};
 	}
 

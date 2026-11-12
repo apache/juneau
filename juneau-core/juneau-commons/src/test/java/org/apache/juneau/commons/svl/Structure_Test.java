@@ -77,11 +77,15 @@ class Structure_Test extends TestBase {
 
 	@Test void b02_immutable() {
 		var s = Structure.ol(List.of("a"), Map.of("k", 1));
-		assertThrows(UnsupportedOperationException.class, () -> ((List<Object>)s.items()).add("b"));
-		assertThrows(UnsupportedOperationException.class, () -> s.options().put("x", 2));
+		var items = (List<Object>)s.items();
+		var options = s.options();
+		assertThrows(UnsupportedOperationException.class, () -> items.add("b"));
+		assertThrows(UnsupportedOperationException.class, () -> options.put("x", 2));
 		var t = Structure.table(List.of("c"), List.of(List.of("a")));
-		assertThrows(UnsupportedOperationException.class, () -> t.columns().add("d"));
-		assertThrows(UnsupportedOperationException.class, () -> ((List<Object>)t.rows().get(0)).add("b"));
+		var columns = t.columns();
+		var row = (List<Object>)t.rows().get(0);
+		assertThrows(UnsupportedOperationException.class, () -> columns.add("d"));
+		assertThrows(UnsupportedOperationException.class, () -> row.add("b"));
 	}
 
 	@Test void b03_optionsOverloads() {
@@ -93,8 +97,10 @@ class Structure_Test extends TestBase {
 
 	@Test void b04_nullsRejected() {
 		assertThrows(NullPointerException.class, () -> Structure.ul(null));
-		assertThrows(NullPointerException.class, () -> Structure.table(null, List.of()));
-		assertThrows(NullPointerException.class, () -> Structure.table(List.of(), null));
+		List<String> noColumns = List.of();
+		List<List<?>> noRows = List.of();
+		assertThrows(NullPointerException.class, () -> Structure.table(null, noRows));
+		assertThrows(NullPointerException.class, () -> Structure.table(noColumns, null));
 	}
 
 	@Test void c01_emptyAndNullElements() {
@@ -106,7 +112,8 @@ class Structure_Test extends TestBase {
 	@Test void d01_nullRowAndNullOptions() {
 		var rows = new ArrayList<List<?>>();
 		rows.add(null);
-		var e = assertThrows(NullPointerException.class, () -> Structure.table(List.of("c"), rows));
+		var columns = List.of("c");
+		var e = assertThrows(NullPointerException.class, () -> Structure.table(columns, rows));
 		assertTrue(e.getMessage().contains("rows"), e.getMessage());
 		assertTrue(Structure.ul(List.of("a"), null).options().isEmpty());
 		assertTrue(Structure.table(List.of(), List.of(), null).options().isEmpty());

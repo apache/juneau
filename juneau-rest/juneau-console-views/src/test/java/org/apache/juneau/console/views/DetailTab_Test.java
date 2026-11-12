@@ -33,27 +33,27 @@ class DetailTab_Test extends TestBase {
 
 	@Test void a02_fieldsTab_rejectsColumnsOutside1to4() {
 		var sut1 = DetailTab.fields("D", "a").columns(5);
-		assertThrows(IllegalArgumentException.class, () -> sut1.toMap());
+		assertThrows(IllegalArgumentException.class, sut1::toMap);
 		var sut2 = DetailTab.fields("D", "a").columns(-1);
-		assertThrows(IllegalArgumentException.class, () -> sut2.toMap());
+		assertThrows(IllegalArgumentException.class, sut2::toMap);
 		assertEquals(4, DetailTab.fields("D", "a").columns(4).toMap().get("columns"));
 	}
 
 	@Test void a03_fieldsTab_duplicateFieldWithinTab() {
 		var sut3 = DetailTab.fields("D", "a", "a");
-		assertThrows(IllegalArgumentException.class, () -> sut3.toMap());
+		assertThrows(IllegalArgumentException.class, sut3::toMap);
 	}
 
 	@Test void a04_group_fieldOutsideTab_orInTwoGroups() {
 		var sut4 = DetailTab.fields("D", "a").group("G", "b");
-		assertThrows(IllegalArgumentException.class, () -> sut4.toMap());
+		assertThrows(IllegalArgumentException.class, sut4::toMap);
 		var sut5 = DetailTab.fields("D", "a").group("G1", "a").group("G2", "a");
-		assertThrows(IllegalArgumentException.class, () -> sut5.toMap());
+		assertThrows(IllegalArgumentException.class, sut5::toMap);
 	}
 
 	@Test void a05_clientRendererRegex() {
 		var sut6 = DetailTab.client("C", "bad name");
-		assertThrows(IllegalArgumentException.class, () -> sut6.toMap());
+		assertThrows(IllegalArgumentException.class, sut6::toMap);
 		assertEquals("client", DetailTab.client("C", "pet-labels").toMap().get("kind"));
 	}
 
@@ -65,17 +65,17 @@ class DetailTab_Test extends TestBase {
 
 	@Test void a07_tabIdGrammar() {
 		var sut7 = DetailTab.fields("D","a").id("Bad Id");
-		assertThrows(IllegalArgumentException.class, () -> sut7.toMap());
+		assertThrows(IllegalArgumentException.class, sut7::toMap);
 	}
 
 	@Test void a08_fieldsTab_needsAtLeastOneField() {
 		var sut8 = DetailTab.fields("D");
-		assertThrows(IllegalArgumentException.class, () -> sut8.toMap());
+		assertThrows(IllegalArgumentException.class, sut8::toMap);
 	}
 
 	@Test void a09_unsafeEndpoint_rejected() {
 		var sut9 = DetailTab.client("C", "r").endpoint("https://x/y");
-		assertThrows(IllegalArgumentException.class, () -> sut9.toMap());
+		assertThrows(IllegalArgumentException.class, sut9::toMap);
 		assertEquals("/a/{id}/labels", DetailTab.client("C", "r").endpoint("/a/{id}/labels").toMap().get("endpoint"));
 	}
 
@@ -86,7 +86,7 @@ class DetailTab_Test extends TestBase {
 
 	@Test void a11_countFromRows_onlyOnTableTabs() {
 		var sut10 = DetailTab.client("C", "r").countFromRows();
-		assertThrows(IllegalArgumentException.class, () -> sut10.toMap());
+		assertThrows(IllegalArgumentException.class, sut10::toMap);
 	}
 
 	@Test void a12_keyOrder() {

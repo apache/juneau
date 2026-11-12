@@ -110,7 +110,8 @@ class TemplateResolver_Render_Test extends TestBase {
 
 	@Test void a15_foreignParsedTemplateRejected() {
 		var other = TemplateResolver.create().build();
-		assertThrows(IllegalArgumentException.class, () -> TemplateResolver.DEFAULT.render(other.parse("x"), Map.of()));
+		var parsed = other.parse("x");
+		assertThrows(IllegalArgumentException.class, () -> TemplateResolver.DEFAULT.render(parsed, Map.of()));
 	}
 
 	@Test void a16_allowFunctionsIsAdditive() {
@@ -124,8 +125,9 @@ class TemplateResolver_Render_Test extends TestBase {
 	}
 
 	@Test void a18_wildcardRejected() {
-		assertThrows(IllegalArgumentException.class, () -> TemplateResolver.create().allowFunctions("*"));
-		assertThrows(IllegalArgumentException.class, () -> TemplateResolver.create().allowOnlyFunctions("*"));
+		var b = TemplateResolver.create();
+		assertThrows(IllegalArgumentException.class, () -> b.allowFunctions("*"));
+		assertThrows(IllegalArgumentException.class, () -> b.allowOnlyFunctions("*"));
 	}
 
 	@Test void a19_mapRowSizeShadowsScope() {

@@ -174,7 +174,7 @@ class ExprEvaluator_Test extends TestBase {
 		assertTrue(e.getMessage().contains("^"), e.getMessage());
 		assertTrue(e.getMessage().contains("1 + (2 / 0)"), e.getMessage());
 		assertNotNull(e.getCause());
-		assertFalse("null".equals(e.getBaseMessage()));
+		assertNotEquals("null", e.getBaseMessage());
 	}
 
 	@Test void b01_pathMapRecordBean() {
@@ -439,11 +439,11 @@ class ExprEvaluator_Test extends TestBase {
 		var e = assertThrows(ExprException.class, () -> ev("immut[nul]"));
 		assertNotNull(e.getCause());
 		assertTrue(e.getCause() instanceof NullPointerException);
-		assertFalse("null".equals(e.getBaseMessage()), e.getBaseMessage());
+		assertNotEquals("null", e.getBaseMessage(), e.getBaseMessage());
 		assertTrue(e.getMessage().contains("^"), e.getMessage());
 		var e2 = assertThrows(ExprException.class, () -> ev("tree[1]"));
 		assertTrue(e2.getCause() instanceof ClassCastException);
-		assertFalse("null".equals(e2.getBaseMessage()));
+		assertNotEquals("null", e2.getBaseMessage());
 	}
 
 	@Test void j02_deepChainsNeverRawStackOverflow() throws Exception {

@@ -217,7 +217,9 @@ class ExprSegment_Test extends TestBase {
 	@Test void f01_foldErrorResurfacesStrict() {
 		var s = seg(STRICT, "1/0");
 		assertNull(s.fold(STRICT));
-		assertThrows(ExprException.class, () -> s.resolve(STRICT.createSession(), new StringBuilder()));
+		var session = STRICT.createSession();
+		var sb = new StringBuilder();
+		assertThrows(ExprException.class, () -> s.resolve(session, sb));
 	}
 
 	@Test void f02_foldFallThroughNotBakedIn() {

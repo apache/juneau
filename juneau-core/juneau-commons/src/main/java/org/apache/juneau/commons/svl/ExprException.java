@@ -23,10 +23,14 @@ package org.apache.juneau.commons.svl;
  * The message reads <c>message at position N:</c>, followed by the source line containing the position and a caret line
  * (tabs copied, other characters as spaces) under the position.
  */
+@SuppressWarnings({
+	"java:S110" // Exception hierarchy mirrors the resolver exception layering
+})
 public class ExprException extends VarResolverException {
 	private static final long serialVersionUID = 1L;
 
-	private final String baseMessage, source;
+	private final String baseMessage;
+	private final String source;
 	private final int pos;
 
 	/**

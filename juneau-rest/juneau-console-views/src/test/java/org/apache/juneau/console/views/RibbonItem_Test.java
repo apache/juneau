@@ -378,9 +378,9 @@ class RibbonItem_Test extends TestBase {
 
 	@Test void a63_search_rejects_symbol_and_appearance() {
 		var sut1 = RibbonItem.search().symbol("x");
-		assertThrows(IllegalArgumentException.class, () -> sut1.toMap());
+		assertThrows(IllegalArgumentException.class, sut1::toMap);
 		var sut2 = RibbonItem.search().appearance("icon");
-		assertThrows(IllegalArgumentException.class, () -> sut2.toMap());
+		assertThrows(IllegalArgumentException.class, sut2::toMap);
 	}
 
 	@Test void a64_new_types_listed_in_unknown_type_error() {

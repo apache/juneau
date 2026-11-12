@@ -208,9 +208,9 @@ class ViewsJs_ConfigChooserA11y_Test extends TestBase {
 		assertBean(report(), "resetNotLink,resetDraftsDefaults", "true,name/status");
 	}
 
-	@Test void e14_savedBarKeepsSaveInRowAndRenameDeleteInMenu() {
+	@Test void e14_savedBarHoldsSaveSaveAsRenameDeleteInline() {
 		assertBean(report(),
-			"rowHoldsSaveAndSaveAs,menuClosedInitially,menuOpenAfterMore,menuHoldsActions,menuNoHaspopup,menuClosesOnOutsideClick,menuClosesOnEscape,escapeRefocusesMore,pickClosesMenu",
-			"true,true,true,true,true,true,true,true,true");
+			"rowHoldsSaveAndSaveAs,noMenuOrMoreButton,renameDeleteDirectChildrenAfterSaveAs,renameDeleteDisabledOnDefault",
+			"true,true,true,true");
 	}
 }

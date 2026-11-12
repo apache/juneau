@@ -883,8 +883,12 @@ public final class TableSpec implements Handled<TableSpec> {
 			b.put("actions", plain(bulk.actions));
 			t.put("bulk", b);
 		}
-		if (detail != null)
-			t.put("detail", detail.toMap(id, columns, rowIdField != null ? rowIdField : selection == null ? null : selection.rowIdField()));
+		if (detail != null) {
+			var detailRowIdField = rowIdField;
+			if (detailRowIdField == null && selection != null)
+				detailRowIdField = selection.rowIdField();
+			t.put("detail", detail.toMap(id, columns, detailRowIdField));
+		}
 		var mm = model.toMap();
 		if (mm != null)
 			t.put("model", mm);

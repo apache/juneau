@@ -98,6 +98,9 @@ public class UsersRest extends PetstoreConsolePage implements RowDetailMixin {
 		return builder(req) ? twin(req, UsersPageBuilders.users()) : FreemarkerView.of("users.ftlh");
 	}
 
+	@SuppressWarnings({
+		"java:S1948" // Servlets are nominally Serializable, but these REST resources are never serialized.
+	})
 	private final RowDetail userDetail = RowDetails.user(this::lookup);
 
 	@Override

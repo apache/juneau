@@ -165,7 +165,7 @@ class Render_Pill_Test extends TestBase {
 		var sut8 = Render.of("tag");
 		assertThrows(IllegalStateException.class, () -> sut8.tone("A", StatusTone.INFO));
 		var sut9 = Render.of("tag");
-		assertThrows(IllegalStateException.class, () -> sut9.categorical());
+		assertThrows(IllegalStateException.class, sut9::categorical);
 		var sut10 = Render.of("tag");
 		assertThrows(IllegalStateException.class, () -> sut10.category("A", 1));
 	}

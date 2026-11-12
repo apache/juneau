@@ -946,6 +946,9 @@ public class ViewsMixin {
 		description="A symbol from the Lucide or shipped sprite, with colours that follow prefers-color-scheme; for favicons.",
 		swagger=@OpSwagger(ignore=true)
 	)
+	@SuppressWarnings({
+		"java:S135" // Sprite search skips missing symbols and stops at an unsafe one; each exit is distinct.
+	})
 	public HttpResource getSymbol(@Path("file") String file) {
 		var name = file.endsWith(".svg") ? file.substring(0, file.length() - 4) : "";
 		if (! SYMBOL_NAME.matcher(name).matches())

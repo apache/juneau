@@ -88,8 +88,9 @@ const LAYOUT = () => {
 		hostChildren: kids,
 		headerBeforeBar: !!(q('.juneau-view-dialog-header') && q('.juneau-config-saved-bar')
 			&& q('.juneau-view-dialog-header').getBoundingClientRect().bottom <= q('.juneau-config-saved-bar').getBoundingClientRect().top),
-		barButtons: Array.prototype.map.call(document.querySelectorAll('.juneau-config-saved-menu > button'), (b) => b.textContent),
-		rowButtons: Array.prototype.map.call(document.querySelectorAll('.juneau-config-saved-bar > button:not(.juneau-config-saved-more)'), (b) => b.textContent),
+		rowButtons: Array.prototype.map.call(document.querySelectorAll('.juneau-config-saved-bar > button'), (b) => b.textContent),
+		noMenu: !document.querySelector('.juneau-config-saved-more') && !document.querySelector('.juneau-config-saved-menu'),
+		actionsVisible: ['.juneau-config-rename', '.juneau-config-delete'].every((s) => { const e = document.querySelector(s); return !!e && e.offsetParent !== null; }),
 		saveDisabled: !!q('.juneau-config-save')?.disabled,
 		deleteDanger: !!q('.juneau-config-delete')?.classList.contains('jc-btn-danger'),
 		renameDisabled: !!q('.juneau-config-rename')?.disabled,
@@ -206,7 +207,6 @@ async function rename(page) {
 		window.__realDelete = p['delete'];
 		p['delete'] = function (t, n) { return n === 'Mine' ? Promise.reject(new Error('storage is locked')) : window.__realDelete(t, n); };
 	});
-	await page.click('.juneau-config-saved-more');
 	await page.click('.juneau-config-rename');
 	out.renameFieldValue = await page.evaluate(() => document.querySelector('.juneau-config-name-input').value);
 	out.renameOkLabel = await page.evaluate(() => document.querySelector('.juneau-config-name-ok').textContent);
@@ -250,7 +250,7 @@ async function saveFlow(page) {
 	const visible = (sel) => page.evaluate((s) => { const e = document.querySelector(s); return !!e && e.offsetParent !== null; }, sel);
 	out.saveDisabledOnDefault = await page.evaluate(() => document.querySelector('.juneau-config-save').disabled);
 	out.rowSameLine = await page.evaluate(() => {
-		const tops = ['.juneau-config-view-select', '.juneau-config-save', '.juneau-config-saveas', '.juneau-config-saved-more']
+		const tops = ['.juneau-config-view-select', '.juneau-config-save', '.juneau-config-saveas', '.juneau-config-rename', '.juneau-config-delete']
 			.map((s) => Math.round(document.querySelector(s).getBoundingClientRect().top));
 		return Math.max.apply(null, tops) - Math.min.apply(null, tops) < 8;
 	});
@@ -285,8 +285,8 @@ async function sortRows(page) {
 		const rows = Array.prototype.slice.call(document.querySelectorAll('.juneau-config-sort-row'));
 		const sorted = rows.find((r) => !r.classList.contains('juneau-config-sort-row-unsorted'));
 		const unsorted = rows.find((r) => r.classList.contains('juneau-config-sort-row-unsorted'));
-		const btn = sorted && sorted.querySelector('.juneau-config-sort-move');
-		const sel = sorted && sorted.querySelector('.juneau-config-sort-dir');
+		const btn = sorted?.querySelector('.juneau-config-sort-move');
+		const sel = sorted?.querySelector('.juneau-config-sort-dir');
 		return { hasBoth: !!(sorted && unsorted), sorted: sorted && h(sorted), unsorted: unsorted && h(unsorted),
 			selectHeight: sel && h(sel), buttonHeight: btn && h(btn) };
 	});

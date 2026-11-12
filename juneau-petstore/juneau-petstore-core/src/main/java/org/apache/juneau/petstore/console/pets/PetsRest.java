@@ -78,7 +78,14 @@ public class PetsRest extends PetstoreConsolePage implements RowDetailMixin {
 	/** The P4 tabs, in nav order. */
 	private static final List<String> TABS = List.of("summary", "photo", "orders", "history");
 
+	@SuppressWarnings({
+		"java:S1948" // Servlets are nominally Serializable, but these REST resources are never serialized.
+	})
 	private final RowDetail petDetail = RowDetails.pet(this::lookup);
+
+	@SuppressWarnings({
+		"java:S1948" // Servlets are nominally Serializable, but these REST resources are never serialized.
+	})
 	private final RowDetail soldDetail = RowDetails.soldPet(this::lookup);
 
 	/**

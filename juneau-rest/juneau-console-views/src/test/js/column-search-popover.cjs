@@ -388,7 +388,8 @@ function ctxWith(type, operatorNames, extra) {
 }
 function suffix(node) {
 	const m = /juneau-view-col-search-popover(-[a-z]+)?/.exec(node.className || '');
-	return node.tagName === 'INPUT' ? 'input' : (m && m[1] ? m[1].slice(1) : node.tagName);
+	if (node.tagName === 'INPUT') return 'input';
+	return m?.[1] ? m[1].slice(1) : node.tagName;
 }
 function focusables(ctx) { return popEl(ctx).querySelectorAll('input,button,a'); }
 function clickOn(ctx, cls) {
@@ -544,7 +545,7 @@ function clickOn(ctx, cls) {
 })();
 
 (function viewKeys() {
-	out.viewKeysHasHelpUrl = (NS.card.liftCatalog('t', { dataUrl: '/d', columns: [{ key: 'a', label: 'A' }], columnSearchHelpUrl: '/docs/search' }).view || {}).columnSearchHelpUrl;
+	out.viewKeysHasHelpUrl = NS.card.liftCatalog('t', { dataUrl: '/d', columns: [{ key: 'a', label: 'A' }], columnSearchHelpUrl: '/docs/search' }).view?.columnSearchHelpUrl;
 })();
 
 // --- Scenario: a column with NO search block still shows type, plain-value help, operators and examples ---------

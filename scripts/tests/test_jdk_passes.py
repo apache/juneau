@@ -64,7 +64,8 @@ def test_record_replaces_same_jdk(file):
     jdk_passes.record(SHA, "21", "test", file=file, now=NOW)
     jdk_passes.record(SHA, "21", "push", file=file, now=NOW)
     entries = json.loads(file.read_text())[SHA]
-    assert len(entries) == 1 and entries[0]["source"] == "push"
+    assert len(entries) == 1
+    assert entries[0]["source"] == "push"
 
 
 def test_missing_and_corrupt_file(file):

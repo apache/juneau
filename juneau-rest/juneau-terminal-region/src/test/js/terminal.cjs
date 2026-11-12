@@ -1474,7 +1474,7 @@ function fakeEl(tag) {
 		setAttribute: function (k, v) { e.attrs[k] = v; },
 		getAttribute: function (k) { return Object.hasOwn(e.attrs, k) ? e.attrs[k] : null; },
 		removeAttribute: function (k) { delete e.attrs[k]; },
-		addEventListener: function (n, f) { (e.listeners[n] ??= []).push(f); }, removeEventListener: function () {}, focus: function () {},
+		addEventListener: function (n, f) { e.listeners[n] ??= []; e.listeners[n].push(f); }, removeEventListener: function () {}, focus: function () {},
 		listeners: {},
 		querySelector: function () { return null; },
 		getBoundingClientRect: function () { return { width: 0 }; }

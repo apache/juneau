@@ -139,7 +139,8 @@ def test_push_forwards_warn_traces_to_test_py():
     push = _load("_traces_push", "push.py")
     plain = push.build_test_command("t.py", argparse.Namespace(js_tests=False, no_js_tests=False, warn_traces=False))
     warned = push.build_test_command("t.py", argparse.Namespace(js_tests=False, no_js_tests=False, warn_traces=True))
-    assert "--warn-traces" not in plain and warned[-1] == "--warn-traces"
+    assert "--warn-traces" not in plain
+    assert warned[-1] == "--warn-traces"
 
 
 def test_push_plans_the_traces_row_after_the_browser_tests_unless_tests_are_skipped(tmp_path):
@@ -149,9 +150,9 @@ def test_push_plans_the_traces_row_after_the_browser_tests_unless_tests_are_skip
     (scripts / "test.py").write_text("", encoding="utf-8")
     ran = argparse.Namespace(test_only=True, tracker_audit=False, skip_tests=False)
     skipped = argparse.Namespace(test_only=True, tracker_audit=False, skip_tests=True)
-    ids = [i for i, _ in push.push_plan(ran, scripts, tmp_path / "juneau", False)]
+    ids = [i for i, _ in push.push_plan(ran, scripts, False)]
     assert ids[ids.index("js-tests") + 1] == "traces"
-    assert "traces" not in [i for i, _ in push.push_plan(skipped, scripts, tmp_path / "juneau", False)]
+    assert "traces" not in [i for i, _ in push.push_plan(skipped, scripts, False)]
 
 
 def test_the_rows_labels_match_between_the_two_scripts(test_mod):

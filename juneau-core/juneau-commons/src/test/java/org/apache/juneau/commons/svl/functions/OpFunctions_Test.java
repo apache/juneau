@@ -82,8 +82,10 @@ class OpFunctions_Test extends TestBase {
 		assertEquals("Operator '%' modulo by zero", m.getMessage());
 		var d = assertThrows(VarResolverException.class, () -> op("div", 1L, 0L));
 		assertEquals("Operator '/' division by zero", d.getMessage());
-		assertThrows(VarResolverException.class, () -> op("div", new BigDecimal("1"), new BigDecimal("0")));
-		var bm = assertThrows(VarResolverException.class, () -> op("mod", new BigDecimal("1"), new BigDecimal("0")));
+		var one = new BigDecimal("1");
+		var zero = new BigDecimal("0");
+		assertThrows(VarResolverException.class, () -> op("div", one, zero));
+		var bm = assertThrows(VarResolverException.class, () -> op("mod", one, zero));
 		assertEquals("Operator '%' modulo by zero", bm.getMessage());
 	}
 

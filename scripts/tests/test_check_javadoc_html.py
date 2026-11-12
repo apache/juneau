@@ -63,7 +63,9 @@ def test_report_only_exits_zero(tmp_path, capsys):
 
 def test_duplicates_collapse():
     remaining, custom, noise = mod.classify(mod.parse("a/B.java:1: error: no caption for table\na/B.java:1: error: no caption for table\n"))
-    assert len(remaining) == 1 and not custom and noise == 0
+    assert len(remaining) == 1
+    assert not custom
+    assert noise == 0
 
 
 def test_custom_list_covers_stylesheet_elements():

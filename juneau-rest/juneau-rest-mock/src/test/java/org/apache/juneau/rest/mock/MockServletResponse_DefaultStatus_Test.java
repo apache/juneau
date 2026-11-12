@@ -37,4 +37,22 @@ class MockServletResponse_DefaultStatus_Test {
 		res.setStatus(404);
 		assertEquals(404, res.getStatus());
 	}
+
+	@Test void a03_nullCharacterEncoding_writerFallsBackToUtf8() throws Exception {
+		var res = MockServletResponse.create();
+		res.setCharacterEncoding((String)null);
+		try (var w = res.getWriter()) {
+			w.write("\u00e9");
+		}
+		assertArrayEquals(new byte[]{(byte)0xC3, (byte)0xA9}, res.getContent());
+	}
+
+	@Test void a04_nullContentTypeOrEncoding_headerUpdateIsSkipped() {
+		var res = MockServletResponse.create();
+		assertDoesNotThrow(() -> res.setCharacterEncoding("ISO-8859-1"));
+		assertNull(res.getContentType());
+		res.setCharacterEncoding((String)null);
+		res.setContentType("text/plain");
+		assertEquals("text/plain", res.getContentType());
+	}
 }

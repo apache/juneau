@@ -153,6 +153,7 @@ public class BasicFileFinder implements FileFinder {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	@SuppressWarnings({
+		"java:S135", // Nested root/candidate search needs both a skip and an early exit per level.
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"null" // Null handling verified by context or framework
 	})

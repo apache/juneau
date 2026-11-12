@@ -120,15 +120,15 @@ class MsgPackConformance_Test extends TestBase {
 	// G4 - BigInteger exact serialization (no silent longValue() truncation).
 	//====================================================================================================
 
-	@Test void c01_bigInteger_longRangeEmitsInt64() throws Exception {
+	@Test void c01_bigInteger_longRangeEmitsInt64() {
 		assertEquals("D3 7F FF FF FF FF FF FF FF", toSpacedHex(mp(new BigInteger("9223372036854775807"))));
 	}
 
-	@Test void c02_bigInteger_2pow63EmitsUint64() throws Exception {
+	@Test void c02_bigInteger_2pow63EmitsUint64() {
 		assertEquals("CF 80 00 00 00 00 00 00 00", toSpacedHex(mp(new BigInteger("9223372036854775808"))));
 	}
 
-	@Test void c03_bigInteger_maxUint64EmitsUint64() throws Exception {
+	@Test void c03_bigInteger_maxUint64EmitsUint64() {
 		assertEquals("CF FF FF FF FF FF FF FF FF", toSpacedHex(mp(new BigInteger("18446744073709551615"))));
 	}
 
@@ -185,15 +185,15 @@ class MsgPackConformance_Test extends TestBase {
 	// G9 - lone/unpaired UTF-16 surrogate emitted as U+FFFD (matches String.getBytes(UTF_8)).
 	//====================================================================================================
 
-	@Test void e01_loneLowSurrogateEmitsReplacementChar() throws Exception {
+	@Test void e01_loneLowSurrogateEmitsReplacementChar() {
 		assertEquals("A3 EF BF BD", toSpacedHex(mp("\uDC00")));
 	}
 
-	@Test void e02_loneHighSurrogateAtEndEmitsReplacementChar() throws Exception {
+	@Test void e02_loneHighSurrogateAtEndEmitsReplacementChar() {
 		assertEquals("A3 EF BF BD", toSpacedHex(mp("\uD800")));
 	}
 
-	@Test void e03_validSurrogatePairStillEmits4Bytes() throws Exception {
+	@Test void e03_validSurrogatePairStillEmits4Bytes() {
 		// U+1F600 GRINNING FACE -> F0 9F 98 80.
 		assertEquals("A4 F0 9F 98 80", toSpacedHex(mp("\uD83D\uDE00")));
 	}

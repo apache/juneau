@@ -101,7 +101,7 @@ def parse_args(argv):
     return parser.parse_args(argv)
 
 
-def main(argv=None):
+def main(argv=None):  # NOSONAR python:S3516 -- returns 0 on success; failures exit via fail_with_message
     args = parse_args(sys.argv[1:] if argv is None else argv)
 
     # Get directories

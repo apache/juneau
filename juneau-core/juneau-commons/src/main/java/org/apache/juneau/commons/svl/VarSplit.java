@@ -50,9 +50,14 @@ import java.util.*;
  * unterminated quote means the rest of the string is nested/quoted (left to the compiler's error path).  The scanner
  * is iterative, so arbitrarily deep nesting cannot overflow the stack.
  */
+@SuppressWarnings({
+	"java:S135", // The scanner loop uses continue and break for state transitions,
+	"java:S3776" // The scanner is a single state machine
+})
 final class VarSplit {
 
-	private static final int BODY = 0, EXPR = 1;
+	private static final int BODY = 0;
+	private static final int EXPR = 1;
 
 	/**
 	 * Internal-only stand-in for a literal comma (an escaped {@code \,}) in the internal comma form handed to

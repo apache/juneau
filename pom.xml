@@ -75,6 +75,9 @@
 		     jsf/jsm/ja (Java), xt/xa/xc/xs/xv (XML), joc/jok/jov (JSON), ua/uk/un/us (URL-encoding/UON),
 		     mc/mk/mv/mi (manifest files), cc/cs/ck/cv/ci (config files), plus c/dc/bc/l/property (misc). None of
 		     these are real HTML tags, so css:S4670 false-positives on every one of them. -->
+		<!-- Every multicriteria entry below (and sonar.exclusions) is also mirrored in the SonarCloud project's
+		     Analysis Scope settings, because SonarLint Connected Mode syncs those and never reads the POM. CI uses
+		     the POM values. When adding or changing an entry here, make the same change in SonarCloud. -->
 		<sonar.issue.ignore.multicriteria>e1,e2,e3,e4,e5,e6,e7,e8,e9</sonar.issue.ignore.multicriteria>
 		<sonar.issue.ignore.multicriteria.e1.ruleKey>css:S4670</sonar.issue.ignore.multicriteria.e1.ruleKey>
 		<sonar.issue.ignore.multicriteria.e1.resourceKey>**/javadoc.css</sonar.issue.ignore.multicriteria.e1.resourceKey>

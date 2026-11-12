@@ -30,14 +30,14 @@ class ExternalizeConfig_Test extends TestBase {
 		assertEquals(GuideRegion.read("ExternalizeConfig/run-output.txt", "output"), GuideRegion.normalize(ConfigDemo.run()));
 	}
 
-	@Test void a02_iniAndYamlAgree() throws Exception {
+	@Test void a02_iniAndYamlAgree() {
 		var ini = Config.create("ExternalizeConfig/app.ini").store(ClasspathStore.DEFAULT).build();
 		var yaml = Config.create("ExternalizeConfig/app.yaml").store(ClasspathStore.DEFAULT).build();
 		for (var key : new String[]{"server/host", "server/port", "server/baseUrl", "database/user", "database/poolSize"})
 			assertEquals(ini.get(key).asString().orElse(null), yaml.get(key).asString().orElse(null), key);
 	}
 
-	@Test void a03_licenseHeaderIsJustComments() throws Exception {
+	@Test void a03_licenseHeaderIsJustComments() {
 		var ini = Config.create("ExternalizeConfig/app.ini").store(ClasspathStore.DEFAULT).build();
 		assertEquals("[, server, database]", ini.getSectionNames().toString());
 	}

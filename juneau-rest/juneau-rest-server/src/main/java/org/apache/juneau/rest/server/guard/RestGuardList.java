@@ -107,7 +107,7 @@ public class RestGuardList {
 		return new Builder(beanStore);
 	}
 
-	private RestGuard[] entries;
+	private final RestGuard[] entries;
 
 	/**
 	 * Constructor.

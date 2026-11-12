@@ -36,7 +36,8 @@ class SwitcherCards_Test extends TestBase {
 	}
 
 	@Test void a02_invalidTableIsRejected() {
-		assertThrows(IllegalStateException.class, () -> SwitcherCards.table(TableSpec.create("bad")));
+		var bad = TableSpec.create("bad");
+		assertThrows(IllegalStateException.class, () -> SwitcherCards.table(bad));
 	}
 
 	@Test void a03_tableModelIsNotCopiedAsBody() {

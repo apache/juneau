@@ -217,7 +217,7 @@ def write_report(entries: list[dict], path: Path, window: int = 20) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(argv: list[str] | None = None) -> int:  # NOSONAR python:S3516 -- exit code is 0 by design; the report never fails the run
     parser = argparse.ArgumentParser(description="Print push timing regression summary.")
     source = parser.add_mutually_exclusive_group()
     source.add_argument("--repo", help="The repo whose run history to read (default: this script's repo)")

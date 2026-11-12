@@ -44,13 +44,13 @@
 for (const m of ['assert', 'async_hooks', 'buffer', 'child_process', 'crypto', 'events', 'fs', 'http', 'http2', 'https', 'net',
 	'os', 'path', 'perf_hooks', 'querystring', 'readline', 'stream', 'string_decoder', 'timers', 'tls', 'url', 'util', 'vm',
 	'worker_threads', 'zlib'])
-	try { require(m); } catch (e) { /* module absent on an older Node; the preload must never throw */ }
+	try { require(m); } catch (e) { /* module absent on an older Node; the preload must never throw */ } // NOSONAR javascript:S2486 - the preload must never throw
 for (const g of ['fetch', 'Request', 'Response', 'Headers', 'FormData', 'WebSocket', 'EventSource', 'MessageChannel', 'BroadcastChannel',
 	'TextDecoderStream', 'ReadableStream', 'CompressionStream', 'Blob', 'File', 'URL', 'URLSearchParams', 'AbortController'])
-	try { if (g in globalThis) void globalThis[g]; } catch (e) { /* ignore */ }
+	try { if (g in globalThis) void globalThis[g]; } catch (e) { /* ignore */ } // NOSONAR javascript:S2486,javascript:S3735 - the preload must never throw; void forces the lazy global getter
 
 const TYPED_ARRAY = Object.getPrototypeOf(Int8Array);
-const proto = (c) => c && c.prototype;
+const proto = (c) => c?.prototype;
 
 const REMOVED = [
 	[Array.prototype, ['toSorted', 'toReversed', 'toSpliced', 'with']],
@@ -75,15 +75,15 @@ for (const name of ['isWellFormed', 'toWellFormed']) {
 		continue;  // Absent on this Node already, so there is nothing to guard.
 	const guarded = {
 		[name](...args) {
-			const stack = new Error().stack.split('\n')[2] || '';
+			const stack = new Error('caller probe').stack.split('\n')[2] || '';
 			if (!/\(?node:|^\s*at node:|\(?internal\//.test(stack))
-				throw new TypeError(`${this}.${name} is not a function (removed by node-floor-preload)`);
+				throw new TypeError(`${String(this)}.${name} is not a function (removed by node-floor-preload)`);
 			return original.apply(this, args);
 		}
 	}[name];
-	Object.defineProperty(String.prototype, name, { value: guarded, configurable: true, writable: true, enumerable: false });
+	Object.defineProperty(String.prototype, name, { value: guarded, configurable: true, writable: true, enumerable: false });  // NOSONAR javascript:S6643 - deliberate: swaps in a guard that mimics an older Node
 }
 
 for (const [target, names] of REMOVED)
 	for (const name of names)
-		try { if (target) delete target[name]; } catch (e) { /* ignore */ }
+		try { if (target) delete target[name]; } catch (e) { /* ignore */ } // NOSONAR javascript:S2486 - the preload must never throw

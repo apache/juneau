@@ -116,7 +116,8 @@ class SwitcherCardType_Test extends TestBase {
 	}
 
 	@Test void style_a02_jsonBodyBadValueSameMessage() {
-		var e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(src("{style:'pills'," + OK.substring(1))));
+		var pills = src("{style:'pills'," + OK.substring(1));
+		var e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(pills));
 		assertTrue(e.getMessage().contains("SwitcherDef 'sw' style 'pills' must be one of tabs, slider."), e.getMessage());
 	}
 

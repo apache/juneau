@@ -125,7 +125,7 @@ function clickTab(panel, id) {
 	const d = s.detail();
 	out.detail_exists = !!d;
 	out.tab_handles = d ? d.tabs.map(function (t) { return t.id; }).join('|') : null;
-	out.tab_lookup = !!(d?.tab('b')?.id === 'b');
+	out.tab_lookup = d?.tab('b')?.id === 'b';
 	out.loaded_once_with_count = s.calls.filter(function (c) { return c.indexOf('loaded:') === 0; }).join('|');
 	out.rendered_fired = s.calls.indexOf('rendered:rowdetail') >= 0;
 

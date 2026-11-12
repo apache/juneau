@@ -538,7 +538,7 @@ out.errors = {};
 		const warns = [];
 		const r = run(C({ header: { title: 'Pets', logo: logo } }), tpl, { before: (sb, env) => {
 			addIcons(src, sb, env);
-			sb.console = Object.assign({}, sb.console, { warn: (...a) => warns.push(a.join(' ')) });
+			sb.console = { ...sb.console, warn: (...a) => warns.push(a.join(' ')) };
 		} });
 		const mark = r.doc.querySelector('.jc-logo-symbol');
 		const use = r.doc.querySelector('use');

@@ -345,18 +345,6 @@
 	min-height: var(--jc-space-5, 1.5em);
 }
 
-/* Saved views: Rename and Delete fold behind the "..." button; its menu opens on its own line under the row. */
-.juneau-config-dialog .juneau-config-saved-menu {
-	display: none;
-}
-
-.juneau-config-dialog .juneau-config-saved-menu[data-open="true"] {
-	display: flex;
-	align-items: center;
-	gap: var(--jc-space-2);
-	flex: 1 0 100%;
-}
-
 /* Naming a view swaps the whole row for the labelled name field. */
 .juneau-config-dialog .juneau-config-saved-bar[data-naming="true"] > :not(.juneau-config-name-field) {
 	display: none;

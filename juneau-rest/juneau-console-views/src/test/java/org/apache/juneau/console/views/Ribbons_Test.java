@@ -85,7 +85,7 @@ class Ribbons_Test extends TestBase {
 	@Test void a07_without_rejects_unknown_and_type_aliases() {
 		for (var bad : List.of("nope", "collapseAll", "resetDefaults", "columnSettings", "linkButton", "create")) {
 			var builder = Ribbons.standard().without(bad);
-			var e = assertThrows(IllegalArgumentException.class, () -> builder.build(), bad);
+			var e = assertThrows(IllegalArgumentException.class, builder::build, bad);
 			assertTrue(e.getMessage().contains("collapse") && e.getMessage().contains("columns"), "lists valid ids: " + e.getMessage());
 		}
 	}

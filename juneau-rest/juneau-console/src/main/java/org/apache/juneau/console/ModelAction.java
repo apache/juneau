@@ -29,12 +29,19 @@ import java.util.regex.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192", // Contract key names repeat as inline literals by design.
+	"java:S1845" // Instance field id and the ID pattern constant are distinct, conventionally named members.
+})
 public final class ModelAction {
 
 	private static final Pattern ID = Pattern.compile("^[A-Za-z0-9_.-]{1,128}$");
 
 	private final String id;
-	private String icon, label, tooltip, tone;
+	private String icon;
+	private String label;
+	private String tooltip;
+	private String tone;
 	private HandlerRef handler;
 	private Map<String,Object> payload;
 

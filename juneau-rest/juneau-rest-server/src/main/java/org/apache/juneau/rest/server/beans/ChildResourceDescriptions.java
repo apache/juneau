@@ -18,8 +18,6 @@ package org.apache.juneau.rest.server.beans;
 
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
-import java.util.*;
-
 import org.apache.juneau.rest.server.*;
 
 /**

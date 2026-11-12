@@ -103,7 +103,8 @@ def test_wrapper_path_with_a_space_runs_once_before_mvn(test_mod, monkeypatch, t
     monkeypatch.setenv("JUNEAU_MVN_WRAPPER", str(script))
     code, _ = test_mod.run_command("mvn -v")
     lines = log.read_text().splitlines()
-    assert len(lines) == 1 and lines[0].split()[0] == "mvn"
+    assert len(lines) == 1
+    assert lines[0].split()[0] == "mvn"
 
 
 @pytest.mark.parametrize("form", ["quoted", "unquoted"])

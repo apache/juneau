@@ -388,7 +388,8 @@ class VarTemplateCompiler_Grammar_Test extends TestBase {
 	@Test void i02_scriptStyleRefusesRequestVarsInExpressions() {
 		var s = LENIENT.createSession();
 		assertEquals("", s.resolveScriptStyle("#{${RQ:x}}"));
-		assertThrows(ExprException.class, () -> STRICT.createSession().resolveScriptStyle("#{${RQ:x}}"));
+		var strict = STRICT.createSession();
+		assertThrows(ExprException.class, () -> strict.resolveScriptStyle("#{${RQ:x}}"));
 	}
 
 	@Test void i03_htmlDocPassthroughVars() {
@@ -515,7 +516,8 @@ class VarTemplateCompiler_Grammar_Test extends TestBase {
 		assertEquals("d", s.resolveScriptStyle("#{${RQ:x} ?: 'd'}"));
 		assertEquals("<b>x</b>", s.resolveScriptStyle("#{${W:x}}"));
 		assertEquals("<b>x</b>", s.resolve("#{${RQ:x} ?: 'd'}"));
-		var e = assertThrows(ExprException.class, () -> STRICT.createSession().resolveScriptStyle("#{${RQ:x} ?: 'd'}"));
+		var strict = STRICT.createSession();
+		var e = assertThrows(ExprException.class, () -> strict.resolveScriptStyle("#{${RQ:x} ?: 'd'}"));
 		assertTrue(e.getMessage().contains("RQ"), e.getMessage());
 	}
 

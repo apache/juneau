@@ -27,8 +27,8 @@ PRIO_ENV = 'JUNEAU_MVN_PRIORITY_DIR'
 POLL_ENV = 'JUNEAU_MVN_POLL'
 HELD_ENV = 'JUNEAU_MVN_LOCK_HELD'
 WRAPPER_ENV = 'JUNEAU_MVN_WRAPPER'
-DEFAULT_LOCK = '/tmp/claude-501/juneau-mvn.lockdir'
-DEFAULT_PRIO = '/tmp/claude-501/juneau-mvn.priority'
+DEFAULT_LOCK = '/tmp/claude-501/juneau-mvn.lockdir'  # NOSONAR python:S5443 -- per-user subdirectory, only a default; JUNEAU_MVN_LOCKDIR overrides it
+DEFAULT_PRIO = '/tmp/claude-501/juneau-mvn.priority'  # NOSONAR python:S5443 -- per-user subdirectory, only a default; JUNEAU_MVN_PRIORITY_DIR overrides it
 
 
 def _alive(pid):

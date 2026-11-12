@@ -126,6 +126,9 @@ public interface VarFunction {
 	 * @return The result; <jk>null</jk> means absent.
 	 * @throws Exception Function-specific failure.
 	 */
+	@SuppressWarnings({
+		"java:S112" // Functions may fail with any checked exception; this is the public contract
+	})
 	default Object invokeValue(VarResolverSession session, List<Object> args) throws Exception {
 		return invoke(session, args);
 	}

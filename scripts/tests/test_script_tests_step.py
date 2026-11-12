@@ -135,6 +135,6 @@ def test_child_environment_carries_the_guard(monkeypatch, test_mod):
 # ---- push.py plan ----------------------------------------------------------------------------------------------------
 def test_push_plan_lists_the_row_after_tests(push_mod):
     args = argparse.Namespace(test_only=True, tracker_audit=False, skip_tests=False, js_tests=False)
-    ids = [step_id for step_id, _ in push_mod.push_plan(args, SCRIPTS_DIR, SCRIPTS_DIR.parent, False)]
+    ids = [step_id for step_id, _ in push_mod.push_plan(args, SCRIPTS_DIR, False)]
     assert ids.index("py-tests") == ids.index("perf") + 1 == ids.index("tests") + 2
     assert push_mod.PLAN_LABELS["py-tests"] == "Python Tests"

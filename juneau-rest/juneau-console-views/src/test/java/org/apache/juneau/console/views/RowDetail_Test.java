@@ -153,7 +153,7 @@ class RowDetail_Test extends TestBase {
 
 	@Test void b03_duplicateTabId_throws() {
 		var d = RowDetail.inline().section("A", "x").section("A", "y");
-		assertThrows(IllegalArgumentException.class, () -> d.toMap());
+		assertThrows(IllegalArgumentException.class, d::toMap);
 	}
 
 	@Test void b04_noTabsNoSections_generatesFlatDetails() {
@@ -190,8 +190,10 @@ class RowDetail_Test extends TestBase {
 	}
 
 	@Test void b07c_basePath_rejectsUnsafe() {
-		assertThrows(IllegalArgumentException.class, () -> RowDetail.fromBean(String.class, id -> id).basePath("https://evil.example"));
-		assertThrows(IllegalArgumentException.class, () -> RowDetail.fromBean(String.class, id -> id).basePath("/a/{id}"));
+		var sut1 = RowDetail.fromBean(String.class, id -> id);
+		var sut2 = RowDetail.fromBean(String.class, id -> id);
+		assertThrows(IllegalArgumentException.class, () -> sut1.basePath("https://evil.example"));
+		assertThrows(IllegalArgumentException.class, () -> sut2.basePath("/a/{id}"));
 	}
 
 	@Test void b08_cacheNone_emitted_defaultOmitted() {

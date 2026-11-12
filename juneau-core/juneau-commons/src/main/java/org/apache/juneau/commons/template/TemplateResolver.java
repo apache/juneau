@@ -213,7 +213,9 @@ public final class TemplateResolver {
 			var patterns = new ArrayList<>(replaced ? only : SafeFunctions.patterns());
 			patterns.addAll(extra);
 			b.allowFunctions(patterns.toArray(new String[0]));
-			var r = renderer != null ? renderer : (destination == null ? null : destination.renderer());
+			var r = renderer;
+			if (r == null && destination != null)
+				r = destination.renderer();
 			var e = destination == null ? null : destination.encoder();
 			return new TemplateResolver(b.build(), r, e, new JsonValueFormatter(maxCollectionSize, strict));
 		}
@@ -272,7 +274,10 @@ public final class TemplateResolver {
 		Objects.requireNonNull(template, "template must not be null");
 		if (template.owner() != this)
 			throw iaex("template was parsed by a different TemplateResolver");
-		var session = resolver.createSession().scope(scope == null ? n -> null : n -> n == null ? null : scope.get(n));
+		Function<String,Object> lookup = n -> n == null ? null : scope.get(n);
+		if (scope == null)
+			lookup = n -> null;
+		var session = resolver.createSession().scope(lookup);
 		if (formatter != null)
 			session.valueFormatter(formatter);
 		return template.template().resolve(session, valueEncoder != null ? valueEncoder : encoder);

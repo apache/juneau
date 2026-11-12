@@ -72,6 +72,7 @@ untracked files.
 import argparse
 import glob
 import json
+import math
 import os
 import subprocess
 import sys
@@ -248,7 +249,7 @@ def format_runtime_results(json_path: Path) -> list[str]:
         params = ",".join(f"{k}={v}" for k, v in (entry.get("params") or {}).items())
         primary = entry["primaryMetric"]
         error = primary.get("scoreError")
-        error_text = f"{error:.3f}" if isinstance(error, (int, float)) and error == error else "-"
+        error_text = f"{error:.3f}" if isinstance(error, (int, float)) and not math.isnan(error) else "-"
         alloc = None
         for key, metric in entry.get("secondaryMetrics", {}).items():
             if key.endswith("gc.alloc.rate.norm"):

@@ -63,6 +63,10 @@ import java.util.*;
  * mode), the evaluator throws {@link FallThrough}.  The caller (Task 2.5) must catch it and emit the fallthrough text.
  * In strict mode an {@link ExprException} is thrown instead.
  */
+@SuppressWarnings({
+	"java:S135", // Loops use continue and break for lenient-mode skips
+	"java:S1192" // Duplicated literals are diagnostic message fragments that read more clearly inline
+})
 final class ExprEvaluator {
 
 	/** Marker meaning "no such property" (distinct from a present <jk>null</jk> value). */
@@ -164,10 +168,6 @@ final class ExprEvaluator {
 		}
 	}
 
-	private static Object op(String name, int pos, ExprContext ctx, Object...args) {
-		return invoke(fn("$op." + name, pos, ctx), pos, ctx, args);
-	}
-
 	/** Plain function call.  Call-form <c>and/or/not</c> are ordinary public functions: eager, public coercion table. */
 	private static Object call(Expr.Call c, ExprContext ctx) {
 		var n = c.fn();
@@ -240,7 +240,7 @@ final class ExprEvaluator {
 	/** Short-circuit <c>and</c> / <c>or</c>; the operator function coerces each operand. */
 	private static Object andOr(boolean and, Expr l, Expr r, int pos, ExprContext ctx) {
 		var f = fn(and ? "$op.and" : "$op.or", pos, ctx);
-		var lb = (Boolean)invoke(f, pos, ctx, node(l, ctx), and ? Boolean.TRUE : Boolean.FALSE);
+		boolean lb = (Boolean)invoke(f, pos, ctx, node(l, ctx), and ? Boolean.TRUE : Boolean.FALSE);
 		if (and != lb)
 			return lb;   // false and ... / true or ...
 		return invoke(f, pos, ctx, lb, node(r, ctx));
@@ -248,7 +248,7 @@ final class ExprEvaluator {
 
 	private static Object ternary(Expr.Ternary t, ExprContext ctx) {
 		var f = fn("$op.ternary", t.pos(), ctx);
-		var chosen = (Boolean)invoke(f, t.pos(), ctx, node(t.c(), ctx), Boolean.TRUE, Boolean.FALSE);
+		boolean chosen = (Boolean)invoke(f, t.pos(), ctx, node(t.c(), ctx), Boolean.TRUE, Boolean.FALSE);
 		return node(chosen ? t.a() : t.b(), ctx);
 	}
 
@@ -261,7 +261,7 @@ final class ExprEvaluator {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// ${...}
+	// Variable references
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -295,10 +295,6 @@ final class ExprEvaluator {
 		} finally {
 			ctx.session.exitExprVar();
 		}
-	}
-
-	private static boolean isDigit(char c) {
-		return c >= '0' && c <= '9';
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -474,7 +470,7 @@ final class ExprEvaluator {
 		if (o instanceof Collection<?> c)
 			return switch (name) { case "size" -> c.size(); case "empty" -> c.isEmpty(); default -> MISSING; };
 		if (o instanceof CharSequence s)
-			return switch (name) { case "length" -> s.length(); case "empty" -> s.length() == 0; default -> MISSING; };
+			return switch (name) { case "length" -> s.length(); case "empty" -> s.isEmpty(); default -> MISSING; };
 		if (o instanceof Optional<?> p)
 			return switch (name) { case "present" -> p.isPresent(); case "empty" -> p.isEmpty(); default -> MISSING; };
 		if (o.getClass().isArray())
@@ -604,13 +600,19 @@ final class ExprEvaluator {
 			it = new Iterator<Object>() {
 				int i;
 				@Override public boolean hasNext() { return i < n; }
-				@Override public Object next() { return Array.get(t, i++); }
+				@Override public Object next() {
+					if (i >= n)
+						throw new NoSuchElementException();
+					return Array.get(t, i++);
+				}
 			};
 		} else if (t instanceof Map<?,?> m) {
 			var ei = m.entrySet().iterator();
 			it = new Iterator<Object>() {
 				@Override public boolean hasNext() { return ei.hasNext(); }
 				@Override public Object next() {
+					if (! ei.hasNext())
+						throw new NoSuchElementException();
 					var en = ei.next();
 					var em = new LinkedHashMap<String,Object>();
 					em.put("key", en.getKey());

@@ -31,6 +31,9 @@ import org.apache.juneau.console.widgets.Op;
 import org.apache.juneau.console.widgets.StatusTone;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"java:S5976" // Each test pins a distinct error code and message; a parameterized test would hide which contract failed.
+})
 class DatatablesCardType_Test extends TestBase {
 
 	private final DatatablesCardType h = new DatatablesCardType();

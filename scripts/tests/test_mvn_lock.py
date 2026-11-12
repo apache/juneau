@@ -59,7 +59,8 @@ def test_waits_and_reports_holder_then_proceeds(lockenv):
         threading.Timer(0.3, lambda: __import__('shutil').rmtree(lockenv / 'lockdir')).start()
         with mvn_lock.MvnLock(on_wait=lambda pid, secs: waits.append(pid)):
             pass
-        assert waits and waits[0] == sleeper.pid
+        assert waits
+        assert waits[0] == sleeper.pid
     finally:
         sleeper.kill()
         sleeper.wait()
@@ -86,8 +87,9 @@ def test_never_breaks_lock_of_live_pid(lockenv):
             if len(calls) >= 3:
                 raise KeyboardInterrupt
 
+        lock = mvn_lock.MvnLock(on_wait=stop)
         with pytest.raises(KeyboardInterrupt):
-            mvn_lock.MvnLock(on_wait=stop).acquire()
+            lock.acquire()
         assert (lockenv / 'lockdir').exists()
     finally:
         sleeper.kill()
@@ -135,7 +137,8 @@ def test_wait_notifier_throttles():
     notify(None, 0)
     notify(None, 5)
     notify(None, 61)
-    assert len(said) == 2 and 'another build' in said[0]
+    assert len(said) == 2
+    assert 'another build' in said[0]
 
 
 @pytest.mark.skipif(not Path.home().joinpath('agents/skills/juneau-worktrees/juneau-mvn-lock.sh').exists(),
@@ -203,9 +206,12 @@ def test_wait_row_shows_holder_then_ends_with_elapsed(lockenv):
     waiting = mvn_lock.WaitRow(lambda: _FakeRow(log, step), said.append)
     waiting(None, 0)
     waiting(None, 125)
-    assert log == ['open'] and step.details == ['held by another build'] * 2 and said
+    assert log == ['open']
+    assert step.details == ['held by another build'] * 2
+    assert said
     waiting.close()
-    assert log == ['open', 'close'] and step.summary == 'acquired after 2:05'
+    assert log == ['open', 'close']
+    assert step.summary == 'acquired after 2:05'
     waiting.close()
     assert log == ['open', 'close']
 

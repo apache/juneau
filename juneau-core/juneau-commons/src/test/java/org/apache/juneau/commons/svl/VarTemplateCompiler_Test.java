@@ -388,14 +388,12 @@ class VarTemplateCompiler_Test extends TestBase {
 	// =========================================================================
 
 	@Test void g01_emptyFunctionName() {
-		var vr = vr();
 		// "#{()}" — parseFunctionName: pos==start at line 447 -> "Unexpected ')'".
 		var ex = strictFail("#{()}");
 		assertTrue(ex.getMessage().contains("Unexpected ')'"), ex.getMessage());
 	}
 
 	@Test void g02_functionNameStartsWithDigit() {
-		var vr = vr();
 		// "#{1foo()}" — parseFunctionName captures "1foo", then line 450 detects non-letter start.
 		// parseError no longer routes the assembled message (which contains the user's source fragment
 		// with literal '{' / '}') through MessageFormat, so the visible message is preserved verbatim.
@@ -405,21 +403,18 @@ class VarTemplateCompiler_Test extends TestBase {
 	}
 
 	@Test void g03_functionNameStartsWithUnderscore() {
-		var vr = vr();
 		// "_x()" — '_' is allowed in identifier chars but isLetter('_') is false.
 		var ex = strictFail("#{_foo()}");
 		assertTrue(ex.getMessage().contains("unknown function '_foo'"), ex.getMessage());
 	}
 
 	@Test void g04_whitespaceOnlyBody() {
-		var vr = vr();
 		// "#{   }" — skipWs eats all of body, parseFunctionName finds pos==start.
 		var ex = strictFail("#{   }");
 		assertTrue(ex.getMessage().contains("Empty expression"), ex.getMessage());
 	}
 
 	@Test void g05_emptyBody() {
-		var vr = vr();
 		// "#{}" — same path as whitespace-only.
 		var ex = strictFail("#{}");
 		assertTrue(ex.getMessage().contains("Empty expression"), ex.getMessage());
@@ -448,26 +443,22 @@ class VarTemplateCompiler_Test extends TestBase {
 	}
 
 	@Test void h02_unclosedArgList() {
-		var vr = vr();
 		// Closed body but missing ')': "#{upper(}".
 		var ex = strictFail("#{upper(}");
 		assertTrue(ex.getMessage().contains("Unexpected end of expression"), ex.getMessage());
 	}
 
 	@Test void h03_trailingContentAfterCloseParen() {
-		var vr = vr();
 		// "#{upper(x)trailing}" — expectEnd fails (line 592-593).
 		strictFail("#{upper(x)trailing}");
 	}
 
 	@Test void h04_missingOpenParen() {
-		var vr = vr();
 		// "#{upper x}" — after parseFunctionName (consuming "upper"), expect('(') fails.
 		strictFail("#{upper x}");
 	}
 
 	@Test void h05_unexpectedEndInArg() {
-		var vr = vr();
 		// Trailing comma forces parseArg to look for another arg and fail.
 		strictFail("#{upper(a,}");
 	}
@@ -511,7 +502,6 @@ class VarTemplateCompiler_Test extends TestBase {
 	}
 
 	@Test void i07_unterminatedQuotedString() {
-		var vr = vr();
 		// Quoted string with no closing quote — covers line 518.
 		// The '#{}' body close still has to be reached, so use:
 		//   "#{id(\"abc)}"  (quote opened, never closed; ')}' is consumed as part of string)
@@ -539,7 +529,7 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void j01_bareIdentifier() {
 		var vr = vr();
-		assertEquals("HELLO", vr.resolve("#{upper('hello')}"));
+		assertEquals("hello", vr.resolve("#{lower('HELLO')}"));
 	}
 
 	@Test void j02_bareNumber() {
@@ -586,7 +576,6 @@ class VarTemplateCompiler_Test extends TestBase {
 	}
 
 	@Test void j10_emptyBareToken() {
-		var vr = vr();
 		// "#{id(,a)}" — first arg is empty bare token. parseArg sees ',' (separator)
 		// and parseBareToken finds pos==start -> "Unexpected ','" (line 578-579).
 		var ex = strictFail("#{id(,a)}");
@@ -615,7 +604,6 @@ class VarTemplateCompiler_Test extends TestBase {
 	}
 
 	@Test void k04_nestedMarkerMissingBrace() {
-		var vr = vr();
 		// "#{id($E)}" — first char '$' begins parseNestedMarker; consumes 'E' as prefix; // NOSONAR
 		// next char is ')' which fails the '{' expectation (line 540-541).
 		var ex = strictFail("#{id($E)}");
@@ -623,13 +611,11 @@ class VarTemplateCompiler_Test extends TestBase {
 	}
 
 	@Test void k05_nestedMarkerHashMissingBrace() {
-		var vr = vr();
 		// "#{id(#x)}" — '#' begins nested marker but no '{' follows.
 		strictFail("#{id(#x)}");
 	}
 
 	@Test void k06_nestedMarkerUnterminated() {
-		var vr = vr();
 		// "#{id(${abc)}" — outer '#{...}' picks up nested ${ } but the body ends before
 		// the inner var has a closing '}'. The outer S3H state machine actually consumes
 		// the trailing close as part of the body so the parser sees an unterminated

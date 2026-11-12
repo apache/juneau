@@ -55,17 +55,15 @@ class BoundedServletInputStream_Test {
 	@Test void a04_bulkRead_overLimit_neverSilentlyTruncatesOrReturnsZero() throws Exception {
 		var is = stream(100, 10);
 		var b = new byte[4];
-		var total = 0;
-		try {
+		var total = new int[1];
+		assertThrows(IOException.class, () -> {
 			int r;
 			while ((r = is.read(b, 0, 4)) != -1) {
 				assertTrue(r > 0, "a bulk read must not return 0 for a non-empty buffer");
-				total += r;
+				total[0] += r;
 			}
-			fail("expected the limit to be reported");
-		} catch (IOException e) {
-			assertEquals(10, total);
-		}
+		});
+		assertEquals(10, total[0]);
 	}
 
 	@Test void a05_zeroLengthRead_returnsZero() throws Exception {

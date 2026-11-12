@@ -394,7 +394,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 	private static void checkNoContractVersion(CardSource source, Object node, String where) {
 		if (node instanceof Map<?,?> m) {
 			// A nested-table tab carries a pre-built slot, whose contractVersion is part of its shape.
-			if ("table".equals(m.get("kind")) && m.get("nested") instanceof Map<?,?> nested) {
+			if ("table".equals(m.get("kind")) && m.get("nested") instanceof Map<?,?>) {
 				var rest = new LinkedHashMap<Object,Object>(m);
 				rest.remove("nested");
 				checkNoContractVersion(source, rest, where);

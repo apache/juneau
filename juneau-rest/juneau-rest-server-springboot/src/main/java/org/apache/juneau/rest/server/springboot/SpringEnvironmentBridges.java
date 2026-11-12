@@ -80,6 +80,9 @@ final class SpringEnvironmentBridges {
 	 * @param context The application context.  Must not be <jk>null</jk>.
 	 * @return The registration, with its reference count incremented.
 	 */
+	@SuppressWarnings({
+		"java:S3824" // Setup can call remove(r) on failure, which would modify the map from inside a computeIfAbsent mapping function.
+	})
 	static Registration acquire(ApplicationContext context) {
 		synchronized (LOCK) {
 			var r = REGISTRATIONS.get(context);

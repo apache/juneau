@@ -225,7 +225,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 	private static final java.util.regex.Pattern LANG_RE = java.util.regex.Pattern.compile("[A-Za-z]{2,8}");
 	private static final java.util.regex.Pattern SCRIPT_RE = java.util.regex.Pattern.compile("[A-Za-z]{4}");
-	private static final java.util.regex.Pattern REGION_RE = java.util.regex.Pattern.compile("[A-Za-z]{2}|[0-9]{3}");
+	private static final java.util.regex.Pattern REGION_RE = java.util.regex.Pattern.compile("[A-Za-z]{2}|\\d{3}");
 
 	/*
 	 * Converts an Accept-Language range to a Locale.

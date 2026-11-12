@@ -40,7 +40,7 @@ class TypedFunction_TypedValues_Test extends TestBase {
 		public Long invoke(long a) { return a * 2; }
 	}
 
-	@Test void a01_typedArgAndStringArgBothWork() throws Exception {
+	@Test void a01_typedArgAndStringArgBothWork() {
 		var abs = new ArithmeticFunctions.Abs();
 		assertEquals("3", abs.invokeValue(null, List.of(-3L)));
 		assertEquals("3", abs.invoke(null, List.of("-3")));
@@ -60,7 +60,7 @@ class TypedFunction_TypedValues_Test extends TestBase {
 		assertEquals("3:abc", p.invoke(null, List.of("a", "b", "c")));
 	}
 
-	@Test void a04_invokeValueReturnsUnstringifiedResult() throws Exception {
+	@Test void a04_invokeValueReturnsUnstringifiedResult() {
 		var n = new Num();
 		assertEquals(8L, n.invokeValue(null, List.of(4)));
 		assertEquals("8", n.invoke(null, List.of("4")));

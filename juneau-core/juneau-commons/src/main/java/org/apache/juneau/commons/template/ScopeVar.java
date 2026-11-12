@@ -34,7 +34,7 @@ import org.apache.juneau.commons.svl.*;
  * <p>
  * The text a scope value produces is data and is never re-resolved, so {@link #allowRecurse()} is <jk>false</jk>.
  */
-// TODO: dotted ${a.b} would need a public path reader from the evaluator
+// Dotted ${a.b} keys are not supported: they would need a public path reader from the evaluator.
 final class ScopeVar extends DefaultingVar {
 
 	ScopeVar() {

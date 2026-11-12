@@ -33,14 +33,20 @@ class ModelAction_Test extends TestBase {
 	@Test void toMap_minimal() {
 		assertEquals(List.of("type", "id", "handler"), new ArrayList<>(ModelAction.of("go").handler("app.go").toMap().keySet()));
 	}
-	@Test void toMap_requiresHandler() { assertThrows(IllegalStateException.class, () -> ModelAction.of("go").toMap()); }
+	@Test void toMap_requiresHandler() {
+		var action = ModelAction.of("go");
+		assertThrows(IllegalStateException.class, action::toMap);
+	}
 	@Test void id_grammar() {
 		assertThrows(IllegalArgumentException.class, () -> ModelAction.of("1 bad"));
 		assertThrows(IllegalArgumentException.class, () -> ModelAction.of(""));
 		assertThrows(IllegalArgumentException.class, () -> ModelAction.of("x".repeat(129)));
 		assertEquals("a.b_c-1", ModelAction.of("a.b_c-1").id());
 	}
-	@Test void handler_badName() { assertThrows(IllegalArgumentException.class, () -> ModelAction.of("go").handler("Bad")); }
+	@Test void handler_badName() {
+		var action = ModelAction.of("go");
+		assertThrows(IllegalArgumentException.class, () -> action.handler("Bad"));
+	}
 	@Test void handler_inline_json() {
 		assertEquals(Map.of("inline", "x"), ModelAction.of("go").handler(HandlerRef.inline("x")).toMap().get("handler"));
 	}

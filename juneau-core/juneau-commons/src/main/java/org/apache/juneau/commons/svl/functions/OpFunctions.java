@@ -56,6 +56,9 @@ import org.apache.juneau.commons.svl.*;
  * 		bounded only by the configured limits and the function allowlist.
  * </ul>
  */
+@SuppressWarnings({
+	"java:S3776" // Numeric comparison and arithmetic dispatch over every numeric kind in one place
+})
 public final class OpFunctions {
 
 	private OpFunctions() {}
@@ -123,6 +126,9 @@ public final class OpFunctions {
 		return isLong(o) || isDouble(o) || isBig(o);
 	}
 
+	@SuppressWarnings({
+		"java:S2111" // The exact binary expansion of the double is intended here
+	})
 	private static BigDecimal big(Object o) {
 		if (o instanceof BigDecimal x) return x;
 		if (o instanceof BigInteger x) return new BigDecimal(x);
@@ -229,7 +235,8 @@ public final class OpFunctions {
 			var dx = x.doubleValue();
 			var dy = y.doubleValue();
 			if (Double.isNaN(dx) || Double.isNaN(dy)) return UNORDERED;
-			return dx < dy ? -1 : dx > dy ? 1 : 0;
+			if (dx < dy) return -1;
+			return dx > dy ? 1 : 0;
 		}
 		if (isDouble(x) || isDouble(y)) {
 			var d = (isDouble(x) ? x : y).doubleValue();

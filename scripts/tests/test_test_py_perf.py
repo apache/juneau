@@ -192,7 +192,8 @@ def test_main_no_longer_writes_a_jsonl(test_mod, monkeypatch, tmp_path):
     assert test_mod._main() == 0
     assert seen == {"guard": ({"m": 1.0}, ["u"])}
     assert not (tmp_path / ".cache" / "juneau-push-timings").exists()
-    assert not hasattr(test_mod, "write_timing_log") and not hasattr(test_mod, "default_timing_log")
+    assert not hasattr(test_mod, "write_timing_log")
+    assert not hasattr(test_mod, "default_timing_log")
 
 
 def test_main_falls_back_to_parsing_the_output_when_the_summarizer_did_not_run(test_mod, monkeypatch):
@@ -484,15 +485,18 @@ def test_count_drop_warns_and_names_collapsed_modules(test_mod):
     sf = {"mod-a": 20.0, "mod-b": 10.0}
     history = runs(*[158000] * 5, surefire=sf)
     verdict, expected, lines = test_mod.test_count_check(history, 56000, {"mod-a": 0.5, "mod-b": 9.0})
-    assert verdict == "drop" and expected == 158000
+    assert verdict == "drop"
+    assert expected == 158000
     assert lines[0] == ("TEST-COUNT WARN: 56000 tests ran, 65% below the recent median of 158000 "
                         "(last 5 passing runs, threshold 10%).")
-    assert "mod-a (20.0s -> 0.5s)" in lines[1] and "mod-b" not in lines[1]
+    assert "mod-a (20.0s -> 0.5s)" in lines[1]
+    assert "mod-b" not in lines[1]
 
 
 def test_count_drop_with_no_collapsed_module_says_so(test_mod):
     verdict, _, lines = test_mod.test_count_check(runs(*[100] * 5), 10, {})
-    assert verdict == "drop" and "No single module" in lines[1]
+    assert verdict == "drop"
+    assert "No single module" in lines[1]
 
 
 def test_count_with_too_little_history_is_an_info_note(test_mod):
@@ -505,7 +509,8 @@ def test_count_ignores_failed_runs_other_shapes_and_this_runs_own_record(test_mo
     history = runs(100, 100, 100, 100, 100) + runs(5, ok=False) + runs(100, sig="old")[:0]
     history = runs(5, sig="other") + history + runs(40)       # newest record is this run's
     verdict, expected, _ = test_mod.test_count_check(history, 40, {})
-    assert verdict == "drop" and expected == 100
+    assert verdict == "drop"
+    assert expected == 100
 
 
 def test_count_guard_never_fails_and_writes_a_report(test_mod, tmp_path, monkeypatch):

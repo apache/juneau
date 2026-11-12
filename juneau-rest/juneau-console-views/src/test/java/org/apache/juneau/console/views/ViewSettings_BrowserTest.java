@@ -181,8 +181,9 @@ class ViewSettings_BrowserTest extends TestBase {
 		var l = wideLayout();
 		assertEquals(List.of("juneau-config-saved-bar", "juneau-config-tabs", "juneau-config-bodies", "juneau-config-status"), l.get("hostChildren"));
 		assertEquals(true, l.get("headerBeforeBar"));
-		assertEquals(List.of("Save", "Save as…"), l.get("rowButtons"));
-		assertEquals(List.of("Rename", "Delete"), l.get("barButtons"));
+		assertEquals(List.of("Save", "Save as…", "Rename", "Delete"), l.get("rowButtons"));
+		assertEquals(true, l.get("noMenu"));
+		assertEquals(true, l.get("actionsVisible"));
 		assertEquals(true, l.get("saveDisabled"));
 		assertEquals(true, l.get("deleteDanger"));
 		// The Default view is active: it can be neither renamed nor deleted.

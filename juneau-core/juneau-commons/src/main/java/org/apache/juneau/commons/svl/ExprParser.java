@@ -27,6 +27,10 @@ import java.util.*;
  * Integer literals that do not fit a <c>long</c> (e.g. <c>9223372036854775808</c>) become Doubles.
  * Because keywords are reserved, they cannot be used as bare identifiers.
  */
+@SuppressWarnings({
+	"java:S135", // Lexer and parser loops use continue and break for token dispatch,
+	"java:S3776" // Lexer and Pratt parser dispatch over the full token grammar in one place
+})
 class ExprParser {
 
 	/** Token kinds. */
@@ -94,7 +98,8 @@ class ExprParser {
 	 */
 	static List<Token> lex(String src) {
 		var out = new ArrayList<Token>();
-		int n = src.length(), i = 0;
+		int n = src.length();
+		int i = 0;
 		while (i < n) {
 			char c = src.charAt(i);
 			if (Character.isWhitespace(c)) { i++; continue; }
@@ -265,13 +270,22 @@ class ExprParser {
 
 	/** Pratt parser state over one token list. */
 	private static final class Parser {
-		private static final int BP_TERNARY = 1, BP_ELVIS = 2, BP_OR = 3, BP_AND = 4, BP_CMP = 5, BP_ADD = 6, BP_MUL = 7, BP_PREFIX = 8;
+		private static final int BP_TERNARY = 1;
+		private static final int BP_ELVIS = 2;
+		private static final int BP_OR = 3;
+		private static final int BP_AND = 4;
+		private static final int BP_CMP = 5;
+		private static final int BP_ADD = 6;
+		private static final int BP_MUL = 7;
+		private static final int BP_PREFIX = 8;
 
 		private final String src;
 		private final List<Token> toks;
 		private final int maxDepth;
 		private final int maxOps;
-		private int i, depth = -1, ops;
+		private int i;
+		private int depth = -1;
+		private int ops;
 
 		Parser(String src, List<Token> toks, int maxDepth, int maxOps) {
 			this.maxOps = maxOps;
@@ -516,7 +530,8 @@ class ExprParser {
 	}
 
 	private static int scanNumber(String src, int start, List<Token> out) {
-		int n = src.length(), i = start;
+		int n = src.length();
+		int i = start;
 		boolean dec = false;
 		while (i < n && isDigit(src.charAt(i))) i++;
 		if (i < n && src.charAt(i) == '.' && !(i + 1 < n && (Character.isJavaIdentifierStart(src.charAt(i + 1)) || src.charAt(i + 1) == '.' || src.charAt(i + 1) == '?' || src.charAt(i + 1) == '!'))) {

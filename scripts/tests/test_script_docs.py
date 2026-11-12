@@ -491,8 +491,10 @@ def test_python_help_flags_are_ignored():
 def test_python_dynamic_flags_are_unverifiable():
     source = "import argparse\nfor flag in FLAGS:\n    p.add_argument(flag)\n"
     declared = python_declared(source)
-    assert declared.uses_argparse and declared.flags == []
-    assert declared.add_calls == 1 and python_declared("import argparse\nparser = None\n").add_calls == 0
+    assert declared.uses_argparse
+    assert declared.flags == []
+    assert declared.add_calls == 1
+    assert python_declared("import argparse\nparser = None\n").add_calls == 0
 
 
 def test_main_guard_detection():
@@ -565,7 +567,8 @@ def test_check3_ignores_headings_inside_code_fences(tmp_path):
 def test_check4_fails_for_an_undocumented_flag(tmp_path):
     scripts = _scripts(tmp_path, {"tool.py": ARGPARSE_SCRIPT, "tool.md": GOOD_DOC})
     failures, _ = check_flags(scripts, Excludes())
-    assert any("--gamma" in f for f in failures) and any("run" in f for f in failures)
+    assert any("--gamma" in f for f in failures)
+    assert any("run" in f for f in failures)
     assert not any("--alpha" in f or "-a" in f.split(":")[-1] for f in failures)
 
 
@@ -580,7 +583,8 @@ def test_check4_reverse_check_only_warns(tmp_path):
     source = 'import argparse\np.add_argument("--alpha")\nif __name__ == "__main__":\n    pass\n'
     scripts = _scripts(tmp_path, {"tool.py": source, "tool.md": GOOD_DOC})
     failures, warns = check_flags(scripts, Excludes())
-    assert failures == [] and any("--beta" in w for w in warns)
+    assert failures == []
+    assert any("--beta" in w for w in warns)
 
 
 def test_stale_exclude_patterns_fail(tmp_path):

@@ -254,8 +254,9 @@ class VarResolver_AllowFunctions_Test extends TestBase {
 	}
 
 	@Test void k02_nullPatternsRejected() {
-		assertThrows(NullPointerException.class, () -> base(true).allowFunctions((String[])null));
-		assertThrows(NullPointerException.class, () -> base(true).allowFunctions("a", null));
+		var b = base(true);
+		assertThrows(NullPointerException.class, () -> b.allowFunctions((String[])null));
+		assertThrows(NullPointerException.class, () -> b.allowFunctions("a", null));
 	}
 
 	@Test void l01_lenientStructuralOperators() {

@@ -84,8 +84,10 @@ def test_tests_record_carries_one_series_per_bucket(test_mod, fake_mvn, run_hist
     assert record["series"]["surefire_s.core"] == {"mod-a": 4.5}
     assert record["series"]["surefire_s.container.springboot"] == {"mod-b": 7.0}
     assert record["series"]["reactor_s"] == {"mod-a": 10.0, "mod-b": 20.0}
-    assert record["step"] == "tests" and record["ok"] is True
-    assert record["wall_s"] is not None and record["wall_s"] >= 0
+    assert record["step"] == "tests"
+    assert record["ok"] is True
+    assert record["wall_s"] is not None
+    assert record["wall_s"] >= 0
 
 
 def test_the_parser_surefire_s_total_is_still_there(test_mod, fake_mvn, run_history, fake_reports):

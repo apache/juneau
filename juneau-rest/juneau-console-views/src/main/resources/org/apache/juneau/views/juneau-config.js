@@ -2737,7 +2737,7 @@
 	}
 
 	/**
-	 * The saved-views bar under the header, one row: picker, Save, Save as..., a "..." menu holding Rename and Delete,
+	 * The saved-views bar under the header, one row: picker, Save, Save as..., Rename, Delete,
 	 * and the "Unsaved changes" note.  Save as and Rename swap the row for one labelled name field (in the bar, never
 	 * a second dialog layer).
 	 */
@@ -2785,38 +2785,6 @@
 		ctx._configSaveAsBtn = saveAsBtn;
 		bar.appendChild(saveAsBtn);
 
-		const more = document.createElement("button");
-		more.type = "button";
-		more.className = "jc-btn juneau-config-saved-more";
-		more.setAttribute("aria-label", "View actions");
-		more.setAttribute("aria-expanded", "false");
-		paintUserText(more, "\u2026");
-		const menu = document.createElement("div");
-		menu.className = "juneau-config-saved-menu";
-		const outsideClick = function (e) {
-			if (!bar.contains(e.target)) setMenuOpen(false, false);
-		};
-		const setMenuOpen = function (open, refocus) {
-			menu.dataset.open = open ? "true" : "false";
-			more.setAttribute("aria-expanded", open ? "true" : "false");
-			document.removeEventListener("click", outsideClick);
-			if (open) document.addEventListener("click", outsideClick);
-			else if (refocus) more.focus();
-		};
-		more.addEventListener("click", function () { setMenuOpen(menu.dataset.open !== "true", true); });
-		bar.addEventListener("keydown", function (e) {
-			if (e.key === "Escape" && menu.dataset.open === "true") {
-				e.stopPropagation();
-				if (e.preventDefault) e.preventDefault();
-				setMenuOpen(false, true);
-			}
-		});
-		menu.addEventListener("click", function (e) {
-			if (e.target !== menu) setMenuOpen(false, false); // the picked action (name field) takes focus itself
-		});
-		bar.appendChild(more);
-		bar.appendChild(menu);
-
 		const renameBtn = document.createElement("button");
 		renameBtn.type = "button";
 		renameBtn.className = "jc-btn juneau-config-rename";
@@ -2825,7 +2793,7 @@
 			if (ctx._configActiveName != null) openNameField(ctx, "rename");
 		});
 		ctx._configRenameBtn = renameBtn;
-		menu.appendChild(renameBtn);
+		bar.appendChild(renameBtn);
 
 		const delBtn = document.createElement("button");
 		delBtn.type = "button";
@@ -2856,7 +2824,7 @@
 			});
 		});
 		ctx._configDeleteBtn = delBtn;
-		menu.appendChild(delBtn);
+		bar.appendChild(delBtn);
 
 		const dirty = document.createElement("span");
 		dirty.className = "juneau-config-dirty";

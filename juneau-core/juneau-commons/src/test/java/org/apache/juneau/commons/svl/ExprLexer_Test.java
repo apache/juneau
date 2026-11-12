@@ -27,6 +27,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for the {@link ExprParser} lexer and {@link ExprException}.
  */
+@SuppressWarnings({
+	"java:S5976" // Each lexer case asserts distinct token expectations and reads clearer as its own test
+})
 class ExprLexer_Test extends TestBase {
 
 	private static List<Token> lex(String s) {
@@ -36,7 +39,7 @@ class ExprLexer_Test extends TestBase {
 	private static String types(String s) {
 		var sb = new StringBuilder();
 		for (var t : lex(s))
-			sb.append(sb.length() == 0 ? "" : " ").append(t.type());
+			sb.append(sb.isEmpty() ? "" : " ").append(t.type());
 		return sb.toString();
 	}
 

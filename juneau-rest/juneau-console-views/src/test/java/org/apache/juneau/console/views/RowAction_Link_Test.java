@@ -42,13 +42,13 @@ class RowAction_Link_Test extends TestBase {
 	@Test void a03_hrefWithEndpointFormConfirm_rejected() {
 		var withEndpoint = RowDetail.inline().action(RowAction.link("o","/a").label("O").endpoint("/b"));
 		var withConfirm = RowDetail.inline().action(RowAction.link("o","/a").label("O").confirm("sure"));
-		assertThrows(IllegalArgumentException.class, () -> withEndpoint.toMap());
-		assertThrows(IllegalArgumentException.class, () -> withConfirm.toMap());
+		assertThrows(IllegalArgumentException.class, withEndpoint::toMap);
+		assertThrows(IllegalArgumentException.class, withConfirm::toMap);
 	}
 
 	@Test void a04_iconOnlyAction_needsLabel() {
 		var iconOnly = RowDetail.inline().action(RowAction.link("o","/a").icon("link"));
-		assertThrows(IllegalArgumentException.class, () -> iconOnly.toMap());
+		assertThrows(IllegalArgumentException.class, iconOnly::toMap);
 	}
 
 	@Test void a05_rowMenu_ignoresLinkActions() {

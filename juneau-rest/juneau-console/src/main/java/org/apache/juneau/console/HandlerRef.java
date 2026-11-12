@@ -34,6 +34,10 @@ import java.util.regex.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1845", // Instance field name and the NAME pattern constant are distinct, conventionally named members.
+	"java:S5998" // Handler names are short, so the regex repetition depth is bounded.
+})
 public final class HandlerRef {
 
 	private static final Pattern NAME = Pattern.compile("^[a-z][A-Za-z0-9]*(\\.[a-z][A-Za-z0-9-]*)+$");

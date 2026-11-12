@@ -85,6 +85,7 @@ import org.apache.juneau.commons.lang.*;
  * segment is emitted unchanged.
  */
 @SuppressWarnings({
+	"java:S127", // Scanners skip escaped characters by advancing the loop counter in the body
 	"java:S3776" // Cognitive complexity acceptable for this tokenizer
 })
 final class VarTemplateCompiler {
@@ -211,16 +212,16 @@ final class VarTemplateCompiler {
 		}
 		var body = compileNested(call, inner, input, j + 1, start);
 		var hasInternalVar = call.body().indexOf('{') != -1;
-		var folded = tryFoldStableVar(call.var(), body, hasInternalVar);
+		var folded = tryFoldStableVar(call.varDef(), body, hasInternalVar);
 		if (folded != null) {
 			// A folded var is a value, not author text: keep it a separate segment so a value encoder still sees it.
 			flushLiteral(segments, literal);
 			segments.add(new LiteralSegment(folded, true));
 		} else {
-			refs.add(new TemplateReference(TemplateReference.Kind.VAR, call.prefix().isEmpty() ? DOLLAR_BRACE_VAR : call.prefix(), call.var() != null, null, start, close + 1));
+			refs.add(new TemplateReference(TemplateReference.Kind.VAR, call.prefix().isEmpty() ? DOLLAR_BRACE_VAR : call.prefix(), call.varDef() != null, null, start, close + 1));
 			addKeyRef(call, inner, start + 2);
 			flushLiteral(segments, literal);
-			segments.add(new VarRefSegment(call.var(), call.prefix(), body, hasInternalVar, fallthrough));
+			segments.add(new VarRefSegment(call.varDef(), call.prefix(), body, hasInternalVar, fallthrough));
 		}
 		return close + 1;
 	}
@@ -286,7 +287,7 @@ final class VarTemplateCompiler {
 	 * written.
 	 */
 	private void addKeyRef(VarCall call, String inner, int innerStart) {
-		if (! (call.var() instanceof DefaultingVar) || ! DOLLAR_BRACE_VAR.equals(call.prefix()))
+		if (! (call.varDef() instanceof DefaultingVar) || ! DOLLAR_BRACE_VAR.equals(call.prefix()))
 			return;
 		var rest = inner.substring(call.restStart());
 		var j = VarSplit.firstTopLevel(rest, ':');
@@ -308,8 +309,19 @@ final class VarTemplateCompiler {
 	}
 
 	/** Identifier scope: top level, a row of a named list, or a body whose target cannot be named. */
-	private static final String ROOT = new String("<root>"), OPAQUE = new String("<opaque>");
+	@SuppressWarnings({
+		"java:S2129" // The String constructor guarantees a unique identity that no interned literal can equal
+	})
+	private static final String ROOT = new String("<root>");
 
+	@SuppressWarnings({
+		"java:S2129" // See ROOT: a unique identity marker
+	})
+	private static final String OPAQUE = new String("<opaque>");
+
+	@SuppressWarnings({
+		"java:S4973" // Scope markers are compared by identity on purpose, so they stay distinct from any equal name
+	})
 	private void walk(Expr e, int base, String scope) {
 		if (e instanceof Expr.Ident x) {
 			if (scope != OPAQUE)
@@ -317,8 +329,12 @@ final class VarTemplateCompiler {
 		} else if (e instanceof Expr.VarRef x) {
 			var raw = x.raw();
 			var call = translate(resolver.getVarMap()::get, raw.substring(2, raw.length() - 1));
-			var name = call.error() != null ? raw : (call.prefix().isEmpty() ? DOLLAR_BRACE_VAR : call.prefix());
-			refs.add(new TemplateReference(TemplateReference.Kind.VAR, name, call.error() == null && call.var() != null, null, base + x.pos(), base + x.pos() + raw.length()));
+			String name;
+			if (call.error() != null)
+				name = raw;
+			else
+				name = call.prefix().isEmpty() ? DOLLAR_BRACE_VAR : call.prefix();
+			refs.add(new TemplateReference(TemplateReference.Kind.VAR, name, call.error() == null && call.varDef() != null, null, base + x.pos(), base + x.pos() + raw.length()));
 			if (call.error() == null)
 				addKeyRef(call, raw.substring(2, raw.length() - 1), base + x.pos() + 2);
 		} else if (e instanceof Expr.Call x) {
@@ -341,6 +357,9 @@ final class VarTemplateCompiler {
 	}
 
 	/** The identifier scope of a select/project body: the list name when the target is a top-level identifier. */
+	@SuppressWarnings({
+		"java:S4973" // Scope markers are compared by identity on purpose
+	})
 	private static String bodyScope(Expr target, String scope) {
 		return target instanceof Expr.Ident x && scope == ROOT ? x.name() : OPAQUE;
 	}
@@ -457,13 +476,13 @@ final class VarTemplateCompiler {
 	 * A translated {@code ${...}} reference.
 	 *
 	 * @param prefix The var name ({@code "P"} for the empty-prefix shortcut).
-	 * @param var The registered var, or <jk>null</jk> if none (only possible when {@code P} is not registered).
+	 * @param varDef The registered var, or <jk>null</jk> if none (only possible when {@code P} is not registered).
 	 * @param body The body in the var's internal comma form, or <jk>null</jk> if {@link #error()} is set.
 	 * @param error Why the body cannot be represented, or <jk>null</jk>.
 	 * @param restStart Offset in the reference body where the text after the prefix starts (<c>0</c> if no prefix
 	 * 	was stripped).
 	 */
-	record VarCall(String prefix, Var var, String body, String error, int restStart) {}
+	record VarCall(String prefix, Var varDef, String body, String error, int restStart) {}
 
 	/**
 	 * Translates the text between {@code ${} and {@code }} into a var and its internal comma-form body.
@@ -560,7 +579,8 @@ final class VarTemplateCompiler {
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
 			if (c == '\\' && i + 1 < s.length()) {
-				var d = s.charAt(++i);
+				i++;
+				var d = s.charAt(i);
 				if (depth == 0 && (d == ':' || d == '\'' || d == '"' || d == '}')) {
 					sb.append(d);
 				} else if (depth == 0 && d == ',') {

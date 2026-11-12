@@ -153,6 +153,9 @@ public final class Structure {
 	 *
 	 * @return An unmodifiable list, or an empty list for a table.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Items are heterogeneous by design; the wildcard is the public contract
+	})
 	public List<?> items() { return items == null ? List.of() : items; }
 
 	/**
@@ -211,7 +214,7 @@ public final class Structure {
 	}
 
 	private static void line(StringBuilder sb, String s) {
-		if (sb.length() > 0)
+		if (! sb.isEmpty())
 			sb.append('\n');
 		sb.append(s);
 	}

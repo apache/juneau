@@ -256,7 +256,7 @@ public class DirectoryResource extends BasicRestServlet {
 		@Override /* Overridden from Comparator */
 		public int compare(FileResource o1, FileResource o2) {
 			int c = o1.getType().compareTo(o2.getType());
-			return c != 0 ? c : o1.getName().compareTo(o2.getName());
+			return c == 0 ? o1.getName().compareTo(o2.getName()) : c;
 		}
 	}
 

@@ -37,7 +37,9 @@ final class ExprContext {
 	final VarResolverSession session;
 	final Object thisValue;
 	final boolean strict;
-	final int maxCollectionSize, maxExprDepth, depth;
+	final int maxCollectionSize;
+	final int maxExprDepth;
+	final int depth;
 	final String source;
 
 	/** Elements evaluated so far by select/project in this evaluation: one budget shared by all element contexts. */
@@ -93,7 +95,7 @@ final class ExprContext {
 			return thisValue;
 		if (parent != null) {
 			var v = ExprEvaluator.elementProp(thisValue, name, this, pos);
-			return v != ExprEvaluator.MISSING ? v : parent.lookup(name, pos);
+			return v == ExprEvaluator.MISSING ? parent.lookup(name, pos) : v;
 		}
 		return root == null ? null : root.apply(name);
 	}

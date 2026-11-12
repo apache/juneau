@@ -77,6 +77,9 @@ public class OrdersRest extends PetstoreConsolePage implements RowDetailMixin {
 		return builder(req) ? twin(req, OrdersPageBuilders.orders()) : FreemarkerView.of("orders.ftlh");
 	}
 
+	@SuppressWarnings({
+		"java:S1948" // Servlets are nominally Serializable, but these REST resources are never serialized.
+	})
 	private final RowDetail orderDetail = RowDetails.order(this::lookup);
 
 	@Override

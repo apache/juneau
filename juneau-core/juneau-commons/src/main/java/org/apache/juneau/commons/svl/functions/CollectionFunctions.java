@@ -87,7 +87,7 @@ public final class CollectionFunctions {
 	 * <p>
 	 * {@code n} must be a non-negative whole number; a {@code null} list yields an empty list.
 	 */
-	// TODO: replace with a range or slice syntax if the SVL grammar ever adds one (see take())
+	// A range or slice syntax would supersede this if the SVL grammar ever adds one (see take()).
 	public static class Take implements VarFunction {
 		@Override public String name() { return "take"; }
 		@Override public int minArity() { return 2; }

@@ -32,13 +32,13 @@ class HtmlDocSerializer_Nonce_Test extends TestBase {
 		return s.createSession().nonce(nonce).build().writeToString(o);
 	}
 
-	@Test void a01_nonceStampedOnStyleAndScript() throws Exception {
+	@Test void a01_nonceStampedOnStyleAndScript() {
 		var html = serialize("R4nd0mT0k3n", "x");
 		assertTrue(html.contains("<style nonce=\"R4nd0mT0k3n\">"), () -> "Missing nonce on style: " + html);
 		assertTrue(html.contains("<script nonce=\"R4nd0mT0k3n\">"), () -> "Missing nonce on script: " + html);
 	}
 
-	@Test void a02_noNonceLeavesPlainTags() throws Exception {
+	@Test void a02_noNonceLeavesPlainTags() {
 		var html = serialize(null, "x");
 		assertTrue(html.contains("<style>"), () -> "Expected plain style tag: " + html);
 		assertTrue(html.contains("<script>"), () -> "Expected plain script tag: " + html);

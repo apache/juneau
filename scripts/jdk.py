@@ -45,7 +45,7 @@ def resolve(value, jdk_dir=None):
         if exact.exists():
             candidates = [exact]
         else:
-            candidates = sorted(p for p in base.glob(f"*{value}*")) if base.is_dir() else []
+            candidates = sorted(base.glob(f"*{value}*")) if base.is_dir() else []
         if not candidates:
             raise JdkError(f"--jdk {value}: no JDK named jdk-{value} or matching *{value}* under {base}")
         if len(candidates) > 1:

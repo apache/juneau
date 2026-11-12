@@ -173,7 +173,7 @@ final class ExprSegment extends TemplateSegment {
 		var call = VarTemplateCompiler.translate(r.getVarMap()::get, raw.substring(2, raw.length() - 1));
 		if (call.error() != null)
 			return false;
-		var v = call.var();
+		var v = call.varDef();
 		var body = call.body();
 		if (! VarTemplateCompiler.isStable(v, body.indexOf('$') != -1))
 			return false;
