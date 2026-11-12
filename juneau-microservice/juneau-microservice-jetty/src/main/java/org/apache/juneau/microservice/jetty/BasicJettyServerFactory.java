@@ -35,6 +35,8 @@ import org.eclipse.jetty.xml.*;
  */
 public class BasicJettyServerFactory implements JettyServerFactory {
 
+	private static final String JETTY_XML_VALIDATING = "org.eclipse.jetty.xml.XmlParser.Validating";
+
 	@Override
 	public Server create(String jettyXml) throws Exception {
 		Objects.requireNonNull(jettyXml,
@@ -44,6 +46,11 @@ public class BasicJettyServerFactory implements JettyServerFactory {
 			pipe(r, w);
 			w.flush();
 		}
+		// Jetty turns on DTD/schema validation whenever the JDK's built-in (Xerces-based) SAX parser is in use, and that
+		// validation fails on JDK 28+ ("schema_reference: Failed to read schema document ''").  The jetty.xml files are
+		// trusted configuration, so default validation off unless the user has set the property explicitly.
+		if (System.getProperty(JETTY_XML_VALIDATING) == null)
+			System.setProperty(JETTY_XML_VALIDATING, "false");
 		var xmlConfiguration = new XmlConfiguration(new PathResourceFactory().newResource(f.toPath()));
 		return (Server)xmlConfiguration.configure();
 	}

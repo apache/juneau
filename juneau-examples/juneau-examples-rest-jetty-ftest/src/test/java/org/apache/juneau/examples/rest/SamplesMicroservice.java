@@ -51,10 +51,9 @@ public class SamplesMicroservice {
 			DEFAULT_CLIENT_PLAINTEXT = client().plainText().build();
 			return true;
 		} catch (Throwable e) {
-			// Probably already started.
-			e.printStackTrace();
-			System.err.println(e); // NOT DEBUG
-			return false;
+			// The already-started case is handled above, so this is a real startup failure.  Surface it.
+			microservice = null;
+			throw new IllegalStateException("Failed to start examples microservice", e);
 		}
 	}
 
