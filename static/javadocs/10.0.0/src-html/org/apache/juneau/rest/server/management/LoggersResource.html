@@ -34,22 +34,22 @@
 <span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.http.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.http.response.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.rest.server.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.rest.server.servlet.*;</span>
-<span class="source-line-no">025</span><span id="line-25"></span>
-<span class="source-line-no">026</span><span id="line-26">/**</span>
-<span class="source-line-no">027</span><span id="line-27"> * Child-resource flavor of the {@code /loggers} runtime log-level management endpoint.</span>
-<span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> * Mounts as a routed child via {@link Rest#children() @Rest(children=LoggersResource.class)} under the</span>
-<span class="source-line-no">031</span><span id="line-31"> * subtree {@code /loggers} and delegates to a shared {@link LoggersManager} worker &amp;mdash; the same logic</span>
-<span class="source-line-no">032</span><span id="line-32"> * the {@link LoggersMixin mixin} flavor uses, so the two forms cannot drift.  Extends</span>
-<span class="source-line-no">033</span><span id="line-33"> * {@link BasicRestResource} so the returned beans serialize via the {@code BasicUniversalConfig} set</span>
-<span class="source-line-no">034</span><span id="line-34"> * (mirrors {@code HealthResource}).</span>
-<span class="source-line-no">035</span><span id="line-35"> *</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> * As with the mixin flavor, the {@code GET} endpoints carry no built-in guard of their own &amp;mdash; mount this</span>
-<span class="source-line-no">038</span><span id="line-38"> * resource only under a subtree that's already covered by whatever authentication/authorization the app applies</span>
-<span class="source-line-no">039</span><span id="line-39"> * to its management endpoints generally. See {@link LoggersMixin} for details.</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.rest.server.guard.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.rest.server.servlet.*;</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">/**</span>
+<span class="source-line-no">028</span><span id="line-28"> * Child-resource flavor of the {@code /loggers} runtime log-level management endpoint.</span>
+<span class="source-line-no">029</span><span id="line-29"> *</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * Mounts as a routed child via {@link Rest#children() @Rest(children=LoggersResource.class)} under the</span>
+<span class="source-line-no">032</span><span id="line-32"> * subtree {@code /loggers} and delegates to a shared {@link LoggersManager} worker &amp;mdash; the same logic</span>
+<span class="source-line-no">033</span><span id="line-33"> * the {@link LoggersMixin mixin} flavor uses, so the two forms cannot drift.  Extends</span>
+<span class="source-line-no">034</span><span id="line-34"> * {@link BasicRestResource} so the returned beans serialize via the {@code BasicUniversalConfig} set</span>
+<span class="source-line-no">035</span><span id="line-35"> * (mirrors {@code HealthResource}).</span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * As with the mixin flavor, every endpoint is denied (403) until the importer registers a</span>
+<span class="source-line-no">039</span><span id="line-39"> * {@link RestGuardList} bean. See {@link LoggersMixin} for details.</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;h2 class='section'&gt;Backend:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;Drives {@link JulLogBackend java.util.logging} by default; declare a Logback / Log4j2 backend</span>
@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51"> *</span>
 <span class="source-line-no">052</span><span id="line-52"> * @since 10.0.0</span>
 <span class="source-line-no">053</span><span id="line-53"> */</span>
-<span class="source-line-no">054</span><span id="line-54">@Rest(path="/loggers")</span>
+<span class="source-line-no">054</span><span id="line-54">@Rest(path="/loggers", guards=DenyAllGuard.class)</span>
 <span class="source-line-no">055</span><span id="line-55">public class LoggersResource extends BasicRestResource {</span>
 <span class="source-line-no">056</span><span id="line-56"></span>
 <span class="source-line-no">057</span><span id="line-57">   private final LoggersManager manager = new LoggersManager();</span>

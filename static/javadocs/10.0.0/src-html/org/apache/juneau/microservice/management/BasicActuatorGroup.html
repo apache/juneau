@@ -47,8 +47,8 @@
 <span class="source-line-no">034</span><span id="line-34"> *</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;b&gt;{@code /info} and {@code /loggers} are off by default&lt;/b&gt; &amp;mdash; unlike health, they are not mounted</span>
-<span class="source-line-no">037</span><span id="line-37"> * on the bare group, since {@link InfoMixin} discloses the full manifest and {@link LoggersMixin}'s read side</span>
-<span class="source-line-no">038</span><span id="line-38"> * discloses logger topology, neither behind any auth. Turn either back on (either approach suffices):</span>
+<span class="source-line-no">037</span><span id="line-37"> * on the bare group, since {@link InfoMixin} discloses the full manifest and {@link LoggersMixin}</span>
+<span class="source-line-no">038</span><span id="line-38"> * discloses logger topology (it is deny-all until a guard bean is registered). Turn either back on (either approach suffices):</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;ul&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;&lt;b&gt;A-la-carte (recommended):&lt;/b&gt; mount {@link InfoMixin} / {@link LoggersMixin} on a resource you</span>
 <span class="source-line-no">041</span><span id="line-41"> *       control, e.g. a {@code BasicActuatorGroup} subclass with</span>

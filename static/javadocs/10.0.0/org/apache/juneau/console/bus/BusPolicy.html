@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
      .downstream(<js>"ops.jobs"</js>, <jk>true</jk>)                       <jc>// retained state</jc>
      .downstream(<js>"ops.alert:*"</js>, <jk>false</jk>)                  <jc>// events, any key</jc>
      .upstream(<js>"ops.cancel-all"</js>, (<jv>session</jv>, <jv>topic</jv>, <jv>payload</jv>) -&gt; <jv>jobs</jv>.cancelAll())
-     .authorizer((<jv>req</jv>, <jv>topic</jv>) -&gt; <jv>req</jv>.isUserInRole(<js>"ops"</js>))  <jc>// per-user, both directions</jc>
+     .authorizer((<jv>req</jv>, <jv>topic</jv>) -&gt; <jv>req</jv>.isUserInRole(<js>"ops"</js>))  <jc>// per-user, both directions; denied until set (or anyCaller())</jc>
      .boundary(<jv>boundary</jv>)                                           <jc>// LoopbackBoundary or CsrfBoundary</jc>
      .build();
 
@@ -182,12 +182,18 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxUpstreamPerSecond()" class="member-name-link">maxUpstreamPerSecond</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;jakarta.servlet.http.HttpServletRequest,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sessionAttributes()" class="member-name-link">sessionAttributes</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sessionGrace()" class="member-name-link">sessionGrace</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sameOriginCheck()" class="member-name-link">sameOriginCheck</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Whether the session POST and SSE stream refuse a request whose <code>Origin</code> does not match its <code>Host</code>
+ when no <a href="#boundary()"><code>boundary()</code></a> is set.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;jakarta.servlet.http.HttpServletRequest,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sessionAttributes()" class="member-name-link">sessionAttributes</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sessionGrace()" class="member-name-link">sessionGrace</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -208,7 +214,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-105">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-107">create</a></span>()</div>
 <div class="block">Creates a new builder.  An unmodified builder builds a policy that grants nothing.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -219,7 +225,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="downstreamRetain(java.lang.String)">
 <h3>downstreamRetain</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-119">downstreamRetain</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-121">downstreamRetain</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic)</span></div>
 <div class="block">Returns whether a topic (or a requested pattern) may flow downstream, and if so whether it is retained.
 
  <p>
@@ -236,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="allowsUpstream(java.lang.String)">
 <h3>allowsUpstream</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-140">allowsUpstream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-142">allowsUpstream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic)</span></div>
 <div class="block">Returns whether a topic may flow upstream (exact match only).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -249,7 +255,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="check(java.util.Map)">
 <h3>check</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-158">check</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>?&gt;&nbsp;contract)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-160">check</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>?&gt;&nbsp;contract)</span></div>
 <div class="block">Checks that this policy grants every topic that a page contract's <code>bridges</code> request (E-55).
 
  <p>
@@ -266,17 +272,17 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="authorizer()">
 <h3>authorizer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiPredicate.html" title="class or interface in java.util.function" class="external-link">BiPredicate</a>&lt;jakarta.servlet.http.HttpServletRequest,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-189">authorizer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiPredicate.html" title="class or interface in java.util.function" class="external-link">BiPredicate</a>&lt;jakarta.servlet.http.HttpServletRequest,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-191">authorizer</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The per-request, per-topic authorizer applied at session open.  Defaults to allow-all.</dd>
+<dd>The per-request, per-topic authorizer applied at session open.  Defaults to deny-all until <a href="BusPolicy.Builder.html#authorizer(java.util.function.BiPredicate)"><code>BusPolicy.Builder.authorizer(BiPredicate)</code></a> or <a href="BusPolicy.Builder.html#anyCaller()"><code>BusPolicy.Builder.anyCaller()</code></a> is called.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="boundary()">
 <h3>boundary</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../rest/server/filter/RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter">RequestBoundary</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-192">boundary</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../rest/server/filter/RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter">RequestBoundary</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-194">boundary</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The request boundary, or <jk>null</jk> when the application has its own guard.</dd>
@@ -284,9 +290,21 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="sameOriginCheck()">
+<h3>sameOriginCheck</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-202">sameOriginCheck</a></span>()</div>
+<div class="block">Whether the session POST and SSE stream refuse a request whose <code>Origin</code> does not match its <code>Host</code>
+ when no <a href="#boundary()"><code>boundary()</code></a> is set.  Default <jk>true</jk>.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><jk>true</jk> if the default same-origin check applies.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="allowedOrigins()">
 <h3>allowedOrigins</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-195">allowedOrigins</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-205">allowedOrigins</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The exact origins allowed on a WebSocket handshake when no <a href="#boundary()"><code>boundary()</code></a> is set.</dd>
@@ -296,7 +314,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sessionGrace()">
 <h3>sessionGrace</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-198">sessionGrace</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-208">sessionGrace</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>How long a session survives after its last connection closes.  Default 60 s.</dd>
@@ -306,7 +324,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxSessionAge()">
 <h3>maxSessionAge</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-201">maxSessionAge</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-211">maxSessionAge</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The absolute session lifetime.  Default 12 h.</dd>
@@ -316,7 +334,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="heartbeat()">
 <h3>heartbeat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-204">heartbeat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-214">heartbeat</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The idle interval after which a <code>ping</code> frame is sent.  Default 15 s.</dd>
@@ -326,7 +344,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxSessions()">
 <h3>maxSessions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-207">maxSessions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-217">maxSessions</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The maximum number of live sessions.  Default 256.</dd>
@@ -336,7 +354,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxQueuedFrames()">
 <h3>maxQueuedFrames</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-210">maxQueuedFrames</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-220">maxQueuedFrames</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The per-connection outbound queue bound.  Default 1024.</dd>
@@ -346,7 +364,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxFrameBytes()">
 <h3>maxFrameBytes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-213">maxFrameBytes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-223">maxFrameBytes</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The maximum encoded frame size in UTF-8 bytes, both directions.  Default 65536.</dd>
@@ -356,7 +374,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxUpstreamPerSecond()">
 <h3>maxUpstreamPerSecond</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-216">maxUpstreamPerSecond</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-226">maxUpstreamPerSecond</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The per-session upstream frame rate limit.  Default 20.</dd>
@@ -366,7 +384,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sessionAttributes()">
 <h3>sessionAttributes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;jakarta.servlet.http.HttpServletRequest,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-219">sessionAttributes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;jakarta.servlet.http.HttpServletRequest,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/bus/BusPolicy.html#line-229">sessionAttributes</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The function that captures session attributes at session open.  Defaults to an empty map.</dd>

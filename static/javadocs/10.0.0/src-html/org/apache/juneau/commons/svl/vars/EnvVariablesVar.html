@@ -69,27 +69,37 @@
 <span class="source-line-no">056</span><span id="line-56">      super(NAME);</span>
 <span class="source-line-no">057</span><span id="line-57">   }</span>
 <span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">   @Override /* Overridden from Var */</span>
-<span class="source-line-no">060</span><span id="line-60">   public String resolve(VarResolverSession session, String varVal) {</span>
-<span class="source-line-no">061</span><span id="line-61">      var v = source.get(varVal);</span>
-<span class="source-line-no">062</span><span id="line-62">      return v.isPresent() ? v.value().orElse(null) : null;</span>
-<span class="source-line-no">063</span><span id="line-63">   }</span>
-<span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">   /**</span>
-<span class="source-line-no">066</span><span id="line-66">    * Process environment variables are immutable for the lifetime of the JVM, so this var</span>
-<span class="source-line-no">067</span><span id="line-67">    * opts in to compile-time stable-value folding.</span>
-<span class="source-line-no">068</span><span id="line-68">    *</span>
-<span class="source-line-no">069</span><span id="line-69">    * &lt;p&gt;</span>
-<span class="source-line-no">070</span><span id="line-70">    * Compiled templates resolve {@code ${E:...}} references once at compile time and replace</span>
-<span class="source-line-no">071</span><span id="line-71">    * them with literal segments — the runtime dispatch is eliminated.</span>
-<span class="source-line-no">072</span><span id="line-72">    *</span>
-<span class="source-line-no">073</span><span id="line-73">    * @return Always {@code true}.</span>
-<span class="source-line-no">074</span><span id="line-74">    */</span>
-<span class="source-line-no">075</span><span id="line-75">   @Override /* Overridden from Var */</span>
-<span class="source-line-no">076</span><span id="line-76">   protected boolean isStable() {</span>
-<span class="source-line-no">077</span><span id="line-77">      return true;</span>
-<span class="source-line-no">078</span><span id="line-78">   }</span>
-<span class="source-line-no">079</span><span id="line-79">}</span>
+<span class="source-line-no">059</span><span id="line-59">   /**</span>
+<span class="source-line-no">060</span><span id="line-60">    * Values from this source are never re-resolved: a value containing &lt;c&gt;${...}&lt;/c&gt; is returned literally.</span>
+<span class="source-line-no">061</span><span id="line-61">    *</span>
+<span class="source-line-no">062</span><span id="line-62">    * @return Always &lt;jk&gt;false&lt;/jk&gt;.</span>
+<span class="source-line-no">063</span><span id="line-63">    */</span>
+<span class="source-line-no">064</span><span id="line-64">   @Override /* Overridden from Var */</span>
+<span class="source-line-no">065</span><span id="line-65">   protected boolean allowRecurse() {</span>
+<span class="source-line-no">066</span><span id="line-66">      return false;</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">   @Override /* Overridden from Var */</span>
+<span class="source-line-no">070</span><span id="line-70">   public String resolve(VarResolverSession session, String varVal) {</span>
+<span class="source-line-no">071</span><span id="line-71">      var v = source.get(varVal);</span>
+<span class="source-line-no">072</span><span id="line-72">      return v.isPresent() ? v.value().orElse(null) : null;</span>
+<span class="source-line-no">073</span><span id="line-73">   }</span>
+<span class="source-line-no">074</span><span id="line-74"></span>
+<span class="source-line-no">075</span><span id="line-75">   /**</span>
+<span class="source-line-no">076</span><span id="line-76">    * Process environment variables are immutable for the lifetime of the JVM, so this var</span>
+<span class="source-line-no">077</span><span id="line-77">    * opts in to compile-time stable-value folding.</span>
+<span class="source-line-no">078</span><span id="line-78">    *</span>
+<span class="source-line-no">079</span><span id="line-79">    * &lt;p&gt;</span>
+<span class="source-line-no">080</span><span id="line-80">    * Compiled templates resolve {@code ${E:...}} references once at compile time and replace</span>
+<span class="source-line-no">081</span><span id="line-81">    * them with literal segments — the runtime dispatch is eliminated.</span>
+<span class="source-line-no">082</span><span id="line-82">    *</span>
+<span class="source-line-no">083</span><span id="line-83">    * @return Always {@code true}.</span>
+<span class="source-line-no">084</span><span id="line-84">    */</span>
+<span class="source-line-no">085</span><span id="line-85">   @Override /* Overridden from Var */</span>
+<span class="source-line-no">086</span><span id="line-86">   protected boolean isStable() {</span>
+<span class="source-line-no">087</span><span id="line-87">      return true;</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89">}</span>
 
 
 

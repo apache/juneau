@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="McpAuthorizationCodeAcquirer.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-82">McpAuthorizationCodeAcquirer.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-83">McpAuthorizationCodeAcquirer.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder.</div>
 </section>
@@ -122,84 +122,91 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the authorization endpoint URL.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#browserLauncher(java.util.function.Consumer)" class="member-name-link">browserLauncher</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&gt;&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#authorizationServer(org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata)" class="member-name-link">authorizationServer</a><wbr>(<a href="../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>&nbsp;metadata)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Applies the discovered authorization-server metadata: sets the expected issuer and requires the <code>iss</code>
+ response parameter when the server advertises <code>authorization_response_iss_parameter_supported</code>
+ (RFC 9207).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#browserLauncher(java.util.function.Consumer)" class="member-name-link">browserLauncher</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the callback invoked with the authorization URL so the caller can open it in a browser (or print it).</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Builds the acquirer.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientId(java.lang.String)" class="member-name-link">clientId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientId(java.lang.String)" class="member-name-link">clientId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the OAuth client ID.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientSecret(java.lang.String)" class="member-name-link">clientSecret</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientSecret(java.lang.String)" class="member-name-link">clientSecret</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the client secret (omit for a public/native PKCE-only client).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#expectedIssuer(java.net.URI)" class="member-name-link">expectedIssuer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#expectedIssuer(java.net.URI)" class="member-name-link">expectedIssuer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the expected issuer the callback <code>iss</code> parameter is validated against (SEP-2468).</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> for the token exchange.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpTimeout(java.time.Duration)" class="member-name-link">httpTimeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpTimeout(java.time.Duration)" class="member-name-link">httpTimeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the connect/read timeout applied to the token-exchange request.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#offlineAccess(boolean)" class="member-name-link">offlineAccess</a><wbr>(boolean&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#offlineAccess(boolean)" class="member-name-link">offlineAccess</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Requests the <code>offline_access</code> scope so the IdP issues a refresh token (SEP-2207).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redirectPath(java.lang.String)" class="member-name-link">redirectPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redirectPath(java.lang.String)" class="member-name-link">redirectPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the loopback redirect path.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redirectPort(int)" class="member-name-link">redirectPort</a><wbr>(int&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redirectPort(int)" class="member-name-link">redirectPort</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets a fixed loopback redirect port so the receiver binds exactly that port (the "bind-first" strategy for
  strict exact-match authorization servers).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#requireIssuerResponseParameter(boolean)" class="member-name-link">requireIssuerResponseParameter</a><wbr>(boolean&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#requireIssuerResponseParameter(boolean)" class="member-name-link">requireIssuerResponseParameter</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Requires the authorization response to carry an <code>iss</code> parameter, rejecting a response that omits it.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resource(java.net.URI)" class="member-name-link">resource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resource(java.net.URI)" class="member-name-link">resource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the RFC 8707 <code>resource</code> indicator (the canonical MCP server URI).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#scope(java.lang.String...)" class="member-name-link">scope</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#scope(java.lang.String...)" class="member-name-link">scope</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds requested scopes.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#skipIssuerValidation(boolean)" class="member-name-link">skipIssuerValidation</a><wbr>(boolean&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#skipIssuerValidation(boolean)" class="member-name-link">skipIssuerValidation</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Explicitly opts out of the SEP-2468 <code>iss</code> validation.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#store(org.apache.juneau.rest.client.mcp.auth.EphemeralStore)" class="member-name-link">store</a><wbr>(<a href="EphemeralStore.html" title="class in org.apache.juneau.rest.client.mcp.auth">EphemeralStore</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#store(org.apache.juneau.rest.client.mcp.auth.EphemeralStore)" class="member-name-link">store</a><wbr>(<a href="EphemeralStore.html" title="class in org.apache.juneau.rest.client.mcp.auth">EphemeralStore</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the ephemeral state/verifier store.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tokenEndpoint(java.net.URI)" class="member-name-link">tokenEndpoint</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tokenEndpoint(java.net.URI)" class="member-name-link">tokenEndpoint</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the token endpoint URL.</div>
 </div>
 </div>
@@ -222,7 +229,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-101">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-102">Builder</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -237,7 +244,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="authorizationEndpoint(java.net.URI)">
 <h3>authorizationEndpoint</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-109">authorizationEndpoint</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-110">authorizationEndpoint</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the authorization endpoint URL.  Required.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -250,7 +257,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tokenEndpoint(java.net.URI)">
 <h3>tokenEndpoint</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-120">tokenEndpoint</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-121">tokenEndpoint</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the token endpoint URL.  Required.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -263,7 +270,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clientId(java.lang.String)">
 <h3>clientId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-131">clientId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-132">clientId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the OAuth client ID.  Required.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -276,7 +283,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clientSecret(java.lang.String)">
 <h3>clientSecret</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-142">clientSecret</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-143">clientSecret</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the client secret (omit for a public/native PKCE-only client).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -289,7 +296,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="scope(java.lang.String...)">
 <h3>scope</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-154">scope</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-155">scope</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
 <div class="block">Adds requested scopes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -302,7 +309,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="offlineAccess(boolean)">
 <h3>offlineAccess</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-169">offlineAccess</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-170">offlineAccess</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Requests the <code>offline_access</code> scope so the IdP issues a refresh token (SEP-2207).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -315,7 +322,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resource(java.net.URI)">
 <h3>resource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-180">resource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-181">resource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the RFC 8707 <code>resource</code> indicator (the canonical MCP server URI).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -328,7 +335,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="expectedIssuer(java.net.URI)">
 <h3>expectedIssuer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-195">expectedIssuer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-196">expectedIssuer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the expected issuer the callback <code>iss</code> parameter is validated against (SEP-2468).
 
  <p>
@@ -345,7 +352,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="skipIssuerValidation(boolean)">
 <h3>skipIssuerValidation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-210">skipIssuerValidation</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-211">skipIssuerValidation</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Explicitly opts out of the SEP-2468 <code>iss</code> validation.
 
  <p>
@@ -360,13 +367,28 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="authorizationServer(org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata)">
+<h3>authorizationServer</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-224">authorizationServer</a></span><wbr><span class="parameters">(<a href="../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>&nbsp;metadata)</span></div>
+<div class="block">Applies the discovered authorization-server metadata: sets the expected issuer and requires the <code>iss</code>
+ response parameter when the server advertises <code>authorization_response_iss_parameter_supported</code>
+ (RFC 9207).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>metadata</code> - The discovered metadata.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="requireIssuerResponseParameter(boolean)">
 <h3>requireIssuerResponseParameter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-226">requireIssuerResponseParameter</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-242">requireIssuerResponseParameter</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Requires the authorization response to carry an <code>iss</code> parameter, rejecting a response that omits it.
 
  <p>
- Set this when the discovered authorization-server metadata advertises
+ Set automatically by <a href="#authorizationServer(org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata)"><code>authorizationServer(OidcMetadata)</code></a>; set explicitly when the discovered authorization-server metadata advertises
  <code>authorization_response_iss_parameter_supported</code> (RFC 9207); see
  <a href="../../../auth/oauth/oidc/OidcMetadata.html#authorizationResponseIssParameterSupported()"><code>OidcMetadata.authorizationResponseIssParameterSupported()</code></a>.</div>
 <dl class="notes">
@@ -380,7 +402,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="redirectPath(java.lang.String)">
 <h3>redirectPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-237">redirectPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-253">redirectPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the loopback redirect path.  Default <code>/callback</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -393,7 +415,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="redirectPort(int)">
 <h3>redirectPort</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-256">redirectPort</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-272">redirectPort</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
 <div class="block">Sets a fixed loopback redirect port so the receiver binds exactly that port (the "bind-first" strategy for
  strict exact-match authorization servers).
 
@@ -413,7 +435,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="browserLauncher(java.util.function.Consumer)">
 <h3>browserLauncher</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-268">browserLauncher</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-284">browserLauncher</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&gt;&nbsp;value)</span></div>
 <div class="block">Sets the callback invoked with the authorization URL so the caller can open it in a browser (or print it).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -426,7 +448,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="store(org.apache.juneau.rest.client.mcp.auth.EphemeralStore)">
 <h3>store</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-279">store</a></span><wbr><span class="parameters">(<a href="EphemeralStore.html" title="class in org.apache.juneau.rest.client.mcp.auth">EphemeralStore</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-295">store</a></span><wbr><span class="parameters">(<a href="EphemeralStore.html" title="class in org.apache.juneau.rest.client.mcp.auth">EphemeralStore</a>&nbsp;value)</span></div>
 <div class="block">Sets the ephemeral state/verifier store.  Defaults to a fresh <a href="EphemeralStore.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>EphemeralStore</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -439,7 +461,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="httpTimeout(java.time.Duration)">
 <h3>httpTimeout</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-290">httpTimeout</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-306">httpTimeout</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
 <div class="block">Sets the connect/read timeout applied to the token-exchange request.  Default 10 seconds.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -452,7 +474,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="httpRequestConfigurator(java.util.function.Consumer)">
 <h3>httpRequestConfigurator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-303">httpRequestConfigurator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-319">httpRequestConfigurator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</span></div>
 <div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> for the token exchange.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -465,7 +487,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-313">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#line-329">build</a></span>()</div>
 <div class="block">Builds the acquirer.</div>
 <dl class="notes">
 <dt>Returns:</dt>

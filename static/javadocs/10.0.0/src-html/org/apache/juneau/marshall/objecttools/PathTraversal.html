@@ -923,68 +923,73 @@
 <span class="source-line-no">910</span><span id="line-910">      return null;   // Never gets here.</span>
 <span class="source-line-no">911</span><span id="line-911">   }</span>
 <span class="source-line-no">912</span><span id="line-912"></span>
-<span class="source-line-no">913</span><span id="line-913">   private Object[] setArrayEntry(Object o, int index, Object val, ClassMeta componentType) {</span>
-<span class="source-line-no">914</span><span id="line-914">      var a = (Object[])o;</span>
-<span class="source-line-no">915</span><span id="line-915">      if (a.length &lt;= index) {</span>
-<span class="source-line-no">916</span><span id="line-916">         // Expand out the array.</span>
-<span class="source-line-no">917</span><span id="line-917">         var a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), index + 1);</span>
-<span class="source-line-no">918</span><span id="line-918">         System.arraycopy(a, 0, a2, 0, a.length);</span>
-<span class="source-line-no">919</span><span id="line-919">         a = a2;</span>
-<span class="source-line-no">920</span><span id="line-920">      }</span>
-<span class="source-line-no">921</span><span id="line-921">      a[index] = convert(val, componentType);</span>
-<span class="source-line-no">922</span><span id="line-922">      return a;</span>
-<span class="source-line-no">923</span><span id="line-923">   }</span>
-<span class="source-line-no">924</span><span id="line-924"></span>
-<span class="source-line-no">925</span><span id="line-925">   JsonNode getNode(String url, JsonNode n) {</span>
-<span class="source-line-no">926</span><span id="line-926">      if (isEmpty(url))</span>
-<span class="source-line-no">927</span><span id="line-927">         return n;</span>
-<span class="source-line-no">928</span><span id="line-928">      int i = url.indexOf('/');</span>
-<span class="source-line-no">929</span><span id="line-929">      String parentKey;</span>
-<span class="source-line-no">930</span><span id="line-930">      String childUrl = null;</span>
-<span class="source-line-no">931</span><span id="line-931">      if (i == -1) {</span>
-<span class="source-line-no">932</span><span id="line-932">         parentKey = url;</span>
-<span class="source-line-no">933</span><span id="line-933">      } else {</span>
-<span class="source-line-no">934</span><span id="line-934">         parentKey = url.substring(0, i);</span>
-<span class="source-line-no">935</span><span id="line-935">         childUrl = url.substring(i + 1);</span>
-<span class="source-line-no">936</span><span id="line-936">      }</span>
-<span class="source-line-no">937</span><span id="line-937"></span>
-<span class="source-line-no">938</span><span id="line-938">      var o = n.o;</span>
-<span class="source-line-no">939</span><span id="line-939">      Object o2 = null;</span>
-<span class="source-line-no">940</span><span id="line-940">      var cm = n.cm;</span>
-<span class="source-line-no">941</span><span id="line-941">      ClassMeta ct2 = null;</span>
-<span class="source-line-no">942</span><span id="line-942">      if (o == null)</span>
-<span class="source-line-no">943</span><span id="line-943">         return null;</span>
-<span class="source-line-no">944</span><span id="line-944">      if (cm.isMap()) {</span>
-<span class="source-line-no">945</span><span id="line-945">         o2 = ((Map)o).get(parentKey);</span>
-<span class="source-line-no">946</span><span id="line-946">         ct2 = cm.getValueType();</span>
-<span class="source-line-no">947</span><span id="line-947">      } else if (cm.isCollection() &amp;&amp; o instanceof List o3) {</span>
-<span class="source-line-no">948</span><span id="line-948">         var key = parseInt(parentKey);</span>
-<span class="source-line-no">949</span><span id="line-949">         if (o3.size() &lt;= key)</span>
-<span class="source-line-no">950</span><span id="line-950">            return null;</span>
-<span class="source-line-no">951</span><span id="line-951">         o2 = o3.get(key);</span>
-<span class="source-line-no">952</span><span id="line-952">         ct2 = cm.getElementType();</span>
-<span class="source-line-no">953</span><span id="line-953">      } else if (cm.isArray()) {</span>
-<span class="source-line-no">954</span><span id="line-954">         var key = parseInt(parentKey);</span>
-<span class="source-line-no">955</span><span id="line-955">         var a = ((Object[])o);</span>
-<span class="source-line-no">956</span><span id="line-956">         if (a.length &lt;= key)</span>
-<span class="source-line-no">957</span><span id="line-957">            return null;</span>
-<span class="source-line-no">958</span><span id="line-958">         o2 = a[key];</span>
-<span class="source-line-no">959</span><span id="line-959">         ct2 = cm.getElementType();</span>
-<span class="source-line-no">960</span><span id="line-960">      } else if (cm.isBean()) {</span>
-<span class="source-line-no">961</span><span id="line-961">         var m = session.toBeanMap(o);</span>
-<span class="source-line-no">962</span><span id="line-962">         o2 = m.get(parentKey);</span>
-<span class="source-line-no">963</span><span id="line-963">         var pMeta = m.getPropertyMeta(parentKey);</span>
-<span class="source-line-no">964</span><span id="line-964">         if (pMeta == null)</span>
-<span class="source-line-no">965</span><span id="line-965">            throw new PathTraversalException(HTTP_BAD_REQUEST, "Unknown property '%s' encountered while trying to parse into class '%s'", parentKey, m.getBeanInfo());</span>
-<span class="source-line-no">966</span><span id="line-966">         ct2 = (ClassMeta) pMeta.getBeanInfo();</span>
-<span class="source-line-no">967</span><span id="line-967">      }</span>
-<span class="source-line-no">968</span><span id="line-968"></span>
-<span class="source-line-no">969</span><span id="line-969">      if (childUrl == null)</span>
-<span class="source-line-no">970</span><span id="line-970">         return new JsonNode(n, parentKey, o2, ct2);</span>
-<span class="source-line-no">971</span><span id="line-971"></span>
-<span class="source-line-no">972</span><span id="line-972">      return getNode(childUrl, new JsonNode(n, parentKey, o2, ct2));</span>
-<span class="source-line-no">973</span><span id="line-973">   }</span>
-<span class="source-line-no">974</span><span id="line-974">}</span>
+<span class="source-line-no">913</span><span id="line-913">   /** Maximum number of slots an array may be grown by a single set operation. */</span>
+<span class="source-line-no">914</span><span id="line-914">   private static final int MAX_ARRAY_GROWTH = 1000;</span>
+<span class="source-line-no">915</span><span id="line-915"></span>
+<span class="source-line-no">916</span><span id="line-916">   private Object[] setArrayEntry(Object o, int index, Object val, ClassMeta componentType) {</span>
+<span class="source-line-no">917</span><span id="line-917">      var a = (Object[])o;</span>
+<span class="source-line-no">918</span><span id="line-918">      if (a.length &lt;= index) {</span>
+<span class="source-line-no">919</span><span id="line-919">         if (index - a.length &gt; MAX_ARRAY_GROWTH)</span>
+<span class="source-line-no">920</span><span id="line-920">            throw new PathTraversalException(HTTP_BAD_REQUEST, "Array index %s is too far beyond the end of the array.", index);</span>
+<span class="source-line-no">921</span><span id="line-921">         // Expand out the array.</span>
+<span class="source-line-no">922</span><span id="line-922">         var a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), index + 1);</span>
+<span class="source-line-no">923</span><span id="line-923">         System.arraycopy(a, 0, a2, 0, a.length);</span>
+<span class="source-line-no">924</span><span id="line-924">         a = a2;</span>
+<span class="source-line-no">925</span><span id="line-925">      }</span>
+<span class="source-line-no">926</span><span id="line-926">      a[index] = convert(val, componentType);</span>
+<span class="source-line-no">927</span><span id="line-927">      return a;</span>
+<span class="source-line-no">928</span><span id="line-928">   }</span>
+<span class="source-line-no">929</span><span id="line-929"></span>
+<span class="source-line-no">930</span><span id="line-930">   JsonNode getNode(String url, JsonNode n) {</span>
+<span class="source-line-no">931</span><span id="line-931">      if (isEmpty(url))</span>
+<span class="source-line-no">932</span><span id="line-932">         return n;</span>
+<span class="source-line-no">933</span><span id="line-933">      int i = url.indexOf('/');</span>
+<span class="source-line-no">934</span><span id="line-934">      String parentKey;</span>
+<span class="source-line-no">935</span><span id="line-935">      String childUrl = null;</span>
+<span class="source-line-no">936</span><span id="line-936">      if (i == -1) {</span>
+<span class="source-line-no">937</span><span id="line-937">         parentKey = url;</span>
+<span class="source-line-no">938</span><span id="line-938">      } else {</span>
+<span class="source-line-no">939</span><span id="line-939">         parentKey = url.substring(0, i);</span>
+<span class="source-line-no">940</span><span id="line-940">         childUrl = url.substring(i + 1);</span>
+<span class="source-line-no">941</span><span id="line-941">      }</span>
+<span class="source-line-no">942</span><span id="line-942"></span>
+<span class="source-line-no">943</span><span id="line-943">      var o = n.o;</span>
+<span class="source-line-no">944</span><span id="line-944">      Object o2 = null;</span>
+<span class="source-line-no">945</span><span id="line-945">      var cm = n.cm;</span>
+<span class="source-line-no">946</span><span id="line-946">      ClassMeta ct2 = null;</span>
+<span class="source-line-no">947</span><span id="line-947">      if (o == null)</span>
+<span class="source-line-no">948</span><span id="line-948">         return null;</span>
+<span class="source-line-no">949</span><span id="line-949">      if (cm.isMap()) {</span>
+<span class="source-line-no">950</span><span id="line-950">         o2 = ((Map)o).get(parentKey);</span>
+<span class="source-line-no">951</span><span id="line-951">         ct2 = cm.getValueType();</span>
+<span class="source-line-no">952</span><span id="line-952">      } else if (cm.isCollection() &amp;&amp; o instanceof List o3) {</span>
+<span class="source-line-no">953</span><span id="line-953">         var key = parseInt(parentKey);</span>
+<span class="source-line-no">954</span><span id="line-954">         if (o3.size() &lt;= key)</span>
+<span class="source-line-no">955</span><span id="line-955">            return null;</span>
+<span class="source-line-no">956</span><span id="line-956">         o2 = o3.get(key);</span>
+<span class="source-line-no">957</span><span id="line-957">         ct2 = cm.getElementType();</span>
+<span class="source-line-no">958</span><span id="line-958">      } else if (cm.isArray()) {</span>
+<span class="source-line-no">959</span><span id="line-959">         var key = parseInt(parentKey);</span>
+<span class="source-line-no">960</span><span id="line-960">         var a = ((Object[])o);</span>
+<span class="source-line-no">961</span><span id="line-961">         if (a.length &lt;= key)</span>
+<span class="source-line-no">962</span><span id="line-962">            return null;</span>
+<span class="source-line-no">963</span><span id="line-963">         o2 = a[key];</span>
+<span class="source-line-no">964</span><span id="line-964">         ct2 = cm.getElementType();</span>
+<span class="source-line-no">965</span><span id="line-965">      } else if (cm.isBean()) {</span>
+<span class="source-line-no">966</span><span id="line-966">         var m = session.toBeanMap(o);</span>
+<span class="source-line-no">967</span><span id="line-967">         o2 = m.get(parentKey);</span>
+<span class="source-line-no">968</span><span id="line-968">         var pMeta = m.getPropertyMeta(parentKey);</span>
+<span class="source-line-no">969</span><span id="line-969">         if (pMeta == null)</span>
+<span class="source-line-no">970</span><span id="line-970">            throw new PathTraversalException(HTTP_BAD_REQUEST, "Unknown property '%s' encountered while trying to parse into class '%s'", parentKey, m.getBeanInfo());</span>
+<span class="source-line-no">971</span><span id="line-971">         ct2 = (ClassMeta) pMeta.getBeanInfo();</span>
+<span class="source-line-no">972</span><span id="line-972">      }</span>
+<span class="source-line-no">973</span><span id="line-973"></span>
+<span class="source-line-no">974</span><span id="line-974">      if (childUrl == null)</span>
+<span class="source-line-no">975</span><span id="line-975">         return new JsonNode(n, parentKey, o2, ct2);</span>
+<span class="source-line-no">976</span><span id="line-976"></span>
+<span class="source-line-no">977</span><span id="line-977">      return getNode(childUrl, new JsonNode(n, parentKey, o2, ct2));</span>
+<span class="source-line-no">978</span><span id="line-978">   }</span>
+<span class="source-line-no">979</span><span id="line-979">}</span>
 
 
 

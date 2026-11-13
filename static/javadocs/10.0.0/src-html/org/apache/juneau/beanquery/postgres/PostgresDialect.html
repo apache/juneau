@@ -103,7 +103,7 @@
 <span class="source-line-no">090</span><span id="line-90">      builtins.put("$eqic", (d, col, type, args) -&gt; eqicFrag(col, type, args.get(0)));</span>
 <span class="source-line-no">091</span><span id="line-91">      builtins.put("$ne", (d, col, type, args) -&gt; ne(col, type, args));</span>
 <span class="source-line-no">092</span><span id="line-92">      builtins.put("$in", (d, col, type, args) -&gt; in(col, type, args));</span>
-<span class="source-line-no">093</span><span id="line-93">      builtins.put("$contains", (d, col, type, args) -&gt; frag(col + " ILIKE ?", like("%", text(args.get(0)), "%")));</span>
+<span class="source-line-no">093</span><span id="line-93">      builtins.put("$contains", (d, col, type, args) -&gt; frag(col + " ILIKE ? ESCAPE '\\'", like("%", text(args.get(0)), "%")));</span>
 <span class="source-line-no">094</span><span id="line-94">      builtins.put("$prefix", (d, col, type, args) -&gt; prefix(col, type, args.get(0)));</span>
 <span class="source-line-no">095</span><span id="line-95">      builtins.put("$regex", (d, col, type, args) -&gt; regex(col, args));</span>
 <span class="source-line-no">096</span><span id="line-96">      builtins.put("$blank", (d, col, type, args) -&gt; SqlFragment.of(blank(col)));</span>
@@ -151,8 +151,8 @@
 <span class="source-line-no">138</span><span id="line-138">         case TEXT, ID: {</span>
 <span class="source-line-no">139</span><span id="line-139">            var token = text(value);</span>
 <span class="source-line-no">140</span><span id="line-140">            if (quoted || ! hasWildcard(token))</span>
-<span class="source-line-no">141</span><span id="line-141">               return frag(columnSql + " ILIKE ?", like("%", token, "%"));</span>
-<span class="source-line-no">142</span><span id="line-142">            return frag(columnSql + " ILIKE ?", glob(token));</span>
+<span class="source-line-no">141</span><span id="line-141">               return frag(columnSql + " ILIKE ? ESCAPE '\\'", like("%", token, "%"));</span>
+<span class="source-line-no">142</span><span id="line-142">            return frag(columnSql + " ILIKE ? ESCAPE '\\'", glob(token));</span>
 <span class="source-line-no">143</span><span id="line-143">         }</span>
 <span class="source-line-no">144</span><span id="line-144">         case ENUM: {</span>
 <span class="source-line-no">145</span><span id="line-145">            // Same rule as the in-memory engine: a wildcard pattern is a case-insensitive whole-string glob over the</span>
@@ -160,7 +160,7 @@
 <span class="source-line-no">147</span><span id="line-147">            var token = text(value);</span>
 <span class="source-line-no">148</span><span id="line-148">            if (quoted || ! hasWildcard(token))</span>
 <span class="source-line-no">149</span><span id="line-149">               return eqicFrag(columnSql, type, token);</span>
-<span class="source-line-no">150</span><span id="line-150">            return frag(textOf(columnSql, type) + " ILIKE ?", glob(token));</span>
+<span class="source-line-no">150</span><span id="line-150">            return frag(textOf(columnSql, type) + " ILIKE ? ESCAPE '\\'", glob(token));</span>
 <span class="source-line-no">151</span><span id="line-151">         }</span>
 <span class="source-line-no">152</span><span id="line-152">         case VERSION:</span>
 <span class="source-line-no">153</span><span id="line-153">            return prefix(columnSql, type, value);</span>
@@ -227,7 +227,7 @@
 <span class="source-line-no">214</span><span id="line-214">         // Array slice: a stored version with fewer parts than the prefix yields a shorter array, which never equals it.</span>
 <span class="source-line-no">215</span><span id="line-215">         return frag(versionArray(col) + "[1:" + n + "] = " + "string_to_array(?, '.')::int[]", v);</span>
 <span class="source-line-no">216</span><span id="line-216">      }</span>
-<span class="source-line-no">217</span><span id="line-217">      return frag(col + " ILIKE ?", like("", text(arg), "%"));</span>
+<span class="source-line-no">217</span><span id="line-217">      return frag(col + " ILIKE ? ESCAPE '\\'", like("", text(arg), "%"));</span>
 <span class="source-line-no">218</span><span id="line-218">   }</span>
 <span class="source-line-no">219</span><span id="line-219"></span>
 <span class="source-line-no">220</span><span id="line-220">   /**</span>
@@ -277,182 +277,226 @@
 <span class="source-line-no">264</span><span id="line-264">         javaFlags |= DOTALL;</span>
 <span class="source-line-no">265</span><span id="line-265">      try {</span>
 <span class="source-line-no">266</span><span id="line-266">         Pattern.compile(pattern, javaFlags);</span>
-<span class="source-line-no">267</span><span id="line-267">      } catch (PatternSyntaxException e) {</span>
-<span class="source-line-no">268</span><span id="line-268">         return NEVER;  // Invalid pattern = no match, like InMemoryMatch/RegexBudget; also keeps it from escaping the \A(?:...)\Z anchors.</span>
-<span class="source-line-no">269</span><span id="line-269">      }</span>
-<span class="source-line-no">270</span><span id="line-270">      String mods;</span>
-<span class="source-line-no">271</span><span id="line-271">      if (multiline)</span>
-<span class="source-line-no">272</span><span id="line-272">         mods = dotall ? "(?w)" : "(?n)";</span>
-<span class="source-line-no">273</span><span id="line-273">      else</span>
-<span class="source-line-no">274</span><span id="line-274">         mods = dotall ? "" : "(?p)";</span>
-<span class="source-line-no">275</span><span id="line-275">      return frag(col + (ci ? " ~* ?" : " ~ ?"), mods + "\\A(?:" + pattern + ")\\Z");</span>
-<span class="source-line-no">276</span><span id="line-276">   }</span>
-<span class="source-line-no">277</span><span id="line-277"></span>
-<span class="source-line-no">278</span><span id="line-278">   private static SqlFragment cmp(String col, String operator, SearchType type, Object arg) {</span>
-<span class="source-line-no">279</span><span id="line-279">      if (type == VERSION) {</span>
-<span class="source-line-no">280</span><span id="line-280">         var v = versionArg(arg);</span>
-<span class="source-line-no">281</span><span id="line-281">         return v == null ? NEVER : frag(versionArray(col) + operator + "string_to_array(?, '.')::int[]", v);</span>
-<span class="source-line-no">282</span><span id="line-282">      }</span>
-<span class="source-line-no">283</span><span id="line-283">      return frag(col + operator + "?", arg);</span>
-<span class="source-line-no">284</span><span id="line-284">   }</span>
-<span class="source-line-no">285</span><span id="line-285"></span>
-<span class="source-line-no">286</span><span id="line-286">   private static SqlFragment between(String col, SearchType type, Object lo, Object hi) {</span>
-<span class="source-line-no">287</span><span id="line-287">      if (type == VERSION) {</span>
-<span class="source-line-no">288</span><span id="line-288">         var l = versionArg(lo);</span>
-<span class="source-line-no">289</span><span id="line-289">         var h = versionArg(hi);</span>
-<span class="source-line-no">290</span><span id="line-290">         return (l == null || h == null) ? NEVER : frag(versionArray(col) + " BETWEEN " + "string_to_array(?, '.')::int[]" + " AND " + "string_to_array(?, '.')::int[]", l, h);</span>
-<span class="source-line-no">291</span><span id="line-291">      }</span>
-<span class="source-line-no">292</span><span id="line-292">      return frag(col + " BETWEEN ? AND ?", lo, hi);</span>
-<span class="source-line-no">293</span><span id="line-293">   }</span>
-<span class="source-line-no">294</span><span id="line-294"></span>
-<span class="source-line-no">295</span><span id="line-295">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">296</span><span id="line-296">   // VERSION (stored as dotted text; compared as a tuple of integers, like InMemoryMatch.cmpVersion)</span>
+<span class="source-line-no">267</span><span id="line-267">         if (! isPortable(pattern))</span>
+<span class="source-line-no">268</span><span id="line-268">            return NEVER;</span>
+<span class="source-line-no">269</span><span id="line-269">      } catch (PatternSyntaxException e) {</span>
+<span class="source-line-no">270</span><span id="line-270">         return NEVER;  // Invalid pattern = no match, like InMemoryMatch/RegexBudget; also keeps it from escaping the \A(?:...)\Z anchors.</span>
+<span class="source-line-no">271</span><span id="line-271">      }</span>
+<span class="source-line-no">272</span><span id="line-272">      String mods;</span>
+<span class="source-line-no">273</span><span id="line-273">      if (multiline)</span>
+<span class="source-line-no">274</span><span id="line-274">         mods = dotall ? "(?w)" : "(?n)";</span>
+<span class="source-line-no">275</span><span id="line-275">      else</span>
+<span class="source-line-no">276</span><span id="line-276">         mods = dotall ? "" : "(?p)";</span>
+<span class="source-line-no">277</span><span id="line-277">      return frag(col + (ci ? " ~* ?" : " ~ ?"), mods + "\\A(?:" + pattern + ")\\Z");</span>
+<span class="source-line-no">278</span><span id="line-278">   }</span>
+<span class="source-line-no">279</span><span id="line-279"></span>
+<span class="source-line-no">280</span><span id="line-280">   private static SqlFragment cmp(String col, String operator, SearchType type, Object arg) {</span>
+<span class="source-line-no">281</span><span id="line-281">      if (type == VERSION) {</span>
+<span class="source-line-no">282</span><span id="line-282">         var v = versionArg(arg);</span>
+<span class="source-line-no">283</span><span id="line-283">         return v == null ? NEVER : frag(versionArray(col) + operator + "string_to_array(?, '.')::int[]", v);</span>
+<span class="source-line-no">284</span><span id="line-284">      }</span>
+<span class="source-line-no">285</span><span id="line-285">      return frag(col + operator + "?", arg);</span>
+<span class="source-line-no">286</span><span id="line-286">   }</span>
+<span class="source-line-no">287</span><span id="line-287"></span>
+<span class="source-line-no">288</span><span id="line-288">   private static SqlFragment between(String col, SearchType type, Object lo, Object hi) {</span>
+<span class="source-line-no">289</span><span id="line-289">      if (type == VERSION) {</span>
+<span class="source-line-no">290</span><span id="line-290">         var l = versionArg(lo);</span>
+<span class="source-line-no">291</span><span id="line-291">         var h = versionArg(hi);</span>
+<span class="source-line-no">292</span><span id="line-292">         return (l == null || h == null) ? NEVER : frag(versionArray(col) + " BETWEEN " + "string_to_array(?, '.')::int[]" + " AND " + "string_to_array(?, '.')::int[]", l, h);</span>
+<span class="source-line-no">293</span><span id="line-293">      }</span>
+<span class="source-line-no">294</span><span id="line-294">      return frag(col + " BETWEEN ? AND ?", lo, hi);</span>
+<span class="source-line-no">295</span><span id="line-295">   }</span>
+<span class="source-line-no">296</span><span id="line-296"></span>
 <span class="source-line-no">297</span><span id="line-297">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">298</span><span id="line-298"></span>
-<span class="source-line-no">299</span><span id="line-299">   /** The predicate for a version that can never match (an unparseable argument, like in-memory). */</span>
-<span class="source-line-no">300</span><span id="line-300">   private static final SqlFragment NEVER = SqlFragment.of("(1 = 0)");</span>
-<span class="source-line-no">301</span><span id="line-301"></span>
-<span class="source-line-no">302</span><span id="line-302">   /**</span>
-<span class="source-line-no">303</span><span id="line-303">    * The column as an {@code int[]}, or {@code NULL} when the stored text is not a dotted sequence of integers.</span>
-<span class="source-line-no">304</span><span id="line-304">    * Postgres compares arrays element by element and then by length, which is exactly the in-memory dotted-tuple order.</span>
-<span class="source-line-no">305</span><span id="line-305">    *</span>
-<span class="source-line-no">306</span><span id="line-306">    * &lt;p&gt;</span>
-<span class="source-line-no">307</span><span id="line-307">    * The guard literal is an {@code E'...'} string with doubled backslashes, so its meaning does not depend on</span>
-<span class="source-line-no">308</span><span id="line-308">    * {@code standard_conforming_strings}, and it contains no {@code ?} that pgjdbc could mistake for a placeholder.</span>
-<span class="source-line-no">309</span><span id="line-309">    */</span>
-<span class="source-line-no">310</span><span id="line-310">   @SuppressWarnings({</span>
-<span class="source-line-no">311</span><span id="line-311">      "java:S6353" // Deliberately ASCII [0-9]: Postgres \\d may match non-ASCII digits in some locales, which would then fail the int cast.</span>
-<span class="source-line-no">312</span><span id="line-312">   })</span>
-<span class="source-line-no">313</span><span id="line-313">   private static String versionArray(String col) {</span>
-<span class="source-line-no">314</span><span id="line-314">      return "(CASE WHEN " + col + " ~ E'^\\\\s*[0-9]{1,9}(\\\\s*\\\\.\\\\s*[0-9]{1,9})*\\\\s*$' THEN string_to_array(" + col + ", '.')::int[] END)";</span>
-<span class="source-line-no">315</span><span id="line-315">   }</span>
-<span class="source-line-no">316</span><span id="line-316"></span>
-<span class="source-line-no">317</span><span id="line-317">   /** A version argument normalized for {@link #VERSION_BIND}, or &lt;jk&gt;null&lt;/jk&gt; if it is not a dotted sequence of integers. */</span>
-<span class="source-line-no">318</span><span id="line-318">   private static String versionArg(Object arg) {</span>
-<span class="source-line-no">319</span><span id="line-319">      // Hand-rolled scan of  ws* d{1,9} (ws* '.' ws* d{1,9})* ws*  (ASCII digits/whitespace), equivalent to that regex but</span>
-<span class="source-line-no">320</span><span id="line-320">      // without a backtracking group.  At most 9 digits per part, so every part fits a Postgres int (no 22003 overflow).</span>
-<span class="source-line-no">321</span><span id="line-321">      var s = text(arg);</span>
-<span class="source-line-no">322</span><span id="line-322">      var n = s.length();</span>
-<span class="source-line-no">323</span><span id="line-323">      var parts = new ArrayList&lt;String&gt;();</span>
-<span class="source-line-no">324</span><span id="line-324">      var i = skipWs(s, 0);</span>
-<span class="source-line-no">325</span><span id="line-325">      while (true) {</span>
-<span class="source-line-no">326</span><span id="line-326">         var start = i;</span>
-<span class="source-line-no">327</span><span id="line-327">         while (i &lt; n &amp;&amp; s.charAt(i) &gt;= '0' &amp;&amp; s.charAt(i) &lt;= '9')</span>
-<span class="source-line-no">328</span><span id="line-328">            i++;</span>
-<span class="source-line-no">329</span><span id="line-329">         if (i == start || i - start &gt; 9)</span>
-<span class="source-line-no">330</span><span id="line-330">            return null;</span>
-<span class="source-line-no">331</span><span id="line-331">         parts.add(String.valueOf(Integer.parseInt(s.substring(start, i))));</span>
-<span class="source-line-no">332</span><span id="line-332">         i = skipWs(s, i);</span>
-<span class="source-line-no">333</span><span id="line-333">         if (i == n)</span>
-<span class="source-line-no">334</span><span id="line-334">            return String.join(".", parts);</span>
-<span class="source-line-no">335</span><span id="line-335">         if (s.charAt(i) != '.')</span>
-<span class="source-line-no">336</span><span id="line-336">            return null;</span>
-<span class="source-line-no">337</span><span id="line-337">         i = skipWs(s, i + 1);</span>
-<span class="source-line-no">338</span><span id="line-338">      }</span>
-<span class="source-line-no">339</span><span id="line-339">   }</span>
-<span class="source-line-no">340</span><span id="line-340"></span>
-<span class="source-line-no">341</span><span id="line-341">   /** Index of the first non-whitespace char at or after {@code i}; whitespace is the regex {@code \s} set (ASCII). */</span>
-<span class="source-line-no">342</span><span id="line-342">   private static int skipWs(String s, int i) {</span>
-<span class="source-line-no">343</span><span id="line-343">      while (i &lt; s.length() &amp;&amp; " \t\n\u000B\f\r".indexOf(s.charAt(i)) &gt;= 0)</span>
-<span class="source-line-no">344</span><span id="line-344">         i++;</span>
-<span class="source-line-no">345</span><span id="line-345">      return i;</span>
-<span class="source-line-no">346</span><span id="line-346">   }</span>
-<span class="source-line-no">347</span><span id="line-347"></span>
-<span class="source-line-no">348</span><span id="line-348">   /** Equality against any of the (parseable) versions; renders as never-true when none parses. */</span>
-<span class="source-line-no">349</span><span id="line-349">   private static SqlFragment versionIn(String col, List&lt;Object&gt; args) {</span>
-<span class="source-line-no">350</span><span id="line-350">      var sb = new StringBuilder();</span>
-<span class="source-line-no">351</span><span id="line-351">      var binds = new ArrayList&lt;&gt;();</span>
-<span class="source-line-no">352</span><span id="line-352">      for (var a : args) {</span>
-<span class="source-line-no">353</span><span id="line-353">         var v = versionArg(a);</span>
-<span class="source-line-no">354</span><span id="line-354">         if (v == null)</span>
-<span class="source-line-no">355</span><span id="line-355">            continue;</span>
-<span class="source-line-no">356</span><span id="line-356">         sb.append(binds.isEmpty() ? "" : " OR ").append(versionArray(col)).append(" = ").append("string_to_array(?, '.')::int[]");</span>
-<span class="source-line-no">357</span><span id="line-357">         binds.add(v);</span>
-<span class="source-line-no">358</span><span id="line-358">      }</span>
-<span class="source-line-no">359</span><span id="line-359">      if (binds.isEmpty())</span>
-<span class="source-line-no">360</span><span id="line-360">         return NEVER;</span>
-<span class="source-line-no">361</span><span id="line-361">      return SqlFragment.of(binds.size() &gt; 1 ? "(" + sb + ")" : sb.toString(), binds);</span>
-<span class="source-line-no">362</span><span id="line-362">   }</span>
-<span class="source-line-no">363</span><span id="line-363"></span>
-<span class="source-line-no">364</span><span id="line-364">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">365</span><span id="line-365">   // Helpers</span>
+<span class="source-line-no">298</span><span id="line-298">   // VERSION (stored as dotted text; compared as a tuple of integers, like InMemoryMatch.cmpVersion)</span>
+<span class="source-line-no">299</span><span id="line-299">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">300</span><span id="line-300"></span>
+<span class="source-line-no">301</span><span id="line-301">   /** The predicate for a version that can never match (an unparseable argument, like in-memory). */</span>
+<span class="source-line-no">302</span><span id="line-302">   private static final SqlFragment NEVER = SqlFragment.of("(1 = 0)");</span>
+<span class="source-line-no">303</span><span id="line-303"></span>
+<span class="source-line-no">304</span><span id="line-304">   /**</span>
+<span class="source-line-no">305</span><span id="line-305">    * The column as an {@code int[]}, or {@code NULL} when the stored text is not a dotted sequence of integers.</span>
+<span class="source-line-no">306</span><span id="line-306">    * Postgres compares arrays element by element and then by length, which is exactly the in-memory dotted-tuple order.</span>
+<span class="source-line-no">307</span><span id="line-307">    *</span>
+<span class="source-line-no">308</span><span id="line-308">    * &lt;p&gt;</span>
+<span class="source-line-no">309</span><span id="line-309">    * The guard literal is an {@code E'...'} string with doubled backslashes, so its meaning does not depend on</span>
+<span class="source-line-no">310</span><span id="line-310">    * {@code standard_conforming_strings}, and it contains no {@code ?} that pgjdbc could mistake for a placeholder.</span>
+<span class="source-line-no">311</span><span id="line-311">    */</span>
+<span class="source-line-no">312</span><span id="line-312">   @SuppressWarnings({</span>
+<span class="source-line-no">313</span><span id="line-313">      "java:S6353" // Deliberately ASCII [0-9]: Postgres \\d may match non-ASCII digits in some locales, which would then fail the int cast.</span>
+<span class="source-line-no">314</span><span id="line-314">   })</span>
+<span class="source-line-no">315</span><span id="line-315">   private static String versionArray(String col) {</span>
+<span class="source-line-no">316</span><span id="line-316">      return "(CASE WHEN " + col + " ~ E'^\\\\s*[0-9]{1,9}(\\\\s*\\\\.\\\\s*[0-9]{1,9})*\\\\s*$' THEN string_to_array(" + col + ", '.')::int[] END)";</span>
+<span class="source-line-no">317</span><span id="line-317">   }</span>
+<span class="source-line-no">318</span><span id="line-318"></span>
+<span class="source-line-no">319</span><span id="line-319">   /** A version argument normalized for {@link #VERSION_BIND}, or &lt;jk&gt;null&lt;/jk&gt; if it is not a dotted sequence of integers. */</span>
+<span class="source-line-no">320</span><span id="line-320">   private static String versionArg(Object arg) {</span>
+<span class="source-line-no">321</span><span id="line-321">      // Hand-rolled scan of  ws* d{1,9} (ws* '.' ws* d{1,9})* ws*  (ASCII digits/whitespace), equivalent to that regex but</span>
+<span class="source-line-no">322</span><span id="line-322">      // without a backtracking group.  At most 9 digits per part, so every part fits a Postgres int (no 22003 overflow).</span>
+<span class="source-line-no">323</span><span id="line-323">      var s = text(arg);</span>
+<span class="source-line-no">324</span><span id="line-324">      var n = s.length();</span>
+<span class="source-line-no">325</span><span id="line-325">      var parts = new ArrayList&lt;String&gt;();</span>
+<span class="source-line-no">326</span><span id="line-326">      var i = skipWs(s, 0);</span>
+<span class="source-line-no">327</span><span id="line-327">      while (true) {</span>
+<span class="source-line-no">328</span><span id="line-328">         var start = i;</span>
+<span class="source-line-no">329</span><span id="line-329">         while (i &lt; n &amp;&amp; s.charAt(i) &gt;= '0' &amp;&amp; s.charAt(i) &lt;= '9')</span>
+<span class="source-line-no">330</span><span id="line-330">            i++;</span>
+<span class="source-line-no">331</span><span id="line-331">         if (i == start || i - start &gt; 9)</span>
+<span class="source-line-no">332</span><span id="line-332">            return null;</span>
+<span class="source-line-no">333</span><span id="line-333">         parts.add(String.valueOf(Integer.parseInt(s.substring(start, i))));</span>
+<span class="source-line-no">334</span><span id="line-334">         i = skipWs(s, i);</span>
+<span class="source-line-no">335</span><span id="line-335">         if (i == n)</span>
+<span class="source-line-no">336</span><span id="line-336">            return String.join(".", parts);</span>
+<span class="source-line-no">337</span><span id="line-337">         if (s.charAt(i) != '.')</span>
+<span class="source-line-no">338</span><span id="line-338">            return null;</span>
+<span class="source-line-no">339</span><span id="line-339">         i = skipWs(s, i + 1);</span>
+<span class="source-line-no">340</span><span id="line-340">      }</span>
+<span class="source-line-no">341</span><span id="line-341">   }</span>
+<span class="source-line-no">342</span><span id="line-342"></span>
+<span class="source-line-no">343</span><span id="line-343">   /** Index of the first non-whitespace char at or after {@code i}; whitespace is the regex {@code \s} set (ASCII). */</span>
+<span class="source-line-no">344</span><span id="line-344">   private static int skipWs(String s, int i) {</span>
+<span class="source-line-no">345</span><span id="line-345">      while (i &lt; s.length() &amp;&amp; " \t\n\u000B\f\r".indexOf(s.charAt(i)) &gt;= 0)</span>
+<span class="source-line-no">346</span><span id="line-346">         i++;</span>
+<span class="source-line-no">347</span><span id="line-347">      return i;</span>
+<span class="source-line-no">348</span><span id="line-348">   }</span>
+<span class="source-line-no">349</span><span id="line-349"></span>
+<span class="source-line-no">350</span><span id="line-350">   /** Equality against any of the (parseable) versions; renders as never-true when none parses. */</span>
+<span class="source-line-no">351</span><span id="line-351">   private static SqlFragment versionIn(String col, List&lt;Object&gt; args) {</span>
+<span class="source-line-no">352</span><span id="line-352">      var sb = new StringBuilder();</span>
+<span class="source-line-no">353</span><span id="line-353">      var binds = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">354</span><span id="line-354">      for (var a : args) {</span>
+<span class="source-line-no">355</span><span id="line-355">         var v = versionArg(a);</span>
+<span class="source-line-no">356</span><span id="line-356">         if (v == null)</span>
+<span class="source-line-no">357</span><span id="line-357">            continue;</span>
+<span class="source-line-no">358</span><span id="line-358">         sb.append(binds.isEmpty() ? "" : " OR ").append(versionArray(col)).append(" = ").append("string_to_array(?, '.')::int[]");</span>
+<span class="source-line-no">359</span><span id="line-359">         binds.add(v);</span>
+<span class="source-line-no">360</span><span id="line-360">      }</span>
+<span class="source-line-no">361</span><span id="line-361">      if (binds.isEmpty())</span>
+<span class="source-line-no">362</span><span id="line-362">         return NEVER;</span>
+<span class="source-line-no">363</span><span id="line-363">      return SqlFragment.of(binds.size() &gt; 1 ? "(" + sb + ")" : sb.toString(), binds);</span>
+<span class="source-line-no">364</span><span id="line-364">   }</span>
+<span class="source-line-no">365</span><span id="line-365"></span>
 <span class="source-line-no">366</span><span id="line-366">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">367</span><span id="line-367"></span>
-<span class="source-line-no">368</span><span id="line-368">   /** The cell is {@code NULL} or ASCII-whitespace only, like the in-memory blank test. */</span>
-<span class="source-line-no">369</span><span id="line-369">   private static String blank(String col) {</span>
-<span class="source-line-no">370</span><span id="line-370">      return blankOr(col, col) + ")";</span>
-<span class="source-line-no">371</span><span id="line-371">   }</span>
-<span class="source-line-no">372</span><span id="line-372"></span>
-<span class="source-line-no">373</span><span id="line-373">   /** Opens a parenthesized disjunction with the blank test for {@code textExpr}; the caller appends the rest and closes it. */</span>
-<span class="source-line-no">374</span><span id="line-374">   private static String blankOr(String col, String textExpr) {</span>
-<span class="source-line-no">375</span><span id="line-375">      return "(" + col + " IS NULL OR btrim(" + textExpr + ", " + "E' \\t\\n\\x0B\\f\\r\\x1C\\x1D\\x1E\\x1F'" + ") = ''";</span>
-<span class="source-line-no">376</span><span id="line-376">   }</span>
-<span class="source-line-no">377</span><span id="line-377"></span>
-<span class="source-line-no">378</span><span id="line-378">   private static boolean isCiText(SearchType type) {</span>
-<span class="source-line-no">379</span><span id="line-379">      return type == TEXT || type == ID || type == ENUM;</span>
-<span class="source-line-no">380</span><span id="line-380">   }</span>
-<span class="source-line-no">381</span><span id="line-381"></span>
-<span class="source-line-no">382</span><span id="line-382">   private static boolean hasWildcard(String token) {</span>
-<span class="source-line-no">383</span><span id="line-383">      return token.indexOf('*') &gt;= 0 || token.indexOf('?') &gt;= 0;</span>
-<span class="source-line-no">384</span><span id="line-384">   }</span>
-<span class="source-line-no">385</span><span id="line-385"></span>
-<span class="source-line-no">386</span><span id="line-386">   /** A bare glob ({@code *} any run, {@code ?} one character) as a LIKE pattern, with LIKE metacharacters escaped first. */</span>
-<span class="source-line-no">387</span><span id="line-387">   private static String glob(String token) {</span>
-<span class="source-line-no">388</span><span id="line-388">      return escapeLike(token).replace("*", "%").replace("?", "_");</span>
-<span class="source-line-no">389</span><span id="line-389">   }</span>
-<span class="source-line-no">390</span><span id="line-390"></span>
-<span class="source-line-no">391</span><span id="line-391">   /** The column as text: an ENUM column may be a native Postgres enum, which has no text operators of its own. */</span>
-<span class="source-line-no">392</span><span id="line-392">   private static String textOf(String col, SearchType type) {</span>
-<span class="source-line-no">393</span><span id="line-393">      return type == ENUM ? col + "::text" : col;</span>
-<span class="source-line-no">394</span><span id="line-394">   }</span>
-<span class="source-line-no">395</span><span id="line-395"></span>
-<span class="source-line-no">396</span><span id="line-396">   /** Text-like columns bind strings; everything else binds the already-typed value. */</span>
-<span class="source-line-no">397</span><span id="line-397">   private static Object bind(SearchType type, Object arg) {</span>
-<span class="source-line-no">398</span><span id="line-398">      return isCiText(type) ? text(arg) : arg;</span>
-<span class="source-line-no">399</span><span id="line-399">   }</span>
-<span class="source-line-no">400</span><span id="line-400"></span>
-<span class="source-line-no">401</span><span id="line-401">   private static List&lt;Object&gt; binds(SearchType type, List&lt;Object&gt; args) {</span>
-<span class="source-line-no">402</span><span id="line-402">      return args.stream().map(a -&gt; bind(type, a)).toList();</span>
-<span class="source-line-no">403</span><span id="line-403">   }</span>
-<span class="source-line-no">404</span><span id="line-404"></span>
-<span class="source-line-no">405</span><span id="line-405">   private static void appendPlaceholders(StringBuilder sb, int count) {</span>
-<span class="source-line-no">406</span><span id="line-406">      for (var i = 0; i &lt; count; i++) {</span>
-<span class="source-line-no">407</span><span id="line-407">         if (i &gt; 0)</span>
-<span class="source-line-no">408</span><span id="line-408">            sb.append(", ");</span>
-<span class="source-line-no">409</span><span id="line-409">         sb.append('?');</span>
-<span class="source-line-no">410</span><span id="line-410">      }</span>
-<span class="source-line-no">411</span><span id="line-411">   }</span>
-<span class="source-line-no">412</span><span id="line-412"></span>
-<span class="source-line-no">413</span><span id="line-413">   /** Escapes LIKE/ILIKE metacharacters (backslash is the default Postgres LIKE escape). */</span>
-<span class="source-line-no">414</span><span id="line-414">   private static String escapeLike(String s) {</span>
-<span class="source-line-no">415</span><span id="line-415">      return s.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");</span>
-<span class="source-line-no">416</span><span id="line-416">   }</span>
-<span class="source-line-no">417</span><span id="line-417"></span>
-<span class="source-line-no">418</span><span id="line-418">   private static String like(String pre, String s, String post) {</span>
-<span class="source-line-no">419</span><span id="line-419">      return pre + escapeLike(s) + post;</span>
-<span class="source-line-no">420</span><span id="line-420">   }</span>
-<span class="source-line-no">421</span><span id="line-421"></span>
-<span class="source-line-no">422</span><span id="line-422">   /**</span>
-<span class="source-line-no">423</span><span id="line-423">    * Asserts that a value on a text-only path is a {@link String}.</span>
-<span class="source-line-no">424</span><span id="line-424">    *</span>
-<span class="source-line-no">425</span><span id="line-425">    * &lt;p&gt;</span>
-<span class="source-line-no">426</span><span id="line-426">    * Values for TEXT / ID / ENUM / VERSION columns are always {@link String}s (design #4 §4: {@link SearchType#parse}</span>
-<span class="source-line-no">427</span><span id="line-427">    * leaves them unchanged), so a non-string here is an engine bug, not a user error.</span>
-<span class="source-line-no">428</span><span id="line-428">    *</span>
-<span class="source-line-no">429</span><span id="line-429">    * @param o The value.</span>
-<span class="source-line-no">430</span><span id="line-430">    * @return The value as a string.</span>
-<span class="source-line-no">431</span><span id="line-431">    * @throws IllegalStateException If the value is not a {@link String}.</span>
-<span class="source-line-no">432</span><span id="line-432">    */</span>
-<span class="source-line-no">433</span><span id="line-433">   private static String text(Object o) {</span>
-<span class="source-line-no">434</span><span id="line-434">      if (o instanceof String s)</span>
-<span class="source-line-no">435</span><span id="line-435">         return s;</span>
-<span class="source-line-no">436</span><span id="line-436">      throw new IllegalStateException(f("Expected a String value for a text comparison but got '%s'.", o == null ? null : o.getClass().getName()));  // I believe we have a short for getting class name?</span>
-<span class="source-line-no">437</span><span id="line-437">   }</span>
-<span class="source-line-no">438</span><span id="line-438"></span>
-<span class="source-line-no">439</span><span id="line-439">   private static SqlFragment frag(String sql, Object...binds) {</span>
-<span class="source-line-no">440</span><span id="line-440">      return SqlFragment.of(sql, binds);</span>
-<span class="source-line-no">441</span><span id="line-441">   }</span>
-<span class="source-line-no">442</span><span id="line-442">}</span>
+<span class="source-line-no">367</span><span id="line-367">   // Helpers</span>
+<span class="source-line-no">368</span><span id="line-368">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">369</span><span id="line-369"></span>
+<span class="source-line-no">370</span><span id="line-370">   /** The cell is {@code NULL} or ASCII-whitespace only, like the in-memory blank test. */</span>
+<span class="source-line-no">371</span><span id="line-371">   private static String blank(String col) {</span>
+<span class="source-line-no">372</span><span id="line-372">      return blankOr(col, col) + ")";</span>
+<span class="source-line-no">373</span><span id="line-373">   }</span>
+<span class="source-line-no">374</span><span id="line-374"></span>
+<span class="source-line-no">375</span><span id="line-375">   /** Opens a parenthesized disjunction with the blank test for {@code textExpr}; the caller appends the rest and closes it. */</span>
+<span class="source-line-no">376</span><span id="line-376">   private static String blankOr(String col, String textExpr) {</span>
+<span class="source-line-no">377</span><span id="line-377">      return "(" + col + " IS NULL OR btrim(" + textExpr + ", " + "E' \\t\\n\\x0B\\f\\r\\x1C\\x1D\\x1E\\x1F'" + ") = ''";</span>
+<span class="source-line-no">378</span><span id="line-378">   }</span>
+<span class="source-line-no">379</span><span id="line-379"></span>
+<span class="source-line-no">380</span><span id="line-380">   private static boolean isCiText(SearchType type) {</span>
+<span class="source-line-no">381</span><span id="line-381">      return type == TEXT || type == ID || type == ENUM;</span>
+<span class="source-line-no">382</span><span id="line-382">   }</span>
+<span class="source-line-no">383</span><span id="line-383"></span>
+<span class="source-line-no">384</span><span id="line-384">   private static boolean hasWildcard(String token) {</span>
+<span class="source-line-no">385</span><span id="line-385">      return token.indexOf('*') &gt;= 0 || token.indexOf('?') &gt;= 0;</span>
+<span class="source-line-no">386</span><span id="line-386">   }</span>
+<span class="source-line-no">387</span><span id="line-387"></span>
+<span class="source-line-no">388</span><span id="line-388">   /** A bare glob ({@code *} any run, {@code ?} one character) as a LIKE pattern, with LIKE metacharacters escaped first. */</span>
+<span class="source-line-no">389</span><span id="line-389">   private static String glob(String token) {</span>
+<span class="source-line-no">390</span><span id="line-390">      return escapeLike(token).replace("*", "%").replace("?", "_");</span>
+<span class="source-line-no">391</span><span id="line-391">   }</span>
+<span class="source-line-no">392</span><span id="line-392"></span>
+<span class="source-line-no">393</span><span id="line-393">   /** The column as text: an ENUM column may be a native Postgres enum, which has no text operators of its own. */</span>
+<span class="source-line-no">394</span><span id="line-394">   private static String textOf(String col, SearchType type) {</span>
+<span class="source-line-no">395</span><span id="line-395">      return type == ENUM ? col + "::text" : col;</span>
+<span class="source-line-no">396</span><span id="line-396">   }</span>
+<span class="source-line-no">397</span><span id="line-397"></span>
+<span class="source-line-no">398</span><span id="line-398">   /** Text-like columns bind strings; everything else binds the already-typed value. */</span>
+<span class="source-line-no">399</span><span id="line-399">   private static Object bind(SearchType type, Object arg) {</span>
+<span class="source-line-no">400</span><span id="line-400">      return isCiText(type) ? text(arg) : arg;</span>
+<span class="source-line-no">401</span><span id="line-401">   }</span>
+<span class="source-line-no">402</span><span id="line-402"></span>
+<span class="source-line-no">403</span><span id="line-403">   private static List&lt;Object&gt; binds(SearchType type, List&lt;Object&gt; args) {</span>
+<span class="source-line-no">404</span><span id="line-404">      return args.stream().map(a -&gt; bind(type, a)).toList();</span>
+<span class="source-line-no">405</span><span id="line-405">   }</span>
+<span class="source-line-no">406</span><span id="line-406"></span>
+<span class="source-line-no">407</span><span id="line-407">   private static void appendPlaceholders(StringBuilder sb, int count) {</span>
+<span class="source-line-no">408</span><span id="line-408">      for (var i = 0; i &lt; count; i++) {</span>
+<span class="source-line-no">409</span><span id="line-409">         if (i &gt; 0)</span>
+<span class="source-line-no">410</span><span id="line-410">            sb.append(", ");</span>
+<span class="source-line-no">411</span><span id="line-411">         sb.append('?');</span>
+<span class="source-line-no">412</span><span id="line-412">      }</span>
+<span class="source-line-no">413</span><span id="line-413">   }</span>
+<span class="source-line-no">414</span><span id="line-414"></span>
+<span class="source-line-no">415</span><span id="line-415">   /**</span>
+<span class="source-line-no">416</span><span id="line-416">    * Returns whether a regex uses only constructs with the same meaning in Java and PostgreSQL (ARE): literals, classes,</span>
+<span class="source-line-no">417</span><span id="line-417">    * groups, alternation, greedy/lazy quantifiers, anchors, back-references and the {@code \d \w \s} shorthands.</span>
+<span class="source-line-no">418</span><span id="line-418">    * Anything that differs between the flavors (possessive quantifiers, inline flags, lookbehind, named or atomic groups,</span>
+<span class="source-line-no">419</span><span id="line-419">    * {@code \p} classes, {@code \b}, {@code \Q...\E}, class intersections and POSIX bracket expressions) makes the</span>
+<span class="source-line-no">420</span><span id="line-420">    * pattern non-portable, so it matches nothing instead of being interpreted differently by the server.</span>
+<span class="source-line-no">421</span><span id="line-421">    */</span>
+<span class="source-line-no">422</span><span id="line-422">   @SuppressWarnings({</span>
+<span class="source-line-no">423</span><span id="line-423">      "java:S3776" // Branching is inherent to the regex scanner.</span>
+<span class="source-line-no">424</span><span id="line-424">   })</span>
+<span class="source-line-no">425</span><span id="line-425">   static boolean isPortable(String p) {</span>
+<span class="source-line-no">426</span><span id="line-426">      var inClass = false;</span>
+<span class="source-line-no">427</span><span id="line-427">      var n = p.length();</span>
+<span class="source-line-no">428</span><span id="line-428">      var i = 0;</span>
+<span class="source-line-no">429</span><span id="line-429">      while (i &lt; n) {</span>
+<span class="source-line-no">430</span><span id="line-430">         var c = p.charAt(i);</span>
+<span class="source-line-no">431</span><span id="line-431">         if (c == '\\') {</span>
+<span class="source-line-no">432</span><span id="line-432">            i++;</span>
+<span class="source-line-no">433</span><span id="line-433">            if (i &gt;= n || "pPbBQEhHRXGzZAkNvVuxc0".indexOf(p.charAt(i)) &gt;= 0)</span>
+<span class="source-line-no">434</span><span id="line-434">               return false;</span>
+<span class="source-line-no">435</span><span id="line-435">         } else if (inClass) {</span>
+<span class="source-line-no">436</span><span id="line-436">            if (c == ']')</span>
+<span class="source-line-no">437</span><span id="line-437">               inClass = false;</span>
+<span class="source-line-no">438</span><span id="line-438">            else if (c == '[' || (c == '&amp;' &amp;&amp; i + 1 &lt; n &amp;&amp; p.charAt(i + 1) == '&amp;'))</span>
+<span class="source-line-no">439</span><span id="line-439">               return false;</span>
+<span class="source-line-no">440</span><span id="line-440">         } else if (c == '[') {</span>
+<span class="source-line-no">441</span><span id="line-441">            inClass = true;</span>
+<span class="source-line-no">442</span><span id="line-442">            if (i + 1 &lt; n &amp;&amp; p.charAt(i + 1) == '^')</span>
+<span class="source-line-no">443</span><span id="line-443">               i++;</span>
+<span class="source-line-no">444</span><span id="line-444">            if (i + 1 &lt; n &amp;&amp; p.charAt(i + 1) == ']')</span>
+<span class="source-line-no">445</span><span id="line-445">               i++;</span>
+<span class="source-line-no">446</span><span id="line-446">         } else if (c == '(' &amp;&amp; i + 1 &lt; n &amp;&amp; p.charAt(i + 1) == '?') {</span>
+<span class="source-line-no">447</span><span id="line-447">            if (i + 2 &gt;= n || ":=!".indexOf(p.charAt(i + 2)) &lt; 0)</span>
+<span class="source-line-no">448</span><span id="line-448">               return false;</span>
+<span class="source-line-no">449</span><span id="line-449">         } else if ("*+?}".indexOf(c) &gt;= 0 &amp;&amp; i + 1 &lt; n &amp;&amp; p.charAt(i + 1) == '+') {</span>
+<span class="source-line-no">450</span><span id="line-450">            return false;</span>
+<span class="source-line-no">451</span><span id="line-451">         }</span>
+<span class="source-line-no">452</span><span id="line-452">         i++;</span>
+<span class="source-line-no">453</span><span id="line-453">      }</span>
+<span class="source-line-no">454</span><span id="line-454">      return ! inClass;</span>
+<span class="source-line-no">455</span><span id="line-455">   }</span>
+<span class="source-line-no">456</span><span id="line-456"></span>
+<span class="source-line-no">457</span><span id="line-457">   /** Escapes LIKE/ILIKE metacharacters (backslash is the default Postgres LIKE escape). */</span>
+<span class="source-line-no">458</span><span id="line-458">   private static String escapeLike(String s) {</span>
+<span class="source-line-no">459</span><span id="line-459">      return s.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");</span>
+<span class="source-line-no">460</span><span id="line-460">   }</span>
+<span class="source-line-no">461</span><span id="line-461"></span>
+<span class="source-line-no">462</span><span id="line-462">   private static String like(String pre, String s, String post) {</span>
+<span class="source-line-no">463</span><span id="line-463">      return pre + escapeLike(s) + post;</span>
+<span class="source-line-no">464</span><span id="line-464">   }</span>
+<span class="source-line-no">465</span><span id="line-465"></span>
+<span class="source-line-no">466</span><span id="line-466">   /**</span>
+<span class="source-line-no">467</span><span id="line-467">    * Asserts that a value on a text-only path is a {@link String}.</span>
+<span class="source-line-no">468</span><span id="line-468">    *</span>
+<span class="source-line-no">469</span><span id="line-469">    * &lt;p&gt;</span>
+<span class="source-line-no">470</span><span id="line-470">    * Values for TEXT / ID / ENUM / VERSION columns are always {@link String}s (design #4 §4: {@link SearchType#parse}</span>
+<span class="source-line-no">471</span><span id="line-471">    * leaves them unchanged), so a non-string here is an engine bug, not a user error.</span>
+<span class="source-line-no">472</span><span id="line-472">    *</span>
+<span class="source-line-no">473</span><span id="line-473">    * @param o The value.</span>
+<span class="source-line-no">474</span><span id="line-474">    * @return The value as a string.</span>
+<span class="source-line-no">475</span><span id="line-475">    * @throws IllegalStateException If the value is not a {@link String}.</span>
+<span class="source-line-no">476</span><span id="line-476">    */</span>
+<span class="source-line-no">477</span><span id="line-477">   private static String text(Object o) {</span>
+<span class="source-line-no">478</span><span id="line-478">      if (o instanceof String s)</span>
+<span class="source-line-no">479</span><span id="line-479">         return s;</span>
+<span class="source-line-no">480</span><span id="line-480">      throw new IllegalStateException(f("Expected a String value for a text comparison but got '%s'.", o == null ? null : o.getClass().getName()));  // I believe we have a short for getting class name?</span>
+<span class="source-line-no">481</span><span id="line-481">   }</span>
+<span class="source-line-no">482</span><span id="line-482"></span>
+<span class="source-line-no">483</span><span id="line-483">   private static SqlFragment frag(String sql, Object...binds) {</span>
+<span class="source-line-no">484</span><span id="line-484">      return SqlFragment.of(sql, binds);</span>
+<span class="source-line-no">485</span><span id="line-485">   }</span>
+<span class="source-line-no">486</span><span id="line-486">}</span>
 
 
 

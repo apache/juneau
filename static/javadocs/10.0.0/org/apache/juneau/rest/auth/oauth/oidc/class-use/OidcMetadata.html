@@ -107,9 +107,16 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../../../../client/mcp/auth/McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpClientRegistrationManager.</span><code><a href="../../../../client/mcp/auth/McpClientRegistrationManager.html#resolve(org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata)" class="member-name-link">resolve</a><wbr>(<a href="../OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>&nbsp;as)</code></div>
+<div class="col-first even-row-color"><code><a href="../../../../client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpAuthorizationCodeAcquirer.Builder.</span><code><a href="../../../../client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#authorizationServer(org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata)" class="member-name-link">authorizationServer</a><wbr>(<a href="../OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>&nbsp;metadata)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Applies the discovered authorization-server metadata: sets the expected issuer and requires the <code>iss</code>
+ response parameter when the server advertises <code>authorization_response_iss_parameter_supported</code>
+ (RFC 9207).</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../../client/mcp/auth/McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpClientRegistrationManager.</span><code><a href="../../../../client/mcp/auth/McpClientRegistrationManager.html#resolve(org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata)" class="member-name-link">resolve</a><wbr>(<a href="../OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>&nbsp;as)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Resolves a usable client registration for the discovered authorization server, applying the SEP-2352 selection,
  issuer-keying, and migration rules (see the class javadoc).</div>
 </div>

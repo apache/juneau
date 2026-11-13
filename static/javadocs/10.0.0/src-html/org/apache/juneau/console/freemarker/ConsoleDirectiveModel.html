@@ -219,152 +219,173 @@
 <span class="source-line-no">206</span><span id="line-206"></span>
 <span class="source-line-no">207</span><span id="line-207">      if (cap.allowInlineHandlers())</span>
 <span class="source-line-no">208</span><span id="line-208">         checkInlineCsp(req);</span>
-<span class="source-line-no">209</span><span id="line-209"></span>
-<span class="source-line-no">210</span><span id="line-210">      var out = env.getOut();</span>
-<span class="source-line-no">211</span><span id="line-211">      var nonce = req.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.class).orElse(null);</span>
-<span class="source-line-no">212</span><span id="line-212">      var htmlAttrs = ConsoleChromeMixin.schemeHtmlAttributes(scheme, schemeToggle);</span>
-<span class="source-line-no">213</span><span id="line-213">      if (themeSelector)</span>
-<span class="source-line-no">214</span><span id="line-214">         htmlAttrs += (htmlAttrs.isEmpty() ? "" : " ") + ConsoleChromeMixin.themeSelectorHtmlAttributes();</span>
-<span class="source-line-no">215</span><span id="line-215">      out.write("&lt;!DOCTYPE html&gt;\n&lt;html lang=\"en\"" + (htmlAttrs.isEmpty() ? "" : " " + htmlAttrs) + "&gt;\n&lt;head&gt;\n");</span>
-<span class="source-line-no">216</span><span id="line-216">      // The pre-paint scheme script runs before any stylesheet so the first paint already has the right scheme.</span>
-<span class="source-line-no">217</span><span id="line-217">      out.write(ConsoleChromeMixin.schemeScriptElement(nonce) + "\n");</span>
-<span class="source-line-no">218</span><span id="line-218">      out.write("&lt;meta charset=\"utf-8\"&gt;\n");</span>
-<span class="source-line-no">219</span><span id="line-219">      out.write("&lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;\n");</span>
-<span class="source-line-no">220</span><span id="line-220">      if (! cap.title().isEmpty())</span>
-<span class="source-line-no">221</span><span id="line-221">         out.write("&lt;title&gt;" + attrEscape(cap.title()) + "&lt;/title&gt;\n");</span>
-<span class="source-line-no">222</span><span id="line-222">      if (! cap.tab().isEmpty())</span>
-<span class="source-line-no">223</span><span id="line-223">         out.write("&lt;meta name=\"page-tab\" content=\"" + attrEscape(cap.tab()) + "\"&gt;\n");</span>
-<span class="source-line-no">224</span><span id="line-224">      if (hasCsrf)</span>
-<span class="source-line-no">225</span><span id="line-225">         out.write("&lt;meta name=\"csrf-token\" content=\"" + attrEscape(metaToken) + "\"&gt;\n");</span>
-<span class="source-line-no">226</span><span id="line-226">      if (! faviconHref.isEmpty())</span>
-<span class="source-line-no">227</span><span id="line-227">         out.write("&lt;link rel=\"icon\" href=\"" + attrEscape(faviconHref) + "\"&gt;\n");</span>
-<span class="source-line-no">228</span><span id="line-228">      out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(ConsoleChromeMixin.chromeCssUrl(req)) + "\"&gt;\n");</span>
-<span class="source-line-no">229</span><span id="line-229">      out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(ConsoleChromeMixin.themeAssetUrl(req, "dark")) + "\"&gt;\n");</span>
-<span class="source-line-no">230</span><span id="line-230">      out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(cap.themeCssUrl) + "\"" + (themeSelector ? " data-jc-theme-link" : "") + "&gt;\n");</span>
-<span class="source-line-no">231</span><span id="line-231">      if (nn(cap.themeOverrideBlock))</span>
-<span class="source-line-no">232</span><span id="line-232">         out.write("&lt;style" + ConsoleChromeMixin.nonceAttr(nonce) + "&gt;" + cap.themeOverrideBlock + "&lt;/style&gt;\n");</span>
-<span class="source-line-no">233</span><span id="line-233">      // App CSS that must lose to page-local css=: emitted BEFORE the page css so a page rule still wins.</span>
-<span class="source-line-no">234</span><span id="line-234">      if (nn(cap.headBeforePageCss))</span>
-<span class="source-line-no">235</span><span id="line-235">         out.write(cap.headBeforePageCss);</span>
-<span class="source-line-no">236</span><span id="line-236">      for (var href : cap.vendorCss())</span>
-<span class="source-line-no">237</span><span id="line-237">         out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\" data-toolkit-css&gt;\n");</span>
-<span class="source-line-no">238</span><span id="line-238">      for (var href : cap.cssHrefs())</span>
-<span class="source-line-no">239</span><span id="line-239">         out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(resolveAsset(req, href)) + "\"&gt;\n");</span>
-<span class="source-line-no">240</span><span id="line-240">      for (var href : cap.runtimeCss())</span>
-<span class="source-line-no">241</span><span id="line-241">         out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\" data-toolkit-css&gt;\n");</span>
-<span class="source-line-no">242</span><span id="line-242">      if (nn(cap.head))</span>
-<span class="source-line-no">243</span><span id="line-243">         out.write(cap.head);</span>
-<span class="source-line-no">244</span><span id="line-244">      out.write("\n&lt;/head&gt;\n");</span>
-<span class="source-line-no">245</span><span id="line-245"></span>
-<span class="source-line-no">246</span><span id="line-246">      out.write("&lt;body");</span>
-<span class="source-line-no">247</span><span id="line-247">      // A spec- or &lt;@body&gt;-authored csrf attribute (merged by checkConsoleClose above) wins over the auto-detection.</span>
-<span class="source-line-no">248</span><span id="line-248">      // Either name suppresses both auto attributes, so a token and its header never come from different sources.</span>
-<span class="source-line-no">249</span><span id="line-249">      if (hasCsrf &amp;&amp; ! cap.hasBodyAttr("data-juneau-csrf") &amp;&amp; ! cap.hasBodyAttr("data-juneau-csrf-header")) {</span>
-<span class="source-line-no">250</span><span id="line-250">         out.write(" data-juneau-csrf=\"" + attrEscape(bodyToken) + "\"");</span>
-<span class="source-line-no">251</span><span id="line-251">         if (inb(csrfHeader))</span>
-<span class="source-line-no">252</span><span id="line-252">            out.write(" data-juneau-csrf-header=\"" + attrEscape(csrfHeader) + "\"");</span>
-<span class="source-line-no">253</span><span id="line-253">      }</span>
-<span class="source-line-no">254</span><span id="line-254">      if (inb(bodyAttrs))</span>
-<span class="source-line-no">255</span><span id="line-255">         out.write(" " + bodyAttrs.trim());</span>
-<span class="source-line-no">256</span><span id="line-256">      out.write("&gt;\n");</span>
-<span class="source-line-no">257</span><span id="line-257"></span>
-<span class="source-line-no">258</span><span id="line-258">      cap.shellUrl(ConsoleChromeMixin.consoleJsUrl(req));</span>
-<span class="source-line-no">259</span><span id="line-259">      cap.writeBody(out);</span>
-<span class="source-line-no">260</span><span id="line-260">      out.write("\n");</span>
-<span class="source-line-no">261</span><span id="line-261"></span>
-<span class="source-line-no">262</span><span id="line-262">      for (var src : cap.vendorJs())</span>
-<span class="source-line-no">263</span><span id="line-263">         out.write("&lt;script src=\"" + attrEscape(src) + "\" data-toolkit-js&gt;&lt;/script&gt;\n");</span>
-<span class="source-line-no">264</span><span id="line-264">      for (var src : cap.runtimeJs())</span>
-<span class="source-line-no">265</span><span id="line-265">         out.write("&lt;script src=\"" + attrEscape(src) + "\" data-toolkit-js&gt;&lt;/script&gt;\n");</span>
-<span class="source-line-no">266</span><span id="line-266">      // The inline-handler compiler is the one script that compiles strings; it is not in any pack and is emitted</span>
-<span class="source-line-no">267</span><span id="line-267">      // only for a page that opted in, after the runtime pack (which holds the model it plugs into).</span>
-<span class="source-line-no">268</span><span id="line-268">      if (cap.allowInlineHandlers())</span>
-<span class="source-line-no">269</span><span id="line-269">         out.write("&lt;script" + ConsoleChromeMixin.nonceAttr(nonce) + " src=\"" + attrEscape(ViewsMixin.viewAssetUrl(req, ViewsMixin.MODEL_INLINE_JS_PATH)) + "\" data-toolkit-js&gt;&lt;/script&gt;\n");</span>
-<span class="source-line-no">270</span><span id="line-270">      // The badge runtime mounts header.badges from the contract on load.  Not a toolkit pack: a chrome-template</span>
-<span class="source-line-no">271</span><span id="line-271">      // &lt;@badge&gt; is only known here, after the page's packs were resolved.</span>
-<span class="source-line-no">272</span><span id="line-272">      if (cap.hasBadges())</span>
-<span class="source-line-no">273</span><span id="line-273">         out.write("&lt;script src=\"" + attrEscape(ConsoleChromeMixin.badgesJsUrl(req)) + "\" data-toolkit-js&gt;&lt;/script&gt;\n");</span>
-<span class="source-line-no">274</span><span id="line-274">      // App scripts that must run after the toolkit pack but before the page-local init= scripts.</span>
-<span class="source-line-no">275</span><span id="line-275">      if (nn(cap.scriptsAfterToolkit))</span>
-<span class="source-line-no">276</span><span id="line-276">         out.write(cap.scriptsAfterToolkit);</span>
-<span class="source-line-no">277</span><span id="line-277">      for (var src : cap.initScripts())</span>
-<span class="source-line-no">278</span><span id="line-278">         out.write("&lt;script src=\"" + attrEscape(resolveAsset(req, src)) + "\"&gt;&lt;/script&gt;\n");</span>
-<span class="source-line-no">279</span><span id="line-279">      if (nn(cap.scripts))</span>
-<span class="source-line-no">280</span><span id="line-280">         out.write(cap.scripts);</span>
-<span class="source-line-no">281</span><span id="line-281">      out.write("\n&lt;/body&gt;\n&lt;/html&gt;\n");</span>
-<span class="source-line-no">282</span><span id="line-282">      cap.consoleDone = true;</span>
-<span class="source-line-no">283</span><span id="line-283">   }</span>
-<span class="source-line-no">284</span><span id="line-284"></span>
-<span class="source-line-no">285</span><span id="line-285">   /**</span>
-<span class="source-line-no">286</span><span id="line-286">    * One CSRF token value for one embed, or &lt;jk&gt;null&lt;/jk&gt; when the request carries none.</span>
-<span class="source-line-no">287</span><span id="line-287">    *</span>
-<span class="source-line-no">288</span><span id="line-288">    * &lt;p&gt;</span>
-<span class="source-line-no">289</span><span id="line-289">    * Prefers the filter's token supplier, read straight from the servlet request: converting it through the REST</span>
-<span class="source-line-no">290</span><span id="line-290">    * attribute view would stringify the supplier itself.  Only the filter's own {@link RequestBoundaryFilter.TokenSupplier}</span>
-<span class="source-line-no">291</span><span id="line-291">    * is trusted; a value of any other type under that name was set by request code, so no token is embedded.  Falls</span>
-<span class="source-line-no">292</span><span id="line-292">    * back to the single string value for a filter that publishes only that.</span>
-<span class="source-line-no">293</span><span id="line-293">    */</span>
-<span class="source-line-no">294</span><span id="line-294">   private static final Pattern SYMBOL_NAME = Pattern.compile("[a-z0-9_]{1,64}");</span>
-<span class="source-line-no">295</span><span id="line-295"></span>
-<span class="source-line-no">296</span><span id="line-296">   // Returns the symbol name when value is "symbol:&lt;name&gt;", null when it is not a symbol reference; rejects a bad name.</span>
-<span class="source-line-no">297</span><span id="line-297">   private static String symbolName(String attr, String value) throws TemplateModelException {</span>
-<span class="source-line-no">298</span><span id="line-298">      if (! value.startsWith("symbol:"))</span>
-<span class="source-line-no">299</span><span id="line-299">         return null;</span>
-<span class="source-line-no">300</span><span id="line-300">      var name = value.substring("symbol:".length());</span>
-<span class="source-line-no">301</span><span id="line-301">      if (! SYMBOL_NAME.matcher(name).matches())</span>
-<span class="source-line-no">302</span><span id="line-302">         throw FtlAttrLists.reject(f("&lt;@console&gt; %s='%s' needs a symbol name matching [a-z0-9_]{1,64}.", attr, value));</span>
-<span class="source-line-no">303</span><span id="line-303">      return name;</span>
-<span class="source-line-no">304</span><span id="line-304">   }</span>
-<span class="source-line-no">305</span><span id="line-305"></span>
-<span class="source-line-no">306</span><span id="line-306">   // A context: / servlet: page asset resolves against the request; an absolute path passes through.</span>
-<span class="source-line-no">307</span><span id="line-307">   private static String resolveAsset(RestRequest req, String url) {</span>
-<span class="source-line-no">308</span><span id="line-308">      return url.startsWith("context:") || url.startsWith("servlet:") ? req.getUriResolver().resolve(url) : url;</span>
-<span class="source-line-no">309</span><span id="line-309">   }</span>
-<span class="source-line-no">310</span><span id="line-310"></span>
-<span class="source-line-no">311</span><span id="line-311">   private static String csrfToken(RestRequest req) {</span>
-<span class="source-line-no">312</span><span id="line-312">      var supplier = req.getHttpServletRequest().getAttribute(RequestBoundaryFilter.TOKEN_SUPPLIER_ATTRIBUTE);</span>
-<span class="source-line-no">313</span><span id="line-313">      if (supplier instanceof RequestBoundaryFilter.TokenSupplier s)</span>
-<span class="source-line-no">314</span><span id="line-314">         return s.get();</span>
-<span class="source-line-no">315</span><span id="line-315">      if (supplier != null)</span>
-<span class="source-line-no">316</span><span id="line-316">         return null;</span>
-<span class="source-line-no">317</span><span id="line-317">      return req.getAttribute(RequestBoundaryFilter.TOKEN_ATTRIBUTE).asString().orElse(null);</span>
-<span class="source-line-no">318</span><span id="line-318">   }</span>
-<span class="source-line-no">319</span><span id="line-319"></span>
-<span class="source-line-no">320</span><span id="line-320">   /** Minimal HTML-attribute escape for an author-/request-supplied value placed in a double-quoted attribute. */</span>
-<span class="source-line-no">321</span><span id="line-321">   private static String attrEscape(String s) {</span>
-<span class="source-line-no">322</span><span id="line-322">      return s.replace("&amp;", "&amp;amp;").replace("&lt;", "&amp;lt;").replace("&gt;", "&amp;gt;").replace("\"", "&amp;quot;");</span>
-<span class="source-line-no">323</span><span id="line-323">   }</span>
-<span class="source-line-no">324</span><span id="line-324"></span>
-<span class="source-line-no">325</span><span id="line-325">   /**</span>
-<span class="source-line-no">326</span><span id="line-326">    * Fails fast when a page opts in to inline handlers under a CSP that would block them.  Every</span>
-<span class="source-line-no">327</span><span id="line-327">    * {@code Content-Security-Policy} value already on the response is checked: its effective script directive</span>
-<span class="source-line-no">328</span><span id="line-328">    * ({@code script-src}, else {@code default-src}) must list {@code 'unsafe-eval'}.  A header added after this point</span>
-<span class="source-line-no">329</span><span id="line-329">    * is not seen here; the client reports it as a loud failure instead.</span>
-<span class="source-line-no">330</span><span id="line-330">    */</span>
-<span class="source-line-no">331</span><span id="line-331">   private static void checkInlineCsp(RestRequest req) {</span>
-<span class="source-line-no">332</span><span id="line-332">      var values = req.getResponse().getHttpServletResponse().getHeaders("Content-Security-Policy");</span>
-<span class="source-line-no">333</span><span id="line-333">      if (values == null || values.isEmpty())</span>
-<span class="source-line-no">334</span><span id="line-334">         return;</span>
-<span class="source-line-no">335</span><span id="line-335">      for (var v : values)</span>
-<span class="source-line-no">336</span><span id="line-336">         if (! allowsEval(v))</span>
-<span class="source-line-no">337</span><span id="line-337">            throw new IllegalStateException("allowInlineHandlers(true) needs 'unsafe-eval' in script-src; the response CSP is: " + String.join(", ", values));</span>
-<span class="source-line-no">338</span><span id="line-338">   }</span>
-<span class="source-line-no">339</span><span id="line-339"></span>
-<span class="source-line-no">340</span><span id="line-340">   private static boolean allowsEval(String policy) {</span>
-<span class="source-line-no">341</span><span id="line-341">      String script = null;</span>
-<span class="source-line-no">342</span><span id="line-342">      String dflt = null;</span>
-<span class="source-line-no">343</span><span id="line-343">      for (var d : policy.split(";")) {</span>
-<span class="source-line-no">344</span><span id="line-344">         var t = d.trim();</span>
-<span class="source-line-no">345</span><span id="line-345">         var lower = t.toLowerCase(java.util.Locale.ROOT);</span>
-<span class="source-line-no">346</span><span id="line-346">         if (lower.equals("script-src") || lower.startsWith("script-src "))</span>
-<span class="source-line-no">347</span><span id="line-347">            script = t;</span>
-<span class="source-line-no">348</span><span id="line-348">         else if (lower.equals("default-src") || lower.startsWith("default-src "))</span>
-<span class="source-line-no">349</span><span id="line-349">            dflt = t;</span>
-<span class="source-line-no">350</span><span id="line-350">      }</span>
-<span class="source-line-no">351</span><span id="line-351">      var effective = script != null ? script : dflt;</span>
-<span class="source-line-no">352</span><span id="line-352">      return effective == null || effective.toLowerCase(java.util.Locale.ROOT).contains(org.apache.juneau.http.header.ContentSecurityPolicy.Builder.UNSAFE_EVAL);</span>
-<span class="source-line-no">353</span><span id="line-353">   }</span>
-<span class="source-line-no">354</span><span id="line-354">}</span>
+<span class="source-line-no">209</span><span id="line-209">      addFrameAncestors(req);</span>
+<span class="source-line-no">210</span><span id="line-210"></span>
+<span class="source-line-no">211</span><span id="line-211">      var out = env.getOut();</span>
+<span class="source-line-no">212</span><span id="line-212">      var nonce = req.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.class).orElse(null);</span>
+<span class="source-line-no">213</span><span id="line-213">      var htmlAttrs = ConsoleChromeMixin.schemeHtmlAttributes(scheme, schemeToggle);</span>
+<span class="source-line-no">214</span><span id="line-214">      if (themeSelector)</span>
+<span class="source-line-no">215</span><span id="line-215">         htmlAttrs += (htmlAttrs.isEmpty() ? "" : " ") + ConsoleChromeMixin.themeSelectorHtmlAttributes();</span>
+<span class="source-line-no">216</span><span id="line-216">      out.write("&lt;!DOCTYPE html&gt;\n&lt;html lang=\"en\"" + (htmlAttrs.isEmpty() ? "" : " " + htmlAttrs) + "&gt;\n&lt;head&gt;\n");</span>
+<span class="source-line-no">217</span><span id="line-217">      // The pre-paint scheme script runs before any stylesheet so the first paint already has the right scheme.</span>
+<span class="source-line-no">218</span><span id="line-218">      out.write(ConsoleChromeMixin.schemeScriptElement(nonce) + "\n");</span>
+<span class="source-line-no">219</span><span id="line-219">      out.write("&lt;meta charset=\"utf-8\"&gt;\n");</span>
+<span class="source-line-no">220</span><span id="line-220">      out.write("&lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;\n");</span>
+<span class="source-line-no">221</span><span id="line-221">      if (! cap.title().isEmpty())</span>
+<span class="source-line-no">222</span><span id="line-222">         out.write("&lt;title&gt;" + attrEscape(cap.title()) + "&lt;/title&gt;\n");</span>
+<span class="source-line-no">223</span><span id="line-223">      if (! cap.tab().isEmpty())</span>
+<span class="source-line-no">224</span><span id="line-224">         out.write("&lt;meta name=\"page-tab\" content=\"" + attrEscape(cap.tab()) + "\"&gt;\n");</span>
+<span class="source-line-no">225</span><span id="line-225">      if (hasCsrf)</span>
+<span class="source-line-no">226</span><span id="line-226">         out.write("&lt;meta name=\"csrf-token\" content=\"" + attrEscape(metaToken) + "\"&gt;\n");</span>
+<span class="source-line-no">227</span><span id="line-227">      if (! faviconHref.isEmpty())</span>
+<span class="source-line-no">228</span><span id="line-228">         out.write("&lt;link rel=\"icon\" href=\"" + attrEscape(faviconHref) + "\"&gt;\n");</span>
+<span class="source-line-no">229</span><span id="line-229">      out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(ConsoleChromeMixin.chromeCssUrl(req)) + "\"&gt;\n");</span>
+<span class="source-line-no">230</span><span id="line-230">      out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(ConsoleChromeMixin.themeAssetUrl(req, "dark")) + "\"&gt;\n");</span>
+<span class="source-line-no">231</span><span id="line-231">      out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(cap.themeCssUrl) + "\"" + (themeSelector ? " data-jc-theme-link" : "") + "&gt;\n");</span>
+<span class="source-line-no">232</span><span id="line-232">      if (nn(cap.themeOverrideBlock))</span>
+<span class="source-line-no">233</span><span id="line-233">         out.write("&lt;style" + ConsoleChromeMixin.nonceAttr(nonce) + "&gt;" + cap.themeOverrideBlock + "&lt;/style&gt;\n");</span>
+<span class="source-line-no">234</span><span id="line-234">      // App CSS that must lose to page-local css=: emitted BEFORE the page css so a page rule still wins.</span>
+<span class="source-line-no">235</span><span id="line-235">      if (nn(cap.headBeforePageCss))</span>
+<span class="source-line-no">236</span><span id="line-236">         out.write(cap.headBeforePageCss);</span>
+<span class="source-line-no">237</span><span id="line-237">      for (var href : cap.vendorCss())</span>
+<span class="source-line-no">238</span><span id="line-238">         out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\" data-toolkit-css&gt;\n");</span>
+<span class="source-line-no">239</span><span id="line-239">      for (var href : cap.cssHrefs())</span>
+<span class="source-line-no">240</span><span id="line-240">         out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(resolveAsset(req, href)) + "\"&gt;\n");</span>
+<span class="source-line-no">241</span><span id="line-241">      for (var href : cap.runtimeCss())</span>
+<span class="source-line-no">242</span><span id="line-242">         out.write("&lt;link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\" data-toolkit-css&gt;\n");</span>
+<span class="source-line-no">243</span><span id="line-243">      if (nn(cap.head))</span>
+<span class="source-line-no">244</span><span id="line-244">         out.write(cap.head);</span>
+<span class="source-line-no">245</span><span id="line-245">      out.write("\n&lt;/head&gt;\n");</span>
+<span class="source-line-no">246</span><span id="line-246"></span>
+<span class="source-line-no">247</span><span id="line-247">      out.write("&lt;body");</span>
+<span class="source-line-no">248</span><span id="line-248">      // A spec- or &lt;@body&gt;-authored csrf attribute (merged by checkConsoleClose above) wins over the auto-detection.</span>
+<span class="source-line-no">249</span><span id="line-249">      // Either name suppresses both auto attributes, so a token and its header never come from different sources.</span>
+<span class="source-line-no">250</span><span id="line-250">      if (hasCsrf &amp;&amp; ! cap.hasBodyAttr("data-juneau-csrf") &amp;&amp; ! cap.hasBodyAttr("data-juneau-csrf-header")) {</span>
+<span class="source-line-no">251</span><span id="line-251">         out.write(" data-juneau-csrf=\"" + attrEscape(bodyToken) + "\"");</span>
+<span class="source-line-no">252</span><span id="line-252">         if (inb(csrfHeader))</span>
+<span class="source-line-no">253</span><span id="line-253">            out.write(" data-juneau-csrf-header=\"" + attrEscape(csrfHeader) + "\"");</span>
+<span class="source-line-no">254</span><span id="line-254">      }</span>
+<span class="source-line-no">255</span><span id="line-255">      if (inb(bodyAttrs))</span>
+<span class="source-line-no">256</span><span id="line-256">         out.write(" " + bodyAttrs.trim());</span>
+<span class="source-line-no">257</span><span id="line-257">      out.write("&gt;\n");</span>
+<span class="source-line-no">258</span><span id="line-258"></span>
+<span class="source-line-no">259</span><span id="line-259">      cap.shellUrl(ConsoleChromeMixin.consoleJsUrl(req));</span>
+<span class="source-line-no">260</span><span id="line-260">      cap.writeBody(out);</span>
+<span class="source-line-no">261</span><span id="line-261">      out.write("\n");</span>
+<span class="source-line-no">262</span><span id="line-262"></span>
+<span class="source-line-no">263</span><span id="line-263">      for (var src : cap.vendorJs())</span>
+<span class="source-line-no">264</span><span id="line-264">         out.write("&lt;script src=\"" + attrEscape(src) + "\" data-toolkit-js&gt;&lt;/script&gt;\n");</span>
+<span class="source-line-no">265</span><span id="line-265">      for (var src : cap.runtimeJs())</span>
+<span class="source-line-no">266</span><span id="line-266">         out.write("&lt;script src=\"" + attrEscape(src) + "\" data-toolkit-js&gt;&lt;/script&gt;\n");</span>
+<span class="source-line-no">267</span><span id="line-267">      // The inline-handler compiler is the one script that compiles strings; it is not in any pack and is emitted</span>
+<span class="source-line-no">268</span><span id="line-268">      // only for a page that opted in, after the runtime pack (which holds the model it plugs into).</span>
+<span class="source-line-no">269</span><span id="line-269">      if (cap.allowInlineHandlers())</span>
+<span class="source-line-no">270</span><span id="line-270">         out.write("&lt;script" + ConsoleChromeMixin.nonceAttr(nonce) + " src=\"" + attrEscape(ViewsMixin.viewAssetUrl(req, ViewsMixin.MODEL_INLINE_JS_PATH)) + "\" data-toolkit-js&gt;&lt;/script&gt;\n");</span>
+<span class="source-line-no">271</span><span id="line-271">      // The badge runtime mounts header.badges from the contract on load.  Not a toolkit pack: a chrome-template</span>
+<span class="source-line-no">272</span><span id="line-272">      // &lt;@badge&gt; is only known here, after the page's packs were resolved.</span>
+<span class="source-line-no">273</span><span id="line-273">      if (cap.hasBadges())</span>
+<span class="source-line-no">274</span><span id="line-274">         out.write("&lt;script src=\"" + attrEscape(ConsoleChromeMixin.badgesJsUrl(req)) + "\" data-toolkit-js&gt;&lt;/script&gt;\n");</span>
+<span class="source-line-no">275</span><span id="line-275">      // App scripts that must run after the toolkit pack but before the page-local init= scripts.</span>
+<span class="source-line-no">276</span><span id="line-276">      if (nn(cap.scriptsAfterToolkit))</span>
+<span class="source-line-no">277</span><span id="line-277">         out.write(cap.scriptsAfterToolkit);</span>
+<span class="source-line-no">278</span><span id="line-278">      for (var src : cap.initScripts())</span>
+<span class="source-line-no">279</span><span id="line-279">         out.write("&lt;script src=\"" + attrEscape(resolveAsset(req, src)) + "\"&gt;&lt;/script&gt;\n");</span>
+<span class="source-line-no">280</span><span id="line-280">      if (nn(cap.scripts))</span>
+<span class="source-line-no">281</span><span id="line-281">         out.write(cap.scripts);</span>
+<span class="source-line-no">282</span><span id="line-282">      out.write("\n&lt;/body&gt;\n&lt;/html&gt;\n");</span>
+<span class="source-line-no">283</span><span id="line-283">      cap.consoleDone = true;</span>
+<span class="source-line-no">284</span><span id="line-284">   }</span>
+<span class="source-line-no">285</span><span id="line-285"></span>
+<span class="source-line-no">286</span><span id="line-286">   /**</span>
+<span class="source-line-no">287</span><span id="line-287">    * One CSRF token value for one embed, or &lt;jk&gt;null&lt;/jk&gt; when the request carries none.</span>
+<span class="source-line-no">288</span><span id="line-288">    *</span>
+<span class="source-line-no">289</span><span id="line-289">    * &lt;p&gt;</span>
+<span class="source-line-no">290</span><span id="line-290">    * Prefers the filter's token supplier, read straight from the servlet request: converting it through the REST</span>
+<span class="source-line-no">291</span><span id="line-291">    * attribute view would stringify the supplier itself.  Only the filter's own {@link RequestBoundaryFilter.TokenSupplier}</span>
+<span class="source-line-no">292</span><span id="line-292">    * is trusted; a value of any other type under that name was set by request code, so no token is embedded.  Falls</span>
+<span class="source-line-no">293</span><span id="line-293">    * back to the single string value for a filter that publishes only that.</span>
+<span class="source-line-no">294</span><span id="line-294">    */</span>
+<span class="source-line-no">295</span><span id="line-295">   private static final Pattern SYMBOL_NAME = Pattern.compile("[a-z0-9_]{1,64}");</span>
+<span class="source-line-no">296</span><span id="line-296"></span>
+<span class="source-line-no">297</span><span id="line-297">   // Returns the symbol name when value is "symbol:&lt;name&gt;", null when it is not a symbol reference; rejects a bad name.</span>
+<span class="source-line-no">298</span><span id="line-298">   private static String symbolName(String attr, String value) throws TemplateModelException {</span>
+<span class="source-line-no">299</span><span id="line-299">      if (! value.startsWith("symbol:"))</span>
+<span class="source-line-no">300</span><span id="line-300">         return null;</span>
+<span class="source-line-no">301</span><span id="line-301">      var name = value.substring("symbol:".length());</span>
+<span class="source-line-no">302</span><span id="line-302">      if (! SYMBOL_NAME.matcher(name).matches())</span>
+<span class="source-line-no">303</span><span id="line-303">         throw FtlAttrLists.reject(f("&lt;@console&gt; %s='%s' needs a symbol name matching [a-z0-9_]{1,64}.", attr, value));</span>
+<span class="source-line-no">304</span><span id="line-304">      return name;</span>
+<span class="source-line-no">305</span><span id="line-305">   }</span>
+<span class="source-line-no">306</span><span id="line-306"></span>
+<span class="source-line-no">307</span><span id="line-307">   // A context: / servlet: page asset resolves against the request; an absolute path passes through.</span>
+<span class="source-line-no">308</span><span id="line-308">   private static String resolveAsset(RestRequest req, String url) {</span>
+<span class="source-line-no">309</span><span id="line-309">      return url.startsWith("context:") || url.startsWith("servlet:") ? req.getUriResolver().resolve(url) : url;</span>
+<span class="source-line-no">310</span><span id="line-310">   }</span>
+<span class="source-line-no">311</span><span id="line-311"></span>
+<span class="source-line-no">312</span><span id="line-312">   private static String csrfToken(RestRequest req) {</span>
+<span class="source-line-no">313</span><span id="line-313">      var supplier = req.getHttpServletRequest().getAttribute(RequestBoundaryFilter.TOKEN_SUPPLIER_ATTRIBUTE);</span>
+<span class="source-line-no">314</span><span id="line-314">      if (supplier instanceof RequestBoundaryFilter.TokenSupplier s)</span>
+<span class="source-line-no">315</span><span id="line-315">         return s.get();</span>
+<span class="source-line-no">316</span><span id="line-316">      if (supplier != null)</span>
+<span class="source-line-no">317</span><span id="line-317">         return null;</span>
+<span class="source-line-no">318</span><span id="line-318">      return req.getAttribute(RequestBoundaryFilter.TOKEN_ATTRIBUTE).asString().orElse(null);</span>
+<span class="source-line-no">319</span><span id="line-319">   }</span>
+<span class="source-line-no">320</span><span id="line-320"></span>
+<span class="source-line-no">321</span><span id="line-321">   /** Minimal HTML-attribute escape for an author-/request-supplied value placed in a double-quoted attribute. */</span>
+<span class="source-line-no">322</span><span id="line-322">   private static String attrEscape(String s) {</span>
+<span class="source-line-no">323</span><span id="line-323">      return s.replace("&amp;", "&amp;amp;").replace("&lt;", "&amp;lt;").replace("&gt;", "&amp;gt;").replace("\"", "&amp;quot;");</span>
+<span class="source-line-no">324</span><span id="line-324">   }</span>
+<span class="source-line-no">325</span><span id="line-325"></span>
+<span class="source-line-no">326</span><span id="line-326">   /**</span>
+<span class="source-line-no">327</span><span id="line-327">    * Fails fast when a page opts in to inline handlers under a CSP that would block them.  Every</span>
+<span class="source-line-no">328</span><span id="line-328">    * {@code Content-Security-Policy} value already on the response is checked: its effective script directive</span>
+<span class="source-line-no">329</span><span id="line-329">    * ({@code script-src}, else {@code default-src}) must list {@code 'unsafe-eval'}.  A header added after this point</span>
+<span class="source-line-no">330</span><span id="line-330">    * is not seen here; the client reports it as a loud failure instead.</span>
+<span class="source-line-no">331</span><span id="line-331">    */</span>
+<span class="source-line-no">332</span><span id="line-332">   private static void checkInlineCsp(RestRequest req) {</span>
+<span class="source-line-no">333</span><span id="line-333">      var values = req.getResponse().getHttpServletResponse().getHeaders("Content-Security-Policy");</span>
+<span class="source-line-no">334</span><span id="line-334">      if (values == null || values.isEmpty())</span>
+<span class="source-line-no">335</span><span id="line-335">         return;</span>
+<span class="source-line-no">336</span><span id="line-336">      for (var v : values)</span>
+<span class="source-line-no">337</span><span id="line-337">         if (! allowsEval(v))</span>
+<span class="source-line-no">338</span><span id="line-338">            throw new IllegalStateException("allowInlineHandlers(true) needs 'unsafe-eval' in script-src; the response CSP is: " + String.join(", ", values));</span>
+<span class="source-line-no">339</span><span id="line-339">   }</span>
+<span class="source-line-no">340</span><span id="line-340"></span>
+<span class="source-line-no">341</span><span id="line-341">   /**</span>
+<span class="source-line-no">342</span><span id="line-342">    * Restricts framing of the page to its own origin unless the application already set a framing policy.</span>
+<span class="source-line-no">343</span><span id="line-343">    *</span>
+<span class="source-line-no">344</span><span id="line-344">    * &lt;p&gt;</span>
+<span class="source-line-no">345</span><span id="line-345">    * Adds {@code Content-Security-Policy: frame-ancestors 'self'} when the response carries neither an</span>
+<span class="source-line-no">346</span><span id="line-346">    * {@code X-Frame-Options} header nor a {@code Content-Security-Policy} value with a {@code frame-ancestors}</span>
+<span class="source-line-no">347</span><span id="line-347">    * directive, so an application keeps full control by setting its own.</span>
+<span class="source-line-no">348</span><span id="line-348">    */</span>
+<span class="source-line-no">349</span><span id="line-349">   private static void addFrameAncestors(RestRequest req) {</span>
+<span class="source-line-no">350</span><span id="line-350">      var res = req.getResponse().getHttpServletResponse();</span>
+<span class="source-line-no">351</span><span id="line-351">      if (res.isCommitted() || res.containsHeader("X-Frame-Options"))</span>
+<span class="source-line-no">352</span><span id="line-352">         return;</span>
+<span class="source-line-no">353</span><span id="line-353">      var values = res.getHeaders("Content-Security-Policy");</span>
+<span class="source-line-no">354</span><span id="line-354">      if (values != null)</span>
+<span class="source-line-no">355</span><span id="line-355">         for (var v : values)</span>
+<span class="source-line-no">356</span><span id="line-356">            if (v.toLowerCase(Locale.ROOT).contains("frame-ancestors"))</span>
+<span class="source-line-no">357</span><span id="line-357">               return;</span>
+<span class="source-line-no">358</span><span id="line-358">      res.addHeader("Content-Security-Policy", "frame-ancestors 'self'");</span>
+<span class="source-line-no">359</span><span id="line-359">   }</span>
+<span class="source-line-no">360</span><span id="line-360"></span>
+<span class="source-line-no">361</span><span id="line-361">   private static boolean allowsEval(String policy) {</span>
+<span class="source-line-no">362</span><span id="line-362">      String script = null;</span>
+<span class="source-line-no">363</span><span id="line-363">      String dflt = null;</span>
+<span class="source-line-no">364</span><span id="line-364">      for (var d : policy.split(";")) {</span>
+<span class="source-line-no">365</span><span id="line-365">         var t = d.trim();</span>
+<span class="source-line-no">366</span><span id="line-366">         var lower = t.toLowerCase(java.util.Locale.ROOT);</span>
+<span class="source-line-no">367</span><span id="line-367">         if (lower.equals("script-src") || lower.startsWith("script-src "))</span>
+<span class="source-line-no">368</span><span id="line-368">            script = t;</span>
+<span class="source-line-no">369</span><span id="line-369">         else if (lower.equals("default-src") || lower.startsWith("default-src "))</span>
+<span class="source-line-no">370</span><span id="line-370">            dflt = t;</span>
+<span class="source-line-no">371</span><span id="line-371">      }</span>
+<span class="source-line-no">372</span><span id="line-372">      var effective = script != null ? script : dflt;</span>
+<span class="source-line-no">373</span><span id="line-373">      return effective == null || effective.toLowerCase(java.util.Locale.ROOT).contains(org.apache.juneau.http.header.ContentSecurityPolicy.Builder.UNSAFE_EVAL);</span>
+<span class="source-line-no">374</span><span id="line-374">   }</span>
+<span class="source-line-no">375</span><span id="line-375">}</span>
 
 
 

@@ -484,7 +484,7 @@
 <span class="source-line-no">471</span><span id="line-471"></span>
 <span class="source-line-no">472</span><span id="line-472">      var subject = claims.getSubject();</span>
 <span class="source-line-no">473</span><span id="line-473">      if (isBlank(subject))</span>
-<span class="source-line-no">474</span><span id="line-474">         subject = "&lt;no-sub&gt;";</span>
+<span class="source-line-no">474</span><span id="line-474">         throw reject("\"sub\" claim is required");</span>
 <span class="source-line-no">475</span><span id="line-475">      return new ClaimsPrincipal(subject, claims.toJSONObject());</span>
 <span class="source-line-no">476</span><span id="line-476">   }</span>
 <span class="source-line-no">477</span><span id="line-477"></span>

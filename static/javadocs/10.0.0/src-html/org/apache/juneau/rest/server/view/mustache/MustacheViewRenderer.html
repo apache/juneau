@@ -167,25 +167,26 @@
 <span class="source-line-no">154</span><span id="line-154">   // mount applies, returning the configuration-relative template name.  Delegates to the shared</span>
 <span class="source-line-no">155</span><span id="line-155">   // FileUtils.resolveVirtualPathSafely + MustacheDispatcher.stripBasePath used by the raw render path.</span>
 <span class="source-line-no">156</span><span id="line-156">   static String gateTemplateName(String basePath, String templateName) {</span>
-<span class="source-line-no">157</span><span id="line-157">      var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);</span>
-<span class="source-line-no">158</span><span id="line-158">      return MustacheDispatcher.stripBasePath(basePath, resolved);</span>
-<span class="source-line-no">159</span><span id="line-159">   }</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">   // Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.</span>
-<span class="source-line-no">162</span><span id="line-162">   private MustacheMixin fallbackMixin() {</span>
-<span class="source-line-no">163</span><span id="line-163">      var local = fallbackMixin;</span>
-<span class="source-line-no">164</span><span id="line-164">      if (local == null) {</span>
-<span class="source-line-no">165</span><span id="line-165">         synchronized (this) {</span>
-<span class="source-line-no">166</span><span id="line-166">            local = fallbackMixin;</span>
-<span class="source-line-no">167</span><span id="line-167">            if (local == null) {</span>
-<span class="source-line-no">168</span><span id="line-168">               local = new MustacheMixin();</span>
-<span class="source-line-no">169</span><span id="line-169">               fallbackMixin = local;</span>
-<span class="source-line-no">170</span><span id="line-170">            }</span>
-<span class="source-line-no">171</span><span id="line-171">         }</span>
-<span class="source-line-no">172</span><span id="line-172">      }</span>
-<span class="source-line-no">173</span><span id="line-173">      return local;</span>
-<span class="source-line-no">174</span><span id="line-174">   }</span>
-<span class="source-line-no">175</span><span id="line-175">}</span>
+<span class="source-line-no">157</span><span id="line-157">      ViewTemplateNames.requirePlainName(templateName);</span>
+<span class="source-line-no">158</span><span id="line-158">      var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);</span>
+<span class="source-line-no">159</span><span id="line-159">      return MustacheDispatcher.stripBasePath(basePath, resolved);</span>
+<span class="source-line-no">160</span><span id="line-160">   }</span>
+<span class="source-line-no">161</span><span id="line-161"></span>
+<span class="source-line-no">162</span><span id="line-162">   // Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.</span>
+<span class="source-line-no">163</span><span id="line-163">   private MustacheMixin fallbackMixin() {</span>
+<span class="source-line-no">164</span><span id="line-164">      var local = fallbackMixin;</span>
+<span class="source-line-no">165</span><span id="line-165">      if (local == null) {</span>
+<span class="source-line-no">166</span><span id="line-166">         synchronized (this) {</span>
+<span class="source-line-no">167</span><span id="line-167">            local = fallbackMixin;</span>
+<span class="source-line-no">168</span><span id="line-168">            if (local == null) {</span>
+<span class="source-line-no">169</span><span id="line-169">               local = new MustacheMixin();</span>
+<span class="source-line-no">170</span><span id="line-170">               fallbackMixin = local;</span>
+<span class="source-line-no">171</span><span id="line-171">            }</span>
+<span class="source-line-no">172</span><span id="line-172">         }</span>
+<span class="source-line-no">173</span><span id="line-173">      }</span>
+<span class="source-line-no">174</span><span id="line-174">      return local;</span>
+<span class="source-line-no">175</span><span id="line-175">   }</span>
+<span class="source-line-no">176</span><span id="line-176">}</span>
 
 
 

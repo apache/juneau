@@ -162,8 +162,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the hashkey of this builder.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nullValue(java.lang.String)" class="member-name-link">nullValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#neutralizeFormulas(boolean)" class="member-name-link">neutralizeFormulas</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Neutralizes spreadsheet formulas in string cells.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nullValue(java.lang.String)" class="member-name-link">nullValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">String to write for null values.</div>
 </div>
 </div>
@@ -201,14 +206,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-100">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-101">Builder</a></span>()</div>
 <div class="block">Constructor, default settings.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.csv.CsvSerializer.Builder)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-112">Builder</a></span><wbr><span class="parameters">(<a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-113">Builder</a></span><wbr><span class="parameters">(<a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -220,7 +225,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.csv.CsvSerializer)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-125">Builder</a></span><wbr><span class="parameters">(<a href="CsvSerializer.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-127">Builder</a></span><wbr><span class="parameters">(<a href="CsvSerializer.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -240,7 +245,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="nullValue(java.lang.String)">
 <h3>nullValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-141">nullValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-144">nullValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">String to write for null values. Parser treats cells matching this as null.
 
  <p>
@@ -256,7 +261,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="allowNestedStructures(boolean)">
 <h3>allowNestedStructures</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-152">allowNestedStructures</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-155">allowNestedStructures</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Enables inline <code>{key:val}</code> and <code>[val;val]</code> notation in cells for nested beans, maps, and lists.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -267,9 +272,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="neutralizeFormulas(boolean)">
+<h3>neutralizeFormulas</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-173">neutralizeFormulas</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="block">Neutralizes spreadsheet formulas in string cells.
+
+ <p>
+ When enabled, string cells (and header names) that begin with <js>'='</js>, <js>'+'</js>, <js>'-'</js>, <js>'@'</js>,
+ a tab or a carriage return are prefixed with a single quote so that spreadsheet applications treat them as text.
+ Numbers and other non-string values are not modified.
+ Enable this when CSV output containing untrusted text will be opened in a spreadsheet.
+ The default is <jk>false</jk>, so that values round-trip through <a href="CsvParser.html" title="class in org.apache.juneau.marshall.csv"><code>CsvParser</code></a> unchanged.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - Whether to neutralize formulas.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="byteArrayFormat(org.apache.juneau.marshall.csv.CsvByteArrayCellFormat)">
 <h3>byteArrayFormat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-166">byteArrayFormat</a></span><wbr><span class="parameters">(<a href="CsvByteArrayCellFormat.html" title="enum class in org.apache.juneau.marshall.csv">CsvByteArrayCellFormat</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-187">byteArrayFormat</a></span><wbr><span class="parameters">(<a href="CsvByteArrayCellFormat.html" title="enum class in org.apache.juneau.marshall.csv">CsvByteArrayCellFormat</a>&nbsp;value)</span></div>
 <div class="block">Format for serializing <code>byte[]</code> arrays in CSV cells.
 
  <p>
@@ -285,7 +310,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashKey()">
 <h3>hashKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/collections/HashKey.html" title="class in org.apache.juneau.commons.collections">HashKey</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-171">hashKey</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/collections/HashKey.html" title="class in org.apache.juneau.commons.collections">HashKey</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-192">hashKey</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.Builder.html#hashKey()">Context.Builder</a></code></span></div>
 <div class="block">Returns the hashkey of this builder.
 
@@ -304,7 +329,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializer.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-176">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializer.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-197">build</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.Builder.html#build()">Context.Builder</a></code></span></div>
 <div class="block">Build the object.</div>
 <dl class="notes">
@@ -318,7 +343,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-181">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.Builder.html#line-202">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.Builder.html#copy()">Context.Builder</a></code></span></div>
 <div class="block">Copy creator.</div>
 <dl class="notes">

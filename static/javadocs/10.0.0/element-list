@@ -47,7 +47,6 @@ org.apache.juneau.config
 org.apache.juneau.config.event
 org.apache.juneau.config.format
 org.apache.juneau.config.internal
-org.apache.juneau.config.mod
 org.apache.juneau.config.store
 org.apache.juneau.config.vars
 org.apache.juneau.console

@@ -411,253 +411,261 @@
 <span class="source-line-no">398</span><span id="line-398">      return out;</span>
 <span class="source-line-no">399</span><span id="line-399">   }</span>
 <span class="source-line-no">400</span><span id="line-400"></span>
-<span class="source-line-no">401</span><span id="line-401">   // Flags a literal init=/css= entry that is neither absolute nor a context:/servlet: URI.  Lists holding an</span>
-<span class="source-line-no">402</span><span id="line-402">   // expression (a call or ${...}) are skipped: their entries are not literals.</span>
-<span class="source-line-no">403</span><span id="line-403">   private static void checkPageAssets(List&lt;Finding&gt; out, String name, int[] lines, int at, String attrText) {</span>
-<span class="source-line-no">404</span><span id="line-404">      var m = PAGE_ASSET.matcher(attrText);</span>
-<span class="source-line-no">405</span><span id="line-405">      while (m.find()) {</span>
-<span class="source-line-no">406</span><span id="line-406">         var attr = m.group(1);</span>
-<span class="source-line-no">407</span><span id="line-407">         var entries = new ArrayList&lt;String&gt;();</span>
-<span class="source-line-no">408</span><span id="line-408">         if (nn(m.group(2))) {</span>
-<span class="source-line-no">409</span><span id="line-409">            var body = m.group(2);</span>
-<span class="source-line-no">410</span><span id="line-410">            if (body.contains("(") || body.contains("${"))</span>
-<span class="source-line-no">411</span><span id="line-411">               continue;</span>
-<span class="source-line-no">412</span><span id="line-412">            var q = QUOTED.matcher(body);</span>
-<span class="source-line-no">413</span><span id="line-413">            while (q.find())</span>
-<span class="source-line-no">414</span><span id="line-414">               entries.add(nn(q.group(1)) ? q.group(1) : q.group(2));</span>
-<span class="source-line-no">415</span><span id="line-415">         } else {</span>
-<span class="source-line-no">416</span><span id="line-416">            var v = nn(m.group(3)) ? m.group(3) : m.group(4);</span>
-<span class="source-line-no">417</span><span id="line-417">            if (v.contains("${"))</span>
-<span class="source-line-no">418</span><span id="line-418">               continue;</span>
-<span class="source-line-no">419</span><span id="line-419">            for (var part : v.split(",")) {</span>
-<span class="source-line-no">420</span><span id="line-420">               var t = part.trim();</span>
-<span class="source-line-no">421</span><span id="line-421">               if (! t.isEmpty())</span>
-<span class="source-line-no">422</span><span id="line-422">                  entries.add(t);</span>
-<span class="source-line-no">423</span><span id="line-423">            }</span>
-<span class="source-line-no">424</span><span id="line-424">         }</span>
-<span class="source-line-no">425</span><span id="line-425">         for (var e : entries)</span>
-<span class="source-line-no">426</span><span id="line-426">            if (! FtlAttrLists.isAbsoluteAsset(e))</span>
-<span class="source-line-no">427</span><span id="line-427">               add(out, name, lines, at, "relative-page-asset", f(</span>
-<span class="source-line-no">428</span><span id="line-428">                  "&lt;@page&gt; %s= entry '%s' must be absolute (start with '/') or a context: / servlet: URI.", attr, e));</span>
-<span class="source-line-no">429</span><span id="line-429">      }</span>
-<span class="source-line-no">430</span><span id="line-430">   }</span>
-<span class="source-line-no">431</span><span id="line-431"></span>
-<span class="source-line-no">432</span><span id="line-432">   /**</span>
-<span class="source-line-no">433</span><span id="line-433">    * Flags a literal {@code view.contractVersion} that differs from {@link ViewsMixin#CONTRACT_VERSION} in a</span>
-<span class="source-line-no">434</span><span id="line-434">    * {@code type="datatables"} card body. An omitted version is fine (the runtime injects it); only a pinned, stale</span>
-<span class="source-line-no">435</span><span id="line-435">    * value is reported. Scans the {@code view:{...}} object at its own nesting depth so nested {@code contractVersion}</span>
-<span class="source-line-no">436</span><span id="line-436">    * keys (quickStats, detail, ...) are never mistaken for it.</span>
-<span class="source-line-no">437</span><span id="line-437">    */</span>
-<span class="source-line-no">438</span><span id="line-438">   private static void checkViewVersion(List&lt;Finding&gt; out, String name, int[] lines, String text, int bodyStart, String cardId) {</span>
-<span class="source-line-no">439</span><span id="line-439">      var end = text.indexOf("&lt;/@card", bodyStart);</span>
-<span class="source-line-no">440</span><span id="line-440">      var body = text.substring(bodyStart, end &lt; 0 ? text.length() : end);</span>
-<span class="source-line-no">441</span><span id="line-441">      var vm = VIEW_KEY.matcher(body);</span>
-<span class="source-line-no">442</span><span id="line-442">      if (! vm.find())</span>
-<span class="source-line-no">443</span><span id="line-443">         return;</span>
-<span class="source-line-no">444</span><span id="line-444">      var depth = 1;</span>
-<span class="source-line-no">445</span><span id="line-445">      for (var i = vm.end(); i &lt; body.length() &amp;&amp; depth &gt; 0; i++) {</span>
-<span class="source-line-no">446</span><span id="line-446">         var c = body.charAt(i);</span>
-<span class="source-line-no">447</span><span id="line-447">         if (c == '{' || c == '[')</span>
-<span class="source-line-no">448</span><span id="line-448">            depth++;</span>
-<span class="source-line-no">449</span><span id="line-449">         else if (c == '}' || c == ']')</span>
-<span class="source-line-no">450</span><span id="line-450">            depth--;</span>
-<span class="source-line-no">451</span><span id="line-451">         else if (depth == 1 &amp;&amp; c == 'c') {</span>
-<span class="source-line-no">452</span><span id="line-452">            var v = VIEW_VERSION.matcher(body.substring(i));</span>
-<span class="source-line-no">453</span><span id="line-453">            if (v.find() &amp;&amp; neq(v.group(1), ViewsMixin.CONTRACT_VERSION)) {</span>
-<span class="source-line-no">454</span><span id="line-454">               add(out, name, lines, bodyStart + i, "view-contract-version", f(</span>
-<span class="source-line-no">455</span><span id="line-455">                  "&lt;@card id='%s'&gt; view.contractVersion is '%s' but the runtime is '%s'; omit it to track the runtime automatically.",</span>
-<span class="source-line-no">456</span><span id="line-456">                  cardId, v.group(1), ViewsMixin.CONTRACT_VERSION));</span>
-<span class="source-line-no">457</span><span id="line-457">               return;</span>
-<span class="source-line-no">458</span><span id="line-458">            }</span>
-<span class="source-line-no">459</span><span id="line-459">         }</span>
-<span class="source-line-no">460</span><span id="line-460">      }</span>
-<span class="source-line-no">461</span><span id="line-461">   }</span>
-<span class="source-line-no">462</span><span id="line-462"></span>
-<span class="source-line-no">463</span><span id="line-463">   private record Value(String value, boolean literal) {}</span>
-<span class="source-line-no">464</span><span id="line-464"></span>
-<span class="source-line-no">465</span><span id="line-465">   // Mirrors CardTypeRegistry.BASE_KEYS (E-23); visibleWhen is deliberately excluded, same as there.</span>
-<span class="source-line-no">466</span><span id="line-466">   private static final Set&lt;String&gt; RESERVED_BODY_KEYS = Set.of("id", "type", "title", "src", "template", "ref");</span>
-<span class="source-line-no">467</span><span id="line-467"></span>
-<span class="source-line-no">468</span><span id="line-468">   /**</span>
-<span class="source-line-no">469</span><span id="line-469">    * The card-body rules: {@code card-src-and-body} and {@code card-reserved-key}.</span>
-<span class="source-line-no">470</span><span id="line-470">    * Reads the body the same way {@link #checkViewVersion} does, up to the next {@code &lt;/@card}.</span>
-<span class="source-line-no">471</span><span id="line-471">    */</span>
-<span class="source-line-no">472</span><span id="line-472">   @SuppressWarnings({</span>
-<span class="source-line-no">473</span><span id="line-473">      "java:S107" // Internal helper whose parameters are the render/validation context.</span>
-<span class="source-line-no">474</span><span id="line-474">   })</span>
-<span class="source-line-no">475</span><span id="line-475">   private static void checkCardBody(List&lt;Finding&gt; out, String name, int[] lines, int at, String text, int bodyStart, Value id, Value src, Value type) {</span>
-<span class="source-line-no">476</span><span id="line-476">      var end = text.indexOf("&lt;/@card", bodyStart);</span>
-<span class="source-line-no">477</span><span id="line-477">      var body = text.substring(bodyStart, end &lt; 0 ? text.length() : end);</span>
-<span class="source-line-no">478</span><span id="line-478">      var cardId = n(id) ? "" : id.value;</span>
-<span class="source-line-no">479</span><span id="line-479">      var trimmed = body.trim();</span>
-<span class="source-line-no">480</span><span id="line-480">      // A chart card legitimately takes src= (remote rows) plus a body (kind and options).</span>
-<span class="source-line-no">481</span><span id="line-481">      var chart = nn(type) &amp;&amp; type.literal &amp;&amp; "chart".equals(type.value);</span>
-<span class="source-line-no">482</span><span id="line-482">      if (! trimmed.isEmpty() &amp;&amp; nn(src) &amp;&amp; src.literal &amp;&amp; ! chart)</span>
-<span class="source-line-no">483</span><span id="line-483">         add(out, name, lines, at, "card-src-and-body", f(</span>
-<span class="source-line-no">484</span><span id="line-484">            "&lt;@card id='%s'&gt; has both src='%s' and a body; use exactly one.", cardId, src.value));</span>
-<span class="source-line-no">485</span><span id="line-485">      if (trimmed.isEmpty() || body.contains("${"))</span>
-<span class="source-line-no">486</span><span id="line-486">         return;</span>
-<span class="source-line-no">487</span><span id="line-487">      var keys = topLevelJson5Keys(trimmed);</span>
-<span class="source-line-no">488</span><span id="line-488">      for (var k : keys)</span>
-<span class="source-line-no">489</span><span id="line-489">         if (RESERVED_BODY_KEYS.contains(k))</span>
-<span class="source-line-no">490</span><span id="line-490">            add(out, name, lines, at, "card-reserved-key", f(</span>
-<span class="source-line-no">491</span><span id="line-491">               "&lt;@card id='%s'&gt; body key '%s' is reserved; set it as an attribute.", cardId, k));</span>
-<span class="source-line-no">492</span><span id="line-492">   }</span>
-<span class="source-line-no">493</span><span id="line-493"></span>
-<span class="source-line-no">494</span><span id="line-494">   // Hand-rolled, like attrs() below: finds JSON5 object keys at brace-depth 0, skipping quoted strings (backslash escapes honored). Not a</span>
-<span class="source-line-no">495</span><span id="line-495">   // general parser — enough to catch literal top-level keys for the two card-body lint rules above.</span>
-<span class="source-line-no">496</span><span id="line-496">   private static Set&lt;String&gt; topLevelJson5Keys(String body) {</span>
-<span class="source-line-no">497</span><span id="line-497">      var s = body.trim();</span>
-<span class="source-line-no">498</span><span id="line-498">      if (s.startsWith("{") &amp;&amp; s.endsWith("}"))</span>
-<span class="source-line-no">499</span><span id="line-499">         s = s.substring(1, s.length() - 1);</span>
-<span class="source-line-no">500</span><span id="line-500">      var keys = new LinkedHashSet&lt;String&gt;();</span>
-<span class="source-line-no">501</span><span id="line-501">      var depth = 0;</span>
-<span class="source-line-no">502</span><span id="line-502">      var i = 0;</span>
-<span class="source-line-no">503</span><span id="line-503">      while (i &lt; s.length()) {</span>
-<span class="source-line-no">504</span><span id="line-504">         var c = s.charAt(i);</span>
-<span class="source-line-no">505</span><span id="line-505">         if (c == '"' || c == '\'') {</span>
-<span class="source-line-no">506</span><span id="line-506">            // Honor backslash escapes in both quote styles: skip the escaped character wholesale.</span>
-<span class="source-line-no">507</span><span id="line-507">            var j = i + 1;</span>
-<span class="source-line-no">508</span><span id="line-508">            while (j &lt; s.length() &amp;&amp; s.charAt(j) != c)</span>
-<span class="source-line-no">509</span><span id="line-509">               j += s.charAt(j) == '\\' ? 2 : 1;</span>
-<span class="source-line-no">510</span><span id="line-510">            i = j &gt;= s.length() ? s.length() : j + 1;</span>
-<span class="source-line-no">511</span><span id="line-511">         } else if (c == '{' || c == '[') {</span>
-<span class="source-line-no">512</span><span id="line-512">            depth++;</span>
-<span class="source-line-no">513</span><span id="line-513">            i++;</span>
-<span class="source-line-no">514</span><span id="line-514">         } else if (c == '}' || c == ']') {</span>
-<span class="source-line-no">515</span><span id="line-515">            depth--;</span>
-<span class="source-line-no">516</span><span id="line-516">            i++;</span>
-<span class="source-line-no">517</span><span id="line-517">         } else if (depth == 0 &amp;&amp; (Character.isLetter(c) || c == '_')) {</span>
-<span class="source-line-no">518</span><span id="line-518">            var start = i;</span>
-<span class="source-line-no">519</span><span id="line-519">            while (i &lt; s.length() &amp;&amp; (Character.isLetterOrDigit(s.charAt(i)) || s.charAt(i) == '_'))</span>
-<span class="source-line-no">520</span><span id="line-520">               i++;</span>
-<span class="source-line-no">521</span><span id="line-521">            var word = s.substring(start, i);</span>
-<span class="source-line-no">522</span><span id="line-522">            var j = i;</span>
-<span class="source-line-no">523</span><span id="line-523">            while (j &lt; s.length() &amp;&amp; Character.isWhitespace(s.charAt(j)))</span>
-<span class="source-line-no">524</span><span id="line-524">               j++;</span>
-<span class="source-line-no">525</span><span id="line-525">            if (j &lt; s.length() &amp;&amp; s.charAt(j) == ':')</span>
-<span class="source-line-no">526</span><span id="line-526">               keys.add(word);</span>
-<span class="source-line-no">527</span><span id="line-527">         } else {</span>
-<span class="source-line-no">528</span><span id="line-528">            i++;</span>
-<span class="source-line-no">529</span><span id="line-529">         }</span>
-<span class="source-line-no">530</span><span id="line-530">      }</span>
-<span class="source-line-no">531</span><span id="line-531">      return keys;</span>
-<span class="source-line-no">532</span><span id="line-532">   }</span>
-<span class="source-line-no">533</span><span id="line-533"></span>
-<span class="source-line-no">534</span><span id="line-534">   private static Map&lt;String,Value&gt; attrs(String s) {</span>
-<span class="source-line-no">535</span><span id="line-535">      var out = new LinkedHashMap&lt;String,Value&gt;();</span>
-<span class="source-line-no">536</span><span id="line-536">      var m = ATTR.matcher(s);</span>
-<span class="source-line-no">537</span><span id="line-537">      while (m.find()) {</span>
-<span class="source-line-no">538</span><span id="line-538">         String v;</span>
-<span class="source-line-no">539</span><span id="line-539">         boolean literal;</span>
-<span class="source-line-no">540</span><span id="line-540">         if (nn(m.group(2)) || nn(m.group(3))) {</span>
-<span class="source-line-no">541</span><span id="line-541">            v = m.group(nn(m.group(2)) ? 2 : 3);</span>
-<span class="source-line-no">542</span><span id="line-542">            literal = ! v.contains("${");</span>
-<span class="source-line-no">543</span><span id="line-543">         } else {</span>
-<span class="source-line-no">544</span><span id="line-544">            v = m.group(4);</span>
-<span class="source-line-no">545</span><span id="line-545">            literal = eqa(v, "true", "false");</span>
-<span class="source-line-no">546</span><span id="line-546">         }</span>
-<span class="source-line-no">547</span><span id="line-547">         out.put(m.group(1), new Value(v, literal));</span>
-<span class="source-line-no">548</span><span id="line-548">      }</span>
-<span class="source-line-no">549</span><span id="line-549">      return out;</span>
-<span class="source-line-no">550</span><span id="line-550">   }</span>
-<span class="source-line-no">551</span><span id="line-551"></span>
-<span class="source-line-no">552</span><span id="line-552">   private void collectScope(String name, String text, Set&lt;String&gt; macros, Set&lt;String&gt; namespaces, Set&lt;String&gt; seen) {</span>
-<span class="source-line-no">553</span><span id="line-553">      if (! seen.add(name))</span>
-<span class="source-line-no">554</span><span id="line-554">         return;</span>
-<span class="source-line-no">555</span><span id="line-555">      var m = MACRO.matcher(text);</span>
-<span class="source-line-no">556</span><span id="line-556">      while (m.find())</span>
-<span class="source-line-no">557</span><span id="line-557">         macros.add(m.group(1));</span>
-<span class="source-line-no">558</span><span id="line-558">      var i = IMPORT.matcher(text);</span>
-<span class="source-line-no">559</span><span id="line-559">      while (i.find())</span>
-<span class="source-line-no">560</span><span id="line-560">         namespaces.add(i.group(1));</span>
-<span class="source-line-no">561</span><span id="line-561">      var inc = INCLUDE.matcher(text);</span>
-<span class="source-line-no">562</span><span id="line-562">      while (inc.find()) {</span>
-<span class="source-line-no">563</span><span id="line-563">         var target = resolve(name, inc.group(1));</span>
-<span class="source-line-no">564</span><span id="line-564">         var src = load(target);</span>
-<span class="source-line-no">565</span><span id="line-565">         if (nn(src))</span>
-<span class="source-line-no">566</span><span id="line-566">            collectScope(target, blankComments(src), macros, namespaces, seen);</span>
-<span class="source-line-no">567</span><span id="line-567">      }</span>
-<span class="source-line-no">568</span><span id="line-568">   }</span>
-<span class="source-line-no">569</span><span id="line-569"></span>
-<span class="source-line-no">570</span><span id="line-570">   private static String resolve(String from, String path) {</span>
-<span class="source-line-no">571</span><span id="line-571">      if (path.startsWith("/"))</span>
-<span class="source-line-no">572</span><span id="line-572">         return path;</span>
-<span class="source-line-no">573</span><span id="line-573">      var slash = from.lastIndexOf('/');</span>
-<span class="source-line-no">574</span><span id="line-574">      return slash &lt; 0 ? path : from.substring(0, slash + 1) + path;</span>
-<span class="source-line-no">575</span><span id="line-575">   }</span>
-<span class="source-line-no">576</span><span id="line-576"></span>
-<span class="source-line-no">577</span><span id="line-577">   // Template root first, then the classpath root, then (for absolute names) the classpath itself.</span>
-<span class="source-line-no">578</span><span id="line-578">   private String load(String name) {</span>
-<span class="source-line-no">579</span><span id="line-579">      var rel = name.startsWith("/") ? name.substring(1) : name;</span>
-<span class="source-line-no">580</span><span id="line-580">      try {</span>
-<span class="source-line-no">581</span><span id="line-581">         if (nn(templateRoot)) {</span>
-<span class="source-line-no">582</span><span id="line-582">            var p = templateRoot.resolve(rel);</span>
-<span class="source-line-no">583</span><span id="line-583">            if (Files.isRegularFile(p))</span>
-<span class="source-line-no">584</span><span id="line-584">               return Files.readString(p, UTF_8);</span>
-<span class="source-line-no">585</span><span id="line-585">         }</span>
-<span class="source-line-no">586</span><span id="line-586">         if (nn(classpathRoot)) {</span>
-<span class="source-line-no">587</span><span id="line-587">            var s = resource(classpathRoot + rel);</span>
-<span class="source-line-no">588</span><span id="line-588">            if (nn(s))</span>
-<span class="source-line-no">589</span><span id="line-589">               return s;</span>
-<span class="source-line-no">590</span><span id="line-590">         }</span>
-<span class="source-line-no">591</span><span id="line-591">         return name.startsWith("/") ? resource(name) : null;</span>
-<span class="source-line-no">592</span><span id="line-592">      } catch (IOException e) {</span>
-<span class="source-line-no">593</span><span id="line-593">         throw new UncheckedIOException(e);</span>
-<span class="source-line-no">594</span><span id="line-594">      }</span>
-<span class="source-line-no">595</span><span id="line-595">   }</span>
-<span class="source-line-no">596</span><span id="line-596"></span>
-<span class="source-line-no">597</span><span id="line-597">   private static String resource(String absPath) throws IOException {</span>
-<span class="source-line-no">598</span><span id="line-598">      var cl = Thread.currentThread().getContextClassLoader();</span>
-<span class="source-line-no">599</span><span id="line-599">      if (n(cl))</span>
-<span class="source-line-no">600</span><span id="line-600">         cl = ConsoleTemplateValidator.class.getClassLoader();</span>
-<span class="source-line-no">601</span><span id="line-601">      try (var in = cl.getResourceAsStream(absPath.substring(1))) {</span>
-<span class="source-line-no">602</span><span id="line-602">         return n(in) ? null : new String(in.readAllBytes(), UTF_8);</span>
-<span class="source-line-no">603</span><span id="line-603">      }</span>
-<span class="source-line-no">604</span><span id="line-604">   }</span>
-<span class="source-line-no">605</span><span id="line-605"></span>
-<span class="source-line-no">606</span><span id="line-606">   @SuppressWarnings({</span>
-<span class="source-line-no">607</span><span id="line-607">      "unused" // the Template is built only so its constructor parses (and may throw)</span>
-<span class="source-line-no">608</span><span id="line-608">   })</span>
-<span class="source-line-no">609</span><span id="line-609">   private static void parse(String name, String source, List&lt;Finding&gt; out) {</span>
-<span class="source-line-no">610</span><span id="line-610">      try {</span>
-<span class="source-line-no">611</span><span id="line-611">         new Template(name, new StringReader(source), PARSE_CFG);</span>
-<span class="source-line-no">612</span><span id="line-612">      } catch (ParseException e) {</span>
-<span class="source-line-no">613</span><span id="line-613">         out.add(new Finding(name, e.getLineNumber(), e.getColumnNumber(), "parse-error", e.getEditorMessage()));</span>
-<span class="source-line-no">614</span><span id="line-614">      } catch (IOException e) {</span>
-<span class="source-line-no">615</span><span id="line-615">         throw new UncheckedIOException(e);</span>
-<span class="source-line-no">616</span><span id="line-616">      }</span>
-<span class="source-line-no">617</span><span id="line-617">   }</span>
-<span class="source-line-no">618</span><span id="line-618"></span>
-<span class="source-line-no">619</span><span id="line-619">   // Replaces each &lt;#-- … --&gt; with spaces (newlines kept), so offsets still map to the original line and column.</span>
-<span class="source-line-no">620</span><span id="line-620">   private static String blankComments(String s) {</span>
-<span class="source-line-no">621</span><span id="line-621">      var sb = new StringBuilder(s);</span>
-<span class="source-line-no">622</span><span id="line-622">      var m = COMMENT.matcher(s);</span>
-<span class="source-line-no">623</span><span id="line-623">      while (m.find())</span>
-<span class="source-line-no">624</span><span id="line-624">         for (var i = m.start(); i &lt; m.end(); i++)</span>
-<span class="source-line-no">625</span><span id="line-625">            if (sb.charAt(i) != '\n')</span>
-<span class="source-line-no">626</span><span id="line-626">               sb.setCharAt(i, ' ');</span>
-<span class="source-line-no">627</span><span id="line-627">      return sb.toString();</span>
-<span class="source-line-no">628</span><span id="line-628">   }</span>
-<span class="source-line-no">629</span><span id="line-629"></span>
-<span class="source-line-no">630</span><span id="line-630">   @SuppressWarnings({</span>
-<span class="source-line-no">631</span><span id="line-631">      "javabugs:S2259" // False positive: validate() throws on a null load() result via n(src), which Sonar's flow analysis does not track as a null guard.</span>
-<span class="source-line-no">632</span><span id="line-632">   })</span>
-<span class="source-line-no">633</span><span id="line-633">   private static int[] lineStarts(String s) {</span>
-<span class="source-line-no">634</span><span id="line-634">      var starts = new ArrayList&lt;Integer&gt;();</span>
-<span class="source-line-no">635</span><span id="line-635">      starts.add(0);</span>
-<span class="source-line-no">636</span><span id="line-636">      for (var i = 0; i &lt; s.length(); i++)</span>
-<span class="source-line-no">637</span><span id="line-637">         if (s.charAt(i) == '\n')</span>
-<span class="source-line-no">638</span><span id="line-638">            starts.add(i + 1);</span>
-<span class="source-line-no">639</span><span id="line-639">      return starts.stream().mapToInt(Integer::intValue).toArray();</span>
-<span class="source-line-no">640</span><span id="line-640">   }</span>
-<span class="source-line-no">641</span><span id="line-641"></span>
-<span class="source-line-no">642</span><span id="line-642">   private static void add(List&lt;Finding&gt; out, String name, int[] lines, int offset, String rule, String message) {</span>
-<span class="source-line-no">643</span><span id="line-643">      var i = Arrays.binarySearch(lines, offset);</span>
-<span class="source-line-no">644</span><span id="line-644">      var line = i &gt;= 0 ? i : -i - 2;</span>
-<span class="source-line-no">645</span><span id="line-645">      out.add(new Finding(name, line + 1, offset - lines[line] + 1, rule, message));</span>
-<span class="source-line-no">646</span><span id="line-646">   }</span>
-<span class="source-line-no">647</span><span id="line-647">}</span>
+<span class="source-line-no">401</span><span id="line-401">   // The literal entries of one init=/css= match, or null when the value holds an expression (a call or ${...}).</span>
+<span class="source-line-no">402</span><span id="line-402">   private static List&lt;String&gt; literalPageAssetEntries(Matcher m) {</span>
+<span class="source-line-no">403</span><span id="line-403">      var entries = new ArrayList&lt;String&gt;();</span>
+<span class="source-line-no">404</span><span id="line-404">      if (nn(m.group(2))) {</span>
+<span class="source-line-no">405</span><span id="line-405">         var body = m.group(2);</span>
+<span class="source-line-no">406</span><span id="line-406">         if (body.contains("(") || body.contains("${"))</span>
+<span class="source-line-no">407</span><span id="line-407">            return null;</span>
+<span class="source-line-no">408</span><span id="line-408">         var q = QUOTED.matcher(body);</span>
+<span class="source-line-no">409</span><span id="line-409">         while (q.find())</span>
+<span class="source-line-no">410</span><span id="line-410">            entries.add(q.group(nn(q.group(1)) ? 1 : 2));</span>
+<span class="source-line-no">411</span><span id="line-411">         return entries;</span>
+<span class="source-line-no">412</span><span id="line-412">      }</span>
+<span class="source-line-no">413</span><span id="line-413">      var v = m.group(nn(m.group(3)) ? 3 : 4);</span>
+<span class="source-line-no">414</span><span id="line-414">      if (v.contains("${"))</span>
+<span class="source-line-no">415</span><span id="line-415">         return null;</span>
+<span class="source-line-no">416</span><span id="line-416">      for (var part : v.split(",")) {</span>
+<span class="source-line-no">417</span><span id="line-417">         var t = part.trim();</span>
+<span class="source-line-no">418</span><span id="line-418">         if (! t.isEmpty())</span>
+<span class="source-line-no">419</span><span id="line-419">            entries.add(t);</span>
+<span class="source-line-no">420</span><span id="line-420">      }</span>
+<span class="source-line-no">421</span><span id="line-421">      return entries;</span>
+<span class="source-line-no">422</span><span id="line-422">   }</span>
+<span class="source-line-no">423</span><span id="line-423"></span>
+<span class="source-line-no">424</span><span id="line-424">   // Flags a literal init=/css= entry that is neither absolute nor a context:/servlet: URI.  Lists holding an</span>
+<span class="source-line-no">425</span><span id="line-425">   // expression (a call or ${...}) are skipped: their entries are not literals.</span>
+<span class="source-line-no">426</span><span id="line-426">   private static void checkPageAssets(List&lt;Finding&gt; out, String name, int[] lines, int at, String attrText) {</span>
+<span class="source-line-no">427</span><span id="line-427">      var m = PAGE_ASSET.matcher(attrText);</span>
+<span class="source-line-no">428</span><span id="line-428">      while (m.find()) {</span>
+<span class="source-line-no">429</span><span id="line-429">         var attr = m.group(1);</span>
+<span class="source-line-no">430</span><span id="line-430">         var entries = literalPageAssetEntries(m);</span>
+<span class="source-line-no">431</span><span id="line-431">         if (entries == null)</span>
+<span class="source-line-no">432</span><span id="line-432">            continue;</span>
+<span class="source-line-no">433</span><span id="line-433">         for (var e : entries)</span>
+<span class="source-line-no">434</span><span id="line-434">            if (! FtlAttrLists.isAbsoluteAsset(e))</span>
+<span class="source-line-no">435</span><span id="line-435">               add(out, name, lines, at, "relative-page-asset", f(</span>
+<span class="source-line-no">436</span><span id="line-436">                  "&lt;@page&gt; %s= entry '%s' must be absolute (start with '/') or a context: / servlet: URI.", attr, e));</span>
+<span class="source-line-no">437</span><span id="line-437">      }</span>
+<span class="source-line-no">438</span><span id="line-438">   }</span>
+<span class="source-line-no">439</span><span id="line-439"></span>
+<span class="source-line-no">440</span><span id="line-440">   /**</span>
+<span class="source-line-no">441</span><span id="line-441">    * Flags a literal {@code view.contractVersion} that differs from {@link ViewsMixin#CONTRACT_VERSION} in a</span>
+<span class="source-line-no">442</span><span id="line-442">    * {@code type="datatables"} card body. An omitted version is fine (the runtime injects it); only a pinned, stale</span>
+<span class="source-line-no">443</span><span id="line-443">    * value is reported. Scans the {@code view:{...}} object at its own nesting depth so nested {@code contractVersion}</span>
+<span class="source-line-no">444</span><span id="line-444">    * keys (quickStats, detail, ...) are never mistaken for it.</span>
+<span class="source-line-no">445</span><span id="line-445">    */</span>
+<span class="source-line-no">446</span><span id="line-446">   private static void checkViewVersion(List&lt;Finding&gt; out, String name, int[] lines, String text, int bodyStart, String cardId) {</span>
+<span class="source-line-no">447</span><span id="line-447">      var end = text.indexOf("&lt;/@card", bodyStart);</span>
+<span class="source-line-no">448</span><span id="line-448">      var body = text.substring(bodyStart, end &lt; 0 ? text.length() : end);</span>
+<span class="source-line-no">449</span><span id="line-449">      var vm = VIEW_KEY.matcher(body);</span>
+<span class="source-line-no">450</span><span id="line-450">      if (! vm.find())</span>
+<span class="source-line-no">451</span><span id="line-451">         return;</span>
+<span class="source-line-no">452</span><span id="line-452">      var depth = 1;</span>
+<span class="source-line-no">453</span><span id="line-453">      for (var i = vm.end(); i &lt; body.length() &amp;&amp; depth &gt; 0; i++) {</span>
+<span class="source-line-no">454</span><span id="line-454">         var c = body.charAt(i);</span>
+<span class="source-line-no">455</span><span id="line-455">         if (c == '{' || c == '[')</span>
+<span class="source-line-no">456</span><span id="line-456">            depth++;</span>
+<span class="source-line-no">457</span><span id="line-457">         else if (c == '}' || c == ']')</span>
+<span class="source-line-no">458</span><span id="line-458">            depth--;</span>
+<span class="source-line-no">459</span><span id="line-459">         else if (depth == 1 &amp;&amp; c == 'c') {</span>
+<span class="source-line-no">460</span><span id="line-460">            var v = VIEW_VERSION.matcher(body.substring(i));</span>
+<span class="source-line-no">461</span><span id="line-461">            if (v.find() &amp;&amp; neq(v.group(1), ViewsMixin.CONTRACT_VERSION)) {</span>
+<span class="source-line-no">462</span><span id="line-462">               add(out, name, lines, bodyStart + i, "view-contract-version", f(</span>
+<span class="source-line-no">463</span><span id="line-463">                  "&lt;@card id='%s'&gt; view.contractVersion is '%s' but the runtime is '%s'; omit it to track the runtime automatically.",</span>
+<span class="source-line-no">464</span><span id="line-464">                  cardId, v.group(1), ViewsMixin.CONTRACT_VERSION));</span>
+<span class="source-line-no">465</span><span id="line-465">               return;</span>
+<span class="source-line-no">466</span><span id="line-466">            }</span>
+<span class="source-line-no">467</span><span id="line-467">         }</span>
+<span class="source-line-no">468</span><span id="line-468">      }</span>
+<span class="source-line-no">469</span><span id="line-469">   }</span>
+<span class="source-line-no">470</span><span id="line-470"></span>
+<span class="source-line-no">471</span><span id="line-471">   private record Value(String value, boolean literal) {}</span>
+<span class="source-line-no">472</span><span id="line-472"></span>
+<span class="source-line-no">473</span><span id="line-473">   // Mirrors CardTypeRegistry.BASE_KEYS (E-23); visibleWhen is deliberately excluded, same as there.</span>
+<span class="source-line-no">474</span><span id="line-474">   private static final Set&lt;String&gt; RESERVED_BODY_KEYS = Set.of("id", "type", "title", "src", "template", "ref");</span>
+<span class="source-line-no">475</span><span id="line-475"></span>
+<span class="source-line-no">476</span><span id="line-476">   /**</span>
+<span class="source-line-no">477</span><span id="line-477">    * The card-body rules: {@code card-src-and-body} and {@code card-reserved-key}.</span>
+<span class="source-line-no">478</span><span id="line-478">    * Reads the body the same way {@link #checkViewVersion} does, up to the next {@code &lt;/@card}.</span>
+<span class="source-line-no">479</span><span id="line-479">    */</span>
+<span class="source-line-no">480</span><span id="line-480">   @SuppressWarnings({</span>
+<span class="source-line-no">481</span><span id="line-481">      "java:S107" // Internal helper whose parameters are the render/validation context.</span>
+<span class="source-line-no">482</span><span id="line-482">   })</span>
+<span class="source-line-no">483</span><span id="line-483">   private static void checkCardBody(List&lt;Finding&gt; out, String name, int[] lines, int at, String text, int bodyStart, Value id, Value src, Value type) {</span>
+<span class="source-line-no">484</span><span id="line-484">      var end = text.indexOf("&lt;/@card", bodyStart);</span>
+<span class="source-line-no">485</span><span id="line-485">      var body = text.substring(bodyStart, end &lt; 0 ? text.length() : end);</span>
+<span class="source-line-no">486</span><span id="line-486">      var cardId = n(id) ? "" : id.value;</span>
+<span class="source-line-no">487</span><span id="line-487">      var trimmed = body.trim();</span>
+<span class="source-line-no">488</span><span id="line-488">      // A chart card legitimately takes src= (remote rows) plus a body (kind and options).</span>
+<span class="source-line-no">489</span><span id="line-489">      var chart = nn(type) &amp;&amp; type.literal &amp;&amp; "chart".equals(type.value);</span>
+<span class="source-line-no">490</span><span id="line-490">      if (! trimmed.isEmpty() &amp;&amp; nn(src) &amp;&amp; src.literal &amp;&amp; ! chart)</span>
+<span class="source-line-no">491</span><span id="line-491">         add(out, name, lines, at, "card-src-and-body", f(</span>
+<span class="source-line-no">492</span><span id="line-492">            "&lt;@card id='%s'&gt; has both src='%s' and a body; use exactly one.", cardId, src.value));</span>
+<span class="source-line-no">493</span><span id="line-493">      if (trimmed.isEmpty() || body.contains("${"))</span>
+<span class="source-line-no">494</span><span id="line-494">         return;</span>
+<span class="source-line-no">495</span><span id="line-495">      var keys = topLevelJson5Keys(trimmed);</span>
+<span class="source-line-no">496</span><span id="line-496">      for (var k : keys)</span>
+<span class="source-line-no">497</span><span id="line-497">         if (RESERVED_BODY_KEYS.contains(k))</span>
+<span class="source-line-no">498</span><span id="line-498">            add(out, name, lines, at, "card-reserved-key", f(</span>
+<span class="source-line-no">499</span><span id="line-499">               "&lt;@card id='%s'&gt; body key '%s' is reserved; set it as an attribute.", cardId, k));</span>
+<span class="source-line-no">500</span><span id="line-500">   }</span>
+<span class="source-line-no">501</span><span id="line-501"></span>
+<span class="source-line-no">502</span><span id="line-502">   // Hand-rolled, like attrs() below: finds JSON5 object keys at brace-depth 0, skipping quoted strings (backslash escapes honored). Not a</span>
+<span class="source-line-no">503</span><span id="line-503">   // general parser — enough to catch literal top-level keys for the two card-body lint rules above.</span>
+<span class="source-line-no">504</span><span id="line-504">   private static Set&lt;String&gt; topLevelJson5Keys(String body) {</span>
+<span class="source-line-no">505</span><span id="line-505">      var s = body.trim();</span>
+<span class="source-line-no">506</span><span id="line-506">      if (s.startsWith("{") &amp;&amp; s.endsWith("}"))</span>
+<span class="source-line-no">507</span><span id="line-507">         s = s.substring(1, s.length() - 1);</span>
+<span class="source-line-no">508</span><span id="line-508">      var keys = new LinkedHashSet&lt;String&gt;();</span>
+<span class="source-line-no">509</span><span id="line-509">      var depth = 0;</span>
+<span class="source-line-no">510</span><span id="line-510">      var i = 0;</span>
+<span class="source-line-no">511</span><span id="line-511">      while (i &lt; s.length()) {</span>
+<span class="source-line-no">512</span><span id="line-512">         var c = s.charAt(i);</span>
+<span class="source-line-no">513</span><span id="line-513">         if (c == '"' || c == '\'') {</span>
+<span class="source-line-no">514</span><span id="line-514">            // Honor backslash escapes in both quote styles: skip the escaped character wholesale.</span>
+<span class="source-line-no">515</span><span id="line-515">            var j = i + 1;</span>
+<span class="source-line-no">516</span><span id="line-516">            while (j &lt; s.length() &amp;&amp; s.charAt(j) != c)</span>
+<span class="source-line-no">517</span><span id="line-517">               j += s.charAt(j) == '\\' ? 2 : 1;</span>
+<span class="source-line-no">518</span><span id="line-518">            i = j &gt;= s.length() ? s.length() : j + 1;</span>
+<span class="source-line-no">519</span><span id="line-519">         } else if (c == '{' || c == '[') {</span>
+<span class="source-line-no">520</span><span id="line-520">            depth++;</span>
+<span class="source-line-no">521</span><span id="line-521">            i++;</span>
+<span class="source-line-no">522</span><span id="line-522">         } else if (c == '}' || c == ']') {</span>
+<span class="source-line-no">523</span><span id="line-523">            depth--;</span>
+<span class="source-line-no">524</span><span id="line-524">            i++;</span>
+<span class="source-line-no">525</span><span id="line-525">         } else if (depth == 0 &amp;&amp; (Character.isLetter(c) || c == '_')) {</span>
+<span class="source-line-no">526</span><span id="line-526">            var start = i;</span>
+<span class="source-line-no">527</span><span id="line-527">            while (i &lt; s.length() &amp;&amp; (Character.isLetterOrDigit(s.charAt(i)) || s.charAt(i) == '_'))</span>
+<span class="source-line-no">528</span><span id="line-528">               i++;</span>
+<span class="source-line-no">529</span><span id="line-529">            var word = s.substring(start, i);</span>
+<span class="source-line-no">530</span><span id="line-530">            var j = i;</span>
+<span class="source-line-no">531</span><span id="line-531">            while (j &lt; s.length() &amp;&amp; Character.isWhitespace(s.charAt(j)))</span>
+<span class="source-line-no">532</span><span id="line-532">               j++;</span>
+<span class="source-line-no">533</span><span id="line-533">            if (j &lt; s.length() &amp;&amp; s.charAt(j) == ':')</span>
+<span class="source-line-no">534</span><span id="line-534">               keys.add(word);</span>
+<span class="source-line-no">535</span><span id="line-535">         } else {</span>
+<span class="source-line-no">536</span><span id="line-536">            i++;</span>
+<span class="source-line-no">537</span><span id="line-537">         }</span>
+<span class="source-line-no">538</span><span id="line-538">      }</span>
+<span class="source-line-no">539</span><span id="line-539">      return keys;</span>
+<span class="source-line-no">540</span><span id="line-540">   }</span>
+<span class="source-line-no">541</span><span id="line-541"></span>
+<span class="source-line-no">542</span><span id="line-542">   private static Map&lt;String,Value&gt; attrs(String s) {</span>
+<span class="source-line-no">543</span><span id="line-543">      var out = new LinkedHashMap&lt;String,Value&gt;();</span>
+<span class="source-line-no">544</span><span id="line-544">      var m = ATTR.matcher(s);</span>
+<span class="source-line-no">545</span><span id="line-545">      while (m.find()) {</span>
+<span class="source-line-no">546</span><span id="line-546">         String v;</span>
+<span class="source-line-no">547</span><span id="line-547">         boolean literal;</span>
+<span class="source-line-no">548</span><span id="line-548">         if (nn(m.group(2)) || nn(m.group(3))) {</span>
+<span class="source-line-no">549</span><span id="line-549">            v = m.group(nn(m.group(2)) ? 2 : 3);</span>
+<span class="source-line-no">550</span><span id="line-550">            literal = ! v.contains("${");</span>
+<span class="source-line-no">551</span><span id="line-551">         } else {</span>
+<span class="source-line-no">552</span><span id="line-552">            v = m.group(4);</span>
+<span class="source-line-no">553</span><span id="line-553">            literal = eqa(v, "true", "false");</span>
+<span class="source-line-no">554</span><span id="line-554">         }</span>
+<span class="source-line-no">555</span><span id="line-555">         out.put(m.group(1), new Value(v, literal));</span>
+<span class="source-line-no">556</span><span id="line-556">      }</span>
+<span class="source-line-no">557</span><span id="line-557">      return out;</span>
+<span class="source-line-no">558</span><span id="line-558">   }</span>
+<span class="source-line-no">559</span><span id="line-559"></span>
+<span class="source-line-no">560</span><span id="line-560">   private void collectScope(String name, String text, Set&lt;String&gt; macros, Set&lt;String&gt; namespaces, Set&lt;String&gt; seen) {</span>
+<span class="source-line-no">561</span><span id="line-561">      if (! seen.add(name))</span>
+<span class="source-line-no">562</span><span id="line-562">         return;</span>
+<span class="source-line-no">563</span><span id="line-563">      var m = MACRO.matcher(text);</span>
+<span class="source-line-no">564</span><span id="line-564">      while (m.find())</span>
+<span class="source-line-no">565</span><span id="line-565">         macros.add(m.group(1));</span>
+<span class="source-line-no">566</span><span id="line-566">      var i = IMPORT.matcher(text);</span>
+<span class="source-line-no">567</span><span id="line-567">      while (i.find())</span>
+<span class="source-line-no">568</span><span id="line-568">         namespaces.add(i.group(1));</span>
+<span class="source-line-no">569</span><span id="line-569">      var inc = INCLUDE.matcher(text);</span>
+<span class="source-line-no">570</span><span id="line-570">      while (inc.find()) {</span>
+<span class="source-line-no">571</span><span id="line-571">         var target = resolve(name, inc.group(1));</span>
+<span class="source-line-no">572</span><span id="line-572">         var src = load(target);</span>
+<span class="source-line-no">573</span><span id="line-573">         if (nn(src))</span>
+<span class="source-line-no">574</span><span id="line-574">            collectScope(target, blankComments(src), macros, namespaces, seen);</span>
+<span class="source-line-no">575</span><span id="line-575">      }</span>
+<span class="source-line-no">576</span><span id="line-576">   }</span>
+<span class="source-line-no">577</span><span id="line-577"></span>
+<span class="source-line-no">578</span><span id="line-578">   private static String resolve(String from, String path) {</span>
+<span class="source-line-no">579</span><span id="line-579">      if (path.startsWith("/"))</span>
+<span class="source-line-no">580</span><span id="line-580">         return path;</span>
+<span class="source-line-no">581</span><span id="line-581">      var slash = from.lastIndexOf('/');</span>
+<span class="source-line-no">582</span><span id="line-582">      return slash &lt; 0 ? path : from.substring(0, slash + 1) + path;</span>
+<span class="source-line-no">583</span><span id="line-583">   }</span>
+<span class="source-line-no">584</span><span id="line-584"></span>
+<span class="source-line-no">585</span><span id="line-585">   // Template root first, then the classpath root, then (for absolute names) the classpath itself.</span>
+<span class="source-line-no">586</span><span id="line-586">   private String load(String name) {</span>
+<span class="source-line-no">587</span><span id="line-587">      var rel = name.startsWith("/") ? name.substring(1) : name;</span>
+<span class="source-line-no">588</span><span id="line-588">      try {</span>
+<span class="source-line-no">589</span><span id="line-589">         if (nn(templateRoot)) {</span>
+<span class="source-line-no">590</span><span id="line-590">            var p = templateRoot.resolve(rel);</span>
+<span class="source-line-no">591</span><span id="line-591">            if (Files.isRegularFile(p))</span>
+<span class="source-line-no">592</span><span id="line-592">               return Files.readString(p, UTF_8);</span>
+<span class="source-line-no">593</span><span id="line-593">         }</span>
+<span class="source-line-no">594</span><span id="line-594">         if (nn(classpathRoot)) {</span>
+<span class="source-line-no">595</span><span id="line-595">            var s = resource(classpathRoot + rel);</span>
+<span class="source-line-no">596</span><span id="line-596">            if (nn(s))</span>
+<span class="source-line-no">597</span><span id="line-597">               return s;</span>
+<span class="source-line-no">598</span><span id="line-598">         }</span>
+<span class="source-line-no">599</span><span id="line-599">         return name.startsWith("/") ? resource(name) : null;</span>
+<span class="source-line-no">600</span><span id="line-600">      } catch (IOException e) {</span>
+<span class="source-line-no">601</span><span id="line-601">         throw new UncheckedIOException(e);</span>
+<span class="source-line-no">602</span><span id="line-602">      }</span>
+<span class="source-line-no">603</span><span id="line-603">   }</span>
+<span class="source-line-no">604</span><span id="line-604"></span>
+<span class="source-line-no">605</span><span id="line-605">   private static String resource(String absPath) throws IOException {</span>
+<span class="source-line-no">606</span><span id="line-606">      var cl = Thread.currentThread().getContextClassLoader();</span>
+<span class="source-line-no">607</span><span id="line-607">      if (n(cl))</span>
+<span class="source-line-no">608</span><span id="line-608">         cl = ConsoleTemplateValidator.class.getClassLoader();</span>
+<span class="source-line-no">609</span><span id="line-609">      try (var in = cl.getResourceAsStream(absPath.substring(1))) {</span>
+<span class="source-line-no">610</span><span id="line-610">         return n(in) ? null : new String(in.readAllBytes(), UTF_8);</span>
+<span class="source-line-no">611</span><span id="line-611">      }</span>
+<span class="source-line-no">612</span><span id="line-612">   }</span>
+<span class="source-line-no">613</span><span id="line-613"></span>
+<span class="source-line-no">614</span><span id="line-614">   @SuppressWarnings({</span>
+<span class="source-line-no">615</span><span id="line-615">      "unused" // the Template is built only so its constructor parses (and may throw)</span>
+<span class="source-line-no">616</span><span id="line-616">   })</span>
+<span class="source-line-no">617</span><span id="line-617">   private static void parse(String name, String source, List&lt;Finding&gt; out) {</span>
+<span class="source-line-no">618</span><span id="line-618">      try {</span>
+<span class="source-line-no">619</span><span id="line-619">         new Template(name, new StringReader(source), PARSE_CFG);</span>
+<span class="source-line-no">620</span><span id="line-620">      } catch (ParseException e) {</span>
+<span class="source-line-no">621</span><span id="line-621">         out.add(new Finding(name, e.getLineNumber(), e.getColumnNumber(), "parse-error", e.getEditorMessage()));</span>
+<span class="source-line-no">622</span><span id="line-622">      } catch (IOException e) {</span>
+<span class="source-line-no">623</span><span id="line-623">         throw new UncheckedIOException(e);</span>
+<span class="source-line-no">624</span><span id="line-624">      }</span>
+<span class="source-line-no">625</span><span id="line-625">   }</span>
+<span class="source-line-no">626</span><span id="line-626"></span>
+<span class="source-line-no">627</span><span id="line-627">   // Replaces each &lt;#-- … --&gt; with spaces (newlines kept), so offsets still map to the original line and column.</span>
+<span class="source-line-no">628</span><span id="line-628">   private static String blankComments(String s) {</span>
+<span class="source-line-no">629</span><span id="line-629">      var sb = new StringBuilder(s);</span>
+<span class="source-line-no">630</span><span id="line-630">      var m = COMMENT.matcher(s);</span>
+<span class="source-line-no">631</span><span id="line-631">      while (m.find())</span>
+<span class="source-line-no">632</span><span id="line-632">         for (var i = m.start(); i &lt; m.end(); i++)</span>
+<span class="source-line-no">633</span><span id="line-633">            if (sb.charAt(i) != '\n')</span>
+<span class="source-line-no">634</span><span id="line-634">               sb.setCharAt(i, ' ');</span>
+<span class="source-line-no">635</span><span id="line-635">      return sb.toString();</span>
+<span class="source-line-no">636</span><span id="line-636">   }</span>
+<span class="source-line-no">637</span><span id="line-637"></span>
+<span class="source-line-no">638</span><span id="line-638">   @SuppressWarnings({</span>
+<span class="source-line-no">639</span><span id="line-639">      "javabugs:S2259" // False positive: validate() throws on a null load() result via n(src), which Sonar's flow analysis does not track as a null guard.</span>
+<span class="source-line-no">640</span><span id="line-640">   })</span>
+<span class="source-line-no">641</span><span id="line-641">   private static int[] lineStarts(String s) {</span>
+<span class="source-line-no">642</span><span id="line-642">      var starts = new ArrayList&lt;Integer&gt;();</span>
+<span class="source-line-no">643</span><span id="line-643">      starts.add(0);</span>
+<span class="source-line-no">644</span><span id="line-644">      for (var i = 0; i &lt; s.length(); i++)</span>
+<span class="source-line-no">645</span><span id="line-645">         if (s.charAt(i) == '\n')</span>
+<span class="source-line-no">646</span><span id="line-646">            starts.add(i + 1);</span>
+<span class="source-line-no">647</span><span id="line-647">      return starts.stream().mapToInt(Integer::intValue).toArray();</span>
+<span class="source-line-no">648</span><span id="line-648">   }</span>
+<span class="source-line-no">649</span><span id="line-649"></span>
+<span class="source-line-no">650</span><span id="line-650">   private static void add(List&lt;Finding&gt; out, String name, int[] lines, int offset, String rule, String message) {</span>
+<span class="source-line-no">651</span><span id="line-651">      var i = Arrays.binarySearch(lines, offset);</span>
+<span class="source-line-no">652</span><span id="line-652">      var line = i &gt;= 0 ? i : -i - 2;</span>
+<span class="source-line-no">653</span><span id="line-653">      out.add(new Finding(name, line + 1, offset - lines[line] + 1, rule, message));</span>
+<span class="source-line-no">654</span><span id="line-654">   }</span>
+<span class="source-line-no">655</span><span id="line-655">}</span>
 
 
 

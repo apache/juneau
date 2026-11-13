@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-70">BigNumberFormat</a></span>
+<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-71">BigNumberFormat</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a>&gt;</span></div>
 <div class="block">Supported wire formats for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link"><code>BigInteger</code></a> and <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link"><code>BigDecimal</code></a> values.
 
@@ -240,14 +240,14 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="NOT_SET">
 <h3>NOT_SET</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-73">NOT_SET</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-74">NOT_SET</a></span></div>
 <div class="block">Sentinel meaning "no value configured" — falls through to the next-higher precedence level.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="NUMBER">
 <h3>NUMBER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-86">NUMBER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-87">NUMBER</a></span></div>
 <div class="block">Bare numeric token (the default).
 
  <h4 class='figure'>Example:</h4>
@@ -262,7 +262,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="STRING">
 <h3>STRING</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-100">STRING</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-101">STRING</a></span></div>
 <div class="block">Quoted-string form for lossless precision.
 
  <h4 class='figure'>Example:</h4>
@@ -278,7 +278,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="AUTO">
 <h3>AUTO</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-113">AUTO</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-114">AUTO</a></span></div>
 <div class="block">Hybrid — emit <a href="#NUMBER"><code>NUMBER</code></a> when the value is JS-safe (fits in <code>±(2^53 − 1)</code>), otherwise
  emit <a href="#STRING"><code>STRING</code></a>.
 
@@ -301,7 +301,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="values()">
 <h3>values</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-70">values</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-71">values</a></span>()</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 <dl class="notes">
@@ -313,7 +313,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="valueOf(java.lang.String)">
 <h3>valueOf</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-70">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-71">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the enum constant of this class with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
 enum constant in this class.  (Extraneous whitespace characters are 
@@ -332,7 +332,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="format(java.math.BigInteger,org.apache.juneau.marshall.BigNumberFormat)">
 <h3>format</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-137">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link">BigInteger</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-138">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link">BigInteger</a>&nbsp;value,
  <a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a>&nbsp;format)</span></div>
 <div class="block">Formats the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link"><code>BigInteger</code></a> using this format.
 
@@ -357,7 +357,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="format(java.math.BigDecimal,org.apache.juneau.marshall.BigNumberFormat)">
 <h3>format</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-165">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link">BigDecimal</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-166">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link">BigDecimal</a>&nbsp;value,
  <a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a>&nbsp;format)</span></div>
 <div class="block">Formats the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link"><code>BigDecimal</code></a> using this format.
 
@@ -382,7 +382,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="parse(java.lang.String,org.apache.juneau.marshall.BigNumberFormat,java.lang.Class)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-194">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-195">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
  <a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a>&nbsp;format,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;targetType)</span></div>
 <div class="block">Parses the specified wire value into a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link"><code>BigInteger</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link"><code>BigDecimal</code></a>.
@@ -407,7 +407,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="isNumeric()">
 <h3>isNumeric</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-229">isNumeric</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-230">isNumeric</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this format always emits a numeric wire value.
 
  <p>

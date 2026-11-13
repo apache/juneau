@@ -37,344 +37,392 @@
 <span class="source-line-no">024</span><span id="line-24">import java.net.http.HttpClient.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.net.http.HttpRequest.*;</span>
 <span class="source-line-no">026</span><span id="line-26">import java.net.http.HttpResponse.*;</span>
-<span class="source-line-no">027</span><span id="line-27">import java.util.*;</span>
-<span class="source-line-no">028</span><span id="line-28"></span>
-<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.http.*;</span>
-<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.http.remote.*;</span>
-<span class="source-line-no">031</span><span id="line-31"></span>
-<span class="source-line-no">032</span><span id="line-32">/**</span>
-<span class="source-line-no">033</span><span id="line-33"> * {@link HttpTransport} implementation backed by the JDK's built-in {@link HttpClient}.</span>
-<span class="source-line-no">034</span><span id="line-34"> *</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> * This is the &lt;b&gt;default&lt;/b&gt; transport used by {@link RestClient}.  It is built into the</span>
-<span class="source-line-no">037</span><span id="line-37"> * {@code juneau-rest-client} artifact, requires no external dependencies, and is always available on Java 11+.</span>
-<span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> * It is auto-discovered via {@link java.util.ServiceLoader} and can also be instantiated explicitly:</span>
-<span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;jv&gt;transport&lt;/jv&gt; = JavaHttpTransport.&lt;jsm&gt;builder&lt;/jsm&gt;()</span>
-<span class="source-line-no">044</span><span id="line-44"> *       .httpClient(HttpClient.newHttpClient())</span>
-<span class="source-line-no">045</span><span id="line-45"> *       .build();</span>
-<span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> *    &lt;jv&gt;client&lt;/jv&gt; = RestClient.&lt;jsm&gt;builder&lt;/jsm&gt;()</span>
-<span class="source-line-no">048</span><span id="line-48"> *       .transport(&lt;jv&gt;transport&lt;/jv&gt;)</span>
-<span class="source-line-no">049</span><span id="line-49"> *       .build();</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;/p&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;p&gt;</span>
-<span class="source-line-no">053</span><span id="line-53"> * When a pooled keep-alive connection is torn down by the server before any response bytes are received (an</span>
-<span class="source-line-no">054</span><span id="line-54"> * immediate {@code EOF} surfaced by the JDK client as an {@code IOException} whose message is</span>
-<span class="source-line-no">055</span><span id="line-55"> * {@code "HTTP/1.1 header parser received no bytes"}), this transport replays the request exactly once on a fresh</span>
-<span class="source-line-no">056</span><span id="line-56"> * connection &amp;mdash; but only when {@link TransportRequest#isSafeToReplay()} proves it is safe (an idempotent method</span>
-<span class="source-line-no">057</span><span id="line-57"> * with an absent or repeatable body).  The JDK client already retries body-less {@code GET} requests itself, but not</span>
-<span class="source-line-no">058</span><span id="line-58"> * other idempotent methods (e.g. {@code PUT}/{@code DELETE}); this backstop closes that gap while never replaying a</span>
-<span class="source-line-no">059</span><span id="line-59"> * {@code POST} or any other non-idempotent request.</span>
-<span class="source-line-no">060</span><span id="line-60"> *</span>
-<span class="source-line-no">061</span><span id="line-61"> * &lt;p&gt;</span>
-<span class="source-line-no">062</span><span id="line-62"> * For SSRF-guard-active ({@code @Remote}) requests (see {@link TransportRequest#isSsrfGuardActive()}), this</span>
-<span class="source-line-no">063</span><span id="line-63"> * transport pin-on-connects: it resolves the request host, selects an address that passes</span>
-<span class="source-line-no">064</span><span id="line-64"> * {@link RemoteUrlPolicy}, and rewrites the request URI to that literal address</span>
-<span class="source-line-no">065</span><span id="line-65"> * (preserving the original host via an explicit {@code Host} header) so the socket connects only to the</span>
-<span class="source-line-no">066</span><span id="line-66"> * validated address &amp;mdash; and re-runs the same check on every {@code Location} hop via</span>
-<span class="source-line-no">067</span><span id="line-67"> * {@link PolicyEnforcedRedirects}. The JDK {@link HttpClient} has no connect-time/DNS SPI, so an IP-literal</span>
-<span class="source-line-no">068</span><span id="line-68"> * rewrite cannot preserve TLS SNI/hostname verification for the original hostname; per the locked design, policy</span>
-<span class="source-line-no">069</span><span id="line-69"> * -covered &lt;b&gt;HTTPS&lt;/b&gt; requests are therefore refused (fail closed) on this transport &amp;mdash; use a transport</span>
-<span class="source-line-no">070</span><span id="line-70"> * that supports connect-time pinning (e.g. Apache HttpClient 4.5/5), or set {@code allowPrivateUrls(true)} if the</span>
-<span class="source-line-no">071</span><span id="line-71"> * target is an intentional local-dev/intranet endpoint. A policy-covered request is also refused if the</span>
-<span class="source-line-no">072</span><span id="line-72"> * underlying {@link HttpClient} was built with automatic redirect-following enabled ({@link Redirect#NORMAL} or</span>
-<span class="source-line-no">073</span><span id="line-73"> * {@link Redirect#ALWAYS}), since this transport cannot re-validate hops that client follows on its own; build it</span>
-<span class="source-line-no">074</span><span id="line-74"> * with the default {@link Redirect#NEVER} (the JDK default) to let this transport's own redirect loop apply.</span>
-<span class="source-line-no">075</span><span id="line-75"> *</span>
-<span class="source-line-no">076</span><span id="line-76"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
-<span class="source-line-no">077</span><span id="line-77"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;Next-Generation REST Client&lt;/a&gt;</span>
-<span class="source-line-no">078</span><span id="line-78"> * &lt;/ul&gt;</span>
-<span class="source-line-no">079</span><span id="line-79"> *</span>
-<span class="source-line-no">080</span><span id="line-80"> * @since 9.2.1</span>
-<span class="source-line-no">081</span><span id="line-81"> */</span>
-<span class="source-line-no">082</span><span id="line-82">@SuppressWarnings({</span>
-<span class="source-line-no">083</span><span id="line-83">   "resource" // Not owned here; lifecycle is managed by the surrounding context</span>
-<span class="source-line-no">084</span><span id="line-84">})</span>
-<span class="source-line-no">085</span><span id="line-85">public final class JavaHttpTransport implements HttpTransport {</span>
-<span class="source-line-no">086</span><span id="line-86"></span>
-<span class="source-line-no">087</span><span id="line-87">   private static final String RESTRICTED_HEADERS_PROPERTY = "jdk.httpclient.allowRestrictedHeaders";</span>
-<span class="source-line-no">088</span><span id="line-88"></span>
-<span class="source-line-no">089</span><span id="line-89">   static {</span>
-<span class="source-line-no">090</span><span id="line-90">      // Best-effort: the JDK HttpClient rejects a caller-set "Host" header by default -- a fixed, JVM-wide,</span>
-<span class="source-line-no">091</span><span id="line-91">      // first-touch-wins setting cached the first time any HttpRequest.Builder.header() call reaches the JDK's</span>
-<span class="source-line-no">092</span><span id="line-92">      // internal restricted-header table. Setting this here, as early as this class is loaded (typically before</span>
-<span class="source-line-no">093</span><span id="line-93">      // any unrelated HttpClient usage elsewhere in the same JVM), lets HTTP pin-on-connect preserve the</span>
-<span class="source-line-no">094</span><span id="line-94">      // original Host header for virtual-hosted targets after the IP-literal rewrite. If some other code</span>
-<span class="source-line-no">095</span><span id="line-95">      // already forced that first touch, this has no effect and sendOncePinned() below fails closed instead of</span>
-<span class="source-line-no">096</span><span id="line-96">      // silently sending the wrong Host.</span>
-<span class="source-line-no">097</span><span id="line-97">      var existing = System.getProperty(RESTRICTED_HEADERS_PROPERTY);</span>
-<span class="source-line-no">098</span><span id="line-98">      if (ib(existing))</span>
-<span class="source-line-no">099</span><span id="line-99">         System.setProperty(RESTRICTED_HEADERS_PROPERTY, "host");</span>
-<span class="source-line-no">100</span><span id="line-100">      else if (! existing.toLowerCase(Locale.ROOT).contains("host"))</span>
-<span class="source-line-no">101</span><span id="line-101">         System.setProperty(RESTRICTED_HEADERS_PROPERTY, existing + ",host");</span>
-<span class="source-line-no">102</span><span id="line-102">      // Raw System property access is intentional: the JDK reads this value from System properties only, so Settings overrides/sources must not be consulted.</span>
-<span class="source-line-no">103</span><span id="line-103">   }</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   private final HttpClient httpClient;</span>
-<span class="source-line-no">106</span><span id="line-106"></span>
-<span class="source-line-no">107</span><span id="line-107">   JavaHttpTransport(JavaHttpTransportBuilder builder) {</span>
-<span class="source-line-no">108</span><span id="line-108">      this.httpClient = builder.httpClient != null ? builder.httpClient : HttpClient.newHttpClient();</span>
-<span class="source-line-no">109</span><span id="line-109">   }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   /**</span>
-<span class="source-line-no">112</span><span id="line-112">    * Returns a new builder for this transport.</span>
-<span class="source-line-no">113</span><span id="line-113">    *</span>
-<span class="source-line-no">114</span><span id="line-114">    * @return A new builder. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">115</span><span id="line-115">    */</span>
-<span class="source-line-no">116</span><span id="line-116">   public static JavaHttpTransportBuilder builder() {</span>
-<span class="source-line-no">117</span><span id="line-117">      return new JavaHttpTransportBuilder();</span>
-<span class="source-line-no">118</span><span id="line-118">   }</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   /**</span>
-<span class="source-line-no">121</span><span id="line-121">    * Returns a new instance backed by a default {@link HttpClient}.</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">124</span><span id="line-124">    */</span>
-<span class="source-line-no">125</span><span id="line-125">   public static JavaHttpTransport create() {</span>
-<span class="source-line-no">126</span><span id="line-126">      return builder().build();</span>
-<span class="source-line-no">127</span><span id="line-127">   }</span>
-<span class="source-line-no">128</span><span id="line-128"></span>
-<span class="source-line-no">129</span><span id="line-129">   @Override /* HttpTransport */</span>
-<span class="source-line-no">130</span><span id="line-130">   public TransportResponse execute(TransportRequest request) throws TransportException {</span>
-<span class="source-line-no">131</span><span id="line-131">      if (request.isSsrfGuardActive())</span>
-<span class="source-line-no">132</span><span id="line-132">         return executeWithPolicy(request);</span>
-<span class="source-line-no">133</span><span id="line-133">      requireNoUnguardedRedirects(request);</span>
-<span class="source-line-no">134</span><span id="line-134">      try {</span>
-<span class="source-line-no">135</span><span id="line-135">         return sendOnce(request);</span>
-<span class="source-line-no">136</span><span id="line-136">      } catch (StaleConnectionException e) {</span>
-<span class="source-line-no">137</span><span id="line-137">         // A pooled keep-alive connection was torn down by the server before any response was received.</span>
-<span class="source-line-no">138</span><span id="line-138">         // Replay once on a fresh connection, but only when it is provably safe (idempotent + repeatable body).</span>
-<span class="source-line-no">139</span><span id="line-139">         if (! request.isSafeToReplay())</span>
-<span class="source-line-no">140</span><span id="line-140">            throw e.asTransportException();</span>
-<span class="source-line-no">141</span><span id="line-141">         try {</span>
-<span class="source-line-no">142</span><span id="line-142">            return sendOnce(request);</span>
-<span class="source-line-no">143</span><span id="line-143">         } catch (StaleConnectionException e2) {</span>
-<span class="source-line-no">144</span><span id="line-144">            throw e2.asTransportException();</span>
-<span class="source-line-no">145</span><span id="line-145">         }</span>
-<span class="source-line-no">146</span><span id="line-146">      }</span>
-<span class="source-line-no">147</span><span id="line-147">   }</span>
-<span class="source-line-no">148</span><span id="line-148"></span>
-<span class="source-line-no">149</span><span id="line-149">   @Override /* HttpTransport */</span>
-<span class="source-line-no">150</span><span id="line-150">   public boolean supportsUrlPolicy() {</span>
-<span class="source-line-no">151</span><span id="line-151">      return true;</span>
-<span class="source-line-no">152</span><span id="line-152">   }</span>
-<span class="source-line-no">153</span><span id="line-153"></span>
-<span class="source-line-no">154</span><span id="line-154">   // A caller-supplied HttpClient that follows redirects itself would replay the request, credential headers included, against</span>
-<span class="source-line-no">155</span><span id="line-155">   // a redirect target of another origin; the JDK client offers no hook to strip them.  Refuse (fail closed) rather than send.</span>
-<span class="source-line-no">156</span><span id="line-156">   private void requireNoUnguardedRedirects(TransportRequest request) throws TransportException {</span>
-<span class="source-line-no">157</span><span id="line-157">      if (httpClient.followRedirects() == Redirect.NEVER)</span>
-<span class="source-line-no">158</span><span id="line-158">         return;</span>
-<span class="source-line-no">159</span><span id="line-159">      for (var h : request.getHeaders())</span>
-<span class="source-line-no">160</span><span id="line-160">         if (RedactedHeaders.isSensitive(h.name(), request.getRedirectStripHeaders()))</span>
-<span class="source-line-no">161</span><span id="line-161">            throw new TransportException("Refusing to send a request carrying the credential header '" + h.name()</span>
-<span class="source-line-no">162</span><span id="line-162">               + "' through a JavaHttpTransport whose HttpClient auto-follows redirects (" + httpClient.followRedirects()</span>
-<span class="source-line-no">163</span><span id="line-163">               + "); the JDK client would forward it to a redirect target of another origin.  Build the HttpClient with "</span>
-<span class="source-line-no">164</span><span id="line-164">               + "the default Redirect.NEVER, or pass the credential another way.");</span>
-<span class="source-line-no">165</span><span id="line-165">   }</span>
-<span class="source-line-no">166</span><span id="line-166"></span>
-<span class="source-line-no">167</span><span id="line-167">   // Runs the Juneau-controlled redirect loop, pinning each hop to a policy-allowed address.</span>
-<span class="source-line-no">168</span><span id="line-168">   private TransportResponse executeWithPolicy(TransportRequest request) throws TransportException {</span>
-<span class="source-line-no">169</span><span id="line-169">      if (httpClient.followRedirects() != Redirect.NEVER)</span>
-<span class="source-line-no">170</span><span id="line-170">         throw new TransportException("Refusing to send a policy-covered @Remote request through a "</span>
-<span class="source-line-no">171</span><span id="line-171">            + "JavaHttpTransport whose HttpClient auto-follows redirects (" + httpClient.followRedirects()</span>
-<span class="source-line-no">172</span><span id="line-172">            + "); this transport cannot re-validate hops that the client follows on its own. Build the "</span>
-<span class="source-line-no">173</span><span id="line-173">            + "HttpClient with the default Redirect.NEVER, or set allowPrivateUrls(true) if this is an "</span>
-<span class="source-line-no">174</span><span id="line-174">            + "intentional local-dev/intranet target.");</span>
-<span class="source-line-no">175</span><span id="line-175">      return PolicyEnforcedRedirects.execute(request, this::sendOncePinned);</span>
-<span class="source-line-no">176</span><span id="line-176">   }</span>
-<span class="source-line-no">177</span><span id="line-177"></span>
-<span class="source-line-no">178</span><span id="line-178">   // Performs one pin-on-connect hop: resolves and pins the request host, then sends without following redirects.</span>
-<span class="source-line-no">179</span><span id="line-179">   private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {</span>
-<span class="source-line-no">180</span><span id="line-180">      var uri = request.getUri();</span>
-<span class="source-line-no">181</span><span id="line-181">      var scheme = uri.getScheme();</span>
-<span class="source-line-no">182</span><span id="line-182">      if (neqic("http", scheme))</span>
-<span class="source-line-no">183</span><span id="line-183">         throw new TransportException("JavaHttpTransport cannot preserve TLS SNI/hostname verification while "</span>
-<span class="source-line-no">184</span><span id="line-184">            + "pinning the resolved address (the JDK HttpClient has no connect-time/DNS SPI); refusing "</span>
-<span class="source-line-no">185</span><span id="line-185">            + "(fail closed) a policy-covered HTTPS request: " + uri</span>
-<span class="source-line-no">186</span><span id="line-186">            + ".  Use a transport with connect-time pinning support (e.g. Apache HttpClient 4.5/5), or set "</span>
-<span class="source-line-no">187</span><span id="line-187">            + "allowPrivateUrls(true) if this is an intentional local-dev/intranet target.");</span>
-<span class="source-line-no">188</span><span id="line-188">      InetAddress pinned;</span>
-<span class="source-line-no">189</span><span id="line-189">      try {</span>
-<span class="source-line-no">190</span><span id="line-190">         pinned = RemoteUrlPolicy.selectAllowedAddress(requireHost(uri), false, RemoteUrlPolicy.AddressResolver.DEFAULT, request.getAllowedAddressRanges());</span>
-<span class="source-line-no">191</span><span id="line-191">      } catch (UnknownHostException e) {</span>
-<span class="source-line-no">192</span><span id="line-192">         throw new TransportException("Could not resolve @Remote request host: " + uri.getHost(), e);</span>
-<span class="source-line-no">193</span><span id="line-193">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">194</span><span id="line-194">         // A refused pin (every resolved address is denied) is reported as the documented TransportException.</span>
-<span class="source-line-no">195</span><span id="line-195">         throw new TransportException("HTTP transport error: " + e.getMessage(), e);</span>
-<span class="source-line-no">196</span><span id="line-196">      }</span>
-<span class="source-line-no">197</span><span id="line-197">      URI pinnedUri;</span>
-<span class="source-line-no">198</span><span id="line-198">      try {</span>
-<span class="source-line-no">199</span><span id="line-199">         pinnedUri = new URI(pinnedUriString(scheme, pinned, uri));</span>
-<span class="source-line-no">200</span><span id="line-200">      } catch (URISyntaxException e) {</span>
-<span class="source-line-no">201</span><span id="line-201">         throw new TransportException("Could not build a pinned request URI for: " + uri, e);</span>
-<span class="source-line-no">202</span><span id="line-202">      }</span>
-<span class="source-line-no">203</span><span id="line-203">      var hostHeader = uri.getPort() &gt;= 0 ? uri.getHost() + ":" + uri.getPort() : uri.getHost();</span>
-<span class="source-line-no">204</span><span id="line-204">      try {</span>
-<span class="source-line-no">205</span><span id="line-205">         return sendOnce(request, pinnedUri, hostHeader);</span>
-<span class="source-line-no">206</span><span id="line-206">      } catch (StaleConnectionException e) {</span>
-<span class="source-line-no">207</span><span id="line-207">         throw e.asTransportException();</span>
-<span class="source-line-no">208</span><span id="line-208">      }</span>
-<span class="source-line-no">209</span><span id="line-209">   }</span>
-<span class="source-line-no">210</span><span id="line-210"></span>
-<span class="source-line-no">211</span><span id="line-211">   // java.net.URI parses some host names (an underscore name such as my_service) with a null host, which</span>
-<span class="source-line-no">212</span><span id="line-212">   // InetAddress would resolve as the loopback address; refuse such a URI by name instead.</span>
-<span class="source-line-no">213</span><span id="line-213">   private static String requireHost(URI uri) {</span>
-<span class="source-line-no">214</span><span id="line-214">      var host = uri.getHost();</span>
-<span class="source-line-no">215</span><span id="line-215">      if (host == null)</span>
-<span class="source-line-no">216</span><span id="line-216">         throw iaex("Request URI has no host that java.net.URI can parse, so it cannot be pinned: %s", uri);</span>
-<span class="source-line-no">217</span><span id="line-217">      return host;</span>
-<span class="source-line-no">218</span><span id="line-218">   }</span>
-<span class="source-line-no">219</span><span id="line-219"></span>
-<span class="source-line-no">220</span><span id="line-220">   // Performs a single HTTP exchange.  Throws StaleConnectionException (a retryable signal) when the failure is a</span>
-<span class="source-line-no">221</span><span id="line-221">   // pre-response stale-connection failure; throws TransportException for every other failure.</span>
-<span class="source-line-no">222</span><span id="line-222">   private TransportResponse sendOnce(TransportRequest request) throws TransportException, StaleConnectionException {</span>
-<span class="source-line-no">223</span><span id="line-223">      return sendOnce(request, request.getUri(), null);</span>
-<span class="source-line-no">224</span><span id="line-224">   }</span>
-<span class="source-line-no">225</span><span id="line-225"></span>
-<span class="source-line-no">226</span><span id="line-226">   // Performs a single HTTP exchange against overrideUri (the pinned address) instead of request.getUri(),</span>
-<span class="source-line-no">227</span><span id="line-227">   // adding an explicit Host header (the original hostname[:port]) when hostHeader is non-null so virtual-hosting</span>
-<span class="source-line-no">228</span><span id="line-228">   // still works after the IP-literal rewrite.</span>
-<span class="source-line-no">229</span><span id="line-229">   private TransportResponse sendOnce(TransportRequest request, URI overrideUri, String hostHeader) throws TransportException, StaleConnectionException {</span>
-<span class="source-line-no">230</span><span id="line-230">      HttpRequest jdkRequest;</span>
-<span class="source-line-no">231</span><span id="line-231">      try {</span>
-<span class="source-line-no">232</span><span id="line-232">         jdkRequest = buildJdkRequest(request, overrideUri, hostHeader);</span>
-<span class="source-line-no">233</span><span id="line-233">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">234</span><span id="line-234">         // The JDK refuses a URI it cannot use (for example an underscore host name, which java.net.URI parses</span>
-<span class="source-line-no">235</span><span id="line-235">         // with a null host) or an invalid header.</span>
-<span class="source-line-no">236</span><span id="line-236">         if (hostHeader == null)</span>
-<span class="source-line-no">237</span><span id="line-237">            throw new TransportException("Could not build the HTTP request for " + request.getUri() + ": " + e.getMessage(), e);</span>
-<span class="source-line-no">238</span><span id="line-238">         // With hostHeader set, the JDK rejected the "Host" header override -- i.e. the static</span>
-<span class="source-line-no">239</span><span id="line-239">         // allowRestrictedHeaders attempt above lost the first-touch race to some other HttpClient usage in this</span>
-<span class="source-line-no">240</span><span id="line-240">         // JVM. Fail closed rather than silently pinning without preserving the original Host.</span>
-<span class="source-line-no">241</span><span id="line-241">         throw new TransportException("Could not preserve the original Host header while pin-on-connecting a "</span>
-<span class="source-line-no">242</span><span id="line-242">            + "policy-covered HTTP request (the JDK HttpClient's restricted-header allowlist was already "</span>
-<span class="source-line-no">243</span><span id="line-243">            + "initialized elsewhere in this JVM); refusing (fail closed): " + request.getUri()</span>
-<span class="source-line-no">244</span><span id="line-244">            + ".  Set the JVM flag -Djdk.httpclient.allowRestrictedHeaders=host, use a transport with native "</span>
-<span class="source-line-no">245</span><span id="line-245">            + "connect-time pinning support (e.g. Apache HttpClient 4.5/5), or set allowPrivateUrls(true) if "</span>
-<span class="source-line-no">246</span><span id="line-246">            + "this is an intentional local-dev/intranet target.", e);</span>
-<span class="source-line-no">247</span><span id="line-247">      }</span>
-<span class="source-line-no">248</span><span id="line-248">      HttpResponse&lt;InputStream&gt; jdkResponse;</span>
-<span class="source-line-no">249</span><span id="line-249">      try {</span>
-<span class="source-line-no">250</span><span id="line-250">         jdkResponse = httpClient.send(jdkRequest, BodyHandlers.ofInputStream());</span>
-<span class="source-line-no">251</span><span id="line-251">      } catch (IOException e) {</span>
-<span class="source-line-no">252</span><span id="line-252">         // httpClient.send() only returns once the response headers have been read, so any IOException here</span>
-<span class="source-line-no">253</span><span id="line-253">         // occurred before any response bytes were received.</span>
-<span class="source-line-no">254</span><span id="line-254">         if (TransportException.isStaleConnectionFailure(e))</span>
-<span class="source-line-no">255</span><span id="line-255">            throw new StaleConnectionException(e);</span>
-<span class="source-line-no">256</span><span id="line-256">         throw new TransportException("HTTP transport error: " + e.getMessage(), e);</span>
-<span class="source-line-no">257</span><span id="line-257">      } catch (InterruptedException e) {</span>
-<span class="source-line-no">258</span><span id="line-258">         Thread.currentThread().interrupt();</span>
-<span class="source-line-no">259</span><span id="line-259">         throw new TransportException("HTTP request interrupted", e);</span>
-<span class="source-line-no">260</span><span id="line-260">      }</span>
-<span class="source-line-no">261</span><span id="line-261">      return buildTransportResponse(jdkResponse);</span>
-<span class="source-line-no">262</span><span id="line-262">   }</span>
-<span class="source-line-no">263</span><span id="line-263"></span>
-<span class="source-line-no">264</span><span id="line-264">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">265</span><span id="line-265">   // Internal helpers</span>
-<span class="source-line-no">266</span><span id="line-266">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">267</span><span id="line-267"></span>
-<span class="source-line-no">268</span><span id="line-268">   // Builds a URI string identical to "uri" except with its host replaced by the pinned literal address, by</span>
-<span class="source-line-no">269</span><span id="line-269">   // concatenating uri's already-percent-encoded raw components -- NOT via the multi-arg java.net.URI</span>
-<span class="source-line-no">270</span><span id="line-270">   // constructor, which treats its arguments as decoded components and would double-encode any "%" already</span>
-<span class="source-line-no">271</span><span id="line-271">   // present in the raw path/query/fragment (e.g. "%20" would become "%2520").</span>
-<span class="source-line-no">272</span><span id="line-272">   private static String pinnedUriString(String scheme, InetAddress pinned, URI uri) {</span>
-<span class="source-line-no">273</span><span id="line-273">      var hostLiteral = pinned instanceof Inet6Address ? "[" + pinned.getHostAddress() + "]" : pinned.getHostAddress();</span>
-<span class="source-line-no">274</span><span id="line-274">      var sb = new StringBuilder(scheme).append("://").append(hostLiteral);</span>
-<span class="source-line-no">275</span><span id="line-275">      if (uri.getPort() &gt;= 0)</span>
-<span class="source-line-no">276</span><span id="line-276">         sb.append(':').append(uri.getPort());</span>
-<span class="source-line-no">277</span><span id="line-277">      if (uri.getRawPath() != null)</span>
-<span class="source-line-no">278</span><span id="line-278">         sb.append(uri.getRawPath());</span>
-<span class="source-line-no">279</span><span id="line-279">      if (uri.getRawQuery() != null)</span>
-<span class="source-line-no">280</span><span id="line-280">         sb.append('?').append(uri.getRawQuery());</span>
-<span class="source-line-no">281</span><span id="line-281">      if (uri.getRawFragment() != null)</span>
-<span class="source-line-no">282</span><span id="line-282">         sb.append('#').append(uri.getRawFragment());</span>
-<span class="source-line-no">283</span><span id="line-283">      return sb.toString();</span>
-<span class="source-line-no">284</span><span id="line-284">   }</span>
-<span class="source-line-no">285</span><span id="line-285"></span>
-<span class="source-line-no">286</span><span id="line-286">   private static HttpRequest buildJdkRequest(TransportRequest request, URI uri, String hostHeader) {</span>
-<span class="source-line-no">287</span><span id="line-287">      var builder = HttpRequest.newBuilder().uri(uri).method(request.getMethod(), buildBodyPublisher(request.getBody()));</span>
-<span class="source-line-no">288</span><span id="line-288">      if (hostHeader != null)</span>
-<span class="source-line-no">289</span><span id="line-289">         builder.header("Host", hostHeader);</span>
-<span class="source-line-no">290</span><span id="line-290">      for (var h : request.getHeaders())</span>
-<span class="source-line-no">291</span><span id="line-291">         builder.header(h.name(), h.value());</span>
-<span class="source-line-no">292</span><span id="line-292">      var timeout = request.getTimeout();</span>
-<span class="source-line-no">293</span><span id="line-293">      if (timeout != null)</span>
-<span class="source-line-no">294</span><span id="line-294">         builder.timeout(timeout);</span>
-<span class="source-line-no">295</span><span id="line-295">      return builder.build();</span>
-<span class="source-line-no">296</span><span id="line-296">   }</span>
-<span class="source-line-no">297</span><span id="line-297"></span>
-<span class="source-line-no">298</span><span id="line-298">   @SuppressWarnings({</span>
-<span class="source-line-no">299</span><span id="line-299">      "java:S2095" // PipedInputStream closed by HttpClient when body publishing finishes; PipedOutputStream closed in writer thread try-with-resources</span>
-<span class="source-line-no">300</span><span id="line-300">   })</span>
-<span class="source-line-no">301</span><span id="line-301">   private static BodyPublisher buildBodyPublisher(TransportBody body) {</span>
-<span class="source-line-no">302</span><span id="line-302">      if (body == null)</span>
-<span class="source-line-no">303</span><span id="line-303">         return BodyPublishers.noBody();</span>
-<span class="source-line-no">304</span><span id="line-304">      // Use a pipe so body.writeTo() streams directly to the JDK client without full in-memory buffering.</span>
-<span class="source-line-no">305</span><span id="line-305">      // The writer runs on a daemon thread; the JDK client reads from the PipedInputStream on its own threads.</span>
-<span class="source-line-no">306</span><span id="line-306">      // The supplier runs when the client publishes the request body (not when the HttpRequest is built).</span>
-<span class="source-line-no">307</span><span id="line-307">      var publisher = BodyPublishers.ofInputStream(() -&gt; {</span>
-<span class="source-line-no">308</span><span id="line-308">         var in = new PipedInputStream();</span>
-<span class="source-line-no">309</span><span id="line-309">         try {</span>
-<span class="source-line-no">310</span><span id="line-310">            var out = new PipedOutputStream(in);</span>
-<span class="source-line-no">311</span><span id="line-311">            var writer = new Thread(() -&gt; {</span>
-<span class="source-line-no">312</span><span id="line-312">               try (out) {</span>
-<span class="source-line-no">313</span><span id="line-313">                  body.writeTo(out);</span>
-<span class="source-line-no">314</span><span id="line-314">               } catch (IOException e) {</span>
-<span class="source-line-no">315</span><span id="line-315">                  // Closing the pipe on error causes the reader to see an IOException,</span>
-<span class="source-line-no">316</span><span id="line-316">                  // which propagates to the JDK client as a send failure.</span>
-<span class="source-line-no">317</span><span id="line-317">               }</span>
-<span class="source-line-no">318</span><span id="line-318">            }, "juneau-ng-body-writer");</span>
-<span class="source-line-no">319</span><span id="line-319">            writer.setDaemon(true);</span>
-<span class="source-line-no">320</span><span id="line-320">            writer.start();</span>
-<span class="source-line-no">321</span><span id="line-321">            return in;</span>
-<span class="source-line-no">322</span><span id="line-322">         } catch (IOException e) {</span>
-<span class="source-line-no">323</span><span id="line-323">            try {</span>
-<span class="source-line-no">324</span><span id="line-324">               in.close();</span>
-<span class="source-line-no">325</span><span id="line-325">            } catch (IOException e2) {</span>
-<span class="source-line-no">326</span><span id="line-326">               e.addSuppressed(e2);</span>
-<span class="source-line-no">327</span><span id="line-327">            }</span>
-<span class="source-line-no">328</span><span id="line-328">            throw new UncheckedIOException(e);</span>
-<span class="source-line-no">329</span><span id="line-329">         }</span>
-<span class="source-line-no">330</span><span id="line-330">      });</span>
-<span class="source-line-no">331</span><span id="line-331">      // A repeatable body with a known length is sent fixed-length (Content-Length) rather than chunked;</span>
-<span class="source-line-no">332</span><span id="line-332">      // unknown-length (or non-repeatable streaming) bodies keep chunked transfer encoding.</span>
-<span class="source-line-no">333</span><span id="line-333">      var length = body.getContentLength();</span>
-<span class="source-line-no">334</span><span id="line-334">      if (body.isRepeatable() &amp;&amp; length &gt;= 0)</span>
-<span class="source-line-no">335</span><span id="line-335">         return length == 0 ? BodyPublishers.noBody() : BodyPublishers.fromPublisher(publisher, length);</span>
-<span class="source-line-no">336</span><span id="line-336">      return publisher;</span>
-<span class="source-line-no">337</span><span id="line-337">   }</span>
-<span class="source-line-no">338</span><span id="line-338"></span>
-<span class="source-line-no">339</span><span id="line-339">   private static TransportResponse buildTransportResponse(HttpResponse&lt;InputStream&gt; jdkResponse) {</span>
-<span class="source-line-no">340</span><span id="line-340">      var body = jdkResponse.body();</span>
-<span class="source-line-no">341</span><span id="line-341">      var builder = TransportResponse.builder()</span>
-<span class="source-line-no">342</span><span id="line-342">         .statusCode(jdkResponse.statusCode())</span>
-<span class="source-line-no">343</span><span id="line-343">         .body(body)</span>
-<span class="source-line-no">344</span><span id="line-344">         .closeCallback(body);</span>
-<span class="source-line-no">345</span><span id="line-345">      jdkResponse.headers().map().forEach((name, values) -&gt;</span>
-<span class="source-line-no">346</span><span id="line-346">         values.forEach(value -&gt; builder.header(name, value)));</span>
-<span class="source-line-no">347</span><span id="line-347">      return builder.build();</span>
-<span class="source-line-no">348</span><span id="line-348">   }</span>
-<span class="source-line-no">349</span><span id="line-349"></span>
-<span class="source-line-no">350</span><span id="line-350">   // Internal signal that a pre-response stale-connection failure occurred and may be retried once.  Carries the</span>
-<span class="source-line-no">351</span><span id="line-351">   // original cause so the caller can build the user-visible TransportException if the retry is not attempted or</span>
-<span class="source-line-no">352</span><span id="line-352">   // also fails.</span>
-<span class="source-line-no">353</span><span id="line-353">   private static final class StaleConnectionException extends Exception {</span>
-<span class="source-line-no">354</span><span id="line-354">      private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">355</span><span id="line-355"></span>
-<span class="source-line-no">356</span><span id="line-356">      StaleConnectionException(Throwable cause) {</span>
-<span class="source-line-no">357</span><span id="line-357">         super(cause);</span>
-<span class="source-line-no">358</span><span id="line-358">      }</span>
-<span class="source-line-no">359</span><span id="line-359"></span>
-<span class="source-line-no">360</span><span id="line-360">      TransportException asTransportException() {</span>
-<span class="source-line-no">361</span><span id="line-361">         return new TransportException("HTTP transport error: " + getCause().getMessage(), getCause());</span>
-<span class="source-line-no">362</span><span id="line-362">      }</span>
-<span class="source-line-no">363</span><span id="line-363">   }</span>
-<span class="source-line-no">364</span><span id="line-364">}</span>
+<span class="source-line-no">027</span><span id="line-27">import java.time.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import java.util.*;</span>
+<span class="source-line-no">029</span><span id="line-29"></span>
+<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.http.*;</span>
+<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.http.remote.*;</span>
+<span class="source-line-no">032</span><span id="line-32"></span>
+<span class="source-line-no">033</span><span id="line-33">/**</span>
+<span class="source-line-no">034</span><span id="line-34"> * {@link HttpTransport} implementation backed by the JDK's built-in {@link HttpClient}.</span>
+<span class="source-line-no">035</span><span id="line-35"> *</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * This is the &lt;b&gt;default&lt;/b&gt; transport used by {@link RestClient}.  It is built into the</span>
+<span class="source-line-no">038</span><span id="line-38"> * {@code juneau-rest-client} artifact, requires no external dependencies, and is always available on Java 11+.</span>
+<span class="source-line-no">039</span><span id="line-39"> *</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * It is auto-discovered via {@link java.util.ServiceLoader} and can also be instantiated explicitly:</span>
+<span class="source-line-no">042</span><span id="line-42"> *</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> *    &lt;jv&gt;transport&lt;/jv&gt; = JavaHttpTransport.&lt;jsm&gt;builder&lt;/jsm&gt;()</span>
+<span class="source-line-no">045</span><span id="line-45"> *       .httpClient(HttpClient.newHttpClient())</span>
+<span class="source-line-no">046</span><span id="line-46"> *       .build();</span>
+<span class="source-line-no">047</span><span id="line-47"> *</span>
+<span class="source-line-no">048</span><span id="line-48"> *    &lt;jv&gt;client&lt;/jv&gt; = RestClient.&lt;jsm&gt;builder&lt;/jsm&gt;()</span>
+<span class="source-line-no">049</span><span id="line-49"> *       .transport(&lt;jv&gt;transport&lt;/jv&gt;)</span>
+<span class="source-line-no">050</span><span id="line-50"> *       .build();</span>
+<span class="source-line-no">051</span><span id="line-51"> * &lt;/p&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> *</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;p&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> * When a pooled keep-alive connection is torn down by the server before any response bytes are received (an</span>
+<span class="source-line-no">055</span><span id="line-55"> * immediate {@code EOF} surfaced by the JDK client as an {@code IOException} whose message is</span>
+<span class="source-line-no">056</span><span id="line-56"> * {@code "HTTP/1.1 header parser received no bytes"}), this transport replays the request exactly once on a fresh</span>
+<span class="source-line-no">057</span><span id="line-57"> * connection &amp;mdash; but only when {@link TransportRequest#isSafeToReplay()} proves it is safe (an idempotent method</span>
+<span class="source-line-no">058</span><span id="line-58"> * with an absent or repeatable body).  The JDK client already retries body-less {@code GET} requests itself, but not</span>
+<span class="source-line-no">059</span><span id="line-59"> * other idempotent methods (e.g. {@code PUT}/{@code DELETE}); this backstop closes that gap while never replaying a</span>
+<span class="source-line-no">060</span><span id="line-60"> * {@code POST} or any other non-idempotent request.</span>
+<span class="source-line-no">061</span><span id="line-61"> *</span>
+<span class="source-line-no">062</span><span id="line-62"> * &lt;p&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> * For SSRF-guard-active ({@code @Remote}) requests (see {@link TransportRequest#isSsrfGuardActive()}), this</span>
+<span class="source-line-no">064</span><span id="line-64"> * transport pin-on-connects: it resolves the request host, selects an address that passes</span>
+<span class="source-line-no">065</span><span id="line-65"> * {@link RemoteUrlPolicy}, and rewrites the request URI to that literal address</span>
+<span class="source-line-no">066</span><span id="line-66"> * (preserving the original host via an explicit {@code Host} header) so the socket connects only to the</span>
+<span class="source-line-no">067</span><span id="line-67"> * validated address &amp;mdash; and re-runs the same check on every {@code Location} hop via</span>
+<span class="source-line-no">068</span><span id="line-68"> * {@link PolicyEnforcedRedirects}. The JDK {@link HttpClient} has no connect-time/DNS SPI, so an IP-literal</span>
+<span class="source-line-no">069</span><span id="line-69"> * rewrite cannot preserve TLS SNI/hostname verification for the original hostname; per the locked design, policy</span>
+<span class="source-line-no">070</span><span id="line-70"> * -covered &lt;b&gt;HTTPS&lt;/b&gt; requests are therefore refused (fail closed) on this transport &amp;mdash; use a transport</span>
+<span class="source-line-no">071</span><span id="line-71"> * that supports connect-time pinning (e.g. Apache HttpClient 4.5/5), or set {@code allowPrivateUrls(true)} if the</span>
+<span class="source-line-no">072</span><span id="line-72"> * target is an intentional local-dev/intranet endpoint. A policy-covered request is also refused if the</span>
+<span class="source-line-no">073</span><span id="line-73"> * underlying {@link HttpClient} was built with automatic redirect-following enabled ({@link Redirect#NORMAL} or</span>
+<span class="source-line-no">074</span><span id="line-74"> * {@link Redirect#ALWAYS}), since this transport cannot re-validate hops that client follows on its own; build it</span>
+<span class="source-line-no">075</span><span id="line-75"> * with the default {@link Redirect#NEVER} (the JDK default) to let this transport's own redirect loop apply.</span>
+<span class="source-line-no">076</span><span id="line-76"> *</span>
+<span class="source-line-no">077</span><span id="line-77"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">078</span><span id="line-78"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;Next-Generation REST Client&lt;/a&gt;</span>
+<span class="source-line-no">079</span><span id="line-79"> * &lt;/ul&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> *</span>
+<span class="source-line-no">081</span><span id="line-81"> * @since 9.2.1</span>
+<span class="source-line-no">082</span><span id="line-82"> */</span>
+<span class="source-line-no">083</span><span id="line-83">@SuppressWarnings({</span>
+<span class="source-line-no">084</span><span id="line-84">   "resource" // Not owned here; lifecycle is managed by the surrounding context</span>
+<span class="source-line-no">085</span><span id="line-85">})</span>
+<span class="source-line-no">086</span><span id="line-86">public final class JavaHttpTransport implements HttpTransport {</span>
+<span class="source-line-no">087</span><span id="line-87"></span>
+<span class="source-line-no">088</span><span id="line-88">   /** Default connect timeout of the {@link HttpClient} this transport creates when none is supplied. */</span>
+<span class="source-line-no">089</span><span id="line-89">   public static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(30);</span>
+<span class="source-line-no">090</span><span id="line-90"></span>
+<span class="source-line-no">091</span><span id="line-91">   /** Default per-request timeout (until the response headers arrive) applied when the request carries none. */</span>
+<span class="source-line-no">092</span><span id="line-92">   public static final Duration DEFAULT_REQUEST_TIMEOUT = Duration.ofSeconds(60);</span>
+<span class="source-line-no">093</span><span id="line-93"></span>
+<span class="source-line-no">094</span><span id="line-94">   /** Default cap, in bytes, on the response body this transport will deliver. */</span>
+<span class="source-line-no">095</span><span id="line-95">   public static final long DEFAULT_MAX_RESPONSE_BYTES = 128L * 1024 * 1024;</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">   private static final String RESTRICTED_HEADERS_PROPERTY = "jdk.httpclient.allowRestrictedHeaders";</span>
+<span class="source-line-no">098</span><span id="line-98"></span>
+<span class="source-line-no">099</span><span id="line-99">   private final HttpClient httpClient;</span>
+<span class="source-line-no">100</span><span id="line-100"></span>
+<span class="source-line-no">101</span><span id="line-101">   private final long maxResponseBytes;</span>
+<span class="source-line-no">102</span><span id="line-102"></span>
+<span class="source-line-no">103</span><span id="line-103">   JavaHttpTransport(JavaHttpTransportBuilder builder) {</span>
+<span class="source-line-no">104</span><span id="line-104">      this.httpClient = builder.httpClient != null ? builder.httpClient : HttpClient.newBuilder().connectTimeout(DEFAULT_CONNECT_TIMEOUT).build();</span>
+<span class="source-line-no">105</span><span id="line-105">      this.maxResponseBytes = builder.maxResponseBytes;</span>
+<span class="source-line-no">106</span><span id="line-106">      if (builder.allowHostHeaderOverride)</span>
+<span class="source-line-no">107</span><span id="line-107">         allowHostHeader();</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   // Raw System property access is intentional: the JDK reads this value from System properties only, so Settings overrides/sources must not be consulted.</span>
+<span class="source-line-no">111</span><span id="line-111">   private static void allowHostHeader() {</span>
+<span class="source-line-no">112</span><span id="line-112">      var existing = System.getProperty(RESTRICTED_HEADERS_PROPERTY);</span>
+<span class="source-line-no">113</span><span id="line-113">      if (ib(existing))</span>
+<span class="source-line-no">114</span><span id="line-114">         System.setProperty(RESTRICTED_HEADERS_PROPERTY, "host");</span>
+<span class="source-line-no">115</span><span id="line-115">      else if (! existing.toLowerCase(Locale.ROOT).contains("host"))</span>
+<span class="source-line-no">116</span><span id="line-116">         System.setProperty(RESTRICTED_HEADERS_PROPERTY, existing + ",host");</span>
+<span class="source-line-no">117</span><span id="line-117">   }</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">   /**</span>
+<span class="source-line-no">120</span><span id="line-120">    * Returns a new builder for this transport.</span>
+<span class="source-line-no">121</span><span id="line-121">    *</span>
+<span class="source-line-no">122</span><span id="line-122">    * @return A new builder. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">123</span><span id="line-123">    */</span>
+<span class="source-line-no">124</span><span id="line-124">   public static JavaHttpTransportBuilder builder() {</span>
+<span class="source-line-no">125</span><span id="line-125">      return new JavaHttpTransportBuilder();</span>
+<span class="source-line-no">126</span><span id="line-126">   }</span>
+<span class="source-line-no">127</span><span id="line-127"></span>
+<span class="source-line-no">128</span><span id="line-128">   /**</span>
+<span class="source-line-no">129</span><span id="line-129">    * Returns a new instance backed by a default {@link HttpClient}.</span>
+<span class="source-line-no">130</span><span id="line-130">    *</span>
+<span class="source-line-no">131</span><span id="line-131">    * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">132</span><span id="line-132">    */</span>
+<span class="source-line-no">133</span><span id="line-133">   public static JavaHttpTransport create() {</span>
+<span class="source-line-no">134</span><span id="line-134">      return builder().build();</span>
+<span class="source-line-no">135</span><span id="line-135">   }</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">   @Override /* HttpTransport */</span>
+<span class="source-line-no">138</span><span id="line-138">   public TransportResponse execute(TransportRequest request) throws TransportException {</span>
+<span class="source-line-no">139</span><span id="line-139">      if (request.isSsrfGuardActive())</span>
+<span class="source-line-no">140</span><span id="line-140">         return executeWithPolicy(request);</span>
+<span class="source-line-no">141</span><span id="line-141">      requireNoUnguardedRedirects(request);</span>
+<span class="source-line-no">142</span><span id="line-142">      try {</span>
+<span class="source-line-no">143</span><span id="line-143">         return sendOnce(request);</span>
+<span class="source-line-no">144</span><span id="line-144">      } catch (StaleConnectionException e) {</span>
+<span class="source-line-no">145</span><span id="line-145">         // A pooled keep-alive connection was torn down by the server before any response was received.</span>
+<span class="source-line-no">146</span><span id="line-146">         // Replay once on a fresh connection, but only when it is provably safe (idempotent + repeatable body).</span>
+<span class="source-line-no">147</span><span id="line-147">         if (! request.isSafeToReplay())</span>
+<span class="source-line-no">148</span><span id="line-148">            throw e.asTransportException();</span>
+<span class="source-line-no">149</span><span id="line-149">         try {</span>
+<span class="source-line-no">150</span><span id="line-150">            return sendOnce(request);</span>
+<span class="source-line-no">151</span><span id="line-151">         } catch (StaleConnectionException e2) {</span>
+<span class="source-line-no">152</span><span id="line-152">            throw e2.asTransportException();</span>
+<span class="source-line-no">153</span><span id="line-153">         }</span>
+<span class="source-line-no">154</span><span id="line-154">      }</span>
+<span class="source-line-no">155</span><span id="line-155">   }</span>
+<span class="source-line-no">156</span><span id="line-156"></span>
+<span class="source-line-no">157</span><span id="line-157">   @Override /* HttpTransport */</span>
+<span class="source-line-no">158</span><span id="line-158">   public boolean supportsUrlPolicy() {</span>
+<span class="source-line-no">159</span><span id="line-159">      return true;</span>
+<span class="source-line-no">160</span><span id="line-160">   }</span>
+<span class="source-line-no">161</span><span id="line-161"></span>
+<span class="source-line-no">162</span><span id="line-162">   // A caller-supplied HttpClient that follows redirects itself would replay the request, credential headers included, against</span>
+<span class="source-line-no">163</span><span id="line-163">   // a redirect target of another origin; the JDK client offers no hook to strip them.  Refuse (fail closed) rather than send.</span>
+<span class="source-line-no">164</span><span id="line-164">   private void requireNoUnguardedRedirects(TransportRequest request) throws TransportException {</span>
+<span class="source-line-no">165</span><span id="line-165">      if (httpClient.followRedirects() == Redirect.NEVER)</span>
+<span class="source-line-no">166</span><span id="line-166">         return;</span>
+<span class="source-line-no">167</span><span id="line-167">      for (var h : request.getHeaders())</span>
+<span class="source-line-no">168</span><span id="line-168">         if (RedactedHeaders.isSensitive(h.name(), RedirectSecurity.stripOnCrossOrigin()))</span>
+<span class="source-line-no">169</span><span id="line-169">            throw new TransportException("Refusing to send a request carrying the credential header '" + h.name()</span>
+<span class="source-line-no">170</span><span id="line-170">               + "' through a JavaHttpTransport whose HttpClient auto-follows redirects (" + httpClient.followRedirects()</span>
+<span class="source-line-no">171</span><span id="line-171">               + "); the JDK client would forward it to a redirect target of another origin.  Build the HttpClient with "</span>
+<span class="source-line-no">172</span><span id="line-172">               + "the default Redirect.NEVER, or pass the credential another way.");</span>
+<span class="source-line-no">173</span><span id="line-173">   }</span>
+<span class="source-line-no">174</span><span id="line-174"></span>
+<span class="source-line-no">175</span><span id="line-175">   // Runs the Juneau-controlled redirect loop, pinning each hop to a policy-allowed address.</span>
+<span class="source-line-no">176</span><span id="line-176">   private TransportResponse executeWithPolicy(TransportRequest request) throws TransportException {</span>
+<span class="source-line-no">177</span><span id="line-177">      if (httpClient.followRedirects() != Redirect.NEVER)</span>
+<span class="source-line-no">178</span><span id="line-178">         throw new TransportException("Refusing to send a policy-covered @Remote request through a "</span>
+<span class="source-line-no">179</span><span id="line-179">            + "JavaHttpTransport whose HttpClient auto-follows redirects (" + httpClient.followRedirects()</span>
+<span class="source-line-no">180</span><span id="line-180">            + "); this transport cannot re-validate hops that the client follows on its own. Build the "</span>
+<span class="source-line-no">181</span><span id="line-181">            + "HttpClient with the default Redirect.NEVER, or set allowPrivateUrls(true) if this is an "</span>
+<span class="source-line-no">182</span><span id="line-182">            + "intentional local-dev/intranet target.");</span>
+<span class="source-line-no">183</span><span id="line-183">      return PolicyEnforcedRedirects.execute(request, this::sendOncePinned);</span>
+<span class="source-line-no">184</span><span id="line-184">   }</span>
+<span class="source-line-no">185</span><span id="line-185"></span>
+<span class="source-line-no">186</span><span id="line-186">   // Performs one pin-on-connect hop: resolves and pins the request host, then sends without following redirects.</span>
+<span class="source-line-no">187</span><span id="line-187">   private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {</span>
+<span class="source-line-no">188</span><span id="line-188">      var uri = request.getUri();</span>
+<span class="source-line-no">189</span><span id="line-189">      var scheme = uri.getScheme();</span>
+<span class="source-line-no">190</span><span id="line-190">      if (neqic("http", scheme))</span>
+<span class="source-line-no">191</span><span id="line-191">         throw new TransportException("JavaHttpTransport cannot preserve TLS SNI/hostname verification while "</span>
+<span class="source-line-no">192</span><span id="line-192">            + "pinning the resolved address (the JDK HttpClient has no connect-time/DNS SPI); refusing "</span>
+<span class="source-line-no">193</span><span id="line-193">            + "(fail closed) a policy-covered HTTPS request: " + uri</span>
+<span class="source-line-no">194</span><span id="line-194">            + ".  Use a transport with connect-time pinning support (e.g. Apache HttpClient 4.5/5), or set "</span>
+<span class="source-line-no">195</span><span id="line-195">            + "allowPrivateUrls(true) if this is an intentional local-dev/intranet target.");</span>
+<span class="source-line-no">196</span><span id="line-196">      InetAddress pinned;</span>
+<span class="source-line-no">197</span><span id="line-197">      try {</span>
+<span class="source-line-no">198</span><span id="line-198">         pinned = RemoteUrlPolicy.selectAllowedAddress(requireHost(uri), false, RemoteUrlPolicy.AddressResolver.DEFAULT, request.getAllowedAddressRanges());</span>
+<span class="source-line-no">199</span><span id="line-199">      } catch (UnknownHostException e) {</span>
+<span class="source-line-no">200</span><span id="line-200">         throw new TransportException("Could not resolve @Remote request host: " + uri.getHost(), e);</span>
+<span class="source-line-no">201</span><span id="line-201">      } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">202</span><span id="line-202">         // A refused pin (every resolved address is denied) is reported as the documented TransportException.</span>
+<span class="source-line-no">203</span><span id="line-203">         throw new TransportException("HTTP transport error: " + e.getMessage(), e);</span>
+<span class="source-line-no">204</span><span id="line-204">      }</span>
+<span class="source-line-no">205</span><span id="line-205">      URI pinnedUri;</span>
+<span class="source-line-no">206</span><span id="line-206">      try {</span>
+<span class="source-line-no">207</span><span id="line-207">         pinnedUri = new URI(pinnedUriString(scheme, pinned, uri));</span>
+<span class="source-line-no">208</span><span id="line-208">      } catch (URISyntaxException e) {</span>
+<span class="source-line-no">209</span><span id="line-209">         throw new TransportException("Could not build a pinned request URI for: " + uri, e);</span>
+<span class="source-line-no">210</span><span id="line-210">      }</span>
+<span class="source-line-no">211</span><span id="line-211">      var hostHeader = uri.getPort() &gt;= 0 ? uri.getHost() + ":" + uri.getPort() : uri.getHost();</span>
+<span class="source-line-no">212</span><span id="line-212">      try {</span>
+<span class="source-line-no">213</span><span id="line-213">         return sendOnce(request, pinnedUri, hostHeader);</span>
+<span class="source-line-no">214</span><span id="line-214">      } catch (StaleConnectionException e) {</span>
+<span class="source-line-no">215</span><span id="line-215">         throw e.asTransportException();</span>
+<span class="source-line-no">216</span><span id="line-216">      }</span>
+<span class="source-line-no">217</span><span id="line-217">   }</span>
+<span class="source-line-no">218</span><span id="line-218"></span>
+<span class="source-line-no">219</span><span id="line-219">   // java.net.URI parses some host names (an underscore name such as my_service) with a null host, which</span>
+<span class="source-line-no">220</span><span id="line-220">   // InetAddress would resolve as the loopback address; refuse such a URI by name instead.</span>
+<span class="source-line-no">221</span><span id="line-221">   private static String requireHost(URI uri) {</span>
+<span class="source-line-no">222</span><span id="line-222">      var host = uri.getHost();</span>
+<span class="source-line-no">223</span><span id="line-223">      if (host == null)</span>
+<span class="source-line-no">224</span><span id="line-224">         throw iaex("Request URI has no host that java.net.URI can parse, so it cannot be pinned: %s", uri);</span>
+<span class="source-line-no">225</span><span id="line-225">      return host;</span>
+<span class="source-line-no">226</span><span id="line-226">   }</span>
+<span class="source-line-no">227</span><span id="line-227"></span>
+<span class="source-line-no">228</span><span id="line-228">   // Performs a single HTTP exchange.  Throws StaleConnectionException (a retryable signal) when the failure is a</span>
+<span class="source-line-no">229</span><span id="line-229">   // pre-response stale-connection failure; throws TransportException for every other failure.</span>
+<span class="source-line-no">230</span><span id="line-230">   private TransportResponse sendOnce(TransportRequest request) throws TransportException, StaleConnectionException {</span>
+<span class="source-line-no">231</span><span id="line-231">      return sendOnce(request, request.getUri(), null);</span>
+<span class="source-line-no">232</span><span id="line-232">   }</span>
+<span class="source-line-no">233</span><span id="line-233"></span>
+<span class="source-line-no">234</span><span id="line-234">   // Performs a single HTTP exchange against overrideUri (the pinned address) instead of request.getUri(),</span>
+<span class="source-line-no">235</span><span id="line-235">   // adding an explicit Host header (the original hostname[:port]) when hostHeader is non-null so virtual-hosting</span>
+<span class="source-line-no">236</span><span id="line-236">   // still works after the IP-literal rewrite.</span>
+<span class="source-line-no">237</span><span id="line-237">   private TransportResponse sendOnce(TransportRequest request, URI overrideUri, String hostHeader) throws TransportException, StaleConnectionException {</span>
+<span class="source-line-no">238</span><span id="line-238">      HttpRequest jdkRequest;</span>
+<span class="source-line-no">239</span><span id="line-239">      try {</span>
+<span class="source-line-no">240</span><span id="line-240">         jdkRequest = buildJdkRequest(request, overrideUri, hostHeader);</span>
+<span class="source-line-no">241</span><span id="line-241">      } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">242</span><span id="line-242">         // The JDK refuses a URI it cannot use (for example an underscore host name, which java.net.URI parses</span>
+<span class="source-line-no">243</span><span id="line-243">         // with a null host) or an invalid header.</span>
+<span class="source-line-no">244</span><span id="line-244">         if (hostHeader == null)</span>
+<span class="source-line-no">245</span><span id="line-245">            throw new TransportException("Could not build the HTTP request for " + request.getUri() + ": " + e.getMessage(), e);</span>
+<span class="source-line-no">246</span><span id="line-246">         // With hostHeader set, the JDK rejected the "Host" header override -- i.e. the JVM</span>
+<span class="source-line-no">247</span><span id="line-247">         // was not started with -Djdk.httpclient.allowRestrictedHeaders=host. Fail closed rather than silently pinning without preserving the original Host.</span>
+<span class="source-line-no">248</span><span id="line-248">         throw new TransportException("Could not preserve the original Host header while pin-on-connecting a "</span>
+<span class="source-line-no">249</span><span id="line-249">            + "policy-covered HTTP request (the JDK HttpClient restricts the Host header unless the JVM "</span>
+<span class="source-line-no">250</span><span id="line-250">            + "is started with the flag below); refusing (fail closed): " + request.getUri()</span>
+<span class="source-line-no">251</span><span id="line-251">            + ".  Call allowHostHeaderOverride() on the transport builder (a JVM-wide setting) or set the JVM flag -Djdk.httpclient.allowRestrictedHeaders=host, use a transport with native "</span>
+<span class="source-line-no">252</span><span id="line-252">            + "connect-time pinning support (e.g. Apache HttpClient 4.5/5), or set allowPrivateUrls(true) if "</span>
+<span class="source-line-no">253</span><span id="line-253">            + "this is an intentional local-dev/intranet target.", e);</span>
+<span class="source-line-no">254</span><span id="line-254">      }</span>
+<span class="source-line-no">255</span><span id="line-255">      HttpResponse&lt;InputStream&gt; jdkResponse;</span>
+<span class="source-line-no">256</span><span id="line-256">      try {</span>
+<span class="source-line-no">257</span><span id="line-257">         jdkResponse = httpClient.send(jdkRequest, BodyHandlers.ofInputStream());</span>
+<span class="source-line-no">258</span><span id="line-258">      } catch (IOException e) {</span>
+<span class="source-line-no">259</span><span id="line-259">         // httpClient.send() only returns once the response headers have been read, so any IOException here</span>
+<span class="source-line-no">260</span><span id="line-260">         // occurred before any response bytes were received.</span>
+<span class="source-line-no">261</span><span id="line-261">         if (TransportException.isStaleConnectionFailure(e))</span>
+<span class="source-line-no">262</span><span id="line-262">            throw new StaleConnectionException(e);</span>
+<span class="source-line-no">263</span><span id="line-263">         throw new TransportException("HTTP transport error: " + e.getMessage(), e);</span>
+<span class="source-line-no">264</span><span id="line-264">      } catch (InterruptedException e) {</span>
+<span class="source-line-no">265</span><span id="line-265">         Thread.currentThread().interrupt();</span>
+<span class="source-line-no">266</span><span id="line-266">         throw new TransportException("HTTP request interrupted", e);</span>
+<span class="source-line-no">267</span><span id="line-267">      }</span>
+<span class="source-line-no">268</span><span id="line-268">      return buildTransportResponse(jdkResponse, maxResponseBytes);</span>
+<span class="source-line-no">269</span><span id="line-269">   }</span>
+<span class="source-line-no">270</span><span id="line-270"></span>
+<span class="source-line-no">271</span><span id="line-271">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">272</span><span id="line-272">   // Internal helpers</span>
+<span class="source-line-no">273</span><span id="line-273">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">274</span><span id="line-274"></span>
+<span class="source-line-no">275</span><span id="line-275">   // Builds a URI string identical to "uri" except with its host replaced by the pinned literal address, by</span>
+<span class="source-line-no">276</span><span id="line-276">   // concatenating uri's already-percent-encoded raw components -- NOT via the multi-arg java.net.URI</span>
+<span class="source-line-no">277</span><span id="line-277">   // constructor, which treats its arguments as decoded components and would double-encode any "%" already</span>
+<span class="source-line-no">278</span><span id="line-278">   // present in the raw path/query/fragment (e.g. "%20" would become "%2520").</span>
+<span class="source-line-no">279</span><span id="line-279">   private static String pinnedUriString(String scheme, InetAddress pinned, URI uri) {</span>
+<span class="source-line-no">280</span><span id="line-280">      var hostLiteral = pinned instanceof Inet6Address ? "[" + pinned.getHostAddress() + "]" : pinned.getHostAddress();</span>
+<span class="source-line-no">281</span><span id="line-281">      var sb = new StringBuilder(scheme).append("://").append(hostLiteral);</span>
+<span class="source-line-no">282</span><span id="line-282">      if (uri.getPort() &gt;= 0)</span>
+<span class="source-line-no">283</span><span id="line-283">         sb.append(':').append(uri.getPort());</span>
+<span class="source-line-no">284</span><span id="line-284">      if (uri.getRawPath() != null)</span>
+<span class="source-line-no">285</span><span id="line-285">         sb.append(uri.getRawPath());</span>
+<span class="source-line-no">286</span><span id="line-286">      if (uri.getRawQuery() != null)</span>
+<span class="source-line-no">287</span><span id="line-287">         sb.append('?').append(uri.getRawQuery());</span>
+<span class="source-line-no">288</span><span id="line-288">      if (uri.getRawFragment() != null)</span>
+<span class="source-line-no">289</span><span id="line-289">         sb.append('#').append(uri.getRawFragment());</span>
+<span class="source-line-no">290</span><span id="line-290">      return sb.toString();</span>
+<span class="source-line-no">291</span><span id="line-291">   }</span>
+<span class="source-line-no">292</span><span id="line-292"></span>
+<span class="source-line-no">293</span><span id="line-293">   private static HttpRequest buildJdkRequest(TransportRequest request, URI uri, String hostHeader) {</span>
+<span class="source-line-no">294</span><span id="line-294">      var builder = HttpRequest.newBuilder().uri(uri).method(request.getMethod(), buildBodyPublisher(request.getBody()));</span>
+<span class="source-line-no">295</span><span id="line-295">      if (hostHeader != null)</span>
+<span class="source-line-no">296</span><span id="line-296">         builder.header("Host", hostHeader);</span>
+<span class="source-line-no">297</span><span id="line-297">      for (var h : request.getHeaders())</span>
+<span class="source-line-no">298</span><span id="line-298">         builder.header(h.name(), h.value());</span>
+<span class="source-line-no">299</span><span id="line-299">      var timeout = request.getTimeout();</span>
+<span class="source-line-no">300</span><span id="line-300">      builder.timeout(timeout != null ? timeout : DEFAULT_REQUEST_TIMEOUT);</span>
+<span class="source-line-no">301</span><span id="line-301">      return builder.build();</span>
+<span class="source-line-no">302</span><span id="line-302">   }</span>
+<span class="source-line-no">303</span><span id="line-303"></span>
+<span class="source-line-no">304</span><span id="line-304">   @SuppressWarnings({</span>
+<span class="source-line-no">305</span><span id="line-305">      "java:S2095" // PipedInputStream closed by HttpClient when body publishing finishes; PipedOutputStream closed in writer thread try-with-resources</span>
+<span class="source-line-no">306</span><span id="line-306">   })</span>
+<span class="source-line-no">307</span><span id="line-307">   private static BodyPublisher buildBodyPublisher(TransportBody body) {</span>
+<span class="source-line-no">308</span><span id="line-308">      if (body == null)</span>
+<span class="source-line-no">309</span><span id="line-309">         return BodyPublishers.noBody();</span>
+<span class="source-line-no">310</span><span id="line-310">      // Use a pipe so body.writeTo() streams directly to the JDK client without full in-memory buffering.</span>
+<span class="source-line-no">311</span><span id="line-311">      // The writer runs on a daemon thread; the JDK client reads from the PipedInputStream on its own threads.</span>
+<span class="source-line-no">312</span><span id="line-312">      // The supplier runs when the client publishes the request body (not when the HttpRequest is built).</span>
+<span class="source-line-no">313</span><span id="line-313">      var publisher = BodyPublishers.ofInputStream(() -&gt; {</span>
+<span class="source-line-no">314</span><span id="line-314">         var in = new PipedInputStream();</span>
+<span class="source-line-no">315</span><span id="line-315">         try {</span>
+<span class="source-line-no">316</span><span id="line-316">            var out = new PipedOutputStream(in);</span>
+<span class="source-line-no">317</span><span id="line-317">            var writer = new Thread(() -&gt; {</span>
+<span class="source-line-no">318</span><span id="line-318">               try (out) {</span>
+<span class="source-line-no">319</span><span id="line-319">                  body.writeTo(out);</span>
+<span class="source-line-no">320</span><span id="line-320">               } catch (IOException e) {</span>
+<span class="source-line-no">321</span><span id="line-321">                  // Closing the pipe on error causes the reader to see an IOException,</span>
+<span class="source-line-no">322</span><span id="line-322">                  // which propagates to the JDK client as a send failure.</span>
+<span class="source-line-no">323</span><span id="line-323">               }</span>
+<span class="source-line-no">324</span><span id="line-324">            }, "juneau-ng-body-writer");</span>
+<span class="source-line-no">325</span><span id="line-325">            writer.setDaemon(true);</span>
+<span class="source-line-no">326</span><span id="line-326">            writer.start();</span>
+<span class="source-line-no">327</span><span id="line-327">            return in;</span>
+<span class="source-line-no">328</span><span id="line-328">         } catch (IOException e) {</span>
+<span class="source-line-no">329</span><span id="line-329">            try {</span>
+<span class="source-line-no">330</span><span id="line-330">               in.close();</span>
+<span class="source-line-no">331</span><span id="line-331">            } catch (IOException e2) {</span>
+<span class="source-line-no">332</span><span id="line-332">               e.addSuppressed(e2);</span>
+<span class="source-line-no">333</span><span id="line-333">            }</span>
+<span class="source-line-no">334</span><span id="line-334">            throw new UncheckedIOException(e);</span>
+<span class="source-line-no">335</span><span id="line-335">         }</span>
+<span class="source-line-no">336</span><span id="line-336">      });</span>
+<span class="source-line-no">337</span><span id="line-337">      // A repeatable body with a known length is sent fixed-length (Content-Length) rather than chunked;</span>
+<span class="source-line-no">338</span><span id="line-338">      // unknown-length (or non-repeatable streaming) bodies keep chunked transfer encoding.</span>
+<span class="source-line-no">339</span><span id="line-339">      var length = body.getContentLength();</span>
+<span class="source-line-no">340</span><span id="line-340">      if (body.isRepeatable() &amp;&amp; length &gt;= 0)</span>
+<span class="source-line-no">341</span><span id="line-341">         return length == 0 ? BodyPublishers.noBody() : BodyPublishers.fromPublisher(publisher, length);</span>
+<span class="source-line-no">342</span><span id="line-342">      return publisher;</span>
+<span class="source-line-no">343</span><span id="line-343">   }</span>
+<span class="source-line-no">344</span><span id="line-344"></span>
+<span class="source-line-no">345</span><span id="line-345">   private static TransportResponse buildTransportResponse(HttpResponse&lt;InputStream&gt; jdkResponse, long maxBytes) {</span>
+<span class="source-line-no">346</span><span id="line-346">      var raw = jdkResponse.body();</span>
+<span class="source-line-no">347</span><span id="line-347">      var body = maxBytes &gt; 0 ? new LimitedInputStream(raw, maxBytes) : raw;</span>
+<span class="source-line-no">348</span><span id="line-348">      var builder = TransportResponse.builder()</span>
+<span class="source-line-no">349</span><span id="line-349">         .statusCode(jdkResponse.statusCode())</span>
+<span class="source-line-no">350</span><span id="line-350">         .body(body)</span>
+<span class="source-line-no">351</span><span id="line-351">         .closeCallback(raw);</span>
+<span class="source-line-no">352</span><span id="line-352">      jdkResponse.headers().map().forEach((name, values) -&gt;</span>
+<span class="source-line-no">353</span><span id="line-353">         values.forEach(value -&gt; builder.header(name, value)));</span>
+<span class="source-line-no">354</span><span id="line-354">      return builder.build();</span>
+<span class="source-line-no">355</span><span id="line-355">   }</span>
+<span class="source-line-no">356</span><span id="line-356"></span>
+<span class="source-line-no">357</span><span id="line-357">   // Fails a read once more than the configured number of body bytes has been delivered.</span>
+<span class="source-line-no">358</span><span id="line-358">   private static final class LimitedInputStream extends FilterInputStream {</span>
+<span class="source-line-no">359</span><span id="line-359">      private final long limit;</span>
+<span class="source-line-no">360</span><span id="line-360">      private long count;</span>
+<span class="source-line-no">361</span><span id="line-361"></span>
+<span class="source-line-no">362</span><span id="line-362">      LimitedInputStream(InputStream in, long limit) {</span>
+<span class="source-line-no">363</span><span id="line-363">         super(in);</span>
+<span class="source-line-no">364</span><span id="line-364">         this.limit = limit;</span>
+<span class="source-line-no">365</span><span id="line-365">      }</span>
+<span class="source-line-no">366</span><span id="line-366"></span>
+<span class="source-line-no">367</span><span id="line-367">      @Override /* InputStream */</span>
+<span class="source-line-no">368</span><span id="line-368">      public int read() throws IOException {</span>
+<span class="source-line-no">369</span><span id="line-369">         var b = super.read();</span>
+<span class="source-line-no">370</span><span id="line-370">         if (b &gt;= 0)</span>
+<span class="source-line-no">371</span><span id="line-371">            add(1);</span>
+<span class="source-line-no">372</span><span id="line-372">         return b;</span>
+<span class="source-line-no">373</span><span id="line-373">      }</span>
+<span class="source-line-no">374</span><span id="line-374"></span>
+<span class="source-line-no">375</span><span id="line-375">      @Override /* InputStream */</span>
+<span class="source-line-no">376</span><span id="line-376">      public int read(byte[] b, int off, int len) throws IOException {</span>
+<span class="source-line-no">377</span><span id="line-377">         var n = super.read(b, off, len);</span>
+<span class="source-line-no">378</span><span id="line-378">         if (n &gt; 0)</span>
+<span class="source-line-no">379</span><span id="line-379">            add(n);</span>
+<span class="source-line-no">380</span><span id="line-380">         return n;</span>
+<span class="source-line-no">381</span><span id="line-381">      }</span>
+<span class="source-line-no">382</span><span id="line-382"></span>
+<span class="source-line-no">383</span><span id="line-383">      @Override /* InputStream */</span>
+<span class="source-line-no">384</span><span id="line-384">      public long skip(long n) throws IOException {</span>
+<span class="source-line-no">385</span><span id="line-385">         var skipped = super.skip(n);</span>
+<span class="source-line-no">386</span><span id="line-386">         if (skipped &gt; 0)</span>
+<span class="source-line-no">387</span><span id="line-387">            add(skipped);</span>
+<span class="source-line-no">388</span><span id="line-388">         return skipped;</span>
+<span class="source-line-no">389</span><span id="line-389">      }</span>
+<span class="source-line-no">390</span><span id="line-390"></span>
+<span class="source-line-no">391</span><span id="line-391">      private void add(long n) throws IOException {</span>
+<span class="source-line-no">392</span><span id="line-392">         count += n;</span>
+<span class="source-line-no">393</span><span id="line-393">         if (count &gt; limit)</span>
+<span class="source-line-no">394</span><span id="line-394">            throw new IOException("Response body exceeds the configured maximum of " + limit + " bytes");</span>
+<span class="source-line-no">395</span><span id="line-395">      }</span>
+<span class="source-line-no">396</span><span id="line-396">   }</span>
+<span class="source-line-no">397</span><span id="line-397"></span>
+<span class="source-line-no">398</span><span id="line-398">   // Internal signal that a pre-response stale-connection failure occurred and may be retried once.  Carries the</span>
+<span class="source-line-no">399</span><span id="line-399">   // original cause so the caller can build the user-visible TransportException if the retry is not attempted or</span>
+<span class="source-line-no">400</span><span id="line-400">   // also fails.</span>
+<span class="source-line-no">401</span><span id="line-401">   private static final class StaleConnectionException extends Exception {</span>
+<span class="source-line-no">402</span><span id="line-402">      private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">403</span><span id="line-403"></span>
+<span class="source-line-no">404</span><span id="line-404">      StaleConnectionException(Throwable cause) {</span>
+<span class="source-line-no">405</span><span id="line-405">         super(cause);</span>
+<span class="source-line-no">406</span><span id="line-406">      }</span>
+<span class="source-line-no">407</span><span id="line-407"></span>
+<span class="source-line-no">408</span><span id="line-408">      TransportException asTransportException() {</span>
+<span class="source-line-no">409</span><span id="line-409">         return new TransportException("HTTP transport error: " + getCause().getMessage(), getCause());</span>
+<span class="source-line-no">410</span><span id="line-410">      }</span>
+<span class="source-line-no">411</span><span id="line-411">   }</span>
+<span class="source-line-no">412</span><span id="line-412">}</span>
 
 
 

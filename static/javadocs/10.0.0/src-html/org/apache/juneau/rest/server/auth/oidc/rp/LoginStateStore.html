@@ -112,77 +112,79 @@
 <span class="source-line-no">099</span><span id="line-99">    * @param redirectTarget The post-login redirect target.  May be {@code null}.  Re-validated by the RP.</span>
 <span class="source-line-no">100</span><span id="line-100">    * @param createdAt Framework-minted store instant.</span>
 <span class="source-line-no">101</span><span id="line-101">    * @param expiresAt Framework-minted expiry ceiling ({@code createdAt + stateNonceTtl}).</span>
-<span class="source-line-no">102</span><span id="line-102">    */</span>
-<span class="source-line-no">103</span><span id="line-103">   record PendingLogin(String nonce, String codeVerifier, String redirectTarget, Instant createdAt, Instant expiresAt) {</span>
-<span class="source-line-no">104</span><span id="line-104">      @Override</span>
-<span class="source-line-no">105</span><span id="line-105">      public String toString() {</span>
-<span class="source-line-no">106</span><span id="line-106">         return "PendingLogin(nonce=&lt;redacted&gt;,codeVerifier=&lt;redacted&gt;,redirectTarget=" + redirectTarget</span>
-<span class="source-line-no">107</span><span id="line-107">            + ",createdAt=" + createdAt + ",expiresAt=" + expiresAt + ")";</span>
-<span class="source-line-no">108</span><span id="line-108">      }</span>
-<span class="source-line-no">109</span><span id="line-109">   }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   /**</span>
-<span class="source-line-no">112</span><span id="line-112">    * Stores a framework-built pending-login association keyed by {@code state}.</span>
-<span class="source-line-no">113</span><span id="line-113">    *</span>
-<span class="source-line-no">114</span><span id="line-114">    * &lt;p&gt;</span>
-<span class="source-line-no">115</span><span id="line-115">    * Implementations MUST persist the association durably enough that a subsequent {@link #consume(String)}</span>
-<span class="source-line-no">116</span><span id="line-116">    * on any node handling the callback can retrieve it.  On an &lt;b&gt;infrastructure failure&lt;/b&gt; (backend</span>
-<span class="source-line-no">117</span><span id="line-117">    * unreachable, write rejected) implementations MUST throw rather than silently drop the record:</span>
-<span class="source-line-no">118</span><span id="line-118">    * {@code store} is invoked on the {@code startLogin} leg before any authorization URL is issued, so a</span>
-<span class="source-line-no">119</span><span id="line-119">    * thrown exception fails the flow closed with no half-initiated login.  Implementations MUST NOT log the</span>
-<span class="source-line-no">120</span><span id="line-120">    * {@link PendingLogin} payload; wrap / sanitize backend exceptions so the {@code codeVerifier} /</span>
-<span class="source-line-no">121</span><span id="line-121">    * {@code state} do not leak into a 500 body or log.</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * &lt;p&gt;</span>
-<span class="source-line-no">124</span><span id="line-124">    * Last-writer-wins: a repeated {@code store} for the same {@code state} overwrites (a Nimbus</span>
-<span class="source-line-no">125</span><span id="line-125">    * {@code State} collision is astronomical).  A backend MAY use {@code SET NX} but is not required to.  A</span>
-<span class="source-line-no">126</span><span id="line-126">    * backend MAY use the remaining time to {@code expiresAt} as a GC / {@code EXPIRE} hint, but GC failure</span>
-<span class="source-line-no">127</span><span id="line-127">    * MUST NOT extend usability past the framework's re-checked {@code expiresAt}.</span>
-<span class="source-line-no">128</span><span id="line-128">    *</span>
-<span class="source-line-no">129</span><span id="line-129">    * @param state The opaque {@code state} value.  Must not be {@code null} or blank.</span>
-<span class="source-line-no">130</span><span id="line-130">    * @param pending The framework-built association (already stamped with {@code createdAt} / {@code expiresAt}).</span>
-<span class="source-line-no">131</span><span id="line-131">    *    Must not be {@code null}.</span>
-<span class="source-line-no">132</span><span id="line-132">    */</span>
-<span class="source-line-no">133</span><span id="line-133">   void store(String state, PendingLogin pending);</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">   /**</span>
-<span class="source-line-no">136</span><span id="line-136">    * Atomically removes and returns the pending-login association for {@code state}, if present.</span>
-<span class="source-line-no">137</span><span id="line-137">    *</span>
-<span class="source-line-no">138</span><span id="line-138">    * &lt;p&gt;</span>
-<span class="source-line-no">139</span><span id="line-139">    * &lt;b&gt;Single-use / atomicity is mandatory (TOCTOU).&lt;/b&gt; The removal and the read MUST be a single atomic</span>
-<span class="source-line-no">140</span><span id="line-140">    * operation so a given {@code state} is consumed at most once.  Of any two concurrent calls with the same</span>
-<span class="source-line-no">141</span><span id="line-141">    * {@code state}, &lt;b&gt;at most one&lt;/b&gt; returns a present {@link Optional}; the other MUST miss &amp;mdash;</span>
-<span class="source-line-no">142</span><span id="line-142">    * including across nodes sharing the store.  Use an atomic primitive against the primary (Redis</span>
-<span class="source-line-no">143</span><span id="line-143">    * {@code GETDEL} or a Lua {@code GET}+{@code DEL}), &lt;b&gt;not&lt;/b&gt; a read-then-delete and &lt;b&gt;not&lt;/b&gt; a</span>
-<span class="source-line-no">144</span><span id="line-144">    * possibly-stale replica read.  A consume that removes the entry but fails to return it (lost response)</span>
-<span class="source-line-no">145</span><span id="line-145">    * MUST be treated as a miss on retry &amp;mdash; never a best-effort put-back (put-back reopens replay); the</span>
-<span class="source-line-no">146</span><span id="line-146">    * user simply restarts login.</span>
-<span class="source-line-no">147</span><span id="line-147">    *</span>
-<span class="source-line-no">148</span><span id="line-148">    * &lt;p&gt;</span>
-<span class="source-line-no">149</span><span id="line-149">    * &lt;b&gt;Bounded I/O.&lt;/b&gt; Implementations MUST apply a bounded deadline to the backend round-trip so a hung</span>
-<span class="source-line-no">150</span><span id="line-150">    * backend cannot stall {@code completeLogin} on a request thread indefinitely.</span>
-<span class="source-line-no">151</span><span id="line-151">    *</span>
-<span class="source-line-no">152</span><span id="line-152">    * &lt;p&gt;</span>
-<span class="source-line-no">153</span><span id="line-153">    * &lt;b&gt;{@code empty()} vs. throw &amp;mdash; distinct meanings.&lt;/b&gt; Return {@link Optional#empty()}</span>
-<span class="source-line-no">154</span><span id="line-154">    * &lt;b&gt;only&lt;/b&gt; for absent / already-consumed / (optionally) store-expired states &amp;mdash; the caller</span>
-<span class="source-line-no">155</span><span id="line-155">    * treats {@code empty()} as a CSRF / replay / expiry rejection.  On an &lt;b&gt;infrastructure failure&lt;/b&gt;</span>
-<span class="source-line-no">156</span><span id="line-156">    * (backend unreachable) the implementation MUST throw (not return {@code empty()}) so the caller can</span>
-<span class="source-line-no">157</span><span id="line-157">    * distinguish an attack from an outage; the RP catches it, logs without the payload, and rejects with an</span>
-<span class="source-line-no">158</span><span id="line-158">    * "unavailable" authentication error.  Either way the login fails closed; implementations MUST NEVER</span>
-<span class="source-line-no">159</span><span id="line-159">    * fabricate a {@link PendingLogin}.</span>
-<span class="source-line-no">160</span><span id="line-160">    *</span>
-<span class="source-line-no">161</span><span id="line-161">    * &lt;p&gt;</span>
-<span class="source-line-no">162</span><span id="line-162">    * &lt;b&gt;Expiry is not the store's sole responsibility.&lt;/b&gt; An implementation MAY treat past-{@code expiresAt}</span>
-<span class="source-line-no">163</span><span id="line-163">    * entries as a miss (early eviction), but the RP re-checks {@code expiresAt} on the returned record</span>
-<span class="source-line-no">164</span><span id="line-164">    * regardless, so it is not a security defect if a store returns an over-age record &amp;mdash; the framework</span>
-<span class="source-line-no">165</span><span id="line-165">    * rejects it.</span>
-<span class="source-line-no">166</span><span id="line-166">    *</span>
-<span class="source-line-no">167</span><span id="line-167">    * @param state The {@code state} value from the callback.  May be {@code null} (returns {@code empty()},</span>
-<span class="source-line-no">168</span><span id="line-168">    *    matching the defensive callback path &amp;mdash; do not throw).</span>
-<span class="source-line-no">169</span><span id="line-169">    * @return The association, or {@link Optional#empty()} if absent, expired, or already consumed.</span>
-<span class="source-line-no">170</span><span id="line-170">    */</span>
-<span class="source-line-no">171</span><span id="line-171">   Optional&lt;PendingLogin&gt; consume(String state);</span>
-<span class="source-line-no">172</span><span id="line-172">}</span>
+<span class="source-line-no">102</span><span id="line-102">    * @param bindingHash Hash of the per-browser login-binding cookie value.  Persist and return verbatim; the RP</span>
+<span class="source-line-no">103</span><span id="line-103">    *    rejects a callback whose cookie does not match it (a {@code null} value never matches).</span>
+<span class="source-line-no">104</span><span id="line-104">    */</span>
+<span class="source-line-no">105</span><span id="line-105">   record PendingLogin(String nonce, String codeVerifier, String redirectTarget, Instant createdAt, Instant expiresAt, String bindingHash) {</span>
+<span class="source-line-no">106</span><span id="line-106">      @Override</span>
+<span class="source-line-no">107</span><span id="line-107">      public String toString() {</span>
+<span class="source-line-no">108</span><span id="line-108">         return "PendingLogin(nonce=&lt;redacted&gt;,codeVerifier=&lt;redacted&gt;,redirectTarget=" + redirectTarget</span>
+<span class="source-line-no">109</span><span id="line-109">            + ",createdAt=" + createdAt + ",expiresAt=" + expiresAt + ")";</span>
+<span class="source-line-no">110</span><span id="line-110">      }</span>
+<span class="source-line-no">111</span><span id="line-111">   }</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">   /**</span>
+<span class="source-line-no">114</span><span id="line-114">    * Stores a framework-built pending-login association keyed by {@code state}.</span>
+<span class="source-line-no">115</span><span id="line-115">    *</span>
+<span class="source-line-no">116</span><span id="line-116">    * &lt;p&gt;</span>
+<span class="source-line-no">117</span><span id="line-117">    * Implementations MUST persist the association durably enough that a subsequent {@link #consume(String)}</span>
+<span class="source-line-no">118</span><span id="line-118">    * on any node handling the callback can retrieve it.  On an &lt;b&gt;infrastructure failure&lt;/b&gt; (backend</span>
+<span class="source-line-no">119</span><span id="line-119">    * unreachable, write rejected) implementations MUST throw rather than silently drop the record:</span>
+<span class="source-line-no">120</span><span id="line-120">    * {@code store} is invoked on the {@code startLogin} leg before any authorization URL is issued, so a</span>
+<span class="source-line-no">121</span><span id="line-121">    * thrown exception fails the flow closed with no half-initiated login.  Implementations MUST NOT log the</span>
+<span class="source-line-no">122</span><span id="line-122">    * {@link PendingLogin} payload; wrap / sanitize backend exceptions so the {@code codeVerifier} /</span>
+<span class="source-line-no">123</span><span id="line-123">    * {@code state} do not leak into a 500 body or log.</span>
+<span class="source-line-no">124</span><span id="line-124">    *</span>
+<span class="source-line-no">125</span><span id="line-125">    * &lt;p&gt;</span>
+<span class="source-line-no">126</span><span id="line-126">    * Last-writer-wins: a repeated {@code store} for the same {@code state} overwrites (a Nimbus</span>
+<span class="source-line-no">127</span><span id="line-127">    * {@code State} collision is astronomical).  A backend MAY use {@code SET NX} but is not required to.  A</span>
+<span class="source-line-no">128</span><span id="line-128">    * backend MAY use the remaining time to {@code expiresAt} as a GC / {@code EXPIRE} hint, but GC failure</span>
+<span class="source-line-no">129</span><span id="line-129">    * MUST NOT extend usability past the framework's re-checked {@code expiresAt}.</span>
+<span class="source-line-no">130</span><span id="line-130">    *</span>
+<span class="source-line-no">131</span><span id="line-131">    * @param state The opaque {@code state} value.  Must not be {@code null} or blank.</span>
+<span class="source-line-no">132</span><span id="line-132">    * @param pending The framework-built association (already stamped with {@code createdAt} / {@code expiresAt}).</span>
+<span class="source-line-no">133</span><span id="line-133">    *    Must not be {@code null}.</span>
+<span class="source-line-no">134</span><span id="line-134">    */</span>
+<span class="source-line-no">135</span><span id="line-135">   void store(String state, PendingLogin pending);</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">   /**</span>
+<span class="source-line-no">138</span><span id="line-138">    * Atomically removes and returns the pending-login association for {@code state}, if present.</span>
+<span class="source-line-no">139</span><span id="line-139">    *</span>
+<span class="source-line-no">140</span><span id="line-140">    * &lt;p&gt;</span>
+<span class="source-line-no">141</span><span id="line-141">    * &lt;b&gt;Single-use / atomicity is mandatory (TOCTOU).&lt;/b&gt; The removal and the read MUST be a single atomic</span>
+<span class="source-line-no">142</span><span id="line-142">    * operation so a given {@code state} is consumed at most once.  Of any two concurrent calls with the same</span>
+<span class="source-line-no">143</span><span id="line-143">    * {@code state}, &lt;b&gt;at most one&lt;/b&gt; returns a present {@link Optional}; the other MUST miss &amp;mdash;</span>
+<span class="source-line-no">144</span><span id="line-144">    * including across nodes sharing the store.  Use an atomic primitive against the primary (Redis</span>
+<span class="source-line-no">145</span><span id="line-145">    * {@code GETDEL} or a Lua {@code GET}+{@code DEL}), &lt;b&gt;not&lt;/b&gt; a read-then-delete and &lt;b&gt;not&lt;/b&gt; a</span>
+<span class="source-line-no">146</span><span id="line-146">    * possibly-stale replica read.  A consume that removes the entry but fails to return it (lost response)</span>
+<span class="source-line-no">147</span><span id="line-147">    * MUST be treated as a miss on retry &amp;mdash; never a best-effort put-back (put-back reopens replay); the</span>
+<span class="source-line-no">148</span><span id="line-148">    * user simply restarts login.</span>
+<span class="source-line-no">149</span><span id="line-149">    *</span>
+<span class="source-line-no">150</span><span id="line-150">    * &lt;p&gt;</span>
+<span class="source-line-no">151</span><span id="line-151">    * &lt;b&gt;Bounded I/O.&lt;/b&gt; Implementations MUST apply a bounded deadline to the backend round-trip so a hung</span>
+<span class="source-line-no">152</span><span id="line-152">    * backend cannot stall {@code completeLogin} on a request thread indefinitely.</span>
+<span class="source-line-no">153</span><span id="line-153">    *</span>
+<span class="source-line-no">154</span><span id="line-154">    * &lt;p&gt;</span>
+<span class="source-line-no">155</span><span id="line-155">    * &lt;b&gt;{@code empty()} vs. throw &amp;mdash; distinct meanings.&lt;/b&gt; Return {@link Optional#empty()}</span>
+<span class="source-line-no">156</span><span id="line-156">    * &lt;b&gt;only&lt;/b&gt; for absent / already-consumed / (optionally) store-expired states &amp;mdash; the caller</span>
+<span class="source-line-no">157</span><span id="line-157">    * treats {@code empty()} as a CSRF / replay / expiry rejection.  On an &lt;b&gt;infrastructure failure&lt;/b&gt;</span>
+<span class="source-line-no">158</span><span id="line-158">    * (backend unreachable) the implementation MUST throw (not return {@code empty()}) so the caller can</span>
+<span class="source-line-no">159</span><span id="line-159">    * distinguish an attack from an outage; the RP catches it, logs without the payload, and rejects with an</span>
+<span class="source-line-no">160</span><span id="line-160">    * "unavailable" authentication error.  Either way the login fails closed; implementations MUST NEVER</span>
+<span class="source-line-no">161</span><span id="line-161">    * fabricate a {@link PendingLogin}.</span>
+<span class="source-line-no">162</span><span id="line-162">    *</span>
+<span class="source-line-no">163</span><span id="line-163">    * &lt;p&gt;</span>
+<span class="source-line-no">164</span><span id="line-164">    * &lt;b&gt;Expiry is not the store's sole responsibility.&lt;/b&gt; An implementation MAY treat past-{@code expiresAt}</span>
+<span class="source-line-no">165</span><span id="line-165">    * entries as a miss (early eviction), but the RP re-checks {@code expiresAt} on the returned record</span>
+<span class="source-line-no">166</span><span id="line-166">    * regardless, so it is not a security defect if a store returns an over-age record &amp;mdash; the framework</span>
+<span class="source-line-no">167</span><span id="line-167">    * rejects it.</span>
+<span class="source-line-no">168</span><span id="line-168">    *</span>
+<span class="source-line-no">169</span><span id="line-169">    * @param state The {@code state} value from the callback.  May be {@code null} (returns {@code empty()},</span>
+<span class="source-line-no">170</span><span id="line-170">    *    matching the defensive callback path &amp;mdash; do not throw).</span>
+<span class="source-line-no">171</span><span id="line-171">    * @return The association, or {@link Optional#empty()} if absent, expired, or already consumed.</span>
+<span class="source-line-no">172</span><span id="line-172">    */</span>
+<span class="source-line-no">173</span><span id="line-173">   Optional&lt;PendingLogin&gt; consume(String state);</span>
+<span class="source-line-no">174</span><span id="line-174">}</span>
 
 
 

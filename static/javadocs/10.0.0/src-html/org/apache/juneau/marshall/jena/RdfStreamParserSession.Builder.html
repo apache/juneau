@@ -509,132 +509,135 @@
 <span class="source-line-no">496</span><span id="line-496">   @Override /* Overridden from InputStreamParserSession */</span>
 <span class="source-line-no">497</span><span id="line-497">   protected &lt;T&gt; T doRead(ParserPipe pipe, ClassMeta&lt;T&gt; type) throws IOException, ParseException, ExecutableException {</span>
 <span class="source-line-no">498</span><span id="line-498"></span>
-<span class="source-line-no">499</span><span id="line-499">      RDFDataMgr.read(model, pipe.getInputStream(), lang);</span>
-<span class="source-line-no">500</span><span id="line-500"></span>
-<span class="source-line-no">501</span><span id="line-501">      var roots = getRoots(model);</span>
-<span class="source-line-no">502</span><span id="line-502"></span>
-<span class="source-line-no">503</span><span id="line-503">      // Special case where we're parsing a loose collection of resources.</span>
-<span class="source-line-no">504</span><span id="line-504">      if (isLooseCollections() &amp;&amp; type.isCollectionOrArray()) { // HTT: RdfStreamParser.Builder only exposes language(); looseCollections is always false for stream parsers.</span>
-<span class="source-line-no">505</span><span id="line-505">         Collection c; // HTT: unreachable — see guard above.</span>
-<span class="source-line-no">506</span><span id="line-506">         if (type.isArray() || type.isArgs()) // HTT: unreachable — see guard above.</span>
-<span class="source-line-no">507</span><span id="line-507">            c = list(); // HTT: unreachable — see guard above.</span>
-<span class="source-line-no">508</span><span id="line-508">         else</span>
-<span class="source-line-no">509</span><span id="line-509">            c = (type.canCreateNewInstance(getOuter()) ? (Collection&lt;?&gt;)type.newInstance(getOuter()) : new JsonList(this)); // HTT: unreachable — see guard above.</span>
-<span class="source-line-no">510</span><span id="line-510"></span>
-<span class="source-line-no">511</span><span id="line-511">         var argIndex = new AtomicInteger(0); // HTT: unreachable — see guard above.</span>
-<span class="source-line-no">512</span><span id="line-512">         var c2 = c; // HTT: unreachable — see guard above.</span>
-<span class="source-line-no">513</span><span id="line-513">         roots.forEach(x -&gt; c2.add(readAnything(type.isArgs() ? type.getArg(argIndex.getAndIncrement()) : type.getElementType(), x, getOuter(), null))); // HTT: unreachable — see guard above.</span>
-<span class="source-line-no">514</span><span id="line-514"></span>
-<span class="source-line-no">515</span><span id="line-515">         if (type.isArray() || type.isArgs()) // HTT: unreachable — see guard above.</span>
-<span class="source-line-no">516</span><span id="line-516">            return (T)toArray(type, c); // HTT: unreachable — see guard above.</span>
-<span class="source-line-no">517</span><span id="line-517">         return (T)c; // HTT: unreachable — see guard above.</span>
-<span class="source-line-no">518</span><span id="line-518">      }</span>
-<span class="source-line-no">519</span><span id="line-519"></span>
-<span class="source-line-no">520</span><span id="line-520">      if (roots.isEmpty())</span>
-<span class="source-line-no">521</span><span id="line-521">         return type.isOptional() ? (T)oe() : null;</span>
+<span class="source-line-no">499</span><span id="line-499">      RDFParser.source(pipe.getInputStream())</span>
+<span class="source-line-no">500</span><span id="line-500">         .lang(lang)</span>
+<span class="source-line-no">501</span><span id="line-501">         .context(RdfParserSession.parserContext(false))</span>
+<span class="source-line-no">502</span><span id="line-502">         .parse(model);</span>
+<span class="source-line-no">503</span><span id="line-503"></span>
+<span class="source-line-no">504</span><span id="line-504">      var roots = getRoots(model);</span>
+<span class="source-line-no">505</span><span id="line-505"></span>
+<span class="source-line-no">506</span><span id="line-506">      // Special case where we're parsing a loose collection of resources.</span>
+<span class="source-line-no">507</span><span id="line-507">      if (isLooseCollections() &amp;&amp; type.isCollectionOrArray()) { // HTT: RdfStreamParser.Builder only exposes language(); looseCollections is always false for stream parsers.</span>
+<span class="source-line-no">508</span><span id="line-508">         Collection c; // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">509</span><span id="line-509">         if (type.isArray() || type.isArgs()) // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">510</span><span id="line-510">            c = list(); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">511</span><span id="line-511">         else</span>
+<span class="source-line-no">512</span><span id="line-512">            c = (type.canCreateNewInstance(getOuter()) ? (Collection&lt;?&gt;)type.newInstance(getOuter()) : new JsonList(this)); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">513</span><span id="line-513"></span>
+<span class="source-line-no">514</span><span id="line-514">         var argIndex = new AtomicInteger(0); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">515</span><span id="line-515">         var c2 = c; // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">516</span><span id="line-516">         roots.forEach(x -&gt; c2.add(readAnything(type.isArgs() ? type.getArg(argIndex.getAndIncrement()) : type.getElementType(), x, getOuter(), null))); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">517</span><span id="line-517"></span>
+<span class="source-line-no">518</span><span id="line-518">         if (type.isArray() || type.isArgs()) // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">519</span><span id="line-519">            return (T)toArray(type, c); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">520</span><span id="line-520">         return (T)c; // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">521</span><span id="line-521">      }</span>
 <span class="source-line-no">522</span><span id="line-522"></span>
-<span class="source-line-no">523</span><span id="line-523">      if (roots.size() &gt; 1)</span>
-<span class="source-line-no">524</span><span id="line-524">         throw new ParseException(this, "Too many root nodes found in model:  %s", roots.size());</span>
-<span class="source-line-no">525</span><span id="line-525">      var resource = roots.get(0);</span>
-<span class="source-line-no">526</span><span id="line-526"></span>
-<span class="source-line-no">527</span><span id="line-527">      return readAnything(type, resource, getOuter(), null);</span>
-<span class="source-line-no">528</span><span id="line-528">   }</span>
+<span class="source-line-no">523</span><span id="line-523">      if (roots.isEmpty())</span>
+<span class="source-line-no">524</span><span id="line-524">         return type.isOptional() ? (T)oe() : null;</span>
+<span class="source-line-no">525</span><span id="line-525"></span>
+<span class="source-line-no">526</span><span id="line-526">      if (roots.size() &gt; 1)</span>
+<span class="source-line-no">527</span><span id="line-527">         throw new ParseException(this, "Too many root nodes found in model:  %s", roots.size());</span>
+<span class="source-line-no">528</span><span id="line-528">      var resource = roots.get(0);</span>
 <span class="source-line-no">529</span><span id="line-529"></span>
-<span class="source-line-no">530</span><span id="line-530">   /**</span>
-<span class="source-line-no">531</span><span id="line-531">    * RDF format for representing collections and arrays.</span>
-<span class="source-line-no">532</span><span id="line-532">    *</span>
-<span class="source-line-no">533</span><span id="line-533">    * @see RdfStreamParser#getCollectionFormat()</span>
-<span class="source-line-no">534</span><span id="line-534">    * @return</span>
-<span class="source-line-no">535</span><span id="line-535">    *    RDF format for representing collections and arrays.</span>
-<span class="source-line-no">536</span><span id="line-536">    */</span>
-<span class="source-line-no">537</span><span id="line-537">   protected final RdfCollectionFormat getCollectionFormat() { return ctx.getCollectionFormat(); }</span>
-<span class="source-line-no">538</span><span id="line-538"></span>
-<span class="source-line-no">539</span><span id="line-539">   /**</span>
-<span class="source-line-no">540</span><span id="line-540">    * Default XML namespace for bean properties.</span>
-<span class="source-line-no">541</span><span id="line-541">    *</span>
-<span class="source-line-no">542</span><span id="line-542">    * @see RdfStreamParser#getJuneauBpNs()</span>
-<span class="source-line-no">543</span><span id="line-543">    * @return</span>
-<span class="source-line-no">544</span><span id="line-544">    *    Default XML namespace for bean properties.</span>
-<span class="source-line-no">545</span><span id="line-545">    */</span>
-<span class="source-line-no">546</span><span id="line-546">   protected final Namespace getJuneauBpNs() { return ctx.getJuneauBpNs(); }</span>
-<span class="source-line-no">547</span><span id="line-547"></span>
-<span class="source-line-no">548</span><span id="line-548">   /**</span>
-<span class="source-line-no">549</span><span id="line-549">    * XML namespace for Juneau properties.</span>
-<span class="source-line-no">550</span><span id="line-550">    *</span>
-<span class="source-line-no">551</span><span id="line-551">    * @see RdfStreamParser#getJuneauNs()</span>
-<span class="source-line-no">552</span><span id="line-552">    * @return</span>
-<span class="source-line-no">553</span><span id="line-553">    *    XML namespace for Juneau properties.</span>
-<span class="source-line-no">554</span><span id="line-554">    */</span>
-<span class="source-line-no">555</span><span id="line-555">   protected final Namespace getJuneauNs() { return ctx.getJuneauNs(); }</span>
-<span class="source-line-no">556</span><span id="line-556"></span>
-<span class="source-line-no">557</span><span id="line-557">   /**</span>
-<span class="source-line-no">558</span><span id="line-558">    * RDF language.</span>
-<span class="source-line-no">559</span><span id="line-559">    *</span>
-<span class="source-line-no">560</span><span id="line-560">    * @see RdfStreamParser#getLanguage()</span>
-<span class="source-line-no">561</span><span id="line-561">    * @return</span>
-<span class="source-line-no">562</span><span id="line-562">    *    The RDF language to use.</span>
-<span class="source-line-no">563</span><span id="line-563">    */</span>
-<span class="source-line-no">564</span><span id="line-564">   protected final String getLanguage() { return ctx.getLanguage(); }</span>
-<span class="source-line-no">565</span><span id="line-565"></span>
-<span class="source-line-no">566</span><span id="line-566">   /**</span>
-<span class="source-line-no">567</span><span id="line-567">    * Returns the language-specific metadata on the specified bean.</span>
-<span class="source-line-no">568</span><span id="line-568">    *</span>
-<span class="source-line-no">569</span><span id="line-569">    * @param bm The bean to return the metadata on.</span>
-<span class="source-line-no">570</span><span id="line-570">    * @return The metadata.</span>
-<span class="source-line-no">571</span><span id="line-571">    */</span>
-<span class="source-line-no">572</span><span id="line-572">   protected RdfBeanMeta getRdfBeanMeta(BeanMeta&lt;?&gt; bm) {</span>
-<span class="source-line-no">573</span><span id="line-573">      return ctx.getRdfBeanMeta(bm);</span>
-<span class="source-line-no">574</span><span id="line-574">   }</span>
-<span class="source-line-no">575</span><span id="line-575"></span>
-<span class="source-line-no">576</span><span id="line-576">   /**</span>
-<span class="source-line-no">577</span><span id="line-577">    * Returns the language-specific metadata on the specified bean property.</span>
-<span class="source-line-no">578</span><span id="line-578">    *</span>
-<span class="source-line-no">579</span><span id="line-579">    * @param bpm The bean property to return the metadata on.</span>
-<span class="source-line-no">580</span><span id="line-580">    * @return The metadata.</span>
-<span class="source-line-no">581</span><span id="line-581">    */</span>
-<span class="source-line-no">582</span><span id="line-582">   protected RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">583</span><span id="line-583">      return ctx.getRdfBeanPropertyMeta(bpm);</span>
-<span class="source-line-no">584</span><span id="line-584">   }</span>
-<span class="source-line-no">585</span><span id="line-585"></span>
-<span class="source-line-no">586</span><span id="line-586">   /**</span>
-<span class="source-line-no">587</span><span id="line-587">    * Returns the language-specific metadata on the specified class.</span>
-<span class="source-line-no">588</span><span id="line-588">    *</span>
-<span class="source-line-no">589</span><span id="line-589">    * @param cm The class to return the metadata on.</span>
-<span class="source-line-no">590</span><span id="line-590">    * @return The metadata.</span>
-<span class="source-line-no">591</span><span id="line-591">    */</span>
-<span class="source-line-no">592</span><span id="line-592">   protected RdfClassMeta getRdfClassMeta(ClassMeta&lt;?&gt; cm) {</span>
-<span class="source-line-no">593</span><span id="line-593">      return ctx.getRdfClassMeta(cm);</span>
-<span class="source-line-no">594</span><span id="line-594">   }</span>
-<span class="source-line-no">595</span><span id="line-595"></span>
-<span class="source-line-no">596</span><span id="line-596">   /**</span>
-<span class="source-line-no">597</span><span id="line-597">    * Returns the language-specific metadata on the specified bean property.</span>
-<span class="source-line-no">598</span><span id="line-598">    *</span>
-<span class="source-line-no">599</span><span id="line-599">    * @param bpm The bean property to return the metadata on.</span>
-<span class="source-line-no">600</span><span id="line-600">    * @return The metadata.</span>
-<span class="source-line-no">601</span><span id="line-601">    */</span>
-<span class="source-line-no">602</span><span id="line-602">   protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">603</span><span id="line-603">      return ctx.getXmlBeanPropertyMeta(bpm);</span>
-<span class="source-line-no">604</span><span id="line-604">   }</span>
-<span class="source-line-no">605</span><span id="line-605"></span>
-<span class="source-line-no">606</span><span id="line-606">   /**</span>
-<span class="source-line-no">607</span><span id="line-607">    * Collections should be serialized and parsed as loose collections.</span>
-<span class="source-line-no">608</span><span id="line-608">    *</span>
-<span class="source-line-no">609</span><span id="line-609">    * @see RdfStreamParser#isLooseCollections()</span>
-<span class="source-line-no">610</span><span id="line-610">    * @return</span>
-<span class="source-line-no">611</span><span id="line-611">    *    &lt;jk&gt;true&lt;/jk&gt; if collections of resources are handled as loose collections of resources in RDF instead of</span>
-<span class="source-line-no">612</span><span id="line-612">    *    resources that are children of an RDF collection (e.g. Sequence, Bag).</span>
-<span class="source-line-no">613</span><span id="line-613">    */</span>
-<span class="source-line-no">614</span><span id="line-614">   protected final boolean isLooseCollections() { return ctx.isLooseCollections(); }</span>
-<span class="source-line-no">615</span><span id="line-615"></span>
-<span class="source-line-no">616</span><span id="line-616">   /**</span>
-<span class="source-line-no">617</span><span id="line-617">    * Trim whitespace from text elements.</span>
-<span class="source-line-no">618</span><span id="line-618">    *</span>
-<span class="source-line-no">619</span><span id="line-619">    * @see RdfStreamParser#isTrimWhitespace()</span>
-<span class="source-line-no">620</span><span id="line-620">    * @return</span>
-<span class="source-line-no">621</span><span id="line-621">    *    &lt;jk&gt;true&lt;/jk&gt; if whitespace in text elements will be automatically trimmed.</span>
-<span class="source-line-no">622</span><span id="line-622">    */</span>
-<span class="source-line-no">623</span><span id="line-623">   protected final boolean isTrimWhitespace() { return ctx.isTrimWhitespace(); }</span>
-<span class="source-line-no">624</span><span id="line-624">}</span>
+<span class="source-line-no">530</span><span id="line-530">      return readAnything(type, resource, getOuter(), null);</span>
+<span class="source-line-no">531</span><span id="line-531">   }</span>
+<span class="source-line-no">532</span><span id="line-532"></span>
+<span class="source-line-no">533</span><span id="line-533">   /**</span>
+<span class="source-line-no">534</span><span id="line-534">    * RDF format for representing collections and arrays.</span>
+<span class="source-line-no">535</span><span id="line-535">    *</span>
+<span class="source-line-no">536</span><span id="line-536">    * @see RdfStreamParser#getCollectionFormat()</span>
+<span class="source-line-no">537</span><span id="line-537">    * @return</span>
+<span class="source-line-no">538</span><span id="line-538">    *    RDF format for representing collections and arrays.</span>
+<span class="source-line-no">539</span><span id="line-539">    */</span>
+<span class="source-line-no">540</span><span id="line-540">   protected final RdfCollectionFormat getCollectionFormat() { return ctx.getCollectionFormat(); }</span>
+<span class="source-line-no">541</span><span id="line-541"></span>
+<span class="source-line-no">542</span><span id="line-542">   /**</span>
+<span class="source-line-no">543</span><span id="line-543">    * Default XML namespace for bean properties.</span>
+<span class="source-line-no">544</span><span id="line-544">    *</span>
+<span class="source-line-no">545</span><span id="line-545">    * @see RdfStreamParser#getJuneauBpNs()</span>
+<span class="source-line-no">546</span><span id="line-546">    * @return</span>
+<span class="source-line-no">547</span><span id="line-547">    *    Default XML namespace for bean properties.</span>
+<span class="source-line-no">548</span><span id="line-548">    */</span>
+<span class="source-line-no">549</span><span id="line-549">   protected final Namespace getJuneauBpNs() { return ctx.getJuneauBpNs(); }</span>
+<span class="source-line-no">550</span><span id="line-550"></span>
+<span class="source-line-no">551</span><span id="line-551">   /**</span>
+<span class="source-line-no">552</span><span id="line-552">    * XML namespace for Juneau properties.</span>
+<span class="source-line-no">553</span><span id="line-553">    *</span>
+<span class="source-line-no">554</span><span id="line-554">    * @see RdfStreamParser#getJuneauNs()</span>
+<span class="source-line-no">555</span><span id="line-555">    * @return</span>
+<span class="source-line-no">556</span><span id="line-556">    *    XML namespace for Juneau properties.</span>
+<span class="source-line-no">557</span><span id="line-557">    */</span>
+<span class="source-line-no">558</span><span id="line-558">   protected final Namespace getJuneauNs() { return ctx.getJuneauNs(); }</span>
+<span class="source-line-no">559</span><span id="line-559"></span>
+<span class="source-line-no">560</span><span id="line-560">   /**</span>
+<span class="source-line-no">561</span><span id="line-561">    * RDF language.</span>
+<span class="source-line-no">562</span><span id="line-562">    *</span>
+<span class="source-line-no">563</span><span id="line-563">    * @see RdfStreamParser#getLanguage()</span>
+<span class="source-line-no">564</span><span id="line-564">    * @return</span>
+<span class="source-line-no">565</span><span id="line-565">    *    The RDF language to use.</span>
+<span class="source-line-no">566</span><span id="line-566">    */</span>
+<span class="source-line-no">567</span><span id="line-567">   protected final String getLanguage() { return ctx.getLanguage(); }</span>
+<span class="source-line-no">568</span><span id="line-568"></span>
+<span class="source-line-no">569</span><span id="line-569">   /**</span>
+<span class="source-line-no">570</span><span id="line-570">    * Returns the language-specific metadata on the specified bean.</span>
+<span class="source-line-no">571</span><span id="line-571">    *</span>
+<span class="source-line-no">572</span><span id="line-572">    * @param bm The bean to return the metadata on.</span>
+<span class="source-line-no">573</span><span id="line-573">    * @return The metadata.</span>
+<span class="source-line-no">574</span><span id="line-574">    */</span>
+<span class="source-line-no">575</span><span id="line-575">   protected RdfBeanMeta getRdfBeanMeta(BeanMeta&lt;?&gt; bm) {</span>
+<span class="source-line-no">576</span><span id="line-576">      return ctx.getRdfBeanMeta(bm);</span>
+<span class="source-line-no">577</span><span id="line-577">   }</span>
+<span class="source-line-no">578</span><span id="line-578"></span>
+<span class="source-line-no">579</span><span id="line-579">   /**</span>
+<span class="source-line-no">580</span><span id="line-580">    * Returns the language-specific metadata on the specified bean property.</span>
+<span class="source-line-no">581</span><span id="line-581">    *</span>
+<span class="source-line-no">582</span><span id="line-582">    * @param bpm The bean property to return the metadata on.</span>
+<span class="source-line-no">583</span><span id="line-583">    * @return The metadata.</span>
+<span class="source-line-no">584</span><span id="line-584">    */</span>
+<span class="source-line-no">585</span><span id="line-585">   protected RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">586</span><span id="line-586">      return ctx.getRdfBeanPropertyMeta(bpm);</span>
+<span class="source-line-no">587</span><span id="line-587">   }</span>
+<span class="source-line-no">588</span><span id="line-588"></span>
+<span class="source-line-no">589</span><span id="line-589">   /**</span>
+<span class="source-line-no">590</span><span id="line-590">    * Returns the language-specific metadata on the specified class.</span>
+<span class="source-line-no">591</span><span id="line-591">    *</span>
+<span class="source-line-no">592</span><span id="line-592">    * @param cm The class to return the metadata on.</span>
+<span class="source-line-no">593</span><span id="line-593">    * @return The metadata.</span>
+<span class="source-line-no">594</span><span id="line-594">    */</span>
+<span class="source-line-no">595</span><span id="line-595">   protected RdfClassMeta getRdfClassMeta(ClassMeta&lt;?&gt; cm) {</span>
+<span class="source-line-no">596</span><span id="line-596">      return ctx.getRdfClassMeta(cm);</span>
+<span class="source-line-no">597</span><span id="line-597">   }</span>
+<span class="source-line-no">598</span><span id="line-598"></span>
+<span class="source-line-no">599</span><span id="line-599">   /**</span>
+<span class="source-line-no">600</span><span id="line-600">    * Returns the language-specific metadata on the specified bean property.</span>
+<span class="source-line-no">601</span><span id="line-601">    *</span>
+<span class="source-line-no">602</span><span id="line-602">    * @param bpm The bean property to return the metadata on.</span>
+<span class="source-line-no">603</span><span id="line-603">    * @return The metadata.</span>
+<span class="source-line-no">604</span><span id="line-604">    */</span>
+<span class="source-line-no">605</span><span id="line-605">   protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">606</span><span id="line-606">      return ctx.getXmlBeanPropertyMeta(bpm);</span>
+<span class="source-line-no">607</span><span id="line-607">   }</span>
+<span class="source-line-no">608</span><span id="line-608"></span>
+<span class="source-line-no">609</span><span id="line-609">   /**</span>
+<span class="source-line-no">610</span><span id="line-610">    * Collections should be serialized and parsed as loose collections.</span>
+<span class="source-line-no">611</span><span id="line-611">    *</span>
+<span class="source-line-no">612</span><span id="line-612">    * @see RdfStreamParser#isLooseCollections()</span>
+<span class="source-line-no">613</span><span id="line-613">    * @return</span>
+<span class="source-line-no">614</span><span id="line-614">    *    &lt;jk&gt;true&lt;/jk&gt; if collections of resources are handled as loose collections of resources in RDF instead of</span>
+<span class="source-line-no">615</span><span id="line-615">    *    resources that are children of an RDF collection (e.g. Sequence, Bag).</span>
+<span class="source-line-no">616</span><span id="line-616">    */</span>
+<span class="source-line-no">617</span><span id="line-617">   protected final boolean isLooseCollections() { return ctx.isLooseCollections(); }</span>
+<span class="source-line-no">618</span><span id="line-618"></span>
+<span class="source-line-no">619</span><span id="line-619">   /**</span>
+<span class="source-line-no">620</span><span id="line-620">    * Trim whitespace from text elements.</span>
+<span class="source-line-no">621</span><span id="line-621">    *</span>
+<span class="source-line-no">622</span><span id="line-622">    * @see RdfStreamParser#isTrimWhitespace()</span>
+<span class="source-line-no">623</span><span id="line-623">    * @return</span>
+<span class="source-line-no">624</span><span id="line-624">    *    &lt;jk&gt;true&lt;/jk&gt; if whitespace in text elements will be automatically trimmed.</span>
+<span class="source-line-no">625</span><span id="line-625">    */</span>
+<span class="source-line-no">626</span><span id="line-626">   protected final boolean isTrimWhitespace() { return ctx.isTrimWhitespace(); }</span>
+<span class="source-line-no">627</span><span id="line-627">}</span>
 
 
 

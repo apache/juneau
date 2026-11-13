@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="LoginStateStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-53">InMemoryLoginStateStore</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-54">InMemoryLoginStateStore</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="LoginStateStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore</a></span></div>
 <div class="block">The shipped, single-node default <a href="LoginStateStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp"><code>LoginStateStore</code></a>: a single-use, TTL-bounded, size-bounded
@@ -98,8 +98,9 @@ implements <a href="LoginStateStore.html" title="interface in org.apache.juneau.
       guarantees single-use within one JVM.
    <li><b>TTL-bounded</b> &mdash; entries at or past their framework-minted <code>expiresAt</code> are treated as a
       miss and swept.
-   <li><b>Size-bounded</b> &mdash; an LRU cap (default 10 000) prevents unbounded growth from abandoned
-      login attempts; eviction mirrors the <code>BoundedLruTokenCache</code> shape.
+   <li><b>Size-bounded</b> &mdash; a cap (default 10 000) prevents unbounded growth from abandoned
+      login attempts.  When the store is full of unexpired entries, new logins are rejected (the store throws)
+      rather than evicting pending ones, so in-flight logins cannot be displaced by a flood.
  </ul>
 
  <p>
@@ -215,7 +216,7 @@ implements <a href="LoginStateStore.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="DEFAULT_MAX_ENTRIES">
 <h3>DEFAULT_MAX_ENTRIES</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-56">DEFAULT_MAX_ENTRIES</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-57">DEFAULT_MAX_ENTRIES</a></span></div>
 <div class="block">Default maximum number of in-flight login attempts retained.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -230,7 +231,7 @@ implements <a href="LoginStateStore.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="DEFAULT_TTL">
 <h3>DEFAULT_TTL</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-59">DEFAULT_TTL</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-60">DEFAULT_TTL</a></span></div>
 <div class="block">Default time-to-live for a pending login (the user has at most a few minutes at the IdP).</div>
 </section>
 </li>
@@ -245,7 +246,7 @@ implements <a href="LoginStateStore.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="&lt;init&gt;(java.time.Duration,int,java.time.Clock)">
 <h3>InMemoryLoginStateStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-75">InMemoryLoginStateStore</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-76">InMemoryLoginStateStore</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl,
  int&nbsp;maxEntries,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
 <div class="block">Constructor.</div>
@@ -254,7 +255,7 @@ implements <a href="LoginStateStore.html" title="interface in org.apache.juneau.
 <dd><code>ttl</code> - The single-use TTL.  Must be positive and not exceed <a href="LoginStateStore.html#MAX_TTL"><code>LoginStateStore.MAX_TTL</code></a>.  Bounds
    sweep of abandoned entries and asserts the framework ceiling for the default path; per-entry expiry is
    driven by the framework-minted <a href="LoginStateStore.PendingLogin.html#expiresAt()"><code>LoginStateStore.PendingLogin.expiresAt()</code></a>.</dd>
-<dd><code>maxEntries</code> - The LRU size cap.  Must be positive.</dd>
+<dd><code>maxEntries</code> - The size cap.  Must be positive.</dd>
 <dd><code>clock</code> - The clock for TTL sweeping.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
@@ -270,7 +271,7 @@ implements <a href="LoginStateStore.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="store(java.lang.String,org.apache.juneau.rest.server.auth.oidc.rp.LoginStateStore.PendingLogin)">
 <h3>store</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-91">store</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-86">store</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state,
  <a href="LoginStateStore.PendingLogin.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore.PendingLogin</a>&nbsp;pending)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="LoginStateStore.html#store(java.lang.String,org.apache.juneau.rest.server.auth.oidc.rp.LoginStateStore.PendingLogin)">LoginStateStore</a></code></span></div>
 <div class="block">Stores a framework-built pending-login association keyed by <code>state</code>.
@@ -302,7 +303,7 @@ implements <a href="LoginStateStore.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="consume(java.lang.String)">
 <h3>consume</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="LoginStateStore.PendingLogin.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore.PendingLogin</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-102">consume</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="LoginStateStore.PendingLogin.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore.PendingLogin</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-99">consume</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="LoginStateStore.html#consume(java.lang.String)">LoginStateStore</a></code></span></div>
 <div class="block">Atomically removes and returns the pending-login association for <code>state</code>, if present.
 
@@ -348,7 +349,7 @@ implements <a href="LoginStateStore.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="size()">
 <h3>size</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-122">size</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemoryLoginStateStore.html#line-119">size</a></span>()</div>
 <div class="block">Returns the current entry count.  Primarily for tests and metrics.</div>
 <dl class="notes">
 <dt>Returns:</dt>

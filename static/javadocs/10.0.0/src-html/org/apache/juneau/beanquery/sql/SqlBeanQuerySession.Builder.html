@@ -273,114 +273,121 @@
 <span class="source-line-no">260</span><span id="line-260">   }</span>
 <span class="source-line-no">261</span><span id="line-261"></span>
 <span class="source-line-no">262</span><span id="line-262">   private BeanQueryExecutionException failed(SqlStatement stmt, Throwable e) {</span>
-<span class="source-line-no">263</span><span id="line-263">      LOG.log(Level.WARNING, e, () -&gt; "Bean query failed: " + stmt.sql());  // SQL text with placeholders; the driver's message may include values.</span>
-<span class="source-line-no">264</span><span id="line-264">      return new BeanQueryExecutionException(e, "Query execution failed for table '%s'.", context.table);</span>
-<span class="source-line-no">265</span><span id="line-265">   }</span>
-<span class="source-line-no">266</span><span id="line-266"></span>
-<span class="source-line-no">267</span><span id="line-267">   private &lt;R&gt; Stream&lt;R&gt; stream(Cursor&lt;R&gt; cursor) {  // Not static: Cursor is an inner class.</span>
-<span class="source-line-no">268</span><span id="line-268">      return StreamSupport.stream(cursor, false).onClose(cursor::close);</span>
-<span class="source-line-no">269</span><span id="line-269">   }</span>
-<span class="source-line-no">270</span><span id="line-270"></span>
-<span class="source-line-no">271</span><span id="line-271">   private static Map&lt;String,Object&gt; valueRow(ResultSet rs, List&lt;String&gt; columns) throws SQLException {</span>
-<span class="source-line-no">272</span><span id="line-272">      var keys = columns.toArray(new String[0]);</span>
-<span class="source-line-no">273</span><span id="line-273">      var vals = new Object[keys.length];</span>
-<span class="source-line-no">274</span><span id="line-274">      for (var i = 0; i &lt; keys.length; i++)</span>
-<span class="source-line-no">275</span><span id="line-275">         vals[i] = rs.getObject(i + 1);</span>
-<span class="source-line-no">276</span><span id="line-276">      return new SimpleMap&lt;&gt;(keys, vals);</span>
-<span class="source-line-no">277</span><span id="line-277">   }</span>
-<span class="source-line-no">278</span><span id="line-278"></span>
-<span class="source-line-no">279</span><span id="line-279">   private static void closeQuietly(AutoCloseable c) {</span>
-<span class="source-line-no">280</span><span id="line-280">      try {</span>
-<span class="source-line-no">281</span><span id="line-281">         c.close();</span>
-<span class="source-line-no">282</span><span id="line-282">      } catch (Exception e) {  // NOSONAR - A close failure must not hide the real result or error.</span>
-<span class="source-line-no">283</span><span id="line-283">         LOG.log(Level.FINE, "Failed to close a JDBC resource.", e);</span>
-<span class="source-line-no">284</span><span id="line-284">      }</span>
-<span class="source-line-no">285</span><span id="line-285">   }</span>
-<span class="source-line-no">286</span><span id="line-286"></span>
-<span class="source-line-no">287</span><span id="line-287">   @FunctionalInterface</span>
-<span class="source-line-no">288</span><span id="line-288">   private interface RowReader&lt;R&gt; {</span>
-<span class="source-line-no">289</span><span id="line-289">      R read(ResultSet rs) throws SQLException;</span>
-<span class="source-line-no">290</span><span id="line-290">   }</span>
-<span class="source-line-no">291</span><span id="line-291"></span>
-<span class="source-line-no">292</span><span id="line-292">   /** An open statement and result set, read one row per {@link #tryAdvance(Consumer)}. */</span>
-<span class="source-line-no">293</span><span id="line-293">   private final class Cursor&lt;R&gt; extends Spliterators.AbstractSpliterator&lt;R&gt; implements AutoCloseable {</span>
-<span class="source-line-no">294</span><span id="line-294"></span>
-<span class="source-line-no">295</span><span id="line-295">      private final SqlStatement stmt;</span>
-<span class="source-line-no">296</span><span id="line-296">      private final RowReader&lt;R&gt; reader;</span>
-<span class="source-line-no">297</span><span id="line-297">      private PreparedStatement ps;</span>
-<span class="source-line-no">298</span><span id="line-298">      private ResultSet rs;</span>
-<span class="source-line-no">299</span><span id="line-299">      private boolean done;</span>
-<span class="source-line-no">300</span><span id="line-300">      private boolean closedBySession;  // Set only by closeBySession() -- distinguishes a forced shutdown from EOF.</span>
+<span class="source-line-no">263</span><span id="line-263">      // Only the exception class and SQLState are logged: the driver's message and stack may include bound values.</span>
+<span class="source-line-no">264</span><span id="line-264">      LOG.log(Level.INFO, () -&gt; "Bean query failed (" + describe(e) + "): " + stmt.sql());</span>
+<span class="source-line-no">265</span><span id="line-265">      return new BeanQueryExecutionException(e, "Query execution failed for table '%s'.", context.table);</span>
+<span class="source-line-no">266</span><span id="line-266">   }</span>
+<span class="source-line-no">267</span><span id="line-267"></span>
+<span class="source-line-no">268</span><span id="line-268">   static String describe(Throwable e) {</span>
+<span class="source-line-no">269</span><span id="line-269">      var state = e instanceof SQLException se ? se.getSQLState() : null;</span>
+<span class="source-line-no">270</span><span id="line-270">      var text = e.getClass().getName() + (state == null ? "" : ", SQLState " + state);</span>
+<span class="source-line-no">271</span><span id="line-271">      return text.replaceAll("\\p{Cntrl}", "?");</span>
+<span class="source-line-no">272</span><span id="line-272">   }</span>
+<span class="source-line-no">273</span><span id="line-273"></span>
+<span class="source-line-no">274</span><span id="line-274">   private &lt;R&gt; Stream&lt;R&gt; stream(Cursor&lt;R&gt; cursor) {  // Not static: Cursor is an inner class.</span>
+<span class="source-line-no">275</span><span id="line-275">      return StreamSupport.stream(cursor, false).onClose(cursor::close);</span>
+<span class="source-line-no">276</span><span id="line-276">   }</span>
+<span class="source-line-no">277</span><span id="line-277"></span>
+<span class="source-line-no">278</span><span id="line-278">   private static Map&lt;String,Object&gt; valueRow(ResultSet rs, List&lt;String&gt; columns) throws SQLException {</span>
+<span class="source-line-no">279</span><span id="line-279">      var keys = columns.toArray(new String[0]);</span>
+<span class="source-line-no">280</span><span id="line-280">      var vals = new Object[keys.length];</span>
+<span class="source-line-no">281</span><span id="line-281">      for (var i = 0; i &lt; keys.length; i++)</span>
+<span class="source-line-no">282</span><span id="line-282">         vals[i] = rs.getObject(i + 1);</span>
+<span class="source-line-no">283</span><span id="line-283">      return new SimpleMap&lt;&gt;(keys, vals);</span>
+<span class="source-line-no">284</span><span id="line-284">   }</span>
+<span class="source-line-no">285</span><span id="line-285"></span>
+<span class="source-line-no">286</span><span id="line-286">   private static void closeQuietly(AutoCloseable c) {</span>
+<span class="source-line-no">287</span><span id="line-287">      try {</span>
+<span class="source-line-no">288</span><span id="line-288">         c.close();</span>
+<span class="source-line-no">289</span><span id="line-289">      } catch (Exception e) {  // NOSONAR - A close failure must not hide the real result or error.</span>
+<span class="source-line-no">290</span><span id="line-290">         LOG.log(Level.FINE, "Failed to close a JDBC resource.", e);</span>
+<span class="source-line-no">291</span><span id="line-291">      }</span>
+<span class="source-line-no">292</span><span id="line-292">   }</span>
+<span class="source-line-no">293</span><span id="line-293"></span>
+<span class="source-line-no">294</span><span id="line-294">   @FunctionalInterface</span>
+<span class="source-line-no">295</span><span id="line-295">   private interface RowReader&lt;R&gt; {</span>
+<span class="source-line-no">296</span><span id="line-296">      R read(ResultSet rs) throws SQLException;</span>
+<span class="source-line-no">297</span><span id="line-297">   }</span>
+<span class="source-line-no">298</span><span id="line-298"></span>
+<span class="source-line-no">299</span><span id="line-299">   /** An open statement and result set, read one row per {@link #tryAdvance(Consumer)}. */</span>
+<span class="source-line-no">300</span><span id="line-300">   private final class Cursor&lt;R&gt; extends Spliterators.AbstractSpliterator&lt;R&gt; implements AutoCloseable {</span>
 <span class="source-line-no">301</span><span id="line-301"></span>
-<span class="source-line-no">302</span><span id="line-302">      Cursor(SqlStatement stmt, RowReader&lt;R&gt; reader) {</span>
-<span class="source-line-no">303</span><span id="line-303">         super(Long.MAX_VALUE, ORDERED);</span>
-<span class="source-line-no">304</span><span id="line-304">         this.stmt = stmt;</span>
-<span class="source-line-no">305</span><span id="line-305">         this.reader = reader;</span>
-<span class="source-line-no">306</span><span id="line-306">         assertOpen();  // Outside the try: a closed-session IllegalStateException must surface unwrapped.</span>
-<span class="source-line-no">307</span><span id="line-307">         try {</span>
-<span class="source-line-no">308</span><span id="line-308">            ps = prepare(stmt);</span>
-<span class="source-line-no">309</span><span id="line-309">            rs = ps.executeQuery();</span>
-<span class="source-line-no">310</span><span id="line-310">         } catch (BeanQueryExecutionException | BeanQuerySyntaxException e) {</span>
-<span class="source-line-no">311</span><span id="line-311">            close();</span>
-<span class="source-line-no">312</span><span id="line-312">            throw e;</span>
-<span class="source-line-no">313</span><span id="line-313">         } catch (SQLException | RuntimeException e) {</span>
-<span class="source-line-no">314</span><span id="line-314">            close();</span>
-<span class="source-line-no">315</span><span id="line-315">            throw failed(stmt, e);</span>
-<span class="source-line-no">316</span><span id="line-316">         }</span>
-<span class="source-line-no">317</span><span id="line-317">         open.add(this);</span>
-<span class="source-line-no">318</span><span id="line-318">      }</span>
-<span class="source-line-no">319</span><span id="line-319"></span>
-<span class="source-line-no">320</span><span id="line-320">      @Override /* Spliterator */</span>
-<span class="source-line-no">321</span><span id="line-321">      public boolean tryAdvance(Consumer&lt;? super R&gt; action) {</span>
-<span class="source-line-no">322</span><span id="line-322">         if (done) {</span>
-<span class="source-line-no">323</span><span id="line-323">            if (closedBySession)</span>
-<span class="source-line-no">324</span><span id="line-324">               throw isex("SqlBeanQuerySession was closed while a stream from it was still open.");</span>
-<span class="source-line-no">325</span><span id="line-325">            return false;</span>
-<span class="source-line-no">326</span><span id="line-326">         }</span>
-<span class="source-line-no">327</span><span id="line-327">         R row;</span>
-<span class="source-line-no">328</span><span id="line-328">         try {</span>
-<span class="source-line-no">329</span><span id="line-329">            if (! rs.next()) {</span>
-<span class="source-line-no">330</span><span id="line-330">               close();</span>
-<span class="source-line-no">331</span><span id="line-331">               return false;</span>
-<span class="source-line-no">332</span><span id="line-332">            }</span>
-<span class="source-line-no">333</span><span id="line-333">            row = reader.read(rs);</span>
-<span class="source-line-no">334</span><span id="line-334">         } catch (BeanQueryExecutionException | BeanQuerySyntaxException e) {</span>
-<span class="source-line-no">335</span><span id="line-335">            close();</span>
-<span class="source-line-no">336</span><span id="line-336">            throw e;</span>
-<span class="source-line-no">337</span><span id="line-337">         } catch (SQLException | RuntimeException e) {  // Includes the rowMapper throwing.</span>
-<span class="source-line-no">338</span><span id="line-338">            close();</span>
-<span class="source-line-no">339</span><span id="line-339">            throw failed(stmt, e);</span>
-<span class="source-line-no">340</span><span id="line-340">         }</span>
-<span class="source-line-no">341</span><span id="line-341">         // action.accept() runs outside the try: it's the caller's stream-pipeline code (e.g. a downstream</span>
-<span class="source-line-no">342</span><span id="line-342">         // Collectors.toMap duplicate-key check), not our SQL/row-mapping logic, so its exceptions must propagate</span>
-<span class="source-line-no">343</span><span id="line-343">         // unwrapped rather than being misreported as a query failure.</span>
-<span class="source-line-no">344</span><span id="line-344">         action.accept(row);</span>
-<span class="source-line-no">345</span><span id="line-345">         return true;</span>
-<span class="source-line-no">346</span><span id="line-346">      }</span>
-<span class="source-line-no">347</span><span id="line-347"></span>
-<span class="source-line-no">348</span><span id="line-348">      @Override /* AutoCloseable */</span>
-<span class="source-line-no">349</span><span id="line-349">      public void close() {</span>
-<span class="source-line-no">350</span><span id="line-350">         if (done)</span>
-<span class="source-line-no">351</span><span id="line-351">            return;</span>
-<span class="source-line-no">352</span><span id="line-352">         done = true;</span>
-<span class="source-line-no">353</span><span id="line-353">         open.remove(this);</span>
-<span class="source-line-no">354</span><span id="line-354">         if (rs != null)</span>
-<span class="source-line-no">355</span><span id="line-355">            closeQuietly(rs);</span>
-<span class="source-line-no">356</span><span id="line-356">         if (ps != null)</span>
-<span class="source-line-no">357</span><span id="line-357">            closeQuietly(ps);</span>
-<span class="source-line-no">358</span><span id="line-358">      }</span>
-<span class="source-line-no">359</span><span id="line-359"></span>
-<span class="source-line-no">360</span><span id="line-360">      /**</span>
-<span class="source-line-no">361</span><span id="line-361">       * Closes this cursor because the owning session is closing, not because the caller is done with it. A later</span>
-<span class="source-line-no">362</span><span id="line-362">       * {@link #tryAdvance} throws {@link IllegalStateException} instead of looking like the stream simply ran out</span>
-<span class="source-line-no">363</span><span id="line-363">       *. Called only from {@code SqlBeanQuerySession.close()}'s force-close loop over still-open cursors.</span>
-<span class="source-line-no">364</span><span id="line-364">       */</span>
-<span class="source-line-no">365</span><span id="line-365">      void closeBySession() {</span>
-<span class="source-line-no">366</span><span id="line-366">         closedBySession = true;</span>
-<span class="source-line-no">367</span><span id="line-367">         close();</span>
-<span class="source-line-no">368</span><span id="line-368">      }</span>
-<span class="source-line-no">369</span><span id="line-369">   }</span>
-<span class="source-line-no">370</span><span id="line-370">}</span>
+<span class="source-line-no">302</span><span id="line-302">      private final SqlStatement stmt;</span>
+<span class="source-line-no">303</span><span id="line-303">      private final RowReader&lt;R&gt; reader;</span>
+<span class="source-line-no">304</span><span id="line-304">      private PreparedStatement ps;</span>
+<span class="source-line-no">305</span><span id="line-305">      private ResultSet rs;</span>
+<span class="source-line-no">306</span><span id="line-306">      private boolean done;</span>
+<span class="source-line-no">307</span><span id="line-307">      private boolean closedBySession;  // Set only by closeBySession() -- distinguishes a forced shutdown from EOF.</span>
+<span class="source-line-no">308</span><span id="line-308"></span>
+<span class="source-line-no">309</span><span id="line-309">      Cursor(SqlStatement stmt, RowReader&lt;R&gt; reader) {</span>
+<span class="source-line-no">310</span><span id="line-310">         super(Long.MAX_VALUE, ORDERED);</span>
+<span class="source-line-no">311</span><span id="line-311">         this.stmt = stmt;</span>
+<span class="source-line-no">312</span><span id="line-312">         this.reader = reader;</span>
+<span class="source-line-no">313</span><span id="line-313">         assertOpen();  // Outside the try: a closed-session IllegalStateException must surface unwrapped.</span>
+<span class="source-line-no">314</span><span id="line-314">         try {</span>
+<span class="source-line-no">315</span><span id="line-315">            ps = prepare(stmt);</span>
+<span class="source-line-no">316</span><span id="line-316">            rs = ps.executeQuery();</span>
+<span class="source-line-no">317</span><span id="line-317">         } catch (BeanQueryExecutionException | BeanQuerySyntaxException e) {</span>
+<span class="source-line-no">318</span><span id="line-318">            close();</span>
+<span class="source-line-no">319</span><span id="line-319">            throw e;</span>
+<span class="source-line-no">320</span><span id="line-320">         } catch (SQLException | RuntimeException e) {</span>
+<span class="source-line-no">321</span><span id="line-321">            close();</span>
+<span class="source-line-no">322</span><span id="line-322">            throw failed(stmt, e);</span>
+<span class="source-line-no">323</span><span id="line-323">         }</span>
+<span class="source-line-no">324</span><span id="line-324">         open.add(this);</span>
+<span class="source-line-no">325</span><span id="line-325">      }</span>
+<span class="source-line-no">326</span><span id="line-326"></span>
+<span class="source-line-no">327</span><span id="line-327">      @Override /* Spliterator */</span>
+<span class="source-line-no">328</span><span id="line-328">      public boolean tryAdvance(Consumer&lt;? super R&gt; action) {</span>
+<span class="source-line-no">329</span><span id="line-329">         if (done) {</span>
+<span class="source-line-no">330</span><span id="line-330">            if (closedBySession)</span>
+<span class="source-line-no">331</span><span id="line-331">               throw isex("SqlBeanQuerySession was closed while a stream from it was still open.");</span>
+<span class="source-line-no">332</span><span id="line-332">            return false;</span>
+<span class="source-line-no">333</span><span id="line-333">         }</span>
+<span class="source-line-no">334</span><span id="line-334">         R row;</span>
+<span class="source-line-no">335</span><span id="line-335">         try {</span>
+<span class="source-line-no">336</span><span id="line-336">            if (! rs.next()) {</span>
+<span class="source-line-no">337</span><span id="line-337">               close();</span>
+<span class="source-line-no">338</span><span id="line-338">               return false;</span>
+<span class="source-line-no">339</span><span id="line-339">            }</span>
+<span class="source-line-no">340</span><span id="line-340">            row = reader.read(rs);</span>
+<span class="source-line-no">341</span><span id="line-341">         } catch (BeanQueryExecutionException | BeanQuerySyntaxException e) {</span>
+<span class="source-line-no">342</span><span id="line-342">            close();</span>
+<span class="source-line-no">343</span><span id="line-343">            throw e;</span>
+<span class="source-line-no">344</span><span id="line-344">         } catch (SQLException | RuntimeException e) {  // Includes the rowMapper throwing.</span>
+<span class="source-line-no">345</span><span id="line-345">            close();</span>
+<span class="source-line-no">346</span><span id="line-346">            throw failed(stmt, e);</span>
+<span class="source-line-no">347</span><span id="line-347">         }</span>
+<span class="source-line-no">348</span><span id="line-348">         // action.accept() runs outside the try: it's the caller's stream-pipeline code (e.g. a downstream</span>
+<span class="source-line-no">349</span><span id="line-349">         // Collectors.toMap duplicate-key check), not our SQL/row-mapping logic, so its exceptions must propagate</span>
+<span class="source-line-no">350</span><span id="line-350">         // unwrapped rather than being misreported as a query failure.</span>
+<span class="source-line-no">351</span><span id="line-351">         action.accept(row);</span>
+<span class="source-line-no">352</span><span id="line-352">         return true;</span>
+<span class="source-line-no">353</span><span id="line-353">      }</span>
+<span class="source-line-no">354</span><span id="line-354"></span>
+<span class="source-line-no">355</span><span id="line-355">      @Override /* AutoCloseable */</span>
+<span class="source-line-no">356</span><span id="line-356">      public void close() {</span>
+<span class="source-line-no">357</span><span id="line-357">         if (done)</span>
+<span class="source-line-no">358</span><span id="line-358">            return;</span>
+<span class="source-line-no">359</span><span id="line-359">         done = true;</span>
+<span class="source-line-no">360</span><span id="line-360">         open.remove(this);</span>
+<span class="source-line-no">361</span><span id="line-361">         if (rs != null)</span>
+<span class="source-line-no">362</span><span id="line-362">            closeQuietly(rs);</span>
+<span class="source-line-no">363</span><span id="line-363">         if (ps != null)</span>
+<span class="source-line-no">364</span><span id="line-364">            closeQuietly(ps);</span>
+<span class="source-line-no">365</span><span id="line-365">      }</span>
+<span class="source-line-no">366</span><span id="line-366"></span>
+<span class="source-line-no">367</span><span id="line-367">      /**</span>
+<span class="source-line-no">368</span><span id="line-368">       * Closes this cursor because the owning session is closing, not because the caller is done with it. A later</span>
+<span class="source-line-no">369</span><span id="line-369">       * {@link #tryAdvance} throws {@link IllegalStateException} instead of looking like the stream simply ran out</span>
+<span class="source-line-no">370</span><span id="line-370">       *. Called only from {@code SqlBeanQuerySession.close()}'s force-close loop over still-open cursors.</span>
+<span class="source-line-no">371</span><span id="line-371">       */</span>
+<span class="source-line-no">372</span><span id="line-372">      void closeBySession() {</span>
+<span class="source-line-no">373</span><span id="line-373">         closedBySession = true;</span>
+<span class="source-line-no">374</span><span id="line-374">         close();</span>
+<span class="source-line-no">375</span><span id="line-375">      }</span>
+<span class="source-line-no">376</span><span id="line-376">   }</span>
+<span class="source-line-no">377</span><span id="line-377">}</span>
 
 
 

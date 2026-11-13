@@ -92,16 +92,13 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-67">RootResources</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-63">RootResources</a></span>
 <span class="extends-implements">extends <a href="../../rest/server/servlet/BasicRestServletGroup.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServletGroup</a></span></div>
 <div class="block">Root router resource for the Jetty deployment.
 
  <p>
  Mounts the deployment-agnostic <a href="../rest/PetStoreResource.html" title="class in org.apache.juneau.petstore.rest"><code>PetStoreResource</code></a> and <a href="../console/PetstoreConsoleResource.html" title="class in org.apache.juneau.petstore.console"><code>PetstoreConsoleResource</code></a> (the admin console at
- <code>/console</code>) from <code>juneau-petstore-core</code>, and the Jetty/Microservice-specific admin resources (<a href="../../microservice/examples/ConfigResource.html" title="class in org.apache.juneau.microservice.examples"><code>ConfigResource</code></a>, <a href="../../microservice/examples/LogsResource.html" title="class in org.apache.juneau.microservice.examples"><code>LogsResource</code></a>,
- <a href="../../microservice/examples/ShutdownResource.html" title="class in org.apache.juneau.microservice.examples"><code>ShutdownResource</code></a>).  The admin trio is a documented Jetty-only non-parity feature — the Spring Boot
- deployment in <code>juneau-petstore-springboot</code> does not mount it.  <a href="App.AppConfig.html#adminBoundary()"><code>App.AppConfig.adminBoundary()</code></a> puts the
- trio behind its own CSRF boundary.
+ <code>/console</code>) from <code>juneau-petstore-core</code>.
 
  <p>
  Also showcases the Config API + SVL variable resolver: the root page's header is driven by
@@ -211,7 +208,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>RootResources</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-111">RootResources</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-104">RootResources</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -225,7 +222,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="petStore()">
 <h3>petStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-129">petStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-122">petStore</a></span>()</div>
 <div class="block">Registers the one <a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service"><code>PetStore</code></a> shared by the <code>/petstore</code> API and the console tree, seeded with the
  deterministic demo data set.
 
@@ -245,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="index(org.apache.juneau.rest.server.RestRequest)">
 <h3>index</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-145">index</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-138">index</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block"><code>GET /</code> goes to the console store page.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

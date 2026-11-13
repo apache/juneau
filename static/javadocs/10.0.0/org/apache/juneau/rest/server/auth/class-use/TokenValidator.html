@@ -74,8 +74,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">OAuth 2.0 / OIDC integration for the Juneau REST server.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
 <div class="col-last even-row-color">
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
+<div class="col-last odd-row-color">
 <div class="block">MCP <code>2026-07-28</code> binding for <code>juneau-rest-server-mcp</code>.</div>
 </div>
 </div>
@@ -170,6 +174,33 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">OAuthFilter.Builder.</span><code><a href="../oauth/OAuthFilter.Builder.html#validator(org.apache.juneau.rest.server.auth.TokenValidator)" class="member-name-link">validator</a><wbr>(<a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Sets the <a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth"><code>TokenValidator</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp">
+<h2>Uses of <a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a> in <a href="../../mcp/package-summary.html">org.apache.juneau.rest.server.mcp</a></h2>
+<div class="caption"><span>Methods in <a href="../../mcp/package-summary.html">org.apache.juneau.rest.server.mcp</a> that return <a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpServerConfig.</span><code><a href="../../mcp/McpServerConfig.html#getTokenValidator()" class="member-name-link">getTokenValidator</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">The validator used to authenticate <code>Authorization: Bearer</code> tokens on MCP POST requests.</div>
+</div>
+</div>
+<div class="caption"><span>Methods in <a href="../../mcp/package-summary.html">org.apache.juneau.rest.server.mcp</a> with parameters of type <a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../mcp/McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpServerConfig.</span><code><a href="../../mcp/McpServerConfig.html#setTokenValidator(org.apache.juneau.rest.server.auth.TokenValidator)" class="member-name-link">setTokenValidator</a><wbr>(<a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Requires a valid bearer token on MCP POST requests, verified by the given validator.</div>
 </div>
 </div>
 </section>
