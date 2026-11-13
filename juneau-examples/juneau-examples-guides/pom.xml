@@ -44,7 +44,7 @@
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<gpg.skip>true</gpg.skip>
 		<!-- Same pins as juneau-examples-mcp: juneau-rest-server-auth-jwt and -oauth declare Nimbus `provided`. -->
-		<nimbus-jose-jwt.version>10.9.1</nimbus-jose-jwt.version>
+		<nimbus-jose-jwt.version>10.10</nimbus-jose-jwt.version>
 		<nimbus-oauth2-oidc-sdk.version>11.38.2</nimbus-oauth2-oidc-sdk.version>
 	</properties>
 
