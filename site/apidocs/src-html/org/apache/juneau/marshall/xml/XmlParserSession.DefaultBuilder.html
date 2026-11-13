@@ -896,203 +896,214 @@
 <span class="source-line-no">883</span><span id="line-883">    */</span>
 <span class="source-line-no">884</span><span id="line-884">   protected &lt;T&gt; T readAnything(ClassMeta&lt;T&gt; eType, String currAttr, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta)</span>
 <span class="source-line-no">885</span><span id="line-885">      throws IOException, ParseException, ExecutableException, XMLStreamException {</span>
-<span class="source-line-no">886</span><span id="line-886"></span>
-<span class="source-line-no">887</span><span id="line-887">      if (eType == null)</span>
-<span class="source-line-no">888</span><span id="line-888">         eType = (ClassMeta&lt;T&gt;)object();</span>
-<span class="source-line-no">889</span><span id="line-889">      var swap = (ObjectSwap&lt;T,Object&gt;)eType.getSwap(this);</span>
-<span class="source-line-no">890</span><span id="line-890">      var builder = (BuilderSwap&lt;T,Object&gt;)eType.getBuilderSwap(this);</span>
-<span class="source-line-no">891</span><span id="line-891">      ClassMeta&lt;?&gt; sType = null;</span>
-<span class="source-line-no">892</span><span id="line-892">      if (nn(builder))</span>
-<span class="source-line-no">893</span><span id="line-893">         sType = builder.getBuilderClassMeta(this);</span>
-<span class="source-line-no">894</span><span id="line-894">      else if (nn(swap))</span>
-<span class="source-line-no">895</span><span id="line-895">         sType = swap.getSwapClassMeta(this);</span>
-<span class="source-line-no">896</span><span id="line-896">      else</span>
-<span class="source-line-no">897</span><span id="line-897">         sType = eType;</span>
-<span class="source-line-no">898</span><span id="line-898"></span>
-<span class="source-line-no">899</span><span id="line-899">      if (sType.isOptional())</span>
-<span class="source-line-no">900</span><span id="line-900">         return (T)o(readAnything(eType.getElementType(), currAttr, r, outer, isRoot, pMeta));</span>
-<span class="source-line-no">901</span><span id="line-901"></span>
-<span class="source-line-no">902</span><span id="line-902">      setCurrentClass(sType);</span>
-<span class="source-line-no">903</span><span id="line-903"></span>
-<span class="source-line-no">904</span><span id="line-904">      var wrapperAttr = (isRoot &amp;&amp; isPreserveRootElement()) ? r.getName().getLocalPart() : null;</span>
-<span class="source-line-no">905</span><span id="line-905">      var typeAttr = r.getAttributeValue(null, getBeanTypePropertyName(eType));</span>
-<span class="source-line-no">906</span><span id="line-906">      var isNil = eq(r.getAttributeValue(null, "nil"), "true");</span>
-<span class="source-line-no">907</span><span id="line-907">      var jsonType = getJsonType(typeAttr);</span>
-<span class="source-line-no">908</span><span id="line-908">      var elementName = getElementName(r);</span>
-<span class="source-line-no">909</span><span id="line-909">      if (jsonType == 0) {</span>
-<span class="source-line-no">910</span><span id="line-910">         if (elementName == null || elementName.equals(currAttr))</span>
-<span class="source-line-no">911</span><span id="line-911">            jsonType = UNKNOWN;</span>
-<span class="source-line-no">912</span><span id="line-912">         else {</span>
-<span class="source-line-no">913</span><span id="line-913">            typeAttr = elementName;</span>
-<span class="source-line-no">914</span><span id="line-914">            jsonType = getJsonType(elementName);</span>
-<span class="source-line-no">915</span><span id="line-915">         }</span>
-<span class="source-line-no">916</span><span id="line-916">      }</span>
-<span class="source-line-no">917</span><span id="line-917"></span>
-<span class="source-line-no">918</span><span id="line-918">      ClassMeta tcm = getClassMeta(typeAttr, pMeta, eType);</span>
-<span class="source-line-no">919</span><span id="line-919">      if (tcm == null &amp;&amp; nn(elementName) &amp;&amp; ! elementName.equals(currAttr))</span>
-<span class="source-line-no">920</span><span id="line-920">         tcm = getClassMeta(elementName, pMeta, eType);</span>
-<span class="source-line-no">921</span><span id="line-921">      if (nn(tcm))</span>
-<span class="source-line-no">922</span><span id="line-922">         sType = eType = tcm;</span>
-<span class="source-line-no">923</span><span id="line-923"></span>
-<span class="source-line-no">924</span><span id="line-924">      Object o = null;</span>
-<span class="source-line-no">925</span><span id="line-925"></span>
-<span class="source-line-no">926</span><span id="line-926">      if (jsonType == NULL) {</span>
-<span class="source-line-no">927</span><span id="line-927">         r.nextTag();   // Discard end tag</span>
-<span class="source-line-no">928</span><span id="line-928">         return null;</span>
-<span class="source-line-no">929</span><span id="line-929">      }</span>
-<span class="source-line-no">930</span><span id="line-930"></span>
-<span class="source-line-no">931</span><span id="line-931">      if (sType.isObject()) {</span>
-<span class="source-line-no">932</span><span id="line-932">         if (jsonType == OBJECT) {</span>
-<span class="source-line-no">933</span><span id="line-933">            var m = newGenericMap();</span>
-<span class="source-line-no">934</span><span id="line-934">            readIntoMap(r, m, string(), object(), pMeta);</span>
-<span class="source-line-no">935</span><span id="line-935">            if (nn(wrapperAttr))</span>
-<span class="source-line-no">936</span><span id="line-936">               m = newGenericMap().append(wrapperAttr, m);</span>
-<span class="source-line-no">937</span><span id="line-937">            o = cast(m, pMeta, eType);</span>
-<span class="source-line-no">938</span><span id="line-938">         } else if (jsonType == ARRAY)</span>
-<span class="source-line-no">939</span><span id="line-939">            o = readIntoCollection(r, newGenericList(), null, pMeta);</span>
-<span class="source-line-no">940</span><span id="line-940">         else if (jsonType == STRING) {</span>
-<span class="source-line-no">941</span><span id="line-941">            o = getElementText(r);</span>
-<span class="source-line-no">942</span><span id="line-942">            if (sType.isChar())</span>
-<span class="source-line-no">943</span><span id="line-943">               o = parseCharacter(o);</span>
-<span class="source-line-no">944</span><span id="line-944">         } else if (jsonType == NUMBER)</span>
-<span class="source-line-no">945</span><span id="line-945">            o = parseNumber(getElementText(r), null);</span>
-<span class="source-line-no">946</span><span id="line-946">         else if (jsonType == BOOLEAN)</span>
-<span class="source-line-no">947</span><span id="line-947">            o = Boolean.parseBoolean(getElementText(r));</span>
-<span class="source-line-no">948</span><span id="line-948">         else if (jsonType == UNKNOWN)</span>
-<span class="source-line-no">949</span><span id="line-949">            o = getUnknown(r);</span>
-<span class="source-line-no">950</span><span id="line-950">      } else if (nn(builder) || sType.canCreateNewBean(outer)) {</span>
-<span class="source-line-no">951</span><span id="line-951">         if (getXmlClassMeta(sType).getFormat() == COLLAPSED) {</span>
-<span class="source-line-no">952</span><span id="line-952">            var fieldName = r.getLocalName();</span>
-<span class="source-line-no">953</span><span id="line-953">            var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());</span>
-<span class="source-line-no">954</span><span id="line-954">            var bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);</span>
-<span class="source-line-no">955</span><span id="line-955">            var cm = (ClassMeta&lt;?&gt;) m.getMeta().getBeanInfo();</span>
-<span class="source-line-no">956</span><span id="line-956">            var pb = swapParentBean(m.getBean(false));</span>
-<span class="source-line-no">957</span><span id="line-957">            try {</span>
-<span class="source-line-no">958</span><span id="line-958">               Object value = readAnything(cm, currAttr, r, m.getBean(false), false, null);</span>
-<span class="source-line-no">959</span><span id="line-959">               setName(cm, value, currAttr);</span>
-<span class="source-line-no">960</span><span id="line-960">               bpm.set(m, currAttr, value);</span>
-<span class="source-line-no">961</span><span id="line-961">            } finally {</span>
-<span class="source-line-no">962</span><span id="line-962">               swapParentBean(pb);</span>
-<span class="source-line-no">963</span><span id="line-963">            }</span>
-<span class="source-line-no">964</span><span id="line-964">            o = nn(builder) ? builder.build(this, checkRequired(m).getBean(), eType) : checkRequired(m).getBean();</span>
-<span class="source-line-no">965</span><span id="line-965">         } else {</span>
-<span class="source-line-no">966</span><span id="line-966">            var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());</span>
+<span class="source-line-no">886</span><span id="line-886">      enterParseDepth();</span>
+<span class="source-line-no">887</span><span id="line-887">      try {</span>
+<span class="source-line-no">888</span><span id="line-888">         return readAnything0(eType, currAttr, r, outer, isRoot, pMeta);</span>
+<span class="source-line-no">889</span><span id="line-889">      } finally {</span>
+<span class="source-line-no">890</span><span id="line-890">         exitParseDepth();</span>
+<span class="source-line-no">891</span><span id="line-891">      }</span>
+<span class="source-line-no">892</span><span id="line-892">   }</span>
+<span class="source-line-no">893</span><span id="line-893"></span>
+<span class="source-line-no">894</span><span id="line-894">   // Workhorse method, wrapped by readAnything() with the recursion-depth guard.</span>
+<span class="source-line-no">895</span><span id="line-895">   private &lt;T&gt; T readAnything0(ClassMeta&lt;T&gt; eType, String currAttr, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta)</span>
+<span class="source-line-no">896</span><span id="line-896">      throws IOException, ParseException, ExecutableException, XMLStreamException {</span>
+<span class="source-line-no">897</span><span id="line-897"></span>
+<span class="source-line-no">898</span><span id="line-898">      if (eType == null)</span>
+<span class="source-line-no">899</span><span id="line-899">         eType = (ClassMeta&lt;T&gt;)object();</span>
+<span class="source-line-no">900</span><span id="line-900">      var swap = (ObjectSwap&lt;T,Object&gt;)eType.getSwap(this);</span>
+<span class="source-line-no">901</span><span id="line-901">      var builder = (BuilderSwap&lt;T,Object&gt;)eType.getBuilderSwap(this);</span>
+<span class="source-line-no">902</span><span id="line-902">      ClassMeta&lt;?&gt; sType = null;</span>
+<span class="source-line-no">903</span><span id="line-903">      if (nn(builder))</span>
+<span class="source-line-no">904</span><span id="line-904">         sType = builder.getBuilderClassMeta(this);</span>
+<span class="source-line-no">905</span><span id="line-905">      else if (nn(swap))</span>
+<span class="source-line-no">906</span><span id="line-906">         sType = swap.getSwapClassMeta(this);</span>
+<span class="source-line-no">907</span><span id="line-907">      else</span>
+<span class="source-line-no">908</span><span id="line-908">         sType = eType;</span>
+<span class="source-line-no">909</span><span id="line-909"></span>
+<span class="source-line-no">910</span><span id="line-910">      if (sType.isOptional())</span>
+<span class="source-line-no">911</span><span id="line-911">         return (T)o(readAnything(eType.getElementType(), currAttr, r, outer, isRoot, pMeta));</span>
+<span class="source-line-no">912</span><span id="line-912"></span>
+<span class="source-line-no">913</span><span id="line-913">      setCurrentClass(sType);</span>
+<span class="source-line-no">914</span><span id="line-914"></span>
+<span class="source-line-no">915</span><span id="line-915">      var wrapperAttr = (isRoot &amp;&amp; isPreserveRootElement()) ? r.getName().getLocalPart() : null;</span>
+<span class="source-line-no">916</span><span id="line-916">      var typeAttr = r.getAttributeValue(null, getBeanTypePropertyName(eType));</span>
+<span class="source-line-no">917</span><span id="line-917">      var isNil = eq(r.getAttributeValue(null, "nil"), "true");</span>
+<span class="source-line-no">918</span><span id="line-918">      var jsonType = getJsonType(typeAttr);</span>
+<span class="source-line-no">919</span><span id="line-919">      var elementName = getElementName(r);</span>
+<span class="source-line-no">920</span><span id="line-920">      if (jsonType == 0) {</span>
+<span class="source-line-no">921</span><span id="line-921">         if (elementName == null || elementName.equals(currAttr))</span>
+<span class="source-line-no">922</span><span id="line-922">            jsonType = UNKNOWN;</span>
+<span class="source-line-no">923</span><span id="line-923">         else {</span>
+<span class="source-line-no">924</span><span id="line-924">            typeAttr = elementName;</span>
+<span class="source-line-no">925</span><span id="line-925">            jsonType = getJsonType(elementName);</span>
+<span class="source-line-no">926</span><span id="line-926">         }</span>
+<span class="source-line-no">927</span><span id="line-927">      }</span>
+<span class="source-line-no">928</span><span id="line-928"></span>
+<span class="source-line-no">929</span><span id="line-929">      ClassMeta tcm = getClassMeta(typeAttr, pMeta, eType);</span>
+<span class="source-line-no">930</span><span id="line-930">      if (tcm == null &amp;&amp; nn(elementName) &amp;&amp; ! elementName.equals(currAttr))</span>
+<span class="source-line-no">931</span><span id="line-931">         tcm = getClassMeta(elementName, pMeta, eType);</span>
+<span class="source-line-no">932</span><span id="line-932">      if (nn(tcm))</span>
+<span class="source-line-no">933</span><span id="line-933">         sType = eType = tcm;</span>
+<span class="source-line-no">934</span><span id="line-934"></span>
+<span class="source-line-no">935</span><span id="line-935">      Object o = null;</span>
+<span class="source-line-no">936</span><span id="line-936"></span>
+<span class="source-line-no">937</span><span id="line-937">      if (jsonType == NULL) {</span>
+<span class="source-line-no">938</span><span id="line-938">         r.nextTag();   // Discard end tag</span>
+<span class="source-line-no">939</span><span id="line-939">         return null;</span>
+<span class="source-line-no">940</span><span id="line-940">      }</span>
+<span class="source-line-no">941</span><span id="line-941"></span>
+<span class="source-line-no">942</span><span id="line-942">      if (sType.isObject()) {</span>
+<span class="source-line-no">943</span><span id="line-943">         if (jsonType == OBJECT) {</span>
+<span class="source-line-no">944</span><span id="line-944">            var m = newGenericMap();</span>
+<span class="source-line-no">945</span><span id="line-945">            readIntoMap(r, m, string(), object(), pMeta);</span>
+<span class="source-line-no">946</span><span id="line-946">            if (nn(wrapperAttr))</span>
+<span class="source-line-no">947</span><span id="line-947">               m = newGenericMap().append(wrapperAttr, m);</span>
+<span class="source-line-no">948</span><span id="line-948">            o = cast(m, pMeta, eType);</span>
+<span class="source-line-no">949</span><span id="line-949">         } else if (jsonType == ARRAY)</span>
+<span class="source-line-no">950</span><span id="line-950">            o = readIntoCollection(r, newGenericList(), null, pMeta);</span>
+<span class="source-line-no">951</span><span id="line-951">         else if (jsonType == STRING) {</span>
+<span class="source-line-no">952</span><span id="line-952">            o = getElementText(r);</span>
+<span class="source-line-no">953</span><span id="line-953">            if (sType.isChar())</span>
+<span class="source-line-no">954</span><span id="line-954">               o = parseCharacter(o);</span>
+<span class="source-line-no">955</span><span id="line-955">         } else if (jsonType == NUMBER)</span>
+<span class="source-line-no">956</span><span id="line-956">            o = parseNumber(getElementText(r), null);</span>
+<span class="source-line-no">957</span><span id="line-957">         else if (jsonType == BOOLEAN)</span>
+<span class="source-line-no">958</span><span id="line-958">            o = Boolean.parseBoolean(getElementText(r));</span>
+<span class="source-line-no">959</span><span id="line-959">         else if (jsonType == UNKNOWN)</span>
+<span class="source-line-no">960</span><span id="line-960">            o = getUnknown(r);</span>
+<span class="source-line-no">961</span><span id="line-961">      } else if (nn(builder) || sType.canCreateNewBean(outer)) {</span>
+<span class="source-line-no">962</span><span id="line-962">         if (getXmlClassMeta(sType).getFormat() == COLLAPSED) {</span>
+<span class="source-line-no">963</span><span id="line-963">            var fieldName = r.getLocalName();</span>
+<span class="source-line-no">964</span><span id="line-964">            var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());</span>
+<span class="source-line-no">965</span><span id="line-965">            var bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);</span>
+<span class="source-line-no">966</span><span id="line-966">            var cm = (ClassMeta&lt;?&gt;) m.getMeta().getBeanInfo();</span>
 <span class="source-line-no">967</span><span id="line-967">            var pb = swapParentBean(m.getBean(false));</span>
 <span class="source-line-no">968</span><span id="line-968">            try {</span>
-<span class="source-line-no">969</span><span id="line-969">               m = readIntoBean(r, m, isNil);</span>
-<span class="source-line-no">970</span><span id="line-970">            } finally {</span>
-<span class="source-line-no">971</span><span id="line-971">               swapParentBean(pb);</span>
-<span class="source-line-no">972</span><span id="line-972">            }</span>
-<span class="source-line-no">973</span><span id="line-973">            o = nn(builder) ? builder.build(this, checkRequired(m).getBean(), eType) : checkRequired(m).getBean();</span>
-<span class="source-line-no">974</span><span id="line-974">         }</span>
-<span class="source-line-no">975</span><span id="line-975">      } else if (sType.isMap()) {</span>
-<span class="source-line-no">976</span><span id="line-976">         var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));</span>
-<span class="source-line-no">977</span><span id="line-977">         o = readIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);</span>
-<span class="source-line-no">978</span><span id="line-978">         if (nn(wrapperAttr)) {</span>
-<span class="source-line-no">979</span><span id="line-979">            var wrapper = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap());</span>
-<span class="source-line-no">980</span><span id="line-980">            wrapper.put(wrapperAttr, m);</span>
-<span class="source-line-no">981</span><span id="line-981">            o = wrapper;</span>
-<span class="source-line-no">982</span><span id="line-982">         }</span>
-<span class="source-line-no">983</span><span id="line-983">      } else if (sType.isCollection()) {</span>
-<span class="source-line-no">984</span><span id="line-984">         var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : newGenericList());</span>
-<span class="source-line-no">985</span><span id="line-985">         o = readIntoCollection(r, l, sType, pMeta);</span>
-<span class="source-line-no">986</span><span id="line-986">      } else if (sType.isArray() || sType.isArgs()) {</span>
-<span class="source-line-no">987</span><span id="line-987">         var l = (ArrayList)readIntoCollection(r, list(), sType, pMeta);</span>
-<span class="source-line-no">988</span><span id="line-988">         o = toArray(sType, l);</span>
-<span class="source-line-no">989</span><span id="line-989">      } else if (sType.isCharSequence()) {</span>
-<span class="source-line-no">990</span><span id="line-990">         o = getElementText(r);</span>
-<span class="source-line-no">991</span><span id="line-991">      } else if (sType.isChar()) {</span>
-<span class="source-line-no">992</span><span id="line-992">         o = parseCharacter(getElementText(r));</span>
-<span class="source-line-no">993</span><span id="line-993">      } else if (sType.isNumber()) {</span>
-<span class="source-line-no">994</span><span id="line-994">         o = parseNumber(getElementText(r), (Class&lt;? extends Number&gt;)sType.inner());</span>
-<span class="source-line-no">995</span><span id="line-995">      } else if (sType.isBoolean()) {</span>
-<span class="source-line-no">996</span><span id="line-996">         o = Boolean.parseBoolean(getElementText(r));</span>
-<span class="source-line-no">997</span><span id="line-997">      } else if (sType.isDate()) {</span>
-<span class="source-line-no">998</span><span id="line-998">         o = readDate(getElementText(r), sType);</span>
-<span class="source-line-no">999</span><span id="line-999">      } else if (sType.isCalendar()) {</span>
-<span class="source-line-no">1000</span><span id="line-1000">         o = readCalendar(getElementText(r), sType);</span>
-<span class="source-line-no">1001</span><span id="line-1001">      } else if (sType.isTemporal()) {</span>
-<span class="source-line-no">1002</span><span id="line-1002">         o = readTemporal(getElementText(r), sType);</span>
-<span class="source-line-no">1003</span><span id="line-1003">      } else if (sType.isDuration()) {</span>
-<span class="source-line-no">1004</span><span id="line-1004">         o = readDuration(getElementText(r));</span>
-<span class="source-line-no">1005</span><span id="line-1005">      } else if (sType.isPeriod()) {</span>
-<span class="source-line-no">1006</span><span id="line-1006">         o = readPeriod(getElementText(r));</span>
-<span class="source-line-no">1007</span><span id="line-1007">      } else if (sType.canCreateNewInstanceFromString(outer)) {</span>
-<span class="source-line-no">1008</span><span id="line-1008">         o = sType.newInstanceFromString(outer, getElementText(r));</span>
-<span class="source-line-no">1009</span><span id="line-1009">      } else if (nn(sType.getProxyInvocationHandler())) {</span>
-<span class="source-line-no">1010</span><span id="line-1010">         var m = newGenericMap();</span>
-<span class="source-line-no">1011</span><span id="line-1011">         readIntoMap(r, m, string(), object(), pMeta);</span>
-<span class="source-line-no">1012</span><span id="line-1012">         if (nn(wrapperAttr))</span>
-<span class="source-line-no">1013</span><span id="line-1013">            m = newGenericMap().append(wrapperAttr, m);</span>
-<span class="source-line-no">1014</span><span id="line-1014">         o = checkRequired(newBeanMap(outer, sType.inner()).load(m)).getBean();</span>
-<span class="source-line-no">1015</span><span id="line-1015">      } else {</span>
-<span class="source-line-no">1016</span><span id="line-1016">         throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s', property: '%s'", cn(sType), sType.getNotABeanReason(),</span>
-<span class="source-line-no">1017</span><span id="line-1017">            pMeta == null ? null : pMeta.getName());</span>
-<span class="source-line-no">1018</span><span id="line-1018">      }</span>
-<span class="source-line-no">1019</span><span id="line-1019"></span>
-<span class="source-line-no">1020</span><span id="line-1020">      if (nn(swap) &amp;&amp; nn(o))</span>
-<span class="source-line-no">1021</span><span id="line-1021">         o = unswap(swap, o, eType);</span>
-<span class="source-line-no">1022</span><span id="line-1022"></span>
-<span class="source-line-no">1023</span><span id="line-1023">      if (nn(parentBean()))</span>
-<span class="source-line-no">1024</span><span id="line-1024">         setParent(eType, o, parentBean());</span>
-<span class="source-line-no">1025</span><span id="line-1025"></span>
-<span class="source-line-no">1026</span><span id="line-1026">      return (T)o;</span>
-<span class="source-line-no">1027</span><span id="line-1027">   }</span>
-<span class="source-line-no">1028</span><span id="line-1028"></span>
-<span class="source-line-no">1029</span><span id="line-1029">   /**</span>
-<span class="source-line-no">1030</span><span id="line-1030">    * Parses the current element as text.</span>
-<span class="source-line-no">1031</span><span id="line-1031">    *</span>
-<span class="source-line-no">1032</span><span id="line-1032">    * @param r The input reader.</span>
-<span class="source-line-no">1033</span><span id="line-1033">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1034</span><span id="line-1034">    * @return The parsed text.</span>
-<span class="source-line-no">1035</span><span id="line-1035">    * @throws XMLStreamException Thrown by underlying reader.</span>
-<span class="source-line-no">1036</span><span id="line-1036">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">1037</span><span id="line-1037">    * @throws ParseException Malformed input encountered.</span>
-<span class="source-line-no">1038</span><span id="line-1038">    */</span>
-<span class="source-line-no">1039</span><span id="line-1039">   protected String readText(XmlReader r) throws IOException, XMLStreamException, ParseException {</span>
-<span class="source-line-no">1040</span><span id="line-1040">      // Note that this is different than {@link #getText(XmlReader)} since it assumes that we're pointing to a</span>
-<span class="source-line-no">1041</span><span id="line-1041">      // whitespace element.</span>
-<span class="source-line-no">1042</span><span id="line-1042"></span>
-<span class="source-line-no">1043</span><span id="line-1043">      var sb2 = getStringBuilder();</span>
-<span class="source-line-no">1044</span><span id="line-1044"></span>
-<span class="source-line-no">1045</span><span id="line-1045">      int depth = 0;</span>
-<span class="source-line-no">1046</span><span id="line-1046">      while (true) {</span>
-<span class="source-line-no">1047</span><span id="line-1047">         var et = r.getEventType();</span>
-<span class="source-line-no">1048</span><span id="line-1048">         if (et == START_ELEMENT) {</span>
-<span class="source-line-no">1049</span><span id="line-1049">            sb2.append(getElementAsString(r));</span>
-<span class="source-line-no">1050</span><span id="line-1050">            depth++;</span>
-<span class="source-line-no">1051</span><span id="line-1051">         } else if (et == CHARACTERS) {</span>
-<span class="source-line-no">1052</span><span id="line-1052">            sb2.append(getText(r));</span>
-<span class="source-line-no">1053</span><span id="line-1053">         } else if (et == END_ELEMENT) {</span>
-<span class="source-line-no">1054</span><span id="line-1054">            sb2.append(getElementAsString(r));</span>
-<span class="source-line-no">1055</span><span id="line-1055">            depth--;</span>
-<span class="source-line-no">1056</span><span id="line-1056">            if (depth &lt;= 0)</span>
-<span class="source-line-no">1057</span><span id="line-1057">               break;</span>
-<span class="source-line-no">1058</span><span id="line-1058">         }</span>
-<span class="source-line-no">1059</span><span id="line-1059">         r.next();</span>
-<span class="source-line-no">1060</span><span id="line-1060">      }</span>
-<span class="source-line-no">1061</span><span id="line-1061">      var s = sb2.toString();</span>
-<span class="source-line-no">1062</span><span id="line-1062">      returnStringBuilder(sb2);</span>
-<span class="source-line-no">1063</span><span id="line-1063">      return s;</span>
-<span class="source-line-no">1064</span><span id="line-1064">   }</span>
-<span class="source-line-no">1065</span><span id="line-1065"></span>
-<span class="source-line-no">1066</span><span id="line-1066">   /**</span>
-<span class="source-line-no">1067</span><span id="line-1067">    * Parses the current whitespace element.</span>
-<span class="source-line-no">1068</span><span id="line-1068">    *</span>
-<span class="source-line-no">1069</span><span id="line-1069">    * &lt;p&gt;</span>
-<span class="source-line-no">1070</span><span id="line-1070">    * For the XML parser, this always returns &lt;jk&gt;null&lt;/jk&gt; since there is no concept of a whitespace element.</span>
-<span class="source-line-no">1071</span><span id="line-1071">    * However, the HTML parser defines various whitespace elements such as &lt;js&gt;"br"&lt;/js&gt; and &lt;js&gt;"sp"&lt;/js&gt;.</span>
-<span class="source-line-no">1072</span><span id="line-1072">    *</span>
-<span class="source-line-no">1073</span><span id="line-1073">    * @param r The XML stream reader to read the current event from.</span>
-<span class="source-line-no">1074</span><span id="line-1074">    * @return The whitespace character or characters.</span>
-<span class="source-line-no">1075</span><span id="line-1075">    * @throws XMLStreamException Thrown by underlying reader.</span>
-<span class="source-line-no">1076</span><span id="line-1076">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">1077</span><span id="line-1077">    * @throws ParseException Malformed input encountered.</span>
-<span class="source-line-no">1078</span><span id="line-1078">    */</span>
-<span class="source-line-no">1079</span><span id="line-1079">   protected String readWhitespaceElement(XmlReader r) throws IOException, XMLStreamException, ParseException {</span>
-<span class="source-line-no">1080</span><span id="line-1080">      return null;</span>
-<span class="source-line-no">1081</span><span id="line-1081">   }</span>
-<span class="source-line-no">1082</span><span id="line-1082">}</span>
+<span class="source-line-no">969</span><span id="line-969">               Object value = readAnything(cm, currAttr, r, m.getBean(false), false, null);</span>
+<span class="source-line-no">970</span><span id="line-970">               setName(cm, value, currAttr);</span>
+<span class="source-line-no">971</span><span id="line-971">               bpm.set(m, currAttr, value);</span>
+<span class="source-line-no">972</span><span id="line-972">            } finally {</span>
+<span class="source-line-no">973</span><span id="line-973">               swapParentBean(pb);</span>
+<span class="source-line-no">974</span><span id="line-974">            }</span>
+<span class="source-line-no">975</span><span id="line-975">            o = nn(builder) ? builder.build(this, checkRequired(m).getBean(), eType) : checkRequired(m).getBean();</span>
+<span class="source-line-no">976</span><span id="line-976">         } else {</span>
+<span class="source-line-no">977</span><span id="line-977">            var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());</span>
+<span class="source-line-no">978</span><span id="line-978">            var pb = swapParentBean(m.getBean(false));</span>
+<span class="source-line-no">979</span><span id="line-979">            try {</span>
+<span class="source-line-no">980</span><span id="line-980">               m = readIntoBean(r, m, isNil);</span>
+<span class="source-line-no">981</span><span id="line-981">            } finally {</span>
+<span class="source-line-no">982</span><span id="line-982">               swapParentBean(pb);</span>
+<span class="source-line-no">983</span><span id="line-983">            }</span>
+<span class="source-line-no">984</span><span id="line-984">            o = nn(builder) ? builder.build(this, checkRequired(m).getBean(), eType) : checkRequired(m).getBean();</span>
+<span class="source-line-no">985</span><span id="line-985">         }</span>
+<span class="source-line-no">986</span><span id="line-986">      } else if (sType.isMap()) {</span>
+<span class="source-line-no">987</span><span id="line-987">         var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));</span>
+<span class="source-line-no">988</span><span id="line-988">         o = readIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);</span>
+<span class="source-line-no">989</span><span id="line-989">         if (nn(wrapperAttr)) {</span>
+<span class="source-line-no">990</span><span id="line-990">            var wrapper = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap());</span>
+<span class="source-line-no">991</span><span id="line-991">            wrapper.put(wrapperAttr, m);</span>
+<span class="source-line-no">992</span><span id="line-992">            o = wrapper;</span>
+<span class="source-line-no">993</span><span id="line-993">         }</span>
+<span class="source-line-no">994</span><span id="line-994">      } else if (sType.isCollection()) {</span>
+<span class="source-line-no">995</span><span id="line-995">         var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : newGenericList());</span>
+<span class="source-line-no">996</span><span id="line-996">         o = readIntoCollection(r, l, sType, pMeta);</span>
+<span class="source-line-no">997</span><span id="line-997">      } else if (sType.isArray() || sType.isArgs()) {</span>
+<span class="source-line-no">998</span><span id="line-998">         var l = (ArrayList)readIntoCollection(r, list(), sType, pMeta);</span>
+<span class="source-line-no">999</span><span id="line-999">         o = toArray(sType, l);</span>
+<span class="source-line-no">1000</span><span id="line-1000">      } else if (sType.isCharSequence()) {</span>
+<span class="source-line-no">1001</span><span id="line-1001">         o = getElementText(r);</span>
+<span class="source-line-no">1002</span><span id="line-1002">      } else if (sType.isChar()) {</span>
+<span class="source-line-no">1003</span><span id="line-1003">         o = parseCharacter(getElementText(r));</span>
+<span class="source-line-no">1004</span><span id="line-1004">      } else if (sType.isNumber()) {</span>
+<span class="source-line-no">1005</span><span id="line-1005">         o = parseNumber(getElementText(r), (Class&lt;? extends Number&gt;)sType.inner());</span>
+<span class="source-line-no">1006</span><span id="line-1006">      } else if (sType.isBoolean()) {</span>
+<span class="source-line-no">1007</span><span id="line-1007">         o = Boolean.parseBoolean(getElementText(r));</span>
+<span class="source-line-no">1008</span><span id="line-1008">      } else if (sType.isDate()) {</span>
+<span class="source-line-no">1009</span><span id="line-1009">         o = readDate(getElementText(r), sType);</span>
+<span class="source-line-no">1010</span><span id="line-1010">      } else if (sType.isCalendar()) {</span>
+<span class="source-line-no">1011</span><span id="line-1011">         o = readCalendar(getElementText(r), sType);</span>
+<span class="source-line-no">1012</span><span id="line-1012">      } else if (sType.isTemporal()) {</span>
+<span class="source-line-no">1013</span><span id="line-1013">         o = readTemporal(getElementText(r), sType);</span>
+<span class="source-line-no">1014</span><span id="line-1014">      } else if (sType.isDuration()) {</span>
+<span class="source-line-no">1015</span><span id="line-1015">         o = readDuration(getElementText(r));</span>
+<span class="source-line-no">1016</span><span id="line-1016">      } else if (sType.isPeriod()) {</span>
+<span class="source-line-no">1017</span><span id="line-1017">         o = readPeriod(getElementText(r));</span>
+<span class="source-line-no">1018</span><span id="line-1018">      } else if (sType.canCreateNewInstanceFromString(outer)) {</span>
+<span class="source-line-no">1019</span><span id="line-1019">         o = sType.newInstanceFromString(outer, getElementText(r));</span>
+<span class="source-line-no">1020</span><span id="line-1020">      } else if (nn(sType.getProxyInvocationHandler())) {</span>
+<span class="source-line-no">1021</span><span id="line-1021">         var m = newGenericMap();</span>
+<span class="source-line-no">1022</span><span id="line-1022">         readIntoMap(r, m, string(), object(), pMeta);</span>
+<span class="source-line-no">1023</span><span id="line-1023">         if (nn(wrapperAttr))</span>
+<span class="source-line-no">1024</span><span id="line-1024">            m = newGenericMap().append(wrapperAttr, m);</span>
+<span class="source-line-no">1025</span><span id="line-1025">         o = checkRequired(newBeanMap(outer, sType.inner()).load(m)).getBean();</span>
+<span class="source-line-no">1026</span><span id="line-1026">      } else {</span>
+<span class="source-line-no">1027</span><span id="line-1027">         throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s', property: '%s'", cn(sType), sType.getNotABeanReason(),</span>
+<span class="source-line-no">1028</span><span id="line-1028">            pMeta == null ? null : pMeta.getName());</span>
+<span class="source-line-no">1029</span><span id="line-1029">      }</span>
+<span class="source-line-no">1030</span><span id="line-1030"></span>
+<span class="source-line-no">1031</span><span id="line-1031">      if (nn(swap) &amp;&amp; nn(o))</span>
+<span class="source-line-no">1032</span><span id="line-1032">         o = unswap(swap, o, eType);</span>
+<span class="source-line-no">1033</span><span id="line-1033"></span>
+<span class="source-line-no">1034</span><span id="line-1034">      if (nn(parentBean()))</span>
+<span class="source-line-no">1035</span><span id="line-1035">         setParent(eType, o, parentBean());</span>
+<span class="source-line-no">1036</span><span id="line-1036"></span>
+<span class="source-line-no">1037</span><span id="line-1037">      return (T)o;</span>
+<span class="source-line-no">1038</span><span id="line-1038">   }</span>
+<span class="source-line-no">1039</span><span id="line-1039"></span>
+<span class="source-line-no">1040</span><span id="line-1040">   /**</span>
+<span class="source-line-no">1041</span><span id="line-1041">    * Parses the current element as text.</span>
+<span class="source-line-no">1042</span><span id="line-1042">    *</span>
+<span class="source-line-no">1043</span><span id="line-1043">    * @param r The input reader.</span>
+<span class="source-line-no">1044</span><span id="line-1044">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1045</span><span id="line-1045">    * @return The parsed text.</span>
+<span class="source-line-no">1046</span><span id="line-1046">    * @throws XMLStreamException Thrown by underlying reader.</span>
+<span class="source-line-no">1047</span><span id="line-1047">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">1048</span><span id="line-1048">    * @throws ParseException Malformed input encountered.</span>
+<span class="source-line-no">1049</span><span id="line-1049">    */</span>
+<span class="source-line-no">1050</span><span id="line-1050">   protected String readText(XmlReader r) throws IOException, XMLStreamException, ParseException {</span>
+<span class="source-line-no">1051</span><span id="line-1051">      // Note that this is different than {@link #getText(XmlReader)} since it assumes that we're pointing to a</span>
+<span class="source-line-no">1052</span><span id="line-1052">      // whitespace element.</span>
+<span class="source-line-no">1053</span><span id="line-1053"></span>
+<span class="source-line-no">1054</span><span id="line-1054">      var sb2 = getStringBuilder();</span>
+<span class="source-line-no">1055</span><span id="line-1055"></span>
+<span class="source-line-no">1056</span><span id="line-1056">      int depth = 0;</span>
+<span class="source-line-no">1057</span><span id="line-1057">      while (true) {</span>
+<span class="source-line-no">1058</span><span id="line-1058">         var et = r.getEventType();</span>
+<span class="source-line-no">1059</span><span id="line-1059">         if (et == START_ELEMENT) {</span>
+<span class="source-line-no">1060</span><span id="line-1060">            sb2.append(getElementAsString(r));</span>
+<span class="source-line-no">1061</span><span id="line-1061">            depth++;</span>
+<span class="source-line-no">1062</span><span id="line-1062">         } else if (et == CHARACTERS) {</span>
+<span class="source-line-no">1063</span><span id="line-1063">            sb2.append(getText(r));</span>
+<span class="source-line-no">1064</span><span id="line-1064">         } else if (et == END_ELEMENT) {</span>
+<span class="source-line-no">1065</span><span id="line-1065">            sb2.append(getElementAsString(r));</span>
+<span class="source-line-no">1066</span><span id="line-1066">            depth--;</span>
+<span class="source-line-no">1067</span><span id="line-1067">            if (depth &lt;= 0)</span>
+<span class="source-line-no">1068</span><span id="line-1068">               break;</span>
+<span class="source-line-no">1069</span><span id="line-1069">         }</span>
+<span class="source-line-no">1070</span><span id="line-1070">         r.next();</span>
+<span class="source-line-no">1071</span><span id="line-1071">      }</span>
+<span class="source-line-no">1072</span><span id="line-1072">      var s = sb2.toString();</span>
+<span class="source-line-no">1073</span><span id="line-1073">      returnStringBuilder(sb2);</span>
+<span class="source-line-no">1074</span><span id="line-1074">      return s;</span>
+<span class="source-line-no">1075</span><span id="line-1075">   }</span>
+<span class="source-line-no">1076</span><span id="line-1076"></span>
+<span class="source-line-no">1077</span><span id="line-1077">   /**</span>
+<span class="source-line-no">1078</span><span id="line-1078">    * Parses the current whitespace element.</span>
+<span class="source-line-no">1079</span><span id="line-1079">    *</span>
+<span class="source-line-no">1080</span><span id="line-1080">    * &lt;p&gt;</span>
+<span class="source-line-no">1081</span><span id="line-1081">    * For the XML parser, this always returns &lt;jk&gt;null&lt;/jk&gt; since there is no concept of a whitespace element.</span>
+<span class="source-line-no">1082</span><span id="line-1082">    * However, the HTML parser defines various whitespace elements such as &lt;js&gt;"br"&lt;/js&gt; and &lt;js&gt;"sp"&lt;/js&gt;.</span>
+<span class="source-line-no">1083</span><span id="line-1083">    *</span>
+<span class="source-line-no">1084</span><span id="line-1084">    * @param r The XML stream reader to read the current event from.</span>
+<span class="source-line-no">1085</span><span id="line-1085">    * @return The whitespace character or characters.</span>
+<span class="source-line-no">1086</span><span id="line-1086">    * @throws XMLStreamException Thrown by underlying reader.</span>
+<span class="source-line-no">1087</span><span id="line-1087">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">1088</span><span id="line-1088">    * @throws ParseException Malformed input encountered.</span>
+<span class="source-line-no">1089</span><span id="line-1089">    */</span>
+<span class="source-line-no">1090</span><span id="line-1090">   protected String readWhitespaceElement(XmlReader r) throws IOException, XMLStreamException, ParseException {</span>
+<span class="source-line-no">1091</span><span id="line-1091">      return null;</span>
+<span class="source-line-no">1092</span><span id="line-1092">   }</span>
+<span class="source-line-no">1093</span><span id="line-1093">}</span>
 
 
 

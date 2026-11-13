@@ -90,9 +90,12 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DebugResource.html#line-46">DebugResource</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DebugResource.html#line-49">DebugResource</a></span>
 <span class="extends-implements">extends <a href="../../rest/server/servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a></span></div>
 <div class="block">Microservice debug utilities.
+
+ <p>
+ This resource has no authentication of its own.  Do not mount it where an untrusted caller can reach it without adding your own authentication.
 
  <p>
  The <code>jetty-thread-dump</code> navlink is a plain <code>GET /jetty/dump</code>, which shows the dump.  Writing the dump to
@@ -195,7 +198,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>DebugResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DebugResource.html#line-61">DebugResource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DebugResource.html#line-64">DebugResource</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -209,7 +212,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createJettyDump(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>createJettyDump</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/classic/response/Ok.html" title="class in org.apache.juneau.http.classic.response">Ok</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DebugResource.html#line-72">createJettyDump</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/classic/response/Ok.html" title="class in org.apache.juneau.http.classic.response">Ok</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DebugResource.html#line-75">createJettyDump</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">[POST /jetty/dump] - Generates and saves the jetty thread dump file to jetty-thread-dump.log.</div>
@@ -227,7 +230,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getChildren()">
 <h3>getChildren</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../rest/server/beans/ResourceDescriptions.html" title="class in org.apache.juneau.rest.server.beans">ResourceDescriptions</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DebugResource.html#line-89">getChildren</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../rest/server/beans/ResourceDescriptions.html" title="class in org.apache.juneau.rest.server.beans">ResourceDescriptions</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DebugResource.html#line-92">getChildren</a></span>()</div>
 <div class="block">[GET /] - Shows child utilities.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -238,7 +241,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getJettyDump(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>getJettyDump</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DebugResource.html#line-105">getJettyDump</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DebugResource.html#line-108">getJettyDump</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span></div>
 <div class="block">[GET /jetty/dump] - Generates and retrieves the jetty thread dump.</div>
 <dl class="notes">

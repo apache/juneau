@@ -50,7 +50,7 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  })
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">class</strong> BusEventsMixin_Session_Test <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	@Rest
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	@Rest(allowCrossSite=<span class="jxr_string">"true"</span>)
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R <strong class="jxr_keyword">extends</strong> BasicRestServlet <strong class="jxr_keyword">implements</strong> BusEventsMixin {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">volatile</strong> ServerBus bus;
@@ -65,7 +65,7 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> SynchronizerToken TOKEN = SynchronizerToken.of(<span class="jxr_string">"the-real-token"</span>);
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> BusPolicy.Builder policy() {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">return</strong> BusPolicy.create().downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>).downstream(<span class="jxr_string">"ops.alert:*"</span>, false);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">return</strong> BusPolicy.create().anyCaller().downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>).downstream(<span class="jxr_string">"ops.alert:*"</span>, false);
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> use(BusPolicy p) {
@@ -379,7 +379,42 @@
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 		C.get(stream + <span class="jxr_string">"?method=DELETE"</span>).userPrincipal(JB).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"text/event-stream"</span>).header(<span class="jxr_string">"Host"</span>, APP_HOST)
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 			.header(<span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://evil.example"</span>).run().assertStatus(403);
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> }
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	<em class="jxr_comment">// d) default same-origin check when the policy has no boundary</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client.classic.RestResponse openWith(String host, String origin, <strong class="jxr_keyword">int</strong> status) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">var</strong> req = C.post(BusEventsMixin.SESSION_PATH).userPrincipal(JB).contentString(body(<span class="jxr_string">"sse"</span>, <span class="jxr_string">"ops.jobs"</span>))
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			.contentType(<span class="jxr_string">"application/json"</span>).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).header(<span class="jxr_string">"Host"</span>, host);
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">if</strong> (origin != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			req = req.header(<span class="jxr_string">"Origin"</span>, origin);
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">return</strong> req.run().assertStatus(status);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	}
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	@Test <strong class="jxr_keyword">void</strong> d01_noBoundaryRefusesAMismatchedOriginOnPostAndStream() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">var</strong> text = openWith(<span class="jxr_string">"app.example"</span>, <span class="jxr_string">"http://other.example"</span>, 403).getContent().asString();
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertTrue(text.contains(<span class="jxr_string">"bus:refused"</span>), text);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertTrue(R.bus.sessions().isEmpty());
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<strong class="jxr_keyword">var</strong> stream = BusEventsMixin.STREAM_PATH.replace(<span class="jxr_string">"{sessionId}"</span>, <span class="jxr_string">"0"</span>.repeat(64));
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		C.get(stream).userPrincipal(JB).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"text/event-stream"</span>).header(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"app.example"</span>)
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			.header(<span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://other.example"</span>).run().assertStatus(403);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	@Test <strong class="jxr_keyword">void</strong> d02_noBoundaryAllowsMatchingOrAbsentOrigin() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		openWith(<span class="jxr_string">"app.example"</span>, <span class="jxr_string">"http://app.example"</span>, 200);
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		openWith(<span class="jxr_string">"app.example"</span>, <strong class="jxr_keyword">null</strong>, 200);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">var</strong> stream = BusEventsMixin.STREAM_PATH.replace(<span class="jxr_string">"{sessionId}"</span>, <span class="jxr_string">"0"</span>.repeat(64));
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		C.get(stream).userPrincipal(JB).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"text/event-stream"</span>).header(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"app.example"</span>)
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			.header(<span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://app.example"</span>).run().assertStatus(404);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	}
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	@Test <strong class="jxr_keyword">void</strong> d03_noSameOriginCheckOptsOut() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		R.bus.close();
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		use(policy().noSameOriginCheck().build());
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		openWith(<span class="jxr_string">"app.example"</span>, <span class="jxr_string">"http://other.example"</span>, 200);
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	}
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

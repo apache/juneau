@@ -102,8 +102,8 @@ loadScripts(document, 'script');</script>
 
  <p>
  <b><code>/info</code> and <code>/loggers</code> are off by default</b> &mdash; unlike health, they are not mounted
- on the bare group, since <a href="InfoMixin.html" title="class in org.apache.juneau.microservice.management"><code>InfoMixin</code></a> discloses the full manifest and <a href="../../rest/server/management/LoggersMixin.html" title="class in org.apache.juneau.rest.server.management"><code>LoggersMixin</code></a>'s read side
- discloses logger topology, neither behind any auth. Turn either back on (either approach suffices):
+ on the bare group, since <a href="InfoMixin.html" title="class in org.apache.juneau.microservice.management"><code>InfoMixin</code></a> discloses the full manifest and <a href="../../rest/server/management/LoggersMixin.html" title="class in org.apache.juneau.rest.server.management"><code>LoggersMixin</code></a>
+ discloses logger topology (it is deny-all until a guard bean is registered). Turn either back on (either approach suffices):
  <ul>
    <li><b>A-la-carte (recommended):</b> mount <a href="InfoMixin.html" title="class in org.apache.juneau.microservice.management"><code>InfoMixin</code></a> / <a href="../../rest/server/management/LoggersMixin.html" title="class in org.apache.juneau.rest.server.management"><code>LoggersMixin</code></a> on a resource you
       control, e.g. a <code>BasicActuatorGroup</code> subclass with

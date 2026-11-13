@@ -78,27 +78,26 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-73">EntryBuilder</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-72">EntryBuilder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A fluent builder for adding or updating a single <a href="Config.html" title="class in org.apache.juneau.config"><code>Config</code></a> entry.
 
  <p>
  This is an ergonomic, self-documenting alternative to the multi-argument
- <a href="Config.html#set(java.lang.String,java.lang.Object,org.apache.juneau.marshall.serializer.Serializer,java.lang.String,java.lang.String,java.util.List)"><code>Config.set(String, Object, Serializer, String, String, List)</code></a> overload.  That overload packs several distinct
+ <a href="Config.html#set(java.lang.String,java.lang.Object,org.apache.juneau.marshall.serializer.Serializer,java.lang.String,java.util.List)"><code>Config.set(String, Object, Serializer, String, List)</code></a> overload.  That overload packs several distinct
  "leave-unchanged versus clear" sentinel conventions into one call (a <jk>null</jk> comment leaves the existing comment
  untouched while a blank comment clears it; a <jk>null</jk> pre-lines list leaves the existing pre-lines untouched while
  an empty list clears them).  This builder replaces those sentinels with explicit methods:
  <ul>
    <li><b>Not calling</b> a facet method leaves that facet untouched (no sentinel needed).
-   <li>An explicit setter (<a href="#comment(java.lang.String)"><code>comment(String)</code></a>, <a href="#preLines(java.util.List)"><code>preLines(List)</code></a>, <a href="#serializer(org.apache.juneau.marshall.serializer.Serializer)"><code>serializer(Serializer)</code></a>,
-      <a href="#modifiers(java.lang.String)"><code>modifiers(String)</code></a>) sets that facet.
+   <li>An explicit setter (<a href="#comment(java.lang.String)"><code>comment(String)</code></a>, <a href="#preLines(java.util.List)"><code>preLines(List)</code></a>, <a href="#serializer(org.apache.juneau.marshall.serializer.Serializer)"><code>serializer(Serializer)</code></a>) sets that facet.
    <li>An explicit clear (<a href="#clearComment()"><code>clearComment()</code></a>, <a href="#clearPreLines()"><code>clearPreLines()</code></a>) intentionally clears that facet rather than
       relying on a magic blank string or empty list.
  </ul>
 
  <p>
  The write is performed by the terminal <a href="#set(java.lang.Object)"><code>set(Object)</code></a> or <a href="#set()"><code>set()</code></a> method.  The result is identical to the
- equivalent <a href="Config.html#set(java.lang.String,java.lang.Object,org.apache.juneau.marshall.serializer.Serializer,java.lang.String,java.lang.String,java.util.List)"><code>Config.set(String, Object, Serializer, String, String, List)</code></a> call.
+ equivalent <a href="Config.html#set(java.lang.String,java.lang.Object,org.apache.juneau.marshall.serializer.Serializer,java.lang.String,java.util.List)"><code>Config.set(String, Object, Serializer, String, List)</code></a> call.
 
  <h2 class='section'>Example:</h2>
  <p class='bjava'>
@@ -174,33 +173,28 @@ loadScripts(document, 'script');</script>
 <div class="block">Specifies the same-line comment to add to the entry.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#modifiers(java.lang.String)" class="member-name-link">modifiers</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#preLines(java.util.List)" class="member-name-link">preLines</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Specifies the modifiers to apply to the value (e.g.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#preLines(java.util.List)" class="member-name-link">preLines</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Specifies the comment or blank lines to add before the entry.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializer(org.apache.juneau.marshall.serializer.Serializer)" class="member-name-link">serializer</a><wbr>(<a href="../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializer(org.apache.juneau.marshall.serializer.Serializer)" class="member-name-link">serializer</a><wbr>(<a href="../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Specifies the serializer to use to serialize the value.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#set()" class="member-name-link">set</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#set()" class="member-name-link">set</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds or updates the entry using the value specified via <a href="#value(java.lang.Object)"><code>value(Object)</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#set(java.lang.Object)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#set(java.lang.Object)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds or updates the entry using the specified value.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#value(java.lang.Object)" class="member-name-link">value</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#value(java.lang.Object)" class="member-name-link">value</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Specifies the value to store on the entry.</div>
 </div>
 </div>
@@ -223,7 +217,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.config.Config,java.lang.String)">
 <h3>EntryBuilder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-92">EntryBuilder</a></span><wbr><span class="parameters">(<a href="Config.html" title="class in org.apache.juneau.config">Config</a>&nbsp;config,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-90">EntryBuilder</a></span><wbr><span class="parameters">(<a href="Config.html" title="class in org.apache.juneau.config">Config</a>&nbsp;config,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -245,7 +239,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="value(java.lang.Object)">
 <h3>value</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-109">value</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-107">value</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Specifies the value to store on the entry.
 
  <p>
@@ -262,7 +256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializer(org.apache.juneau.marshall.serializer.Serializer)">
 <h3>serializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-123">serializer</a></span><wbr><span class="parameters">(<a href="../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-121">serializer</a></span><wbr><span class="parameters">(<a href="../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;value)</span></div>
 <div class="block">Specifies the serializer to use to serialize the value.
 
  <p>
@@ -276,25 +270,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="modifiers(java.lang.String)">
-<h3>modifiers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-137">modifiers</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block">Specifies the modifiers to apply to the value (e.g. <js>"*"</js> for encoded values).
-
- <p>
- If not called, the modifiers on any existing entry are left untouched.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>value</code> - The modifiers to apply to the value.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="comment(java.lang.String)">
 <h3>comment</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-152">comment</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-136">comment</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Specifies the same-line comment to add to the entry.
 
  <p>
@@ -311,7 +289,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clearComment()">
 <h3>clearComment</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-163">clearComment</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-147">clearComment</a></span>()</div>
 <div class="block">Explicitly clears the same-line comment on the entry.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -322,7 +300,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="preLines(java.util.List)">
 <h3>preLines</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-178">preLines</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-162">preLines</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Specifies the comment or blank lines to add before the entry.
 
  <p>
@@ -339,7 +317,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clearPreLines()">
 <h3>clearPreLines</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-189">clearPreLines</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.apache.juneau.config">EntryBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-173">clearPreLines</a></span>()</div>
 <div class="block">Explicitly clears the pre-lines on the entry.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -350,7 +328,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set()">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Config.html" title="class in org.apache.juneau.config">Config</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-202">set</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Config.html" title="class in org.apache.juneau.config">Config</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-186">set</a></span>()
            throws <span class="exceptions"><a href="../marshall/serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
 <div class="block">Adds or updates the entry using the value specified via <a href="#value(java.lang.Object)"><code>value(Object)</code></a>.</div>
 <dl class="notes">
@@ -365,7 +343,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Config.html" title="class in org.apache.juneau.config">Config</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-217">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Config.html" title="class in org.apache.juneau.config">Config</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/EntryBuilder.html#line-201">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
            throws <span class="exceptions"><a href="../marshall/serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
 <div class="block">Adds or updates the entry using the specified value.</div>
 <dl class="notes">

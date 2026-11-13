@@ -42,8 +42,8 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;{@code /info} and {@code /loggers} are off by default&lt;/b&gt; &amp;mdash; unlike health, they are not mounted</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * on the bare group, since {@link InfoMixin} discloses the full manifest and {@link LoggersMixin}'s read side</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * discloses logger topology, neither behind any auth. Turn either back on (either approach suffices):</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * on the bare group, since {@link InfoMixin} discloses the full manifest and {@link LoggersMixin}</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * discloses logger topology (it is deny-all until a guard bean is registered). Turn either back on (either approach suffices):</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;A-la-carte (recommended):&lt;/b&gt; mount {@link InfoMixin} / {@link LoggersMixin} on a resource you</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * 		control, e.g. a {@code BasicActuatorGroup} subclass with</em>

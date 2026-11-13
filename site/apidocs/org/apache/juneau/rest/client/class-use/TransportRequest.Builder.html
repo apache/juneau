@@ -103,10 +103,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the HTTP method.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#redirectStripHeaders(java.util.Collection)" class="member-name-link">redirectStripHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#redirectForwardHeaders(java.util.Collection)" class="member-name-link">redirectForwardHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Adds header names to strip, besides <a href="../RedirectSecurity.html#stripOnCrossOrigin()"><code>RedirectSecurity.stripOnCrossOrigin()</code></a>, when the request is replayed
- against another origin.</div>
+<div class="block">Adds header names that may be replayed against another origin, besides
+ <a href="../RedirectSecurity.html#forwardOnCrossOrigin()"><code>RedirectSecurity.forwardOnCrossOrigin()</code></a>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#remoteUrlPolicy(boolean,boolean)" class="member-name-link">remoteUrlPolicy</a><wbr>(boolean&nbsp;policyEnforced,

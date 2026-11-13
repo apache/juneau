@@ -407,82 +407,83 @@
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">var</strong> ms = (<strong class="jxr_keyword">int</strong>) Math.min(httpTimeout.toMillis(), Integer.MAX_VALUE);
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 		http.setConnectTimeout(ms);
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 		http.setReadTimeout(ms);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">if</strong> (httpRequestConfigurator != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			httpRequestConfigurator.accept(http);
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		HTTPResponse httpResp;
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			httpResp = http.send();
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Dynamic client registration HTTP call failed"</span>, e);
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		}
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">return</strong> parseRegistrationResponse(httpResp);
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	}
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<strong class="jxr_keyword">private</strong> <a name="McpClientRegistration" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpClientRegistration.html#McpClientRegistration">McpClientRegistration</a> toRegistration(ClientInformation info) {
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">var</strong> secret = info.getSecret();
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		Optional&lt;String&gt; clientSecret = secret == <strong class="jxr_keyword">null</strong> ? oe() : o(secret.getValue());
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		Optional&lt;Instant&gt; secretExpires = (secret == <strong class="jxr_keyword">null</strong> || secret.getExpirationDate() == <strong class="jxr_keyword">null</strong>) ? oe() : o(secret.getExpirationDate().toInstant());
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">var</strong> rat = info.getRegistrationAccessToken();
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		Optional&lt;String&gt; regAccessToken = rat == <strong class="jxr_keyword">null</strong> ? oe() : o(rat.getValue());
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		Optional&lt;URI&gt; regClientUri = info.getRegistrationURI() == <strong class="jxr_keyword">null</strong> ? oe() : o(info.getRegistrationURI());
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="McpClientRegistration" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpClientRegistration.html#McpClientRegistration">McpClientRegistration</a>(
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			info.getID().getValue(),
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			clientSecret,
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			secretExpires,
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			regAccessToken,
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			regClientUri,
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			issuer,
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			redirectUris,
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			applicationType,
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			extrasFrom(info));
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	}
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<em class="jxr_javadoccomment">/** Surfaces any non-registered custom fields the AS returned in the registration response as the registration's extras. */</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; extrasFrom(ClientInformation info) {
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">var</strong> custom = info.getMetadata().getCustomFields();
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">return</strong> custom.isEmpty() ? Map.of() : <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(custom);
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	}
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;GrantType&gt; mapGrantTypes(Set&lt;String&gt; v) {
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;GrantType&gt;();
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> g : v) {
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 				out.add(GrantType.parse(g));
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			} <strong class="jxr_keyword">catch</strong> (ParseException e) { <em class="jxr_comment">// HTT: GrantType.parse only throws ParseException for null/empty input, which the builder's reqnb rejects up front</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 				<strong class="jxr_keyword">throw</strong> iaex(e, <span class="jxr_string">"Invalid grant_type '%s'"</span>, g);  <em class="jxr_comment">// HTT: see above</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			}
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		}
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">return</strong> out;
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 	}
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;ResponseType&gt; mapResponseTypes(Set&lt;String&gt; v) {
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;ResponseType&gt;();
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : v) {
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 				out.add(ResponseType.parse(r));
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			} <strong class="jxr_keyword">catch</strong> (ParseException e) { <em class="jxr_comment">// HTT: ResponseType.parse only throws ParseException for null/empty input, which the builder's reqnb rejects up front</em>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 				<strong class="jxr_keyword">throw</strong> iaex(e, <span class="jxr_string">"Invalid response_type '%s'"</span>, r);  <em class="jxr_comment">// HTT: see above</em>
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			}
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		}
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<strong class="jxr_keyword">return</strong> out;
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 	}
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	<em class="jxr_javadoccomment">/** Whether the URI is {@code https} or targets a loopback host (exempt from the https requirement). */</em>
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSecureOrLoopback(URI uri) {
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">return</strong> UriUtils.isSecureOrLoopback(uri);
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	}
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	@Override <em class="jxr_comment">/* Object */</em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"McpDynamicClientRegistrar[registrationEndpoint="</span> + registrationEndpoint
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			+ <span class="jxr_string">", issuer="</span> + issuer
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			+ <span class="jxr_string">", applicationType="</span> + applicationType
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			+ <span class="jxr_string">", redirectUris="</span> + redirectUris
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 			+ <span class="jxr_string">", confidential="</span> + confidential
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			+ <span class="jxr_string">", initialAccessToken="</span> + (initialAccessTokenSupplier != <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"&lt;redacted&gt;"</span> : <span class="jxr_string">"&lt;none&gt;"</span>)
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 			+ <span class="jxr_string">"]"</span>;
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 	}
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> }
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		http.setFollowRedirects(false);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">if</strong> (httpRequestConfigurator != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			httpRequestConfigurator.accept(http);
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		HTTPResponse httpResp;
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			httpResp = http.send();
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Dynamic client registration HTTP call failed"</span>, e);
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		}
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">return</strong> parseRegistrationResponse(httpResp);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	}
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	<strong class="jxr_keyword">private</strong> <a name="McpClientRegistration" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpClientRegistration.html#McpClientRegistration">McpClientRegistration</a> toRegistration(ClientInformation info) {
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">var</strong> secret = info.getSecret();
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		Optional&lt;String&gt; clientSecret = secret == <strong class="jxr_keyword">null</strong> ? oe() : o(secret.getValue());
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		Optional&lt;Instant&gt; secretExpires = (secret == <strong class="jxr_keyword">null</strong> || secret.getExpirationDate() == <strong class="jxr_keyword">null</strong>) ? oe() : o(secret.getExpirationDate().toInstant());
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">var</strong> rat = info.getRegistrationAccessToken();
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		Optional&lt;String&gt; regAccessToken = rat == <strong class="jxr_keyword">null</strong> ? oe() : o(rat.getValue());
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		Optional&lt;URI&gt; regClientUri = info.getRegistrationURI() == <strong class="jxr_keyword">null</strong> ? oe() : o(info.getRegistrationURI());
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="McpClientRegistration" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpClientRegistration.html#McpClientRegistration">McpClientRegistration</a>(
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			info.getID().getValue(),
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			clientSecret,
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			secretExpires,
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			regAccessToken,
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			regClientUri,
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			issuer,
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			redirectUris,
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			applicationType,
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			extrasFrom(info));
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	}
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<em class="jxr_javadoccomment">/** Surfaces any non-registered custom fields the AS returned in the registration response as the registration's extras. */</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; extrasFrom(ClientInformation info) {
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">var</strong> custom = info.getMetadata().getCustomFields();
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">return</strong> custom.isEmpty() ? Map.of() : <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(custom);
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	}
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;GrantType&gt; mapGrantTypes(Set&lt;String&gt; v) {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;GrantType&gt;();
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> g : v) {
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 				out.add(GrantType.parse(g));
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			} <strong class="jxr_keyword">catch</strong> (ParseException e) { <em class="jxr_comment">// HTT: GrantType.parse only throws ParseException for null/empty input, which the builder's reqnb rejects up front</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 				<strong class="jxr_keyword">throw</strong> iaex(e, <span class="jxr_string">"Invalid grant_type '%s'"</span>, g);  <em class="jxr_comment">// HTT: see above</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			}
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		}
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	}
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;ResponseType&gt; mapResponseTypes(Set&lt;String&gt; v) {
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;ResponseType&gt;();
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : v) {
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 				out.add(ResponseType.parse(r));
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			} <strong class="jxr_keyword">catch</strong> (ParseException e) { <em class="jxr_comment">// HTT: ResponseType.parse only throws ParseException for null/empty input, which the builder's reqnb rejects up front</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 				<strong class="jxr_keyword">throw</strong> iaex(e, <span class="jxr_string">"Invalid response_type '%s'"</span>, r);  <em class="jxr_comment">// HTT: see above</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			}
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		}
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	<em class="jxr_javadoccomment">/** Whether the URI is {@code https} or targets a loopback host (exempt from the https requirement). */</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSecureOrLoopback(URI uri) {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">return</strong> UriUtils.isSecureOrLoopback(uri);
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	}
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"McpDynamicClientRegistrar[registrationEndpoint="</span> + registrationEndpoint
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			+ <span class="jxr_string">", issuer="</span> + issuer
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			+ <span class="jxr_string">", applicationType="</span> + applicationType
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 			+ <span class="jxr_string">", redirectUris="</span> + redirectUris
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			+ <span class="jxr_string">", confidential="</span> + confidential
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 			+ <span class="jxr_string">", initialAccessToken="</span> + (initialAccessTokenSupplier != <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"&lt;redacted&gt;"</span> : <span class="jxr_string">"&lt;none&gt;"</span>)
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			+ <span class="jxr_string">"]"</span>;
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	}
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

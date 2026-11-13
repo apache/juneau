@@ -472,7 +472,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.reflect.Method,org.apache.juneau.rest.server.RestContext)">
 <h3>RestOpContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1393">RestOpContext</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1396">RestOpContext</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
  <a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context)</span>
               throws <span class="exceptions">jakarta.servlet.ServletException</span></div>
 <div class="block">2-arg positional context constructor.
@@ -494,7 +494,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.reflect.Method,org.apache.juneau.rest.server.RestContext,java.util.function.Supplier)">
 <h3>RestOpContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1405">RestOpContext</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1408">RestOpContext</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
  <a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;resourceSupplier)</span>
               throws <span class="exceptions">jakarta.servlet.ServletException</span></div>
@@ -539,7 +539,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getRestOpAnnotations()">
 <h3>getRestOpAnnotations</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../commons/reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1215">getRestOpAnnotations</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../commons/reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1218">getRestOpAnnotations</a></span>()</div>
 <div class="block">Returns all <a href="RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-group annotations on this operation method, in child-to-parent order.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -550,7 +550,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isInherited(java.lang.String)">
 <h3>isInherited</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1252">isInherited</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1255">isInherited</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property)</span></div>
 <div class="block">Returns <code>true</code> if context-level values for the given property should be merged.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -564,7 +564,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getAllowedParserOptions()">
 <h3>getAllowedParserOptions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1261">getAllowedParserOptions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1264">getAllowedParserOptions</a></span>()</div>
 <div class="block">Returns the parser session-option keys allowed for this operation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -575,7 +575,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getAllowedSerializerOptions()">
 <h3>getAllowedSerializerOptions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1270">getAllowedSerializerOptions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1273">getAllowedSerializerOptions</a></span>()</div>
 <div class="block">Returns the serializer session-option keys allowed for this operation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -586,7 +586,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="compareTo(org.apache.juneau.rest.server.RestOpContext)">
 <h3>compareTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1474">compareTo</a></span><wbr><span class="parameters">(<a href="RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1477">compareTo</a></span><wbr><span class="parameters">(<a href="RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html#compareTo(T)" title="class or interface in java.lang" class="external-link">compareTo</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a>&gt;</code></dd>
@@ -596,7 +596,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/Context.Builder.html" title="class in org.apache.juneau.marshall">Context.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1532">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/Context.Builder.html" title="class in org.apache.juneau.marshall">Context.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1535">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../marshall/Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -613,7 +613,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="createRequest(org.apache.juneau.rest.server.RestSession)">
 <h3>createRequest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1544">createRequest</a></span><wbr><span class="parameters">(<a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1547">createRequest</a></span><wbr><span class="parameters">(<a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Creates a <a href="RestRequest.html" title="class in org.apache.juneau.rest.server"><code>RestRequest</code></a> object based on the specified incoming <code>HttpServletRequest</code> object.</div>
 <dl class="notes">
@@ -629,7 +629,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="createResponse(org.apache.juneau.rest.server.RestSession,org.apache.juneau.rest.server.RestRequest)">
 <h3>createResponse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1557">createResponse</a></span><wbr><span class="parameters">(<a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1560">createResponse</a></span><wbr><span class="parameters">(<a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session,
  <a href="RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span>
                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Creates a <a href="RestResponse.html" title="class in org.apache.juneau.rest.server"><code>RestResponse</code></a> object based on the specified incoming <code>HttpServletResponse</code> object
@@ -648,7 +648,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="createSession(org.apache.juneau.rest.server.RestSession)">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestOpSession.Builder.html" title="class in org.apache.juneau.rest.server">RestOpSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1568">createSession</a></span><wbr><span class="parameters">(<a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestOpSession.Builder.html" title="class in org.apache.juneau.rest.server">RestOpSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1571">createSession</a></span><wbr><span class="parameters">(<a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</span>
                                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Creates a new REST operation session.</div>
 <dl class="notes">
@@ -664,7 +664,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1575">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1578">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -674,7 +674,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getMarshallingContext()">
 <h3>getMarshallingContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1585">getMarshallingContext</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1588">getMarshallingContext</a></span>()</div>
 <div class="block">Returns the marshalling context associated with this context.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -685,7 +685,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getDefaultCharset()">
 <h3>getDefaultCharset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1592">getDefaultCharset</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1595">getDefaultCharset</a></span>()</div>
 <div class="block">Returns the default charset.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -696,7 +696,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getDefaultRequestAttributes()">
 <h3>getDefaultRequestAttributes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="httppart/NamedAttributeMap.html" title="class in org.apache.juneau.rest.server.httppart">NamedAttributeMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1599">getDefaultRequestAttributes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="httppart/NamedAttributeMap.html" title="class in org.apache.juneau.rest.server.httppart">NamedAttributeMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1602">getDefaultRequestAttributes</a></span>()</div>
 <div class="block">Returns the default request attributes.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -707,7 +707,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getDefaultRequestFormData()">
 <h3>getDefaultRequestFormData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/part/HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1606">getDefaultRequestFormData</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/part/HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1609">getDefaultRequestFormData</a></span>()</div>
 <div class="block">Returns the default form data parameters.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -718,7 +718,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getDefaultRequestHeaders()">
 <h3>getDefaultRequestHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1613">getDefaultRequestHeaders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1616">getDefaultRequestHeaders</a></span>()</div>
 <div class="block">Returns the default request headers.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -729,7 +729,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getDefaultRequestQueryData()">
 <h3>getDefaultRequestQueryData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/part/HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1620">getDefaultRequestQueryData</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/part/HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1623">getDefaultRequestQueryData</a></span>()</div>
 <div class="block">Returns the default request query parameters.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -740,7 +740,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getDefaultResponseHeaders()">
 <h3>getDefaultResponseHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1627">getDefaultResponseHeaders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1630">getDefaultResponseHeaders</a></span>()</div>
 <div class="block">Returns the default response headers.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -751,7 +751,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getEncoders()">
 <h3>getEncoders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/encoders/EncoderSet.html" title="class in org.apache.juneau.marshall.encoders">EncoderSet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1634">getEncoders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/encoders/EncoderSet.html" title="class in org.apache.juneau.marshall.encoders">EncoderSet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1637">getEncoders</a></span>()</div>
 <div class="block">Returns the compression encoders to use for this method.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -762,7 +762,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getHttpMethod()">
 <h3>getHttpMethod</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1641">getHttpMethod</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1644">getHttpMethod</a></span>()</div>
 <div class="block">Returns the HTTP method name (e.g. <js>"GET"</js>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -773,7 +773,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isRead()">
 <h3>isRead</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1655">isRead</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1658">isRead</a></span>()</div>
 <div class="block">Returns whether this operation is declared <a href="RestOp.html#read()"><code>read=true</code></a>.
 
  <p>
@@ -793,7 +793,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getJavaMethod()">
 <h3>getJavaMethod</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1662">getJavaMethod</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1665">getJavaMethod</a></span>()</div>
 <div class="block">Returns the underlying Java method that this context belongs to.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -804,7 +804,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getJsonSchemaGenerator()">
 <h3>getJsonSchemaGenerator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/jsonschema/JsonSchemaGenerator.html" title="class in org.apache.juneau.marshall.jsonschema">JsonSchemaGenerator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1669">getJsonSchemaGenerator</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/jsonschema/JsonSchemaGenerator.html" title="class in org.apache.juneau.marshall.jsonschema">JsonSchemaGenerator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1672">getJsonSchemaGenerator</a></span>()</div>
 <div class="block">Returns the JSON-Schema generator applicable to this Java method.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -815,7 +815,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getMaxInput()">
 <h3>getMaxInput</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1676">getMaxInput</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1679">getMaxInput</a></span>()</div>
 <div class="block">Returns the max number of bytes to process in the input content.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -826,7 +826,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isProblemDetails()">
 <h3>isProblemDetails</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1693">isProblemDetails</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1696">isProblemDetails</a></span>()</div>
 <div class="block">Returns whether this operation emits RFC 7807 <code>application/problem+json</code> responses.
 
  <p>
@@ -847,7 +847,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isDebugMarshalling()">
 <h3>isDebugMarshalling</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1710">isDebugMarshalling</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1713">isDebugMarshalling</a></span>()</div>
 <div class="block">Returns whether REST-driven serializer/parser debug behavior is enabled for this operation.
 
  <p>
@@ -868,7 +868,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isVirtualThreadsEnabled()">
 <h3>isVirtualThreadsEnabled</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1722">isVirtualThreadsEnabled</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1725">isVirtualThreadsEnabled</a></span>()</div>
 <div class="block">Returns whether this operation opts into per-request virtual-thread dispatch on Java 21+.
 
  <p>
@@ -884,7 +884,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isObservabilityEnabled()">
 <h3>isObservabilityEnabled</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1740">isObservabilityEnabled</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1743">isObservabilityEnabled</a></span>()</div>
 <div class="block">Returns whether the observability block is enabled for this operation.
 
  <p>
@@ -911,7 +911,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getMetricName()">
 <h3>getMetricName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1751">getMetricName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1754">getMetricName</a></span>()</div>
 <div class="block">Returns the per-op metric name override from <code>@RestOp(metricName)</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -928,7 +928,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getMetricTags()">
 <h3>getMetricTags</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1759">getMetricTags</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1762">getMetricTags</a></span>()</div>
 <div class="block">Returns the per-op additional metric tags from <code>@RestOp(metricTags)</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -945,7 +945,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getAsyncTimeoutMillis()">
 <h3>getAsyncTimeoutMillis</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1768">getAsyncTimeoutMillis</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1771">getAsyncTimeoutMillis</a></span>()</div>
 <div class="block">Returns the configured async-response timeout (milliseconds) for this operation, or <code>-1</code> when no
  value was supplied at the op or resource level — in which case the default 30-second fallback applies in
  <a href="processor/AsyncResponseProcessor.html" title="class in org.apache.juneau.rest.server.processor"><code>AsyncResponseProcessor</code></a>.</div>
@@ -958,7 +958,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getAsyncCompletionExecutor()">
 <h3>getAsyncCompletionExecutor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Executor.html" title="class or interface in java.util.concurrent" class="external-link">Executor</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1778">getAsyncCompletionExecutor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Executor.html" title="class or interface in java.util.concurrent" class="external-link">Executor</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1781">getAsyncCompletionExecutor</a></span>()</div>
 <div class="block">Returns the effective <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Executor.html" title="class or interface in java.util.concurrent" class="external-link"><code>Executor</code></a> for routing
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a> completion callbacks on this operation, or
  <code>null</code> when neither the op nor the resource configures an executor (natural completion thread).</div>
@@ -973,7 +973,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getParsers()">
 <h3>getParsers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/parser/ParserSet.html" title="class in org.apache.juneau.marshall.parser">ParserSet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1785">getParsers</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/parser/ParserSet.html" title="class in org.apache.juneau.marshall.parser">ParserSet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1788">getParsers</a></span>()</div>
 <div class="block">Returns the parsers to use for this method.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -984,7 +984,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getPartParser()">
 <h3>getPartParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/httppart/HttpPartParser.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1792">getPartParser</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/httppart/HttpPartParser.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1795">getPartParser</a></span>()</div>
 <div class="block">Bean property getter:  <property>partParser</property>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -995,7 +995,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getPartSerializer()">
 <h3>getPartSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1799">getPartSerializer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1802">getPartSerializer</a></span>()</div>
 <div class="block">Bean property getter:  <property>partSerializer</property>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1006,7 +1006,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getPathPattern()">
 <h3>getPathPattern</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1806">getPathPattern</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1809">getPathPattern</a></span>()</div>
 <div class="block">Returns the path pattern for this method.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1017,7 +1017,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getPathMatchers()">
 <h3>getPathMatchers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="util/UrlPathMatcher.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatcher</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1815">getPathMatchers</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="util/UrlPathMatcher.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatcher</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1818">getPathMatchers</a></span>()</div>
 <div class="block">Returns the URL path matchers for this operation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1030,7 +1030,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getOptionalMatchers()">
 <h3>getOptionalMatchers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="matcher/RestMatcher.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcher</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1824">getOptionalMatchers</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="matcher/RestMatcher.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcher</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1827">getOptionalMatchers</a></span>()</div>
 <div class="block">Returns the optional matchers for this operation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1043,7 +1043,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getRequiredMatchers()">
 <h3>getRequiredMatchers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="matcher/RestMatcher.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcher</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1833">getRequiredMatchers</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="matcher/RestMatcher.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcher</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1836">getRequiredMatchers</a></span>()</div>
 <div class="block">Returns the required matchers for this operation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1056,7 +1056,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getLogger()">
 <h3>getLogger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/logging/RichLogger.html" title="class in org.apache.juneau.commons.logging">RichLogger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1846">getLogger</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/logging/RichLogger.html" title="class in org.apache.juneau.commons.logging">RichLogger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1849">getLogger</a></span>()</div>
 <div class="block">Returns the per-operation logger used for debug capture.
 
  <p>
@@ -1073,7 +1073,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getResponseBeanMeta(java.lang.Object)">
 <h3>getResponseBeanMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../httppart/bean/ResponseBeanMeta.html" title="class in org.apache.juneau.httppart.bean">ResponseBeanMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1854">getResponseBeanMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../httppart/bean/ResponseBeanMeta.html" title="class in org.apache.juneau.httppart.bean">ResponseBeanMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1857">getResponseBeanMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Returns metadata about the specified response object if it's annotated with <a href="../../http/Response.html" title="annotation interface in org.apache.juneau.http"><code>@Response</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1086,7 +1086,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getResponseHeaderMeta(java.lang.Object)">
 <h3>getResponseHeaderMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="httppart/ResponsePartMeta.html" title="class in org.apache.juneau.rest.server.httppart">ResponsePartMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1876">getResponseHeaderMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="httppart/ResponsePartMeta.html" title="class in org.apache.juneau.rest.server.httppart">ResponsePartMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1879">getResponseHeaderMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Returns metadata about the specified response object if it's annotated with <a href="../../http/Header.html" title="annotation interface in org.apache.juneau.http"><code>@Header</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1099,7 +1099,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getResponseMeta()">
 <h3>getResponseMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../httppart/bean/ResponseBeanMeta.html" title="class in org.apache.juneau.httppart.bean">ResponseBeanMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1902">getResponseMeta</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../httppart/bean/ResponseBeanMeta.html" title="class in org.apache.juneau.httppart.bean">ResponseBeanMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1905">getResponseMeta</a></span>()</div>
 <div class="block">Returns the response bean meta if this method returns a <a href="../../http/Response.html" title="annotation interface in org.apache.juneau.http"><code>Response</code></a>-annotated bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1110,7 +1110,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getSerializers()">
 <h3>getSerializers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/serializer/SerializerSet.html" title="class in org.apache.juneau.marshall.serializer">SerializerSet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1909">getSerializers</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/serializer/SerializerSet.html" title="class in org.apache.juneau.marshall.serializer">SerializerSet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1912">getSerializers</a></span>()</div>
 <div class="block">Returns the serializers to use for this method.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1121,7 +1121,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getSupportedAcceptTypes()">
 <h3>getSupportedAcceptTypes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1916">getSupportedAcceptTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1919">getSupportedAcceptTypes</a></span>()</div>
 <div class="block">Returns a list of supported accept types.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1132,7 +1132,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getSupportedContentTypes()">
 <h3>getSupportedContentTypes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1923">getSupportedContentTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1926">getSupportedContentTypes</a></span>()</div>
 <div class="block">Returns the list of supported content types.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1143,7 +1143,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1925">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1928">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -1153,7 +1153,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="match(org.apache.juneau.rest.server.RestSession)">
 <h3>match</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1976">match</a></span><wbr><span class="parameters">(<a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-1979">match</a></span><wbr><span class="parameters">(<a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</span></div>
 <div class="block">Identifies if this method can process the specified call.
 
  <p>
@@ -1178,7 +1178,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-2012">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpContext.html#line-2015">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../marshall/Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

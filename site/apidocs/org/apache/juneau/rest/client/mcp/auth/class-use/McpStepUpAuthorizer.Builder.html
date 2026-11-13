@@ -77,24 +77,34 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the scope accumulator.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpStepUpAuthorizer.Builder.</span><code><a href="../McpStepUpAuthorizer.Builder.html#attemptStepUp(boolean)" class="member-name-link">attemptStepUp</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpStepUpAuthorizer.Builder.</span><code><a href="../McpStepUpAuthorizer.Builder.html#allowedScopes(java.lang.String...)" class="member-name-link">allowedScopes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Whether to attempt step-up at all.</div>
-</div>
-<div class="col-first even-row-color"><code>static <a href="../McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpStepUpAuthorizer.</span><code><a href="../McpStepUpAuthorizer.html#create()" class="member-name-link">create</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">Static creator.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpStepUpAuthorizer.Builder.</span><code><a href="../McpStepUpAuthorizer.Builder.html#issuer(java.net.URI)" class="member-name-link">issuer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Sets the authorization server issuer.</div>
+<div class="block">Restricts the scopes a server challenge may add to the step-up union.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpStepUpAuthorizer.Builder.</span><code><a href="../McpStepUpAuthorizer.Builder.html#maxAttempts(int)" class="member-name-link">maxAttempts</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpStepUpAuthorizer.Builder.</span><code><a href="../McpStepUpAuthorizer.Builder.html#attemptStepUp(boolean)" class="member-name-link">attemptStepUp</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Whether to attempt step-up at all.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpStepUpAuthorizer.</span><code><a href="../McpStepUpAuthorizer.html#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Static creator.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpStepUpAuthorizer.Builder.</span><code><a href="../McpStepUpAuthorizer.Builder.html#issuer(java.net.URI)" class="member-name-link">issuer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets the authorization server issuer.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpStepUpAuthorizer.Builder.</span><code><a href="../McpStepUpAuthorizer.Builder.html#maxAttempts(int)" class="member-name-link">maxAttempts</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the hard cap on re-authorization attempts per <code>(resource, operation)</code> before a permanent failure.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpStepUpAuthorizer.Builder.</span><code><a href="../McpStepUpAuthorizer.Builder.html#maxScopes(int)" class="member-name-link">maxScopes</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Caps the number of scopes the accumulated step-up union may contain.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">McpStepUpAuthorizer.Builder.</span><code><a href="../McpStepUpAuthorizer.Builder.html#previouslyRequestedScopes(java.lang.String...)" class="member-name-link">previouslyRequestedScopes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>

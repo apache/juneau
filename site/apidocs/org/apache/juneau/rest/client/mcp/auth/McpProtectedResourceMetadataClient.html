@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-59">McpProtectedResourceMetadataClient</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-62">McpProtectedResourceMetadataClient</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Fetches and parses an RFC 9728 Protected Resource Metadata (PRM) document, and resolves the authorization server a
  protected MCP resource delegates to.
@@ -95,11 +95,13 @@ loadScripts(document, 'script');</script>
  argument of <a href="#fetch(java.net.URI,java.net.URI)"><code>fetch(URI, URI)</code></a> / <a href="#parse(java.lang.String,java.net.URI,java.net.URI)"><code>parse(String, URI, URI)</code></a>), the PRM document's <code>resource</code> field is
  validated against it per RFC 9728 &sect;3.3 (exact string match, mirroring the issuer-identity posture) and a mismatch
  is rejected &mdash; this defends against a malicious server pointing the client at a PRM document minted for a
- different resource.  When no expected resource is supplied the identity check is skipped.
+ different resource.  An expected resource is required unless <a href="McpProtectedResourceMetadataClient.Builder.html#skipResourceValidation(boolean)"><code>McpProtectedResourceMetadataClient.Builder.skipResourceValidation(boolean)</code></a> is set.
 
  <p>
- By default the PRM URL and any discovered authorization-server URI must use <code>https</code> (loopback hosts are always
- permitted for local/testing use); <a href="McpProtectedResourceMetadataClient.Builder.html#allowInsecureHttp(boolean)"><code>McpProtectedResourceMetadataClient.Builder.allowInsecureHttp(boolean)</code></a> disables the scheme check entirely.</div>
+ By default the PRM URL and any discovered authorization-server URI must use <code>https</code> and must not point at a
+ loopback, private, link-local or metadata host; <a href="McpProtectedResourceMetadataClient.Builder.html#allowPrivateUrls(boolean)"><code>McpProtectedResourceMetadataClient.Builder.allowPrivateUrls(boolean)</code></a> lifts the host restriction
+ (and permits plain <code>http</code> for loopback hosts), and <a href="McpProtectedResourceMetadataClient.Builder.html#allowInsecureHttp(boolean)"><code>McpProtectedResourceMetadataClient.Builder.allowInsecureHttp(boolean)</code></a> disables the
+ scheme check.</div>
 <dl class="notes">
 <dt>Since:</dt>
 <dd>10.0.0</dd>
@@ -211,7 +213,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.client.mcp.auth.McpProtectedResourceMetadataClient.Builder)">
 <h3>McpProtectedResourceMetadataClient</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-159">McpProtectedResourceMetadataClient</a></span><wbr><span class="parameters">(<a href="McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-194">McpProtectedResourceMetadataClient</a></span><wbr><span class="parameters">(<a href="McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -230,7 +232,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-72">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-75">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -241,7 +243,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fetch(java.net.URI)">
 <h3>fetch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-175">fetch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;prmUrl)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-212">fetch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;prmUrl)</span></div>
 <div class="block">Fetches and parses the PRM document at the supplied URL, validating its <code>resource</code> field against the
  builder-configured <a href="McpProtectedResourceMetadataClient.Builder.html#expectedResource(java.net.URI)"><code>McpProtectedResourceMetadataClient.Builder.expectedResource(URI)</code></a> (if any).</div>
 <dl class="notes">
@@ -258,15 +260,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fetch(java.net.URI,java.net.URI)">
 <h3>fetch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-189">fetch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;prmUrl,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-226">fetch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;prmUrl,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;expectedResource)</span></div>
 <div class="block">Fetches and parses the PRM document at the supplied URL, validating its <code>resource</code> field against the
  supplied expected resource identifier (RFC 9728 &sect;3.3).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>prmUrl</code> - The PRM document URL.  Must not be <jk>null</jk>.</dd>
-<dd><code>expectedResource</code> - The resource identifier the client was actually talking to.  May be <jk>null</jk> to
-   skip the identity check.</dd>
+<dd><code>expectedResource</code> - The resource identifier the client was actually talking to.  May be <jk>null</jk> only
+   when <a href="McpProtectedResourceMetadataClient.Builder.html#skipResourceValidation(boolean)"><code>McpProtectedResourceMetadataClient.Builder.skipResourceValidation(boolean)</code></a> is set.</dd>
 <dt>Returns:</dt>
 <dd>The parsed metadata.</dd>
 <dt>Throws:</dt>
@@ -277,7 +279,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parse(java.lang.String,java.net.URI)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-219">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;json,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-257">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;json,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;source)</span></div>
 <div class="block">Parses a PRM JSON document body, validating its <code>resource</code> field against the builder-configured
  <a href="McpProtectedResourceMetadataClient.Builder.html#expectedResource(java.net.URI)"><code>McpProtectedResourceMetadataClient.Builder.expectedResource(URI)</code></a> (if any).</div>
@@ -296,7 +298,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parse(java.lang.String,java.net.URI,java.net.URI)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-235">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;json,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-273">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;json,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;source,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;expectedResource)</span></div>
 <div class="block">Parses a PRM JSON document body, validating its <code>resource</code> field against the supplied expected resource
@@ -305,8 +307,8 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>json</code> - The JSON document body.  Must not be <jk>null</jk>.</dd>
 <dd><code>source</code> - The source URI, used only for error messages.  May be <jk>null</jk>.</dd>
-<dd><code>expectedResource</code> - The resource identifier the client was actually talking to.  May be <jk>null</jk> to
-   skip the identity check.</dd>
+<dd><code>expectedResource</code> - The resource identifier the client was actually talking to.  May be <jk>null</jk> only
+   when <a href="McpProtectedResourceMetadataClient.Builder.html#skipResourceValidation(boolean)"><code>McpProtectedResourceMetadataClient.Builder.skipResourceValidation(boolean)</code></a> is set.</dd>
 <dt>Returns:</dt>
 <dd>The parsed metadata.</dd>
 <dt>Throws:</dt>
@@ -318,7 +320,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="discoverAuthorizationServer(org.apache.juneau.rest.client.mcp.auth.McpProtectedResourceMetadata)">
 <h3>discoverAuthorizationServer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-273">discoverAuthorizationServer</a></span><wbr><span class="parameters">(<a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadata</a>&nbsp;prm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.html#line-311">discoverAuthorizationServer</a></span><wbr><span class="parameters">(<a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadata</a>&nbsp;prm)</span></div>
 <div class="block">Selects the first authorization server from the PRM document and validates its issuer identity via RFC 8414 /
  OIDC discovery.</div>
 <dl class="notes">

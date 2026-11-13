@@ -43,8 +43,8 @@
 <span class="source-line-no">030</span><span id="line-30"> *</span>
 <span class="source-line-no">031</span><span id="line-31"> * @param accessToken The opaque or JWT access-token string.  Never {@code null}.</span>
 <span class="source-line-no">032</span><span id="line-32"> * @param tokenType The token type per RFC 6749 &amp;sect;5.1 (typically {@code "Bearer"}).  Never {@code null}.</span>
-<span class="source-line-no">033</span><span id="line-33"> * @param expiresAt The instant at which the access token expires.  May be {@link Instant#MAX} when the</span>
-<span class="source-line-no">034</span><span id="line-34"> *    IdP returned no {@code expires_in}.</span>
+<span class="source-line-no">033</span><span id="line-33"> * @param expiresAt The instant at which the access token expires.  Tokens acquired through the flows in this</span>
+<span class="source-line-no">034</span><span id="line-34"> *    package carry a 5-minute lifetime when the IdP returned no (or a zero) {@code expires_in}.</span>
 <span class="source-line-no">035</span><span id="line-35"> * @param refreshToken The refresh token, if the IdP issued one.</span>
 <span class="source-line-no">036</span><span id="line-36"> * @param scope The granted scopes, if the IdP returned a {@code scope} field.</span>
 <span class="source-line-no">037</span><span id="line-37"> * @param idToken The OIDC ID token (a JWT), if the flow scope included {@code openid}.  &lt;b&gt;Not validated&lt;/b&gt;</span>

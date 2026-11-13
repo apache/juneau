@@ -1425,585 +1425,587 @@
 <a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> 
 <a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> 		<em class="jxr_comment">// Class.forName(String) runs static initializers; resolve without initializing.</em>
 <a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">inner</strong>() == Class.<strong class="jxr_keyword">class</strong>) {
-<a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> 			<strong class="jxr_keyword">var</strong> cl = Thread.currentThread().getContextClassLoader();
-<a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1422" href="#L1422">1422</a> 				<strong class="jxr_keyword">return</strong> (T)Class.forName(arg, false, cl != <strong class="jxr_keyword">null</strong> ? cl : ClassMeta.<strong class="jxr_keyword">class</strong>.getClassLoader());
-<a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> 			} <strong class="jxr_keyword">catch</strong> (ClassNotFoundException e) {
-<a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e, <span class="jxr_string">"Could not resolve class '%s'"</span>, arg);
-<a class="jxr_linenumber" name="L1425" href="#L1425">1425</a> 			}
-<a class="jxr_linenumber" name="L1426" href="#L1426">1426</a> 		}
-<a class="jxr_linenumber" name="L1427" href="#L1427">1427</a> 
-<a class="jxr_linenumber" name="L1428" href="#L1428">1428</a> 		<strong class="jxr_keyword">if</strong> (fromStringMethod.isPresent())
-<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> 			<strong class="jxr_keyword">return</strong> (T)fromStringMethod.get().invoke(<strong class="jxr_keyword">null</strong>, arg);
-<a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> 
-<a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> 		<strong class="jxr_keyword">if</strong> (stringConstructor.isPresent()) {
-<a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 			<strong class="jxr_keyword">if</strong> (nonStaticMemberClass)
-<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 				<strong class="jxr_keyword">return</strong> stringConstructor.get().&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>, arg);
-<a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 			<strong class="jxr_keyword">return</strong> stringConstructor.get().&lt;T&gt;newInstance(arg);
-<a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> 		}
-<a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> 		<strong class="jxr_keyword">throw</strong> exex(<span class="jxr_string">"No string constructor or valueOf(String) method found for class '%s'"</span>, cn(<strong class="jxr_keyword">inner</strong>()));
-<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> 	}
-<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> 
-<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> <em class="jxr_javadoccomment">	 * Similar to {@link #equals(Object)} except primitive and Object types that are similar are considered the same.</em>
-<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> <em class="jxr_javadoccomment">	 * (e.g. &lt;jk&gt;boolean&lt;/jk&gt; == &lt;c&gt;Boolean&lt;/c&gt;).</em>
-<a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> <em class="jxr_javadoccomment">	 * @param cm The class meta to compare to. Can be &lt;jk&gt;null&lt;/jk&gt;, in which case this method returns &lt;jk&gt;false&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified class-meta is equivalent to this one.</em>
-<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> same(ClassMeta&lt;?&gt; cm) {
-<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> 		<strong class="jxr_keyword">if</strong> (cm == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L1449" href="#L1449">1449</a> 		<strong class="jxr_keyword">if</strong> (equals(cm))
-<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L1451" href="#L1451">1451</a> 		<strong class="jxr_keyword">return</strong> (isPrimitive() &amp;&amp; cat.same(cm.cat));
-<a class="jxr_linenumber" name="L1452" href="#L1452">1452</a> 	}
-<a class="jxr_linenumber" name="L1453" href="#L1453">1453</a> 
-<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L1456" href="#L1456">1456</a> 		<strong class="jxr_keyword">return</strong> toString(false);
-<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> 	}
-<a class="jxr_linenumber" name="L1458" href="#L1458">1458</a> 
-<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> <em class="jxr_javadoccomment">	 * Same as {@link #toString()} except use simple class names.</em>
-<a class="jxr_linenumber" name="L1461" href="#L1461">1461</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1462" href="#L1462">1462</a> <em class="jxr_javadoccomment">	 * @param simple Print simple class names only (no package).</em>
-<a class="jxr_linenumber" name="L1463" href="#L1463">1463</a> <em class="jxr_javadoccomment">	 * @return A new string.</em>
-<a class="jxr_linenumber" name="L1464" href="#L1464">1464</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1465" href="#L1465">1465</a> 	<strong class="jxr_keyword">public</strong> String toString(<strong class="jxr_keyword">boolean</strong> simple) {
-<a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> 		<strong class="jxr_keyword">return</strong> toString(<strong class="jxr_keyword">new</strong> StringBuilder(), simple).toString();
-<a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> 	}
-<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 
-<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> <em class="jxr_javadoccomment">	 * Converts the specified object to a string.</em>
-<a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> <em class="jxr_javadoccomment">	 * @param t The object to convert.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</em>
-<a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> <em class="jxr_javadoccomment">	 * @return The object converted to a string, or &lt;jk&gt;null&lt;/jk&gt; if the object was null.</em>
-<a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> 	<strong class="jxr_keyword">public</strong> String toString(Object t) {
-<a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> 		<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 		<strong class="jxr_keyword">if</strong> (isEnum())
-<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 			<strong class="jxr_keyword">return</strong> marshallingContext.getEnumFormat().format((Enum&lt;?&gt;)t);
-<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 		<strong class="jxr_keyword">return</strong> t.toString();
-<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> 	}
-<a class="jxr_linenumber" name="L1482" href="#L1482">1482</a> 
-<a class="jxr_linenumber" name="L1483" href="#L1483">1483</a> 	<strong class="jxr_keyword">private</strong> ObjectSwap&lt;T,?&gt; createSwap(Swap s) {
-<a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> 		<strong class="jxr_keyword">var</strong> c = s.value();
-<a class="jxr_linenumber" name="L1485" href="#L1485">1485</a> 		<strong class="jxr_keyword">if</strong> (ClassUtils.isVoid(c))
-<a class="jxr_linenumber" name="L1486" href="#L1486">1486</a> 			c = s.impl();
-<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> 		<strong class="jxr_keyword">var</strong> ci = info(c);
-<a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> 
-<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> 		<strong class="jxr_keyword">if</strong> (ci.isAssignableTo(ObjectSwap.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> 			<strong class="jxr_keyword">var</strong> ps = BeanInstantiator.of(ObjectSwap.<strong class="jxr_keyword">class</strong>).type(ci).run();
-<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> 			<strong class="jxr_keyword">if</strong> (s.mediaTypes().length &gt; 0)
-<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> 				ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));
-<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> 			<strong class="jxr_keyword">if</strong> (! s.template().isEmpty())
-<a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> 				ps.withTemplate(s.template());
-<a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> 			<strong class="jxr_keyword">return</strong> ps;
-<a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> 		}
-<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 
-<a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> 		<strong class="jxr_keyword">if</strong> (ci.isAssignableTo(Surrogate.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> 			List&lt;SurrogateSwap&lt;?,?&gt;&gt; l = SurrogateSwap.findObjectSwaps(c, marshallingContext);
-<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> 			<strong class="jxr_keyword">return</strong> first(l).map(x -&gt; (ObjectSwap&lt;T,?&gt;)x).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> 		}
-<a class="jxr_linenumber" name="L1502" href="#L1502">1502</a> 
-<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ClassMetaRuntimeException(c, <span class="jxr_string">"Invalid swap class '%s' specified.  Must extend from ObjectSwap or Surrogate."</span>, c);
-<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> 	}
-<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 
-<a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> 	<strong class="jxr_keyword">private</strong> String findBeanDictionaryName() {
-<a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> 		<strong class="jxr_keyword">if</strong> (marshallingContext == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1509" href="#L1509">1509</a> 
-<a class="jxr_linenumber" name="L1510" href="#L1510">1510</a> 		<strong class="jxr_keyword">var</strong> d = beanMeta.get().optBeanMeta().map(x -&gt; x.getDictionaryName()).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a> 		<strong class="jxr_keyword">if</strong> (nn(d))
-<a class="jxr_linenumber" name="L1512" href="#L1512">1512</a> 			<strong class="jxr_keyword">return</strong> d;
-<a class="jxr_linenumber" name="L1513" href="#L1513">1513</a> 
-<a class="jxr_linenumber" name="L1514" href="#L1514">1514</a> 		<em class="jxr_comment">// Note that @Marshalled(typeName) can be defined on non-bean types, so</em>
-<a class="jxr_linenumber" name="L1515" href="#L1515">1515</a> 		<em class="jxr_comment">// we have to check again.</em>
-<a class="jxr_linenumber" name="L1516" href="#L1516">1516</a> 		<strong class="jxr_keyword">return</strong> marshallingContext.getAnnotationProvider().find(Marshalled.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>)
-<a class="jxr_linenumber" name="L1517" href="#L1517">1517</a> 			.stream()
-<a class="jxr_linenumber" name="L1518" href="#L1518">1518</a> 			.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
-<a class="jxr_linenumber" name="L1519" href="#L1519">1519</a> 			.filter(x -&gt; ! x.typeName().isEmpty())
-<a class="jxr_linenumber" name="L1520" href="#L1520">1520</a> 			.map(Marshalled::typeName)
-<a class="jxr_linenumber" name="L1521" href="#L1521">1521</a> 			.findFirst()
-<a class="jxr_linenumber" name="L1522" href="#L1522">1522</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1523" href="#L1523">1523</a> 	}
-<a class="jxr_linenumber" name="L1524" href="#L1524">1524</a> 
-<a class="jxr_linenumber" name="L1525" href="#L1525">1525</a> 	<strong class="jxr_keyword">private</strong> BeanMeta.BeanMetaValue&lt;T&gt; findBeanMeta() {
-<a class="jxr_linenumber" name="L1526" href="#L1526">1526</a> 		<strong class="jxr_keyword">if</strong> (! cat.isUnknown())
-<a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BeanMeta.BeanMetaValue&lt;&gt;((BeanMeta&lt;T&gt;)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Known non-bean type"</span>);
-<a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> 		<strong class="jxr_keyword">return</strong> BeanMeta.create(<strong class="jxr_keyword">this</strong>, implClass.get());
-<a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> 	}
-<a class="jxr_linenumber" name="L1530" href="#L1530">1530</a> 
-<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> 	<strong class="jxr_keyword">private</strong> KeyValueTypes findKeyValueTypes() {
-<a class="jxr_linenumber" name="L1532" href="#L1532">1532</a> 		<strong class="jxr_keyword">if</strong> (cat.is(MAP) &amp;&amp; ! cat.is(BEANMAP)) {
-<a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> 			<em class="jxr_comment">// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap&lt;String,Person&gt;)</em>
-<a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> 			<strong class="jxr_keyword">var</strong> typeParams = marshallingContext.findParameters(<strong class="jxr_keyword">inner</strong>(), <strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L1535" href="#L1535">1535</a> 			<strong class="jxr_keyword">if</strong> (nn(typeParams) &amp;&amp; typeParams.length == 2) {
-<a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> KeyValueTypes(typeParams[0], typeParams[1]);
-<a class="jxr_linenumber" name="L1537" href="#L1537">1537</a> 			}
-<a class="jxr_linenumber" name="L1538" href="#L1538">1538</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> KeyValueTypes(marshallingContext.getClassMeta(Object.<strong class="jxr_keyword">class</strong>), marshallingContext.getClassMeta(Object.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L1539" href="#L1539">1539</a> 		}
-<a class="jxr_linenumber" name="L1540" href="#L1540">1540</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> KeyValueTypes(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1541" href="#L1541">1541</a> 	}
-<a class="jxr_linenumber" name="L1542" href="#L1542">1542</a> 
-<a class="jxr_linenumber" name="L1543" href="#L1543">1543</a> 	<strong class="jxr_keyword">private</strong> ClassMeta&lt;?&gt; findElementType() {
-<a class="jxr_linenumber" name="L1544" href="#L1544">1544</a> 		<strong class="jxr_keyword">if</strong> (marshallingContext == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1545" href="#L1545">1545</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1546" href="#L1546">1546</a> 		<em class="jxr_comment">// Primitive optional types carry no generic parameter — synthesize the matching boxed element type so</em>
-<a class="jxr_linenumber" name="L1547" href="#L1547">1547</a> 		<em class="jxr_comment">// the first-class optional path (serialize unwrap / parse element-typed wrap) has a target type.</em>
-<a class="jxr_linenumber" name="L1548" href="#L1548">1548</a> 		<strong class="jxr_keyword">if</strong> (is(OptionalInt.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L1549" href="#L1549">1549</a> 			<strong class="jxr_keyword">return</strong> marshallingContext.getClassMeta(Integer.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L1550" href="#L1550">1550</a> 		<strong class="jxr_keyword">if</strong> (is(OptionalLong.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L1551" href="#L1551">1551</a> 			<strong class="jxr_keyword">return</strong> marshallingContext.getClassMeta(Long.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L1552" href="#L1552">1552</a> 		<strong class="jxr_keyword">if</strong> (is(OptionalDouble.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L1553" href="#L1553">1553</a> 			<strong class="jxr_keyword">return</strong> marshallingContext.getClassMeta(Double.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L1554" href="#L1554">1554</a> 		<strong class="jxr_keyword">if</strong> (cat.is(ARRAY)) {
-<a class="jxr_linenumber" name="L1555" href="#L1555">1555</a> 			<strong class="jxr_keyword">return</strong> marshallingContext.getClassMeta(<strong class="jxr_keyword">inner</strong>().getComponentType());
-<a class="jxr_linenumber" name="L1556" href="#L1556">1556</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cat.is(COLLECTION) || cat.is(ITERABLE) || cat.is(ITERATOR) || cat.is(STREAM) || is(Optional.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L1557" href="#L1557">1557</a> 			<strong class="jxr_keyword">var</strong> typeParams = marshallingContext.findParameters(<strong class="jxr_keyword">inner</strong>(), <strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L1558" href="#L1558">1558</a> 			<strong class="jxr_keyword">if</strong> (nn(typeParams) &amp;&amp; typeParams.length == 1) {
-<a class="jxr_linenumber" name="L1559" href="#L1559">1559</a> 				<strong class="jxr_keyword">return</strong> typeParams[0];
-<a class="jxr_linenumber" name="L1560" href="#L1560">1560</a> 			}
-<a class="jxr_linenumber" name="L1561" href="#L1561">1561</a> 			<strong class="jxr_keyword">return</strong> marshallingContext.getClassMeta(Object.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L1562" href="#L1562">1562</a> 		}
-<a class="jxr_linenumber" name="L1563" href="#L1563">1563</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1564" href="#L1564">1564</a> 	}
-<a class="jxr_linenumber" name="L1565" href="#L1565">1565</a> 
-<a class="jxr_linenumber" name="L1566" href="#L1566">1566</a> 	<strong class="jxr_keyword">private</strong> BuilderSwap&lt;T,?&gt; findBuilderSwap() {
-<a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> 		<strong class="jxr_keyword">var</strong> bc = marshallingContext;
-<a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> 		<strong class="jxr_keyword">if</strong> (bc == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> 		<strong class="jxr_keyword">return</strong> (BuilderSwap&lt;T,?&gt;)BuilderSwap.findSwapFromObjectClass(bc, <strong class="jxr_keyword">inner</strong>(), bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
-<a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> 	}
-<a class="jxr_linenumber" name="L1572" href="#L1572">1572</a> 
-<a class="jxr_linenumber" name="L1573" href="#L1573">1573</a> 	<strong class="jxr_keyword">private</strong> List&lt;ObjectSwap&lt;T,?&gt;&gt; findSwaps() {
-<a class="jxr_linenumber" name="L1574" href="#L1574">1574</a> 		<strong class="jxr_keyword">if</strong> (marshallingContext == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1575" href="#L1575">1575</a> 			<strong class="jxr_keyword">return</strong> l();
-<a class="jxr_linenumber" name="L1576" href="#L1576">1576</a> 
-<a class="jxr_linenumber" name="L1577" href="#L1577">1577</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;ObjectSwap&lt;T,?&gt;&gt;();
-<a class="jxr_linenumber" name="L1578" href="#L1578">1578</a> 		<strong class="jxr_keyword">var</strong> swapArray = marshallingContext.getSwaps();
-<a class="jxr_linenumber" name="L1579" href="#L1579">1579</a> 		<strong class="jxr_keyword">if</strong> (! swapArray.isEmpty()) {
-<a class="jxr_linenumber" name="L1580" href="#L1580">1580</a> 			<strong class="jxr_keyword">var</strong> innerClass = <strong class="jxr_keyword">inner</strong>();
-<a class="jxr_linenumber" name="L1581" href="#L1581">1581</a> 			swapArray.stream().filter(f -&gt; f.getNormalClass().isAssignableFrom(innerClass)).forEach(f -&gt; list.add((ObjectSwap&lt;T,?&gt;)f));
-<a class="jxr_linenumber" name="L1582" href="#L1582">1582</a> 		}
-<a class="jxr_linenumber" name="L1583" href="#L1583">1583</a> 
-<a class="jxr_linenumber" name="L1584" href="#L1584">1584</a> 		<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
-<a class="jxr_linenumber" name="L1585" href="#L1585">1585</a> 		ap.find(Swap.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>).stream().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; list.add(createSwap(x)));
-<a class="jxr_linenumber" name="L1586" href="#L1586">1586</a> 
-<a class="jxr_linenumber" name="L1587" href="#L1587">1587</a> 		<em class="jxr_comment">// @Marshalled(as=STRING) installs an AutoStringSwap before any auto-detection.</em>
-<a class="jxr_linenumber" name="L1588" href="#L1588">1588</a> 		<strong class="jxr_keyword">if</strong> (list.isEmpty()) {
-<a class="jxr_linenumber" name="L1589" href="#L1589">1589</a> 			<strong class="jxr_keyword">var</strong> marshalledList = ap.find(Marshalled.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L1590" href="#L1590">1590</a> 			<strong class="jxr_keyword">if</strong> (marshalledList.stream().anyMatch(x -&gt; x.<strong class="jxr_keyword">inner</strong>().as() == MarshalledAs.STRING))
-<a class="jxr_linenumber" name="L1591" href="#L1591">1591</a> 				list.add(<strong class="jxr_keyword">new</strong> AutoStringSwap&lt;&gt;(<strong class="jxr_keyword">this</strong>));
-<a class="jxr_linenumber" name="L1592" href="#L1592">1592</a> 		}
-<a class="jxr_linenumber" name="L1593" href="#L1593">1593</a> 
-<a class="jxr_linenumber" name="L1594" href="#L1594">1594</a> 		<em class="jxr_comment">// @MarshalledIgnore on TYPE — skip entirely: serialize as null, parse as null.</em>
-<a class="jxr_linenumber" name="L1595" href="#L1595">1595</a> 		<em class="jxr_comment">// Use String.class (not Object.class) as swapClass so sType.isObject() stays false</em>
-<a class="jxr_linenumber" name="L1596" href="#L1596">1596</a> 		<em class="jxr_comment">// and the serializer correctly emits "null" when swap() returns null.</em>
-<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a> 		<strong class="jxr_keyword">if</strong> (list.isEmpty() &amp;&amp; ap.has(MarshalledIgnore.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>))
-<a class="jxr_linenumber" name="L1598" href="#L1598">1598</a> 			list.add(<strong class="jxr_keyword">new</strong> ObjectSwap&lt;T,String&gt;(<strong class="jxr_keyword">inner</strong>(), String.<strong class="jxr_keyword">class</strong>) {
-<a class="jxr_linenumber" name="L1599" href="#L1599">1599</a> 				@Override <strong class="jxr_keyword">public</strong> String swap(MarshallingSession session, T o) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
-<a class="jxr_linenumber" name="L1600" href="#L1600">1600</a> 				@Override <strong class="jxr_keyword">public</strong> T unswap(MarshallingSession session, String s, ClassMeta&lt;?&gt; hint) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
-<a class="jxr_linenumber" name="L1601" href="#L1601">1601</a> 			});
-<a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> 
-<a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> 		<strong class="jxr_keyword">var</strong> ds = DefaultSwaps.find(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> 		<strong class="jxr_keyword">if</strong> (ds == <strong class="jxr_keyword">null</strong> &amp;&amp; !isStreamable()) {
-<a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> 			ds = AutoObjectSwap.find(marshallingContext, <strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L1606" href="#L1606">1606</a> 		<strong class="jxr_keyword">if</strong> (ds == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1607" href="#L1607">1607</a> 			ds = AutoNumberSwap.find(marshallingContext, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> 			<strong class="jxr_keyword">if</strong> (!ClassFormat.isClassNameAllowed(arg))
+<a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Could not resolve class '%s'"</span>, arg);
+<a class="jxr_linenumber" name="L1422" href="#L1422">1422</a> 			<strong class="jxr_keyword">var</strong> cl = Thread.currentThread().getContextClassLoader();
+<a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> 				<strong class="jxr_keyword">return</strong> (T)Class.forName(arg, false, cl != <strong class="jxr_keyword">null</strong> ? cl : ClassMeta.<strong class="jxr_keyword">class</strong>.getClassLoader());
+<a class="jxr_linenumber" name="L1425" href="#L1425">1425</a> 			} <strong class="jxr_keyword">catch</strong> (ClassNotFoundException e) {
+<a class="jxr_linenumber" name="L1426" href="#L1426">1426</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e, <span class="jxr_string">"Could not resolve class '%s'"</span>, arg);
+<a class="jxr_linenumber" name="L1427" href="#L1427">1427</a> 			}
+<a class="jxr_linenumber" name="L1428" href="#L1428">1428</a> 		}
+<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> 
+<a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> 		<strong class="jxr_keyword">if</strong> (fromStringMethod.isPresent())
+<a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> 			<strong class="jxr_keyword">return</strong> (T)fromStringMethod.get().invoke(<strong class="jxr_keyword">null</strong>, arg);
+<a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 
+<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 		<strong class="jxr_keyword">if</strong> (stringConstructor.isPresent()) {
+<a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 			<strong class="jxr_keyword">if</strong> (nonStaticMemberClass)
+<a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> 				<strong class="jxr_keyword">return</strong> stringConstructor.get().&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>, arg);
+<a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> 			<strong class="jxr_keyword">return</strong> stringConstructor.get().&lt;T&gt;newInstance(arg);
+<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> 		}
+<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> 		<strong class="jxr_keyword">throw</strong> exex(<span class="jxr_string">"No string constructor or valueOf(String) method found for class '%s'"</span>, cn(<strong class="jxr_keyword">inner</strong>()));
+<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> 	}
+<a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> 
+<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> <em class="jxr_javadoccomment">	 * Similar to {@link #equals(Object)} except primitive and Object types that are similar are considered the same.</em>
+<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> <em class="jxr_javadoccomment">	 * (e.g. &lt;jk&gt;boolean&lt;/jk&gt; == &lt;c&gt;Boolean&lt;/c&gt;).</em>
+<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> <em class="jxr_javadoccomment">	 * @param cm The class meta to compare to. Can be &lt;jk&gt;null&lt;/jk&gt;, in which case this method returns &lt;jk&gt;false&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified class-meta is equivalent to this one.</em>
+<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> same(ClassMeta&lt;?&gt; cm) {
+<a class="jxr_linenumber" name="L1449" href="#L1449">1449</a> 		<strong class="jxr_keyword">if</strong> (cm == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L1451" href="#L1451">1451</a> 		<strong class="jxr_keyword">if</strong> (equals(cm))
+<a class="jxr_linenumber" name="L1452" href="#L1452">1452</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L1453" href="#L1453">1453</a> 		<strong class="jxr_keyword">return</strong> (isPrimitive() &amp;&amp; cat.same(cm.cat));
+<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> 	}
+<a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> 
+<a class="jxr_linenumber" name="L1456" href="#L1456">1456</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L1458" href="#L1458">1458</a> 		<strong class="jxr_keyword">return</strong> toString(false);
+<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> 	}
+<a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> 
+<a class="jxr_linenumber" name="L1461" href="#L1461">1461</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1462" href="#L1462">1462</a> <em class="jxr_javadoccomment">	 * Same as {@link #toString()} except use simple class names.</em>
+<a class="jxr_linenumber" name="L1463" href="#L1463">1463</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1464" href="#L1464">1464</a> <em class="jxr_javadoccomment">	 * @param simple Print simple class names only (no package).</em>
+<a class="jxr_linenumber" name="L1465" href="#L1465">1465</a> <em class="jxr_javadoccomment">	 * @return A new string.</em>
+<a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> 	<strong class="jxr_keyword">public</strong> String toString(<strong class="jxr_keyword">boolean</strong> simple) {
+<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 		<strong class="jxr_keyword">return</strong> toString(<strong class="jxr_keyword">new</strong> StringBuilder(), simple).toString();
+<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 	}
+<a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> 
+<a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> <em class="jxr_javadoccomment">	 * Converts the specified object to a string.</em>
+<a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> <em class="jxr_javadoccomment">	 * @param t The object to convert.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</em>
+<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> <em class="jxr_javadoccomment">	 * @return The object converted to a string, or &lt;jk&gt;null&lt;/jk&gt; if the object was null.</em>
+<a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 	<strong class="jxr_keyword">public</strong> String toString(Object t) {
+<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 		<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 		<strong class="jxr_keyword">if</strong> (isEnum())
+<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> 			<strong class="jxr_keyword">return</strong> marshallingContext.getEnumFormat().format((Enum&lt;?&gt;)t);
+<a class="jxr_linenumber" name="L1482" href="#L1482">1482</a> 		<strong class="jxr_keyword">return</strong> t.toString();
+<a class="jxr_linenumber" name="L1483" href="#L1483">1483</a> 	}
+<a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> 
+<a class="jxr_linenumber" name="L1485" href="#L1485">1485</a> 	<strong class="jxr_keyword">private</strong> ObjectSwap&lt;T,?&gt; createSwap(Swap s) {
+<a class="jxr_linenumber" name="L1486" href="#L1486">1486</a> 		<strong class="jxr_keyword">var</strong> c = s.value();
+<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> 		<strong class="jxr_keyword">if</strong> (ClassUtils.isVoid(c))
+<a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> 			c = s.impl();
+<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> 		<strong class="jxr_keyword">var</strong> ci = info(c);
+<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> 
+<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> 		<strong class="jxr_keyword">if</strong> (ci.isAssignableTo(ObjectSwap.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> 			<strong class="jxr_keyword">var</strong> ps = BeanInstantiator.of(ObjectSwap.<strong class="jxr_keyword">class</strong>).type(ci).run();
+<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> 			<strong class="jxr_keyword">if</strong> (s.mediaTypes().length &gt; 0)
+<a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> 				ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));
+<a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> 			<strong class="jxr_keyword">if</strong> (! s.template().isEmpty())
+<a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> 				ps.withTemplate(s.template());
+<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 			<strong class="jxr_keyword">return</strong> ps;
+<a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> 		}
+<a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> 
+<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> 		<strong class="jxr_keyword">if</strong> (ci.isAssignableTo(Surrogate.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> 			List&lt;SurrogateSwap&lt;?,?&gt;&gt; l = SurrogateSwap.findObjectSwaps(c, marshallingContext);
+<a class="jxr_linenumber" name="L1502" href="#L1502">1502</a> 			<strong class="jxr_keyword">return</strong> first(l).map(x -&gt; (ObjectSwap&lt;T,?&gt;)x).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 		}
+<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> 
+<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ClassMetaRuntimeException(c, <span class="jxr_string">"Invalid swap class '%s' specified.  Must extend from ObjectSwap or Surrogate."</span>, c);
+<a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> 	}
+<a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> 
+<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> 	<strong class="jxr_keyword">private</strong> String findBeanDictionaryName() {
+<a class="jxr_linenumber" name="L1509" href="#L1509">1509</a> 		<strong class="jxr_keyword">if</strong> (marshallingContext == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1510" href="#L1510">1510</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a> 
+<a class="jxr_linenumber" name="L1512" href="#L1512">1512</a> 		<strong class="jxr_keyword">var</strong> d = beanMeta.get().optBeanMeta().map(x -&gt; x.getDictionaryName()).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1513" href="#L1513">1513</a> 		<strong class="jxr_keyword">if</strong> (nn(d))
+<a class="jxr_linenumber" name="L1514" href="#L1514">1514</a> 			<strong class="jxr_keyword">return</strong> d;
+<a class="jxr_linenumber" name="L1515" href="#L1515">1515</a> 
+<a class="jxr_linenumber" name="L1516" href="#L1516">1516</a> 		<em class="jxr_comment">// Note that @Marshalled(typeName) can be defined on non-bean types, so</em>
+<a class="jxr_linenumber" name="L1517" href="#L1517">1517</a> 		<em class="jxr_comment">// we have to check again.</em>
+<a class="jxr_linenumber" name="L1518" href="#L1518">1518</a> 		<strong class="jxr_keyword">return</strong> marshallingContext.getAnnotationProvider().find(Marshalled.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>)
+<a class="jxr_linenumber" name="L1519" href="#L1519">1519</a> 			.stream()
+<a class="jxr_linenumber" name="L1520" href="#L1520">1520</a> 			.map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
+<a class="jxr_linenumber" name="L1521" href="#L1521">1521</a> 			.filter(x -&gt; ! x.typeName().isEmpty())
+<a class="jxr_linenumber" name="L1522" href="#L1522">1522</a> 			.map(Marshalled::typeName)
+<a class="jxr_linenumber" name="L1523" href="#L1523">1523</a> 			.findFirst()
+<a class="jxr_linenumber" name="L1524" href="#L1524">1524</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1525" href="#L1525">1525</a> 	}
+<a class="jxr_linenumber" name="L1526" href="#L1526">1526</a> 
+<a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> 	<strong class="jxr_keyword">private</strong> BeanMeta.BeanMetaValue&lt;T&gt; findBeanMeta() {
+<a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> 		<strong class="jxr_keyword">if</strong> (! cat.isUnknown())
+<a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BeanMeta.BeanMetaValue&lt;&gt;((BeanMeta&lt;T&gt;)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Known non-bean type"</span>);
+<a class="jxr_linenumber" name="L1530" href="#L1530">1530</a> 		<strong class="jxr_keyword">return</strong> BeanMeta.create(<strong class="jxr_keyword">this</strong>, implClass.get());
+<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> 	}
+<a class="jxr_linenumber" name="L1532" href="#L1532">1532</a> 
+<a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> 	<strong class="jxr_keyword">private</strong> KeyValueTypes findKeyValueTypes() {
+<a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> 		<strong class="jxr_keyword">if</strong> (cat.is(MAP) &amp;&amp; ! cat.is(BEANMAP)) {
+<a class="jxr_linenumber" name="L1535" href="#L1535">1535</a> 			<em class="jxr_comment">// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap&lt;String,Person&gt;)</em>
+<a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> 			<strong class="jxr_keyword">var</strong> typeParams = marshallingContext.findParameters(<strong class="jxr_keyword">inner</strong>(), <strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L1537" href="#L1537">1537</a> 			<strong class="jxr_keyword">if</strong> (nn(typeParams) &amp;&amp; typeParams.length == 2) {
+<a class="jxr_linenumber" name="L1538" href="#L1538">1538</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> KeyValueTypes(typeParams[0], typeParams[1]);
+<a class="jxr_linenumber" name="L1539" href="#L1539">1539</a> 			}
+<a class="jxr_linenumber" name="L1540" href="#L1540">1540</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> KeyValueTypes(marshallingContext.getClassMeta(Object.<strong class="jxr_keyword">class</strong>), marshallingContext.getClassMeta(Object.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1541" href="#L1541">1541</a> 		}
+<a class="jxr_linenumber" name="L1542" href="#L1542">1542</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> KeyValueTypes(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1543" href="#L1543">1543</a> 	}
+<a class="jxr_linenumber" name="L1544" href="#L1544">1544</a> 
+<a class="jxr_linenumber" name="L1545" href="#L1545">1545</a> 	<strong class="jxr_keyword">private</strong> ClassMeta&lt;?&gt; findElementType() {
+<a class="jxr_linenumber" name="L1546" href="#L1546">1546</a> 		<strong class="jxr_keyword">if</strong> (marshallingContext == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1547" href="#L1547">1547</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1548" href="#L1548">1548</a> 		<em class="jxr_comment">// Primitive optional types carry no generic parameter — synthesize the matching boxed element type so</em>
+<a class="jxr_linenumber" name="L1549" href="#L1549">1549</a> 		<em class="jxr_comment">// the first-class optional path (serialize unwrap / parse element-typed wrap) has a target type.</em>
+<a class="jxr_linenumber" name="L1550" href="#L1550">1550</a> 		<strong class="jxr_keyword">if</strong> (is(OptionalInt.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L1551" href="#L1551">1551</a> 			<strong class="jxr_keyword">return</strong> marshallingContext.getClassMeta(Integer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1552" href="#L1552">1552</a> 		<strong class="jxr_keyword">if</strong> (is(OptionalLong.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L1553" href="#L1553">1553</a> 			<strong class="jxr_keyword">return</strong> marshallingContext.getClassMeta(Long.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1554" href="#L1554">1554</a> 		<strong class="jxr_keyword">if</strong> (is(OptionalDouble.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L1555" href="#L1555">1555</a> 			<strong class="jxr_keyword">return</strong> marshallingContext.getClassMeta(Double.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1556" href="#L1556">1556</a> 		<strong class="jxr_keyword">if</strong> (cat.is(ARRAY)) {
+<a class="jxr_linenumber" name="L1557" href="#L1557">1557</a> 			<strong class="jxr_keyword">return</strong> marshallingContext.getClassMeta(<strong class="jxr_keyword">inner</strong>().getComponentType());
+<a class="jxr_linenumber" name="L1558" href="#L1558">1558</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cat.is(COLLECTION) || cat.is(ITERABLE) || cat.is(ITERATOR) || cat.is(STREAM) || is(Optional.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L1559" href="#L1559">1559</a> 			<strong class="jxr_keyword">var</strong> typeParams = marshallingContext.findParameters(<strong class="jxr_keyword">inner</strong>(), <strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L1560" href="#L1560">1560</a> 			<strong class="jxr_keyword">if</strong> (nn(typeParams) &amp;&amp; typeParams.length == 1) {
+<a class="jxr_linenumber" name="L1561" href="#L1561">1561</a> 				<strong class="jxr_keyword">return</strong> typeParams[0];
+<a class="jxr_linenumber" name="L1562" href="#L1562">1562</a> 			}
+<a class="jxr_linenumber" name="L1563" href="#L1563">1563</a> 			<strong class="jxr_keyword">return</strong> marshallingContext.getClassMeta(Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1564" href="#L1564">1564</a> 		}
+<a class="jxr_linenumber" name="L1565" href="#L1565">1565</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1566" href="#L1566">1566</a> 	}
+<a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> 
+<a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> 	<strong class="jxr_keyword">private</strong> BuilderSwap&lt;T,?&gt; findBuilderSwap() {
+<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> 		<strong class="jxr_keyword">var</strong> bc = marshallingContext;
+<a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> 		<strong class="jxr_keyword">if</strong> (bc == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1572" href="#L1572">1572</a> 		<strong class="jxr_keyword">return</strong> (BuilderSwap&lt;T,?&gt;)BuilderSwap.findSwapFromObjectClass(bc, <strong class="jxr_keyword">inner</strong>(), bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
+<a class="jxr_linenumber" name="L1573" href="#L1573">1573</a> 	}
+<a class="jxr_linenumber" name="L1574" href="#L1574">1574</a> 
+<a class="jxr_linenumber" name="L1575" href="#L1575">1575</a> 	<strong class="jxr_keyword">private</strong> List&lt;ObjectSwap&lt;T,?&gt;&gt; findSwaps() {
+<a class="jxr_linenumber" name="L1576" href="#L1576">1576</a> 		<strong class="jxr_keyword">if</strong> (marshallingContext == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1577" href="#L1577">1577</a> 			<strong class="jxr_keyword">return</strong> l();
+<a class="jxr_linenumber" name="L1578" href="#L1578">1578</a> 
+<a class="jxr_linenumber" name="L1579" href="#L1579">1579</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;ObjectSwap&lt;T,?&gt;&gt;();
+<a class="jxr_linenumber" name="L1580" href="#L1580">1580</a> 		<strong class="jxr_keyword">var</strong> swapArray = marshallingContext.getSwaps();
+<a class="jxr_linenumber" name="L1581" href="#L1581">1581</a> 		<strong class="jxr_keyword">if</strong> (! swapArray.isEmpty()) {
+<a class="jxr_linenumber" name="L1582" href="#L1582">1582</a> 			<strong class="jxr_keyword">var</strong> innerClass = <strong class="jxr_keyword">inner</strong>();
+<a class="jxr_linenumber" name="L1583" href="#L1583">1583</a> 			swapArray.stream().filter(f -&gt; f.getNormalClass().isAssignableFrom(innerClass)).forEach(f -&gt; list.add((ObjectSwap&lt;T,?&gt;)f));
+<a class="jxr_linenumber" name="L1584" href="#L1584">1584</a> 		}
+<a class="jxr_linenumber" name="L1585" href="#L1585">1585</a> 
+<a class="jxr_linenumber" name="L1586" href="#L1586">1586</a> 		<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
+<a class="jxr_linenumber" name="L1587" href="#L1587">1587</a> 		ap.find(Swap.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>).stream().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; list.add(createSwap(x)));
+<a class="jxr_linenumber" name="L1588" href="#L1588">1588</a> 
+<a class="jxr_linenumber" name="L1589" href="#L1589">1589</a> 		<em class="jxr_comment">// @Marshalled(as=STRING) installs an AutoStringSwap before any auto-detection.</em>
+<a class="jxr_linenumber" name="L1590" href="#L1590">1590</a> 		<strong class="jxr_keyword">if</strong> (list.isEmpty()) {
+<a class="jxr_linenumber" name="L1591" href="#L1591">1591</a> 			<strong class="jxr_keyword">var</strong> marshalledList = ap.find(Marshalled.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1592" href="#L1592">1592</a> 			<strong class="jxr_keyword">if</strong> (marshalledList.stream().anyMatch(x -&gt; x.<strong class="jxr_keyword">inner</strong>().as() == MarshalledAs.STRING))
+<a class="jxr_linenumber" name="L1593" href="#L1593">1593</a> 				list.add(<strong class="jxr_keyword">new</strong> AutoStringSwap&lt;&gt;(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L1594" href="#L1594">1594</a> 		}
+<a class="jxr_linenumber" name="L1595" href="#L1595">1595</a> 
+<a class="jxr_linenumber" name="L1596" href="#L1596">1596</a> 		<em class="jxr_comment">// @MarshalledIgnore on TYPE — skip entirely: serialize as null, parse as null.</em>
+<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a> 		<em class="jxr_comment">// Use String.class (not Object.class) as swapClass so sType.isObject() stays false</em>
+<a class="jxr_linenumber" name="L1598" href="#L1598">1598</a> 		<em class="jxr_comment">// and the serializer correctly emits "null" when swap() returns null.</em>
+<a class="jxr_linenumber" name="L1599" href="#L1599">1599</a> 		<strong class="jxr_keyword">if</strong> (list.isEmpty() &amp;&amp; ap.has(MarshalledIgnore.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>))
+<a class="jxr_linenumber" name="L1600" href="#L1600">1600</a> 			list.add(<strong class="jxr_keyword">new</strong> ObjectSwap&lt;T,String&gt;(<strong class="jxr_keyword">inner</strong>(), String.<strong class="jxr_keyword">class</strong>) {
+<a class="jxr_linenumber" name="L1601" href="#L1601">1601</a> 				@Override <strong class="jxr_keyword">public</strong> String swap(MarshallingSession session, T o) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> 				@Override <strong class="jxr_keyword">public</strong> T unswap(MarshallingSession session, String s, ClassMeta&lt;?&gt; hint) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> 			});
+<a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> 
+<a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> 		<strong class="jxr_keyword">var</strong> ds = DefaultSwaps.find(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1606" href="#L1606">1606</a> 		<strong class="jxr_keyword">if</strong> (ds == <strong class="jxr_keyword">null</strong> &amp;&amp; !isStreamable()) {
+<a class="jxr_linenumber" name="L1607" href="#L1607">1607</a> 			ds = AutoObjectSwap.find(marshallingContext, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L1608" href="#L1608">1608</a> 		<strong class="jxr_keyword">if</strong> (ds == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> 			ds = AutoMapSwap.find(marshallingContext, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> 			ds = AutoNumberSwap.find(marshallingContext, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L1610" href="#L1610">1610</a> 		<strong class="jxr_keyword">if</strong> (ds == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1611" href="#L1611">1611</a> 			ds = AutoListSwap.find(marshallingContext, <strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> 		}
-<a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> 
-<a class="jxr_linenumber" name="L1614" href="#L1614">1614</a> 		<strong class="jxr_keyword">if</strong> (nn(ds))
-<a class="jxr_linenumber" name="L1615" href="#L1615">1615</a> 			list.add((ObjectSwap&lt;T,?&gt;)ds);
-<a class="jxr_linenumber" name="L1616" href="#L1616">1616</a> 
-<a class="jxr_linenumber" name="L1617" href="#L1617">1617</a> 		<strong class="jxr_keyword">return</strong> u(list);
-<a class="jxr_linenumber" name="L1618" href="#L1618">1618</a> 	}
-<a class="jxr_linenumber" name="L1619" href="#L1619">1619</a> 
-<a class="jxr_linenumber" name="L1620" href="#L1620">1620</a> 	<strong class="jxr_keyword">private</strong> List&lt;ObjectSwap&lt;?,?&gt;&gt; findChildSwaps() {
-<a class="jxr_linenumber" name="L1621" href="#L1621">1621</a> 		<strong class="jxr_keyword">if</strong> (marshallingContext == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1622" href="#L1622">1622</a> 			<strong class="jxr_keyword">return</strong> l();
-<a class="jxr_linenumber" name="L1623" href="#L1623">1623</a> 		<strong class="jxr_keyword">var</strong> swapArray = marshallingContext.getSwaps();
-<a class="jxr_linenumber" name="L1624" href="#L1624">1624</a> 		<strong class="jxr_keyword">if</strong> (swapArray.isEmpty())
-<a class="jxr_linenumber" name="L1625" href="#L1625">1625</a> 			<strong class="jxr_keyword">return</strong> l();
-<a class="jxr_linenumber" name="L1626" href="#L1626">1626</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;ObjectSwap&lt;?,?&gt;&gt;();
-<a class="jxr_linenumber" name="L1627" href="#L1627">1627</a> 		<strong class="jxr_keyword">var</strong> innerClass = <strong class="jxr_keyword">inner</strong>();
-<a class="jxr_linenumber" name="L1628" href="#L1628">1628</a> 		swapArray.stream().filter(f -&gt; f.getNormalClass().isAssignableTo(innerClass)).forEach(list::add);
-<a class="jxr_linenumber" name="L1629" href="#L1629">1629</a> 		<strong class="jxr_keyword">return</strong> u(list);
-<a class="jxr_linenumber" name="L1630" href="#L1630">1630</a> 	}
-<a class="jxr_linenumber" name="L1631" href="#L1631">1631</a> 
-<a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> 	<strong class="jxr_keyword">private</strong> String findExample() {
+<a class="jxr_linenumber" name="L1611" href="#L1611">1611</a> 			ds = AutoMapSwap.find(marshallingContext, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> 		<strong class="jxr_keyword">if</strong> (ds == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> 			ds = AutoListSwap.find(marshallingContext, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1614" href="#L1614">1614</a> 		}
+<a class="jxr_linenumber" name="L1615" href="#L1615">1615</a> 
+<a class="jxr_linenumber" name="L1616" href="#L1616">1616</a> 		<strong class="jxr_keyword">if</strong> (nn(ds))
+<a class="jxr_linenumber" name="L1617" href="#L1617">1617</a> 			list.add((ObjectSwap&lt;T,?&gt;)ds);
+<a class="jxr_linenumber" name="L1618" href="#L1618">1618</a> 
+<a class="jxr_linenumber" name="L1619" href="#L1619">1619</a> 		<strong class="jxr_keyword">return</strong> u(list);
+<a class="jxr_linenumber" name="L1620" href="#L1620">1620</a> 	}
+<a class="jxr_linenumber" name="L1621" href="#L1621">1621</a> 
+<a class="jxr_linenumber" name="L1622" href="#L1622">1622</a> 	<strong class="jxr_keyword">private</strong> List&lt;ObjectSwap&lt;?,?&gt;&gt; findChildSwaps() {
+<a class="jxr_linenumber" name="L1623" href="#L1623">1623</a> 		<strong class="jxr_keyword">if</strong> (marshallingContext == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1624" href="#L1624">1624</a> 			<strong class="jxr_keyword">return</strong> l();
+<a class="jxr_linenumber" name="L1625" href="#L1625">1625</a> 		<strong class="jxr_keyword">var</strong> swapArray = marshallingContext.getSwaps();
+<a class="jxr_linenumber" name="L1626" href="#L1626">1626</a> 		<strong class="jxr_keyword">if</strong> (swapArray.isEmpty())
+<a class="jxr_linenumber" name="L1627" href="#L1627">1627</a> 			<strong class="jxr_keyword">return</strong> l();
+<a class="jxr_linenumber" name="L1628" href="#L1628">1628</a> 		<strong class="jxr_keyword">var</strong> list = <strong class="jxr_keyword">new</strong> ArrayList&lt;ObjectSwap&lt;?,?&gt;&gt;();
+<a class="jxr_linenumber" name="L1629" href="#L1629">1629</a> 		<strong class="jxr_keyword">var</strong> innerClass = <strong class="jxr_keyword">inner</strong>();
+<a class="jxr_linenumber" name="L1630" href="#L1630">1630</a> 		swapArray.stream().filter(f -&gt; f.getNormalClass().isAssignableTo(innerClass)).forEach(list::add);
+<a class="jxr_linenumber" name="L1631" href="#L1631">1631</a> 		<strong class="jxr_keyword">return</strong> u(list);
+<a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> 	}
 <a class="jxr_linenumber" name="L1633" href="#L1633">1633</a> 
-<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> 		<strong class="jxr_keyword">var</strong> ex = beanMeta.get().optBeanMeta().map(x -&gt; (MarshalledFilter) x.getBeanFilter()).map(x -&gt; x.getExample()).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> 	<strong class="jxr_keyword">private</strong> String findExample() {
 <a class="jxr_linenumber" name="L1635" href="#L1635">1635</a> 
-<a class="jxr_linenumber" name="L1636" href="#L1636">1636</a> 		<strong class="jxr_keyword">if</strong> (ex == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1637" href="#L1637">1637</a> 			ex = marshalledFilter.map(x -&gt; x.getExample()).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1638" href="#L1638">1638</a> 
-<a class="jxr_linenumber" name="L1639" href="#L1639">1639</a> 		<strong class="jxr_keyword">if</strong> (ex == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(marshallingContext))
-<a class="jxr_linenumber" name="L1640" href="#L1640">1640</a> 			ex = marshallingContext.getAnnotationProvider().find(Example.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>).stream().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().value()).filter(Shorts::ine).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1641" href="#L1641">1641</a> 
-<a class="jxr_linenumber" name="L1642" href="#L1642">1642</a> 		<strong class="jxr_keyword">if</strong> (ex == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L1643" href="#L1643">1643</a> 			<strong class="jxr_keyword">if</strong> (isAny(<strong class="jxr_keyword">boolean</strong>.<strong class="jxr_keyword">class</strong>, Boolean.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L1644" href="#L1644">1644</a> 				ex = <span class="jxr_string">"true"</span>;
-<a class="jxr_linenumber" name="L1645" href="#L1645">1645</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isAny(<strong class="jxr_keyword">char</strong>.<strong class="jxr_keyword">class</strong>, Character.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L1646" href="#L1646">1646</a> 				ex = <span class="jxr_string">"a"</span>;
-<a class="jxr_linenumber" name="L1647" href="#L1647">1647</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cat.is(CHARSEQ)) {
-<a class="jxr_linenumber" name="L1648" href="#L1648">1648</a> 				ex = <span class="jxr_string">"foo"</span>;
-<a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cat.is(ENUM)) {
-<a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> 				Optional&lt;Enum&lt;?&gt;&gt; e = first(EnumSet.allOf(asEnumClass(<strong class="jxr_keyword">inner</strong>())));
-<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> 				ex = e.map(x -&gt; marshallingContext.getEnumFormat().format(x)).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isAny(<strong class="jxr_keyword">float</strong>.<strong class="jxr_keyword">class</strong>, Float.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">double</strong>.<strong class="jxr_keyword">class</strong>, Double.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> 				ex = <span class="jxr_string">"1.0"</span>;
-<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isAny(<strong class="jxr_keyword">short</strong>.<strong class="jxr_keyword">class</strong>, Short.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>, Long.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> 				ex = <span class="jxr_string">"1"</span>;
-<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 			}
-<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> 		}
-<a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> 
-<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> 		<strong class="jxr_keyword">return</strong> ex;
-<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> 	}
-<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> 
-<a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> 	<strong class="jxr_keyword">private</strong> FieldInfo findExampleField() {
-<a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> 		<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
-<a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> 
-<a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> 		<strong class="jxr_keyword">return</strong> getDeclaredFields()
-<a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> 			.stream()
-<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 			.filter(x -&gt; x.isStatic() &amp;&amp; isAssignableFrom(x.getFieldType()) &amp;&amp; ap.has(Example.<strong class="jxr_keyword">class</strong>, x))
-<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> 			.map(x -&gt; x.accessible())
-<a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 			.findFirst()
-<a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1671" href="#L1671">1671</a> 	}
-<a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> 
-<a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> 	<strong class="jxr_keyword">private</strong> MethodInfo findExampleMethod() {
-<a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> 		<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
-<a class="jxr_linenumber" name="L1676" href="#L1676">1676</a> 
-<a class="jxr_linenumber" name="L1677" href="#L1677">1677</a> 		<em class="jxr_comment">// Option 1:  Public example() or @Example method.</em>
-<a class="jxr_linenumber" name="L1678" href="#L1678">1678</a> 		<strong class="jxr_keyword">var</strong> m = getPublicMethod(
-<a class="jxr_linenumber" name="L1679" href="#L1679">1679</a> 			x -&gt; x.isStatic() &amp;&amp; x.isNotDeprecated() &amp;&amp; (x.hasName(<span class="jxr_string">"example"</span>) || ap.has(Example.<strong class="jxr_keyword">class</strong>, x)) &amp;&amp; x.hasParameterTypesLenient(MarshallingSession.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L1680" href="#L1680">1680</a> 		);
-<a class="jxr_linenumber" name="L1681" href="#L1681">1681</a> 		<strong class="jxr_keyword">if</strong> (m.isPresent()) <strong class="jxr_keyword">return</strong> m.get();
-<a class="jxr_linenumber" name="L1682" href="#L1682">1682</a> 
-<a class="jxr_linenumber" name="L1683" href="#L1683">1683</a> 		<em class="jxr_comment">// Option 2:  Non-public @Example method.</em>
-<a class="jxr_linenumber" name="L1684" href="#L1684">1684</a> 		<strong class="jxr_keyword">return</strong> getDeclaredMethods()
-<a class="jxr_linenumber" name="L1685" href="#L1685">1685</a> 			.stream()
-<a class="jxr_linenumber" name="L1686" href="#L1686">1686</a> 			.flatMap(x -&gt; x.getMatchingMethods().stream())
-<a class="jxr_linenumber" name="L1687" href="#L1687">1687</a> 			.filter(x -&gt; x.isStatic() &amp;&amp; ap.has(Example.<strong class="jxr_keyword">class</strong>, x))
-<a class="jxr_linenumber" name="L1688" href="#L1688">1688</a> 			.map(x -&gt; x.accessible())
-<a class="jxr_linenumber" name="L1689" href="#L1689">1689</a> 			.findFirst()
-<a class="jxr_linenumber" name="L1690" href="#L1690">1690</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1691" href="#L1691">1691</a> 		<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L1692" href="#L1692">1692</a> 	}
-<a class="jxr_linenumber" name="L1693" href="#L1693">1693</a> 
-<a class="jxr_linenumber" name="L1694" href="#L1694">1694</a> 	<strong class="jxr_keyword">private</strong> MethodInfo findFromStringMethod() {
-<a class="jxr_linenumber" name="L1695" href="#L1695">1695</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L1696" href="#L1696">1696</a> 
-<a class="jxr_linenumber" name="L1697" href="#L1697">1697</a> 		<em class="jxr_comment">// Option 1:  Explicit @StringCtor(name) short-circuits the name-based guessing below.</em>
-<a class="jxr_linenumber" name="L1698" href="#L1698">1698</a> 		<em class="jxr_comment">// marshallingContext is null for context-less ClassMetas (e.g. the args-array ClassMeta), so there's</em>
-<a class="jxr_linenumber" name="L1699" href="#L1699">1699</a> 		<em class="jxr_comment">// no annotation provider to consult in that case.</em>
-<a class="jxr_linenumber" name="L1700" href="#L1700">1700</a> 		<strong class="jxr_keyword">if</strong> (marshallingContext != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L1701" href="#L1701">1701</a> 			<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
-<a class="jxr_linenumber" name="L1702" href="#L1702">1702</a> 			<strong class="jxr_keyword">var</strong> stringCtor = ap.find(StringCtor.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>).stream().findFirst();
-<a class="jxr_linenumber" name="L1703" href="#L1703">1703</a> 			<strong class="jxr_keyword">if</strong> (stringCtor.isPresent()) {
-<a class="jxr_linenumber" name="L1704" href="#L1704">1704</a> 				<strong class="jxr_keyword">var</strong> methodName = stringCtor.get().<strong class="jxr_keyword">inner</strong>().value();
-<a class="jxr_linenumber" name="L1705" href="#L1705">1705</a> 				<strong class="jxr_keyword">return</strong> getPublicMethod(
-<a class="jxr_linenumber" name="L1706" href="#L1706">1706</a> 					x -&gt; x.isStatic() &amp;&amp; x.hasReturnType(<strong class="jxr_keyword">this</strong>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>) &amp;&amp; x.hasName(methodName)
-<a class="jxr_linenumber" name="L1707" href="#L1707">1707</a> 				).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1708" href="#L1708">1708</a> 			}
-<a class="jxr_linenumber" name="L1709" href="#L1709">1709</a> 		}
-<a class="jxr_linenumber" name="L1710" href="#L1710">1710</a> 
-<a class="jxr_linenumber" name="L1711" href="#L1711">1711</a> 		<em class="jxr_comment">// Option 2:  Find static fromString(String) or equivalent method by conventional name.</em>
-<a class="jxr_linenumber" name="L1712" href="#L1712">1712</a> 		<em class="jxr_comment">// fromString() must be checked before valueOf() so that Enum classes can create their own</em>
-<a class="jxr_linenumber" name="L1713" href="#L1713">1713</a> 		<em class="jxr_comment">//		specialized fromString() methods to override the behavior of Enum.valueOf(String).</em>
-<a class="jxr_linenumber" name="L1714" href="#L1714">1714</a> 		<em class="jxr_comment">// valueOf() is used by enums.</em>
-<a class="jxr_linenumber" name="L1715" href="#L1715">1715</a> 		<em class="jxr_comment">// parse() is used by the java logging Level class.</em>
-<a class="jxr_linenumber" name="L1716" href="#L1716">1716</a> 		<em class="jxr_comment">// forName() is used by Class and Charset</em>
-<a class="jxr_linenumber" name="L1717" href="#L1717">1717</a> 		<strong class="jxr_keyword">var</strong> names = a(<span class="jxr_string">"fromString"</span>, <span class="jxr_string">"fromValue"</span>, <span class="jxr_string">"valueOf"</span>, <span class="jxr_string">"parse"</span>, <span class="jxr_string">"parseString"</span>, <span class="jxr_string">"forName"</span>, <span class="jxr_string">"forString"</span>);
-<a class="jxr_linenumber" name="L1718" href="#L1718">1718</a> 		<strong class="jxr_keyword">return</strong> getPublicMethod(
-<a class="jxr_linenumber" name="L1719" href="#L1719">1719</a> 			x -&gt; x.isStatic() &amp;&amp; x.isNotDeprecated() &amp;&amp; x.hasReturnType(<strong class="jxr_keyword">this</strong>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>) &amp;&amp; contains(x.getName(), names)
-<a class="jxr_linenumber" name="L1720" href="#L1720">1720</a> 		).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1721" href="#L1721">1721</a> 		<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L1722" href="#L1722">1722</a> 	}
-<a class="jxr_linenumber" name="L1723" href="#L1723">1723</a> 
-<a class="jxr_linenumber" name="L1724" href="#L1724">1724</a> 	<strong class="jxr_keyword">private</strong> ClassInfoTyped&lt;? <strong class="jxr_keyword">extends</strong> T&gt; findImplClass() {
+<a class="jxr_linenumber" name="L1636" href="#L1636">1636</a> 		<strong class="jxr_keyword">var</strong> ex = beanMeta.get().optBeanMeta().map(x -&gt; (MarshalledFilter) x.getBeanFilter()).map(x -&gt; x.getExample()).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1637" href="#L1637">1637</a> 
+<a class="jxr_linenumber" name="L1638" href="#L1638">1638</a> 		<strong class="jxr_keyword">if</strong> (ex == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1639" href="#L1639">1639</a> 			ex = marshalledFilter.map(x -&gt; x.getExample()).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1640" href="#L1640">1640</a> 
+<a class="jxr_linenumber" name="L1641" href="#L1641">1641</a> 		<strong class="jxr_keyword">if</strong> (ex == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(marshallingContext))
+<a class="jxr_linenumber" name="L1642" href="#L1642">1642</a> 			ex = marshallingContext.getAnnotationProvider().find(Example.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>).stream().map(x -&gt; x.<strong class="jxr_keyword">inner</strong>().value()).filter(Shorts::ine).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1643" href="#L1643">1643</a> 
+<a class="jxr_linenumber" name="L1644" href="#L1644">1644</a> 		<strong class="jxr_keyword">if</strong> (ex == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1645" href="#L1645">1645</a> 			<strong class="jxr_keyword">if</strong> (isAny(<strong class="jxr_keyword">boolean</strong>.<strong class="jxr_keyword">class</strong>, Boolean.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L1646" href="#L1646">1646</a> 				ex = <span class="jxr_string">"true"</span>;
+<a class="jxr_linenumber" name="L1647" href="#L1647">1647</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isAny(<strong class="jxr_keyword">char</strong>.<strong class="jxr_keyword">class</strong>, Character.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L1648" href="#L1648">1648</a> 				ex = <span class="jxr_string">"a"</span>;
+<a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cat.is(CHARSEQ)) {
+<a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> 				ex = <span class="jxr_string">"foo"</span>;
+<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cat.is(ENUM)) {
+<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> 				Optional&lt;Enum&lt;?&gt;&gt; e = first(EnumSet.allOf(asEnumClass(<strong class="jxr_keyword">inner</strong>())));
+<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> 				ex = e.map(x -&gt; marshallingContext.getEnumFormat().format(x)).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isAny(<strong class="jxr_keyword">float</strong>.<strong class="jxr_keyword">class</strong>, Float.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">double</strong>.<strong class="jxr_keyword">class</strong>, Double.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> 				ex = <span class="jxr_string">"1.0"</span>;
+<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isAny(<strong class="jxr_keyword">short</strong>.<strong class="jxr_keyword">class</strong>, Short.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>, Long.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> 				ex = <span class="jxr_string">"1"</span>;
+<a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> 			}
+<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> 		}
+<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> 
+<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> 		<strong class="jxr_keyword">return</strong> ex;
+<a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> 	}
+<a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> 
+<a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> 	<strong class="jxr_keyword">private</strong> FieldInfo findExampleField() {
+<a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> 		<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
+<a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> 
+<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 		<strong class="jxr_keyword">return</strong> getDeclaredFields()
+<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> 			.stream()
+<a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 			.filter(x -&gt; x.isStatic() &amp;&amp; isAssignableFrom(x.getFieldType()) &amp;&amp; ap.has(Example.<strong class="jxr_keyword">class</strong>, x))
+<a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 			.map(x -&gt; x.accessible())
+<a class="jxr_linenumber" name="L1671" href="#L1671">1671</a> 			.findFirst()
+<a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> 	}
+<a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> 
+<a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> 	<strong class="jxr_keyword">private</strong> MethodInfo findExampleMethod() {
+<a class="jxr_linenumber" name="L1676" href="#L1676">1676</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L1677" href="#L1677">1677</a> 		<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
+<a class="jxr_linenumber" name="L1678" href="#L1678">1678</a> 
+<a class="jxr_linenumber" name="L1679" href="#L1679">1679</a> 		<em class="jxr_comment">// Option 1:  Public example() or @Example method.</em>
+<a class="jxr_linenumber" name="L1680" href="#L1680">1680</a> 		<strong class="jxr_keyword">var</strong> m = getPublicMethod(
+<a class="jxr_linenumber" name="L1681" href="#L1681">1681</a> 			x -&gt; x.isStatic() &amp;&amp; x.isNotDeprecated() &amp;&amp; (x.hasName(<span class="jxr_string">"example"</span>) || ap.has(Example.<strong class="jxr_keyword">class</strong>, x)) &amp;&amp; x.hasParameterTypesLenient(MarshallingSession.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L1682" href="#L1682">1682</a> 		);
+<a class="jxr_linenumber" name="L1683" href="#L1683">1683</a> 		<strong class="jxr_keyword">if</strong> (m.isPresent()) <strong class="jxr_keyword">return</strong> m.get();
+<a class="jxr_linenumber" name="L1684" href="#L1684">1684</a> 
+<a class="jxr_linenumber" name="L1685" href="#L1685">1685</a> 		<em class="jxr_comment">// Option 2:  Non-public @Example method.</em>
+<a class="jxr_linenumber" name="L1686" href="#L1686">1686</a> 		<strong class="jxr_keyword">return</strong> getDeclaredMethods()
+<a class="jxr_linenumber" name="L1687" href="#L1687">1687</a> 			.stream()
+<a class="jxr_linenumber" name="L1688" href="#L1688">1688</a> 			.flatMap(x -&gt; x.getMatchingMethods().stream())
+<a class="jxr_linenumber" name="L1689" href="#L1689">1689</a> 			.filter(x -&gt; x.isStatic() &amp;&amp; ap.has(Example.<strong class="jxr_keyword">class</strong>, x))
+<a class="jxr_linenumber" name="L1690" href="#L1690">1690</a> 			.map(x -&gt; x.accessible())
+<a class="jxr_linenumber" name="L1691" href="#L1691">1691</a> 			.findFirst()
+<a class="jxr_linenumber" name="L1692" href="#L1692">1692</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1693" href="#L1693">1693</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L1694" href="#L1694">1694</a> 	}
+<a class="jxr_linenumber" name="L1695" href="#L1695">1695</a> 
+<a class="jxr_linenumber" name="L1696" href="#L1696">1696</a> 	<strong class="jxr_keyword">private</strong> MethodInfo findFromStringMethod() {
+<a class="jxr_linenumber" name="L1697" href="#L1697">1697</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L1698" href="#L1698">1698</a> 
+<a class="jxr_linenumber" name="L1699" href="#L1699">1699</a> 		<em class="jxr_comment">// Option 1:  Explicit @StringCtor(name) short-circuits the name-based guessing below.</em>
+<a class="jxr_linenumber" name="L1700" href="#L1700">1700</a> 		<em class="jxr_comment">// marshallingContext is null for context-less ClassMetas (e.g. the args-array ClassMeta), so there's</em>
+<a class="jxr_linenumber" name="L1701" href="#L1701">1701</a> 		<em class="jxr_comment">// no annotation provider to consult in that case.</em>
+<a class="jxr_linenumber" name="L1702" href="#L1702">1702</a> 		<strong class="jxr_keyword">if</strong> (marshallingContext != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1703" href="#L1703">1703</a> 			<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
+<a class="jxr_linenumber" name="L1704" href="#L1704">1704</a> 			<strong class="jxr_keyword">var</strong> stringCtor = ap.find(StringCtor.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>).stream().findFirst();
+<a class="jxr_linenumber" name="L1705" href="#L1705">1705</a> 			<strong class="jxr_keyword">if</strong> (stringCtor.isPresent()) {
+<a class="jxr_linenumber" name="L1706" href="#L1706">1706</a> 				<strong class="jxr_keyword">var</strong> methodName = stringCtor.get().<strong class="jxr_keyword">inner</strong>().value();
+<a class="jxr_linenumber" name="L1707" href="#L1707">1707</a> 				<strong class="jxr_keyword">return</strong> getPublicMethod(
+<a class="jxr_linenumber" name="L1708" href="#L1708">1708</a> 					x -&gt; x.isStatic() &amp;&amp; x.hasReturnType(<strong class="jxr_keyword">this</strong>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>) &amp;&amp; x.hasName(methodName)
+<a class="jxr_linenumber" name="L1709" href="#L1709">1709</a> 				).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1710" href="#L1710">1710</a> 			}
+<a class="jxr_linenumber" name="L1711" href="#L1711">1711</a> 		}
+<a class="jxr_linenumber" name="L1712" href="#L1712">1712</a> 
+<a class="jxr_linenumber" name="L1713" href="#L1713">1713</a> 		<em class="jxr_comment">// Option 2:  Find static fromString(String) or equivalent method by conventional name.</em>
+<a class="jxr_linenumber" name="L1714" href="#L1714">1714</a> 		<em class="jxr_comment">// fromString() must be checked before valueOf() so that Enum classes can create their own</em>
+<a class="jxr_linenumber" name="L1715" href="#L1715">1715</a> 		<em class="jxr_comment">//		specialized fromString() methods to override the behavior of Enum.valueOf(String).</em>
+<a class="jxr_linenumber" name="L1716" href="#L1716">1716</a> 		<em class="jxr_comment">// valueOf() is used by enums.</em>
+<a class="jxr_linenumber" name="L1717" href="#L1717">1717</a> 		<em class="jxr_comment">// parse() is used by the java logging Level class.</em>
+<a class="jxr_linenumber" name="L1718" href="#L1718">1718</a> 		<em class="jxr_comment">// forName() is used by Class and Charset</em>
+<a class="jxr_linenumber" name="L1719" href="#L1719">1719</a> 		<strong class="jxr_keyword">var</strong> names = a(<span class="jxr_string">"fromString"</span>, <span class="jxr_string">"fromValue"</span>, <span class="jxr_string">"valueOf"</span>, <span class="jxr_string">"parse"</span>, <span class="jxr_string">"parseString"</span>, <span class="jxr_string">"forName"</span>, <span class="jxr_string">"forString"</span>);
+<a class="jxr_linenumber" name="L1720" href="#L1720">1720</a> 		<strong class="jxr_keyword">return</strong> getPublicMethod(
+<a class="jxr_linenumber" name="L1721" href="#L1721">1721</a> 			x -&gt; x.isStatic() &amp;&amp; x.isNotDeprecated() &amp;&amp; x.hasReturnType(<strong class="jxr_keyword">this</strong>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>) &amp;&amp; contains(x.getName(), names)
+<a class="jxr_linenumber" name="L1722" href="#L1722">1722</a> 		).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1723" href="#L1723">1723</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L1724" href="#L1724">1724</a> 	}
 <a class="jxr_linenumber" name="L1725" href="#L1725">1725</a> 
-<a class="jxr_linenumber" name="L1726" href="#L1726">1726</a> 		<strong class="jxr_keyword">if</strong> (is(Object.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L1727" href="#L1727">1727</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1728" href="#L1728">1728</a> 
-<a class="jxr_linenumber" name="L1729" href="#L1729">1729</a> 		<strong class="jxr_keyword">var</strong> mf = marshalledFilter.get();
-<a class="jxr_linenumber" name="L1730" href="#L1730">1730</a> 		<strong class="jxr_keyword">if</strong> (mf == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1731" href="#L1731">1731</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1732" href="#L1732">1732</a> 		<strong class="jxr_keyword">var</strong> implClassInfo = mf.getImplClass();
-<a class="jxr_linenumber" name="L1733" href="#L1733">1733</a> 		<strong class="jxr_keyword">if</strong> (implClassInfo == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1734" href="#L1734">1734</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1735" href="#L1735">1735</a> 		<strong class="jxr_keyword">return</strong> (ClassInfoTyped&lt;? <strong class="jxr_keyword">extends</strong> T&gt;)implClassInfo;
-<a class="jxr_linenumber" name="L1736" href="#L1736">1736</a> 	}
-<a class="jxr_linenumber" name="L1737" href="#L1737">1737</a> 
-<a class="jxr_linenumber" name="L1738" href="#L1738">1738</a> 	<strong class="jxr_keyword">private</strong> MarshalledFilter findMarshalledFilter() {
-<a class="jxr_linenumber" name="L1739" href="#L1739">1739</a> 		<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
-<a class="jxr_linenumber" name="L1740" href="#L1740">1740</a> 		<strong class="jxr_keyword">var</strong> l = ap.find(Marshalled.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L1741" href="#L1741">1741</a> 		<strong class="jxr_keyword">var</strong> bt = ap.find(BeanType.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L1742" href="#L1742">1742</a> 		<strong class="jxr_keyword">if</strong> (l.isEmpty() &amp;&amp; bt.isEmpty())
-<a class="jxr_linenumber" name="L1743" href="#L1743">1743</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1744" href="#L1744">1744</a> 		<strong class="jxr_keyword">return</strong> MarshalledFilter.create(<strong class="jxr_keyword">this</strong>)
-<a class="jxr_linenumber" name="L1745" href="#L1745">1745</a> 			.applyAnnotations(reverse(l.stream().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList()))
-<a class="jxr_linenumber" name="L1746" href="#L1746">1746</a> 			.applyBeanTypeAnnotations(reverse(bt.stream().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList()))
-<a class="jxr_linenumber" name="L1747" href="#L1747">1747</a> 			.build();
-<a class="jxr_linenumber" name="L1748" href="#L1748">1748</a> 	}
-<a class="jxr_linenumber" name="L1749" href="#L1749">1749</a> 
-<a class="jxr_linenumber" name="L1750" href="#L1750">1750</a> 	<strong class="jxr_keyword">private</strong> Property&lt;T,Object&gt; findNameProperty() {
-<a class="jxr_linenumber" name="L1751" href="#L1751">1751</a> 		<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
-<a class="jxr_linenumber" name="L1752" href="#L1752">1752</a> 
-<a class="jxr_linenumber" name="L1753" href="#L1753">1753</a> 		<strong class="jxr_keyword">var</strong> s = getAllFields()
-<a class="jxr_linenumber" name="L1754" href="#L1754">1754</a> 			.stream()
-<a class="jxr_linenumber" name="L1755" href="#L1755">1755</a> 			.filter(x -&gt; ap.has(NameProperty.<strong class="jxr_keyword">class</strong>, x))
-<a class="jxr_linenumber" name="L1756" href="#L1756">1756</a> 			.map(x -&gt; x.accessible())
-<a class="jxr_linenumber" name="L1757" href="#L1757">1757</a> 			.map(x -&gt; Property.&lt;T,Object&gt;create().field(x).build())
-<a class="jxr_linenumber" name="L1758" href="#L1758">1758</a> 			.findFirst();
-<a class="jxr_linenumber" name="L1759" href="#L1759">1759</a> 
-<a class="jxr_linenumber" name="L1760" href="#L1760">1760</a> 		<strong class="jxr_keyword">if</strong> (s.isPresent()) <strong class="jxr_keyword">return</strong> s.get();
+<a class="jxr_linenumber" name="L1726" href="#L1726">1726</a> 	<strong class="jxr_keyword">private</strong> ClassInfoTyped&lt;? <strong class="jxr_keyword">extends</strong> T&gt; findImplClass() {
+<a class="jxr_linenumber" name="L1727" href="#L1727">1727</a> 
+<a class="jxr_linenumber" name="L1728" href="#L1728">1728</a> 		<strong class="jxr_keyword">if</strong> (is(Object.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L1729" href="#L1729">1729</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1730" href="#L1730">1730</a> 
+<a class="jxr_linenumber" name="L1731" href="#L1731">1731</a> 		<strong class="jxr_keyword">var</strong> mf = marshalledFilter.get();
+<a class="jxr_linenumber" name="L1732" href="#L1732">1732</a> 		<strong class="jxr_keyword">if</strong> (mf == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1733" href="#L1733">1733</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1734" href="#L1734">1734</a> 		<strong class="jxr_keyword">var</strong> implClassInfo = mf.getImplClass();
+<a class="jxr_linenumber" name="L1735" href="#L1735">1735</a> 		<strong class="jxr_keyword">if</strong> (implClassInfo == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1736" href="#L1736">1736</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1737" href="#L1737">1737</a> 		<strong class="jxr_keyword">return</strong> (ClassInfoTyped&lt;? <strong class="jxr_keyword">extends</strong> T&gt;)implClassInfo;
+<a class="jxr_linenumber" name="L1738" href="#L1738">1738</a> 	}
+<a class="jxr_linenumber" name="L1739" href="#L1739">1739</a> 
+<a class="jxr_linenumber" name="L1740" href="#L1740">1740</a> 	<strong class="jxr_keyword">private</strong> MarshalledFilter findMarshalledFilter() {
+<a class="jxr_linenumber" name="L1741" href="#L1741">1741</a> 		<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
+<a class="jxr_linenumber" name="L1742" href="#L1742">1742</a> 		<strong class="jxr_keyword">var</strong> l = ap.find(Marshalled.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1743" href="#L1743">1743</a> 		<strong class="jxr_keyword">var</strong> bt = ap.find(BeanType.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1744" href="#L1744">1744</a> 		<strong class="jxr_keyword">if</strong> (l.isEmpty() &amp;&amp; bt.isEmpty())
+<a class="jxr_linenumber" name="L1745" href="#L1745">1745</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1746" href="#L1746">1746</a> 		<strong class="jxr_keyword">return</strong> MarshalledFilter.create(<strong class="jxr_keyword">this</strong>)
+<a class="jxr_linenumber" name="L1747" href="#L1747">1747</a> 			.applyAnnotations(reverse(l.stream().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList()))
+<a class="jxr_linenumber" name="L1748" href="#L1748">1748</a> 			.applyBeanTypeAnnotations(reverse(bt.stream().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList()))
+<a class="jxr_linenumber" name="L1749" href="#L1749">1749</a> 			.build();
+<a class="jxr_linenumber" name="L1750" href="#L1750">1750</a> 	}
+<a class="jxr_linenumber" name="L1751" href="#L1751">1751</a> 
+<a class="jxr_linenumber" name="L1752" href="#L1752">1752</a> 	<strong class="jxr_keyword">private</strong> Property&lt;T,Object&gt; findNameProperty() {
+<a class="jxr_linenumber" name="L1753" href="#L1753">1753</a> 		<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
+<a class="jxr_linenumber" name="L1754" href="#L1754">1754</a> 
+<a class="jxr_linenumber" name="L1755" href="#L1755">1755</a> 		<strong class="jxr_keyword">var</strong> s = getAllFields()
+<a class="jxr_linenumber" name="L1756" href="#L1756">1756</a> 			.stream()
+<a class="jxr_linenumber" name="L1757" href="#L1757">1757</a> 			.filter(x -&gt; ap.has(NameProperty.<strong class="jxr_keyword">class</strong>, x))
+<a class="jxr_linenumber" name="L1758" href="#L1758">1758</a> 			.map(x -&gt; x.accessible())
+<a class="jxr_linenumber" name="L1759" href="#L1759">1759</a> 			.map(x -&gt; Property.&lt;T,Object&gt;create().field(x).build())
+<a class="jxr_linenumber" name="L1760" href="#L1760">1760</a> 			.findFirst();
 <a class="jxr_linenumber" name="L1761" href="#L1761">1761</a> 
-<a class="jxr_linenumber" name="L1762" href="#L1762">1762</a> 		<strong class="jxr_keyword">var</strong> builder = Property.&lt;T,Object&gt;create();
+<a class="jxr_linenumber" name="L1762" href="#L1762">1762</a> 		<strong class="jxr_keyword">if</strong> (s.isPresent()) <strong class="jxr_keyword">return</strong> s.get();
 <a class="jxr_linenumber" name="L1763" href="#L1763">1763</a> 
-<a class="jxr_linenumber" name="L1764" href="#L1764">1764</a> 		<em class="jxr_comment">// Look for setter method (1 parameter) with @NameProperty</em>
-<a class="jxr_linenumber" name="L1765" href="#L1765">1765</a> 		<strong class="jxr_keyword">var</strong> setterMethod = getAllMethods()
-<a class="jxr_linenumber" name="L1766" href="#L1766">1766</a> 			.stream()
-<a class="jxr_linenumber" name="L1767" href="#L1767">1767</a> 			.filter(x -&gt; ap.has(NameProperty.<strong class="jxr_keyword">class</strong>, x) &amp;&amp; x.hasNumParameters(1))
-<a class="jxr_linenumber" name="L1768" href="#L1768">1768</a> 			.findFirst();
-<a class="jxr_linenumber" name="L1769" href="#L1769">1769</a> 
-<a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> 		<strong class="jxr_keyword">if</strong> (setterMethod.isPresent()) {
-<a class="jxr_linenumber" name="L1771" href="#L1771">1771</a> 			builder.setter(setterMethod.get().accessible());
-<a class="jxr_linenumber" name="L1772" href="#L1772">1772</a> 
-<a class="jxr_linenumber" name="L1773" href="#L1773">1773</a> 			<em class="jxr_comment">// Try to find a corresponding getter method (even if not annotated)</em>
-<a class="jxr_linenumber" name="L1774" href="#L1774">1774</a> 			<em class="jxr_comment">// If setter is "setName", look for "getName" or "isName"</em>
-<a class="jxr_linenumber" name="L1775" href="#L1775">1775</a> 			<strong class="jxr_keyword">var</strong> setterName = setterMethod.get().getNameSimple();
-<a class="jxr_linenumber" name="L1776" href="#L1776">1776</a> 			<strong class="jxr_keyword">if</strong> (setterName.startsWith(<span class="jxr_string">"set"</span>) &amp;&amp; setterName.length() &gt; 3) {
-<a class="jxr_linenumber" name="L1777" href="#L1777">1777</a> 				<strong class="jxr_keyword">var</strong> propertyName = setterName.substring(3);
-<a class="jxr_linenumber" name="L1778" href="#L1778">1778</a> 				<strong class="jxr_keyword">var</strong> getterName1 = <span class="jxr_string">"get"</span> + propertyName;
-<a class="jxr_linenumber" name="L1779" href="#L1779">1779</a> 				<strong class="jxr_keyword">var</strong> getterName2 = <span class="jxr_string">"is"</span> + propertyName;
-<a class="jxr_linenumber" name="L1780" href="#L1780">1780</a> 
-<a class="jxr_linenumber" name="L1781" href="#L1781">1781</a> 				<strong class="jxr_keyword">var</strong> getter = getAllMethods()
-<a class="jxr_linenumber" name="L1782" href="#L1782">1782</a> 					.stream()
-<a class="jxr_linenumber" name="L1783" href="#L1783">1783</a> 					.filter(x -&gt; !x.isStatic() &amp;&amp; x.hasNumParameters(0) &amp;&amp;
-<a class="jxr_linenumber" name="L1784" href="#L1784">1784</a> 						(x.hasName(getterName1) || x.hasName(getterName2)) &amp;&amp;
-<a class="jxr_linenumber" name="L1785" href="#L1785">1785</a> 						!x.getReturnType().is(Void.TYPE))
-<a class="jxr_linenumber" name="L1786" href="#L1786">1786</a> 					.findFirst();
-<a class="jxr_linenumber" name="L1787" href="#L1787">1787</a> 
-<a class="jxr_linenumber" name="L1788" href="#L1788">1788</a> 				<strong class="jxr_keyword">if</strong> (getter.isPresent()) {
-<a class="jxr_linenumber" name="L1789" href="#L1789">1789</a> 					builder.getter(getter.get().accessible());
-<a class="jxr_linenumber" name="L1790" href="#L1790">1790</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L1791" href="#L1791">1791</a> 					<em class="jxr_comment">// Try to find a field with the property name (lowercase first letter)</em>
-<a class="jxr_linenumber" name="L1792" href="#L1792">1792</a> 					<strong class="jxr_keyword">var</strong> fieldName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
-<a class="jxr_linenumber" name="L1793" href="#L1793">1793</a> 					<strong class="jxr_keyword">var</strong> field = getAllFields()
-<a class="jxr_linenumber" name="L1794" href="#L1794">1794</a> 						.stream()
-<a class="jxr_linenumber" name="L1795" href="#L1795">1795</a> 						.filter(x -&gt; !x.isStatic() &amp;&amp; x.hasName(fieldName))
-<a class="jxr_linenumber" name="L1796" href="#L1796">1796</a> 						.findFirst();
-<a class="jxr_linenumber" name="L1797" href="#L1797">1797</a> 
-<a class="jxr_linenumber" name="L1798" href="#L1798">1798</a> 					<strong class="jxr_keyword">if</strong> (field.isPresent()) {
-<a class="jxr_linenumber" name="L1799" href="#L1799">1799</a> 						<strong class="jxr_keyword">var</strong> f = field.get().accessible();
-<a class="jxr_linenumber" name="L1800" href="#L1800">1800</a> 						builder.getter(f::get);
-<a class="jxr_linenumber" name="L1801" href="#L1801">1801</a> 					}
-<a class="jxr_linenumber" name="L1802" href="#L1802">1802</a> 				}
-<a class="jxr_linenumber" name="L1803" href="#L1803">1803</a> 			}
-<a class="jxr_linenumber" name="L1804" href="#L1804">1804</a> 		}
-<a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> 
-<a class="jxr_linenumber" name="L1806" href="#L1806">1806</a> 		<em class="jxr_comment">// Look for getter method (0 parameters, non-void return) with @NameProperty</em>
-<a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> 		<strong class="jxr_keyword">var</strong> getterMethod = getAllMethods()
-<a class="jxr_linenumber" name="L1808" href="#L1808">1808</a> 			.stream()
-<a class="jxr_linenumber" name="L1809" href="#L1809">1809</a> 			.filter(x -&gt; ap.has(NameProperty.<strong class="jxr_keyword">class</strong>, x) &amp;&amp; x.hasNumParameters(0) &amp;&amp; !x.getReturnType().is(Void.TYPE))
-<a class="jxr_linenumber" name="L1810" href="#L1810">1810</a> 			.findFirst();
-<a class="jxr_linenumber" name="L1811" href="#L1811">1811</a> 
-<a class="jxr_linenumber" name="L1812" href="#L1812">1812</a> 		<strong class="jxr_keyword">if</strong> (getterMethod.isPresent()) {
-<a class="jxr_linenumber" name="L1813" href="#L1813">1813</a> 			builder.getter(getterMethod.get().accessible());
-<a class="jxr_linenumber" name="L1814" href="#L1814">1814</a> 		}
-<a class="jxr_linenumber" name="L1815" href="#L1815">1815</a> 
-<a class="jxr_linenumber" name="L1816" href="#L1816">1816</a> 		<em class="jxr_comment">// Return null if neither setter nor getter was found</em>
-<a class="jxr_linenumber" name="L1817" href="#L1817">1817</a> 		<strong class="jxr_keyword">if</strong> (setterMethod.isEmpty() &amp;&amp; getterMethod.isEmpty())
-<a class="jxr_linenumber" name="L1818" href="#L1818">1818</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1819" href="#L1819">1819</a> 
-<a class="jxr_linenumber" name="L1820" href="#L1820">1820</a> 		<strong class="jxr_keyword">return</strong> builder.build();
-<a class="jxr_linenumber" name="L1821" href="#L1821">1821</a> 	}
-<a class="jxr_linenumber" name="L1822" href="#L1822">1822</a> 
-<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> 	<strong class="jxr_keyword">private</strong> ConstructorInfo findNoArgConstructor() {
+<a class="jxr_linenumber" name="L1764" href="#L1764">1764</a> 		<strong class="jxr_keyword">var</strong> builder = Property.&lt;T,Object&gt;create();
+<a class="jxr_linenumber" name="L1765" href="#L1765">1765</a> 
+<a class="jxr_linenumber" name="L1766" href="#L1766">1766</a> 		<em class="jxr_comment">// Look for setter method (1 parameter) with @NameProperty</em>
+<a class="jxr_linenumber" name="L1767" href="#L1767">1767</a> 		<strong class="jxr_keyword">var</strong> setterMethod = getAllMethods()
+<a class="jxr_linenumber" name="L1768" href="#L1768">1768</a> 			.stream()
+<a class="jxr_linenumber" name="L1769" href="#L1769">1769</a> 			.filter(x -&gt; ap.has(NameProperty.<strong class="jxr_keyword">class</strong>, x) &amp;&amp; x.hasNumParameters(1))
+<a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> 			.findFirst();
+<a class="jxr_linenumber" name="L1771" href="#L1771">1771</a> 
+<a class="jxr_linenumber" name="L1772" href="#L1772">1772</a> 		<strong class="jxr_keyword">if</strong> (setterMethod.isPresent()) {
+<a class="jxr_linenumber" name="L1773" href="#L1773">1773</a> 			builder.setter(setterMethod.get().accessible());
+<a class="jxr_linenumber" name="L1774" href="#L1774">1774</a> 
+<a class="jxr_linenumber" name="L1775" href="#L1775">1775</a> 			<em class="jxr_comment">// Try to find a corresponding getter method (even if not annotated)</em>
+<a class="jxr_linenumber" name="L1776" href="#L1776">1776</a> 			<em class="jxr_comment">// If setter is "setName", look for "getName" or "isName"</em>
+<a class="jxr_linenumber" name="L1777" href="#L1777">1777</a> 			<strong class="jxr_keyword">var</strong> setterName = setterMethod.get().getNameSimple();
+<a class="jxr_linenumber" name="L1778" href="#L1778">1778</a> 			<strong class="jxr_keyword">if</strong> (setterName.startsWith(<span class="jxr_string">"set"</span>) &amp;&amp; setterName.length() &gt; 3) {
+<a class="jxr_linenumber" name="L1779" href="#L1779">1779</a> 				<strong class="jxr_keyword">var</strong> propertyName = setterName.substring(3);
+<a class="jxr_linenumber" name="L1780" href="#L1780">1780</a> 				<strong class="jxr_keyword">var</strong> getterName1 = <span class="jxr_string">"get"</span> + propertyName;
+<a class="jxr_linenumber" name="L1781" href="#L1781">1781</a> 				<strong class="jxr_keyword">var</strong> getterName2 = <span class="jxr_string">"is"</span> + propertyName;
+<a class="jxr_linenumber" name="L1782" href="#L1782">1782</a> 
+<a class="jxr_linenumber" name="L1783" href="#L1783">1783</a> 				<strong class="jxr_keyword">var</strong> getter = getAllMethods()
+<a class="jxr_linenumber" name="L1784" href="#L1784">1784</a> 					.stream()
+<a class="jxr_linenumber" name="L1785" href="#L1785">1785</a> 					.filter(x -&gt; !x.isStatic() &amp;&amp; x.hasNumParameters(0) &amp;&amp;
+<a class="jxr_linenumber" name="L1786" href="#L1786">1786</a> 						(x.hasName(getterName1) || x.hasName(getterName2)) &amp;&amp;
+<a class="jxr_linenumber" name="L1787" href="#L1787">1787</a> 						!x.getReturnType().is(Void.TYPE))
+<a class="jxr_linenumber" name="L1788" href="#L1788">1788</a> 					.findFirst();
+<a class="jxr_linenumber" name="L1789" href="#L1789">1789</a> 
+<a class="jxr_linenumber" name="L1790" href="#L1790">1790</a> 				<strong class="jxr_keyword">if</strong> (getter.isPresent()) {
+<a class="jxr_linenumber" name="L1791" href="#L1791">1791</a> 					builder.getter(getter.get().accessible());
+<a class="jxr_linenumber" name="L1792" href="#L1792">1792</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L1793" href="#L1793">1793</a> 					<em class="jxr_comment">// Try to find a field with the property name (lowercase first letter)</em>
+<a class="jxr_linenumber" name="L1794" href="#L1794">1794</a> 					<strong class="jxr_keyword">var</strong> fieldName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
+<a class="jxr_linenumber" name="L1795" href="#L1795">1795</a> 					<strong class="jxr_keyword">var</strong> field = getAllFields()
+<a class="jxr_linenumber" name="L1796" href="#L1796">1796</a> 						.stream()
+<a class="jxr_linenumber" name="L1797" href="#L1797">1797</a> 						.filter(x -&gt; !x.isStatic() &amp;&amp; x.hasName(fieldName))
+<a class="jxr_linenumber" name="L1798" href="#L1798">1798</a> 						.findFirst();
+<a class="jxr_linenumber" name="L1799" href="#L1799">1799</a> 
+<a class="jxr_linenumber" name="L1800" href="#L1800">1800</a> 					<strong class="jxr_keyword">if</strong> (field.isPresent()) {
+<a class="jxr_linenumber" name="L1801" href="#L1801">1801</a> 						<strong class="jxr_keyword">var</strong> f = field.get().accessible();
+<a class="jxr_linenumber" name="L1802" href="#L1802">1802</a> 						builder.getter(f::get);
+<a class="jxr_linenumber" name="L1803" href="#L1803">1803</a> 					}
+<a class="jxr_linenumber" name="L1804" href="#L1804">1804</a> 				}
+<a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> 			}
+<a class="jxr_linenumber" name="L1806" href="#L1806">1806</a> 		}
+<a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> 
+<a class="jxr_linenumber" name="L1808" href="#L1808">1808</a> 		<em class="jxr_comment">// Look for getter method (0 parameters, non-void return) with @NameProperty</em>
+<a class="jxr_linenumber" name="L1809" href="#L1809">1809</a> 		<strong class="jxr_keyword">var</strong> getterMethod = getAllMethods()
+<a class="jxr_linenumber" name="L1810" href="#L1810">1810</a> 			.stream()
+<a class="jxr_linenumber" name="L1811" href="#L1811">1811</a> 			.filter(x -&gt; ap.has(NameProperty.<strong class="jxr_keyword">class</strong>, x) &amp;&amp; x.hasNumParameters(0) &amp;&amp; !x.getReturnType().is(Void.TYPE))
+<a class="jxr_linenumber" name="L1812" href="#L1812">1812</a> 			.findFirst();
+<a class="jxr_linenumber" name="L1813" href="#L1813">1813</a> 
+<a class="jxr_linenumber" name="L1814" href="#L1814">1814</a> 		<strong class="jxr_keyword">if</strong> (getterMethod.isPresent()) {
+<a class="jxr_linenumber" name="L1815" href="#L1815">1815</a> 			builder.getter(getterMethod.get().accessible());
+<a class="jxr_linenumber" name="L1816" href="#L1816">1816</a> 		}
+<a class="jxr_linenumber" name="L1817" href="#L1817">1817</a> 
+<a class="jxr_linenumber" name="L1818" href="#L1818">1818</a> 		<em class="jxr_comment">// Return null if neither setter nor getter was found</em>
+<a class="jxr_linenumber" name="L1819" href="#L1819">1819</a> 		<strong class="jxr_keyword">if</strong> (setterMethod.isEmpty() &amp;&amp; getterMethod.isEmpty())
+<a class="jxr_linenumber" name="L1820" href="#L1820">1820</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1821" href="#L1821">1821</a> 
+<a class="jxr_linenumber" name="L1822" href="#L1822">1822</a> 		<strong class="jxr_keyword">return</strong> builder.build();
+<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> 	}
 <a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> 
-<a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> 		<strong class="jxr_keyword">if</strong> (is(Object.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1827" href="#L1827">1827</a> 
-<a class="jxr_linenumber" name="L1828" href="#L1828">1828</a> 		<strong class="jxr_keyword">if</strong> (implClass.isPresent())
-<a class="jxr_linenumber" name="L1829" href="#L1829">1829</a> 			<strong class="jxr_keyword">return</strong> implClass.get().getPublicConstructor(x -&gt; x.hasNumParameters(0)).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1830" href="#L1830">1830</a> 
-<a class="jxr_linenumber" name="L1831" href="#L1831">1831</a> 		<strong class="jxr_keyword">if</strong> (isAbstract())
-<a class="jxr_linenumber" name="L1832" href="#L1832">1832</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1833" href="#L1833">1833</a> 
-<a class="jxr_linenumber" name="L1834" href="#L1834">1834</a> 		<strong class="jxr_keyword">var</strong> numParams = nonStaticMemberClass ? 1 : 0;
-<a class="jxr_linenumber" name="L1835" href="#L1835">1835</a> 		<strong class="jxr_keyword">return</strong> getPublicConstructors()
-<a class="jxr_linenumber" name="L1836" href="#L1836">1836</a> 			.stream()
-<a class="jxr_linenumber" name="L1837" href="#L1837">1837</a> 			.filter(x -&gt; x.isPublic() &amp;&amp; x.isNotDeprecated() &amp;&amp; x.hasNumParameters(numParams))
-<a class="jxr_linenumber" name="L1838" href="#L1838">1838</a> 			.findFirst()
-<a class="jxr_linenumber" name="L1839" href="#L1839">1839</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1840" href="#L1840">1840</a> 	}
-<a class="jxr_linenumber" name="L1841" href="#L1841">1841</a> 
-<a class="jxr_linenumber" name="L1842" href="#L1842">1842</a> 	<strong class="jxr_keyword">private</strong> Property&lt;T,Object&gt; findParentProperty() {
-<a class="jxr_linenumber" name="L1843" href="#L1843">1843</a> 		<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
-<a class="jxr_linenumber" name="L1844" href="#L1844">1844</a> 
-<a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 		<strong class="jxr_keyword">var</strong> s = getAllFields()
-<a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 			.stream()
-<a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> 			.filter(x -&gt; ap.has(ParentProperty.<strong class="jxr_keyword">class</strong>, x))
-<a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> 			.map(x -&gt; x.accessible())
-<a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 			.map(x -&gt; Property.&lt;T,Object&gt;create().field(x).build())
-<a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> 			.findFirst();
-<a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> 
-<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 		<strong class="jxr_keyword">if</strong> (s.isPresent()) <strong class="jxr_keyword">return</strong> s.get();
+<a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> 	<strong class="jxr_keyword">private</strong> ConstructorInfo findNoArgConstructor() {
+<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> 
+<a class="jxr_linenumber" name="L1827" href="#L1827">1827</a> 		<strong class="jxr_keyword">if</strong> (is(Object.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L1828" href="#L1828">1828</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1829" href="#L1829">1829</a> 
+<a class="jxr_linenumber" name="L1830" href="#L1830">1830</a> 		<strong class="jxr_keyword">if</strong> (implClass.isPresent())
+<a class="jxr_linenumber" name="L1831" href="#L1831">1831</a> 			<strong class="jxr_keyword">return</strong> implClass.get().getPublicConstructor(x -&gt; x.hasNumParameters(0)).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1832" href="#L1832">1832</a> 
+<a class="jxr_linenumber" name="L1833" href="#L1833">1833</a> 		<strong class="jxr_keyword">if</strong> (isAbstract())
+<a class="jxr_linenumber" name="L1834" href="#L1834">1834</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1835" href="#L1835">1835</a> 
+<a class="jxr_linenumber" name="L1836" href="#L1836">1836</a> 		<strong class="jxr_keyword">var</strong> numParams = nonStaticMemberClass ? 1 : 0;
+<a class="jxr_linenumber" name="L1837" href="#L1837">1837</a> 		<strong class="jxr_keyword">return</strong> getPublicConstructors()
+<a class="jxr_linenumber" name="L1838" href="#L1838">1838</a> 			.stream()
+<a class="jxr_linenumber" name="L1839" href="#L1839">1839</a> 			.filter(x -&gt; x.isPublic() &amp;&amp; x.isNotDeprecated() &amp;&amp; x.hasNumParameters(numParams))
+<a class="jxr_linenumber" name="L1840" href="#L1840">1840</a> 			.findFirst()
+<a class="jxr_linenumber" name="L1841" href="#L1841">1841</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1842" href="#L1842">1842</a> 	}
+<a class="jxr_linenumber" name="L1843" href="#L1843">1843</a> 
+<a class="jxr_linenumber" name="L1844" href="#L1844">1844</a> 	<strong class="jxr_keyword">private</strong> Property&lt;T,Object&gt; findParentProperty() {
+<a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 		<strong class="jxr_keyword">var</strong> ap = marshallingContext.getAnnotationProvider();
+<a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 
+<a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> 		<strong class="jxr_keyword">var</strong> s = getAllFields()
+<a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> 			.stream()
+<a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 			.filter(x -&gt; ap.has(ParentProperty.<strong class="jxr_keyword">class</strong>, x))
+<a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> 			.map(x -&gt; x.accessible())
+<a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> 			.map(x -&gt; Property.&lt;T,Object&gt;create().field(x).build())
+<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 			.findFirst();
 <a class="jxr_linenumber" name="L1853" href="#L1853">1853</a> 
-<a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> 		<strong class="jxr_keyword">var</strong> builder = Property.&lt;T,Object&gt;create();
+<a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> 		<strong class="jxr_keyword">if</strong> (s.isPresent()) <strong class="jxr_keyword">return</strong> s.get();
 <a class="jxr_linenumber" name="L1855" href="#L1855">1855</a> 
-<a class="jxr_linenumber" name="L1856" href="#L1856">1856</a> 		<em class="jxr_comment">// Look for setter method (1 parameter) with @ParentProperty</em>
-<a class="jxr_linenumber" name="L1857" href="#L1857">1857</a> 		<strong class="jxr_keyword">var</strong> setterMethod = getAllMethods()
-<a class="jxr_linenumber" name="L1858" href="#L1858">1858</a> 			.stream()
-<a class="jxr_linenumber" name="L1859" href="#L1859">1859</a> 			.filter(x -&gt; ap.has(ParentProperty.<strong class="jxr_keyword">class</strong>, x) &amp;&amp; x.hasNumParameters(1))
-<a class="jxr_linenumber" name="L1860" href="#L1860">1860</a> 			.findFirst();
-<a class="jxr_linenumber" name="L1861" href="#L1861">1861</a> 
-<a class="jxr_linenumber" name="L1862" href="#L1862">1862</a> 		<strong class="jxr_keyword">if</strong> (setterMethod.isPresent()) {
-<a class="jxr_linenumber" name="L1863" href="#L1863">1863</a> 			builder.setter(setterMethod.get().accessible());
-<a class="jxr_linenumber" name="L1864" href="#L1864">1864</a> 
-<a class="jxr_linenumber" name="L1865" href="#L1865">1865</a> 			<em class="jxr_comment">// Try to find a corresponding getter method (even if not annotated)</em>
-<a class="jxr_linenumber" name="L1866" href="#L1866">1866</a> 			<em class="jxr_comment">// If setter is "setParent", look for "getParent" or "isParent"</em>
-<a class="jxr_linenumber" name="L1867" href="#L1867">1867</a> 			<strong class="jxr_keyword">var</strong> setterName = setterMethod.get().getNameSimple();
-<a class="jxr_linenumber" name="L1868" href="#L1868">1868</a> 			<strong class="jxr_keyword">if</strong> (setterName.startsWith(<span class="jxr_string">"set"</span>) &amp;&amp; setterName.length() &gt; 3) {
-<a class="jxr_linenumber" name="L1869" href="#L1869">1869</a> 				<strong class="jxr_keyword">var</strong> propertyName = setterName.substring(3);
-<a class="jxr_linenumber" name="L1870" href="#L1870">1870</a> 				<strong class="jxr_keyword">var</strong> getterName1 = <span class="jxr_string">"get"</span> + propertyName;
-<a class="jxr_linenumber" name="L1871" href="#L1871">1871</a> 				<strong class="jxr_keyword">var</strong> getterName2 = <span class="jxr_string">"is"</span> + propertyName;
-<a class="jxr_linenumber" name="L1872" href="#L1872">1872</a> 
-<a class="jxr_linenumber" name="L1873" href="#L1873">1873</a> 				<strong class="jxr_keyword">var</strong> getter = getAllMethods()
-<a class="jxr_linenumber" name="L1874" href="#L1874">1874</a> 					.stream()
-<a class="jxr_linenumber" name="L1875" href="#L1875">1875</a> 					.filter(x -&gt; !x.isStatic() &amp;&amp; x.hasNumParameters(0) &amp;&amp;
-<a class="jxr_linenumber" name="L1876" href="#L1876">1876</a> 						(x.hasName(getterName1) || x.hasName(getterName2)) &amp;&amp;
-<a class="jxr_linenumber" name="L1877" href="#L1877">1877</a> 						!x.getReturnType().is(Void.TYPE))
-<a class="jxr_linenumber" name="L1878" href="#L1878">1878</a> 					.findFirst();
-<a class="jxr_linenumber" name="L1879" href="#L1879">1879</a> 
-<a class="jxr_linenumber" name="L1880" href="#L1880">1880</a> 				<strong class="jxr_keyword">if</strong> (getter.isPresent()) {
-<a class="jxr_linenumber" name="L1881" href="#L1881">1881</a> 					builder.getter(getter.get().accessible());
-<a class="jxr_linenumber" name="L1882" href="#L1882">1882</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L1883" href="#L1883">1883</a> 					<em class="jxr_comment">// Try to find a field with the property name (lowercase first letter)</em>
-<a class="jxr_linenumber" name="L1884" href="#L1884">1884</a> 					<strong class="jxr_keyword">var</strong> fieldName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
-<a class="jxr_linenumber" name="L1885" href="#L1885">1885</a> 					<strong class="jxr_keyword">var</strong> field = getAllFields()
-<a class="jxr_linenumber" name="L1886" href="#L1886">1886</a> 						.stream()
-<a class="jxr_linenumber" name="L1887" href="#L1887">1887</a> 						.filter(x -&gt; !x.isStatic() &amp;&amp; x.hasName(fieldName))
-<a class="jxr_linenumber" name="L1888" href="#L1888">1888</a> 						.findFirst();
-<a class="jxr_linenumber" name="L1889" href="#L1889">1889</a> 
-<a class="jxr_linenumber" name="L1890" href="#L1890">1890</a> 					<strong class="jxr_keyword">if</strong> (field.isPresent()) {
-<a class="jxr_linenumber" name="L1891" href="#L1891">1891</a> 						<strong class="jxr_keyword">var</strong> f = field.get().accessible();
-<a class="jxr_linenumber" name="L1892" href="#L1892">1892</a> 						builder.getter(f::get);
-<a class="jxr_linenumber" name="L1893" href="#L1893">1893</a> 					}
-<a class="jxr_linenumber" name="L1894" href="#L1894">1894</a> 				}
-<a class="jxr_linenumber" name="L1895" href="#L1895">1895</a> 			}
-<a class="jxr_linenumber" name="L1896" href="#L1896">1896</a> 		}
-<a class="jxr_linenumber" name="L1897" href="#L1897">1897</a> 
-<a class="jxr_linenumber" name="L1898" href="#L1898">1898</a> 		<em class="jxr_comment">// Look for getter method (0 parameters, non-void return) with @ParentProperty</em>
-<a class="jxr_linenumber" name="L1899" href="#L1899">1899</a> 		<strong class="jxr_keyword">var</strong> getterMethod = getAllMethods()
-<a class="jxr_linenumber" name="L1900" href="#L1900">1900</a> 			.stream()
-<a class="jxr_linenumber" name="L1901" href="#L1901">1901</a> 			.filter(x -&gt; ap.has(ParentProperty.<strong class="jxr_keyword">class</strong>, x) &amp;&amp; x.hasNumParameters(0) &amp;&amp; !x.getReturnType().is(Void.TYPE))
-<a class="jxr_linenumber" name="L1902" href="#L1902">1902</a> 			.findFirst();
-<a class="jxr_linenumber" name="L1903" href="#L1903">1903</a> 
-<a class="jxr_linenumber" name="L1904" href="#L1904">1904</a> 		<strong class="jxr_keyword">if</strong> (getterMethod.isPresent()) {
-<a class="jxr_linenumber" name="L1905" href="#L1905">1905</a> 			builder.getter(getterMethod.get().accessible());
-<a class="jxr_linenumber" name="L1906" href="#L1906">1906</a> 		}
-<a class="jxr_linenumber" name="L1907" href="#L1907">1907</a> 
-<a class="jxr_linenumber" name="L1908" href="#L1908">1908</a> 		<em class="jxr_comment">// Return null if neither setter nor getter was found</em>
-<a class="jxr_linenumber" name="L1909" href="#L1909">1909</a> 		<strong class="jxr_keyword">if</strong> (setterMethod.isEmpty() &amp;&amp; getterMethod.isEmpty())
-<a class="jxr_linenumber" name="L1910" href="#L1910">1910</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1911" href="#L1911">1911</a> 
-<a class="jxr_linenumber" name="L1912" href="#L1912">1912</a> 		<strong class="jxr_keyword">return</strong> builder.build();
-<a class="jxr_linenumber" name="L1913" href="#L1913">1913</a> 	}
-<a class="jxr_linenumber" name="L1914" href="#L1914">1914</a> 
-<a class="jxr_linenumber" name="L1915" href="#L1915">1915</a> 	<strong class="jxr_keyword">private</strong> ConstructorInfo findStringConstructor() {
+<a class="jxr_linenumber" name="L1856" href="#L1856">1856</a> 		<strong class="jxr_keyword">var</strong> builder = Property.&lt;T,Object&gt;create();
+<a class="jxr_linenumber" name="L1857" href="#L1857">1857</a> 
+<a class="jxr_linenumber" name="L1858" href="#L1858">1858</a> 		<em class="jxr_comment">// Look for setter method (1 parameter) with @ParentProperty</em>
+<a class="jxr_linenumber" name="L1859" href="#L1859">1859</a> 		<strong class="jxr_keyword">var</strong> setterMethod = getAllMethods()
+<a class="jxr_linenumber" name="L1860" href="#L1860">1860</a> 			.stream()
+<a class="jxr_linenumber" name="L1861" href="#L1861">1861</a> 			.filter(x -&gt; ap.has(ParentProperty.<strong class="jxr_keyword">class</strong>, x) &amp;&amp; x.hasNumParameters(1))
+<a class="jxr_linenumber" name="L1862" href="#L1862">1862</a> 			.findFirst();
+<a class="jxr_linenumber" name="L1863" href="#L1863">1863</a> 
+<a class="jxr_linenumber" name="L1864" href="#L1864">1864</a> 		<strong class="jxr_keyword">if</strong> (setterMethod.isPresent()) {
+<a class="jxr_linenumber" name="L1865" href="#L1865">1865</a> 			builder.setter(setterMethod.get().accessible());
+<a class="jxr_linenumber" name="L1866" href="#L1866">1866</a> 
+<a class="jxr_linenumber" name="L1867" href="#L1867">1867</a> 			<em class="jxr_comment">// Try to find a corresponding getter method (even if not annotated)</em>
+<a class="jxr_linenumber" name="L1868" href="#L1868">1868</a> 			<em class="jxr_comment">// If setter is "setParent", look for "getParent" or "isParent"</em>
+<a class="jxr_linenumber" name="L1869" href="#L1869">1869</a> 			<strong class="jxr_keyword">var</strong> setterName = setterMethod.get().getNameSimple();
+<a class="jxr_linenumber" name="L1870" href="#L1870">1870</a> 			<strong class="jxr_keyword">if</strong> (setterName.startsWith(<span class="jxr_string">"set"</span>) &amp;&amp; setterName.length() &gt; 3) {
+<a class="jxr_linenumber" name="L1871" href="#L1871">1871</a> 				<strong class="jxr_keyword">var</strong> propertyName = setterName.substring(3);
+<a class="jxr_linenumber" name="L1872" href="#L1872">1872</a> 				<strong class="jxr_keyword">var</strong> getterName1 = <span class="jxr_string">"get"</span> + propertyName;
+<a class="jxr_linenumber" name="L1873" href="#L1873">1873</a> 				<strong class="jxr_keyword">var</strong> getterName2 = <span class="jxr_string">"is"</span> + propertyName;
+<a class="jxr_linenumber" name="L1874" href="#L1874">1874</a> 
+<a class="jxr_linenumber" name="L1875" href="#L1875">1875</a> 				<strong class="jxr_keyword">var</strong> getter = getAllMethods()
+<a class="jxr_linenumber" name="L1876" href="#L1876">1876</a> 					.stream()
+<a class="jxr_linenumber" name="L1877" href="#L1877">1877</a> 					.filter(x -&gt; !x.isStatic() &amp;&amp; x.hasNumParameters(0) &amp;&amp;
+<a class="jxr_linenumber" name="L1878" href="#L1878">1878</a> 						(x.hasName(getterName1) || x.hasName(getterName2)) &amp;&amp;
+<a class="jxr_linenumber" name="L1879" href="#L1879">1879</a> 						!x.getReturnType().is(Void.TYPE))
+<a class="jxr_linenumber" name="L1880" href="#L1880">1880</a> 					.findFirst();
+<a class="jxr_linenumber" name="L1881" href="#L1881">1881</a> 
+<a class="jxr_linenumber" name="L1882" href="#L1882">1882</a> 				<strong class="jxr_keyword">if</strong> (getter.isPresent()) {
+<a class="jxr_linenumber" name="L1883" href="#L1883">1883</a> 					builder.getter(getter.get().accessible());
+<a class="jxr_linenumber" name="L1884" href="#L1884">1884</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L1885" href="#L1885">1885</a> 					<em class="jxr_comment">// Try to find a field with the property name (lowercase first letter)</em>
+<a class="jxr_linenumber" name="L1886" href="#L1886">1886</a> 					<strong class="jxr_keyword">var</strong> fieldName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
+<a class="jxr_linenumber" name="L1887" href="#L1887">1887</a> 					<strong class="jxr_keyword">var</strong> field = getAllFields()
+<a class="jxr_linenumber" name="L1888" href="#L1888">1888</a> 						.stream()
+<a class="jxr_linenumber" name="L1889" href="#L1889">1889</a> 						.filter(x -&gt; !x.isStatic() &amp;&amp; x.hasName(fieldName))
+<a class="jxr_linenumber" name="L1890" href="#L1890">1890</a> 						.findFirst();
+<a class="jxr_linenumber" name="L1891" href="#L1891">1891</a> 
+<a class="jxr_linenumber" name="L1892" href="#L1892">1892</a> 					<strong class="jxr_keyword">if</strong> (field.isPresent()) {
+<a class="jxr_linenumber" name="L1893" href="#L1893">1893</a> 						<strong class="jxr_keyword">var</strong> f = field.get().accessible();
+<a class="jxr_linenumber" name="L1894" href="#L1894">1894</a> 						builder.getter(f::get);
+<a class="jxr_linenumber" name="L1895" href="#L1895">1895</a> 					}
+<a class="jxr_linenumber" name="L1896" href="#L1896">1896</a> 				}
+<a class="jxr_linenumber" name="L1897" href="#L1897">1897</a> 			}
+<a class="jxr_linenumber" name="L1898" href="#L1898">1898</a> 		}
+<a class="jxr_linenumber" name="L1899" href="#L1899">1899</a> 
+<a class="jxr_linenumber" name="L1900" href="#L1900">1900</a> 		<em class="jxr_comment">// Look for getter method (0 parameters, non-void return) with @ParentProperty</em>
+<a class="jxr_linenumber" name="L1901" href="#L1901">1901</a> 		<strong class="jxr_keyword">var</strong> getterMethod = getAllMethods()
+<a class="jxr_linenumber" name="L1902" href="#L1902">1902</a> 			.stream()
+<a class="jxr_linenumber" name="L1903" href="#L1903">1903</a> 			.filter(x -&gt; ap.has(ParentProperty.<strong class="jxr_keyword">class</strong>, x) &amp;&amp; x.hasNumParameters(0) &amp;&amp; !x.getReturnType().is(Void.TYPE))
+<a class="jxr_linenumber" name="L1904" href="#L1904">1904</a> 			.findFirst();
+<a class="jxr_linenumber" name="L1905" href="#L1905">1905</a> 
+<a class="jxr_linenumber" name="L1906" href="#L1906">1906</a> 		<strong class="jxr_keyword">if</strong> (getterMethod.isPresent()) {
+<a class="jxr_linenumber" name="L1907" href="#L1907">1907</a> 			builder.getter(getterMethod.get().accessible());
+<a class="jxr_linenumber" name="L1908" href="#L1908">1908</a> 		}
+<a class="jxr_linenumber" name="L1909" href="#L1909">1909</a> 
+<a class="jxr_linenumber" name="L1910" href="#L1910">1910</a> 		<em class="jxr_comment">// Return null if neither setter nor getter was found</em>
+<a class="jxr_linenumber" name="L1911" href="#L1911">1911</a> 		<strong class="jxr_keyword">if</strong> (setterMethod.isEmpty() &amp;&amp; getterMethod.isEmpty())
+<a class="jxr_linenumber" name="L1912" href="#L1912">1912</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1913" href="#L1913">1913</a> 
+<a class="jxr_linenumber" name="L1914" href="#L1914">1914</a> 		<strong class="jxr_keyword">return</strong> builder.build();
+<a class="jxr_linenumber" name="L1915" href="#L1915">1915</a> 	}
 <a class="jxr_linenumber" name="L1916" href="#L1916">1916</a> 
-<a class="jxr_linenumber" name="L1917" href="#L1917">1917</a> 		<strong class="jxr_keyword">if</strong> (is(Object.<strong class="jxr_keyword">class</strong>) || isAbstract())
-<a class="jxr_linenumber" name="L1918" href="#L1918">1918</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1919" href="#L1919">1919</a> 
-<a class="jxr_linenumber" name="L1920" href="#L1920">1920</a> 		<strong class="jxr_keyword">if</strong> (implClass.isPresent())
-<a class="jxr_linenumber" name="L1921" href="#L1921">1921</a> 			<strong class="jxr_keyword">return</strong> implClass.get().getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1922" href="#L1922">1922</a> 
-<a class="jxr_linenumber" name="L1923" href="#L1923">1923</a> 		<strong class="jxr_keyword">if</strong> (isAbstract())
-<a class="jxr_linenumber" name="L1924" href="#L1924">1924</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1925" href="#L1925">1925</a> 
-<a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> 		<strong class="jxr_keyword">var</strong> numParams = nonStaticMemberClass ? 2 : 1;
-<a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> 		<strong class="jxr_keyword">return</strong> getPublicConstructors()
-<a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> 			.stream()
-<a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> 			.filter(x -&gt; x.isPublic() &amp;&amp; x.isNotDeprecated() &amp;&amp; x.hasNumParameters(numParams))
-<a class="jxr_linenumber" name="L1930" href="#L1930">1930</a> 			.filter(x -&gt; x.getParameter(numParams == 2 ? 1 : 0).isType(String.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> 			.findFirst()
-<a class="jxr_linenumber" name="L1932" href="#L1932">1932</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1933" href="#L1933">1933</a> 	}
-<a class="jxr_linenumber" name="L1934" href="#L1934">1934</a> 
-<a class="jxr_linenumber" name="L1935" href="#L1935">1935</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1936" href="#L1936">1936</a> <em class="jxr_javadoccomment">	 * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the normal class of one of the</em>
-<a class="jxr_linenumber" name="L1937" href="#L1937">1937</a> <em class="jxr_javadoccomment">	 * child POJO swaps associated with this class.</em>
-<a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1939" href="#L1939">1939</a> <em class="jxr_javadoccomment">	 * @param normalClass The normal class being resolved.</em>
-<a class="jxr_linenumber" name="L1940" href="#L1940">1940</a> <em class="jxr_javadoccomment">	 * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</em>
-<a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1942" href="#L1942">1942</a> 	<strong class="jxr_keyword">protected</strong> ObjectSwap&lt;?,?&gt; getChildObjectSwapForSwap(Class&lt;?&gt; normalClass) {
-<a class="jxr_linenumber" name="L1943" href="#L1943">1943</a> 		<strong class="jxr_keyword">return</strong> childSwapMap.get(normalClass);
-<a class="jxr_linenumber" name="L1944" href="#L1944">1944</a> 	}
-<a class="jxr_linenumber" name="L1945" href="#L1945">1945</a> 
-<a class="jxr_linenumber" name="L1946" href="#L1946">1946</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1947" href="#L1947">1947</a> <em class="jxr_javadoccomment">	 * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the swap class of one of the child</em>
-<a class="jxr_linenumber" name="L1948" href="#L1948">1948</a> <em class="jxr_javadoccomment">	 * POJO swaps associated with this class.</em>
-<a class="jxr_linenumber" name="L1949" href="#L1949">1949</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1950" href="#L1950">1950</a> <em class="jxr_javadoccomment">	 * @param swapClass The swap class being resolved.</em>
-<a class="jxr_linenumber" name="L1951" href="#L1951">1951</a> <em class="jxr_javadoccomment">	 * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</em>
-<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> 	<strong class="jxr_keyword">protected</strong> ObjectSwap&lt;?,?&gt; getChildObjectSwapForUnswap(Class&lt;?&gt; swapClass) {
-<a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> 		<strong class="jxr_keyword">return</strong> childUnswapMap.get(swapClass);
-<a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> 	}
-<a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> 
-<a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this class or any child classes has a {@link ObjectSwap} associated with it.</em>
-<a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1961" href="#L1961">1961</a> <em class="jxr_javadoccomment">	 * Used when transforming bean properties to prevent having to look up transforms if we know for certain that no</em>
-<a class="jxr_linenumber" name="L1962" href="#L1962">1962</a> <em class="jxr_javadoccomment">	 * transforms are associated with a bean property.</em>
-<a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1964" href="#L1964">1964</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class or any child classes has a {@link ObjectSwap} associated with it.</em>
-<a class="jxr_linenumber" name="L1965" href="#L1965">1965</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> hasChildSwaps() {
-<a class="jxr_linenumber" name="L1967" href="#L1967">1967</a> 		<strong class="jxr_keyword">return</strong> ! childSwaps.get().isEmpty();
-<a class="jxr_linenumber" name="L1968" href="#L1968">1968</a> 	}
-<a class="jxr_linenumber" name="L1969" href="#L1969">1969</a> 
-<a class="jxr_linenumber" name="L1970" href="#L1970">1970</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1971" href="#L1971">1971</a> <em class="jxr_javadoccomment">	 * Appends this object as a readable string to the specified string builder.</em>
-<a class="jxr_linenumber" name="L1972" href="#L1972">1972</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1973" href="#L1973">1973</a> <em class="jxr_javadoccomment">	 * @param sb The string builder to append this object to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1974" href="#L1974">1974</a> <em class="jxr_javadoccomment">	 * @param simple Print simple class names only (no package).</em>
-<a class="jxr_linenumber" name="L1975" href="#L1975">1975</a> <em class="jxr_javadoccomment">	 * @return The passed-in string builder.</em>
-<a class="jxr_linenumber" name="L1976" href="#L1976">1976</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1977" href="#L1977">1977</a> 	<strong class="jxr_keyword">protected</strong> StringBuilder toString(StringBuilder sb, <strong class="jxr_keyword">boolean</strong> simple) {
-<a class="jxr_linenumber" name="L1978" href="#L1978">1978</a> 		<strong class="jxr_keyword">var</strong> n = simple ? cnsq(<strong class="jxr_keyword">inner</strong>()) : cn(<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L1979" href="#L1979">1979</a> 		<strong class="jxr_keyword">if</strong> (cat.is(ARRAY))
-<a class="jxr_linenumber" name="L1980" href="#L1980">1980</a> 			<strong class="jxr_keyword">return</strong> elementType.get().toString(sb, simple).append('[').append(']');
-<a class="jxr_linenumber" name="L1981" href="#L1981">1981</a> 		<strong class="jxr_keyword">if</strong> (cat.is(BEANMAP))
-<a class="jxr_linenumber" name="L1982" href="#L1982">1982</a> 			<strong class="jxr_keyword">return</strong> sb.append(cn(BeanMap.<strong class="jxr_keyword">class</strong>)).append('&lt;').append(n).append('&gt;');
-<a class="jxr_linenumber" name="L1983" href="#L1983">1983</a> 		<strong class="jxr_keyword">if</strong> (cat.is(MAP)) {
-<a class="jxr_linenumber" name="L1984" href="#L1984">1984</a> 			<strong class="jxr_keyword">var</strong> kvTypes = keyValueTypes.get();
-<a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> 			<strong class="jxr_keyword">var</strong> kt = kvTypes.optKeyType();
-<a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> 			<strong class="jxr_keyword">var</strong> vt = kvTypes.optValueType();
-<a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 			<strong class="jxr_keyword">if</strong> (kt.isPresent() &amp;&amp; vt.isPresent() &amp;&amp; kt.get().isObject() &amp;&amp; vt.get().isObject())
-<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 				<strong class="jxr_keyword">return</strong> sb.append(n);
-<a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append('&lt;').append(kt.map(x -&gt; x.toString(simple)).orElse(<span class="jxr_string">"?"</span>)).append(',').append(vt.map(x -&gt; x.toString(simple)).orElse(<span class="jxr_string">"?"</span>)).append('&gt;');
-<a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> 		}
-<a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> 		<strong class="jxr_keyword">if</strong> (cat.is(COLLECTION) || is(Optional.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L1992" href="#L1992">1992</a> 			<strong class="jxr_keyword">var</strong> et = elementType.get();
-<a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> 			String typeString = et != <strong class="jxr_keyword">null</strong> ? et.toString(simple) : <span class="jxr_string">"?"</span>;
-<a class="jxr_linenumber" name="L1994" href="#L1994">1994</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append(et != <strong class="jxr_keyword">null</strong> &amp;&amp; et.isObject() ? <span class="jxr_string">""</span> : <span class="jxr_string">"&lt;"</span> + typeString + <span class="jxr_string">"&gt;"</span>);
-<a class="jxr_linenumber" name="L1995" href="#L1995">1995</a> 		}
-<a class="jxr_linenumber" name="L1996" href="#L1996">1996</a> 		<strong class="jxr_keyword">return</strong> sb.append(n);
-<a class="jxr_linenumber" name="L1997" href="#L1997">1997</a> 	}
-<a class="jxr_linenumber" name="L1998" href="#L1998">1998</a> }
+<a class="jxr_linenumber" name="L1917" href="#L1917">1917</a> 	<strong class="jxr_keyword">private</strong> ConstructorInfo findStringConstructor() {
+<a class="jxr_linenumber" name="L1918" href="#L1918">1918</a> 
+<a class="jxr_linenumber" name="L1919" href="#L1919">1919</a> 		<strong class="jxr_keyword">if</strong> (is(Object.<strong class="jxr_keyword">class</strong>) || isAbstract())
+<a class="jxr_linenumber" name="L1920" href="#L1920">1920</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1921" href="#L1921">1921</a> 
+<a class="jxr_linenumber" name="L1922" href="#L1922">1922</a> 		<strong class="jxr_keyword">if</strong> (implClass.isPresent())
+<a class="jxr_linenumber" name="L1923" href="#L1923">1923</a> 			<strong class="jxr_keyword">return</strong> implClass.get().getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1924" href="#L1924">1924</a> 
+<a class="jxr_linenumber" name="L1925" href="#L1925">1925</a> 		<strong class="jxr_keyword">if</strong> (isAbstract())
+<a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> 
+<a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> 		<strong class="jxr_keyword">var</strong> numParams = nonStaticMemberClass ? 2 : 1;
+<a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> 		<strong class="jxr_keyword">return</strong> getPublicConstructors()
+<a class="jxr_linenumber" name="L1930" href="#L1930">1930</a> 			.stream()
+<a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> 			.filter(x -&gt; x.isPublic() &amp;&amp; x.isNotDeprecated() &amp;&amp; x.hasNumParameters(numParams))
+<a class="jxr_linenumber" name="L1932" href="#L1932">1932</a> 			.filter(x -&gt; x.getParameter(numParams == 2 ? 1 : 0).isType(String.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L1933" href="#L1933">1933</a> 			.findFirst()
+<a class="jxr_linenumber" name="L1934" href="#L1934">1934</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1935" href="#L1935">1935</a> 	}
+<a class="jxr_linenumber" name="L1936" href="#L1936">1936</a> 
+<a class="jxr_linenumber" name="L1937" href="#L1937">1937</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> <em class="jxr_javadoccomment">	 * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the normal class of one of the</em>
+<a class="jxr_linenumber" name="L1939" href="#L1939">1939</a> <em class="jxr_javadoccomment">	 * child POJO swaps associated with this class.</em>
+<a class="jxr_linenumber" name="L1940" href="#L1940">1940</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> <em class="jxr_javadoccomment">	 * @param normalClass The normal class being resolved.</em>
+<a class="jxr_linenumber" name="L1942" href="#L1942">1942</a> <em class="jxr_javadoccomment">	 * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</em>
+<a class="jxr_linenumber" name="L1943" href="#L1943">1943</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1944" href="#L1944">1944</a> 	<strong class="jxr_keyword">protected</strong> ObjectSwap&lt;?,?&gt; getChildObjectSwapForSwap(Class&lt;?&gt; normalClass) {
+<a class="jxr_linenumber" name="L1945" href="#L1945">1945</a> 		<strong class="jxr_keyword">return</strong> childSwapMap.get(normalClass);
+<a class="jxr_linenumber" name="L1946" href="#L1946">1946</a> 	}
+<a class="jxr_linenumber" name="L1947" href="#L1947">1947</a> 
+<a class="jxr_linenumber" name="L1948" href="#L1948">1948</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1949" href="#L1949">1949</a> <em class="jxr_javadoccomment">	 * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the swap class of one of the child</em>
+<a class="jxr_linenumber" name="L1950" href="#L1950">1950</a> <em class="jxr_javadoccomment">	 * POJO swaps associated with this class.</em>
+<a class="jxr_linenumber" name="L1951" href="#L1951">1951</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> <em class="jxr_javadoccomment">	 * @param swapClass The swap class being resolved.</em>
+<a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> <em class="jxr_javadoccomment">	 * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</em>
+<a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> 	<strong class="jxr_keyword">protected</strong> ObjectSwap&lt;?,?&gt; getChildObjectSwapForUnswap(Class&lt;?&gt; swapClass) {
+<a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> 		<strong class="jxr_keyword">return</strong> childUnswapMap.get(swapClass);
+<a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 	}
+<a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 
+<a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this class or any child classes has a {@link ObjectSwap} associated with it.</em>
+<a class="jxr_linenumber" name="L1961" href="#L1961">1961</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1962" href="#L1962">1962</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> <em class="jxr_javadoccomment">	 * Used when transforming bean properties to prevent having to look up transforms if we know for certain that no</em>
+<a class="jxr_linenumber" name="L1964" href="#L1964">1964</a> <em class="jxr_javadoccomment">	 * transforms are associated with a bean property.</em>
+<a class="jxr_linenumber" name="L1965" href="#L1965">1965</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class or any child classes has a {@link ObjectSwap} associated with it.</em>
+<a class="jxr_linenumber" name="L1967" href="#L1967">1967</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1968" href="#L1968">1968</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> hasChildSwaps() {
+<a class="jxr_linenumber" name="L1969" href="#L1969">1969</a> 		<strong class="jxr_keyword">return</strong> ! childSwaps.get().isEmpty();
+<a class="jxr_linenumber" name="L1970" href="#L1970">1970</a> 	}
+<a class="jxr_linenumber" name="L1971" href="#L1971">1971</a> 
+<a class="jxr_linenumber" name="L1972" href="#L1972">1972</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1973" href="#L1973">1973</a> <em class="jxr_javadoccomment">	 * Appends this object as a readable string to the specified string builder.</em>
+<a class="jxr_linenumber" name="L1974" href="#L1974">1974</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1975" href="#L1975">1975</a> <em class="jxr_javadoccomment">	 * @param sb The string builder to append this object to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1976" href="#L1976">1976</a> <em class="jxr_javadoccomment">	 * @param simple Print simple class names only (no package).</em>
+<a class="jxr_linenumber" name="L1977" href="#L1977">1977</a> <em class="jxr_javadoccomment">	 * @return The passed-in string builder.</em>
+<a class="jxr_linenumber" name="L1978" href="#L1978">1978</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1979" href="#L1979">1979</a> 	<strong class="jxr_keyword">protected</strong> StringBuilder toString(StringBuilder sb, <strong class="jxr_keyword">boolean</strong> simple) {
+<a class="jxr_linenumber" name="L1980" href="#L1980">1980</a> 		<strong class="jxr_keyword">var</strong> n = simple ? cnsq(<strong class="jxr_keyword">inner</strong>()) : cn(<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L1981" href="#L1981">1981</a> 		<strong class="jxr_keyword">if</strong> (cat.is(ARRAY))
+<a class="jxr_linenumber" name="L1982" href="#L1982">1982</a> 			<strong class="jxr_keyword">return</strong> elementType.get().toString(sb, simple).append('[').append(']');
+<a class="jxr_linenumber" name="L1983" href="#L1983">1983</a> 		<strong class="jxr_keyword">if</strong> (cat.is(BEANMAP))
+<a class="jxr_linenumber" name="L1984" href="#L1984">1984</a> 			<strong class="jxr_keyword">return</strong> sb.append(cn(BeanMap.<strong class="jxr_keyword">class</strong>)).append('&lt;').append(n).append('&gt;');
+<a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> 		<strong class="jxr_keyword">if</strong> (cat.is(MAP)) {
+<a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> 			<strong class="jxr_keyword">var</strong> kvTypes = keyValueTypes.get();
+<a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 			<strong class="jxr_keyword">var</strong> kt = kvTypes.optKeyType();
+<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 			<strong class="jxr_keyword">var</strong> vt = kvTypes.optValueType();
+<a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> 			<strong class="jxr_keyword">if</strong> (kt.isPresent() &amp;&amp; vt.isPresent() &amp;&amp; kt.get().isObject() &amp;&amp; vt.get().isObject())
+<a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> 				<strong class="jxr_keyword">return</strong> sb.append(n);
+<a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append('&lt;').append(kt.map(x -&gt; x.toString(simple)).orElse(<span class="jxr_string">"?"</span>)).append(',').append(vt.map(x -&gt; x.toString(simple)).orElse(<span class="jxr_string">"?"</span>)).append('&gt;');
+<a class="jxr_linenumber" name="L1992" href="#L1992">1992</a> 		}
+<a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> 		<strong class="jxr_keyword">if</strong> (cat.is(COLLECTION) || is(Optional.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L1994" href="#L1994">1994</a> 			<strong class="jxr_keyword">var</strong> et = elementType.get();
+<a class="jxr_linenumber" name="L1995" href="#L1995">1995</a> 			String typeString = et != <strong class="jxr_keyword">null</strong> ? et.toString(simple) : <span class="jxr_string">"?"</span>;
+<a class="jxr_linenumber" name="L1996" href="#L1996">1996</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append(et != <strong class="jxr_keyword">null</strong> &amp;&amp; et.isObject() ? <span class="jxr_string">""</span> : <span class="jxr_string">"&lt;"</span> + typeString + <span class="jxr_string">"&gt;"</span>);
+<a class="jxr_linenumber" name="L1997" href="#L1997">1997</a> 		}
+<a class="jxr_linenumber" name="L1998" href="#L1998">1998</a> 		<strong class="jxr_keyword">return</strong> sb.append(n);
+<a class="jxr_linenumber" name="L1999" href="#L1999">1999</a> 	}
+<a class="jxr_linenumber" name="L2000" href="#L2000">2000</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

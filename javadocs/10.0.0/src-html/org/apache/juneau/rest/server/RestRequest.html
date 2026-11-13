@@ -220,14 +220,14 @@
 <span class="source-line-no">207</span><span id="line-207"></span>
 <span class="source-line-no">208</span><span id="line-208">   /**</span>
 <span class="source-line-no">209</span><span id="line-209">    * Returns {@code true} if {@code method} is one of the methods the {@code content} URL-parameter body</span>
-<span class="source-line-no">210</span><span id="line-210">    * override (see {@link Rest#disableContentParam()}) is documented to apply to.</span>
+<span class="source-line-no">210</span><span id="line-210">    * override (see {@link Rest#allowContentParam()}) is documented to apply to.</span>
 <span class="source-line-no">211</span><span id="line-211">    *</span>
 <span class="source-line-no">212</span><span id="line-212">    * &lt;p&gt;</span>
 <span class="source-line-no">213</span><span id="line-213">    * Package-private for direct unit-test coverage. Restricting the override to {@code PUT}/{@code POST} (its</span>
 <span class="source-line-no">214</span><span id="line-214">    * documented scope all along) keeps a plain cross-origin {@code GET} &amp;mdash; the kind a browser will issue</span>
 <span class="source-line-no">215</span><span id="line-215">    * with no preflight and no custom header for something as simple as an &lt;code&gt;&amp;lt;img src=...&amp;gt;&lt;/code&gt; tag</span>
 <span class="source-line-no">216</span><span id="line-216">    * &amp;mdash; from ever having its body-carrying {@code Content-Type} gate bypassed via a query string, without</span>
-<span class="source-line-no">217</span><span id="line-217">    * touching the {@link Rest#disableContentParam()} default itself.</span>
+<span class="source-line-no">217</span><span id="line-217">    * touching the {@link Rest#allowContentParam()} default itself.</span>
 <span class="source-line-no">218</span><span id="line-218">    *</span>
 <span class="source-line-no">219</span><span id="line-219">    * @param method The request's HTTP method. Can be {@code null} (returns {@code false}).</span>
 <span class="source-line-no">220</span><span id="line-220">    * @return {@code true} if {@code method} is {@code PUT} or {@code POST}, case-insensitively.</span>

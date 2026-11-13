@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransportBuilder.html#line-33">JavaHttpTransportBuilder</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransportBuilder.html#line-34">JavaHttpTransportBuilder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Fluent builder for <a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client"><code>JavaHttpTransport</code></a>.
 
@@ -106,15 +106,25 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client">JavaHttpTransport</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JavaHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportBuilder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allowHostHeaderOverride()" class="member-name-link">allowHostHeaderOverride</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Opts in to sending a caller-controlled <code>Host</code> header, which pinning a policy-covered HTTP request needs.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client">JavaHttpTransport</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Builds and returns the <a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client"><code>JavaHttpTransport</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JavaHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportBuilder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpClient(java.net.http.HttpClient)" class="member-name-link">httpClient</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link">HttpClient</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JavaHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportBuilder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpClient(java.net.http.HttpClient)" class="member-name-link">httpClient</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link">HttpClient</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the underlying <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link"><code>HttpClient</code></a> to use.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JavaHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportBuilder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxResponseBytes(long)" class="member-name-link">maxResponseBytes</a><wbr>(long&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the maximum number of response body bytes the transport delivers; reading further fails with an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a>.</div>
 </div>
 </div>
 </div>
@@ -134,9 +144,43 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="allowHostHeaderOverride()">
+<h3>allowHostHeaderOverride</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JavaHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransportBuilder.html#line-62">allowHostHeaderOverride</a></span>()</div>
+<div class="block">Opts in to sending a caller-controlled <code>Host</code> header, which pinning a policy-covered HTTP request needs.
+
+ <p>
+ The JDK <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link"><code>HttpClient</code></a> rejects a <code>Host</code> header unless the JVM property <code>jdk.httpclient.allowRestrictedHeaders</code>
+ lists it.  Without this opt-in a policy-covered HTTP request that needs a <code>Host</code> override fails closed.
+
+ <p>
+ <b>This setting changes a JVM-wide property.</b>  Building the transport adds <code>host</code> to the system property
+ <code>jdk.httpclient.allowRestrictedHeaders</code>, which affects every <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link"><code>HttpClient</code></a> in the JVM.  The JDK reads the
+ property once, the first time any code builds a request header, so it only takes effect if that has not happened yet; otherwise
+ start the JVM with <code>-Djdk.httpclient.allowRestrictedHeaders=host</code>.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="maxResponseBytes(long)">
+<h3>maxResponseBytes</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JavaHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransportBuilder.html#line-73">maxResponseBytes</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
+<div class="block">Sets the maximum number of response body bytes the transport delivers; reading further fails with an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The cap in bytes.  Zero or negative means unlimited.  Defaults to <a href="JavaHttpTransport.html#DEFAULT_MAX_RESPONSE_BYTES"><code>JavaHttpTransport.DEFAULT_MAX_RESPONSE_BYTES</code></a>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="httpClient(java.net.http.HttpClient)">
 <h3>httpClient</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JavaHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransportBuilder.html#line-51">httpClient</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link">HttpClient</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JavaHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransportBuilder.html#line-87">httpClient</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link">HttpClient</a>&nbsp;value)</span></div>
 <div class="block">Sets the underlying <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link"><code>HttpClient</code></a> to use.
 
  <p>
@@ -152,7 +196,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client">JavaHttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransportBuilder.html#line-61">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client">JavaHttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransportBuilder.html#line-97">build</a></span>()</div>
 <div class="block">Builds and returns the <a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client"><code>JavaHttpTransport</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>

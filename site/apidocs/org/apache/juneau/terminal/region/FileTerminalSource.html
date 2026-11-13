@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code>, <code><a href="TerminalSource.html" title="interface in org.apache.juneau.terminal.region">TerminalSource</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-62">FileTerminalSource</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-64">FileTerminalSource</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="TerminalSource.html" title="interface in org.apache.juneau.terminal.region">TerminalSource</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></span></div>
 <div class="block">A <a href="TerminalSource.html" title="interface in org.apache.juneau.terminal.region"><code>TerminalSource</code></a> that tails one growing log file of raw terminal bytes.
@@ -203,7 +203,7 @@ implements <a href="TerminalSource.html" title="interface in org.apache.juneau.t
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.terminal.region.TerminalSource">Methods inherited from interface&nbsp;org.apache.juneau.terminal.region.<a href="TerminalSource.html" title="interface in org.apache.juneau.terminal.region">TerminalSource</a></h3>
-<code><a href="TerminalSource.html#copyTo(java.io.OutputStream)">copyTo</a></code></div>
+<code><a href="TerminalSource.html#copyTo(java.io.OutputStream)">copyTo</a>, <a href="TerminalSource.html#copyTo(java.io.OutputStream,long)">copyTo</a></code></div>
 </section>
 </li>
 </ul>
@@ -218,7 +218,7 @@ implements <a href="TerminalSource.html" title="interface in org.apache.juneau.t
 <li>
 <section class="detail" id="DEFAULT_COLS">
 <h3>DEFAULT_COLS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-65">DEFAULT_COLS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-67">DEFAULT_COLS</a></span></div>
 <div class="block">The width used while the size sidecar is missing or malformed.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -233,7 +233,7 @@ implements <a href="TerminalSource.html" title="interface in org.apache.juneau.t
 <li>
 <section class="detail" id="DEFAULT_ROWS">
 <h3>DEFAULT_ROWS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-68">DEFAULT_ROWS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-70">DEFAULT_ROWS</a></span></div>
 <div class="block">The height used while the size sidecar is missing or malformed.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -256,7 +256,7 @@ implements <a href="TerminalSource.html" title="interface in org.apache.juneau.t
 <li>
 <section class="detail" id="create(java.nio.file.Path)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileTerminalSource.Builder.html" title="class in org.apache.juneau.terminal.region">FileTerminalSource.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-137">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;file)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileTerminalSource.Builder.html" title="class in org.apache.juneau.terminal.region">FileTerminalSource.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-143">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;file)</span></div>
 <div class="block">Creates a builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -269,7 +269,7 @@ implements <a href="TerminalSource.html" title="interface in org.apache.juneau.t
 <li>
 <section class="detail" id="file()">
 <h3>file</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-146">file</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-152">file</a></span>()</div>
 <div class="block">The log file.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -280,7 +280,7 @@ implements <a href="TerminalSource.html" title="interface in org.apache.juneau.t
 <li>
 <section class="detail" id="nudges(java.lang.String,org.apache.juneau.terminal.region.TerminalNudgePublisher)">
 <h3>nudges</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileTerminalSource.html" title="class in org.apache.juneau.terminal.region">FileTerminalSource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-167">nudges</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;terminalId,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileTerminalSource.html" title="class in org.apache.juneau.terminal.region">FileTerminalSource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-173">nudges</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;terminalId,
  <a href="TerminalNudgePublisher.html" title="interface in org.apache.juneau.terminal.region">TerminalNudgePublisher</a>&nbsp;publisher)</span></div>
 <div class="block">Reports growth of the file to a publisher.
 
@@ -306,7 +306,7 @@ implements <a href="TerminalSource.html" title="interface in org.apache.juneau.t
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-221">close</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-227">close</a></span>()</div>
 <div class="block">Stops the nudge thread, if any, and waits up to 1000 ms for it.
 
  <p>
@@ -320,7 +320,7 @@ implements <a href="TerminalSource.html" title="interface in org.apache.juneau.t
 <li>
 <section class="detail" id="read(long,int)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TerminalChunk.html" title="class in org.apache.juneau.terminal.region">TerminalChunk</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-241">read</a></span><wbr><span class="parameters">(long&nbsp;fromOffset,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TerminalChunk.html" title="class in org.apache.juneau.terminal.region">TerminalChunk</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/FileTerminalSource.html#line-247">read</a></span><wbr><span class="parameters">(long&nbsp;fromOffset,
  int&nbsp;maxBytes)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="TerminalSource.html#read(long,int)">TerminalSource</a></code></span></div>

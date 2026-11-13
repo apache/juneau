@@ -918,68 +918,73 @@
 <a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;	<em class="jxr_comment">// Never gets here.</em>
 <a class="jxr_linenumber" name="L911" href="#L911">911</a> 	}
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> 
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> 	<strong class="jxr_keyword">private</strong> Object[] setArrayEntry(Object o, <strong class="jxr_keyword">int</strong> index, Object val, ClassMeta componentType) {
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> 		<strong class="jxr_keyword">var</strong> a = (Object[])o;
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> 		<strong class="jxr_keyword">if</strong> (a.length &lt;= index) {
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 			<em class="jxr_comment">// Expand out the array.</em>
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> 			<strong class="jxr_keyword">var</strong> a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), index + 1);
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> 			System.arraycopy(a, 0, a2, 0, a.length);
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> 			a = a2;
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		}
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> 		a[index] = convert(val, componentType);
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		<strong class="jxr_keyword">return</strong> a;
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> 	}
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> 
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 	JsonNode getNode(String url, JsonNode n) {
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(url))
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> 			<strong class="jxr_keyword">return</strong> n;
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 		<strong class="jxr_keyword">int</strong> i = url.indexOf('/');
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> 		String parentKey;
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		String childUrl = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<strong class="jxr_keyword">if</strong> (i == -1) {
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 			parentKey = url;
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> 			parentKey = url.substring(0, i);
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> 			childUrl = url.substring(i + 1);
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> 		}
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> 
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> 		<strong class="jxr_keyword">var</strong> o = n.o;
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> 		Object o2 = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> 		<strong class="jxr_keyword">var</strong> cm = n.cm;
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		ClassMeta ct2 = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> 		<strong class="jxr_keyword">if</strong> (cm.isMap()) {
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> 			o2 = ((Map)o).get(parentKey);
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> 			ct2 = cm.getValueType();
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cm.isCollection() &amp;&amp; o instanceof List o3) {
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> 			<strong class="jxr_keyword">var</strong> key = parseInt(parentKey);
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 			<strong class="jxr_keyword">if</strong> (o3.size() &lt;= key)
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 			o2 = o3.get(key);
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 			ct2 = cm.getElementType();
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cm.isArray()) {
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 			<strong class="jxr_keyword">var</strong> key = parseInt(parentKey);
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> 			<strong class="jxr_keyword">var</strong> a = ((Object[])o);
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> 			<strong class="jxr_keyword">if</strong> (a.length &lt;= key)
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> 			o2 = a[key];
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> 			ct2 = cm.getElementType();
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cm.isBean()) {
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 			<strong class="jxr_keyword">var</strong> m = session.toBeanMap(o);
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 			o2 = m.get(parentKey);
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 			<strong class="jxr_keyword">var</strong> pMeta = m.getPropertyMeta(parentKey);
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 			<strong class="jxr_keyword">if</strong> (pMeta == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PathTraversalException(HTTP_BAD_REQUEST, <span class="jxr_string">"Unknown property '%s' encountered while trying to parse into class '%s'"</span>, parentKey, m.getBeanInfo());
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 			ct2 = (ClassMeta) pMeta.getBeanInfo();
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> 		}
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> 
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> 		<strong class="jxr_keyword">if</strong> (childUrl == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonNode(n, parentKey, o2, ct2);
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> 
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 		<strong class="jxr_keyword">return</strong> getNode(childUrl, <strong class="jxr_keyword">new</strong> JsonNode(n, parentKey, o2, ct2));
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 	}
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> }
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 	<em class="jxr_javadoccomment">/** Maximum number of slots an array may be grown by a single set operation. */</em>
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_ARRAY_GROWTH = 1000;
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 	<strong class="jxr_keyword">private</strong> Object[] setArrayEntry(Object o, <strong class="jxr_keyword">int</strong> index, Object val, ClassMeta componentType) {
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 		<strong class="jxr_keyword">var</strong> a = (Object[])o;
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 		<strong class="jxr_keyword">if</strong> (a.length &lt;= index) {
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 			<strong class="jxr_keyword">if</strong> (index - a.length &gt; MAX_ARRAY_GROWTH)
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PathTraversalException(HTTP_BAD_REQUEST, <span class="jxr_string">"Array index %s is too far beyond the end of the array."</span>, index);
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 			<em class="jxr_comment">// Expand out the array.</em>
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 			<strong class="jxr_keyword">var</strong> a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), index + 1);
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 			System.arraycopy(a, 0, a2, 0, a.length);
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 			a = a2;
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		}
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 		a[index] = convert(val, componentType);
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 		<strong class="jxr_keyword">return</strong> a;
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	}
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 	JsonNode getNode(String url, JsonNode n) {
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(url))
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 			<strong class="jxr_keyword">return</strong> n;
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 		<strong class="jxr_keyword">int</strong> i = url.indexOf('/');
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 		String parentKey;
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 		String childUrl = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 		<strong class="jxr_keyword">if</strong> (i == -1) {
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> 			parentKey = url;
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 			parentKey = url.substring(0, i);
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 			childUrl = url.substring(i + 1);
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		}
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 		<strong class="jxr_keyword">var</strong> o = n.o;
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 		Object o2 = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 		<strong class="jxr_keyword">var</strong> cm = n.cm;
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 		ClassMeta ct2 = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 		<strong class="jxr_keyword">if</strong> (cm.isMap()) {
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> 			o2 = ((Map)o).get(parentKey);
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 			ct2 = cm.getValueType();
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cm.isCollection() &amp;&amp; o instanceof List o3) {
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 			<strong class="jxr_keyword">var</strong> key = parseInt(parentKey);
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 			<strong class="jxr_keyword">if</strong> (o3.size() &lt;= key)
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 			o2 = o3.get(key);
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 			ct2 = cm.getElementType();
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cm.isArray()) {
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 			<strong class="jxr_keyword">var</strong> key = parseInt(parentKey);
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 			<strong class="jxr_keyword">var</strong> a = ((Object[])o);
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 			<strong class="jxr_keyword">if</strong> (a.length &lt;= key)
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 			o2 = a[key];
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 			ct2 = cm.getElementType();
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cm.isBean()) {
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 			<strong class="jxr_keyword">var</strong> m = session.toBeanMap(o);
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 			o2 = m.get(parentKey);
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 			<strong class="jxr_keyword">var</strong> pMeta = m.getPropertyMeta(parentKey);
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 			<strong class="jxr_keyword">if</strong> (pMeta == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PathTraversalException(HTTP_BAD_REQUEST, <span class="jxr_string">"Unknown property '%s' encountered while trying to parse into class '%s'"</span>, parentKey, m.getBeanInfo());
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> 			ct2 = (ClassMeta) pMeta.getBeanInfo();
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 		}
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 		<strong class="jxr_keyword">if</strong> (childUrl == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonNode(n, parentKey, o2, ct2);
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> 		<strong class="jxr_keyword">return</strong> getNode(childUrl, <strong class="jxr_keyword">new</strong> JsonNode(n, parentKey, o2, ct2));
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 	}
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

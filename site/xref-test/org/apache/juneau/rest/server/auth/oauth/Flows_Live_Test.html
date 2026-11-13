@@ -163,64 +163,65 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<em class="jxr_comment">// H: lifetime == 0 → Instant.MAX (Flows.java line 99 true branch)</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<em class="jxr_comment">// H: lifetime == 0 → 5-minute default (Flows.java line 99 true branch)</em>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 	@Test <strong class="jxr_keyword">void</strong> h01_zeroLifetime_expiresAtMax() {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<em class="jxr_comment">// expires_in:0 → lifetime==0 → Instant.MAX</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<em class="jxr_comment">// expires_in:0 → lifetime==0 → default 5-minute lifetime</em>
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> t = acquire(<span class="jxr_string">"{\&quot;access_token\&quot;:\&quot;at\&quot;,\&quot;token_type\&quot;:\&quot;Bearer\&quot;,\&quot;expires_in\&quot;:0}"</span>);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertEquals(Instant.MAX, t.expiresAt());
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Test <strong class="jxr_keyword">void</strong> i01_tokenCachePutAfterAcquire() {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		nextResponse = <span class="jxr_string">"{\&quot;access_token\&quot;:\&quot;at-cached\&quot;,\&quot;token_type\&quot;:\&quot;Bearer\&quot;,\&quot;expires_in\&quot;:3600}"</span>;
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> cache = BoundedLruTokenCache.create();
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">var</strong> f = CachingClientCredentialsFlow.create()
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			.tokenEndpoint(tokenEndpoint())
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			.clientId(<span class="jxr_string">"id"</span>)
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			.clientSecret(<span class="jxr_string">"s"</span>)
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			.tokenCache(cache)
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			.build();
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">var</strong> t = f.acquire();
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertEquals(<span class="jxr_string">"at-cached"</span>, t.accessToken());
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<em class="jxr_comment">// Token should now be cached — second acquire() returns from cache without hitting the endpoint.</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		server.stop(0); <em class="jxr_comment">// prevent second network call</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertNotNull(f.acquire());
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<em class="jxr_comment">// J: httpRequestConfigurator non-null → invoked (Flows.java line 56 true branch)</em>
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	@Test <strong class="jxr_keyword">void</strong> j01_httpRequestConfigurator_invoked() {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		nextResponse = <span class="jxr_string">"{\&quot;access_token\&quot;:\&quot;at\&quot;,\&quot;token_type\&quot;:\&quot;Bearer\&quot;,\&quot;expires_in\&quot;:3600}"</span>;
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> called = <strong class="jxr_keyword">new</strong> AtomicBoolean();
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> f = OAuthClientCredentialsFlow.create()
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			.tokenEndpoint(tokenEndpoint())
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			.clientId(<span class="jxr_string">"id"</span>)
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			.clientSecret(<span class="jxr_string">"s"</span>)
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			.httpRequestConfigurator(req -&gt; called.set(<strong class="jxr_keyword">true</strong>))
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			.build();
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		f.acquire();
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertTrue(called.get());
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<em class="jxr_comment">// K: error response from token endpoint → OAuthFlowException (Flows.java line 70 true branch)</em>
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	@Test <strong class="jxr_keyword">void</strong> k01_errorResponse_throwsOAuthFlowException() {
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		nextResponse = <span class="jxr_string">"{\&quot;error\&quot;:\&quot;invalid_client\&quot;,\&quot;error_description\&quot;:\&quot;bad credentials\&quot;}"</span>;
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		nextStatus = 400;
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">var</strong> f = OAuthClientCredentialsFlow.create()
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			.tokenEndpoint(tokenEndpoint())
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			.clientId(<span class="jxr_string">"id"</span>)
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			.clientSecret(<span class="jxr_string">"s"</span>)
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			.build();
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(OAuthFlowException.<strong class="jxr_keyword">class</strong>, f::acquire);
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"invalid_client"</span>) || ex.getMessage().contains(<span class="jxr_string">"error"</span>));
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> }
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertTrue(t.expiresAt().isAfter(Instant.now().plusSeconds(240)));
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertTrue(t.expiresAt().isBefore(Instant.now().plusSeconds(360)));
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	@Test <strong class="jxr_keyword">void</strong> i01_tokenCachePutAfterAcquire() {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		nextResponse = <span class="jxr_string">"{\&quot;access_token\&quot;:\&quot;at-cached\&quot;,\&quot;token_type\&quot;:\&quot;Bearer\&quot;,\&quot;expires_in\&quot;:3600}"</span>;
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">var</strong> cache = BoundedLruTokenCache.create();
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">var</strong> f = CachingClientCredentialsFlow.create()
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			.tokenEndpoint(tokenEndpoint())
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			.clientId(<span class="jxr_string">"id"</span>)
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			.clientSecret(<span class="jxr_string">"s"</span>)
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			.tokenCache(cache)
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			.build();
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> t = f.acquire();
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		assertEquals(<span class="jxr_string">"at-cached"</span>, t.accessToken());
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<em class="jxr_comment">// Token should now be cached — second acquire() returns from cache without hitting the endpoint.</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		server.stop(0); <em class="jxr_comment">// prevent second network call</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertNotNull(f.acquire());
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	}
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<em class="jxr_comment">// J: httpRequestConfigurator non-null → invoked (Flows.java line 56 true branch)</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	@Test <strong class="jxr_keyword">void</strong> j01_httpRequestConfigurator_invoked() {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		nextResponse = <span class="jxr_string">"{\&quot;access_token\&quot;:\&quot;at\&quot;,\&quot;token_type\&quot;:\&quot;Bearer\&quot;,\&quot;expires_in\&quot;:3600}"</span>;
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> called = <strong class="jxr_keyword">new</strong> AtomicBoolean();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> f = OAuthClientCredentialsFlow.create()
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			.tokenEndpoint(tokenEndpoint())
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			.clientId(<span class="jxr_string">"id"</span>)
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			.clientSecret(<span class="jxr_string">"s"</span>)
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			.httpRequestConfigurator(req -&gt; called.set(<strong class="jxr_keyword">true</strong>))
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			.build();
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		f.acquire();
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertTrue(called.get());
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	}
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<em class="jxr_comment">// K: error response from token endpoint → OAuthFlowException (Flows.java line 70 true branch)</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	@Test <strong class="jxr_keyword">void</strong> k01_errorResponse_throwsOAuthFlowException() {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		nextResponse = <span class="jxr_string">"{\&quot;error\&quot;:\&quot;invalid_client\&quot;,\&quot;error_description\&quot;:\&quot;bad credentials\&quot;}"</span>;
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		nextStatus = 400;
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">var</strong> f = OAuthClientCredentialsFlow.create()
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			.tokenEndpoint(tokenEndpoint())
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			.clientId(<span class="jxr_string">"id"</span>)
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			.clientSecret(<span class="jxr_string">"s"</span>)
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			.build();
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(OAuthFlowException.<strong class="jxr_keyword">class</strong>, f::acquire);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"invalid_client"</span>) || ex.getMessage().contains(<span class="jxr_string">"error"</span>));
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	}
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

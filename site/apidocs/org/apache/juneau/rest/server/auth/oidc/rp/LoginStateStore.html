@@ -223,7 +223,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="store(java.lang.String,org.apache.juneau.rest.server.auth.oidc.rp.LoginStateStore.PendingLogin)">
 <h3>store</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/LoginStateStore.html#line-133">store</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state,
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/LoginStateStore.html#line-135">store</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state,
  <a href="LoginStateStore.PendingLogin.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore.PendingLogin</a>&nbsp;pending)</span></div>
 <div class="block">Stores a framework-built pending-login association keyed by <code>state</code>.
 
@@ -252,7 +252,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="consume(java.lang.String)">
 <h3>consume</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="LoginStateStore.PendingLogin.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore.PendingLogin</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/LoginStateStore.html#line-171">consume</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state)</span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="LoginStateStore.PendingLogin.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore.PendingLogin</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/LoginStateStore.html#line-173">consume</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state)</span></div>
 <div class="block">Atomically removes and returns the pending-login association for <code>state</code>, if present.
 
  <p>

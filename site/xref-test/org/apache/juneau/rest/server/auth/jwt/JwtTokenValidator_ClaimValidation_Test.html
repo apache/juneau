@@ -155,19 +155,19 @@
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertTrue(ex.getMessage().toLowerCase().contains(<span class="jxr_string">"\&quot;aud\&quot;"</span>));
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@Test <strong class="jxr_keyword">void</strong> a09_blankSubject_yieldsPlaceholderName() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<em class="jxr_comment">// A signed, otherwise-valid JWT with no "sub" still validates; the resulting principal</em>
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<em class="jxr_comment">// carries the documented "&lt;no-sub&gt;" placeholder.</em>
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> rsa = generateRsa(<span class="jxr_string">"kid-1"</span>);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> claims = <strong class="jxr_keyword">new</strong> com.nimbusds.jwt.JWTClaimsSet.Builder()
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			.issuer(DEFAULT_ISSUER)
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			.audience(DEFAULT_AUDIENCE)
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			.notBeforeTime(Date.from(NOW))
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			.expirationTime(Date.from(NOW.plus(Duration.ofMinutes(5))))
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			.build();
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">var</strong> token = signRsa(rsa, claims);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> principal = newValidator(fixed(rsa)).validate(token);
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertEquals(<span class="jxr_string">"&lt;no-sub&gt;"</span>, principal.getName());
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@Test <strong class="jxr_keyword">void</strong> a09_blankSubject_rejected() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<em class="jxr_comment">// A signed, otherwise-valid JWT with no "sub" is rejected.</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> rsa = generateRsa(<span class="jxr_string">"kid-1"</span>);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> claims = <strong class="jxr_keyword">new</strong> com.nimbusds.jwt.JWTClaimsSet.Builder()
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			.issuer(DEFAULT_ISSUER)
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			.audience(DEFAULT_AUDIENCE)
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			.notBeforeTime(Date.from(NOW))
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			.expirationTime(Date.from(NOW.plus(Duration.ofMinutes(5))))
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			.build();
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">var</strong> token = signRsa(rsa, claims);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">var</strong> validator = newValidator(fixed(rsa));
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(AuthenticationException.<strong class="jxr_keyword">class</strong>, () -&gt; validator.validate(token));
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"\&quot;sub\&quot;"</span>));
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	@Test <strong class="jxr_keyword">void</strong> b01_clockSkew_acceptsRecentlyExpiredJwtWithinSkew() <strong class="jxr_keyword">throws</strong> Exception {

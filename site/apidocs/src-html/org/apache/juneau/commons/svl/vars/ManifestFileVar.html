@@ -101,23 +101,33 @@
 <span class="source-line-no">088</span><span id="line-88">      this.source = new ManifestFilePropertySource(supplier);</span>
 <span class="source-line-no">089</span><span id="line-89">   }</span>
 <span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">   @Override /* Overridden from Var */</span>
-<span class="source-line-no">092</span><span id="line-92">   public String resolve(VarResolverSession session, String key) {</span>
-<span class="source-line-no">093</span><span id="line-93">      var v = source.get(key);</span>
-<span class="source-line-no">094</span><span id="line-94">      return v.isPresent() ? v.value().orElse(null) : "";</span>
-<span class="source-line-no">095</span><span id="line-95">   }</span>
-<span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">   /**</span>
-<span class="source-line-no">098</span><span id="line-98">    * Manifest entries are immutable for the lifetime of the classpath. This var opts in to</span>
-<span class="source-line-no">099</span><span id="line-99">    * compile-time stable-value folding.</span>
-<span class="source-line-no">100</span><span id="line-100">    *</span>
-<span class="source-line-no">101</span><span id="line-101">    * @return Always {@code true}.</span>
-<span class="source-line-no">102</span><span id="line-102">    */</span>
-<span class="source-line-no">103</span><span id="line-103">   @Override /* Overridden from Var */</span>
-<span class="source-line-no">104</span><span id="line-104">   protected boolean isStable() {</span>
-<span class="source-line-no">105</span><span id="line-105">      return true;</span>
-<span class="source-line-no">106</span><span id="line-106">   }</span>
-<span class="source-line-no">107</span><span id="line-107">}</span>
+<span class="source-line-no">091</span><span id="line-91">   /**</span>
+<span class="source-line-no">092</span><span id="line-92">    * Values from this source are never re-resolved: a value containing &lt;c&gt;${...}&lt;/c&gt; is returned literally.</span>
+<span class="source-line-no">093</span><span id="line-93">    *</span>
+<span class="source-line-no">094</span><span id="line-94">    * @return Always &lt;jk&gt;false&lt;/jk&gt;.</span>
+<span class="source-line-no">095</span><span id="line-95">    */</span>
+<span class="source-line-no">096</span><span id="line-96">   @Override /* Overridden from Var */</span>
+<span class="source-line-no">097</span><span id="line-97">   protected boolean allowRecurse() {</span>
+<span class="source-line-no">098</span><span id="line-98">      return false;</span>
+<span class="source-line-no">099</span><span id="line-99">   }</span>
+<span class="source-line-no">100</span><span id="line-100"></span>
+<span class="source-line-no">101</span><span id="line-101">   @Override /* Overridden from Var */</span>
+<span class="source-line-no">102</span><span id="line-102">   public String resolve(VarResolverSession session, String key) {</span>
+<span class="source-line-no">103</span><span id="line-103">      var v = source.get(key);</span>
+<span class="source-line-no">104</span><span id="line-104">      return v.isPresent() ? v.value().orElse(null) : "";</span>
+<span class="source-line-no">105</span><span id="line-105">   }</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">   /**</span>
+<span class="source-line-no">108</span><span id="line-108">    * Manifest entries are immutable for the lifetime of the classpath. This var opts in to</span>
+<span class="source-line-no">109</span><span id="line-109">    * compile-time stable-value folding.</span>
+<span class="source-line-no">110</span><span id="line-110">    *</span>
+<span class="source-line-no">111</span><span id="line-111">    * @return Always {@code true}.</span>
+<span class="source-line-no">112</span><span id="line-112">    */</span>
+<span class="source-line-no">113</span><span id="line-113">   @Override /* Overridden from Var */</span>
+<span class="source-line-no">114</span><span id="line-114">   protected boolean isStable() {</span>
+<span class="source-line-no">115</span><span id="line-115">      return true;</span>
+<span class="source-line-no">116</span><span id="line-116">   }</span>
+<span class="source-line-no">117</span><span id="line-117">}</span>
 
 
 

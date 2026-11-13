@@ -229,7 +229,7 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">var</strong> prmUrl = server.getRootUrl().resolve(<span class="jxr_string">".well-known/oauth-protected-resource"</span>);
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">var</strong> response = http.send(HttpRequest.newBuilder(prmUrl).GET().build(), HttpResponse.BodyHandlers.ofString());
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 		assertEquals(200, response.statusCode());
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">var</strong> prm = McpProtectedResourceMetadataClient.create().build().parse(response.body(), prmUrl);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">var</strong> prm = McpProtectedResourceMetadataClient.create().expectedResource(server.getRootUrl()).build().parse(response.body(), prmUrl);
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertEquals(server.getRootUrl(), prm.resource());
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 		assertEquals(List.of(server.getAuthServer().issuerUri()), prm.authorizationServers());
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<em class="jxr_comment">// H3: addOperationScope(...) also advertises mcp.write as supported, on top of the mcp.read baseline.</em>

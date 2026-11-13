@@ -198,9 +198,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds default query parameters appended to every request URL.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redirectStripHeaders(java.lang.String...)" class="member-name-link">redirectStripHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redirectForwardHeaders(java.lang.String...)" class="member-name-link">redirectForwardHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds header names that are removed when a request is replayed against another origin by a redirect.</div>
+<div class="block">Adds header names that may be replayed against another origin by a redirect.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rootUrl(java.lang.String)" class="member-name-link">rootUrl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
@@ -326,19 +326,20 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="redirectStripHeaders(java.lang.String...)">
-<h3>redirectStripHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-512">redirectStripHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
-<div class="block">Adds header names that are removed when a request is replayed against another origin by a redirect.
+<section class="detail" id="redirectForwardHeaders(java.lang.String...)">
+<h3>redirectForwardHeaders</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-513">redirectForwardHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="block">Adds header names that may be replayed against another origin by a redirect.
 
  <p>
- The names are added to the default credential set (<a href="../../http/RedactedHeaders.html#DEFAULT"><code>RedactedHeaders.DEFAULT</code></a>, e.g. <code>Authorization</code> and
- <code>Cookie</code>); the default set is never reduced.  Use it for application-specific credential headers such as
- <code>X-Api-Key</code>.  Calls accumulate.  Matching is case-insensitive.
+ A request replayed against another origin (or across an <code>https</code> to <code>http</code> downgrade) keeps only the
+ headers on <a href="RedirectSecurity.html#forwardOnCrossOrigin()"><code>RedirectSecurity.forwardOnCrossOrigin()</code></a> (content negotiation and framing headers); every other
+ caller-set header, including custom authentication headers, is removed.  Use this to forward an additional,
+ non-sensitive header.  Calls accumulate.  Matching is case-insensitive.
 
  <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Applied by the Juneau-controlled redirect loop used for requests under the SSRF guardrail.  Redirect
-      guards that a transport installs on its own HTTP client use the default set.
+      guards that a transport installs on its own HTTP client use the built-in list only.
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -351,7 +352,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sendRequestId(boolean)">
 <h3>sendRequestId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-532">sendRequestId</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-533">sendRequestId</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Controls the built-in <code>X-Request-Id</code> auto-send interceptor (enabled by default).
 
  <p>
@@ -373,7 +374,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="headers(org.apache.juneau.http.HttpHeader...)">
 <h3>headers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-543">headers</a></span><wbr><span class="parameters">(<a href="../../http/HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-544">headers</a></span><wbr><span class="parameters">(<a href="../../http/HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;value)</span></div>
 <div class="block">Adds default headers sent with every request.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -386,7 +387,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="header(java.lang.String,java.lang.String)">
 <h3>header</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-555">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-556">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Adds a default header sent with every request.</div>
 <dl class="notes">
@@ -401,7 +402,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="header(java.lang.String,java.util.function.Supplier)">
 <h3>header</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-567">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-568">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Adds a default header with a lazy value, evaluated at each request.</div>
 <dl class="notes">
@@ -416,7 +417,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="queryData(org.apache.juneau.http.HttpPart...)">
 <h3>queryData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-578">queryData</a></span><wbr><span class="parameters">(<a href="../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-579">queryData</a></span><wbr><span class="parameters">(<a href="../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</span></div>
 <div class="block">Adds default query parameters appended to every request URL.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -429,7 +430,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="queryData(java.lang.String,java.lang.String)">
 <h3>queryData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-590">queryData</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-591">queryData</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Adds a default query parameter appended to every request URL.</div>
 <dl class="notes">
@@ -444,7 +445,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="interceptors(org.apache.juneau.rest.client.RestCallInterceptor...)">
 <h3>interceptors</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-601">interceptors</a></span><wbr><span class="parameters">(<a href="RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-602">interceptors</a></span><wbr><span class="parameters">(<a href="RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a>...&nbsp;value)</span></div>
 <div class="block">Adds one or more lifecycle interceptors called before/after each request.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -457,7 +458,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="debugFormatter(org.apache.juneau.rest.client.RestClientDebugFormatter)">
 <h3>debugFormatter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-620">debugFormatter</a></span><wbr><span class="parameters">(<a href="RestClientDebugFormatter.html" title="interface in org.apache.juneau.rest.client">RestClientDebugFormatter</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-621">debugFormatter</a></span><wbr><span class="parameters">(<a href="RestClientDebugFormatter.html" title="interface in org.apache.juneau.rest.client">RestClientDebugFormatter</a>&nbsp;value)</span></div>
 <div class="block">Sets the formatter used for level-driven REST debug logging.
 
  <p>
@@ -478,7 +479,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="debugLoggerName(java.lang.String)">
 <h3>debugLoggerName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-634">debugLoggerName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-635">debugLoggerName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the logger name used for REST debug records.
 
  <p>
@@ -494,7 +495,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bodyConverter(org.apache.juneau.rest.client.BodyConverter...)">
 <h3>bodyConverter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-649">bodyConverter</a></span><wbr><span class="parameters">(<a href="BodyConverter.html" title="interface in org.apache.juneau.rest.client">BodyConverter</a>&lt;?&gt;...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-650">bodyConverter</a></span><wbr><span class="parameters">(<a href="BodyConverter.html" title="interface in org.apache.juneau.rest.client">BodyConverter</a>&lt;?&gt;...&nbsp;value)</span></div>
 <div class="block">Prepends custom body converters to the default converter list.
 
  <p>
@@ -510,7 +511,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bodyConverters(org.apache.juneau.rest.client.BodyConverter...)">
 <h3>bodyConverters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-665">bodyConverters</a></span><wbr><span class="parameters">(<a href="BodyConverter.html" title="interface in org.apache.juneau.rest.client">BodyConverter</a>&lt;?&gt;...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-666">bodyConverters</a></span><wbr><span class="parameters">(<a href="BodyConverter.html" title="interface in org.apache.juneau.rest.client">BodyConverter</a>&lt;?&gt;...&nbsp;value)</span></div>
 <div class="block">Replaces the entire body converter list (including defaults).
 
  <p>
@@ -526,7 +527,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializers(org.apache.juneau.marshall.serializer.SerializerSet)">
 <h3>serializers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-676">serializers</a></span><wbr><span class="parameters">(<a href="../../marshall/serializer/SerializerSet.html" title="class in org.apache.juneau.marshall.serializer">SerializerSet</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-677">serializers</a></span><wbr><span class="parameters">(<a href="../../marshall/serializer/SerializerSet.html" title="class in org.apache.juneau.marshall.serializer">SerializerSet</a>&nbsp;value)</span></div>
 <div class="block">Sets the serializer registry used for outbound bodies.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -539,7 +540,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parsers(org.apache.juneau.marshall.parser.ParserSet)">
 <h3>parsers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-687">parsers</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/ParserSet.html" title="class in org.apache.juneau.marshall.parser">ParserSet</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-688">parsers</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/ParserSet.html" title="class in org.apache.juneau.marshall.parser">ParserSet</a>&nbsp;value)</span></div>
 <div class="block">Sets the parser registry used for inbound bodies.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -552,7 +553,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializer(org.apache.juneau.marshall.serializer.Serializer...)">
 <h3>serializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-698">serializer</a></span><wbr><span class="parameters">(<a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-699">serializer</a></span><wbr><span class="parameters">(<a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>...&nbsp;value)</span></div>
 <div class="block">Appends serializers (built into a <a href="../../marshall/serializer/SerializerSet.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializerSet</code></a> at build time if no set was supplied).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -565,7 +566,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parser(org.apache.juneau.marshall.parser.Parser...)">
 <h3>parser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-709">parser</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-710">parser</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>...&nbsp;value)</span></div>
 <div class="block">Appends parsers (built into a <a href="../../marshall/parser/ParserSet.html" title="class in org.apache.juneau.marshall.parser"><code>ParserSet</code></a> at build time if no set was supplied).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -578,7 +579,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultSerializer(org.apache.juneau.marshall.serializer.Serializer)">
 <h3>defaultSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-727">defaultSerializer</a></span><wbr><span class="parameters">(<a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-728">defaultSerializer</a></span><wbr><span class="parameters">(<a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;value)</span></div>
 <div class="block">Designates the default serializer used for outbound bodies when no registered serializer matches the
  requested media type.
 
@@ -598,7 +599,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultParser(org.apache.juneau.marshall.parser.Parser)">
 <h3>defaultParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-745">defaultParser</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-746">defaultParser</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;value)</span></div>
 <div class="block">Designates the default parser used when the response <code>Content-Type</code> is absent or matches no registered
  parser.
 
@@ -618,7 +619,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.html" title="class in org.apache.juneau.rest.client">RestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-755">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestClient.html" title="class in org.apache.juneau.rest.client">RestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClient.Builder.html#line-756">build</a></span>()</div>
 <div class="block">Builds and returns the <a href="RestClient.html" title="class in org.apache.juneau.rest.client"><code>RestClient</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>

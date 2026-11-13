@@ -108,7 +108,7 @@
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">final</strong> Parser defaultParser;
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> allowPrivateUrls;
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">final</strong> RemoteUrlPolicy.AllowedRanges allowedAddressRanges;
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">final</strong> List&lt;String&gt; redirectStripHeaders;
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">final</strong> List&lt;String&gt; redirectForwardHeaders;
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">private</strong> RestClient(Builder builder) {
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">this</strong>.transport = reqnn(<span class="jxr_string">"transport"</span>,
@@ -126,7 +126,7 @@
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">this</strong>.defaultParser = builder.defaultParser;
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">this</strong>.allowPrivateUrls = builder.allowPrivateUrls || Boolean.getBoolean(RemoteUrlPolicy.ALLOW_PRIVATE_URLS_PROPERTY);
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">this</strong>.allowedAddressRanges = RemoteUrlPolicy.AllowedRanges.of(builder.allowedAddressRanges.toArray(<strong class="jxr_keyword">new</strong> String[0]));
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">this</strong>.redirectStripHeaders = List.copyOf(builder.redirectStripHeaders);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">this</strong>.redirectForwardHeaders = List.copyOf(builder.redirectForwardHeaders);
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 	}
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -422,7 +422,7 @@
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">final</strong> List&lt;Parser&gt; parserList = l();
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">boolean</strong> allowPrivateUrls;
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">final</strong> List&lt;String&gt; allowedAddressRanges = l();
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">final</strong> List&lt;String&gt; redirectStripHeaders = l();
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">final</strong> List&lt;String&gt; redirectForwardHeaders = l();
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">boolean</strong> sendRequestId = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">private</strong> Builder() {}
@@ -502,273 +502,274 @@
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 		}
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">		 * Adds header names that are removed when a request is replayed against another origin by a redirect.</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">		 * Adds header names that may be replayed against another origin by a redirect.</em>
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">		 * The names are added to the default credential set ({@link RedactedHeaders#DEFAULT}, e.g. {@code Authorization} and</em>
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">		 * {@code Cookie}); the default set is never reduced.  Use it for application-specific credential headers such as</em>
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">		 * {@code X-Api-Key}.  Calls accumulate.  Matching is case-insensitive.</em>
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;Applied by the Juneau-controlled redirect loop used for requests under the SSRF guardrail.  Redirect</em>
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">		 * 		guards that a transport installs on its own HTTP client use the default set.</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">		 * @param value The header names. &lt;jk&gt;null&lt;/jk&gt; or empty adds nothing.</em>
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		<strong class="jxr_keyword">public</strong> Builder redirectStripHeaders(String...value) {
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 			<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 				redirectStripHeaders.addAll(Arrays.asList(value));
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		}
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">		 * Controls the built-in {@code X-Request-Id} auto-send interceptor (enabled by default).</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">		 * When enabled, every request that does not already carry an {@code X-Request-Id} header (case-insensitive) is</em>
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">		 * stamped with a freshly minted version-7 UUID before it is sent, and the server's echoed id is captured on the</em>
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">		 * response ({@link RestResponse#getRequestId()}).  Set to {@code false} to disable the interceptor entirely:</em>
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">		 * no id is sent or captured, and a later {@link #interceptors(RestCallInterceptor...)} call does not resurrect</em>
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">		 * it.  Callers can still set an id per request via {@link RestRequest#requestId(String)}.</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">		 * @param value {@code false} to disable the auto-send interceptor. Default {@code true}.</em>
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">		 * @since 10.0.0</em>
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<strong class="jxr_keyword">public</strong> Builder sendRequestId(<strong class="jxr_keyword">boolean</strong> value) {
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 			sendRequestId = value;
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		}
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">		 * Adds default headers sent with every request.</em>
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">		 * @param value The headers to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">public</strong> Builder headers(HttpHeader... value) {
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 			defaultHeaders.addAll(Arrays.asList(value));
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		}
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">		 * Adds a default header sent with every request.</em>
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">		 * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">		 * @param value The header value (eager). May be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">public</strong> Builder header(String name, String value) {
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			defaultHeaders.add(HttpHeaderBean.of(name, value));
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		}
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> <em class="jxr_javadoccomment">		 * Adds a default header with a lazy value, evaluated at each request.</em>
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">		 * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">		 * @param value Supplier for the header value. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">public</strong> Builder header(String name, Supplier&lt;String&gt; value) {
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			defaultHeaders.add(HttpHeaderBean.of(name, value));
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		}
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> <em class="jxr_javadoccomment">		 * Adds default query parameters appended to every request URL.</em>
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">		 * @param value The parts to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		<strong class="jxr_keyword">public</strong> Builder queryData(HttpPart... value) {
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 			defaultQueryData.addAll(Arrays.asList(value));
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		}
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">		 * Adds a default query parameter appended to every request URL.</em>
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">		 * @param name The parameter name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">		 * @param value The parameter value (eager). May be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">public</strong> Builder queryData(String name, String value) {
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			defaultQueryData.add(HttpPartBean.of(name, value));
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		}
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">		 * Adds one or more lifecycle interceptors called before/after each request.</em>
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> <em class="jxr_javadoccomment">		 * @param value The interceptors to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">public</strong> Builder interceptors(RestCallInterceptor... value) {
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 			interceptors.addAll(Arrays.asList(value));
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		}
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> <em class="jxr_javadoccomment">		 * Sets the formatter used for level-driven REST debug logging.</em>
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">		 * The formatter renders cumulative content based on the resolved debug logger level:</em>
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">		 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">		 * 	&lt;li&gt;{@link Level#INFO INFO} - basic line ({@link RestClientDebugFormatter#formatBasic(RestRequest, RestResponse)}).</em>
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">		 * 	&lt;li&gt;{@link Level#FINE FINE} - basic + headers.</em>
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">		 * 	&lt;li&gt;{@link Level#FINEST FINEST} - basic + headers + body.</em>
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> <em class="jxr_javadoccomment">		 * @param value The formatter. Can be &lt;jk&gt;null&lt;/jk&gt; to restore the default formatter.</em>
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<strong class="jxr_keyword">public</strong> Builder debugFormatter(<a name="RestClientDebugFormatter" href="../../../../../org/apache/juneau/rest/client/RestClientDebugFormatter.html#RestClientDebugFormatter">RestClientDebugFormatter</a> value) {
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			debugFormatter = value;
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		}
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> <em class="jxr_javadoccomment">		 * Sets the logger name used for REST debug records.</em>
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> <em class="jxr_javadoccomment">		 * If not set, defaults to {@code RestClient.class.getName()}.</em>
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">		 * @param value The logger name. Can be &lt;jk&gt;null&lt;/jk&gt; to use the default logger name.</em>
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 		<strong class="jxr_keyword">public</strong> Builder debugLoggerName(String value) {
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 			debugLoggerName = value;
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		}
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">		 * A request replayed against another origin (or across an {@code https} to {@code http} downgrade) keeps only the</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">		 * headers on {@link RedirectSecurity#forwardOnCrossOrigin()} (content negotiation and framing headers); every other</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">		 * caller-set header, including custom authentication headers, is removed.  Use this to forward an additional,</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">		 * non-sensitive header.  Calls accumulate.  Matching is case-insensitive.</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;Applied by the Juneau-controlled redirect loop used for requests under the SSRF guardrail.  Redirect</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">		 * 		guards that a transport installs on its own HTTP client use the built-in list only.</em>
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">		 * @param value The header names. &lt;jk&gt;null&lt;/jk&gt; or empty adds nothing.</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">public</strong> Builder redirectForwardHeaders(String...value) {
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 				redirectForwardHeaders.addAll(Arrays.asList(value));
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		}
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">		 * Controls the built-in {@code X-Request-Id} auto-send interceptor (enabled by default).</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">		 * When enabled, every request that does not already carry an {@code X-Request-Id} header (case-insensitive) is</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">		 * stamped with a freshly minted version-7 UUID before it is sent, and the server's echoed id is captured on the</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">		 * response ({@link RestResponse#getRequestId()}).  Set to {@code false} to disable the interceptor entirely:</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">		 * no id is sent or captured, and a later {@link #interceptors(RestCallInterceptor...)} call does not resurrect</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">		 * it.  Callers can still set an id per request via {@link RestRequest#requestId(String)}.</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">		 * @param value {@code false} to disable the auto-send interceptor. Default {@code true}.</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">		 * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		<strong class="jxr_keyword">public</strong> Builder sendRequestId(<strong class="jxr_keyword">boolean</strong> value) {
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 			sendRequestId = value;
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		}
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">		 * Adds default headers sent with every request.</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">		 * @param value The headers to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		<strong class="jxr_keyword">public</strong> Builder headers(HttpHeader... value) {
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 			defaultHeaders.addAll(Arrays.asList(value));
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		}
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">		 * Adds a default header sent with every request.</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">		 * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">		 * @param value The header value (eager). May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		<strong class="jxr_keyword">public</strong> Builder header(String name, String value) {
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			defaultHeaders.add(HttpHeaderBean.of(name, value));
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		}
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> <em class="jxr_javadoccomment">		 * Adds a default header with a lazy value, evaluated at each request.</em>
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">		 * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">		 * @param value Supplier for the header value. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		<strong class="jxr_keyword">public</strong> Builder header(String name, Supplier&lt;String&gt; value) {
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			defaultHeaders.add(HttpHeaderBean.of(name, value));
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		}
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">		 * Adds default query parameters appended to every request URL.</em>
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">		 * @param value The parts to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">public</strong> Builder queryData(HttpPart... value) {
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 			defaultQueryData.addAll(Arrays.asList(value));
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		}
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">		 * Adds a default query parameter appended to every request URL.</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">		 * @param name The parameter name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">		 * @param value The parameter value (eager). May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">public</strong> Builder queryData(String name, String value) {
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 			defaultQueryData.add(HttpPartBean.of(name, value));
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		}
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">		 * Adds one or more lifecycle interceptors called before/after each request.</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> <em class="jxr_javadoccomment">		 * @param value The interceptors to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">public</strong> Builder interceptors(RestCallInterceptor... value) {
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 			interceptors.addAll(Arrays.asList(value));
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		}
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">		 * Sets the formatter used for level-driven REST debug logging.</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">		 * The formatter renders cumulative content based on the resolved debug logger level:</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">		 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">		 * 	&lt;li&gt;{@link Level#INFO INFO} - basic line ({@link RestClientDebugFormatter#formatBasic(RestRequest, RestResponse)}).</em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">		 * 	&lt;li&gt;{@link Level#FINE FINE} - basic + headers.</em>
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> <em class="jxr_javadoccomment">		 * 	&lt;li&gt;{@link Level#FINEST FINEST} - basic + headers + body.</em>
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> <em class="jxr_javadoccomment">		 * @param value The formatter. Can be &lt;jk&gt;null&lt;/jk&gt; to restore the default formatter.</em>
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">public</strong> Builder debugFormatter(<a name="RestClientDebugFormatter" href="../../../../../org/apache/juneau/rest/client/RestClientDebugFormatter.html#RestClientDebugFormatter">RestClientDebugFormatter</a> value) {
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 			debugFormatter = value;
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		}
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> <em class="jxr_javadoccomment">		 * Sets the logger name used for REST debug records.</em>
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">		 * If not set, defaults to {@code RestClient.class.getName()}.</em>
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">		 * @param value The logger name. Can be &lt;jk&gt;null&lt;/jk&gt; to use the default logger name.</em>
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">public</strong> Builder debugLoggerName(String value) {
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 			debugLoggerName = value;
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 		}
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> <em class="jxr_javadoccomment">		 * Prepends custom body converters to the default converter list.</em>
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> <em class="jxr_javadoccomment">		 * Custom converters are checked before the defaults when {@link RestRequest#body(Object)} is called.</em>
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> <em class="jxr_javadoccomment">		 * @param value The converters to prepend. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 		<strong class="jxr_keyword">public</strong> Builder bodyConverter(BodyConverter&lt;?&gt;... value) {
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 			<strong class="jxr_keyword">var</strong> prepended = <strong class="jxr_keyword">new</strong> ArrayList&lt;BodyConverter&lt;?&gt;&gt;(Arrays.asList(value));
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 			prepended.addAll(bodyConverters);
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 			bodyConverters = prepended;
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		}
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> <em class="jxr_javadoccomment">		 * Replaces the entire body converter list (including defaults).</em>
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> <em class="jxr_javadoccomment">		 * Use this when you want full control over body conversion, including disabling the built-in defaults.</em>
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> <em class="jxr_javadoccomment">		 * @param value The complete replacement converter list. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 		<strong class="jxr_keyword">public</strong> Builder bodyConverters(BodyConverter&lt;?&gt;... value) {
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			bodyConverters = list(value);
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		}
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> <em class="jxr_javadoccomment">		 * Sets the serializer registry used for outbound bodies.</em>
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">		 * @param value The serializer set. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		<strong class="jxr_keyword">public</strong> Builder serializers(SerializerSet value) {
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 			serializers = value;
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		}
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">		 * Sets the parser registry used for inbound bodies.</em>
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> <em class="jxr_javadoccomment">		 * @param value The parser set. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<strong class="jxr_keyword">public</strong> Builder parsers(ParserSet value) {
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 			parsers = value;
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		}
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> <em class="jxr_javadoccomment">		 * Appends serializers (built into a {@link SerializerSet} at build time if no set was supplied).</em>
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> <em class="jxr_javadoccomment">		 * @param value The serializers to append. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 		<strong class="jxr_keyword">public</strong> Builder serializer(Serializer... value) {
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> 			serializerList.addAll(Arrays.asList(value));
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 		}
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">		 * Appends parsers (built into a {@link ParserSet} at build time if no set was supplied).</em>
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">		 * @param value The parsers to append. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		<strong class="jxr_keyword">public</strong> Builder parser(Parser... value) {
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 			parserList.addAll(Arrays.asList(value));
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> 		}
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> <em class="jxr_javadoccomment">		 * Designates the default serializer used for outbound bodies when no registered serializer matches the</em>
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> <em class="jxr_javadoccomment">		 * requested media type.</em>
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">		 * This is the explicit, opt-in way to restore a fallback serializer.  Without it, a request that cannot be</em>
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">		 * matched to a registered serializer (and any body requiring serialization on a serializer-less client) fails</em>
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">		 * rather than silently defaulting to JSON.  Set {@code defaultSerializer(JsonSerializer.DEFAULT)} to recover</em>
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> <em class="jxr_javadoccomment">		 * the pre-10.0 implicit-JSON behavior.</em>
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> <em class="jxr_javadoccomment">		 * @param value The default serializer. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L725" href="#L725">725</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		<strong class="jxr_keyword">public</strong> Builder defaultSerializer(Serializer value) {
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 			defaultSerializer = value;
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> 		}
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> 
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> <em class="jxr_javadoccomment">		 * Designates the default parser used when the response {@code Content-Type} is absent or matches no registered</em>
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> <em class="jxr_javadoccomment">		 * parser.</em>
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">		 * This is the explicit, opt-in way to restore a fallback parser.  Without it, a response whose</em>
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> <em class="jxr_javadoccomment">		 * {@code Content-Type} matches no registered parser fails with &lt;c&gt;415 Unsupported Media Type&lt;/c&gt; rather than</em>
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">		 * silently parsing as JSON.  Set {@code defaultParser(JsonParser.DEFAULT)} to recover the pre-10.0</em>
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> <em class="jxr_javadoccomment">		 * implicit-JSON behavior.</em>
-<a class="jxr_linenumber" name="L741" href="#L741">741</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> <em class="jxr_javadoccomment">		 * @param value The default parser. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> 		<strong class="jxr_keyword">public</strong> Builder defaultParser(Parser value) {
-<a class="jxr_linenumber" name="L746" href="#L746">746</a> 			defaultParser = value;
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> 		}
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> 
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> <em class="jxr_javadoccomment">		 * Builds and returns the {@link RestClient}.</em>
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">		 * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> 		<strong class="jxr_keyword">public</strong> RestClient build() {
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 			<strong class="jxr_keyword">if</strong> (serializers == <strong class="jxr_keyword">null</strong> &amp;&amp; ! serializerList.isEmpty())
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> 				serializers = SerializerSet.create().add(serializerList.toArray(<strong class="jxr_keyword">new</strong> Serializer[0])).build();
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 			<strong class="jxr_keyword">if</strong> (parsers == <strong class="jxr_keyword">null</strong> &amp;&amp; ! parserList.isEmpty())
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 				parsers = ParserSet.create().add(parserList.toArray(<strong class="jxr_keyword">new</strong> Parser[0])).build();
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RestClient(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 		}
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	}
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> }
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> <em class="jxr_javadoccomment">		 * Prepends custom body converters to the default converter list.</em>
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> <em class="jxr_javadoccomment">		 * Custom converters are checked before the defaults when {@link RestRequest#body(Object)} is called.</em>
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">		 * @param value The converters to prepend. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		<strong class="jxr_keyword">public</strong> Builder bodyConverter(BodyConverter&lt;?&gt;... value) {
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 			<strong class="jxr_keyword">var</strong> prepended = <strong class="jxr_keyword">new</strong> ArrayList&lt;BodyConverter&lt;?&gt;&gt;(Arrays.asList(value));
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 			prepended.addAll(bodyConverters);
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			bodyConverters = prepended;
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 		}
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> <em class="jxr_javadoccomment">		 * Replaces the entire body converter list (including defaults).</em>
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> <em class="jxr_javadoccomment">		 * Use this when you want full control over body conversion, including disabling the built-in defaults.</em>
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> <em class="jxr_javadoccomment">		 * @param value The complete replacement converter list. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 		<strong class="jxr_keyword">public</strong> Builder bodyConverters(BodyConverter&lt;?&gt;... value) {
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 			bodyConverters = list(value);
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		}
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">		 * Sets the serializer registry used for outbound bodies.</em>
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">		 * @param value The serializer set. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		<strong class="jxr_keyword">public</strong> Builder serializers(SerializerSet value) {
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 			serializers = value;
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		}
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> <em class="jxr_javadoccomment">		 * Sets the parser registry used for inbound bodies.</em>
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> <em class="jxr_javadoccomment">		 * @param value The parser set. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 		<strong class="jxr_keyword">public</strong> Builder parsers(ParserSet value) {
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 			parsers = value;
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		}
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> <em class="jxr_javadoccomment">		 * Appends serializers (built into a {@link SerializerSet} at build time if no set was supplied).</em>
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> <em class="jxr_javadoccomment">		 * @param value The serializers to append. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 		<strong class="jxr_keyword">public</strong> Builder serializer(Serializer... value) {
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 			serializerList.addAll(Arrays.asList(value));
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 		}
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">		 * Appends parsers (built into a {@link ParserSet} at build time if no set was supplied).</em>
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">		 * @param value The parsers to append. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 		<strong class="jxr_keyword">public</strong> Builder parser(Parser... value) {
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 			parserList.addAll(Arrays.asList(value));
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		}
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> <em class="jxr_javadoccomment">		 * Designates the default serializer used for outbound bodies when no registered serializer matches the</em>
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> <em class="jxr_javadoccomment">		 * requested media type.</em>
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">		 * This is the explicit, opt-in way to restore a fallback serializer.  Without it, a request that cannot be</em>
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">		 * matched to a registered serializer (and any body requiring serialization on a serializer-less client) fails</em>
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> <em class="jxr_javadoccomment">		 * rather than silently defaulting to JSON.  Set {@code defaultSerializer(JsonSerializer.DEFAULT)} to recover</em>
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> <em class="jxr_javadoccomment">		 * the pre-10.0 implicit-JSON behavior.</em>
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> <em class="jxr_javadoccomment">		 * @param value The default serializer. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 		<strong class="jxr_keyword">public</strong> Builder defaultSerializer(Serializer value) {
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 			defaultSerializer = value;
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 		}
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> <em class="jxr_javadoccomment">		 * Designates the default parser used when the response {@code Content-Type} is absent or matches no registered</em>
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> <em class="jxr_javadoccomment">		 * parser.</em>
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> <em class="jxr_javadoccomment">		 * This is the explicit, opt-in way to restore a fallback parser.  Without it, a response whose</em>
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">		 * {@code Content-Type} matches no registered parser fails with &lt;c&gt;415 Unsupported Media Type&lt;/c&gt; rather than</em>
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> <em class="jxr_javadoccomment">		 * silently parsing as JSON.  Set {@code defaultParser(JsonParser.DEFAULT)} to recover the pre-10.0</em>
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> <em class="jxr_javadoccomment">		 * implicit-JSON behavior.</em>
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> <em class="jxr_javadoccomment">		 * @param value The default parser. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 		<strong class="jxr_keyword">public</strong> Builder defaultParser(Parser value) {
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 			defaultParser = value;
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		}
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> <em class="jxr_javadoccomment">		 * Builds and returns the {@link RestClient}.</em>
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">		 * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		<strong class="jxr_keyword">public</strong> RestClient build() {
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 			<strong class="jxr_keyword">if</strong> (serializers == <strong class="jxr_keyword">null</strong> &amp;&amp; ! serializerList.isEmpty())
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 				serializers = SerializerSet.create().add(serializerList.toArray(<strong class="jxr_keyword">new</strong> Serializer[0])).build();
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 			<strong class="jxr_keyword">if</strong> (parsers == <strong class="jxr_keyword">null</strong> &amp;&amp; ! parserList.isEmpty())
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 				parsers = ParserSet.create().add(parserList.toArray(<strong class="jxr_keyword">new</strong> Parser[0])).build();
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RestClient(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 		}
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 	}
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -110,28 +110,38 @@
 <span class="source-line-no">097</span><span id="line-97">      this.stable = false;</span>
 <span class="source-line-no">098</span><span id="line-98">   }</span>
 <span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">   @Override /* Overridden from Var */</span>
-<span class="source-line-no">101</span><span id="line-101">   public String resolve(VarResolverSession session, String key) {</span>
-<span class="source-line-no">102</span><span id="line-102">      var result = source.get(key);</span>
-<span class="source-line-no">103</span><span id="line-103">      return result.isPresent() ? result.value().orElse(null) : null;</span>
-<span class="source-line-no">104</span><span id="line-104">   }</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">   /**</span>
-<span class="source-line-no">107</span><span id="line-107">    * Process command-line args are immutable for the lifetime of the JVM, so the no-arg</span>
-<span class="source-line-no">108</span><span id="line-108">    * constructor opts in to compile-time stable-value folding.</span>
-<span class="source-line-no">109</span><span id="line-109">    *</span>
-<span class="source-line-no">110</span><span id="line-110">    * &lt;p&gt;</span>
-<span class="source-line-no">111</span><span id="line-111">    * The {@link #create(Supplier)} variant returns {@code false} since the supplier may</span>
-<span class="source-line-no">112</span><span id="line-112">    * return updated args between resolves.</span>
-<span class="source-line-no">113</span><span id="line-113">    *</span>
-<span class="source-line-no">114</span><span id="line-114">    * @return {@code true} for the default no-arg constructor; {@code false} for the</span>
-<span class="source-line-no">115</span><span id="line-115">    *  {@link #create(Supplier)} variant.</span>
-<span class="source-line-no">116</span><span id="line-116">    */</span>
-<span class="source-line-no">117</span><span id="line-117">   @Override /* Overridden from Var */</span>
-<span class="source-line-no">118</span><span id="line-118">   protected boolean isStable() {</span>
-<span class="source-line-no">119</span><span id="line-119">      return stable;</span>
-<span class="source-line-no">120</span><span id="line-120">   }</span>
-<span class="source-line-no">121</span><span id="line-121">}</span>
+<span class="source-line-no">100</span><span id="line-100">   /**</span>
+<span class="source-line-no">101</span><span id="line-101">    * Values from this source are never re-resolved: a value containing &lt;c&gt;${...}&lt;/c&gt; is returned literally.</span>
+<span class="source-line-no">102</span><span id="line-102">    *</span>
+<span class="source-line-no">103</span><span id="line-103">    * @return Always &lt;jk&gt;false&lt;/jk&gt;.</span>
+<span class="source-line-no">104</span><span id="line-104">    */</span>
+<span class="source-line-no">105</span><span id="line-105">   @Override /* Overridden from Var */</span>
+<span class="source-line-no">106</span><span id="line-106">   protected boolean allowRecurse() {</span>
+<span class="source-line-no">107</span><span id="line-107">      return false;</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   @Override /* Overridden from Var */</span>
+<span class="source-line-no">111</span><span id="line-111">   public String resolve(VarResolverSession session, String key) {</span>
+<span class="source-line-no">112</span><span id="line-112">      var result = source.get(key);</span>
+<span class="source-line-no">113</span><span id="line-113">      return result.isPresent() ? result.value().orElse(null) : null;</span>
+<span class="source-line-no">114</span><span id="line-114">   }</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   /**</span>
+<span class="source-line-no">117</span><span id="line-117">    * Process command-line args are immutable for the lifetime of the JVM, so the no-arg</span>
+<span class="source-line-no">118</span><span id="line-118">    * constructor opts in to compile-time stable-value folding.</span>
+<span class="source-line-no">119</span><span id="line-119">    *</span>
+<span class="source-line-no">120</span><span id="line-120">    * &lt;p&gt;</span>
+<span class="source-line-no">121</span><span id="line-121">    * The {@link #create(Supplier)} variant returns {@code false} since the supplier may</span>
+<span class="source-line-no">122</span><span id="line-122">    * return updated args between resolves.</span>
+<span class="source-line-no">123</span><span id="line-123">    *</span>
+<span class="source-line-no">124</span><span id="line-124">    * @return {@code true} for the default no-arg constructor; {@code false} for the</span>
+<span class="source-line-no">125</span><span id="line-125">    *  {@link #create(Supplier)} variant.</span>
+<span class="source-line-no">126</span><span id="line-126">    */</span>
+<span class="source-line-no">127</span><span id="line-127">   @Override /* Overridden from Var */</span>
+<span class="source-line-no">128</span><span id="line-128">   protected boolean isStable() {</span>
+<span class="source-line-no">129</span><span id="line-129">      return stable;</span>
+<span class="source-line-no">130</span><span id="line-130">   }</span>
+<span class="source-line-no">131</span><span id="line-131">}</span>
 
 
 

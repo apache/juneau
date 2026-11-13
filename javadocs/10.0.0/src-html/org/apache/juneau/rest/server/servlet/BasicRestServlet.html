@@ -49,11 +49,11 @@
 <span class="source-line-no">036</span><span id="line-36"> *</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * The residual cross-cutting endpoints are supplied by single-responsibility op-mixins ({@link ErrorMixin},</span>
-<span class="source-line-no">039</span><span id="line-39"> * {@link HtdocMixin}, {@link StatsMixin}, and {@link FaviconMixin}), and the api-docs surface by the</span>
+<span class="source-line-no">039</span><span id="line-39"> * {@link HtdocMixin}, and {@link FaviconMixin}), and the api-docs surface by the</span>
 <span class="source-line-no">040</span><span id="line-40"> * api-docs mixin pack ({@link SwaggerUiMixin} and {@link RedocMixin}, which transitively pull in</span>
 <span class="source-line-no">041</span><span id="line-41"> * {@link SwaggerMixin} and {@link OpenApiMixin}). Resulting endpoints:</span>
 <span class="source-line-no">042</span><span id="line-42"> * {@code /api}, {@code /swagger}, {@code /openapi}, {@code /openapi.json}, {@code /openapi.yaml},</span>
-<span class="source-line-no">043</span><span id="line-43"> * {@code /redoc}, {@code /htdocs/*}, {@code /favicon.ico}, {@code /stats}, {@code /error}.</span>
+<span class="source-line-no">043</span><span id="line-43"> * {@code /redoc}, {@code /htdocs/*}, {@code /favicon.ico}, {@code /error}.</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses"&gt;@Rest-Annotated Class&lt;/a&gt;</span>
@@ -62,29 +62,28 @@
 <span class="source-line-no">049</span><span id="line-49"> * @serial exclude</span>
 <span class="source-line-no">050</span><span id="line-50"> */</span>
 <span class="source-line-no">051</span><span id="line-51">// @formatter:off</span>
-<span class="source-line-no">052</span><span id="line-52">@Rest(mixins={SwaggerUiMixin.class, RedocMixin.class, ErrorMixin.class, HtdocMixin.class, StatsMixin.class, FaviconMixin.class})</span>
+<span class="source-line-no">052</span><span id="line-52">@Rest(mixins={SwaggerUiMixin.class, RedocMixin.class, ErrorMixin.class, HtdocMixin.class, FaviconMixin.class})</span>
 <span class="source-line-no">053</span><span id="line-53">@HtmlDocConfig(</span>
 <span class="source-line-no">054</span><span id="line-54">   // Basic page navigation links.</span>
 <span class="source-line-no">055</span><span id="line-55">   navlinks={</span>
 <span class="source-line-no">056</span><span id="line-56">      "up: request:/..",</span>
-<span class="source-line-no">057</span><span id="line-57">      "api: servlet:/api",</span>
-<span class="source-line-no">058</span><span id="line-58">      "stats: servlet:/stats"</span>
-<span class="source-line-no">059</span><span id="line-59">   }</span>
-<span class="source-line-no">060</span><span id="line-60">)</span>
-<span class="source-line-no">061</span><span id="line-61">@JsonSchemaConfig(</span>
-<span class="source-line-no">062</span><span id="line-62">   // Add descriptions to the following types when not specified:</span>
-<span class="source-line-no">063</span><span id="line-63">   addDescriptionsTo="bean,collection,array,map,enum",</span>
-<span class="source-line-no">064</span><span id="line-64">   // Add example to the following types:</span>
-<span class="source-line-no">065</span><span id="line-65">   addExamplesTo="bean,collection,array,map",</span>
-<span class="source-line-no">066</span><span id="line-66">   // Don't generate schema information on the Swagger / OpenApi beans themselves or HTML beans.</span>
-<span class="source-line-no">067</span><span id="line-67">   ignoreTypes="Swagger,OpenApi,org.apache.juneau.bean.html5.*",</span>
-<span class="source-line-no">068</span><span id="line-68">   // Use $ref references for bean definitions to reduce duplication in generated specs.</span>
-<span class="source-line-no">069</span><span id="line-69">   useBeanDefs="true"</span>
-<span class="source-line-no">070</span><span id="line-70">)</span>
-<span class="source-line-no">071</span><span id="line-71">// @formatter:on</span>
-<span class="source-line-no">072</span><span id="line-72">public abstract class BasicRestServlet extends RestServlet implements BasicUniversalConfig {</span>
-<span class="source-line-no">073</span><span id="line-73">   private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">074</span><span id="line-74">}</span>
+<span class="source-line-no">057</span><span id="line-57">      "api: servlet:/api"</span>
+<span class="source-line-no">058</span><span id="line-58">   }</span>
+<span class="source-line-no">059</span><span id="line-59">)</span>
+<span class="source-line-no">060</span><span id="line-60">@JsonSchemaConfig(</span>
+<span class="source-line-no">061</span><span id="line-61">   // Add descriptions to the following types when not specified:</span>
+<span class="source-line-no">062</span><span id="line-62">   addDescriptionsTo="bean,collection,array,map,enum",</span>
+<span class="source-line-no">063</span><span id="line-63">   // Add example to the following types:</span>
+<span class="source-line-no">064</span><span id="line-64">   addExamplesTo="bean,collection,array,map",</span>
+<span class="source-line-no">065</span><span id="line-65">   // Don't generate schema information on the Swagger / OpenApi beans themselves or HTML beans.</span>
+<span class="source-line-no">066</span><span id="line-66">   ignoreTypes="Swagger,OpenApi,org.apache.juneau.bean.html5.*",</span>
+<span class="source-line-no">067</span><span id="line-67">   // Use $ref references for bean definitions to reduce duplication in generated specs.</span>
+<span class="source-line-no">068</span><span id="line-68">   useBeanDefs="true"</span>
+<span class="source-line-no">069</span><span id="line-69">)</span>
+<span class="source-line-no">070</span><span id="line-70">// @formatter:on</span>
+<span class="source-line-no">071</span><span id="line-71">public abstract class BasicRestServlet extends RestServlet implements BasicUniversalConfig {</span>
+<span class="source-line-no">072</span><span id="line-72">   private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">073</span><span id="line-73">}</span>
 
 
 

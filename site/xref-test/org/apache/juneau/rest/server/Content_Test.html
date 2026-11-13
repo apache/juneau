@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<em class="jxr_comment">// @Body on parameter</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	@Rest(serializers=Json5Serializer.<strong class="jxr_keyword">class</strong>, parsers=Json5Parser.<strong class="jxr_keyword">class</strong>, defaultAccept=<span class="jxr_string">"text/json"</span>)
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	@Rest(serializers=Json5Serializer.<strong class="jxr_keyword">class</strong>, parsers=Json5Parser.<strong class="jxr_keyword">class</strong>, defaultAccept=<span class="jxr_string">"text/json"</span>, allowContentParam=<span class="jxr_string">"true"</span>)
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A {
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		@RestPut(path=<span class="jxr_string">"/String"</span>)
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">public</strong> String a(@Content String b) {
@@ -658,7 +658,7 @@
 <a class="jxr_linenumber" name="L650" href="#L650">650</a> 	<em class="jxr_comment">// Complex POJOs</em>
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	@Rest(serializers=Json5Serializer.<strong class="jxr_keyword">class</strong>, parsers=Json5Parser.<strong class="jxr_keyword">class</strong>, defaultAccept=<span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	@Rest(serializers=Json5Serializer.<strong class="jxr_keyword">class</strong>, parsers=Json5Parser.<strong class="jxr_keyword">class</strong>, defaultAccept=<span class="jxr_string">"application/json"</span>, allowContentParam=<span class="jxr_string">"true"</span>)
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E {
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 		@RestPut(path=<span class="jxr_string">"/B"</span>)
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<strong class="jxr_keyword">public</strong> XBeans.XB a(@Content XBeans.XB b) {
@@ -694,7 +694,7 @@
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> 			.assertContent(expected);
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> 	}
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 	@Rest(serializers=Json5Serializer.<strong class="jxr_keyword">class</strong>, parsers=Json5Parser.<strong class="jxr_keyword">class</strong>, defaultAccept=<span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 	@Rest(serializers=Json5Serializer.<strong class="jxr_keyword">class</strong>, parsers=Json5Parser.<strong class="jxr_keyword">class</strong>, defaultAccept=<span class="jxr_string">"application/json"</span>, allowContentParam=<span class="jxr_string">"true"</span>)
 <a class="jxr_linenumber" name="L690" href="#L690">690</a> 	@MarshalledApply(on=<span class="jxr_string">"A,B,C"</span>,value=@Marshalled)
 <a class="jxr_linenumber" name="L691" href="#L691">691</a> 	@UrlEncodingApply(on=<span class="jxr_string">"C"</span>,value=@UrlEncoding(expandedParams=<strong class="jxr_keyword">true</strong>))
 <a class="jxr_linenumber" name="L692" href="#L692">692</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E2 {

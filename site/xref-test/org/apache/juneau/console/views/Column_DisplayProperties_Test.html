@@ -189,7 +189,13 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertEquals(<span class="jxr_string">"x"</span>, Column.create(<span class="jxr_string">"price"</span>).description(<span class="jxr_string">"x"</span>).description());
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertNull(Column.create(<span class="jxr_string">"price"</span>).description());
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> }
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	@Test <strong class="jxr_keyword">void</strong> a14_html_emittedOnlyWhenEnabled() {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertFalse(Column.create(<span class="jxr_string">"note"</span>).toCatalogMap().containsKey(<span class="jxr_string">"html"</span>));
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertFalse(Column.create(<span class="jxr_string">"note"</span>).html(false).toCatalogMap().containsKey(<span class="jxr_string">"html"</span>));
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, Column.create(<span class="jxr_string">"note"</span>).html(<strong class="jxr_keyword">true</strong>).toCatalogMap().get(<span class="jxr_string">"html"</span>));
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

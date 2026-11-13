@@ -74,28 +74,38 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">McpProtectedResourceMetadataClient.Builder.</span><code><a href="../McpProtectedResourceMetadataClient.Builder.html#allowInsecureHttp(boolean)" class="member-name-link">allowInsecureHttp</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Allows plain <code>http</code> PRM / authorization-server URLs (loopback hosts are always allowed regardless).</div>
+<div class="block">Allows plain <code>http</code> PRM / authorization-server URLs for non-loopback hosts.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpProtectedResourceMetadataClient.</span><code><a href="../McpProtectedResourceMetadataClient.html#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-first odd-row-color"><code><a href="../McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpProtectedResourceMetadataClient.Builder.</span><code><a href="../McpProtectedResourceMetadataClient.Builder.html#allowPrivateUrls(boolean)" class="member-name-link">allowPrivateUrls</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Allows PRM / authorization-server URLs that point at loopback, private, link-local or metadata hosts.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpProtectedResourceMetadataClient.</span><code><a href="../McpProtectedResourceMetadataClient.html#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Static creator.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpProtectedResourceMetadataClient.Builder.</span><code><a href="../McpProtectedResourceMetadataClient.Builder.html#expectedResource(java.net.URI)" class="member-name-link">expectedResource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpProtectedResourceMetadataClient.Builder.</span><code><a href="../McpProtectedResourceMetadataClient.Builder.html#expectedResource(java.net.URI)" class="member-name-link">expectedResource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the expected <code>resource</code> identifier the PRM document's <code>resource</code> field is validated against
  (RFC 9728 &sect;3.3).</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpProtectedResourceMetadataClient.Builder.</span><code><a href="../McpProtectedResourceMetadataClient.Builder.html#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpProtectedResourceMetadataClient.Builder.</span><code><a href="../McpProtectedResourceMetadataClient.Builder.html#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> used for the PRM fetch and AS discovery.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpProtectedResourceMetadataClient.Builder.</span><code><a href="../McpProtectedResourceMetadataClient.Builder.html#httpTimeout(java.time.Duration)" class="member-name-link">httpTimeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpProtectedResourceMetadataClient.Builder.</span><code><a href="../McpProtectedResourceMetadataClient.Builder.html#httpTimeout(java.time.Duration)" class="member-name-link">httpTimeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the connect/read timeout applied to the PRM fetch and AS discovery.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpProtectedResourceMetadataClient.Builder.</span><code><a href="../McpProtectedResourceMetadataClient.Builder.html#skipResourceValidation(boolean)" class="member-name-link">skipResourceValidation</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Skips the check of the PRM <code>resource</code> field against an expected resource identifier.</div>
 </div>
 </div>
 <div class="caption"><span>Constructors in <a href="../package-summary.html">org.apache.juneau.rest.client.mcp.auth</a> with parameters of type <a href="../McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></span></div>

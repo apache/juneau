@@ -122,8 +122,8 @@
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@Test <strong class="jxr_keyword">void</strong> c04_leadingAndRepeatedSeparatorsTolerated() {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer ,, ,error=x"</span>).orElseThrow();
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertEquals(<span class="jxr_string">"x"</span>, c.error().orElseThrow());
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer ,, ,error=invalid_token"</span>).orElseThrow();
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertEquals(<span class="jxr_string">"invalid_token"</span>, c.error().orElseThrow());
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@Test <strong class="jxr_keyword">void</strong> c05_emptyBareValueAtEndOfInput() {
@@ -132,37 +132,56 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@Test <strong class="jxr_keyword">void</strong> c06_firstDuplicateParamWins() {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer error=first, error=second"</span>).orElseThrow();
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertEquals(<span class="jxr_string">"first"</span>, c.error().orElseThrow());
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer error=invalid_token, error=invalid_request"</span>).orElseThrow();
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertEquals(<span class="jxr_string">"invalid_token"</span>, c.error().orElseThrow());
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test <strong class="jxr_keyword">void</strong> c07_quotedValueHonorsEscapes() {
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer error_description=\&quot;say &#92;&#92;\&quot;hi&#92;&#92;\&quot;, ok\&quot;, error=x"</span>).orElseThrow();
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer error_description=\&quot;say &#92;&#92;\&quot;hi&#92;&#92;\&quot;, ok\&quot;, error=invalid_token"</span>).orElseThrow();
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertEquals(<span class="jxr_string">"say \&quot;hi\&quot;, ok"</span>, c.parameter(<span class="jxr_string">"error_description"</span>).orElseThrow());
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertEquals(<span class="jxr_string">"x"</span>, c.error().orElseThrow());
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertEquals(<span class="jxr_string">"invalid_token"</span>, c.error().orElseThrow());
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	@Test <strong class="jxr_keyword">void</strong> c08_trailingBackslashInQuotedValueKeptLiterally() {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<em class="jxr_comment">// A backslash as the very last char has nothing to escape, so it is appended as-is (and the quote is unterminated).</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer a=\&quot;x&#92;&#92;"</span>).orElseThrow();
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertEquals(<span class="jxr_string">"x&#92;&#92;"</span>, c.parameter(<span class="jxr_string">"a"</span>).orElseThrow());
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	@Test <strong class="jxr_keyword">void</strong> c07b_unknownErrorCodeIsNotSurfaced() {
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer error=\&quot;&lt;b&gt;made_up&lt;/b&gt;\&quot;"</span>).orElseThrow();
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		assertTrue(c.error().isEmpty());
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertEquals(<span class="jxr_string">"&lt;b&gt;made_up&lt;/b&gt;"</span>, c.parameter(<span class="jxr_string">"error"</span>).orElseThrow());
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	@Test <strong class="jxr_keyword">void</strong> c09_unterminatedQuotedValueTakesRemainder() {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer a=\&quot;abc"</span>).orElseThrow();
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(<span class="jxr_string">"abc"</span>, c.parameter(<span class="jxr_string">"a"</span>).orElseThrow());
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> c12_blankScopeIsEmptySet() {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer scope=\&quot;  \&quot;"</span>).orElseThrow();
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertTrue(c.scopes().isEmpty());
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Test <strong class="jxr_keyword">void</strong> c13_scopesSplitOnAnyWhitespaceRun() {
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer scope=\&quot;  read   write\t admin \&quot;"</span>).orElseThrow();
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertEquals(List.of(<span class="jxr_string">"read"</span>, <span class="jxr_string">"write"</span>, <span class="jxr_string">"admin"</span>), List.copyOf(c.scopes()));
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> }
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	@Test <strong class="jxr_keyword">void</strong> c08_trailingBackslashInQuotedValueKeptLiterally() {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<em class="jxr_comment">// A backslash as the very last char has nothing to escape, so it is appended as-is (and the quote is unterminated).</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer a=\&quot;x&#92;&#92;"</span>).orElseThrow();
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertEquals(<span class="jxr_string">"x&#92;&#92;"</span>, c.parameter(<span class="jxr_string">"a"</span>).orElseThrow());
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	@Test <strong class="jxr_keyword">void</strong> c09_unterminatedQuotedValueTakesRemainder() {
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer a=\&quot;abc"</span>).orElseThrow();
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertEquals(<span class="jxr_string">"abc"</span>, c.parameter(<span class="jxr_string">"a"</span>).orElseThrow());
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	}
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	@Test <strong class="jxr_keyword">void</strong> c12_blankScopeIsEmptySet() {
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer scope=\&quot;  \&quot;"</span>).orElseThrow();
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertTrue(c.scopes().isEmpty());
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	}
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	@Test <strong class="jxr_keyword">void</strong> c13_scopesSplitOnAnyWhitespaceRun() {
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(<span class="jxr_string">"Bearer scope=\&quot;  read   write\t admin \&quot;"</span>).orElseThrow();
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertEquals(List.of(<span class="jxr_string">"read"</span>, <span class="jxr_string">"write"</span>, <span class="jxr_string">"admin"</span>), List.copyOf(c.scopes()));
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	@Test <strong class="jxr_keyword">void</strong> d01_parameterCountIsBounded() {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"Bearer "</span>);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 1000; i++)
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			sb.append(<span class="jxr_string">"p"</span>).append(i).append(<span class="jxr_string">"=v,"</span>);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> c = WwwAuthenticateChallenge.parse(sb.toString()).orElseThrow();
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertEquals(WwwAuthenticateChallenge.MAX_PARAMETERS, c.parameters().size());
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	@Test <strong class="jxr_keyword">void</strong> d02_oversizedHeaderIsNotAChallenge() {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">var</strong> header = <span class="jxr_string">"Bearer scope=\&quot;"</span> + <span class="jxr_string">"a"</span>.repeat(WwwAuthenticateChallenge.MAX_HEADER_LENGTH) + <span class="jxr_string">"\&quot;"</span>;
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		assertTrue(WwwAuthenticateChallenge.parse(header).isEmpty());
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

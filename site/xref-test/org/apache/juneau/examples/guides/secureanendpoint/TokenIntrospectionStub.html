@@ -44,7 +44,7 @@
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		server.createContext(<span class="jxr_string">"/introspect"</span>, exchange -&gt; {
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  			<strong class="jxr_keyword">var</strong> form = <strong class="jxr_keyword">new</strong> String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  			<strong class="jxr_keyword">var</strong> body = form.contains(<span class="jxr_string">"token=opaque-good"</span>)
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  				? <span class="jxr_string">"{\&quot;active\&quot;:true,\&quot;sub\&quot;:\&quot;reporting-job\&quot;,\&quot;scope\&quot;:\&quot;orders:read\&quot;}"</span>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  				? <span class="jxr_string">"{\&quot;active\&quot;:true,\&quot;sub\&quot;:\&quot;reporting-job\&quot;,\&quot;scope\&quot;:\&quot;orders:read\&quot;,\&quot;aud\&quot;:\&quot;https://api.example.com\&quot;}"</span>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  				: <span class="jxr_string">"{\&quot;active\&quot;:false}"</span>;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  			<strong class="jxr_keyword">var</strong> bytes = body.getBytes(StandardCharsets.UTF_8);
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  			exchange.getResponseHeaders().add(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>);

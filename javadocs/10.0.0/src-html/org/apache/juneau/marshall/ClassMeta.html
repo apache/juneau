@@ -1430,585 +1430,587 @@
 <span class="source-line-no">1417</span><span id="line-1417"></span>
 <span class="source-line-no">1418</span><span id="line-1418">      // Class.forName(String) runs static initializers; resolve without initializing.</span>
 <span class="source-line-no">1419</span><span id="line-1419">      if (inner() == Class.class) {</span>
-<span class="source-line-no">1420</span><span id="line-1420">         var cl = Thread.currentThread().getContextClassLoader();</span>
-<span class="source-line-no">1421</span><span id="line-1421">         try {</span>
-<span class="source-line-no">1422</span><span id="line-1422">            return (T)Class.forName(arg, false, cl != null ? cl : ClassMeta.class.getClassLoader());</span>
-<span class="source-line-no">1423</span><span id="line-1423">         } catch (ClassNotFoundException e) {</span>
-<span class="source-line-no">1424</span><span id="line-1424">            throw new ExecutableException(e, "Could not resolve class '%s'", arg);</span>
-<span class="source-line-no">1425</span><span id="line-1425">         }</span>
-<span class="source-line-no">1426</span><span id="line-1426">      }</span>
-<span class="source-line-no">1427</span><span id="line-1427"></span>
-<span class="source-line-no">1428</span><span id="line-1428">      if (fromStringMethod.isPresent())</span>
-<span class="source-line-no">1429</span><span id="line-1429">         return (T)fromStringMethod.get().invoke(null, arg);</span>
-<span class="source-line-no">1430</span><span id="line-1430"></span>
-<span class="source-line-no">1431</span><span id="line-1431">      if (stringConstructor.isPresent()) {</span>
-<span class="source-line-no">1432</span><span id="line-1432">         if (nonStaticMemberClass)</span>
-<span class="source-line-no">1433</span><span id="line-1433">            return stringConstructor.get().&lt;T&gt;newInstance(outer, arg);</span>
-<span class="source-line-no">1434</span><span id="line-1434">         return stringConstructor.get().&lt;T&gt;newInstance(arg);</span>
-<span class="source-line-no">1435</span><span id="line-1435">      }</span>
-<span class="source-line-no">1436</span><span id="line-1436">      throw exex("No string constructor or valueOf(String) method found for class '%s'", cn(inner()));</span>
-<span class="source-line-no">1437</span><span id="line-1437">   }</span>
-<span class="source-line-no">1438</span><span id="line-1438"></span>
-<span class="source-line-no">1439</span><span id="line-1439">   /**</span>
-<span class="source-line-no">1440</span><span id="line-1440">    * Similar to {@link #equals(Object)} except primitive and Object types that are similar are considered the same.</span>
-<span class="source-line-no">1441</span><span id="line-1441">    * (e.g. &lt;jk&gt;boolean&lt;/jk&gt; == &lt;c&gt;Boolean&lt;/c&gt;).</span>
-<span class="source-line-no">1442</span><span id="line-1442">    *</span>
-<span class="source-line-no">1443</span><span id="line-1443">    * @param cm The class meta to compare to. Can be &lt;jk&gt;null&lt;/jk&gt;, in which case this method returns &lt;jk&gt;false&lt;/jk&gt;.</span>
-<span class="source-line-no">1444</span><span id="line-1444">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified class-meta is equivalent to this one.</span>
-<span class="source-line-no">1445</span><span id="line-1445">    */</span>
-<span class="source-line-no">1446</span><span id="line-1446">   public boolean same(ClassMeta&lt;?&gt; cm) {</span>
-<span class="source-line-no">1447</span><span id="line-1447">      if (cm == null)</span>
-<span class="source-line-no">1448</span><span id="line-1448">         return false;</span>
-<span class="source-line-no">1449</span><span id="line-1449">      if (equals(cm))</span>
-<span class="source-line-no">1450</span><span id="line-1450">         return true;</span>
-<span class="source-line-no">1451</span><span id="line-1451">      return (isPrimitive() &amp;&amp; cat.same(cm.cat));</span>
-<span class="source-line-no">1452</span><span id="line-1452">   }</span>
-<span class="source-line-no">1453</span><span id="line-1453"></span>
-<span class="source-line-no">1454</span><span id="line-1454">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">1455</span><span id="line-1455">   public String toString() {</span>
-<span class="source-line-no">1456</span><span id="line-1456">      return toString(false);</span>
-<span class="source-line-no">1457</span><span id="line-1457">   }</span>
-<span class="source-line-no">1458</span><span id="line-1458"></span>
-<span class="source-line-no">1459</span><span id="line-1459">   /**</span>
-<span class="source-line-no">1460</span><span id="line-1460">    * Same as {@link #toString()} except use simple class names.</span>
-<span class="source-line-no">1461</span><span id="line-1461">    *</span>
-<span class="source-line-no">1462</span><span id="line-1462">    * @param simple Print simple class names only (no package).</span>
-<span class="source-line-no">1463</span><span id="line-1463">    * @return A new string.</span>
-<span class="source-line-no">1464</span><span id="line-1464">    */</span>
-<span class="source-line-no">1465</span><span id="line-1465">   public String toString(boolean simple) {</span>
-<span class="source-line-no">1466</span><span id="line-1466">      return toString(new StringBuilder(), simple).toString();</span>
-<span class="source-line-no">1467</span><span id="line-1467">   }</span>
-<span class="source-line-no">1468</span><span id="line-1468"></span>
-<span class="source-line-no">1469</span><span id="line-1469">   /**</span>
-<span class="source-line-no">1470</span><span id="line-1470">    * Converts the specified object to a string.</span>
-<span class="source-line-no">1471</span><span id="line-1471">    *</span>
-<span class="source-line-no">1472</span><span id="line-1472">    * @param t The object to convert.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
-<span class="source-line-no">1473</span><span id="line-1473">    * @return The object converted to a string, or &lt;jk&gt;null&lt;/jk&gt; if the object was null.</span>
-<span class="source-line-no">1474</span><span id="line-1474">    */</span>
-<span class="source-line-no">1475</span><span id="line-1475">   public String toString(Object t) {</span>
-<span class="source-line-no">1476</span><span id="line-1476">      if (t == null)</span>
-<span class="source-line-no">1477</span><span id="line-1477">         return null;</span>
-<span class="source-line-no">1478</span><span id="line-1478">      if (isEnum())</span>
-<span class="source-line-no">1479</span><span id="line-1479">         return marshallingContext.getEnumFormat().format((Enum&lt;?&gt;)t);</span>
-<span class="source-line-no">1480</span><span id="line-1480">      return t.toString();</span>
-<span class="source-line-no">1481</span><span id="line-1481">   }</span>
-<span class="source-line-no">1482</span><span id="line-1482"></span>
-<span class="source-line-no">1483</span><span id="line-1483">   private ObjectSwap&lt;T,?&gt; createSwap(Swap s) {</span>
-<span class="source-line-no">1484</span><span id="line-1484">      var c = s.value();</span>
-<span class="source-line-no">1485</span><span id="line-1485">      if (ClassUtils.isVoid(c))</span>
-<span class="source-line-no">1486</span><span id="line-1486">         c = s.impl();</span>
-<span class="source-line-no">1487</span><span id="line-1487">      var ci = info(c);</span>
-<span class="source-line-no">1488</span><span id="line-1488"></span>
-<span class="source-line-no">1489</span><span id="line-1489">      if (ci.isAssignableTo(ObjectSwap.class)) {</span>
-<span class="source-line-no">1490</span><span id="line-1490">         var ps = BeanInstantiator.of(ObjectSwap.class).type(ci).run();</span>
-<span class="source-line-no">1491</span><span id="line-1491">         if (s.mediaTypes().length &gt; 0)</span>
-<span class="source-line-no">1492</span><span id="line-1492">            ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));</span>
-<span class="source-line-no">1493</span><span id="line-1493">         if (! s.template().isEmpty())</span>
-<span class="source-line-no">1494</span><span id="line-1494">            ps.withTemplate(s.template());</span>
-<span class="source-line-no">1495</span><span id="line-1495">         return ps;</span>
-<span class="source-line-no">1496</span><span id="line-1496">      }</span>
-<span class="source-line-no">1497</span><span id="line-1497"></span>
-<span class="source-line-no">1498</span><span id="line-1498">      if (ci.isAssignableTo(Surrogate.class)) {</span>
-<span class="source-line-no">1499</span><span id="line-1499">         List&lt;SurrogateSwap&lt;?,?&gt;&gt; l = SurrogateSwap.findObjectSwaps(c, marshallingContext);</span>
-<span class="source-line-no">1500</span><span id="line-1500">         return first(l).map(x -&gt; (ObjectSwap&lt;T,?&gt;)x).orElse(null);</span>
-<span class="source-line-no">1501</span><span id="line-1501">      }</span>
-<span class="source-line-no">1502</span><span id="line-1502"></span>
-<span class="source-line-no">1503</span><span id="line-1503">      throw new ClassMetaRuntimeException(c, "Invalid swap class '%s' specified.  Must extend from ObjectSwap or Surrogate.", c);</span>
-<span class="source-line-no">1504</span><span id="line-1504">   }</span>
-<span class="source-line-no">1505</span><span id="line-1505"></span>
-<span class="source-line-no">1506</span><span id="line-1506">   private String findBeanDictionaryName() {</span>
-<span class="source-line-no">1507</span><span id="line-1507">      if (marshallingContext == null)</span>
-<span class="source-line-no">1508</span><span id="line-1508">         return null;</span>
-<span class="source-line-no">1509</span><span id="line-1509"></span>
-<span class="source-line-no">1510</span><span id="line-1510">      var d = beanMeta.get().optBeanMeta().map(x -&gt; x.getDictionaryName()).orElse(null);</span>
-<span class="source-line-no">1511</span><span id="line-1511">      if (nn(d))</span>
-<span class="source-line-no">1512</span><span id="line-1512">         return d;</span>
-<span class="source-line-no">1513</span><span id="line-1513"></span>
-<span class="source-line-no">1514</span><span id="line-1514">      // Note that @Marshalled(typeName) can be defined on non-bean types, so</span>
-<span class="source-line-no">1515</span><span id="line-1515">      // we have to check again.</span>
-<span class="source-line-no">1516</span><span id="line-1516">      return marshallingContext.getAnnotationProvider().find(Marshalled.class, this)</span>
-<span class="source-line-no">1517</span><span id="line-1517">         .stream()</span>
-<span class="source-line-no">1518</span><span id="line-1518">         .map(AnnotationInfo::inner)</span>
-<span class="source-line-no">1519</span><span id="line-1519">         .filter(x -&gt; ! x.typeName().isEmpty())</span>
-<span class="source-line-no">1520</span><span id="line-1520">         .map(Marshalled::typeName)</span>
-<span class="source-line-no">1521</span><span id="line-1521">         .findFirst()</span>
-<span class="source-line-no">1522</span><span id="line-1522">         .orElse(null);</span>
-<span class="source-line-no">1523</span><span id="line-1523">   }</span>
-<span class="source-line-no">1524</span><span id="line-1524"></span>
-<span class="source-line-no">1525</span><span id="line-1525">   private BeanMeta.BeanMetaValue&lt;T&gt; findBeanMeta() {</span>
-<span class="source-line-no">1526</span><span id="line-1526">      if (! cat.isUnknown())</span>
-<span class="source-line-no">1527</span><span id="line-1527">         return new BeanMeta.BeanMetaValue&lt;&gt;((BeanMeta&lt;T&gt;)null, "Known non-bean type");</span>
-<span class="source-line-no">1528</span><span id="line-1528">      return BeanMeta.create(this, implClass.get());</span>
-<span class="source-line-no">1529</span><span id="line-1529">   }</span>
-<span class="source-line-no">1530</span><span id="line-1530"></span>
-<span class="source-line-no">1531</span><span id="line-1531">   private KeyValueTypes findKeyValueTypes() {</span>
-<span class="source-line-no">1532</span><span id="line-1532">      if (cat.is(MAP) &amp;&amp; ! cat.is(BEANMAP)) {</span>
-<span class="source-line-no">1533</span><span id="line-1533">         // If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap&lt;String,Person&gt;)</span>
-<span class="source-line-no">1534</span><span id="line-1534">         var typeParams = marshallingContext.findParameters(inner(), inner());</span>
-<span class="source-line-no">1535</span><span id="line-1535">         if (nn(typeParams) &amp;&amp; typeParams.length == 2) {</span>
-<span class="source-line-no">1536</span><span id="line-1536">            return new KeyValueTypes(typeParams[0], typeParams[1]);</span>
-<span class="source-line-no">1537</span><span id="line-1537">         }</span>
-<span class="source-line-no">1538</span><span id="line-1538">         return new KeyValueTypes(marshallingContext.getClassMeta(Object.class), marshallingContext.getClassMeta(Object.class));</span>
-<span class="source-line-no">1539</span><span id="line-1539">      }</span>
-<span class="source-line-no">1540</span><span id="line-1540">      return new KeyValueTypes(null, null);</span>
-<span class="source-line-no">1541</span><span id="line-1541">   }</span>
-<span class="source-line-no">1542</span><span id="line-1542"></span>
-<span class="source-line-no">1543</span><span id="line-1543">   private ClassMeta&lt;?&gt; findElementType() {</span>
-<span class="source-line-no">1544</span><span id="line-1544">      if (marshallingContext == null)</span>
-<span class="source-line-no">1545</span><span id="line-1545">         return null;</span>
-<span class="source-line-no">1546</span><span id="line-1546">      // Primitive optional types carry no generic parameter — synthesize the matching boxed element type so</span>
-<span class="source-line-no">1547</span><span id="line-1547">      // the first-class optional path (serialize unwrap / parse element-typed wrap) has a target type.</span>
-<span class="source-line-no">1548</span><span id="line-1548">      if (is(OptionalInt.class))</span>
-<span class="source-line-no">1549</span><span id="line-1549">         return marshallingContext.getClassMeta(Integer.class);</span>
-<span class="source-line-no">1550</span><span id="line-1550">      if (is(OptionalLong.class))</span>
-<span class="source-line-no">1551</span><span id="line-1551">         return marshallingContext.getClassMeta(Long.class);</span>
-<span class="source-line-no">1552</span><span id="line-1552">      if (is(OptionalDouble.class))</span>
-<span class="source-line-no">1553</span><span id="line-1553">         return marshallingContext.getClassMeta(Double.class);</span>
-<span class="source-line-no">1554</span><span id="line-1554">      if (cat.is(ARRAY)) {</span>
-<span class="source-line-no">1555</span><span id="line-1555">         return marshallingContext.getClassMeta(inner().getComponentType());</span>
-<span class="source-line-no">1556</span><span id="line-1556">      } else if (cat.is(COLLECTION) || cat.is(ITERABLE) || cat.is(ITERATOR) || cat.is(STREAM) || is(Optional.class)) {</span>
-<span class="source-line-no">1557</span><span id="line-1557">         var typeParams = marshallingContext.findParameters(inner(), inner());</span>
-<span class="source-line-no">1558</span><span id="line-1558">         if (nn(typeParams) &amp;&amp; typeParams.length == 1) {</span>
-<span class="source-line-no">1559</span><span id="line-1559">            return typeParams[0];</span>
-<span class="source-line-no">1560</span><span id="line-1560">         }</span>
-<span class="source-line-no">1561</span><span id="line-1561">         return marshallingContext.getClassMeta(Object.class);</span>
-<span class="source-line-no">1562</span><span id="line-1562">      }</span>
-<span class="source-line-no">1563</span><span id="line-1563">      return null;</span>
-<span class="source-line-no">1564</span><span id="line-1564">   }</span>
-<span class="source-line-no">1565</span><span id="line-1565"></span>
-<span class="source-line-no">1566</span><span id="line-1566">   private BuilderSwap&lt;T,?&gt; findBuilderSwap() {</span>
-<span class="source-line-no">1567</span><span id="line-1567">      var bc = marshallingContext;</span>
-<span class="source-line-no">1568</span><span id="line-1568">      if (bc == null)</span>
-<span class="source-line-no">1569</span><span id="line-1569">         return null;</span>
-<span class="source-line-no">1570</span><span id="line-1570">      return (BuilderSwap&lt;T,?&gt;)BuilderSwap.findSwapFromObjectClass(bc, inner(), bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());</span>
-<span class="source-line-no">1571</span><span id="line-1571">   }</span>
-<span class="source-line-no">1572</span><span id="line-1572"></span>
-<span class="source-line-no">1573</span><span id="line-1573">   private List&lt;ObjectSwap&lt;T,?&gt;&gt; findSwaps() {</span>
-<span class="source-line-no">1574</span><span id="line-1574">      if (marshallingContext == null)</span>
-<span class="source-line-no">1575</span><span id="line-1575">         return l();</span>
-<span class="source-line-no">1576</span><span id="line-1576"></span>
-<span class="source-line-no">1577</span><span id="line-1577">      var list = new ArrayList&lt;ObjectSwap&lt;T,?&gt;&gt;();</span>
-<span class="source-line-no">1578</span><span id="line-1578">      var swapArray = marshallingContext.getSwaps();</span>
-<span class="source-line-no">1579</span><span id="line-1579">      if (! swapArray.isEmpty()) {</span>
-<span class="source-line-no">1580</span><span id="line-1580">         var innerClass = inner();</span>
-<span class="source-line-no">1581</span><span id="line-1581">         swapArray.stream().filter(f -&gt; f.getNormalClass().isAssignableFrom(innerClass)).forEach(f -&gt; list.add((ObjectSwap&lt;T,?&gt;)f));</span>
-<span class="source-line-no">1582</span><span id="line-1582">      }</span>
-<span class="source-line-no">1583</span><span id="line-1583"></span>
-<span class="source-line-no">1584</span><span id="line-1584">      var ap = marshallingContext.getAnnotationProvider();</span>
-<span class="source-line-no">1585</span><span id="line-1585">      ap.find(Swap.class, this).stream().map(AnnotationInfo::inner).forEach(x -&gt; list.add(createSwap(x)));</span>
-<span class="source-line-no">1586</span><span id="line-1586"></span>
-<span class="source-line-no">1587</span><span id="line-1587">      // @Marshalled(as=STRING) installs an AutoStringSwap before any auto-detection.</span>
-<span class="source-line-no">1588</span><span id="line-1588">      if (list.isEmpty()) {</span>
-<span class="source-line-no">1589</span><span id="line-1589">         var marshalledList = ap.find(Marshalled.class, this);</span>
-<span class="source-line-no">1590</span><span id="line-1590">         if (marshalledList.stream().anyMatch(x -&gt; x.inner().as() == MarshalledAs.STRING))</span>
-<span class="source-line-no">1591</span><span id="line-1591">            list.add(new AutoStringSwap&lt;&gt;(this));</span>
-<span class="source-line-no">1592</span><span id="line-1592">      }</span>
-<span class="source-line-no">1593</span><span id="line-1593"></span>
-<span class="source-line-no">1594</span><span id="line-1594">      // @MarshalledIgnore on TYPE — skip entirely: serialize as null, parse as null.</span>
-<span class="source-line-no">1595</span><span id="line-1595">      // Use String.class (not Object.class) as swapClass so sType.isObject() stays false</span>
-<span class="source-line-no">1596</span><span id="line-1596">      // and the serializer correctly emits "null" when swap() returns null.</span>
-<span class="source-line-no">1597</span><span id="line-1597">      if (list.isEmpty() &amp;&amp; ap.has(MarshalledIgnore.class, this))</span>
-<span class="source-line-no">1598</span><span id="line-1598">         list.add(new ObjectSwap&lt;T,String&gt;(inner(), String.class) {</span>
-<span class="source-line-no">1599</span><span id="line-1599">            @Override public String swap(MarshallingSession session, T o) { return null; }</span>
-<span class="source-line-no">1600</span><span id="line-1600">            @Override public T unswap(MarshallingSession session, String s, ClassMeta&lt;?&gt; hint) { return null; }</span>
-<span class="source-line-no">1601</span><span id="line-1601">         });</span>
-<span class="source-line-no">1602</span><span id="line-1602"></span>
-<span class="source-line-no">1603</span><span id="line-1603">      var ds = DefaultSwaps.find(this);</span>
-<span class="source-line-no">1604</span><span id="line-1604">      if (ds == null &amp;&amp; !isStreamable()) {</span>
-<span class="source-line-no">1605</span><span id="line-1605">         ds = AutoObjectSwap.find(marshallingContext, this);</span>
-<span class="source-line-no">1606</span><span id="line-1606">      if (ds == null)</span>
-<span class="source-line-no">1607</span><span id="line-1607">         ds = AutoNumberSwap.find(marshallingContext, this);</span>
+<span class="source-line-no">1420</span><span id="line-1420">         if (!ClassFormat.isClassNameAllowed(arg))</span>
+<span class="source-line-no">1421</span><span id="line-1421">            throw new ExecutableException("Could not resolve class '%s'", arg);</span>
+<span class="source-line-no">1422</span><span id="line-1422">         var cl = Thread.currentThread().getContextClassLoader();</span>
+<span class="source-line-no">1423</span><span id="line-1423">         try {</span>
+<span class="source-line-no">1424</span><span id="line-1424">            return (T)Class.forName(arg, false, cl != null ? cl : ClassMeta.class.getClassLoader());</span>
+<span class="source-line-no">1425</span><span id="line-1425">         } catch (ClassNotFoundException e) {</span>
+<span class="source-line-no">1426</span><span id="line-1426">            throw new ExecutableException(e, "Could not resolve class '%s'", arg);</span>
+<span class="source-line-no">1427</span><span id="line-1427">         }</span>
+<span class="source-line-no">1428</span><span id="line-1428">      }</span>
+<span class="source-line-no">1429</span><span id="line-1429"></span>
+<span class="source-line-no">1430</span><span id="line-1430">      if (fromStringMethod.isPresent())</span>
+<span class="source-line-no">1431</span><span id="line-1431">         return (T)fromStringMethod.get().invoke(null, arg);</span>
+<span class="source-line-no">1432</span><span id="line-1432"></span>
+<span class="source-line-no">1433</span><span id="line-1433">      if (stringConstructor.isPresent()) {</span>
+<span class="source-line-no">1434</span><span id="line-1434">         if (nonStaticMemberClass)</span>
+<span class="source-line-no">1435</span><span id="line-1435">            return stringConstructor.get().&lt;T&gt;newInstance(outer, arg);</span>
+<span class="source-line-no">1436</span><span id="line-1436">         return stringConstructor.get().&lt;T&gt;newInstance(arg);</span>
+<span class="source-line-no">1437</span><span id="line-1437">      }</span>
+<span class="source-line-no">1438</span><span id="line-1438">      throw exex("No string constructor or valueOf(String) method found for class '%s'", cn(inner()));</span>
+<span class="source-line-no">1439</span><span id="line-1439">   }</span>
+<span class="source-line-no">1440</span><span id="line-1440"></span>
+<span class="source-line-no">1441</span><span id="line-1441">   /**</span>
+<span class="source-line-no">1442</span><span id="line-1442">    * Similar to {@link #equals(Object)} except primitive and Object types that are similar are considered the same.</span>
+<span class="source-line-no">1443</span><span id="line-1443">    * (e.g. &lt;jk&gt;boolean&lt;/jk&gt; == &lt;c&gt;Boolean&lt;/c&gt;).</span>
+<span class="source-line-no">1444</span><span id="line-1444">    *</span>
+<span class="source-line-no">1445</span><span id="line-1445">    * @param cm The class meta to compare to. Can be &lt;jk&gt;null&lt;/jk&gt;, in which case this method returns &lt;jk&gt;false&lt;/jk&gt;.</span>
+<span class="source-line-no">1446</span><span id="line-1446">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified class-meta is equivalent to this one.</span>
+<span class="source-line-no">1447</span><span id="line-1447">    */</span>
+<span class="source-line-no">1448</span><span id="line-1448">   public boolean same(ClassMeta&lt;?&gt; cm) {</span>
+<span class="source-line-no">1449</span><span id="line-1449">      if (cm == null)</span>
+<span class="source-line-no">1450</span><span id="line-1450">         return false;</span>
+<span class="source-line-no">1451</span><span id="line-1451">      if (equals(cm))</span>
+<span class="source-line-no">1452</span><span id="line-1452">         return true;</span>
+<span class="source-line-no">1453</span><span id="line-1453">      return (isPrimitive() &amp;&amp; cat.same(cm.cat));</span>
+<span class="source-line-no">1454</span><span id="line-1454">   }</span>
+<span class="source-line-no">1455</span><span id="line-1455"></span>
+<span class="source-line-no">1456</span><span id="line-1456">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">1457</span><span id="line-1457">   public String toString() {</span>
+<span class="source-line-no">1458</span><span id="line-1458">      return toString(false);</span>
+<span class="source-line-no">1459</span><span id="line-1459">   }</span>
+<span class="source-line-no">1460</span><span id="line-1460"></span>
+<span class="source-line-no">1461</span><span id="line-1461">   /**</span>
+<span class="source-line-no">1462</span><span id="line-1462">    * Same as {@link #toString()} except use simple class names.</span>
+<span class="source-line-no">1463</span><span id="line-1463">    *</span>
+<span class="source-line-no">1464</span><span id="line-1464">    * @param simple Print simple class names only (no package).</span>
+<span class="source-line-no">1465</span><span id="line-1465">    * @return A new string.</span>
+<span class="source-line-no">1466</span><span id="line-1466">    */</span>
+<span class="source-line-no">1467</span><span id="line-1467">   public String toString(boolean simple) {</span>
+<span class="source-line-no">1468</span><span id="line-1468">      return toString(new StringBuilder(), simple).toString();</span>
+<span class="source-line-no">1469</span><span id="line-1469">   }</span>
+<span class="source-line-no">1470</span><span id="line-1470"></span>
+<span class="source-line-no">1471</span><span id="line-1471">   /**</span>
+<span class="source-line-no">1472</span><span id="line-1472">    * Converts the specified object to a string.</span>
+<span class="source-line-no">1473</span><span id="line-1473">    *</span>
+<span class="source-line-no">1474</span><span id="line-1474">    * @param t The object to convert.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
+<span class="source-line-no">1475</span><span id="line-1475">    * @return The object converted to a string, or &lt;jk&gt;null&lt;/jk&gt; if the object was null.</span>
+<span class="source-line-no">1476</span><span id="line-1476">    */</span>
+<span class="source-line-no">1477</span><span id="line-1477">   public String toString(Object t) {</span>
+<span class="source-line-no">1478</span><span id="line-1478">      if (t == null)</span>
+<span class="source-line-no">1479</span><span id="line-1479">         return null;</span>
+<span class="source-line-no">1480</span><span id="line-1480">      if (isEnum())</span>
+<span class="source-line-no">1481</span><span id="line-1481">         return marshallingContext.getEnumFormat().format((Enum&lt;?&gt;)t);</span>
+<span class="source-line-no">1482</span><span id="line-1482">      return t.toString();</span>
+<span class="source-line-no">1483</span><span id="line-1483">   }</span>
+<span class="source-line-no">1484</span><span id="line-1484"></span>
+<span class="source-line-no">1485</span><span id="line-1485">   private ObjectSwap&lt;T,?&gt; createSwap(Swap s) {</span>
+<span class="source-line-no">1486</span><span id="line-1486">      var c = s.value();</span>
+<span class="source-line-no">1487</span><span id="line-1487">      if (ClassUtils.isVoid(c))</span>
+<span class="source-line-no">1488</span><span id="line-1488">         c = s.impl();</span>
+<span class="source-line-no">1489</span><span id="line-1489">      var ci = info(c);</span>
+<span class="source-line-no">1490</span><span id="line-1490"></span>
+<span class="source-line-no">1491</span><span id="line-1491">      if (ci.isAssignableTo(ObjectSwap.class)) {</span>
+<span class="source-line-no">1492</span><span id="line-1492">         var ps = BeanInstantiator.of(ObjectSwap.class).type(ci).run();</span>
+<span class="source-line-no">1493</span><span id="line-1493">         if (s.mediaTypes().length &gt; 0)</span>
+<span class="source-line-no">1494</span><span id="line-1494">            ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));</span>
+<span class="source-line-no">1495</span><span id="line-1495">         if (! s.template().isEmpty())</span>
+<span class="source-line-no">1496</span><span id="line-1496">            ps.withTemplate(s.template());</span>
+<span class="source-line-no">1497</span><span id="line-1497">         return ps;</span>
+<span class="source-line-no">1498</span><span id="line-1498">      }</span>
+<span class="source-line-no">1499</span><span id="line-1499"></span>
+<span class="source-line-no">1500</span><span id="line-1500">      if (ci.isAssignableTo(Surrogate.class)) {</span>
+<span class="source-line-no">1501</span><span id="line-1501">         List&lt;SurrogateSwap&lt;?,?&gt;&gt; l = SurrogateSwap.findObjectSwaps(c, marshallingContext);</span>
+<span class="source-line-no">1502</span><span id="line-1502">         return first(l).map(x -&gt; (ObjectSwap&lt;T,?&gt;)x).orElse(null);</span>
+<span class="source-line-no">1503</span><span id="line-1503">      }</span>
+<span class="source-line-no">1504</span><span id="line-1504"></span>
+<span class="source-line-no">1505</span><span id="line-1505">      throw new ClassMetaRuntimeException(c, "Invalid swap class '%s' specified.  Must extend from ObjectSwap or Surrogate.", c);</span>
+<span class="source-line-no">1506</span><span id="line-1506">   }</span>
+<span class="source-line-no">1507</span><span id="line-1507"></span>
+<span class="source-line-no">1508</span><span id="line-1508">   private String findBeanDictionaryName() {</span>
+<span class="source-line-no">1509</span><span id="line-1509">      if (marshallingContext == null)</span>
+<span class="source-line-no">1510</span><span id="line-1510">         return null;</span>
+<span class="source-line-no">1511</span><span id="line-1511"></span>
+<span class="source-line-no">1512</span><span id="line-1512">      var d = beanMeta.get().optBeanMeta().map(x -&gt; x.getDictionaryName()).orElse(null);</span>
+<span class="source-line-no">1513</span><span id="line-1513">      if (nn(d))</span>
+<span class="source-line-no">1514</span><span id="line-1514">         return d;</span>
+<span class="source-line-no">1515</span><span id="line-1515"></span>
+<span class="source-line-no">1516</span><span id="line-1516">      // Note that @Marshalled(typeName) can be defined on non-bean types, so</span>
+<span class="source-line-no">1517</span><span id="line-1517">      // we have to check again.</span>
+<span class="source-line-no">1518</span><span id="line-1518">      return marshallingContext.getAnnotationProvider().find(Marshalled.class, this)</span>
+<span class="source-line-no">1519</span><span id="line-1519">         .stream()</span>
+<span class="source-line-no">1520</span><span id="line-1520">         .map(AnnotationInfo::inner)</span>
+<span class="source-line-no">1521</span><span id="line-1521">         .filter(x -&gt; ! x.typeName().isEmpty())</span>
+<span class="source-line-no">1522</span><span id="line-1522">         .map(Marshalled::typeName)</span>
+<span class="source-line-no">1523</span><span id="line-1523">         .findFirst()</span>
+<span class="source-line-no">1524</span><span id="line-1524">         .orElse(null);</span>
+<span class="source-line-no">1525</span><span id="line-1525">   }</span>
+<span class="source-line-no">1526</span><span id="line-1526"></span>
+<span class="source-line-no">1527</span><span id="line-1527">   private BeanMeta.BeanMetaValue&lt;T&gt; findBeanMeta() {</span>
+<span class="source-line-no">1528</span><span id="line-1528">      if (! cat.isUnknown())</span>
+<span class="source-line-no">1529</span><span id="line-1529">         return new BeanMeta.BeanMetaValue&lt;&gt;((BeanMeta&lt;T&gt;)null, "Known non-bean type");</span>
+<span class="source-line-no">1530</span><span id="line-1530">      return BeanMeta.create(this, implClass.get());</span>
+<span class="source-line-no">1531</span><span id="line-1531">   }</span>
+<span class="source-line-no">1532</span><span id="line-1532"></span>
+<span class="source-line-no">1533</span><span id="line-1533">   private KeyValueTypes findKeyValueTypes() {</span>
+<span class="source-line-no">1534</span><span id="line-1534">      if (cat.is(MAP) &amp;&amp; ! cat.is(BEANMAP)) {</span>
+<span class="source-line-no">1535</span><span id="line-1535">         // If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap&lt;String,Person&gt;)</span>
+<span class="source-line-no">1536</span><span id="line-1536">         var typeParams = marshallingContext.findParameters(inner(), inner());</span>
+<span class="source-line-no">1537</span><span id="line-1537">         if (nn(typeParams) &amp;&amp; typeParams.length == 2) {</span>
+<span class="source-line-no">1538</span><span id="line-1538">            return new KeyValueTypes(typeParams[0], typeParams[1]);</span>
+<span class="source-line-no">1539</span><span id="line-1539">         }</span>
+<span class="source-line-no">1540</span><span id="line-1540">         return new KeyValueTypes(marshallingContext.getClassMeta(Object.class), marshallingContext.getClassMeta(Object.class));</span>
+<span class="source-line-no">1541</span><span id="line-1541">      }</span>
+<span class="source-line-no">1542</span><span id="line-1542">      return new KeyValueTypes(null, null);</span>
+<span class="source-line-no">1543</span><span id="line-1543">   }</span>
+<span class="source-line-no">1544</span><span id="line-1544"></span>
+<span class="source-line-no">1545</span><span id="line-1545">   private ClassMeta&lt;?&gt; findElementType() {</span>
+<span class="source-line-no">1546</span><span id="line-1546">      if (marshallingContext == null)</span>
+<span class="source-line-no">1547</span><span id="line-1547">         return null;</span>
+<span class="source-line-no">1548</span><span id="line-1548">      // Primitive optional types carry no generic parameter — synthesize the matching boxed element type so</span>
+<span class="source-line-no">1549</span><span id="line-1549">      // the first-class optional path (serialize unwrap / parse element-typed wrap) has a target type.</span>
+<span class="source-line-no">1550</span><span id="line-1550">      if (is(OptionalInt.class))</span>
+<span class="source-line-no">1551</span><span id="line-1551">         return marshallingContext.getClassMeta(Integer.class);</span>
+<span class="source-line-no">1552</span><span id="line-1552">      if (is(OptionalLong.class))</span>
+<span class="source-line-no">1553</span><span id="line-1553">         return marshallingContext.getClassMeta(Long.class);</span>
+<span class="source-line-no">1554</span><span id="line-1554">      if (is(OptionalDouble.class))</span>
+<span class="source-line-no">1555</span><span id="line-1555">         return marshallingContext.getClassMeta(Double.class);</span>
+<span class="source-line-no">1556</span><span id="line-1556">      if (cat.is(ARRAY)) {</span>
+<span class="source-line-no">1557</span><span id="line-1557">         return marshallingContext.getClassMeta(inner().getComponentType());</span>
+<span class="source-line-no">1558</span><span id="line-1558">      } else if (cat.is(COLLECTION) || cat.is(ITERABLE) || cat.is(ITERATOR) || cat.is(STREAM) || is(Optional.class)) {</span>
+<span class="source-line-no">1559</span><span id="line-1559">         var typeParams = marshallingContext.findParameters(inner(), inner());</span>
+<span class="source-line-no">1560</span><span id="line-1560">         if (nn(typeParams) &amp;&amp; typeParams.length == 1) {</span>
+<span class="source-line-no">1561</span><span id="line-1561">            return typeParams[0];</span>
+<span class="source-line-no">1562</span><span id="line-1562">         }</span>
+<span class="source-line-no">1563</span><span id="line-1563">         return marshallingContext.getClassMeta(Object.class);</span>
+<span class="source-line-no">1564</span><span id="line-1564">      }</span>
+<span class="source-line-no">1565</span><span id="line-1565">      return null;</span>
+<span class="source-line-no">1566</span><span id="line-1566">   }</span>
+<span class="source-line-no">1567</span><span id="line-1567"></span>
+<span class="source-line-no">1568</span><span id="line-1568">   private BuilderSwap&lt;T,?&gt; findBuilderSwap() {</span>
+<span class="source-line-no">1569</span><span id="line-1569">      var bc = marshallingContext;</span>
+<span class="source-line-no">1570</span><span id="line-1570">      if (bc == null)</span>
+<span class="source-line-no">1571</span><span id="line-1571">         return null;</span>
+<span class="source-line-no">1572</span><span id="line-1572">      return (BuilderSwap&lt;T,?&gt;)BuilderSwap.findSwapFromObjectClass(bc, inner(), bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());</span>
+<span class="source-line-no">1573</span><span id="line-1573">   }</span>
+<span class="source-line-no">1574</span><span id="line-1574"></span>
+<span class="source-line-no">1575</span><span id="line-1575">   private List&lt;ObjectSwap&lt;T,?&gt;&gt; findSwaps() {</span>
+<span class="source-line-no">1576</span><span id="line-1576">      if (marshallingContext == null)</span>
+<span class="source-line-no">1577</span><span id="line-1577">         return l();</span>
+<span class="source-line-no">1578</span><span id="line-1578"></span>
+<span class="source-line-no">1579</span><span id="line-1579">      var list = new ArrayList&lt;ObjectSwap&lt;T,?&gt;&gt;();</span>
+<span class="source-line-no">1580</span><span id="line-1580">      var swapArray = marshallingContext.getSwaps();</span>
+<span class="source-line-no">1581</span><span id="line-1581">      if (! swapArray.isEmpty()) {</span>
+<span class="source-line-no">1582</span><span id="line-1582">         var innerClass = inner();</span>
+<span class="source-line-no">1583</span><span id="line-1583">         swapArray.stream().filter(f -&gt; f.getNormalClass().isAssignableFrom(innerClass)).forEach(f -&gt; list.add((ObjectSwap&lt;T,?&gt;)f));</span>
+<span class="source-line-no">1584</span><span id="line-1584">      }</span>
+<span class="source-line-no">1585</span><span id="line-1585"></span>
+<span class="source-line-no">1586</span><span id="line-1586">      var ap = marshallingContext.getAnnotationProvider();</span>
+<span class="source-line-no">1587</span><span id="line-1587">      ap.find(Swap.class, this).stream().map(AnnotationInfo::inner).forEach(x -&gt; list.add(createSwap(x)));</span>
+<span class="source-line-no">1588</span><span id="line-1588"></span>
+<span class="source-line-no">1589</span><span id="line-1589">      // @Marshalled(as=STRING) installs an AutoStringSwap before any auto-detection.</span>
+<span class="source-line-no">1590</span><span id="line-1590">      if (list.isEmpty()) {</span>
+<span class="source-line-no">1591</span><span id="line-1591">         var marshalledList = ap.find(Marshalled.class, this);</span>
+<span class="source-line-no">1592</span><span id="line-1592">         if (marshalledList.stream().anyMatch(x -&gt; x.inner().as() == MarshalledAs.STRING))</span>
+<span class="source-line-no">1593</span><span id="line-1593">            list.add(new AutoStringSwap&lt;&gt;(this));</span>
+<span class="source-line-no">1594</span><span id="line-1594">      }</span>
+<span class="source-line-no">1595</span><span id="line-1595"></span>
+<span class="source-line-no">1596</span><span id="line-1596">      // @MarshalledIgnore on TYPE — skip entirely: serialize as null, parse as null.</span>
+<span class="source-line-no">1597</span><span id="line-1597">      // Use String.class (not Object.class) as swapClass so sType.isObject() stays false</span>
+<span class="source-line-no">1598</span><span id="line-1598">      // and the serializer correctly emits "null" when swap() returns null.</span>
+<span class="source-line-no">1599</span><span id="line-1599">      if (list.isEmpty() &amp;&amp; ap.has(MarshalledIgnore.class, this))</span>
+<span class="source-line-no">1600</span><span id="line-1600">         list.add(new ObjectSwap&lt;T,String&gt;(inner(), String.class) {</span>
+<span class="source-line-no">1601</span><span id="line-1601">            @Override public String swap(MarshallingSession session, T o) { return null; }</span>
+<span class="source-line-no">1602</span><span id="line-1602">            @Override public T unswap(MarshallingSession session, String s, ClassMeta&lt;?&gt; hint) { return null; }</span>
+<span class="source-line-no">1603</span><span id="line-1603">         });</span>
+<span class="source-line-no">1604</span><span id="line-1604"></span>
+<span class="source-line-no">1605</span><span id="line-1605">      var ds = DefaultSwaps.find(this);</span>
+<span class="source-line-no">1606</span><span id="line-1606">      if (ds == null &amp;&amp; !isStreamable()) {</span>
+<span class="source-line-no">1607</span><span id="line-1607">         ds = AutoObjectSwap.find(marshallingContext, this);</span>
 <span class="source-line-no">1608</span><span id="line-1608">      if (ds == null)</span>
-<span class="source-line-no">1609</span><span id="line-1609">         ds = AutoMapSwap.find(marshallingContext, this);</span>
+<span class="source-line-no">1609</span><span id="line-1609">         ds = AutoNumberSwap.find(marshallingContext, this);</span>
 <span class="source-line-no">1610</span><span id="line-1610">      if (ds == null)</span>
-<span class="source-line-no">1611</span><span id="line-1611">         ds = AutoListSwap.find(marshallingContext, this);</span>
-<span class="source-line-no">1612</span><span id="line-1612">      }</span>
-<span class="source-line-no">1613</span><span id="line-1613"></span>
-<span class="source-line-no">1614</span><span id="line-1614">      if (nn(ds))</span>
-<span class="source-line-no">1615</span><span id="line-1615">         list.add((ObjectSwap&lt;T,?&gt;)ds);</span>
-<span class="source-line-no">1616</span><span id="line-1616"></span>
-<span class="source-line-no">1617</span><span id="line-1617">      return u(list);</span>
-<span class="source-line-no">1618</span><span id="line-1618">   }</span>
-<span class="source-line-no">1619</span><span id="line-1619"></span>
-<span class="source-line-no">1620</span><span id="line-1620">   private List&lt;ObjectSwap&lt;?,?&gt;&gt; findChildSwaps() {</span>
-<span class="source-line-no">1621</span><span id="line-1621">      if (marshallingContext == null)</span>
-<span class="source-line-no">1622</span><span id="line-1622">         return l();</span>
-<span class="source-line-no">1623</span><span id="line-1623">      var swapArray = marshallingContext.getSwaps();</span>
-<span class="source-line-no">1624</span><span id="line-1624">      if (swapArray.isEmpty())</span>
-<span class="source-line-no">1625</span><span id="line-1625">         return l();</span>
-<span class="source-line-no">1626</span><span id="line-1626">      var list = new ArrayList&lt;ObjectSwap&lt;?,?&gt;&gt;();</span>
-<span class="source-line-no">1627</span><span id="line-1627">      var innerClass = inner();</span>
-<span class="source-line-no">1628</span><span id="line-1628">      swapArray.stream().filter(f -&gt; f.getNormalClass().isAssignableTo(innerClass)).forEach(list::add);</span>
-<span class="source-line-no">1629</span><span id="line-1629">      return u(list);</span>
-<span class="source-line-no">1630</span><span id="line-1630">   }</span>
-<span class="source-line-no">1631</span><span id="line-1631"></span>
-<span class="source-line-no">1632</span><span id="line-1632">   private String findExample() {</span>
+<span class="source-line-no">1611</span><span id="line-1611">         ds = AutoMapSwap.find(marshallingContext, this);</span>
+<span class="source-line-no">1612</span><span id="line-1612">      if (ds == null)</span>
+<span class="source-line-no">1613</span><span id="line-1613">         ds = AutoListSwap.find(marshallingContext, this);</span>
+<span class="source-line-no">1614</span><span id="line-1614">      }</span>
+<span class="source-line-no">1615</span><span id="line-1615"></span>
+<span class="source-line-no">1616</span><span id="line-1616">      if (nn(ds))</span>
+<span class="source-line-no">1617</span><span id="line-1617">         list.add((ObjectSwap&lt;T,?&gt;)ds);</span>
+<span class="source-line-no">1618</span><span id="line-1618"></span>
+<span class="source-line-no">1619</span><span id="line-1619">      return u(list);</span>
+<span class="source-line-no">1620</span><span id="line-1620">   }</span>
+<span class="source-line-no">1621</span><span id="line-1621"></span>
+<span class="source-line-no">1622</span><span id="line-1622">   private List&lt;ObjectSwap&lt;?,?&gt;&gt; findChildSwaps() {</span>
+<span class="source-line-no">1623</span><span id="line-1623">      if (marshallingContext == null)</span>
+<span class="source-line-no">1624</span><span id="line-1624">         return l();</span>
+<span class="source-line-no">1625</span><span id="line-1625">      var swapArray = marshallingContext.getSwaps();</span>
+<span class="source-line-no">1626</span><span id="line-1626">      if (swapArray.isEmpty())</span>
+<span class="source-line-no">1627</span><span id="line-1627">         return l();</span>
+<span class="source-line-no">1628</span><span id="line-1628">      var list = new ArrayList&lt;ObjectSwap&lt;?,?&gt;&gt;();</span>
+<span class="source-line-no">1629</span><span id="line-1629">      var innerClass = inner();</span>
+<span class="source-line-no">1630</span><span id="line-1630">      swapArray.stream().filter(f -&gt; f.getNormalClass().isAssignableTo(innerClass)).forEach(list::add);</span>
+<span class="source-line-no">1631</span><span id="line-1631">      return u(list);</span>
+<span class="source-line-no">1632</span><span id="line-1632">   }</span>
 <span class="source-line-no">1633</span><span id="line-1633"></span>
-<span class="source-line-no">1634</span><span id="line-1634">      var ex = beanMeta.get().optBeanMeta().map(x -&gt; (MarshalledFilter) x.getBeanFilter()).map(x -&gt; x.getExample()).orElse(null);</span>
+<span class="source-line-no">1634</span><span id="line-1634">   private String findExample() {</span>
 <span class="source-line-no">1635</span><span id="line-1635"></span>
-<span class="source-line-no">1636</span><span id="line-1636">      if (ex == null)</span>
-<span class="source-line-no">1637</span><span id="line-1637">         ex = marshalledFilter.map(x -&gt; x.getExample()).orElse(null);</span>
-<span class="source-line-no">1638</span><span id="line-1638"></span>
-<span class="source-line-no">1639</span><span id="line-1639">      if (ex == null &amp;&amp; nn(marshallingContext))</span>
-<span class="source-line-no">1640</span><span id="line-1640">         ex = marshallingContext.getAnnotationProvider().find(Example.class, this).stream().map(x -&gt; x.inner().value()).filter(Shorts::ine).findFirst().orElse(null);</span>
-<span class="source-line-no">1641</span><span id="line-1641"></span>
-<span class="source-line-no">1642</span><span id="line-1642">      if (ex == null) {</span>
-<span class="source-line-no">1643</span><span id="line-1643">         if (isAny(boolean.class, Boolean.class)) {</span>
-<span class="source-line-no">1644</span><span id="line-1644">            ex = "true";</span>
-<span class="source-line-no">1645</span><span id="line-1645">         } else if (isAny(char.class, Character.class)) {</span>
-<span class="source-line-no">1646</span><span id="line-1646">            ex = "a";</span>
-<span class="source-line-no">1647</span><span id="line-1647">         } else if (cat.is(CHARSEQ)) {</span>
-<span class="source-line-no">1648</span><span id="line-1648">            ex = "foo";</span>
-<span class="source-line-no">1649</span><span id="line-1649">         } else if (cat.is(ENUM)) {</span>
-<span class="source-line-no">1650</span><span id="line-1650">            Optional&lt;Enum&lt;?&gt;&gt; e = first(EnumSet.allOf(asEnumClass(inner())));</span>
-<span class="source-line-no">1651</span><span id="line-1651">            ex = e.map(x -&gt; marshallingContext.getEnumFormat().format(x)).orElse(null);</span>
-<span class="source-line-no">1652</span><span id="line-1652">         } else if (isAny(float.class, Float.class, double.class, Double.class)) {</span>
-<span class="source-line-no">1653</span><span id="line-1653">            ex = "1.0";</span>
-<span class="source-line-no">1654</span><span id="line-1654">         } else if (isAny(short.class, Short.class, int.class, Integer.class, long.class, Long.class)) {</span>
-<span class="source-line-no">1655</span><span id="line-1655">            ex = "1";</span>
-<span class="source-line-no">1656</span><span id="line-1656">         }</span>
-<span class="source-line-no">1657</span><span id="line-1657">      }</span>
-<span class="source-line-no">1658</span><span id="line-1658"></span>
-<span class="source-line-no">1659</span><span id="line-1659">      return ex;</span>
-<span class="source-line-no">1660</span><span id="line-1660">   }</span>
-<span class="source-line-no">1661</span><span id="line-1661"></span>
-<span class="source-line-no">1662</span><span id="line-1662">   private FieldInfo findExampleField() {</span>
-<span class="source-line-no">1663</span><span id="line-1663">      var ap = marshallingContext.getAnnotationProvider();</span>
-<span class="source-line-no">1664</span><span id="line-1664"></span>
-<span class="source-line-no">1665</span><span id="line-1665">      return getDeclaredFields()</span>
-<span class="source-line-no">1666</span><span id="line-1666">         .stream()</span>
-<span class="source-line-no">1667</span><span id="line-1667">         .filter(x -&gt; x.isStatic() &amp;&amp; isAssignableFrom(x.getFieldType()) &amp;&amp; ap.has(Example.class, x))</span>
-<span class="source-line-no">1668</span><span id="line-1668">         .map(x -&gt; x.accessible())</span>
-<span class="source-line-no">1669</span><span id="line-1669">         .findFirst()</span>
-<span class="source-line-no">1670</span><span id="line-1670">         .orElse(null);</span>
-<span class="source-line-no">1671</span><span id="line-1671">   }</span>
-<span class="source-line-no">1672</span><span id="line-1672"></span>
-<span class="source-line-no">1673</span><span id="line-1673">   private MethodInfo findExampleMethod() {</span>
-<span class="source-line-no">1674</span><span id="line-1674">      // @formatter:off</span>
-<span class="source-line-no">1675</span><span id="line-1675">      var ap = marshallingContext.getAnnotationProvider();</span>
-<span class="source-line-no">1676</span><span id="line-1676"></span>
-<span class="source-line-no">1677</span><span id="line-1677">      // Option 1:  Public example() or @Example method.</span>
-<span class="source-line-no">1678</span><span id="line-1678">      var m = getPublicMethod(</span>
-<span class="source-line-no">1679</span><span id="line-1679">         x -&gt; x.isStatic() &amp;&amp; x.isNotDeprecated() &amp;&amp; (x.hasName("example") || ap.has(Example.class, x)) &amp;&amp; x.hasParameterTypesLenient(MarshallingSession.class)</span>
-<span class="source-line-no">1680</span><span id="line-1680">      );</span>
-<span class="source-line-no">1681</span><span id="line-1681">      if (m.isPresent()) return m.get();</span>
-<span class="source-line-no">1682</span><span id="line-1682"></span>
-<span class="source-line-no">1683</span><span id="line-1683">      // Option 2:  Non-public @Example method.</span>
-<span class="source-line-no">1684</span><span id="line-1684">      return getDeclaredMethods()</span>
-<span class="source-line-no">1685</span><span id="line-1685">         .stream()</span>
-<span class="source-line-no">1686</span><span id="line-1686">         .flatMap(x -&gt; x.getMatchingMethods().stream())</span>
-<span class="source-line-no">1687</span><span id="line-1687">         .filter(x -&gt; x.isStatic() &amp;&amp; ap.has(Example.class, x))</span>
-<span class="source-line-no">1688</span><span id="line-1688">         .map(x -&gt; x.accessible())</span>
-<span class="source-line-no">1689</span><span id="line-1689">         .findFirst()</span>
-<span class="source-line-no">1690</span><span id="line-1690">         .orElse(null);</span>
-<span class="source-line-no">1691</span><span id="line-1691">      // @formatter:on</span>
-<span class="source-line-no">1692</span><span id="line-1692">   }</span>
-<span class="source-line-no">1693</span><span id="line-1693"></span>
-<span class="source-line-no">1694</span><span id="line-1694">   private MethodInfo findFromStringMethod() {</span>
-<span class="source-line-no">1695</span><span id="line-1695">      // @formatter:off</span>
-<span class="source-line-no">1696</span><span id="line-1696"></span>
-<span class="source-line-no">1697</span><span id="line-1697">      // Option 1:  Explicit @StringCtor(name) short-circuits the name-based guessing below.</span>
-<span class="source-line-no">1698</span><span id="line-1698">      // marshallingContext is null for context-less ClassMetas (e.g. the args-array ClassMeta), so there's</span>
-<span class="source-line-no">1699</span><span id="line-1699">      // no annotation provider to consult in that case.</span>
-<span class="source-line-no">1700</span><span id="line-1700">      if (marshallingContext != null) {</span>
-<span class="source-line-no">1701</span><span id="line-1701">         var ap = marshallingContext.getAnnotationProvider();</span>
-<span class="source-line-no">1702</span><span id="line-1702">         var stringCtor = ap.find(StringCtor.class, this).stream().findFirst();</span>
-<span class="source-line-no">1703</span><span id="line-1703">         if (stringCtor.isPresent()) {</span>
-<span class="source-line-no">1704</span><span id="line-1704">            var methodName = stringCtor.get().inner().value();</span>
-<span class="source-line-no">1705</span><span id="line-1705">            return getPublicMethod(</span>
-<span class="source-line-no">1706</span><span id="line-1706">               x -&gt; x.isStatic() &amp;&amp; x.hasReturnType(this) &amp;&amp; x.hasParameterTypes(String.class) &amp;&amp; x.hasName(methodName)</span>
-<span class="source-line-no">1707</span><span id="line-1707">            ).orElse(null);</span>
-<span class="source-line-no">1708</span><span id="line-1708">         }</span>
-<span class="source-line-no">1709</span><span id="line-1709">      }</span>
-<span class="source-line-no">1710</span><span id="line-1710"></span>
-<span class="source-line-no">1711</span><span id="line-1711">      // Option 2:  Find static fromString(String) or equivalent method by conventional name.</span>
-<span class="source-line-no">1712</span><span id="line-1712">      // fromString() must be checked before valueOf() so that Enum classes can create their own</span>
-<span class="source-line-no">1713</span><span id="line-1713">      //    specialized fromString() methods to override the behavior of Enum.valueOf(String).</span>
-<span class="source-line-no">1714</span><span id="line-1714">      // valueOf() is used by enums.</span>
-<span class="source-line-no">1715</span><span id="line-1715">      // parse() is used by the java logging Level class.</span>
-<span class="source-line-no">1716</span><span id="line-1716">      // forName() is used by Class and Charset</span>
-<span class="source-line-no">1717</span><span id="line-1717">      var names = a("fromString", "fromValue", "valueOf", "parse", "parseString", "forName", "forString");</span>
-<span class="source-line-no">1718</span><span id="line-1718">      return getPublicMethod(</span>
-<span class="source-line-no">1719</span><span id="line-1719">         x -&gt; x.isStatic() &amp;&amp; x.isNotDeprecated() &amp;&amp; x.hasReturnType(this) &amp;&amp; x.hasParameterTypes(String.class) &amp;&amp; contains(x.getName(), names)</span>
-<span class="source-line-no">1720</span><span id="line-1720">      ).orElse(null);</span>
-<span class="source-line-no">1721</span><span id="line-1721">      // @formatter:on</span>
-<span class="source-line-no">1722</span><span id="line-1722">   }</span>
-<span class="source-line-no">1723</span><span id="line-1723"></span>
-<span class="source-line-no">1724</span><span id="line-1724">   private ClassInfoTyped&lt;? extends T&gt; findImplClass() {</span>
+<span class="source-line-no">1636</span><span id="line-1636">      var ex = beanMeta.get().optBeanMeta().map(x -&gt; (MarshalledFilter) x.getBeanFilter()).map(x -&gt; x.getExample()).orElse(null);</span>
+<span class="source-line-no">1637</span><span id="line-1637"></span>
+<span class="source-line-no">1638</span><span id="line-1638">      if (ex == null)</span>
+<span class="source-line-no">1639</span><span id="line-1639">         ex = marshalledFilter.map(x -&gt; x.getExample()).orElse(null);</span>
+<span class="source-line-no">1640</span><span id="line-1640"></span>
+<span class="source-line-no">1641</span><span id="line-1641">      if (ex == null &amp;&amp; nn(marshallingContext))</span>
+<span class="source-line-no">1642</span><span id="line-1642">         ex = marshallingContext.getAnnotationProvider().find(Example.class, this).stream().map(x -&gt; x.inner().value()).filter(Shorts::ine).findFirst().orElse(null);</span>
+<span class="source-line-no">1643</span><span id="line-1643"></span>
+<span class="source-line-no">1644</span><span id="line-1644">      if (ex == null) {</span>
+<span class="source-line-no">1645</span><span id="line-1645">         if (isAny(boolean.class, Boolean.class)) {</span>
+<span class="source-line-no">1646</span><span id="line-1646">            ex = "true";</span>
+<span class="source-line-no">1647</span><span id="line-1647">         } else if (isAny(char.class, Character.class)) {</span>
+<span class="source-line-no">1648</span><span id="line-1648">            ex = "a";</span>
+<span class="source-line-no">1649</span><span id="line-1649">         } else if (cat.is(CHARSEQ)) {</span>
+<span class="source-line-no">1650</span><span id="line-1650">            ex = "foo";</span>
+<span class="source-line-no">1651</span><span id="line-1651">         } else if (cat.is(ENUM)) {</span>
+<span class="source-line-no">1652</span><span id="line-1652">            Optional&lt;Enum&lt;?&gt;&gt; e = first(EnumSet.allOf(asEnumClass(inner())));</span>
+<span class="source-line-no">1653</span><span id="line-1653">            ex = e.map(x -&gt; marshallingContext.getEnumFormat().format(x)).orElse(null);</span>
+<span class="source-line-no">1654</span><span id="line-1654">         } else if (isAny(float.class, Float.class, double.class, Double.class)) {</span>
+<span class="source-line-no">1655</span><span id="line-1655">            ex = "1.0";</span>
+<span class="source-line-no">1656</span><span id="line-1656">         } else if (isAny(short.class, Short.class, int.class, Integer.class, long.class, Long.class)) {</span>
+<span class="source-line-no">1657</span><span id="line-1657">            ex = "1";</span>
+<span class="source-line-no">1658</span><span id="line-1658">         }</span>
+<span class="source-line-no">1659</span><span id="line-1659">      }</span>
+<span class="source-line-no">1660</span><span id="line-1660"></span>
+<span class="source-line-no">1661</span><span id="line-1661">      return ex;</span>
+<span class="source-line-no">1662</span><span id="line-1662">   }</span>
+<span class="source-line-no">1663</span><span id="line-1663"></span>
+<span class="source-line-no">1664</span><span id="line-1664">   private FieldInfo findExampleField() {</span>
+<span class="source-line-no">1665</span><span id="line-1665">      var ap = marshallingContext.getAnnotationProvider();</span>
+<span class="source-line-no">1666</span><span id="line-1666"></span>
+<span class="source-line-no">1667</span><span id="line-1667">      return getDeclaredFields()</span>
+<span class="source-line-no">1668</span><span id="line-1668">         .stream()</span>
+<span class="source-line-no">1669</span><span id="line-1669">         .filter(x -&gt; x.isStatic() &amp;&amp; isAssignableFrom(x.getFieldType()) &amp;&amp; ap.has(Example.class, x))</span>
+<span class="source-line-no">1670</span><span id="line-1670">         .map(x -&gt; x.accessible())</span>
+<span class="source-line-no">1671</span><span id="line-1671">         .findFirst()</span>
+<span class="source-line-no">1672</span><span id="line-1672">         .orElse(null);</span>
+<span class="source-line-no">1673</span><span id="line-1673">   }</span>
+<span class="source-line-no">1674</span><span id="line-1674"></span>
+<span class="source-line-no">1675</span><span id="line-1675">   private MethodInfo findExampleMethod() {</span>
+<span class="source-line-no">1676</span><span id="line-1676">      // @formatter:off</span>
+<span class="source-line-no">1677</span><span id="line-1677">      var ap = marshallingContext.getAnnotationProvider();</span>
+<span class="source-line-no">1678</span><span id="line-1678"></span>
+<span class="source-line-no">1679</span><span id="line-1679">      // Option 1:  Public example() or @Example method.</span>
+<span class="source-line-no">1680</span><span id="line-1680">      var m = getPublicMethod(</span>
+<span class="source-line-no">1681</span><span id="line-1681">         x -&gt; x.isStatic() &amp;&amp; x.isNotDeprecated() &amp;&amp; (x.hasName("example") || ap.has(Example.class, x)) &amp;&amp; x.hasParameterTypesLenient(MarshallingSession.class)</span>
+<span class="source-line-no">1682</span><span id="line-1682">      );</span>
+<span class="source-line-no">1683</span><span id="line-1683">      if (m.isPresent()) return m.get();</span>
+<span class="source-line-no">1684</span><span id="line-1684"></span>
+<span class="source-line-no">1685</span><span id="line-1685">      // Option 2:  Non-public @Example method.</span>
+<span class="source-line-no">1686</span><span id="line-1686">      return getDeclaredMethods()</span>
+<span class="source-line-no">1687</span><span id="line-1687">         .stream()</span>
+<span class="source-line-no">1688</span><span id="line-1688">         .flatMap(x -&gt; x.getMatchingMethods().stream())</span>
+<span class="source-line-no">1689</span><span id="line-1689">         .filter(x -&gt; x.isStatic() &amp;&amp; ap.has(Example.class, x))</span>
+<span class="source-line-no">1690</span><span id="line-1690">         .map(x -&gt; x.accessible())</span>
+<span class="source-line-no">1691</span><span id="line-1691">         .findFirst()</span>
+<span class="source-line-no">1692</span><span id="line-1692">         .orElse(null);</span>
+<span class="source-line-no">1693</span><span id="line-1693">      // @formatter:on</span>
+<span class="source-line-no">1694</span><span id="line-1694">   }</span>
+<span class="source-line-no">1695</span><span id="line-1695"></span>
+<span class="source-line-no">1696</span><span id="line-1696">   private MethodInfo findFromStringMethod() {</span>
+<span class="source-line-no">1697</span><span id="line-1697">      // @formatter:off</span>
+<span class="source-line-no">1698</span><span id="line-1698"></span>
+<span class="source-line-no">1699</span><span id="line-1699">      // Option 1:  Explicit @StringCtor(name) short-circuits the name-based guessing below.</span>
+<span class="source-line-no">1700</span><span id="line-1700">      // marshallingContext is null for context-less ClassMetas (e.g. the args-array ClassMeta), so there's</span>
+<span class="source-line-no">1701</span><span id="line-1701">      // no annotation provider to consult in that case.</span>
+<span class="source-line-no">1702</span><span id="line-1702">      if (marshallingContext != null) {</span>
+<span class="source-line-no">1703</span><span id="line-1703">         var ap = marshallingContext.getAnnotationProvider();</span>
+<span class="source-line-no">1704</span><span id="line-1704">         var stringCtor = ap.find(StringCtor.class, this).stream().findFirst();</span>
+<span class="source-line-no">1705</span><span id="line-1705">         if (stringCtor.isPresent()) {</span>
+<span class="source-line-no">1706</span><span id="line-1706">            var methodName = stringCtor.get().inner().value();</span>
+<span class="source-line-no">1707</span><span id="line-1707">            return getPublicMethod(</span>
+<span class="source-line-no">1708</span><span id="line-1708">               x -&gt; x.isStatic() &amp;&amp; x.hasReturnType(this) &amp;&amp; x.hasParameterTypes(String.class) &amp;&amp; x.hasName(methodName)</span>
+<span class="source-line-no">1709</span><span id="line-1709">            ).orElse(null);</span>
+<span class="source-line-no">1710</span><span id="line-1710">         }</span>
+<span class="source-line-no">1711</span><span id="line-1711">      }</span>
+<span class="source-line-no">1712</span><span id="line-1712"></span>
+<span class="source-line-no">1713</span><span id="line-1713">      // Option 2:  Find static fromString(String) or equivalent method by conventional name.</span>
+<span class="source-line-no">1714</span><span id="line-1714">      // fromString() must be checked before valueOf() so that Enum classes can create their own</span>
+<span class="source-line-no">1715</span><span id="line-1715">      //    specialized fromString() methods to override the behavior of Enum.valueOf(String).</span>
+<span class="source-line-no">1716</span><span id="line-1716">      // valueOf() is used by enums.</span>
+<span class="source-line-no">1717</span><span id="line-1717">      // parse() is used by the java logging Level class.</span>
+<span class="source-line-no">1718</span><span id="line-1718">      // forName() is used by Class and Charset</span>
+<span class="source-line-no">1719</span><span id="line-1719">      var names = a("fromString", "fromValue", "valueOf", "parse", "parseString", "forName", "forString");</span>
+<span class="source-line-no">1720</span><span id="line-1720">      return getPublicMethod(</span>
+<span class="source-line-no">1721</span><span id="line-1721">         x -&gt; x.isStatic() &amp;&amp; x.isNotDeprecated() &amp;&amp; x.hasReturnType(this) &amp;&amp; x.hasParameterTypes(String.class) &amp;&amp; contains(x.getName(), names)</span>
+<span class="source-line-no">1722</span><span id="line-1722">      ).orElse(null);</span>
+<span class="source-line-no">1723</span><span id="line-1723">      // @formatter:on</span>
+<span class="source-line-no">1724</span><span id="line-1724">   }</span>
 <span class="source-line-no">1725</span><span id="line-1725"></span>
-<span class="source-line-no">1726</span><span id="line-1726">      if (is(Object.class))</span>
-<span class="source-line-no">1727</span><span id="line-1727">         return null;</span>
-<span class="source-line-no">1728</span><span id="line-1728"></span>
-<span class="source-line-no">1729</span><span id="line-1729">      var mf = marshalledFilter.get();</span>
-<span class="source-line-no">1730</span><span id="line-1730">      if (mf == null)</span>
-<span class="source-line-no">1731</span><span id="line-1731">         return null;</span>
-<span class="source-line-no">1732</span><span id="line-1732">      var implClassInfo = mf.getImplClass();</span>
-<span class="source-line-no">1733</span><span id="line-1733">      if (implClassInfo == null)</span>
-<span class="source-line-no">1734</span><span id="line-1734">         return null;</span>
-<span class="source-line-no">1735</span><span id="line-1735">      return (ClassInfoTyped&lt;? extends T&gt;)implClassInfo;</span>
-<span class="source-line-no">1736</span><span id="line-1736">   }</span>
-<span class="source-line-no">1737</span><span id="line-1737"></span>
-<span class="source-line-no">1738</span><span id="line-1738">   private MarshalledFilter findMarshalledFilter() {</span>
-<span class="source-line-no">1739</span><span id="line-1739">      var ap = marshallingContext.getAnnotationProvider();</span>
-<span class="source-line-no">1740</span><span id="line-1740">      var l = ap.find(Marshalled.class, this);</span>
-<span class="source-line-no">1741</span><span id="line-1741">      var bt = ap.find(BeanType.class, this);</span>
-<span class="source-line-no">1742</span><span id="line-1742">      if (l.isEmpty() &amp;&amp; bt.isEmpty())</span>
-<span class="source-line-no">1743</span><span id="line-1743">         return null;</span>
-<span class="source-line-no">1744</span><span id="line-1744">      return MarshalledFilter.create(this)</span>
-<span class="source-line-no">1745</span><span id="line-1745">         .applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList()))</span>
-<span class="source-line-no">1746</span><span id="line-1746">         .applyBeanTypeAnnotations(reverse(bt.stream().map(AnnotationInfo::inner).toList()))</span>
-<span class="source-line-no">1747</span><span id="line-1747">         .build();</span>
-<span class="source-line-no">1748</span><span id="line-1748">   }</span>
-<span class="source-line-no">1749</span><span id="line-1749"></span>
-<span class="source-line-no">1750</span><span id="line-1750">   private Property&lt;T,Object&gt; findNameProperty() {</span>
-<span class="source-line-no">1751</span><span id="line-1751">      var ap = marshallingContext.getAnnotationProvider();</span>
-<span class="source-line-no">1752</span><span id="line-1752"></span>
-<span class="source-line-no">1753</span><span id="line-1753">      var s = getAllFields()</span>
-<span class="source-line-no">1754</span><span id="line-1754">         .stream()</span>
-<span class="source-line-no">1755</span><span id="line-1755">         .filter(x -&gt; ap.has(NameProperty.class, x))</span>
-<span class="source-line-no">1756</span><span id="line-1756">         .map(x -&gt; x.accessible())</span>
-<span class="source-line-no">1757</span><span id="line-1757">         .map(x -&gt; Property.&lt;T,Object&gt;create().field(x).build())</span>
-<span class="source-line-no">1758</span><span id="line-1758">         .findFirst();</span>
-<span class="source-line-no">1759</span><span id="line-1759"></span>
-<span class="source-line-no">1760</span><span id="line-1760">      if (s.isPresent()) return s.get();</span>
+<span class="source-line-no">1726</span><span id="line-1726">   private ClassInfoTyped&lt;? extends T&gt; findImplClass() {</span>
+<span class="source-line-no">1727</span><span id="line-1727"></span>
+<span class="source-line-no">1728</span><span id="line-1728">      if (is(Object.class))</span>
+<span class="source-line-no">1729</span><span id="line-1729">         return null;</span>
+<span class="source-line-no">1730</span><span id="line-1730"></span>
+<span class="source-line-no">1731</span><span id="line-1731">      var mf = marshalledFilter.get();</span>
+<span class="source-line-no">1732</span><span id="line-1732">      if (mf == null)</span>
+<span class="source-line-no">1733</span><span id="line-1733">         return null;</span>
+<span class="source-line-no">1734</span><span id="line-1734">      var implClassInfo = mf.getImplClass();</span>
+<span class="source-line-no">1735</span><span id="line-1735">      if (implClassInfo == null)</span>
+<span class="source-line-no">1736</span><span id="line-1736">         return null;</span>
+<span class="source-line-no">1737</span><span id="line-1737">      return (ClassInfoTyped&lt;? extends T&gt;)implClassInfo;</span>
+<span class="source-line-no">1738</span><span id="line-1738">   }</span>
+<span class="source-line-no">1739</span><span id="line-1739"></span>
+<span class="source-line-no">1740</span><span id="line-1740">   private MarshalledFilter findMarshalledFilter() {</span>
+<span class="source-line-no">1741</span><span id="line-1741">      var ap = marshallingContext.getAnnotationProvider();</span>
+<span class="source-line-no">1742</span><span id="line-1742">      var l = ap.find(Marshalled.class, this);</span>
+<span class="source-line-no">1743</span><span id="line-1743">      var bt = ap.find(BeanType.class, this);</span>
+<span class="source-line-no">1744</span><span id="line-1744">      if (l.isEmpty() &amp;&amp; bt.isEmpty())</span>
+<span class="source-line-no">1745</span><span id="line-1745">         return null;</span>
+<span class="source-line-no">1746</span><span id="line-1746">      return MarshalledFilter.create(this)</span>
+<span class="source-line-no">1747</span><span id="line-1747">         .applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList()))</span>
+<span class="source-line-no">1748</span><span id="line-1748">         .applyBeanTypeAnnotations(reverse(bt.stream().map(AnnotationInfo::inner).toList()))</span>
+<span class="source-line-no">1749</span><span id="line-1749">         .build();</span>
+<span class="source-line-no">1750</span><span id="line-1750">   }</span>
+<span class="source-line-no">1751</span><span id="line-1751"></span>
+<span class="source-line-no">1752</span><span id="line-1752">   private Property&lt;T,Object&gt; findNameProperty() {</span>
+<span class="source-line-no">1753</span><span id="line-1753">      var ap = marshallingContext.getAnnotationProvider();</span>
+<span class="source-line-no">1754</span><span id="line-1754"></span>
+<span class="source-line-no">1755</span><span id="line-1755">      var s = getAllFields()</span>
+<span class="source-line-no">1756</span><span id="line-1756">         .stream()</span>
+<span class="source-line-no">1757</span><span id="line-1757">         .filter(x -&gt; ap.has(NameProperty.class, x))</span>
+<span class="source-line-no">1758</span><span id="line-1758">         .map(x -&gt; x.accessible())</span>
+<span class="source-line-no">1759</span><span id="line-1759">         .map(x -&gt; Property.&lt;T,Object&gt;create().field(x).build())</span>
+<span class="source-line-no">1760</span><span id="line-1760">         .findFirst();</span>
 <span class="source-line-no">1761</span><span id="line-1761"></span>
-<span class="source-line-no">1762</span><span id="line-1762">      var builder = Property.&lt;T,Object&gt;create();</span>
+<span class="source-line-no">1762</span><span id="line-1762">      if (s.isPresent()) return s.get();</span>
 <span class="source-line-no">1763</span><span id="line-1763"></span>
-<span class="source-line-no">1764</span><span id="line-1764">      // Look for setter method (1 parameter) with @NameProperty</span>
-<span class="source-line-no">1765</span><span id="line-1765">      var setterMethod = getAllMethods()</span>
-<span class="source-line-no">1766</span><span id="line-1766">         .stream()</span>
-<span class="source-line-no">1767</span><span id="line-1767">         .filter(x -&gt; ap.has(NameProperty.class, x) &amp;&amp; x.hasNumParameters(1))</span>
-<span class="source-line-no">1768</span><span id="line-1768">         .findFirst();</span>
-<span class="source-line-no">1769</span><span id="line-1769"></span>
-<span class="source-line-no">1770</span><span id="line-1770">      if (setterMethod.isPresent()) {</span>
-<span class="source-line-no">1771</span><span id="line-1771">         builder.setter(setterMethod.get().accessible());</span>
-<span class="source-line-no">1772</span><span id="line-1772"></span>
-<span class="source-line-no">1773</span><span id="line-1773">         // Try to find a corresponding getter method (even if not annotated)</span>
-<span class="source-line-no">1774</span><span id="line-1774">         // If setter is "setName", look for "getName" or "isName"</span>
-<span class="source-line-no">1775</span><span id="line-1775">         var setterName = setterMethod.get().getNameSimple();</span>
-<span class="source-line-no">1776</span><span id="line-1776">         if (setterName.startsWith("set") &amp;&amp; setterName.length() &gt; 3) {</span>
-<span class="source-line-no">1777</span><span id="line-1777">            var propertyName = setterName.substring(3);</span>
-<span class="source-line-no">1778</span><span id="line-1778">            var getterName1 = "get" + propertyName;</span>
-<span class="source-line-no">1779</span><span id="line-1779">            var getterName2 = "is" + propertyName;</span>
-<span class="source-line-no">1780</span><span id="line-1780"></span>
-<span class="source-line-no">1781</span><span id="line-1781">            var getter = getAllMethods()</span>
-<span class="source-line-no">1782</span><span id="line-1782">               .stream()</span>
-<span class="source-line-no">1783</span><span id="line-1783">               .filter(x -&gt; !x.isStatic() &amp;&amp; x.hasNumParameters(0) &amp;&amp;</span>
-<span class="source-line-no">1784</span><span id="line-1784">                  (x.hasName(getterName1) || x.hasName(getterName2)) &amp;&amp;</span>
-<span class="source-line-no">1785</span><span id="line-1785">                  !x.getReturnType().is(Void.TYPE))</span>
-<span class="source-line-no">1786</span><span id="line-1786">               .findFirst();</span>
-<span class="source-line-no">1787</span><span id="line-1787"></span>
-<span class="source-line-no">1788</span><span id="line-1788">            if (getter.isPresent()) {</span>
-<span class="source-line-no">1789</span><span id="line-1789">               builder.getter(getter.get().accessible());</span>
-<span class="source-line-no">1790</span><span id="line-1790">            } else {</span>
-<span class="source-line-no">1791</span><span id="line-1791">               // Try to find a field with the property name (lowercase first letter)</span>
-<span class="source-line-no">1792</span><span id="line-1792">               var fieldName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);</span>
-<span class="source-line-no">1793</span><span id="line-1793">               var field = getAllFields()</span>
-<span class="source-line-no">1794</span><span id="line-1794">                  .stream()</span>
-<span class="source-line-no">1795</span><span id="line-1795">                  .filter(x -&gt; !x.isStatic() &amp;&amp; x.hasName(fieldName))</span>
-<span class="source-line-no">1796</span><span id="line-1796">                  .findFirst();</span>
-<span class="source-line-no">1797</span><span id="line-1797"></span>
-<span class="source-line-no">1798</span><span id="line-1798">               if (field.isPresent()) {</span>
-<span class="source-line-no">1799</span><span id="line-1799">                  var f = field.get().accessible();</span>
-<span class="source-line-no">1800</span><span id="line-1800">                  builder.getter(f::get);</span>
-<span class="source-line-no">1801</span><span id="line-1801">               }</span>
-<span class="source-line-no">1802</span><span id="line-1802">            }</span>
-<span class="source-line-no">1803</span><span id="line-1803">         }</span>
-<span class="source-line-no">1804</span><span id="line-1804">      }</span>
-<span class="source-line-no">1805</span><span id="line-1805"></span>
-<span class="source-line-no">1806</span><span id="line-1806">      // Look for getter method (0 parameters, non-void return) with @NameProperty</span>
-<span class="source-line-no">1807</span><span id="line-1807">      var getterMethod = getAllMethods()</span>
-<span class="source-line-no">1808</span><span id="line-1808">         .stream()</span>
-<span class="source-line-no">1809</span><span id="line-1809">         .filter(x -&gt; ap.has(NameProperty.class, x) &amp;&amp; x.hasNumParameters(0) &amp;&amp; !x.getReturnType().is(Void.TYPE))</span>
-<span class="source-line-no">1810</span><span id="line-1810">         .findFirst();</span>
-<span class="source-line-no">1811</span><span id="line-1811"></span>
-<span class="source-line-no">1812</span><span id="line-1812">      if (getterMethod.isPresent()) {</span>
-<span class="source-line-no">1813</span><span id="line-1813">         builder.getter(getterMethod.get().accessible());</span>
-<span class="source-line-no">1814</span><span id="line-1814">      }</span>
-<span class="source-line-no">1815</span><span id="line-1815"></span>
-<span class="source-line-no">1816</span><span id="line-1816">      // Return null if neither setter nor getter was found</span>
-<span class="source-line-no">1817</span><span id="line-1817">      if (setterMethod.isEmpty() &amp;&amp; getterMethod.isEmpty())</span>
-<span class="source-line-no">1818</span><span id="line-1818">         return null;</span>
-<span class="source-line-no">1819</span><span id="line-1819"></span>
-<span class="source-line-no">1820</span><span id="line-1820">      return builder.build();</span>
-<span class="source-line-no">1821</span><span id="line-1821">   }</span>
-<span class="source-line-no">1822</span><span id="line-1822"></span>
-<span class="source-line-no">1823</span><span id="line-1823">   private ConstructorInfo findNoArgConstructor() {</span>
+<span class="source-line-no">1764</span><span id="line-1764">      var builder = Property.&lt;T,Object&gt;create();</span>
+<span class="source-line-no">1765</span><span id="line-1765"></span>
+<span class="source-line-no">1766</span><span id="line-1766">      // Look for setter method (1 parameter) with @NameProperty</span>
+<span class="source-line-no">1767</span><span id="line-1767">      var setterMethod = getAllMethods()</span>
+<span class="source-line-no">1768</span><span id="line-1768">         .stream()</span>
+<span class="source-line-no">1769</span><span id="line-1769">         .filter(x -&gt; ap.has(NameProperty.class, x) &amp;&amp; x.hasNumParameters(1))</span>
+<span class="source-line-no">1770</span><span id="line-1770">         .findFirst();</span>
+<span class="source-line-no">1771</span><span id="line-1771"></span>
+<span class="source-line-no">1772</span><span id="line-1772">      if (setterMethod.isPresent()) {</span>
+<span class="source-line-no">1773</span><span id="line-1773">         builder.setter(setterMethod.get().accessible());</span>
+<span class="source-line-no">1774</span><span id="line-1774"></span>
+<span class="source-line-no">1775</span><span id="line-1775">         // Try to find a corresponding getter method (even if not annotated)</span>
+<span class="source-line-no">1776</span><span id="line-1776">         // If setter is "setName", look for "getName" or "isName"</span>
+<span class="source-line-no">1777</span><span id="line-1777">         var setterName = setterMethod.get().getNameSimple();</span>
+<span class="source-line-no">1778</span><span id="line-1778">         if (setterName.startsWith("set") &amp;&amp; setterName.length() &gt; 3) {</span>
+<span class="source-line-no">1779</span><span id="line-1779">            var propertyName = setterName.substring(3);</span>
+<span class="source-line-no">1780</span><span id="line-1780">            var getterName1 = "get" + propertyName;</span>
+<span class="source-line-no">1781</span><span id="line-1781">            var getterName2 = "is" + propertyName;</span>
+<span class="source-line-no">1782</span><span id="line-1782"></span>
+<span class="source-line-no">1783</span><span id="line-1783">            var getter = getAllMethods()</span>
+<span class="source-line-no">1784</span><span id="line-1784">               .stream()</span>
+<span class="source-line-no">1785</span><span id="line-1785">               .filter(x -&gt; !x.isStatic() &amp;&amp; x.hasNumParameters(0) &amp;&amp;</span>
+<span class="source-line-no">1786</span><span id="line-1786">                  (x.hasName(getterName1) || x.hasName(getterName2)) &amp;&amp;</span>
+<span class="source-line-no">1787</span><span id="line-1787">                  !x.getReturnType().is(Void.TYPE))</span>
+<span class="source-line-no">1788</span><span id="line-1788">               .findFirst();</span>
+<span class="source-line-no">1789</span><span id="line-1789"></span>
+<span class="source-line-no">1790</span><span id="line-1790">            if (getter.isPresent()) {</span>
+<span class="source-line-no">1791</span><span id="line-1791">               builder.getter(getter.get().accessible());</span>
+<span class="source-line-no">1792</span><span id="line-1792">            } else {</span>
+<span class="source-line-no">1793</span><span id="line-1793">               // Try to find a field with the property name (lowercase first letter)</span>
+<span class="source-line-no">1794</span><span id="line-1794">               var fieldName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);</span>
+<span class="source-line-no">1795</span><span id="line-1795">               var field = getAllFields()</span>
+<span class="source-line-no">1796</span><span id="line-1796">                  .stream()</span>
+<span class="source-line-no">1797</span><span id="line-1797">                  .filter(x -&gt; !x.isStatic() &amp;&amp; x.hasName(fieldName))</span>
+<span class="source-line-no">1798</span><span id="line-1798">                  .findFirst();</span>
+<span class="source-line-no">1799</span><span id="line-1799"></span>
+<span class="source-line-no">1800</span><span id="line-1800">               if (field.isPresent()) {</span>
+<span class="source-line-no">1801</span><span id="line-1801">                  var f = field.get().accessible();</span>
+<span class="source-line-no">1802</span><span id="line-1802">                  builder.getter(f::get);</span>
+<span class="source-line-no">1803</span><span id="line-1803">               }</span>
+<span class="source-line-no">1804</span><span id="line-1804">            }</span>
+<span class="source-line-no">1805</span><span id="line-1805">         }</span>
+<span class="source-line-no">1806</span><span id="line-1806">      }</span>
+<span class="source-line-no">1807</span><span id="line-1807"></span>
+<span class="source-line-no">1808</span><span id="line-1808">      // Look for getter method (0 parameters, non-void return) with @NameProperty</span>
+<span class="source-line-no">1809</span><span id="line-1809">      var getterMethod = getAllMethods()</span>
+<span class="source-line-no">1810</span><span id="line-1810">         .stream()</span>
+<span class="source-line-no">1811</span><span id="line-1811">         .filter(x -&gt; ap.has(NameProperty.class, x) &amp;&amp; x.hasNumParameters(0) &amp;&amp; !x.getReturnType().is(Void.TYPE))</span>
+<span class="source-line-no">1812</span><span id="line-1812">         .findFirst();</span>
+<span class="source-line-no">1813</span><span id="line-1813"></span>
+<span class="source-line-no">1814</span><span id="line-1814">      if (getterMethod.isPresent()) {</span>
+<span class="source-line-no">1815</span><span id="line-1815">         builder.getter(getterMethod.get().accessible());</span>
+<span class="source-line-no">1816</span><span id="line-1816">      }</span>
+<span class="source-line-no">1817</span><span id="line-1817"></span>
+<span class="source-line-no">1818</span><span id="line-1818">      // Return null if neither setter nor getter was found</span>
+<span class="source-line-no">1819</span><span id="line-1819">      if (setterMethod.isEmpty() &amp;&amp; getterMethod.isEmpty())</span>
+<span class="source-line-no">1820</span><span id="line-1820">         return null;</span>
+<span class="source-line-no">1821</span><span id="line-1821"></span>
+<span class="source-line-no">1822</span><span id="line-1822">      return builder.build();</span>
+<span class="source-line-no">1823</span><span id="line-1823">   }</span>
 <span class="source-line-no">1824</span><span id="line-1824"></span>
-<span class="source-line-no">1825</span><span id="line-1825">      if (is(Object.class))</span>
-<span class="source-line-no">1826</span><span id="line-1826">         return null;</span>
-<span class="source-line-no">1827</span><span id="line-1827"></span>
-<span class="source-line-no">1828</span><span id="line-1828">      if (implClass.isPresent())</span>
-<span class="source-line-no">1829</span><span id="line-1829">         return implClass.get().getPublicConstructor(x -&gt; x.hasNumParameters(0)).orElse(null);</span>
-<span class="source-line-no">1830</span><span id="line-1830"></span>
-<span class="source-line-no">1831</span><span id="line-1831">      if (isAbstract())</span>
-<span class="source-line-no">1832</span><span id="line-1832">         return null;</span>
-<span class="source-line-no">1833</span><span id="line-1833"></span>
-<span class="source-line-no">1834</span><span id="line-1834">      var numParams = nonStaticMemberClass ? 1 : 0;</span>
-<span class="source-line-no">1835</span><span id="line-1835">      return getPublicConstructors()</span>
-<span class="source-line-no">1836</span><span id="line-1836">         .stream()</span>
-<span class="source-line-no">1837</span><span id="line-1837">         .filter(x -&gt; x.isPublic() &amp;&amp; x.isNotDeprecated() &amp;&amp; x.hasNumParameters(numParams))</span>
-<span class="source-line-no">1838</span><span id="line-1838">         .findFirst()</span>
-<span class="source-line-no">1839</span><span id="line-1839">         .orElse(null);</span>
-<span class="source-line-no">1840</span><span id="line-1840">   }</span>
-<span class="source-line-no">1841</span><span id="line-1841"></span>
-<span class="source-line-no">1842</span><span id="line-1842">   private Property&lt;T,Object&gt; findParentProperty() {</span>
-<span class="source-line-no">1843</span><span id="line-1843">      var ap = marshallingContext.getAnnotationProvider();</span>
-<span class="source-line-no">1844</span><span id="line-1844"></span>
-<span class="source-line-no">1845</span><span id="line-1845">      var s = getAllFields()</span>
-<span class="source-line-no">1846</span><span id="line-1846">         .stream()</span>
-<span class="source-line-no">1847</span><span id="line-1847">         .filter(x -&gt; ap.has(ParentProperty.class, x))</span>
-<span class="source-line-no">1848</span><span id="line-1848">         .map(x -&gt; x.accessible())</span>
-<span class="source-line-no">1849</span><span id="line-1849">         .map(x -&gt; Property.&lt;T,Object&gt;create().field(x).build())</span>
-<span class="source-line-no">1850</span><span id="line-1850">         .findFirst();</span>
-<span class="source-line-no">1851</span><span id="line-1851"></span>
-<span class="source-line-no">1852</span><span id="line-1852">      if (s.isPresent()) return s.get();</span>
+<span class="source-line-no">1825</span><span id="line-1825">   private ConstructorInfo findNoArgConstructor() {</span>
+<span class="source-line-no">1826</span><span id="line-1826"></span>
+<span class="source-line-no">1827</span><span id="line-1827">      if (is(Object.class))</span>
+<span class="source-line-no">1828</span><span id="line-1828">         return null;</span>
+<span class="source-line-no">1829</span><span id="line-1829"></span>
+<span class="source-line-no">1830</span><span id="line-1830">      if (implClass.isPresent())</span>
+<span class="source-line-no">1831</span><span id="line-1831">         return implClass.get().getPublicConstructor(x -&gt; x.hasNumParameters(0)).orElse(null);</span>
+<span class="source-line-no">1832</span><span id="line-1832"></span>
+<span class="source-line-no">1833</span><span id="line-1833">      if (isAbstract())</span>
+<span class="source-line-no">1834</span><span id="line-1834">         return null;</span>
+<span class="source-line-no">1835</span><span id="line-1835"></span>
+<span class="source-line-no">1836</span><span id="line-1836">      var numParams = nonStaticMemberClass ? 1 : 0;</span>
+<span class="source-line-no">1837</span><span id="line-1837">      return getPublicConstructors()</span>
+<span class="source-line-no">1838</span><span id="line-1838">         .stream()</span>
+<span class="source-line-no">1839</span><span id="line-1839">         .filter(x -&gt; x.isPublic() &amp;&amp; x.isNotDeprecated() &amp;&amp; x.hasNumParameters(numParams))</span>
+<span class="source-line-no">1840</span><span id="line-1840">         .findFirst()</span>
+<span class="source-line-no">1841</span><span id="line-1841">         .orElse(null);</span>
+<span class="source-line-no">1842</span><span id="line-1842">   }</span>
+<span class="source-line-no">1843</span><span id="line-1843"></span>
+<span class="source-line-no">1844</span><span id="line-1844">   private Property&lt;T,Object&gt; findParentProperty() {</span>
+<span class="source-line-no">1845</span><span id="line-1845">      var ap = marshallingContext.getAnnotationProvider();</span>
+<span class="source-line-no">1846</span><span id="line-1846"></span>
+<span class="source-line-no">1847</span><span id="line-1847">      var s = getAllFields()</span>
+<span class="source-line-no">1848</span><span id="line-1848">         .stream()</span>
+<span class="source-line-no">1849</span><span id="line-1849">         .filter(x -&gt; ap.has(ParentProperty.class, x))</span>
+<span class="source-line-no">1850</span><span id="line-1850">         .map(x -&gt; x.accessible())</span>
+<span class="source-line-no">1851</span><span id="line-1851">         .map(x -&gt; Property.&lt;T,Object&gt;create().field(x).build())</span>
+<span class="source-line-no">1852</span><span id="line-1852">         .findFirst();</span>
 <span class="source-line-no">1853</span><span id="line-1853"></span>
-<span class="source-line-no">1854</span><span id="line-1854">      var builder = Property.&lt;T,Object&gt;create();</span>
+<span class="source-line-no">1854</span><span id="line-1854">      if (s.isPresent()) return s.get();</span>
 <span class="source-line-no">1855</span><span id="line-1855"></span>
-<span class="source-line-no">1856</span><span id="line-1856">      // Look for setter method (1 parameter) with @ParentProperty</span>
-<span class="source-line-no">1857</span><span id="line-1857">      var setterMethod = getAllMethods()</span>
-<span class="source-line-no">1858</span><span id="line-1858">         .stream()</span>
-<span class="source-line-no">1859</span><span id="line-1859">         .filter(x -&gt; ap.has(ParentProperty.class, x) &amp;&amp; x.hasNumParameters(1))</span>
-<span class="source-line-no">1860</span><span id="line-1860">         .findFirst();</span>
-<span class="source-line-no">1861</span><span id="line-1861"></span>
-<span class="source-line-no">1862</span><span id="line-1862">      if (setterMethod.isPresent()) {</span>
-<span class="source-line-no">1863</span><span id="line-1863">         builder.setter(setterMethod.get().accessible());</span>
-<span class="source-line-no">1864</span><span id="line-1864"></span>
-<span class="source-line-no">1865</span><span id="line-1865">         // Try to find a corresponding getter method (even if not annotated)</span>
-<span class="source-line-no">1866</span><span id="line-1866">         // If setter is "setParent", look for "getParent" or "isParent"</span>
-<span class="source-line-no">1867</span><span id="line-1867">         var setterName = setterMethod.get().getNameSimple();</span>
-<span class="source-line-no">1868</span><span id="line-1868">         if (setterName.startsWith("set") &amp;&amp; setterName.length() &gt; 3) {</span>
-<span class="source-line-no">1869</span><span id="line-1869">            var propertyName = setterName.substring(3);</span>
-<span class="source-line-no">1870</span><span id="line-1870">            var getterName1 = "get" + propertyName;</span>
-<span class="source-line-no">1871</span><span id="line-1871">            var getterName2 = "is" + propertyName;</span>
-<span class="source-line-no">1872</span><span id="line-1872"></span>
-<span class="source-line-no">1873</span><span id="line-1873">            var getter = getAllMethods()</span>
-<span class="source-line-no">1874</span><span id="line-1874">               .stream()</span>
-<span class="source-line-no">1875</span><span id="line-1875">               .filter(x -&gt; !x.isStatic() &amp;&amp; x.hasNumParameters(0) &amp;&amp;</span>
-<span class="source-line-no">1876</span><span id="line-1876">                  (x.hasName(getterName1) || x.hasName(getterName2)) &amp;&amp;</span>
-<span class="source-line-no">1877</span><span id="line-1877">                  !x.getReturnType().is(Void.TYPE))</span>
-<span class="source-line-no">1878</span><span id="line-1878">               .findFirst();</span>
-<span class="source-line-no">1879</span><span id="line-1879"></span>
-<span class="source-line-no">1880</span><span id="line-1880">            if (getter.isPresent()) {</span>
-<span class="source-line-no">1881</span><span id="line-1881">               builder.getter(getter.get().accessible());</span>
-<span class="source-line-no">1882</span><span id="line-1882">            } else {</span>
-<span class="source-line-no">1883</span><span id="line-1883">               // Try to find a field with the property name (lowercase first letter)</span>
-<span class="source-line-no">1884</span><span id="line-1884">               var fieldName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);</span>
-<span class="source-line-no">1885</span><span id="line-1885">               var field = getAllFields()</span>
-<span class="source-line-no">1886</span><span id="line-1886">                  .stream()</span>
-<span class="source-line-no">1887</span><span id="line-1887">                  .filter(x -&gt; !x.isStatic() &amp;&amp; x.hasName(fieldName))</span>
-<span class="source-line-no">1888</span><span id="line-1888">                  .findFirst();</span>
-<span class="source-line-no">1889</span><span id="line-1889"></span>
-<span class="source-line-no">1890</span><span id="line-1890">               if (field.isPresent()) {</span>
-<span class="source-line-no">1891</span><span id="line-1891">                  var f = field.get().accessible();</span>
-<span class="source-line-no">1892</span><span id="line-1892">                  builder.getter(f::get);</span>
-<span class="source-line-no">1893</span><span id="line-1893">               }</span>
-<span class="source-line-no">1894</span><span id="line-1894">            }</span>
-<span class="source-line-no">1895</span><span id="line-1895">         }</span>
-<span class="source-line-no">1896</span><span id="line-1896">      }</span>
-<span class="source-line-no">1897</span><span id="line-1897"></span>
-<span class="source-line-no">1898</span><span id="line-1898">      // Look for getter method (0 parameters, non-void return) with @ParentProperty</span>
-<span class="source-line-no">1899</span><span id="line-1899">      var getterMethod = getAllMethods()</span>
-<span class="source-line-no">1900</span><span id="line-1900">         .stream()</span>
-<span class="source-line-no">1901</span><span id="line-1901">         .filter(x -&gt; ap.has(ParentProperty.class, x) &amp;&amp; x.hasNumParameters(0) &amp;&amp; !x.getReturnType().is(Void.TYPE))</span>
-<span class="source-line-no">1902</span><span id="line-1902">         .findFirst();</span>
-<span class="source-line-no">1903</span><span id="line-1903"></span>
-<span class="source-line-no">1904</span><span id="line-1904">      if (getterMethod.isPresent()) {</span>
-<span class="source-line-no">1905</span><span id="line-1905">         builder.getter(getterMethod.get().accessible());</span>
-<span class="source-line-no">1906</span><span id="line-1906">      }</span>
-<span class="source-line-no">1907</span><span id="line-1907"></span>
-<span class="source-line-no">1908</span><span id="line-1908">      // Return null if neither setter nor getter was found</span>
-<span class="source-line-no">1909</span><span id="line-1909">      if (setterMethod.isEmpty() &amp;&amp; getterMethod.isEmpty())</span>
-<span class="source-line-no">1910</span><span id="line-1910">         return null;</span>
-<span class="source-line-no">1911</span><span id="line-1911"></span>
-<span class="source-line-no">1912</span><span id="line-1912">      return builder.build();</span>
-<span class="source-line-no">1913</span><span id="line-1913">   }</span>
-<span class="source-line-no">1914</span><span id="line-1914"></span>
-<span class="source-line-no">1915</span><span id="line-1915">   private ConstructorInfo findStringConstructor() {</span>
+<span class="source-line-no">1856</span><span id="line-1856">      var builder = Property.&lt;T,Object&gt;create();</span>
+<span class="source-line-no">1857</span><span id="line-1857"></span>
+<span class="source-line-no">1858</span><span id="line-1858">      // Look for setter method (1 parameter) with @ParentProperty</span>
+<span class="source-line-no">1859</span><span id="line-1859">      var setterMethod = getAllMethods()</span>
+<span class="source-line-no">1860</span><span id="line-1860">         .stream()</span>
+<span class="source-line-no">1861</span><span id="line-1861">         .filter(x -&gt; ap.has(ParentProperty.class, x) &amp;&amp; x.hasNumParameters(1))</span>
+<span class="source-line-no">1862</span><span id="line-1862">         .findFirst();</span>
+<span class="source-line-no">1863</span><span id="line-1863"></span>
+<span class="source-line-no">1864</span><span id="line-1864">      if (setterMethod.isPresent()) {</span>
+<span class="source-line-no">1865</span><span id="line-1865">         builder.setter(setterMethod.get().accessible());</span>
+<span class="source-line-no">1866</span><span id="line-1866"></span>
+<span class="source-line-no">1867</span><span id="line-1867">         // Try to find a corresponding getter method (even if not annotated)</span>
+<span class="source-line-no">1868</span><span id="line-1868">         // If setter is "setParent", look for "getParent" or "isParent"</span>
+<span class="source-line-no">1869</span><span id="line-1869">         var setterName = setterMethod.get().getNameSimple();</span>
+<span class="source-line-no">1870</span><span id="line-1870">         if (setterName.startsWith("set") &amp;&amp; setterName.length() &gt; 3) {</span>
+<span class="source-line-no">1871</span><span id="line-1871">            var propertyName = setterName.substring(3);</span>
+<span class="source-line-no">1872</span><span id="line-1872">            var getterName1 = "get" + propertyName;</span>
+<span class="source-line-no">1873</span><span id="line-1873">            var getterName2 = "is" + propertyName;</span>
+<span class="source-line-no">1874</span><span id="line-1874"></span>
+<span class="source-line-no">1875</span><span id="line-1875">            var getter = getAllMethods()</span>
+<span class="source-line-no">1876</span><span id="line-1876">               .stream()</span>
+<span class="source-line-no">1877</span><span id="line-1877">               .filter(x -&gt; !x.isStatic() &amp;&amp; x.hasNumParameters(0) &amp;&amp;</span>
+<span class="source-line-no">1878</span><span id="line-1878">                  (x.hasName(getterName1) || x.hasName(getterName2)) &amp;&amp;</span>
+<span class="source-line-no">1879</span><span id="line-1879">                  !x.getReturnType().is(Void.TYPE))</span>
+<span class="source-line-no">1880</span><span id="line-1880">               .findFirst();</span>
+<span class="source-line-no">1881</span><span id="line-1881"></span>
+<span class="source-line-no">1882</span><span id="line-1882">            if (getter.isPresent()) {</span>
+<span class="source-line-no">1883</span><span id="line-1883">               builder.getter(getter.get().accessible());</span>
+<span class="source-line-no">1884</span><span id="line-1884">            } else {</span>
+<span class="source-line-no">1885</span><span id="line-1885">               // Try to find a field with the property name (lowercase first letter)</span>
+<span class="source-line-no">1886</span><span id="line-1886">               var fieldName = Character.toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);</span>
+<span class="source-line-no">1887</span><span id="line-1887">               var field = getAllFields()</span>
+<span class="source-line-no">1888</span><span id="line-1888">                  .stream()</span>
+<span class="source-line-no">1889</span><span id="line-1889">                  .filter(x -&gt; !x.isStatic() &amp;&amp; x.hasName(fieldName))</span>
+<span class="source-line-no">1890</span><span id="line-1890">                  .findFirst();</span>
+<span class="source-line-no">1891</span><span id="line-1891"></span>
+<span class="source-line-no">1892</span><span id="line-1892">               if (field.isPresent()) {</span>
+<span class="source-line-no">1893</span><span id="line-1893">                  var f = field.get().accessible();</span>
+<span class="source-line-no">1894</span><span id="line-1894">                  builder.getter(f::get);</span>
+<span class="source-line-no">1895</span><span id="line-1895">               }</span>
+<span class="source-line-no">1896</span><span id="line-1896">            }</span>
+<span class="source-line-no">1897</span><span id="line-1897">         }</span>
+<span class="source-line-no">1898</span><span id="line-1898">      }</span>
+<span class="source-line-no">1899</span><span id="line-1899"></span>
+<span class="source-line-no">1900</span><span id="line-1900">      // Look for getter method (0 parameters, non-void return) with @ParentProperty</span>
+<span class="source-line-no">1901</span><span id="line-1901">      var getterMethod = getAllMethods()</span>
+<span class="source-line-no">1902</span><span id="line-1902">         .stream()</span>
+<span class="source-line-no">1903</span><span id="line-1903">         .filter(x -&gt; ap.has(ParentProperty.class, x) &amp;&amp; x.hasNumParameters(0) &amp;&amp; !x.getReturnType().is(Void.TYPE))</span>
+<span class="source-line-no">1904</span><span id="line-1904">         .findFirst();</span>
+<span class="source-line-no">1905</span><span id="line-1905"></span>
+<span class="source-line-no">1906</span><span id="line-1906">      if (getterMethod.isPresent()) {</span>
+<span class="source-line-no">1907</span><span id="line-1907">         builder.getter(getterMethod.get().accessible());</span>
+<span class="source-line-no">1908</span><span id="line-1908">      }</span>
+<span class="source-line-no">1909</span><span id="line-1909"></span>
+<span class="source-line-no">1910</span><span id="line-1910">      // Return null if neither setter nor getter was found</span>
+<span class="source-line-no">1911</span><span id="line-1911">      if (setterMethod.isEmpty() &amp;&amp; getterMethod.isEmpty())</span>
+<span class="source-line-no">1912</span><span id="line-1912">         return null;</span>
+<span class="source-line-no">1913</span><span id="line-1913"></span>
+<span class="source-line-no">1914</span><span id="line-1914">      return builder.build();</span>
+<span class="source-line-no">1915</span><span id="line-1915">   }</span>
 <span class="source-line-no">1916</span><span id="line-1916"></span>
-<span class="source-line-no">1917</span><span id="line-1917">      if (is(Object.class) || isAbstract())</span>
-<span class="source-line-no">1918</span><span id="line-1918">         return null;</span>
-<span class="source-line-no">1919</span><span id="line-1919"></span>
-<span class="source-line-no">1920</span><span id="line-1920">      if (implClass.isPresent())</span>
-<span class="source-line-no">1921</span><span id="line-1921">         return implClass.get().getPublicConstructor(x -&gt; x.hasParameterTypes(String.class)).orElse(null);</span>
-<span class="source-line-no">1922</span><span id="line-1922"></span>
-<span class="source-line-no">1923</span><span id="line-1923">      if (isAbstract())</span>
-<span class="source-line-no">1924</span><span id="line-1924">         return null;</span>
-<span class="source-line-no">1925</span><span id="line-1925"></span>
-<span class="source-line-no">1926</span><span id="line-1926">      var numParams = nonStaticMemberClass ? 2 : 1;</span>
-<span class="source-line-no">1927</span><span id="line-1927">      return getPublicConstructors()</span>
-<span class="source-line-no">1928</span><span id="line-1928">         .stream()</span>
-<span class="source-line-no">1929</span><span id="line-1929">         .filter(x -&gt; x.isPublic() &amp;&amp; x.isNotDeprecated() &amp;&amp; x.hasNumParameters(numParams))</span>
-<span class="source-line-no">1930</span><span id="line-1930">         .filter(x -&gt; x.getParameter(numParams == 2 ? 1 : 0).isType(String.class))</span>
-<span class="source-line-no">1931</span><span id="line-1931">         .findFirst()</span>
-<span class="source-line-no">1932</span><span id="line-1932">         .orElse(null);</span>
-<span class="source-line-no">1933</span><span id="line-1933">   }</span>
-<span class="source-line-no">1934</span><span id="line-1934"></span>
-<span class="source-line-no">1935</span><span id="line-1935">   /**</span>
-<span class="source-line-no">1936</span><span id="line-1936">    * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the normal class of one of the</span>
-<span class="source-line-no">1937</span><span id="line-1937">    * child POJO swaps associated with this class.</span>
-<span class="source-line-no">1938</span><span id="line-1938">    *</span>
-<span class="source-line-no">1939</span><span id="line-1939">    * @param normalClass The normal class being resolved.</span>
-<span class="source-line-no">1940</span><span id="line-1940">    * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</span>
-<span class="source-line-no">1941</span><span id="line-1941">    */</span>
-<span class="source-line-no">1942</span><span id="line-1942">   protected ObjectSwap&lt;?,?&gt; getChildObjectSwapForSwap(Class&lt;?&gt; normalClass) {</span>
-<span class="source-line-no">1943</span><span id="line-1943">      return childSwapMap.get(normalClass);</span>
-<span class="source-line-no">1944</span><span id="line-1944">   }</span>
-<span class="source-line-no">1945</span><span id="line-1945"></span>
-<span class="source-line-no">1946</span><span id="line-1946">   /**</span>
-<span class="source-line-no">1947</span><span id="line-1947">    * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the swap class of one of the child</span>
-<span class="source-line-no">1948</span><span id="line-1948">    * POJO swaps associated with this class.</span>
-<span class="source-line-no">1949</span><span id="line-1949">    *</span>
-<span class="source-line-no">1950</span><span id="line-1950">    * @param swapClass The swap class being resolved.</span>
-<span class="source-line-no">1951</span><span id="line-1951">    * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</span>
-<span class="source-line-no">1952</span><span id="line-1952">    */</span>
-<span class="source-line-no">1953</span><span id="line-1953">   protected ObjectSwap&lt;?,?&gt; getChildObjectSwapForUnswap(Class&lt;?&gt; swapClass) {</span>
-<span class="source-line-no">1954</span><span id="line-1954">      return childUnswapMap.get(swapClass);</span>
-<span class="source-line-no">1955</span><span id="line-1955">   }</span>
-<span class="source-line-no">1956</span><span id="line-1956"></span>
-<span class="source-line-no">1957</span><span id="line-1957">   /**</span>
-<span class="source-line-no">1958</span><span id="line-1958">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this class or any child classes has a {@link ObjectSwap} associated with it.</span>
-<span class="source-line-no">1959</span><span id="line-1959">    *</span>
-<span class="source-line-no">1960</span><span id="line-1960">    * &lt;p&gt;</span>
-<span class="source-line-no">1961</span><span id="line-1961">    * Used when transforming bean properties to prevent having to look up transforms if we know for certain that no</span>
-<span class="source-line-no">1962</span><span id="line-1962">    * transforms are associated with a bean property.</span>
-<span class="source-line-no">1963</span><span id="line-1963">    *</span>
-<span class="source-line-no">1964</span><span id="line-1964">    * @return &lt;jk&gt;true&lt;/jk&gt; if this class or any child classes has a {@link ObjectSwap} associated with it.</span>
-<span class="source-line-no">1965</span><span id="line-1965">    */</span>
-<span class="source-line-no">1966</span><span id="line-1966">   protected boolean hasChildSwaps() {</span>
-<span class="source-line-no">1967</span><span id="line-1967">      return ! childSwaps.get().isEmpty();</span>
-<span class="source-line-no">1968</span><span id="line-1968">   }</span>
-<span class="source-line-no">1969</span><span id="line-1969"></span>
-<span class="source-line-no">1970</span><span id="line-1970">   /**</span>
-<span class="source-line-no">1971</span><span id="line-1971">    * Appends this object as a readable string to the specified string builder.</span>
-<span class="source-line-no">1972</span><span id="line-1972">    *</span>
-<span class="source-line-no">1973</span><span id="line-1973">    * @param sb The string builder to append this object to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1974</span><span id="line-1974">    * @param simple Print simple class names only (no package).</span>
-<span class="source-line-no">1975</span><span id="line-1975">    * @return The passed-in string builder.</span>
-<span class="source-line-no">1976</span><span id="line-1976">    */</span>
-<span class="source-line-no">1977</span><span id="line-1977">   protected StringBuilder toString(StringBuilder sb, boolean simple) {</span>
-<span class="source-line-no">1978</span><span id="line-1978">      var n = simple ? cnsq(inner()) : cn(inner());</span>
-<span class="source-line-no">1979</span><span id="line-1979">      if (cat.is(ARRAY))</span>
-<span class="source-line-no">1980</span><span id="line-1980">         return elementType.get().toString(sb, simple).append('[').append(']');</span>
-<span class="source-line-no">1981</span><span id="line-1981">      if (cat.is(BEANMAP))</span>
-<span class="source-line-no">1982</span><span id="line-1982">         return sb.append(cn(BeanMap.class)).append('&lt;').append(n).append('&gt;');</span>
-<span class="source-line-no">1983</span><span id="line-1983">      if (cat.is(MAP)) {</span>
-<span class="source-line-no">1984</span><span id="line-1984">         var kvTypes = keyValueTypes.get();</span>
-<span class="source-line-no">1985</span><span id="line-1985">         var kt = kvTypes.optKeyType();</span>
-<span class="source-line-no">1986</span><span id="line-1986">         var vt = kvTypes.optValueType();</span>
-<span class="source-line-no">1987</span><span id="line-1987">         if (kt.isPresent() &amp;&amp; vt.isPresent() &amp;&amp; kt.get().isObject() &amp;&amp; vt.get().isObject())</span>
-<span class="source-line-no">1988</span><span id="line-1988">            return sb.append(n);</span>
-<span class="source-line-no">1989</span><span id="line-1989">         return sb.append(n).append('&lt;').append(kt.map(x -&gt; x.toString(simple)).orElse("?")).append(',').append(vt.map(x -&gt; x.toString(simple)).orElse("?")).append('&gt;');</span>
-<span class="source-line-no">1990</span><span id="line-1990">      }</span>
-<span class="source-line-no">1991</span><span id="line-1991">      if (cat.is(COLLECTION) || is(Optional.class)) {</span>
-<span class="source-line-no">1992</span><span id="line-1992">         var et = elementType.get();</span>
-<span class="source-line-no">1993</span><span id="line-1993">         String typeString = et != null ? et.toString(simple) : "?";</span>
-<span class="source-line-no">1994</span><span id="line-1994">         return sb.append(n).append(et != null &amp;&amp; et.isObject() ? "" : "&lt;" + typeString + "&gt;");</span>
-<span class="source-line-no">1995</span><span id="line-1995">      }</span>
-<span class="source-line-no">1996</span><span id="line-1996">      return sb.append(n);</span>
-<span class="source-line-no">1997</span><span id="line-1997">   }</span>
-<span class="source-line-no">1998</span><span id="line-1998">}</span>
+<span class="source-line-no">1917</span><span id="line-1917">   private ConstructorInfo findStringConstructor() {</span>
+<span class="source-line-no">1918</span><span id="line-1918"></span>
+<span class="source-line-no">1919</span><span id="line-1919">      if (is(Object.class) || isAbstract())</span>
+<span class="source-line-no">1920</span><span id="line-1920">         return null;</span>
+<span class="source-line-no">1921</span><span id="line-1921"></span>
+<span class="source-line-no">1922</span><span id="line-1922">      if (implClass.isPresent())</span>
+<span class="source-line-no">1923</span><span id="line-1923">         return implClass.get().getPublicConstructor(x -&gt; x.hasParameterTypes(String.class)).orElse(null);</span>
+<span class="source-line-no">1924</span><span id="line-1924"></span>
+<span class="source-line-no">1925</span><span id="line-1925">      if (isAbstract())</span>
+<span class="source-line-no">1926</span><span id="line-1926">         return null;</span>
+<span class="source-line-no">1927</span><span id="line-1927"></span>
+<span class="source-line-no">1928</span><span id="line-1928">      var numParams = nonStaticMemberClass ? 2 : 1;</span>
+<span class="source-line-no">1929</span><span id="line-1929">      return getPublicConstructors()</span>
+<span class="source-line-no">1930</span><span id="line-1930">         .stream()</span>
+<span class="source-line-no">1931</span><span id="line-1931">         .filter(x -&gt; x.isPublic() &amp;&amp; x.isNotDeprecated() &amp;&amp; x.hasNumParameters(numParams))</span>
+<span class="source-line-no">1932</span><span id="line-1932">         .filter(x -&gt; x.getParameter(numParams == 2 ? 1 : 0).isType(String.class))</span>
+<span class="source-line-no">1933</span><span id="line-1933">         .findFirst()</span>
+<span class="source-line-no">1934</span><span id="line-1934">         .orElse(null);</span>
+<span class="source-line-no">1935</span><span id="line-1935">   }</span>
+<span class="source-line-no">1936</span><span id="line-1936"></span>
+<span class="source-line-no">1937</span><span id="line-1937">   /**</span>
+<span class="source-line-no">1938</span><span id="line-1938">    * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the normal class of one of the</span>
+<span class="source-line-no">1939</span><span id="line-1939">    * child POJO swaps associated with this class.</span>
+<span class="source-line-no">1940</span><span id="line-1940">    *</span>
+<span class="source-line-no">1941</span><span id="line-1941">    * @param normalClass The normal class being resolved.</span>
+<span class="source-line-no">1942</span><span id="line-1942">    * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</span>
+<span class="source-line-no">1943</span><span id="line-1943">    */</span>
+<span class="source-line-no">1944</span><span id="line-1944">   protected ObjectSwap&lt;?,?&gt; getChildObjectSwapForSwap(Class&lt;?&gt; normalClass) {</span>
+<span class="source-line-no">1945</span><span id="line-1945">      return childSwapMap.get(normalClass);</span>
+<span class="source-line-no">1946</span><span id="line-1946">   }</span>
+<span class="source-line-no">1947</span><span id="line-1947"></span>
+<span class="source-line-no">1948</span><span id="line-1948">   /**</span>
+<span class="source-line-no">1949</span><span id="line-1949">    * Returns the {@link ObjectSwap} where the specified class is the same/subclass of the swap class of one of the child</span>
+<span class="source-line-no">1950</span><span id="line-1950">    * POJO swaps associated with this class.</span>
+<span class="source-line-no">1951</span><span id="line-1951">    *</span>
+<span class="source-line-no">1952</span><span id="line-1952">    * @param swapClass The swap class being resolved.</span>
+<span class="source-line-no">1953</span><span id="line-1953">    * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</span>
+<span class="source-line-no">1954</span><span id="line-1954">    */</span>
+<span class="source-line-no">1955</span><span id="line-1955">   protected ObjectSwap&lt;?,?&gt; getChildObjectSwapForUnswap(Class&lt;?&gt; swapClass) {</span>
+<span class="source-line-no">1956</span><span id="line-1956">      return childUnswapMap.get(swapClass);</span>
+<span class="source-line-no">1957</span><span id="line-1957">   }</span>
+<span class="source-line-no">1958</span><span id="line-1958"></span>
+<span class="source-line-no">1959</span><span id="line-1959">   /**</span>
+<span class="source-line-no">1960</span><span id="line-1960">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this class or any child classes has a {@link ObjectSwap} associated with it.</span>
+<span class="source-line-no">1961</span><span id="line-1961">    *</span>
+<span class="source-line-no">1962</span><span id="line-1962">    * &lt;p&gt;</span>
+<span class="source-line-no">1963</span><span id="line-1963">    * Used when transforming bean properties to prevent having to look up transforms if we know for certain that no</span>
+<span class="source-line-no">1964</span><span id="line-1964">    * transforms are associated with a bean property.</span>
+<span class="source-line-no">1965</span><span id="line-1965">    *</span>
+<span class="source-line-no">1966</span><span id="line-1966">    * @return &lt;jk&gt;true&lt;/jk&gt; if this class or any child classes has a {@link ObjectSwap} associated with it.</span>
+<span class="source-line-no">1967</span><span id="line-1967">    */</span>
+<span class="source-line-no">1968</span><span id="line-1968">   protected boolean hasChildSwaps() {</span>
+<span class="source-line-no">1969</span><span id="line-1969">      return ! childSwaps.get().isEmpty();</span>
+<span class="source-line-no">1970</span><span id="line-1970">   }</span>
+<span class="source-line-no">1971</span><span id="line-1971"></span>
+<span class="source-line-no">1972</span><span id="line-1972">   /**</span>
+<span class="source-line-no">1973</span><span id="line-1973">    * Appends this object as a readable string to the specified string builder.</span>
+<span class="source-line-no">1974</span><span id="line-1974">    *</span>
+<span class="source-line-no">1975</span><span id="line-1975">    * @param sb The string builder to append this object to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1976</span><span id="line-1976">    * @param simple Print simple class names only (no package).</span>
+<span class="source-line-no">1977</span><span id="line-1977">    * @return The passed-in string builder.</span>
+<span class="source-line-no">1978</span><span id="line-1978">    */</span>
+<span class="source-line-no">1979</span><span id="line-1979">   protected StringBuilder toString(StringBuilder sb, boolean simple) {</span>
+<span class="source-line-no">1980</span><span id="line-1980">      var n = simple ? cnsq(inner()) : cn(inner());</span>
+<span class="source-line-no">1981</span><span id="line-1981">      if (cat.is(ARRAY))</span>
+<span class="source-line-no">1982</span><span id="line-1982">         return elementType.get().toString(sb, simple).append('[').append(']');</span>
+<span class="source-line-no">1983</span><span id="line-1983">      if (cat.is(BEANMAP))</span>
+<span class="source-line-no">1984</span><span id="line-1984">         return sb.append(cn(BeanMap.class)).append('&lt;').append(n).append('&gt;');</span>
+<span class="source-line-no">1985</span><span id="line-1985">      if (cat.is(MAP)) {</span>
+<span class="source-line-no">1986</span><span id="line-1986">         var kvTypes = keyValueTypes.get();</span>
+<span class="source-line-no">1987</span><span id="line-1987">         var kt = kvTypes.optKeyType();</span>
+<span class="source-line-no">1988</span><span id="line-1988">         var vt = kvTypes.optValueType();</span>
+<span class="source-line-no">1989</span><span id="line-1989">         if (kt.isPresent() &amp;&amp; vt.isPresent() &amp;&amp; kt.get().isObject() &amp;&amp; vt.get().isObject())</span>
+<span class="source-line-no">1990</span><span id="line-1990">            return sb.append(n);</span>
+<span class="source-line-no">1991</span><span id="line-1991">         return sb.append(n).append('&lt;').append(kt.map(x -&gt; x.toString(simple)).orElse("?")).append(',').append(vt.map(x -&gt; x.toString(simple)).orElse("?")).append('&gt;');</span>
+<span class="source-line-no">1992</span><span id="line-1992">      }</span>
+<span class="source-line-no">1993</span><span id="line-1993">      if (cat.is(COLLECTION) || is(Optional.class)) {</span>
+<span class="source-line-no">1994</span><span id="line-1994">         var et = elementType.get();</span>
+<span class="source-line-no">1995</span><span id="line-1995">         String typeString = et != null ? et.toString(simple) : "?";</span>
+<span class="source-line-no">1996</span><span id="line-1996">         return sb.append(n).append(et != null &amp;&amp; et.isObject() ? "" : "&lt;" + typeString + "&gt;");</span>
+<span class="source-line-no">1997</span><span id="line-1997">      }</span>
+<span class="source-line-no">1998</span><span id="line-1998">      return sb.append(n);</span>
+<span class="source-line-no">1999</span><span id="line-1999">   }</span>
+<span class="source-line-no">2000</span><span id="line-2000">}</span>
 
 
 

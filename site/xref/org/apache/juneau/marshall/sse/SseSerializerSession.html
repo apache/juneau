@@ -152,13 +152,13 @@
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">if</strong> (e == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">if</strong> (!isEmpty(e.getEvent()))
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			writeField(w, <span class="jxr_string">"event"</span>, e.getEvent());
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			writeField(w, <span class="jxr_string">"event"</span>, stripLineBreaks(e.getEvent()));
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">if</strong> (e.getData() != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> line : splitData(e.getData()))
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 				writeField(w, <span class="jxr_string">"data"</span>, line);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">if</strong> (e.getId() != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			writeField(w, <span class="jxr_string">"id"</span>, e.getId());
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			writeField(w, <span class="jxr_string">"id"</span>, stripLineBreaks(e.getId()));
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">if</strong> (e.getRetry() != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			w.write(<span class="jxr_string">"retry: "</span> + e.getRetry() + <span class="jxr_string">"\n"</span>);
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		w.write(<span class="jxr_string">"\n"</span>);
@@ -173,10 +173,14 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<strong class="jxr_keyword">static</strong> List&lt;String&gt; splitData(String s) {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> parts = s.split(<span class="jxr_string">"\n"</span>, -1);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> parts = s.split(<span class="jxr_string">"\r\n|\r|\n"</span>, -1);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">return</strong> Arrays.asList(parts);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> }
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String stripLineBreaks(String s) {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">return</strong> s.replace(<span class="jxr_string">"\r"</span>, <span class="jxr_string">""</span>).replace(<span class="jxr_string">"\n"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

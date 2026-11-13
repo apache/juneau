@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.html#line-294">ConsoleFreemarkerMixin.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.html#line-316">ConsoleFreemarkerMixin.Builder</a></span>
 <span class="extends-implements">extends <a href="../../rest/server/view/freemarker/FreemarkerMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin.Builder</a></span></div>
 <div class="block">Builder for <a href="ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.console.freemarker"><code>ConsoleFreemarkerMixin</code></a>.</div>
 </section>
@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-308">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-330">Builder</a></span>()</div>
 <div class="block">Constructor &mdash; package access for <a href="ConsoleFreemarkerMixin.html#create()"><code>ConsoleFreemarkerMixin.create()</code></a>.</div>
 </section>
 </li>
@@ -224,11 +224,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="basePath(java.lang.String)">
 <h3>basePath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-318">basePath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-340">basePath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the classpath base path under which template resources are resolved.
 
  <p>
- Defaults to <a href="../../rest/server/view/freemarker/FreemarkerMixin.html#DEFAULT_BASE_PATH"><code>"/"</code></a>. A typical configured
+ Defaults to <a href="../../rest/server/view/freemarker/FreemarkerMixin.html#DEFAULT_BASE_PATH"><code>"/templates/"</code></a>. A typical configured
  value is <code>"/templates/"</code> &mdash; the same Spring-Boot-compatible layout
  convention the sibling JSP / Thymeleaf / Mustache bridges use.
 
@@ -252,7 +252,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="chromeTemplate(java.lang.String)">
 <h3>chromeTemplate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-334">chromeTemplate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;chromeTemplate)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-356">chromeTemplate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;chromeTemplate)</span></div>
 <div class="block">Sets the consumer chrome template that <code>&lt;@page&gt;</code> includes after capturing its body.
 
  <p>
@@ -269,7 +269,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="registerToolkitPack(java.lang.String,java.util.List,java.util.List)">
 <h3>registerToolkitPack</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-350">registerToolkitPack</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-372">registerToolkitPack</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;cssPaths,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;jsPaths)</span></div>
 <div class="block">Registers an app-supplied <a href="ToolkitPack.Kind.html#RUNTIME"><code>ToolkitPack.Kind.RUNTIME</code></a> toolkit pack with no dependencies.
@@ -289,7 +289,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="registerToolkitPack(org.apache.juneau.console.freemarker.ToolkitPack)">
 <h3>registerToolkitPack</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-364">registerToolkitPack</a></span><wbr><span class="parameters">(<a href="ToolkitPack.html" title="class in org.apache.juneau.console.freemarker">ToolkitPack</a>&nbsp;pack)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-386">registerToolkitPack</a></span><wbr><span class="parameters">(<a href="ToolkitPack.html" title="class in org.apache.juneau.console.freemarker">ToolkitPack</a>&nbsp;pack)</span></div>
 <div class="block">Registers an app-supplied toolkit pack.
 
  <p>
@@ -306,7 +306,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="providedPacks(java.lang.String...)">
 <h3>providedPacks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-376">providedPacks</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-398">providedPacks</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
 <div class="block">Names packs the app's chrome already loads.  A provided pack contributes no URLs; its dependencies still load
  unless they are provided too.</div>
 <dl class="notes">
@@ -320,7 +320,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="requirePacks(java.lang.String...)">
 <h3>requirePacks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-390">requirePacks</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-412">requirePacks</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
 <div class="block">Opts in to the startup WebJar check: the named packs (for example <code>"charts"</code>) are expanded through
  <code>dependsOn</code> and every WebJar they reach is probed when the mixin is built, so a missing
  <code>org.webjars.npm:echarts</code> fails at startup (E-70) instead of on the first chart page.  An app pack
@@ -336,7 +336,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cardRequires(java.lang.String,java.lang.String...)">
 <h3>cardRequires</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-409">cardRequires</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-431">cardRequires</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;packs)</span></div>
 <div class="block">Adds packs every card of a type requires, after the built-in one
  (<code>datatables</code> &rarr; <code>"datatables-glue"</code>).</div>
@@ -352,7 +352,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cardType(org.apache.juneau.console.CardTypeHandler)">
 <h3>cardType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-426">cardType</a></span><wbr><span class="parameters">(<a href="../CardTypeHandler.html" title="interface in org.apache.juneau.console">CardTypeHandler</a>&nbsp;handler)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-448">cardType</a></span><wbr><span class="parameters">(<a href="../CardTypeHandler.html" title="interface in org.apache.juneau.console">CardTypeHandler</a>&nbsp;handler)</span></div>
 <div class="block">Registers a server-side card type handler for this mixin's <code>&lt;@card&gt;</code> directive, on top of
  <a href="../CardTypeRegistry.html#standard()"><code>CardTypeRegistry.standard()</code></a>.
 
@@ -372,7 +372,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="devMode(boolean)">
 <h3>devMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-449">devMode</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-471">devMode</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Validates every page contract against <code>juneau-page.schema.json</code> when <code>&lt;@console&gt;</code> closes, and
  fails the render with E-14 on any finding.
 
@@ -397,7 +397,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="adopterAssets(java.lang.ClassLoader,java.lang.String)">
 <h3>adopterAssets</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-484">adopterAssets</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html" title="class or interface in java.lang" class="external-link">ClassLoader</a>&nbsp;loader,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.Builder.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-506">adopterAssets</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html" title="class or interface in java.lang" class="external-link">ClassLoader</a>&nbsp;loader,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceRoot)</span></div>
 <div class="block">Enables the <code>assetUrl(path)</code> template function that versions the adopter's own static assets.
 
@@ -435,7 +435,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-500">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ConsoleFreemarkerMixin.Builder.html#line-522">build</a></span>()</div>
 <div class="block">Builds the <a href="ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.console.freemarker"><code>ConsoleFreemarkerMixin</code></a>.
 
  <p>

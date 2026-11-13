@@ -153,31 +153,46 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Decides whether credentials should be forwarded or stripped for a single redirect hop.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isDowngrade(java.net.URI,java.net.URI)" class="member-name-link">isDowngrade</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;from,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;to)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#forwardOnCrossOrigin()" class="member-name-link">forwardOnCrossOrigin</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Returns the lower-cased names of the headers that may be replayed against another origin.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isDowngrade(java.net.URI,java.net.URI)" class="member-name-link">isDowngrade</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;from,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;to)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns <code>true</code> if the redirect represents an <code>https</code> &rarr; <code>http</code> scheme
  downgrade.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isForwardedCrossOrigin(java.lang.String)" class="member-name-link">isForwardedCrossOrigin</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Returns whether a header may be replayed against another origin.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sameOrigin(java.net.URI,java.net.URI)" class="member-name-link">sameOrigin</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;from,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;to)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#mustStrip(java.lang.String,java.util.Collection)" class="member-name-link">mustStrip</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;extraForward)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Returns whether a header must be removed from a request replayed against another origin.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sameOrigin(java.net.URI,java.net.URI)" class="member-name-link">sameOrigin</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;from,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;to)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns <code>true</code> if <code>from</code> and <code>to</code> share the same origin &mdash; scheme,
  host (case-insensitive), and port (after default-port normalization for <code>http</code>/<code>https</code>).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#shouldStripCredentials(java.net.URI,java.net.URI)" class="member-name-link">shouldStripCredentials</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;from,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#shouldStripCredentials(java.net.URI,java.net.URI)" class="member-name-link">shouldStripCredentials</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;from,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;to)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Convenience boolean form of <a href="#decide(java.net.URI,java.net.URI)"><code>decide(URI, URI)</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#stripOnCrossOrigin()" class="member-name-link">stripOnCrossOrigin</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Returns the header names that must be stripped from a request before it is replayed
- cross-origin.</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#stripOnCrossOrigin()" class="member-name-link">stripOnCrossOrigin</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Returns the well-known credential header names, used to mark them sensitive (for example to keep them out of logs).</div>
 </div>
 </div>
 </div>
@@ -270,12 +285,59 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="stripOnCrossOrigin()">
 <h3>stripOnCrossOrigin</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RedirectSecurity.html#line-141">stripOnCrossOrigin</a></span>()</div>
-<div class="block">Returns the header names that must be stripped from a request before it is replayed
- cross-origin. Reuses the canonical credential-header set from <a href="../../http/RedactedHeaders.html#DEFAULT"><code>RedactedHeaders.DEFAULT</code></a>.</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RedirectSecurity.html#line-144">stripOnCrossOrigin</a></span>()</div>
+<div class="block">Returns the well-known credential header names, used to mark them sensitive (for example to keep them out of logs).
+
+ <p>
+ This is not the strip list: a cross-origin redirect removes every header that is not on
+ <a href="#forwardOnCrossOrigin()"><code>forwardOnCrossOrigin()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The set of header names to strip on a cross-origin (or downgraded) redirect.</dd>
+<dd>The set of credential header names.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="forwardOnCrossOrigin()">
+<h3>forwardOnCrossOrigin</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RedirectSecurity.html#line-163">forwardOnCrossOrigin</a></span>()</div>
+<div class="block">Returns the lower-cased names of the headers that may be replayed against another origin.
+
+ <p>
+ Every other caller-set header is removed from a request replayed cross-origin (or across an <code>https</code> &rarr;
+ <code>http</code> downgrade).  Additional names can be forwarded per client with
+ <a href="RestClient.Builder.html#redirectForwardHeaders(java.lang.String...)"><code>RestClient.Builder.redirectForwardHeaders(String...)</code></a>.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>An unmodifiable set of lower-cased header names.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isForwardedCrossOrigin(java.lang.String)">
+<h3>isForwardedCrossOrigin</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RedirectSecurity.html#line-173">isForwardedCrossOrigin</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="block">Returns whether a header may be replayed against another origin.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - The header name.  Compared case-insensitively.</dd>
+<dt>Returns:</dt>
+<dd><jk>true</jk> if the header is on the built-in forward list.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="mustStrip(java.lang.String,java.util.Collection)">
+<h3>mustStrip</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RedirectSecurity.html#line-184">mustStrip</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;extraForward)</span></div>
+<div class="block">Returns whether a header must be removed from a request replayed against another origin.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - The header name.</dd>
+<dd><code>extraForward</code> - Additional header names the caller allows to be forwarded.  May be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd><jk>true</jk> if the header is on neither the built-in nor the caller-supplied forward list.</dd>
 </dl>
 </section>
 </li>

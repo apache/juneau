@@ -121,10 +121,16 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Copies every byte still held, oldest first, up to the end at the time of the call.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="TerminalChunk.html" title="class in org.apache.juneau.terminal.region">TerminalChunk</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#read(long,int)" class="member-name-link">read</a><wbr>(long&nbsp;fromOffset,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#copyTo(java.io.OutputStream,long)" class="member-name-link">copyTo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;out,
+ long&nbsp;maxBytes)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Copies the bytes still held like <a href="#copyTo(java.io.OutputStream)"><code>copyTo(OutputStream)</code></a>, stopping once <code>maxBytes</code> have been written.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="TerminalChunk.html" title="class in org.apache.juneau.terminal.region">TerminalChunk</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#read(long,int)" class="member-name-link">read</a><wbr>(long&nbsp;fromOffset,
  int&nbsp;maxBytes)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Reads up to <code>maxBytes</code> bytes starting at <code>fromOffset</code>.</div>
 </div>
 </div>
@@ -200,6 +206,22 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>out</code> - The stream to write to.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the source could not be read or the stream written.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="copyTo(java.io.OutputStream,long)">
+<h3>copyTo</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalSource.html#line-69">copyTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;out,
+ long&nbsp;maxBytes)</span>
+             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Copies the bytes still held like <a href="#copyTo(java.io.OutputStream)"><code>copyTo(OutputStream)</code></a>, stopping once <code>maxBytes</code> have been written.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>out</code> - The stream to write to.</dd>
+<dd><code>maxBytes</code> - The most bytes to write.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the source could not be read or the stream written.</dd>
 </dl>

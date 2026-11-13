@@ -70,26 +70,30 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/SamlAssertionValidator.html#org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator</a></div>
+<div class="col-first even-row-color"><a href="class-use/AuthnRequestStore.html#org.apache.juneau.rest.server.auth.saml">AuthnRequestStore</a></div>
 <div class="col-last even-row-color">
+<div class="block">SPI for the registry of outstanding SAML authentication request IDs.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/SamlAssertionValidator.html#org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Validates a SAML 2.0 <code>&lt;samlp:Response&gt;</code> document and produces a <a href="../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a> marked
  with <code>issuerType=SAML</code>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/SamlAssertionValidator.Builder.html#org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/SamlAssertionValidator.Builder.html#org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder for <a href="SamlAssertionValidator.html" title="class in org.apache.juneau.rest.server.auth.saml"><code>SamlAssertionValidator</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/SamlAuthFilter.html#org.apache.juneau.rest.server.auth.saml">SamlAuthFilter</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/SamlAuthFilter.html#org.apache.juneau.rest.server.auth.saml">SamlAuthFilter</a></div>
+<div class="col-last odd-row-color">
 <div class="block"><a href="../AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a> that authenticates requests carrying a SAML 2.0 <code>&lt;samlp:Response&gt;</code> delivered via
  the <a href="SamlBinding.html#POST"><code>SamlBinding.POST</code></a> or <a href="SamlBinding.html#REDIRECT"><code>SamlBinding.REDIRECT</code></a> HTTP binding.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/SamlAuthFilter.Builder.html#org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/SamlAuthFilter.Builder.html#org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder for <a href="SamlAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.saml"><code>SamlAuthFilter</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/SamlBinding.html#org.apache.juneau.rest.server.auth.saml">SamlBinding</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/SamlBinding.html#org.apache.juneau.rest.server.auth.saml">SamlBinding</a></div>
+<div class="col-last odd-row-color">
 <div class="block">SAML 2.0 bindings supported by <a href="SamlAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.saml"><code>SamlAuthFilter</code></a> for delivering a <code>&lt;Response&gt;</code> from an IdP to the SP.</div>
 </div>
 </div>

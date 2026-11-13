@@ -161,7 +161,7 @@
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<strong class="jxr_keyword">private</strong> BusPolicy.Builder policy() {
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">return</strong> BusPolicy.create().upstream(TerminalInput.TOPIC, input).downstream(TerminalInput.STATUS_TOPIC, false);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">return</strong> BusPolicy.create().anyCaller().upstream(TerminalInput.TOPIC, input).downstream(TerminalInput.STATUS_TOPIC, false);
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	}
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<em class="jxr_javadoccomment">/** A bus with the WebSocket transport enabled (copied from {@code ServerBus_Test}). */</em>
@@ -398,7 +398,7 @@
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 	@Test <strong class="jxr_keyword">void</strong> a15_beforeBind() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">var</strong> unbound = TerminalInput.create(access);
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> b2 = bus(BusPolicy.create().upstream(TerminalInput.TOPIC, unbound).downstream(TerminalInput.STATUS_TOPIC, false).build())) {
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> b2 = bus(BusPolicy.create().anyCaller().upstream(TerminalInput.TOPIC, unbound).downstream(TerminalInput.STATUS_TOPIC, false).build())) {
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">var</strong> s = open(b2, <span class="jxr_string">"alice"</span>);
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">var</strong> ws = connect(b2, s);
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">var</strong> records = LogRecordCapture.quietly(ServerBus.<strong class="jxr_keyword">class</strong>, () -&gt; b2.receive(s, frame(<span class="jxr_string">"t1"</span>, <span class="jxr_string">""</span>)));
@@ -435,7 +435,7 @@
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 	@Test <strong class="jxr_keyword">void</strong> a18_callerAttributes() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">var</strong> in2 = TerminalInput.create(access);
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> b2 = bus(BusPolicy.create().upstream(TerminalInput.TOPIC, in2).downstream(TerminalInput.STATUS_TOPIC, false)
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> b2 = bus(BusPolicy.create().anyCaller().upstream(TerminalInput.TOPIC, in2).downstream(TerminalInput.STATUS_TOPIC, false)
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 				.sessionAttributes(r -&gt; Map.of(<span class="jxr_string">"role"</span>, <span class="jxr_string">"typist"</span>)).build())) {
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 			in2.bind(b2);
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">var</strong> s = open(b2, <span class="jxr_string">"dave"</span>);

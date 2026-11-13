@@ -2287,37 +2287,42 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Serves <code>?from=&lt;offset&gt;&amp;max=&lt;n&gt;</code> as raw bytes with the <code>Term-*</code> headers.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TerminalEndpoints.</span><code><a href="../../../terminal/region/TerminalEndpoints.html#terminalAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">terminalAssetUrl</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
+<div class="col-first odd-row-color"><code>static <a href="../../../terminal/region/TerminalCaller.html" title="interface in org.apache.juneau.terminal.region">TerminalCaller</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TerminalEndpoints.</span><code><a href="../../../terminal/region/TerminalEndpoints.html#caller(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">caller</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Adapts a request to the transport-neutral caller handed to <a href="../../../terminal/region/TerminalAccess.html" title="interface in org.apache.juneau.terminal.region"><code>TerminalAccess</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TerminalEndpoints.</span><code><a href="../../../terminal/region/TerminalEndpoints.html#terminalAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">terminalAssetUrl</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Returns the absolute URL of a terminal asset, resolved against the request, with a
  <code>?v=&lt;buildVersion&gt;-&lt;hash8&gt;</code> cache-buster.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../../../terminal/region/TerminalMixin.html#terminalAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">terminalAssetUrl</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../../../terminal/region/TerminalMixin.html#terminalAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">terminalAssetUrl</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">The absolute URL of a terminal asset; the toolkit pack resolver for the <code>terminal</code> pack.</div>
 </div>
-<div class="col-first odd-row-color"><code>default void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../../../terminal/region/TerminalMixin.html#terminalBytes(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">terminalBytes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
- <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
- <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-terminal/{id}/bytes] &mdash; raw bytes from an offset.</div>
-</div>
 <div class="col-first even-row-color"><code>default void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../../../terminal/region/TerminalMixin.html#terminalRaw(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">terminalRaw</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="col-second even-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../../../terminal/region/TerminalMixin.html#terminalBytes(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">terminalBytes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
 <div class="col-last even-row-color">
+<div class="block">[GET /juneau-terminal/{id}/bytes] &mdash; raw bytes from an offset.</div>
+</div>
+<div class="col-first odd-row-color"><code>default void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../../../terminal/region/TerminalMixin.html#terminalRaw(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">terminalRaw</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">[GET /juneau-terminal/{id}/raw] &mdash; the whole log as an attachment.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../terminal/region/TerminalSource.html" title="interface in org.apache.juneau.terminal.region">TerminalSource</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../../../terminal/region/TerminalMixin.html#terminalSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">terminalSource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../terminal/region/TerminalSource.html" title="interface in org.apache.juneau.terminal.region">TerminalSource</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../../../terminal/region/TerminalMixin.html#terminalSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">terminalSource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Resolves the source for a terminal id, applying the application's own access rules.</div>
 </div>
 </div>

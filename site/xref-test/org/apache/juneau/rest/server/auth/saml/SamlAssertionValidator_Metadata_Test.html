@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">private</strong> SamlAssertionValidator validator(String metadataXml, Clock clock) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> file = tmp.resolve(<span class="jxr_string">"metadata.xml"</span>);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		Files.writeString(file, metadataXml, StandardCharsets.UTF_8);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">return</strong> SamlAssertionValidator.create()
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">return</strong> SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			.spEntityId(AUDIENCE)
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			.expectedIssuer(ISSUER)
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			.metadataResolver(SamlMetadataResolvers.file(file))

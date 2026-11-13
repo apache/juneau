@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="McpStepUpAuthorizer.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.html#line-95">McpStepUpAuthorizer.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.html#line-98">McpStepUpAuthorizer.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder.</div>
 </section>
@@ -122,24 +122,34 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the scope accumulator.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attemptStepUp(boolean)" class="member-name-link">attemptStepUp</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allowedScopes(java.lang.String...)" class="member-name-link">allowedScopes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Whether to attempt step-up at all.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpStepUpAuthorizer.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Builds the authorizer.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#issuer(java.net.URI)" class="member-name-link">issuer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the authorization server issuer.</div>
+<div class="block">Restricts the scopes a server challenge may add to the step-up union.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxAttempts(int)" class="member-name-link">maxAttempts</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attemptStepUp(boolean)" class="member-name-link">attemptStepUp</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Whether to attempt step-up at all.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpStepUpAuthorizer.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Builds the authorizer.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#issuer(java.net.URI)" class="member-name-link">issuer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the authorization server issuer.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxAttempts(int)" class="member-name-link">maxAttempts</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the hard cap on re-authorization attempts per <code>(resource, operation)</code> before a permanent failure.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxScopes(int)" class="member-name-link">maxScopes</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Caps the number of scopes the accumulated step-up union may contain.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#previouslyRequestedScopes(java.lang.String...)" class="member-name-link">previouslyRequestedScopes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
@@ -176,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-105">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-110">Builder</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -191,7 +201,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resource(java.net.URI)">
 <h3>resource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-113">resource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-118">resource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the RFC 8707 resource indicator this authorizer tracks attempts for.  Required.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -204,7 +214,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="issuer(java.net.URI)">
 <h3>issuer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-124">issuer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-129">issuer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the authorization server issuer.  Required.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -217,7 +227,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="accumulator(org.apache.juneau.rest.client.mcp.auth.McpScopeAccumulator)">
 <h3>accumulator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-135">accumulator</a></span><wbr><span class="parameters">(<a href="McpScopeAccumulator.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpScopeAccumulator</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-140">accumulator</a></span><wbr><span class="parameters">(<a href="McpScopeAccumulator.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpScopeAccumulator</a>&nbsp;value)</span></div>
 <div class="block">Sets the scope accumulator.  Defaults to a fresh <a href="McpScopeAccumulator.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpScopeAccumulator</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -230,7 +240,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="reauthorizer(org.apache.juneau.rest.client.mcp.auth.McpStepUpAuthorizer.Reauthorizer)">
 <h3>reauthorizer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-146">reauthorizer</a></span><wbr><span class="parameters">(<a href="McpStepUpAuthorizer.Reauthorizer.html" title="interface in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Reauthorizer</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-151">reauthorizer</a></span><wbr><span class="parameters">(<a href="McpStepUpAuthorizer.Reauthorizer.html" title="interface in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Reauthorizer</a>&nbsp;value)</span></div>
 <div class="block">Sets the re-authorization callback invoked with the widened scope union.  Required.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -243,7 +253,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxAttempts(int)">
 <h3>maxAttempts</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-158">maxAttempts</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-163">maxAttempts</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
 <div class="block">Sets the hard cap on re-authorization attempts per <code>(resource, operation)</code> before a permanent failure.
  Default 3.</div>
 <dl class="notes">
@@ -257,7 +267,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attemptStepUp(boolean)">
 <h3>attemptStepUp</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-171">attemptStepUp</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-176">attemptStepUp</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Whether to attempt step-up at all.  Default <jk>true</jk>; a <code>client_credentials</code> client MAY set
  <jk>false</jk> to abort immediately on the first challenge.</div>
 <dl class="notes">
@@ -269,9 +279,40 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="allowedScopes(java.lang.String...)">
+<h3>allowedScopes</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-192">allowedScopes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="block">Restricts the scopes a server challenge may add to the step-up union.
+
+ <p>
+ When set, a challenge naming any scope outside this set (and outside the previously-requested scopes) aborts
+ the step-up with an <a href="McpAuthException.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpAuthException</code></a> instead of re-authorizing.  When unset, only the
+ <a href="#maxScopes(int)"><code>scope-count cap</code></a> applies.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>values</code> - The permitted scopes.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="maxScopes(int)">
+<h3>maxScopes</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-207">maxScopes</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="block">Caps the number of scopes the accumulated step-up union may contain.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The cap.  Must be &gt;= 1.  Defaults to <a href="McpStepUpAuthorizer.html#DEFAULT_MAX_SCOPES">32</a>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="previouslyRequestedScopes(java.lang.String...)">
 <h3>previouslyRequestedScopes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-182">previouslyRequestedScopes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-219">previouslyRequestedScopes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
 <div class="block">Seeds the scope accumulator with the client's previously-requested scopes so the first union preserves them.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -284,7 +325,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-196">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpStepUpAuthorizer.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#line-233">build</a></span>()</div>
 <div class="block">Builds the authorizer.</div>
 <dl class="notes">
 <dt>Returns:</dt>

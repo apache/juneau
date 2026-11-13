@@ -90,13 +90,13 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Test
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">void</strong> a03_contains() {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> f = where(<span class="jxr_string">"name"</span>, <span class="jxr_string">"$contains(err)"</span>);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ?,[%err%]"</span>);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ? ESCAPE '&#92;&#92;',[%err%]"</span>);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">void</strong> a04_prefixText() {
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> f = where(<span class="jxr_string">"name"</span>, <span class="jxr_string">"$prefix(ab)"</span>);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ?,[ab%]"</span>);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ? ESCAPE '&#92;&#92;',[ab%]"</span>);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Test
@@ -170,13 +170,13 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	@Test
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">void</strong> b03_bareText() {
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">var</strong> f = where(<span class="jxr_string">"name"</span>, <span class="jxr_string">"Bill"</span>);
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ?,[%Bill%]"</span>);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ? ESCAPE '&#92;&#92;',[%Bill%]"</span>);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	@Test
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<strong class="jxr_keyword">void</strong> b04_bareWildcard() {
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">var</strong> f = where(<span class="jxr_string">"name"</span>, <span class="jxr_string">"*Bi*ll*"</span>);
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ?,[%Bi%ll%]"</span>);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ? ESCAPE '&#92;&#92;',[%Bi%ll%]"</span>);
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 	@Test
@@ -309,19 +309,19 @@
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 	@Test
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 	<strong class="jxr_keyword">void</strong> e03_bareQuestionWildcard_mapsToUnderscore() {
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">var</strong> f = where(<span class="jxr_string">"name"</span>, <span class="jxr_string">"a?c"</span>);
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ?,[a_c]"</span>);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ? ESCAPE '&#92;&#92;',[a_c]"</span>);
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 	}
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 	@Test
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 	<strong class="jxr_keyword">void</strong> e04_bareStarAndQuestionCombine() {
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">var</strong> f = where(<span class="jxr_string">"name"</span>, <span class="jxr_string">"a*b?c"</span>);
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ?,[a%b_c]"</span>);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ? ESCAPE '&#92;&#92;',[a%b_c]"</span>);
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 	}
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 	@Test
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<strong class="jxr_keyword">void</strong> e05_quotedBare_bypassesWildcardMapping() {
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">var</strong> f = where(<span class="jxr_string">"name"</span>, <span class="jxr_string">"\&quot;a*\&quot;"</span>);
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ?,[%a*%]"</span>);  <em class="jxr_comment">// * is not a Postgres LIKE metachar, so it's left as literal text here</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		assertBean(f, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"\&quot;name\&quot; ILIKE ? ESCAPE '&#92;&#92;',[%a*%]"</span>);  <em class="jxr_comment">// * is not a Postgres LIKE metachar, so it's left as literal text here</em>
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 	}
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 	@Test
@@ -378,14 +378,14 @@
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 	@Test
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 	<strong class="jxr_keyword">void</strong> g01_bareEnumStar_isWholeStringCaseInsensitiveGlobOverCastColumn() {
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">var</strong> f = where(<span class="jxr_string">"status"</span>, <span class="jxr_string">"op*"</span>);
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertEquals(<span class="jxr_string">"\&quot;status\&quot;::text ILIKE ?"</span>, f.sql());
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertEquals(<span class="jxr_string">"\&quot;status\&quot;::text ILIKE ? ESCAPE '&#92;&#92;'"</span>, f.sql());
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 		assertEquals(List.of(<span class="jxr_string">"op%"</span>), f.binds());
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 	}
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 	@Test
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 	<strong class="jxr_keyword">void</strong> g02_bareEnumQuestion_mapsToUnderscore() {
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">var</strong> f = where(<span class="jxr_string">"status"</span>, <span class="jxr_string">"OPE?"</span>);
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertEquals(<span class="jxr_string">"\&quot;status\&quot;::text ILIKE ?"</span>, f.sql());
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertEquals(<span class="jxr_string">"\&quot;status\&quot;::text ILIKE ? ESCAPE '&#92;&#92;'"</span>, f.sql());
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 		assertEquals(List.of(<span class="jxr_string">"OPE_"</span>), f.binds());
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 
@@ -631,7 +631,7 @@
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 	@Test
 <a class="jxr_linenumber" name="L624" href="#L624">624</a> 	<strong class="jxr_keyword">void</strong> k07_columnLevelNot_coalescesInnerPredicate() {
 <a class="jxr_linenumber" name="L625" href="#L625">625</a> 		assertBean(where(<span class="jxr_string">"age"</span>, <span class="jxr_string">"$not($gt(5))"</span>), <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"(NOT COALESCE(\&quot;age\&quot; &gt; ?, FALSE)),[5]"</span>);
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		assertEquals(<span class="jxr_string">"(NOT COALESCE(\&quot;name\&quot; ILIKE ?, FALSE))"</span>, where(<span class="jxr_string">"name"</span>, <span class="jxr_string">"$not($contains(x))"</span>).sql());
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		assertEquals(<span class="jxr_string">"(NOT COALESCE(\&quot;name\&quot; ILIKE ? ESCAPE '&#92;&#92;', FALSE))"</span>, where(<span class="jxr_string">"name"</span>, <span class="jxr_string">"$not($contains(x))"</span>).sql());
 <a class="jxr_linenumber" name="L627" href="#L627">627</a> 	}
 <a class="jxr_linenumber" name="L628" href="#L628">628</a> 
 <a class="jxr_linenumber" name="L629" href="#L629">629</a> 	@Test
@@ -662,7 +662,27 @@
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 		assertSize(1, iso.binds());
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 		assertInstanceOf(java.time.OffsetDateTime.<strong class="jxr_keyword">class</strong>, iso.binds().get(0));
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 	}
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> }
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	@Test
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 	<strong class="jxr_keyword">void</strong> z01_isPortable_acceptsCommonSyntaxAndRejectsFlavorSpecificConstructs() {
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ok : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"abc"</span>, <span class="jxr_string">"a.*b"</span>, <span class="jxr_string">"(a|b)+c"</span>, <span class="jxr_string">"[a-z0-9]{2,4}"</span>, <span class="jxr_string">"&#92;&#92;d+&#92;&#92;.&#92;&#92;d*"</span>, <span class="jxr_string">"(?:x)y"</span>, <span class="jxr_string">"^a+?$"</span>, <span class="jxr_string">"[^]a]"</span>})
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 			assertTrue(PostgresDialect.isPortable(ok), ok);
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bad : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a++"</span>, <span class="jxr_string">"a*+"</span>, <span class="jxr_string">"&#92;&#92;p{L}+"</span>, <span class="jxr_string">"(?i)abc"</span>, <span class="jxr_string">"(?&lt;=a)b"</span>, <span class="jxr_string">"(?&lt;n&gt;a)"</span>, <span class="jxr_string">"&#92;&#92;bword"</span>, <span class="jxr_string">"&#92;&#92;Qa.b&#92;&#92;E"</span>, <span class="jxr_string">"[a-z&amp;&amp;[^b]]"</span>, <span class="jxr_string">"[[:alpha:]]"</span>, <span class="jxr_string">"a&#92;&#92;"</span>, <span class="jxr_string">"[abc"</span>})
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			assertFalse(PostgresDialect.isPortable(bad), bad);
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 	}
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	@Test
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	<strong class="jxr_keyword">void</strong> z02_regexWithNonPortableSyntaxNeverMatches() {
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		<strong class="jxr_keyword">var</strong> f = where(<span class="jxr_string">"name"</span>, <span class="jxr_string">"$regex(a++)"</span>);
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		assertBean(f, <span class="jxr_string">"sql"</span>, <span class="jxr_string">"(1 = 0)"</span>);
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 	}
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	@Test
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	<strong class="jxr_keyword">void</strong> z03_ilikeStatementsDeclareTheEscapeCharacter() {
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<strong class="jxr_keyword">var</strong> f = where(<span class="jxr_string">"name"</span>, <span class="jxr_string">"$contains(a_b)"</span>);
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 		assertTrue(f.sql().contains(<span class="jxr_string">"ILIKE ? ESCAPE '&#92;&#92;'"</span>), f.sql());
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 	}
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

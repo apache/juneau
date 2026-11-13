@@ -88,112 +88,114 @@
 <span class="source-line-no">075</span><span id="line-75">            lastLocation.forEach((k, v) -&gt; sb.append("\n\t\t").append(k).append(": ").append(v));</span>
 <span class="source-line-no">076</span><span id="line-76">         }</span>
 <span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">         String lines = session.getInputAsString();</span>
-<span class="source-line-no">079</span><span id="line-79">         if (lines == null)</span>
-<span class="source-line-no">080</span><span id="line-80">            sb.append("\n\tUse BEAN_debug setting to display content.");</span>
-<span class="source-line-no">081</span><span id="line-81">         else {</span>
-<span class="source-line-no">082</span><span id="line-82">            int numLines = session.getDebugOutputLines();</span>
-<span class="source-line-no">083</span><span id="line-83">            int start = p.line - numLines;</span>
-<span class="source-line-no">084</span><span id="line-84">            int end = p.line + numLines;</span>
-<span class="source-line-no">085</span><span id="line-85">            sb.append("\n---start--\n").append(getNumberedLines(lines, start, end)).append("---end---");</span>
-<span class="source-line-no">086</span><span id="line-86">         }</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">         msg = sb.toString();</span>
-<span class="source-line-no">089</span><span id="line-89">      }</span>
-<span class="source-line-no">090</span><span id="line-90">      return msg;</span>
-<span class="source-line-no">091</span><span id="line-91">   }</span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   /**</span>
-<span class="source-line-no">094</span><span id="line-94">    * Constructor.</span>
-<span class="source-line-no">095</span><span id="line-95">    *</span>
-<span class="source-line-no">096</span><span id="line-96">    * @param session The parser session.</span>
-<span class="source-line-no">097</span><span id="line-97">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the message is not augmented with position/debug info).</span>
-<span class="source-line-no">098</span><span id="line-98">    * @param causedBy The inner exception.</span>
-<span class="source-line-no">099</span><span id="line-99">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">100</span><span id="line-100">    */</span>
-<span class="source-line-no">101</span><span id="line-101">   public ParseException(ParserSession session, Exception causedBy) {</span>
-<span class="source-line-no">102</span><span id="line-102">      super(causedBy, getMessage(session, causedBy.getMessage()));</span>
-<span class="source-line-no">103</span><span id="line-103">   }</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   /**</span>
-<span class="source-line-no">106</span><span id="line-106">    * Constructor.</span>
-<span class="source-line-no">107</span><span id="line-107">    *</span>
-<span class="source-line-no">108</span><span id="line-108">    * @param session The parser session.</span>
-<span class="source-line-no">109</span><span id="line-109">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the message is not augmented with position/debug info).</span>
-<span class="source-line-no">110</span><span id="line-110">    * @param message The exception message containing {@link String#format(String, Object...) String.format}-style (&lt;c&gt;%s&lt;/c&gt;) arguments.</span>
-<span class="source-line-no">111</span><span id="line-111">    * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.</span>
-<span class="source-line-no">112</span><span id="line-112">    */</span>
-<span class="source-line-no">113</span><span id="line-113">   public ParseException(ParserSession session, String message, Object...args) {</span>
-<span class="source-line-no">114</span><span id="line-114">      super(getMessage(session, message, args));</span>
-<span class="source-line-no">115</span><span id="line-115">   }</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   /**</span>
-<span class="source-line-no">118</span><span id="line-118">    * Constructor.</span>
-<span class="source-line-no">119</span><span id="line-119">    *</span>
-<span class="source-line-no">120</span><span id="line-120">    * @param session The parser session.</span>
-<span class="source-line-no">121</span><span id="line-121">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the message is not augmented with position/debug info).</span>
-<span class="source-line-no">122</span><span id="line-122">    * @param causedBy The cause of this exception.</span>
-<span class="source-line-no">123</span><span id="line-123">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (no cause is set).</span>
-<span class="source-line-no">124</span><span id="line-124">    * @param message The exception message containing {@link String#format(String, Object...) String.format}-style (&lt;c&gt;%s&lt;/c&gt;) arguments.</span>
-<span class="source-line-no">125</span><span id="line-125">    * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.</span>
-<span class="source-line-no">126</span><span id="line-126">    */</span>
-<span class="source-line-no">127</span><span id="line-127">   public ParseException(ParserSession session, Throwable causedBy, String message, Object...args) {</span>
-<span class="source-line-no">128</span><span id="line-128">      super(causedBy, getMessage(session, message, args));</span>
-<span class="source-line-no">129</span><span id="line-129">   }</span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">   /**</span>
-<span class="source-line-no">132</span><span id="line-132">    * Constructor.</span>
-<span class="source-line-no">133</span><span id="line-133">    *</span>
-<span class="source-line-no">134</span><span id="line-134">    * @param message The {@link String#format(String, Object...) String.format}-style message (&lt;c&gt;%s&lt;/c&gt; placeholders).</span>
-<span class="source-line-no">135</span><span id="line-135">    * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.</span>
-<span class="source-line-no">136</span><span id="line-136">    */</span>
-<span class="source-line-no">137</span><span id="line-137">   public ParseException(String message, Object...args) {</span>
-<span class="source-line-no">138</span><span id="line-138">      super(message, args);</span>
-<span class="source-line-no">139</span><span id="line-139">   }</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   /**</span>
-<span class="source-line-no">142</span><span id="line-142">    * Constructor.</span>
-<span class="source-line-no">143</span><span id="line-143">    *</span>
-<span class="source-line-no">144</span><span id="line-144">    * @param causedBy The cause of this exception.</span>
-<span class="source-line-no">145</span><span id="line-145">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (no cause is set).</span>
-<span class="source-line-no">146</span><span id="line-146">    */</span>
-<span class="source-line-no">147</span><span id="line-147">   public ParseException(Throwable causedBy) {</span>
-<span class="source-line-no">148</span><span id="line-148">      super(causedBy);</span>
-<span class="source-line-no">149</span><span id="line-149">   }</span>
-<span class="source-line-no">150</span><span id="line-150"></span>
-<span class="source-line-no">151</span><span id="line-151">   /**</span>
-<span class="source-line-no">152</span><span id="line-152">    * Constructor.</span>
-<span class="source-line-no">153</span><span id="line-153">    *</span>
-<span class="source-line-no">154</span><span id="line-154">    * @param causedBy The cause of this exception.</span>
-<span class="source-line-no">155</span><span id="line-155">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (no cause is set).</span>
-<span class="source-line-no">156</span><span id="line-156">    * @param message The {@link String#format(String, Object...) String.format}-style message (&lt;c&gt;%s&lt;/c&gt; placeholders).</span>
-<span class="source-line-no">157</span><span id="line-157">    * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.</span>
-<span class="source-line-no">158</span><span id="line-158">    */</span>
-<span class="source-line-no">159</span><span id="line-159">   public ParseException(Throwable causedBy, String message, Object...args) {</span>
-<span class="source-line-no">160</span><span id="line-160">      super(causedBy, message, args);</span>
-<span class="source-line-no">161</span><span id="line-161">   }</span>
-<span class="source-line-no">162</span><span id="line-162"></span>
-<span class="source-line-no">163</span><span id="line-163">   /**</span>
-<span class="source-line-no">164</span><span id="line-164">    * Returns the highest-level &lt;c&gt;ParseException&lt;/c&gt; in the stack trace.</span>
-<span class="source-line-no">165</span><span id="line-165">    *</span>
-<span class="source-line-no">166</span><span id="line-166">    * &lt;p&gt;</span>
-<span class="source-line-no">167</span><span id="line-167">    * Useful for JUnit testing of error conditions.</span>
-<span class="source-line-no">168</span><span id="line-168">    *</span>
-<span class="source-line-no">169</span><span id="line-169">    * @return The root parse exception, or this exception if there isn't one.</span>
-<span class="source-line-no">170</span><span id="line-170">    */</span>
-<span class="source-line-no">171</span><span id="line-171">   public ParseException getRootCause() {</span>
-<span class="source-line-no">172</span><span id="line-172">      ParseException t = this;</span>
-<span class="source-line-no">173</span><span id="line-173">      while (! (t.getCause() == null || ! (t.getCause() instanceof ParseException t2)))</span>
-<span class="source-line-no">174</span><span id="line-174">         t = t2;</span>
-<span class="source-line-no">175</span><span id="line-175">      return t;</span>
-<span class="source-line-no">176</span><span id="line-176">   }</span>
-<span class="source-line-no">177</span><span id="line-177"></span>
-<span class="source-line-no">178</span><span id="line-178">   @Override /* Overridden from BasicRuntimeException */</span>
-<span class="source-line-no">179</span><span id="line-179">   public ParseException setMessage(String message, Object...args) {</span>
-<span class="source-line-no">180</span><span id="line-180">      super.setMessage(message, args);</span>
-<span class="source-line-no">181</span><span id="line-181">      return this;</span>
-<span class="source-line-no">182</span><span id="line-182">   }</span>
-<span class="source-line-no">183</span><span id="line-183">}</span>
+<span class="source-line-no">078</span><span id="line-78">         if (session.isIncludeInputInErrors()) {</span>
+<span class="source-line-no">079</span><span id="line-79">            String lines = session.getInputAsString();</span>
+<span class="source-line-no">080</span><span id="line-80">            if (lines == null)</span>
+<span class="source-line-no">081</span><span id="line-81">               sb.append("\n\tUse BEAN_debug setting to display content.");</span>
+<span class="source-line-no">082</span><span id="line-82">            else {</span>
+<span class="source-line-no">083</span><span id="line-83">               int numLines = session.getDebugOutputLines();</span>
+<span class="source-line-no">084</span><span id="line-84">               int start = p.line - numLines;</span>
+<span class="source-line-no">085</span><span id="line-85">               int end = p.line + numLines;</span>
+<span class="source-line-no">086</span><span id="line-86">               sb.append("\n---start--\n").append(getNumberedLines(lines, start, end)).append("---end---");</span>
+<span class="source-line-no">087</span><span id="line-87">            }</span>
+<span class="source-line-no">088</span><span id="line-88">         }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">         msg = sb.toString();</span>
+<span class="source-line-no">091</span><span id="line-91">      }</span>
+<span class="source-line-no">092</span><span id="line-92">      return msg;</span>
+<span class="source-line-no">093</span><span id="line-93">   }</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">   /**</span>
+<span class="source-line-no">096</span><span id="line-96">    * Constructor.</span>
+<span class="source-line-no">097</span><span id="line-97">    *</span>
+<span class="source-line-no">098</span><span id="line-98">    * @param session The parser session.</span>
+<span class="source-line-no">099</span><span id="line-99">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the message is not augmented with position/debug info).</span>
+<span class="source-line-no">100</span><span id="line-100">    * @param causedBy The inner exception.</span>
+<span class="source-line-no">101</span><span id="line-101">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">102</span><span id="line-102">    */</span>
+<span class="source-line-no">103</span><span id="line-103">   public ParseException(ParserSession session, Exception causedBy) {</span>
+<span class="source-line-no">104</span><span id="line-104">      super(causedBy, getMessage(session, causedBy.getMessage()));</span>
+<span class="source-line-no">105</span><span id="line-105">   }</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">   /**</span>
+<span class="source-line-no">108</span><span id="line-108">    * Constructor.</span>
+<span class="source-line-no">109</span><span id="line-109">    *</span>
+<span class="source-line-no">110</span><span id="line-110">    * @param session The parser session.</span>
+<span class="source-line-no">111</span><span id="line-111">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the message is not augmented with position/debug info).</span>
+<span class="source-line-no">112</span><span id="line-112">    * @param message The exception message containing {@link String#format(String, Object...) String.format}-style (&lt;c&gt;%s&lt;/c&gt;) arguments.</span>
+<span class="source-line-no">113</span><span id="line-113">    * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.</span>
+<span class="source-line-no">114</span><span id="line-114">    */</span>
+<span class="source-line-no">115</span><span id="line-115">   public ParseException(ParserSession session, String message, Object...args) {</span>
+<span class="source-line-no">116</span><span id="line-116">      super(getMessage(session, message, args));</span>
+<span class="source-line-no">117</span><span id="line-117">   }</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">   /**</span>
+<span class="source-line-no">120</span><span id="line-120">    * Constructor.</span>
+<span class="source-line-no">121</span><span id="line-121">    *</span>
+<span class="source-line-no">122</span><span id="line-122">    * @param session The parser session.</span>
+<span class="source-line-no">123</span><span id="line-123">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the message is not augmented with position/debug info).</span>
+<span class="source-line-no">124</span><span id="line-124">    * @param causedBy The cause of this exception.</span>
+<span class="source-line-no">125</span><span id="line-125">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (no cause is set).</span>
+<span class="source-line-no">126</span><span id="line-126">    * @param message The exception message containing {@link String#format(String, Object...) String.format}-style (&lt;c&gt;%s&lt;/c&gt;) arguments.</span>
+<span class="source-line-no">127</span><span id="line-127">    * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.</span>
+<span class="source-line-no">128</span><span id="line-128">    */</span>
+<span class="source-line-no">129</span><span id="line-129">   public ParseException(ParserSession session, Throwable causedBy, String message, Object...args) {</span>
+<span class="source-line-no">130</span><span id="line-130">      super(causedBy, getMessage(session, message, args));</span>
+<span class="source-line-no">131</span><span id="line-131">   }</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">   /**</span>
+<span class="source-line-no">134</span><span id="line-134">    * Constructor.</span>
+<span class="source-line-no">135</span><span id="line-135">    *</span>
+<span class="source-line-no">136</span><span id="line-136">    * @param message The {@link String#format(String, Object...) String.format}-style message (&lt;c&gt;%s&lt;/c&gt; placeholders).</span>
+<span class="source-line-no">137</span><span id="line-137">    * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.</span>
+<span class="source-line-no">138</span><span id="line-138">    */</span>
+<span class="source-line-no">139</span><span id="line-139">   public ParseException(String message, Object...args) {</span>
+<span class="source-line-no">140</span><span id="line-140">      super(message, args);</span>
+<span class="source-line-no">141</span><span id="line-141">   }</span>
+<span class="source-line-no">142</span><span id="line-142"></span>
+<span class="source-line-no">143</span><span id="line-143">   /**</span>
+<span class="source-line-no">144</span><span id="line-144">    * Constructor.</span>
+<span class="source-line-no">145</span><span id="line-145">    *</span>
+<span class="source-line-no">146</span><span id="line-146">    * @param causedBy The cause of this exception.</span>
+<span class="source-line-no">147</span><span id="line-147">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (no cause is set).</span>
+<span class="source-line-no">148</span><span id="line-148">    */</span>
+<span class="source-line-no">149</span><span id="line-149">   public ParseException(Throwable causedBy) {</span>
+<span class="source-line-no">150</span><span id="line-150">      super(causedBy);</span>
+<span class="source-line-no">151</span><span id="line-151">   }</span>
+<span class="source-line-no">152</span><span id="line-152"></span>
+<span class="source-line-no">153</span><span id="line-153">   /**</span>
+<span class="source-line-no">154</span><span id="line-154">    * Constructor.</span>
+<span class="source-line-no">155</span><span id="line-155">    *</span>
+<span class="source-line-no">156</span><span id="line-156">    * @param causedBy The cause of this exception.</span>
+<span class="source-line-no">157</span><span id="line-157">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (no cause is set).</span>
+<span class="source-line-no">158</span><span id="line-158">    * @param message The {@link String#format(String, Object...) String.format}-style message (&lt;c&gt;%s&lt;/c&gt; placeholders).</span>
+<span class="source-line-no">159</span><span id="line-159">    * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.</span>
+<span class="source-line-no">160</span><span id="line-160">    */</span>
+<span class="source-line-no">161</span><span id="line-161">   public ParseException(Throwable causedBy, String message, Object...args) {</span>
+<span class="source-line-no">162</span><span id="line-162">      super(causedBy, message, args);</span>
+<span class="source-line-no">163</span><span id="line-163">   }</span>
+<span class="source-line-no">164</span><span id="line-164"></span>
+<span class="source-line-no">165</span><span id="line-165">   /**</span>
+<span class="source-line-no">166</span><span id="line-166">    * Returns the highest-level &lt;c&gt;ParseException&lt;/c&gt; in the stack trace.</span>
+<span class="source-line-no">167</span><span id="line-167">    *</span>
+<span class="source-line-no">168</span><span id="line-168">    * &lt;p&gt;</span>
+<span class="source-line-no">169</span><span id="line-169">    * Useful for JUnit testing of error conditions.</span>
+<span class="source-line-no">170</span><span id="line-170">    *</span>
+<span class="source-line-no">171</span><span id="line-171">    * @return The root parse exception, or this exception if there isn't one.</span>
+<span class="source-line-no">172</span><span id="line-172">    */</span>
+<span class="source-line-no">173</span><span id="line-173">   public ParseException getRootCause() {</span>
+<span class="source-line-no">174</span><span id="line-174">      ParseException t = this;</span>
+<span class="source-line-no">175</span><span id="line-175">      while (! (t.getCause() == null || ! (t.getCause() instanceof ParseException t2)))</span>
+<span class="source-line-no">176</span><span id="line-176">         t = t2;</span>
+<span class="source-line-no">177</span><span id="line-177">      return t;</span>
+<span class="source-line-no">178</span><span id="line-178">   }</span>
+<span class="source-line-no">179</span><span id="line-179"></span>
+<span class="source-line-no">180</span><span id="line-180">   @Override /* Overridden from BasicRuntimeException */</span>
+<span class="source-line-no">181</span><span id="line-181">   public ParseException setMessage(String message, Object...args) {</span>
+<span class="source-line-no">182</span><span id="line-182">      super.setMessage(message, args);</span>
+<span class="source-line-no">183</span><span id="line-183">      return this;</span>
+<span class="source-line-no">184</span><span id="line-184">   }</span>
+<span class="source-line-no">185</span><span id="line-185">}</span>
 
 
 

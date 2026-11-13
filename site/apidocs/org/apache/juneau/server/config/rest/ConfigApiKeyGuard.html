@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#line-45">ConfigApiKeyGuard</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#line-55">ConfigApiKeyGuard</a></span>
 <span class="extends-implements">extends <a href="../../../rest/server/guard/RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a></span></div>
 <div class="block">Guard that protects <a href="LoadConfigResource.html" title="class in org.apache.juneau.server.config.rest"><code>LoadConfigResource</code></a> with a shared API key.
 
@@ -94,6 +94,14 @@ loadScripts(document, 'script');</script>
  <p>
  Clients supply the key in either an <c>Authorization: Bearer &lt;key&gt;</c> header or an <c>X-Api-Key</c> header.
  The comparison is constant-time (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/MessageDigest.html#isEqual(byte%5B%5D,byte%5B%5D)" title="class or interface in java.security" class="external-link"><code>MessageDigest.isEqual(byte[], byte[])</code></a> over UTF-8 bytes).
+
+ <p>
+ The key is read once, when the guard is created, and the <a href="../../../config/Config.html" title="class in org.apache.juneau.config"><code>Config</code></a> used to read it is closed straight away.
+ Changing the key requires a restart.
+
+ <p>
+ Requests that did not arrive over a secure channel are refused unless they come from a loopback address or
+ <c>[Security]</c> <ck>allowInsecure</ck> is <cv>true</cv>.
 
  <p>
  The guard <b>fails closed</b>: if no key is configured (missing, empty or unreadable setting), every request is
@@ -110,7 +118,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">ConfigApiKeyGuard</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor.</div>
+</div>
 </div>
 </section>
 </li>
@@ -128,7 +138,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#configuredKey()" class="member-name-link">configuredKey</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the configured key, or <jk>null</jk> if none is configured or the configuration cannot be read.</div>
+<div class="block">Returns the key read at startup, or <jk>null</jk> if none is configured or the configuration could not be read.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#guard(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">guard</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
@@ -161,7 +171,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ConfigApiKeyGuard</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#line-45">ConfigApiKeyGuard</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#line-66">ConfigApiKeyGuard</a></span>()</div>
+<div class="block">Constructor.  Reads the settings once and releases the configuration.</div>
 </section>
 </li>
 </ul>
@@ -175,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="guard(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>guard</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#line-51">guard</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#line-84">guard</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
               throws <span class="exceptions"><a href="../../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../rest/server/guard/RestGuard.html#guard(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">RestGuard</a></code></span></div>
@@ -204,7 +215,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isRequestAllowed(org.apache.juneau.rest.server.RestRequest)">
 <h3>isRequestAllowed</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#line-58">isRequestAllowed</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#line-91">isRequestAllowed</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../rest/server/guard/RestGuard.html#isRequestAllowed(org.apache.juneau.rest.server.RestRequest)">RestGuard</a></code></span></div>
 <div class="block">Returns <jk>true</jk> if the specified request can pass through this guard.</div>
 <dl class="notes">
@@ -220,8 +231,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="configuredKey()">
 <h3>configuredKey</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#line-68">configuredKey</a></span>()</div>
-<div class="block">Returns the configured key, or <jk>null</jk> if none is configured or the configuration cannot be read.</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#line-114">configuredKey</a></span>()</div>
+<div class="block">Returns the key read at startup, or <jk>null</jk> if none is configured or the configuration could not be read.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The configured key, or <jk>null</jk>.</dd>

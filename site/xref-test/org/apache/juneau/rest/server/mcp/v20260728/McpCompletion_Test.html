@@ -330,7 +330,7 @@
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 		}));
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">var</strong> resp = send(config, JsonMap.of(<span class="jxr_string">"ref"</span>, promptRef(<span class="jxr_string">"greet"</span>), <span class="jxr_string">"argument"</span>, argument(<span class="jxr_string">"style"</span>, <span class="jxr_string">"v"</span>)));
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		assertEquals(McpRevision.CODE_INTERNAL_ERROR, resp.getError().getCode());
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		assertEquals(<span class="jxr_string">"boom"</span>, resp.getError().getMessage());
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		assertEquals(<span class="jxr_string">"Internal error"</span>, resp.getError().getMessage());
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 	}
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 	@Test <strong class="jxr_keyword">void</strong> d02_completerReturnsNull_internalError() {

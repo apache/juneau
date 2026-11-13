@@ -162,25 +162,26 @@
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<em class="jxr_comment">// mount applies, returning the configuration-relative template name.  Delegates to the shared</em>
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_comment">// FileUtils.resolveVirtualPathSafely + MustacheDispatcher.stripBasePath used by the raw render path.</em>
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<strong class="jxr_keyword">static</strong> String gateTemplateName(String basePath, String templateName) {
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">return</strong> MustacheDispatcher.stripBasePath(basePath, resolved);
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	}
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<em class="jxr_comment">// Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.</em>
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<strong class="jxr_keyword">private</strong> MustacheMixin fallbackMixin() {
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> local = fallbackMixin;
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">if</strong> (local == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 				local = fallbackMixin;
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 				<strong class="jxr_keyword">if</strong> (local == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 					local = <strong class="jxr_keyword">new</strong> MustacheMixin();
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 					fallbackMixin = local;
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				}
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			}
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		}
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">return</strong> local;
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> }
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		ViewTemplateNames.requirePlainName(templateName);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">return</strong> MustacheDispatcher.stripBasePath(basePath, resolved);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<em class="jxr_comment">// Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">private</strong> MustacheMixin fallbackMixin() {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">var</strong> local = fallbackMixin;
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">if</strong> (local == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 				local = fallbackMixin;
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<strong class="jxr_keyword">if</strong> (local == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 					local = <strong class="jxr_keyword">new</strong> MustacheMixin();
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 					fallbackMixin = local;
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				}
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			}
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		}
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">return</strong> local;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -132,7 +132,7 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	@Test
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<strong class="jxr_keyword">void</strong> a11_readMalformedLine() {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertThrowsWithMessage(ParseException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"invalid"</span>, () -&gt;
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertThrowsWithMessage(ParseException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Unquoted attribute"</span>, () -&gt;
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			Jsonl.to(<span class="jxr_string">"{\&quot;a\&quot;:1}\n{invalid json}"</span>, List.<strong class="jxr_keyword">class</strong>, JsonMap.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> }

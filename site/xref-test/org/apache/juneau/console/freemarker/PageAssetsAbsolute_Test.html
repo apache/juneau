@@ -95,12 +95,12 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test <strong class="jxr_keyword">void</strong> b01_validator_relativeInit_isFlagged() {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> f = ConsoleTemplateValidator.create().validateSource(<span class="jxr_string">"t.ftlh"</span>, <span class="jxr_string">"&lt;@page init=\&quot;one.js\&quot;&gt;&lt;/@page&gt;"</span>);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertTrue(f.stream().anyMatch(x -&gt; x.rule().equals(<span class="jxr_string">"relative-page-asset"</span>) &amp;&amp; x.message().equals(
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<span class="jxr_string">"&lt;@page&gt; init= entry 'one.js' must be absolute (start with '/') or a context: / servlet: URI."</span>)), () -&gt; f.toString());
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<span class="jxr_string">"&lt;@page&gt; init= entry 'one.js' must be absolute (start with '/') or a context: / servlet: URI."</span>)), f::toString);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	}
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@Test <strong class="jxr_keyword">void</strong> b02_validator_relativeCssInList_isFlagged() {
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> f = ConsoleTemplateValidator.create().validateSource(<span class="jxr_string">"t.ftlh"</span>, <span class="jxr_string">"&lt;@page css=[\&quot;/ok.css\&quot;, \&quot;rel.css\&quot;, \&quot;//cdn/x.css\&quot;]&gt;&lt;/@page&gt;"</span>);
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertEquals(2, f.stream().filter(x -&gt; x.rule().equals(<span class="jxr_string">"relative-page-asset"</span>)).count(), () -&gt; f.toString());
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertEquals(2, f.stream().filter(x -&gt; x.rule().equals(<span class="jxr_string">"relative-page-asset"</span>)).count(), f::toString);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Test <strong class="jxr_keyword">void</strong> b03_validator_absoluteAndUriForms_areClean() {

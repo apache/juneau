@@ -79,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		server.addConnector(connector);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		connector.open();                       <em class="jxr_comment">// the port, and so the exact Origin, is known before start</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		origin = <span class="jxr_string">"http://127.0.0.1:"</span> + connector.getLocalPort();
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		bus = ServerBus.create(BusPolicy.create()
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		bus = ServerBus.create(BusPolicy.create().anyCaller()
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			.downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			.downstream(<span class="jxr_string">"ops.audit"</span>, <strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			.upstream(<span class="jxr_string">"ops.cancel-all"</span>, (s, t, p) -&gt; UPSTREAM.countDown())

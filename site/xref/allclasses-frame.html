@@ -94,6 +94,7 @@
                 <li><a href="org/apache/juneau/rest/server/auth/AuthFilter.html#AuthFilter" target="classFrame">AuthFilter</a></li>
                 <li><a href="org/apache/juneau/rest/server/auth/AuthResultAccumulator.html#AuthResultAccumulator" target="classFrame">AuthResultAccumulator</a></li>
                 <li><a href="org/apache/juneau/rest/server/auth/Authenticator.html#Authenticator" target="classFrame">Authenticator</a></li>
+                <li><a href="org/apache/juneau/rest/server/auth/saml/AuthnRequestStore.html#AuthnRequestStore" target="classFrame">AuthnRequestStore</a></li>
                 <li><a href="org/apache/juneau/marshall/swap/spi/AutoListSwap.html#AutoListSwap" target="classFrame">AutoListSwap</a></li>
                 <li><a href="org/apache/juneau/marshall/swap/spi/AutoMapSwap.html#AutoMapSwap" target="classFrame">AutoMapSwap</a></li>
                 <li><a href="org/apache/juneau/marshall/swap/spi/AutoObjectSwap.html#AutoObjectSwap" target="classFrame">AutoObjectSwap</a></li>
@@ -793,6 +794,7 @@
                 <li><a href="org/apache/juneau/bean/mcp/v20250618/Implementation.html#Implementation" target="classFrame">Implementation</a></li>
                 <li><a href="org/apache/juneau/bean/mcp/v20260728/Implementation.html#Implementation" target="classFrame">Implementation</a></li>
                 <li><a href="org/apache/juneau/marshall/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject" target="classFrame">ImplicitSwappedObject</a></li>
+                <li><a href="org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#InMemoryAuthnRequestStore" target="classFrame">InMemoryAuthnRequestStore</a></li>
                 <li><a href="org/apache/juneau/commons/beanquery/InMemoryBeanQueryContext.html#InMemoryBeanQueryContext" target="classFrame">InMemoryBeanQueryContext</a></li>
                 <li><a href="org/apache/juneau/commons/beanquery/InMemoryBeanQueryContext.html#InMemoryBeanQueryContext.Builder" target="classFrame">InMemoryBeanQueryContext.Builder</a></li>
                 <li><a href="org/apache/juneau/commons/beanquery/InMemoryBeanQuerySession.html#InMemoryBeanQuerySession" target="classFrame">InMemoryBeanQuerySession</a></li>
@@ -892,7 +894,6 @@
                 <li><a href="org/apache/juneau/commons/utils/JsonValueSafety.html#JsonValueSafety.Framed" target="classFrame">JsonValueSafety.Framed</a></li>
                 <li><a href="org/apache/juneau/marshall/jsonl/JsonlTokenReader.html#JsonlTokenReader" target="classFrame">JsonlTokenReader</a></li>
                 <li><a href="org/apache/juneau/rest/server/view/jsp/JspDispatcher.html#JspDispatcher" target="classFrame">JspDispatcher</a></li>
-                <li><a href="org/apache/juneau/rest/server/view/jsp/JspDispatcher.html#JspDispatcher.Builder" target="classFrame">JspDispatcher.Builder</a></li>
                 <li><a href="org/apache/juneau/rest/server/view/jsp/JspView.html#JspView" target="classFrame">JspView</a></li>
                 <li><a href="org/apache/juneau/commons/inject/JsrSupport.html#JsrSupport" target="classFrame">JsrSupport</a></li>
                 <li><a href="org/apache/juneau/rest/server/springboot/JuneauResetResistantLevelChangePropagator.html#JuneauResetResistantLevelChangePropagator" target="classFrame">JuneauResetResistantLevelChangePropagator</a></li>
@@ -1066,6 +1067,7 @@
                 <li><a href="org/apache/juneau/rest/server/mcp/McpPromptSpec.html#McpPromptSpec" target="classFrame">McpPromptSpec</a></li>
                 <li><a href="org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadata.html#McpProtectedResourceMetadata" target="classFrame">McpProtectedResourceMetadata</a></li>
                 <li><a href="org/apache/juneau/rest/server/mcp/v20260728/McpProtectedResourceMetadata.html#McpProtectedResourceMetadata" target="classFrame">McpProtectedResourceMetadata</a></li>
+                <li><a href="org/apache/juneau/rest/server/mcp/McpRequestPolicy.html#McpRequestPolicy" target="classFrame">McpRequestPolicy</a></li>
                 <li><a href="org/apache/juneau/rest/server/mcp/v20260728/McpRequestState.html#McpRequestState" target="classFrame">McpRequestState</a></li>
                 <li><a href="org/apache/juneau/rest/server/mcp/McpResourceContents.html#McpResourceContents" target="classFrame">McpResourceContents</a></li>
                 <li><a href="org/apache/juneau/rest/server/mcp/McpResourceContents.html#McpResourceContents.Kind" target="classFrame">McpResourceContents.Kind</a></li>
@@ -1082,7 +1084,9 @@
                 <li><a href="org/apache/juneau/rest/server/mcp/McpRole.html#McpRole" target="classFrame">McpRole</a></li>
                 <li><a href="org/apache/juneau/bean/mcp/v20260728/McpRoutingNames.html#McpRoutingNames" target="classFrame">McpRoutingNames</a></li>
                 <li><a href="org/apache/juneau/rest/server/mcp/McpSchema.html#McpSchema" target="classFrame">McpSchema</a></li>
+                <li><a href="org/apache/juneau/rest/server/mcp/v20250618/McpSchemaSafety.html#McpSchemaSafety" target="classFrame">McpSchemaSafety</a></li>
                 <li><a href="org/apache/juneau/rest/server/mcp/v20260728/McpSchemaSafety.html#McpSchemaSafety" target="classFrame">McpSchemaSafety</a></li>
+                <li><a href="org/apache/juneau/rest/server/mcp/v20250618/McpSchemaSafety.html#McpSchemaSafety.TaskStart" target="classFrame">McpSchemaSafety.TaskStart</a></li>
                 <li><a href="org/apache/juneau/rest/server/mcp/v20260728/McpSchemaSafety.html#McpSchemaSafety.TaskStart" target="classFrame">McpSchemaSafety.TaskStart</a></li>
                 <li><a href="org/apache/juneau/rest/server/mcp/McpStreamResult.html#McpStreamResult" target="classFrame">McpStreamResult</a></li>
                 <li><a href="org/apache/juneau/rest/server/mcp/McpSubscription.html#McpSubscription" target="classFrame">McpSubscription</a></li>
@@ -1134,7 +1138,6 @@
                 <li><a href="org/apache/juneau/rest/mock/classic/MockHttpClientConnectionManager.html#MockHttpClientConnectionManager" target="classFrame">MockHttpClientConnectionManager</a></li>
                 <li><a href="org/apache/juneau/rest/mock/MockHttpSession.html#MockHttpSession" target="classFrame">MockHttpSession</a></li>
                 <li><a href="org/apache/juneau/rest/mock/classic/MockLogger.html#MockLogger" target="classFrame">MockLogger</a></li>
-                <li><a href="org/apache/juneau/config/mod/Mod.html#Mod" target="classFrame">Mod</a></li>
                 <li><a href="org/apache/juneau/bct/junit/Mode.html#Mode" target="classFrame">Mode</a></li>
                 <li><a href="org/apache/juneau/bean/mcp/v20260728/ModelHint.html#ModelHint" target="classFrame">ModelHint</a></li>
                 <li><a href="org/apache/juneau/bean/mcp/v20260728/ModelPreferences.html#ModelPreferences" target="classFrame">ModelPreferences</a></li>
@@ -1478,6 +1481,7 @@
                 <li><a href="org/apache/juneau/marshall/jena/RdfCollectionFormat.html#RdfCollectionFormat" target="classFrame">RdfCollectionFormat</a></li>
                 <li><a href="org/apache/juneau/marshall/jena/marshaller/RdfJson.html#RdfJson" target="classFrame">RdfJson</a></li>
                 <li><a href="org/apache/juneau/marshall/jena/RdfMetaProvider.html#RdfMetaProvider" target="classFrame">RdfMetaProvider</a></li>
+                <li><a href="org/apache/juneau/marshall/jena/RdfNoNetworkDocumentLoader.html#RdfNoNetworkDocumentLoader" target="classFrame">RdfNoNetworkDocumentLoader</a></li>
                 <li><a href="org/apache/juneau/marshall/jena/marshaller/RdfProto.html#RdfProto" target="classFrame">RdfProto</a></li>
                 <li><a href="org/apache/juneau/marshall/jena/RdfSchema.html#RdfSchema" target="classFrame">RdfSchema</a></li>
                 <li><a href="org/apache/juneau/marshall/jena/marshaller/RdfThrift.html#RdfThrift" target="classFrame">RdfThrift</a></li>
@@ -1513,6 +1517,7 @@
                 <li><a href="org/apache/juneau/commons/beanquery/RegexBudget.html#RegexBudget" target="classFrame">RegexBudget</a></li>
                 <li><a href="org/apache/juneau/commons/beanquery/RegexBudget.html#RegexBudget.Deadlined" target="classFrame">RegexBudget.Deadlined</a></li>
                 <li><a href="org/apache/juneau/commons/svl/functions/RegexFunctions.html#RegexFunctions" target="classFrame">RegexFunctions</a></li>
+                <li><a href="org/apache/juneau/commons/svl/functions/RegexFunctions.html#RegexFunctions.Deadline" target="classFrame">RegexFunctions.Deadline</a></li>
                 <li><a href="org/apache/juneau/console/views/RegionTable.html#RegionTable" target="classFrame">RegionTable</a></li>
                 <li><a href="org/apache/juneau/commons/beanquery/RelativeDuration.html#RelativeDuration" target="classFrame">RelativeDuration</a></li>
                 <li><a href="org/apache/juneau/commons/beanquery/RelativeDuration.html#RelativeDuration.Unit" target="classFrame">RelativeDuration.Unit</a></li>
@@ -2161,6 +2166,7 @@
                 <li><a href="org/apache/juneau/rest/server/view/ViewResource.html#ViewResource" target="classFrame">ViewResource</a></li>
                 <li><a href="org/apache/juneau/rest/server/view/ViewServlet.html#ViewServlet" target="classFrame">ViewServlet</a></li>
                 <li><a href="org/apache/juneau/console/views/ViewTable.html#ViewTable" target="classFrame">ViewTable</a></li>
+                <li><a href="org/apache/juneau/rest/server/view/ViewTemplateNames.html#ViewTemplateNames" target="classFrame">ViewTemplateNames</a></li>
                 <li><a href="org/apache/juneau/console/views/VisibilityRule.html#VisibilityRule" target="classFrame">VisibilityRule</a></li>
                 <li><a href="org/apache/juneau/http/classic/header/Warning.html#Warning" target="classFrame">Warning</a></li>
                 <li><a href="org/apache/juneau/http/header/Warning.html#Warning" target="classFrame">Warning</a></li>
@@ -2213,7 +2219,6 @@
                 <li><a href="org/apache/juneau/marshall/xml/XmlResolver.html#XmlResolver.Void" target="classFrame">XmlResolver.Void</a></li>
                 <li><a href="org/apache/juneau/marshall/xml/XmlSchema.html#XmlSchema" target="classFrame">XmlSchema</a></li>
                 <li><a href="org/apache/juneau/examples/core/xml/XmlSimpleExample.html#XmlSimpleExample" target="classFrame">XmlSimpleExample</a></li>
-                <li><a href="org/apache/juneau/config/mod/XorEncodeMod.html#XorEncodeMod" target="classFrame">XorEncodeMod</a></li>
                 <li><a href="org/apache/juneau/marshall/yaml/YamlAnnotation.html#YamlAnnotation" target="classFrame">YamlAnnotation</a></li>
                 <li><a href="org/apache/juneau/marshall/yaml/YamlAnnotation.html#YamlAnnotation.Object" target="classFrame">YamlAnnotation.Object</a></li>
                 <li><a href="org/apache/juneau/marshall/yaml/YamlApplyAnnotation.html#YamlApplyAnnotation" target="classFrame">YamlApplyAnnotation</a></li>

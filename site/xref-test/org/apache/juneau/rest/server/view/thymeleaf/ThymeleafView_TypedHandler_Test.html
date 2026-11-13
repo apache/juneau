@@ -117,12 +117,12 @@
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		@RestGet(<span class="jxr_string">"/thy-hello"</span>)
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">public</strong> View thyHello() {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<strong class="jxr_keyword">return</strong> ThymeleafView.of(<span class="jxr_string">"templates/hello.html"</span>).attr(<span class="jxr_string">"name"</span>, <span class="jxr_string">"Alice"</span>);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<strong class="jxr_keyword">return</strong> ThymeleafView.of(<span class="jxr_string">"hello.html"</span>).attr(<span class="jxr_string">"name"</span>, <span class="jxr_string">"Alice"</span>);
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		}
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 		@RestGet(<span class="jxr_string">"/fm-hello"</span>)
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">public</strong> View fmHello() {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">return</strong> FreemarkerView.of(<span class="jxr_string">"freemarker-templates/hello.ftlh"</span>).attr(<span class="jxr_string">"name"</span>, <span class="jxr_string">"Alice"</span>);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">return</strong> FreemarkerView.of(<span class="jxr_string">"hello.ftlh"</span>).attr(<span class="jxr_string">"name"</span>, <span class="jxr_string">"Alice"</span>);
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		}
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 
@@ -152,7 +152,7 @@
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		@RestGet(<span class="jxr_string">"/hello/{name}"</span>)
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">public</strong> View hello(@Path String name) {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">return</strong> ThymeleafView.of(<span class="jxr_string">"templates/hello.html"</span>).attr(<span class="jxr_string">"name"</span>, name);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">return</strong> ThymeleafView.of(<span class="jxr_string">"hello.html"</span>).attr(<span class="jxr_string">"name"</span>, name);
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
@@ -180,7 +180,7 @@
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 		@RestGet(<span class="jxr_string">"/hello"</span>)
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">public</strong> View hello() {
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			<strong class="jxr_keyword">return</strong> ThymeleafView.of(<span class="jxr_string">"templates/hello.html"</span>).attr(<span class="jxr_string">"name"</span>, <span class="jxr_string">"Alice"</span>);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			<strong class="jxr_keyword">return</strong> ThymeleafView.of(<span class="jxr_string">"hello.html"</span>).attr(<span class="jxr_string">"name"</span>, <span class="jxr_string">"Alice"</span>);
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 		}
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 	}
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 

@@ -38,8 +38,8 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * @param accessToken The opaque or JWT access-token string.  Never {@code null}.</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * @param tokenType The token type per RFC 6749 &amp;sect;5.1 (typically {@code "Bearer"}).  Never {@code null}.</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * @param expiresAt The instant at which the access token expires.  May be {@link Instant#MAX} when the</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * 	IdP returned no {@code expires_in}.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * @param expiresAt The instant at which the access token expires.  Tokens acquired through the flows in this</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * 	package carry a 5-minute lifetime when the IdP returned no (or a zero) {@code expires_in}.</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * @param refreshToken The refresh token, if the IdP issued one.</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * @param scope The granted scopes, if the IdP returned a {@code scope} field.</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * @param idToken The OIDC ID token (a JWT), if the flow scope included {@code openid}.  &lt;b&gt;Not validated&lt;/b&gt;</em>

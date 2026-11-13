@@ -65,7 +65,25 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<em class="jxr_comment">// juneau-server-config.cfg in the test classpath/working dir sets no Security/apiKey.</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		assertNull(g.configuredKey());
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	}
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  }
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	@Test <strong class="jxr_keyword">void</strong> b01_secureChannel_accepted() {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"10.1.2.3"</span>, false));
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	@Test <strong class="jxr_keyword">void</strong> b02_insecureLoopback_accepted() {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(false, <span class="jxr_string">"127.0.0.1"</span>, false));
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(false, <span class="jxr_string">"::1"</span>, false));
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	}
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	@Test <strong class="jxr_keyword">void</strong> b03_insecureRemote_refused() {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertFalse(ConfigApiKeyGuard.isChannelAcceptable(false, <span class="jxr_string">"10.1.2.3"</span>, false));
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertFalse(ConfigApiKeyGuard.isChannelAcceptable(false, <strong class="jxr_keyword">null</strong>, false));
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	@Test <strong class="jxr_keyword">void</strong> b04_insecureRemote_acceptedWhenAllowInsecure() {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(false, <span class="jxr_string">"10.1.2.3"</span>, <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

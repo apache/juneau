@@ -98,9 +98,8 @@ loadScripts(document, 'script');</script>
  (mirrors <code>HealthResource</code>).
 
  <p>
- As with the mixin flavor, the <code>GET</code> endpoints carry no built-in guard of their own &mdash; mount this
- resource only under a subtree that's already covered by whatever authentication/authorization the app applies
- to its management endpoints generally. See <a href="LoggersMixin.html" title="class in org.apache.juneau.rest.server.management"><code>LoggersMixin</code></a> for details.
+ As with the mixin flavor, every endpoint is denied (403) until the importer registers a
+ <a href="../guard/RestGuardList.html" title="class in org.apache.juneau.rest.server.guard"><code>RestGuardList</code></a> bean. See <a href="LoggersMixin.html" title="class in org.apache.juneau.rest.server.management"><code>LoggersMixin</code></a> for details.
 
  <h2 class='section'>Backend:</h2><ul>
    <li>Drives <a href="JulLogBackend.html" title="class in org.apache.juneau.rest.server.management"><code>java.util.logging</code></a> by default; declare a Logback / Log4j2 backend

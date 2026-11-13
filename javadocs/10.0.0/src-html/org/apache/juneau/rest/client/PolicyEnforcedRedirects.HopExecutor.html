@@ -34,30 +34,30 @@
 <span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.net.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.http.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.http.remote.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">/**</span>
-<span class="source-line-no">028</span><span id="line-28"> * Shared Juneau-controlled redirect loop for SSRF-guard-active ({@link TransportRequest#isSsrfGuardActive()})</span>
-<span class="source-line-no">029</span><span id="line-29"> * {@code @Remote} requests.</span>
-<span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> * Every first-party transport that supports the SSRF guardrail's connect-time contract (see</span>
-<span class="source-line-no">033</span><span id="line-33"> * {@link HttpTransport#supportsUrlPolicy()}) disables its own automatic redirect-following for policy-covered</span>
-<span class="source-line-no">034</span><span id="line-34"> * requests and instead routes each hop through {@link #execute(TransportRequest, HopExecutor)}, which re-runs the</span>
-<span class="source-line-no">035</span><span id="line-35"> * {@link RemoteUrlPolicy} pre-check &amp;mdash; and, via the supplied {@link HopExecutor}, pin-on-connect &amp;mdash; on</span>
-<span class="source-line-no">036</span><span id="line-36"> * every {@code Location} hop.  A public {@code @Url} that redirects to {@code http://169.254.169.254/} or</span>
-<span class="source-line-no">037</span><span id="line-37"> * {@code http://127.0.0.1/} is rejected exactly as a direct request to that target would be.</span>
-<span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> * Follows conventional 3xx semantics: {@code 301}/{@code 302}/{@code 303} rewrite the method to {@code GET} with</span>
-<span class="source-line-no">041</span><span id="line-41"> * no body, unless the original method was already {@code GET}/{@code HEAD}; {@code 307}/{@code 308} preserve the</span>
-<span class="source-line-no">042</span><span id="line-42"> * original method and body. A non-{@linkplain TransportBody#isRepeatable() repeatable} body cannot be safely</span>
-<span class="source-line-no">043</span><span id="line-43"> * re-sent, so such a redirect is refused (fail closed) rather than risking a corrupt or partial replay.  The</span>
-<span class="source-line-no">044</span><span id="line-44"> * chain is capped at {@link RemoteUrlPolicy#MAX_REDIRECT_HOPS} hops.</span>
-<span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;p&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> * Caller-set credential headers ({@link RedirectSecurity#stripOnCrossOrigin()}, matched case-insensitively) are</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.http.remote.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">/**</span>
+<span class="source-line-no">027</span><span id="line-27"> * Shared Juneau-controlled redirect loop for SSRF-guard-active ({@link TransportRequest#isSsrfGuardActive()})</span>
+<span class="source-line-no">028</span><span id="line-28"> * {@code @Remote} requests.</span>
+<span class="source-line-no">029</span><span id="line-29"> *</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * Every first-party transport that supports the SSRF guardrail's connect-time contract (see</span>
+<span class="source-line-no">032</span><span id="line-32"> * {@link HttpTransport#supportsUrlPolicy()}) disables its own automatic redirect-following for policy-covered</span>
+<span class="source-line-no">033</span><span id="line-33"> * requests and instead routes each hop through {@link #execute(TransportRequest, HopExecutor)}, which re-runs the</span>
+<span class="source-line-no">034</span><span id="line-34"> * {@link RemoteUrlPolicy} pre-check &amp;mdash; and, via the supplied {@link HopExecutor}, pin-on-connect &amp;mdash; on</span>
+<span class="source-line-no">035</span><span id="line-35"> * every {@code Location} hop.  A public {@code @Url} that redirects to {@code http://169.254.169.254/} or</span>
+<span class="source-line-no">036</span><span id="line-36"> * {@code http://127.0.0.1/} is rejected exactly as a direct request to that target would be.</span>
+<span class="source-line-no">037</span><span id="line-37"> *</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * Follows conventional 3xx semantics: {@code 301}/{@code 302}/{@code 303} rewrite the method to {@code GET} with</span>
+<span class="source-line-no">040</span><span id="line-40"> * no body, unless the original method was already {@code GET}/{@code HEAD}; {@code 307}/{@code 308} preserve the</span>
+<span class="source-line-no">041</span><span id="line-41"> * original method and body. A non-{@linkplain TransportBody#isRepeatable() repeatable} body cannot be safely</span>
+<span class="source-line-no">042</span><span id="line-42"> * re-sent, so such a redirect is refused (fail closed) rather than risking a corrupt or partial replay.  The</span>
+<span class="source-line-no">043</span><span id="line-43"> * chain is capped at {@link RemoteUrlPolicy#MAX_REDIRECT_HOPS} hops.</span>
+<span class="source-line-no">044</span><span id="line-44"> *</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;p&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * Caller-set headers other than the content-negotiation and framing headers on {@link RedirectSecurity#forwardOnCrossOrigin()}</span>
+<span class="source-line-no">047</span><span id="line-47"> * (and any added with {@code redirectForwardHeaders}), matched case-insensitively, are</span>
 <span class="source-line-no">048</span><span id="line-48"> * carried to a hop only when it is the same origin as the &lt;em&gt;first&lt;/em&gt; request in the chain and not an {@code https}</span>
 <span class="source-line-no">049</span><span id="line-49"> * &amp;rarr; {@code http} downgrade (see {@link RedirectSecurity#shouldStripCredentials(URI, URI)}); otherwise they are</span>
 <span class="source-line-no">050</span><span id="line-50"> * dropped for that hop.  A hop that returns to the first origin gets them back, but only when its method is {@code GET} or {@code HEAD}</span>
@@ -187,14 +187,14 @@
 <span class="source-line-no">174</span><span id="line-174">            .uri(target2)</span>
 <span class="source-line-no">175</span><span id="line-175">            .remoteUrlPolicy(true, false)</span>
 <span class="source-line-no">176</span><span id="line-176">            .allowedAddressRanges(current.getAllowedAddressRanges())</span>
-<span class="source-line-no">177</span><span id="line-177">            .redirectStripHeaders(initial.getRedirectStripHeaders())</span>
+<span class="source-line-no">177</span><span id="line-177">            .redirectForwardHeaders(initial.getRedirectForwardHeaders())</span>
 <span class="source-line-no">178</span><span id="line-178">            .timeout(current.getTimeout());</span>
 <span class="source-line-no">179</span><span id="line-179">         // Credential headers are forwarded only to the first origin (and never across an https -&gt; http downgrade), so a hop</span>
 <span class="source-line-no">180</span><span id="line-180">         // that returns to it gets the caller's headers back.  They are taken from the initial request, not the previous hop's.</span>
 <span class="source-line-no">181</span><span id="line-181">         var stripCredentials = RedirectSecurity.shouldStripCredentials(initial.getUri(), target)</span>
 <span class="source-line-no">182</span><span id="line-182">            || (left &amp;&amp; ! safeMethod(rewriteToGet ? "GET" : current.getMethod()));</span>
 <span class="source-line-no">183</span><span id="line-183">         for (var h : initial.getHeaders())</span>
-<span class="source-line-no">184</span><span id="line-184">            if (! (stripCredentials &amp;&amp; RedactedHeaders.isSensitive(h.name(), initial.getRedirectStripHeaders())))</span>
+<span class="source-line-no">184</span><span id="line-184">            if (! (stripCredentials &amp;&amp; RedirectSecurity.mustStrip(h.name(), initial.getRedirectForwardHeaders())))</span>
 <span class="source-line-no">185</span><span id="line-185">               builder.header(h.name(), h.value());</span>
 <span class="source-line-no">186</span><span id="line-186">         if (! rewriteToGet) {</span>
 <span class="source-line-no">187</span><span id="line-187">            var body = current.getBody();</span>

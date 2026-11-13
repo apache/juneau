@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> a02_freemarkerMountInstalled_rendersTemplate() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<em class="jxr_comment">// Default basePath="/" + no templateSuffix → request path is taken as-is, FreeMarker's</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<em class="jxr_comment">// root-of-classpath loader resolves it directly.</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		ca.get(<span class="jxr_string">"/freemarker/freemarker-templates/about.ftlh"</span>)
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		ca.get(<span class="jxr_string">"/freemarker/about.ftlh"</span>)
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  			.run()
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			.assertContent().asString().isContains(<span class="jxr_string">"About Juneau"</span>);

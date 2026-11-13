@@ -95,8 +95,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#defaultFunctions()" class="member-name-link">defaultFunctions</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">Registers the built-in <a href="../VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a> catalog plus any third-party functions
- discovered via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html#load(java.lang.Class)" title="class or interface in java.util" class="external-link"><code>ServiceLoader.load(Class)</code></a> on <a href="../VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a>.</div>
+<div class="block">Registers the built-in <a href="../VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a> catalog.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#defaultVars()" class="member-name-link">defaultVars</a>()</code></div>
@@ -114,43 +113,49 @@ loadScripts(document, 'script');</script>
 <div class="block">Register one or more <a href="../VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a> instances on this builder.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#maxCollectionSize(int)" class="member-name-link">maxCollectionSize</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#loadServices()" class="member-name-link">loadServices</a>()</code></div>
 <div class="col-last even-row-color">
+<div class="block">Registers third-party <a href="../VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a> implementations discovered through <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html" title="class or interface in java.util" class="external-link"><code>ServiceLoader</code></a>
+ (<code>META-INF/services/org.apache.juneau.commons.svl.VarFunction</code>).</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#maxCollectionSize(int)" class="member-name-link">maxCollectionSize</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the maximum number of elements allowed in a collection built by an expression.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#maxExprDepth(int)" class="member-name-link">maxExprDepth</a><wbr>(int&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#maxExprDepth(int)" class="member-name-link">maxExprDepth</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the maximum expression nesting depth accepted by the parser.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#maxRecursionDepth(int)" class="member-name-link">maxRecursionDepth</a><wbr>(int&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#maxRecursionDepth(int)" class="member-name-link">maxRecursionDepth</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the maximum depth for re-resolving a var's output.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#strict(boolean)" class="member-name-link">strict</a><wbr>(boolean&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#strict(boolean)" class="member-name-link">strict</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Enables or disables strict expression evaluation.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#valueFormatter(java.util.function.Function)" class="member-name-link">valueFormatter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#valueFormatter(java.util.function.Function)" class="member-name-link">valueFormatter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the formatter that converts the typed result of a <code>#{...}</code> expression to text.</div>
 </div>
-<div class="col-first odd-row-color"><code>final <a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#vars(java.lang.Class...)" class="member-name-link">vars</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../Var.html" title="class in org.apache.juneau.commons.svl">Var</a>&gt;...&nbsp;values)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Register new variables with this resolver.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#vars(org.apache.juneau.commons.svl.Var...)" class="member-name-link">vars</a><wbr>(<a href="../Var.html" title="class in org.apache.juneau.commons.svl">Var</a>...&nbsp;values)</code></div>
+<div class="col-first even-row-color"><code>final <a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#vars(java.lang.Class...)" class="member-name-link">vars</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../Var.html" title="class in org.apache.juneau.commons.svl">Var</a>&gt;...&nbsp;values)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Register new variables with this resolver.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#vars(org.apache.juneau.commons.svl.VarList)" class="member-name-link">vars</a><wbr>(<a href="../VarList.html" title="class in org.apache.juneau.commons.svl">VarList</a>&nbsp;values)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#vars(org.apache.juneau.commons.svl.Var...)" class="member-name-link">vars</a><wbr>(<a href="../Var.html" title="class in org.apache.juneau.commons.svl">Var</a>...&nbsp;values)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Register new variables with this resolver.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">VarResolver.Builder.</span><code><a href="../VarResolver.Builder.html#vars(org.apache.juneau.commons.svl.VarList)" class="member-name-link">vars</a><wbr>(<a href="../VarList.html" title="class in org.apache.juneau.commons.svl">VarList</a>&nbsp;values)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Register new variables with this resolver.</div>
 </div>
 </div>

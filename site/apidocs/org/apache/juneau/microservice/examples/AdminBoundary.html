@@ -78,9 +78,14 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/AdminBoundary.html#line-85">AdminBoundary</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/AdminBoundary.html#line-90">AdminBoundary</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">The CSRF boundary for the admin resources <a href="ConfigResource.html" title="class in org.apache.juneau.microservice.examples"><code>ConfigResource</code></a>, <a href="LogsResource.html" title="class in org.apache.juneau.microservice.examples"><code>LogsResource</code></a> and <a href="ShutdownResource.html" title="class in org.apache.juneau.microservice.examples"><code>ShutdownResource</code></a>.
+
+ <p>
+ This boundary is not authentication.  It checks the <code>Host</code> and <code>Origin</code> headers a browser sends; it does
+ not identify the caller, and any client that is not a browser passes it.  The admin resources have no authentication
+ of their own, so an application that mounts them must add its own, and must not expose them on an untrusted network.
 
  <p>
  <a href="#registration(java.lang.String,java.lang.String...)"><code>registration(String, String...)</code></a> returns a <a href="../ServletFilterRegistration.html" title="class in org.apache.juneau.microservice"><code>ServletFilterRegistration</code></a> that puts the three resources
@@ -198,14 +203,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="LOOPBACK_HOSTS">
 <h3>LOOPBACK_HOSTS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/AdminBoundary.html#line-88">LOOPBACK_HOSTS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/AdminBoundary.html#line-93">LOOPBACK_HOSTS</a></span></div>
 <div class="block">The host names answered when none are given: <code>localhost</code>, <code>127.0.0.1</code> and <code>[::1]</code>, on any port.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ORDER">
 <h3>ORDER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/AdminBoundary.html#line-91">ORDER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/AdminBoundary.html#line-96">ORDER</a></span></div>
 <div class="block">The order the registration runs at: ahead of authentication, behind anything registered at the very front.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -228,7 +233,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="registration(java.lang.String,java.lang.String...)">
 <h3>registration</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/AdminBoundary.html#line-123">registration</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefix,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/AdminBoundary.html#line-128">registration</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefix,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;allowedHosts)</span></div>
 <div class="block">A registration of a new CSRF boundary over the three admin resources.
 

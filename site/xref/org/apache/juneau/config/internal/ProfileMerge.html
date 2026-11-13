@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> key : overlay.getKeys(section)) {
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  				<strong class="jxr_keyword">var</strong> e = overlay.getEntry(section, key);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  				<strong class="jxr_keyword">if</strong> (e != <strong class="jxr_keyword">null</strong>)  <em class="jxr_comment">// HTT: getKeys() only returns keys with entries, so getEntry is never null here.</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  					base.setEntry(section, key, e.getValue(), e.getModifiers(), e.getComment(), e.getPreLines());
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  					base.setEntry(section, key, e.getValue(), e.getComment(), e.getPreLines());
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  			}
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		}
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}

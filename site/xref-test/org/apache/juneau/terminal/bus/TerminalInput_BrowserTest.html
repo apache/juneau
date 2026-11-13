@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 			}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		};
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> input = TerminalInput.create(access);
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		bus = ServerBus.create(BusPolicy.create()
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		bus = ServerBus.create(BusPolicy.create().anyCaller()
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			.allowedOrigins(origin)
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			.upstream(TerminalInput.TOPIC, input)
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			.downstream(TerminalInput.STATUS_TOPIC, false)
@@ -208,7 +208,7 @@
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<em class="jxr_javadoccomment">/** Starts {@code sh -c script} under the runner's pseudo-terminal, with input on, as terminal and run {@code id}. */</em>
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> job(String id, String script) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		JOBS.put(id, TerminalProcess.start(<span class="jxr_string">"generic"</span>, List.of(<span class="jxr_string">"sh"</span>, <span class="jxr_string">"-c"</span>, script), 100, 30, dir.resolve(id), <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		JOBS.put(id, TerminalProcess.start(<span class="jxr_string">"generic"</span>, List.of(<span class="jxr_string">"sh"</span>, <span class="jxr_string">"-c"</span>, script), 100, 30, dir, <strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 	}
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<em class="jxr_javadoccomment">/** {@code juneau-terminal/src/main/python/juneau_terminal.py}, from {@code basedir} or the working directory. */</em>

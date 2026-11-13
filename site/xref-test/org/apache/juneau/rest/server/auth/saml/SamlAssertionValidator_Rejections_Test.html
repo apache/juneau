@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Instant NOA = NOW.plusSeconds(300);
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> SamlAssertionValidator.Builder base(BasicCredential cred) {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">return</strong> SamlAssertionValidator.create()
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">return</strong> SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  			.spEntityId(AUDIENCE)
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  			.expectedIssuer(ISSUER)
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			.signingCredential(cred)
@@ -202,7 +202,7 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		sc.setMethod(SubjectConfirmation.METHOD_BEARER);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">var</strong> xml = signedWithConfirmation(cred, sc);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> v = base(cred).build();
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(AuthenticationException.<strong class="jxr_keyword">class</strong>, () -&gt; v.validate(xml, ACS));
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(AuthenticationException.<strong class="jxr_keyword">class</strong>, () -&gt; v.validate(xml));
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"SubjectConfirmationData&gt; is missing"</span>), ex.getMessage());
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 	}
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 
@@ -210,7 +210,7 @@
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> cred = cred();
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> xml = signedWithConfirmation(cred, SamlTestSupport.bearerConfirmation(ACS, NOW.plusSeconds(600), NOA, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> v = base(cred).build();
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(AuthenticationException.<strong class="jxr_keyword">class</strong>, () -&gt; v.validate(xml, ACS));
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(AuthenticationException.<strong class="jxr_keyword">class</strong>, () -&gt; v.validate(xml));
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"not yet valid"</span>), ex.getMessage());
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 
@@ -218,14 +218,14 @@
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">var</strong> cred = cred();
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">var</strong> xml = signedWithConfirmation(cred, SamlTestSupport.bearerConfirmation(ACS, <strong class="jxr_keyword">null</strong>, NOA, <span class="jxr_string">"_req1"</span>, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">var</strong> v = base(cred).build();
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(AuthenticationException.<strong class="jxr_keyword">class</strong>, () -&gt; v.validate(xml, ACS));
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"unsolicited"</span>), ex.getMessage());
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(AuthenticationException.<strong class="jxr_keyword">class</strong>, () -&gt; v.validate(xml));
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"outstanding request"</span>), ex.getMessage());
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 	}
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	@Test <strong class="jxr_keyword">void</strong> d04_confirmationNotBeforeInWindow_accepted() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">var</strong> cred = cred();
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">var</strong> xml = signedWithConfirmation(cred, SamlTestSupport.bearerConfirmation(ACS, NBF, NOA, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertEquals(<span class="jxr_string">"alice"</span>, base(cred).build().validate(xml, ACS).getName());
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertEquals(<span class="jxr_string">"alice"</span>, base(cred).build().validate(xml).getName());
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>

@@ -215,14 +215,14 @@
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 * Returns {@code true} if {@code method} is one of the methods the {@code content} URL-parameter body</em>
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">	 * override (see {@link Rest#disableContentParam()}) is documented to apply to.</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">	 * override (see {@link Rest#allowContentParam()}) is documented to apply to.</em>
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * Package-private for direct unit-test coverage. Restricting the override to {@code PUT}/{@code POST} (its</em>
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * documented scope all along) keeps a plain cross-origin {@code GET} &amp;mdash; the kind a browser will issue</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * with no preflight and no custom header for something as simple as an &lt;code&gt;&amp;lt;img src=...&amp;gt;&lt;/code&gt; tag</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * &amp;mdash; from ever having its body-carrying {@code Content-Type} gate bypassed via a query string, without</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * touching the {@link Rest#disableContentParam()} default itself.</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * touching the {@link Rest#allowContentParam()} default itself.</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * @param method The request's HTTP method. Can be {@code null} (returns {@code false}).</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 * @return {@code true} if {@code method} is {@code PUT} or {@code POST}, case-insensitively.</em>

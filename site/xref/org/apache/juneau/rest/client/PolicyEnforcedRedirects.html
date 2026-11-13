@@ -29,30 +29,30 @@
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.net.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.remote.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Shared Juneau-controlled redirect loop for SSRF-guard-active ({@link TransportRequest#isSsrfGuardActive()})</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * {@code @Remote} requests.</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Every first-party transport that supports the SSRF guardrail's connect-time contract (see</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * {@link HttpTransport#supportsUrlPolicy()}) disables its own automatic redirect-following for policy-covered</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * requests and instead routes each hop through {@link #execute(TransportRequest, HopExecutor)}, which re-runs the</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * {@link RemoteUrlPolicy} pre-check &amp;mdash; and, via the supplied {@link HopExecutor}, pin-on-connect &amp;mdash; on</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * every {@code Location} hop.  A public {@code @Url} that redirects to {@code <a href="http://169.254.169.254/" target="alexandria_uri">http://169.254.169.254/</a>} or</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * {@code <a href="http://127.0.0.1/" target="alexandria_uri">http://127.0.0.1/</a>} is rejected exactly as a direct request to that target would be.</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * Follows conventional 3xx semantics: {@code 301}/{@code 302}/{@code 303} rewrite the method to {@code GET} with</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * no body, unless the original method was already {@code GET}/{@code HEAD}; {@code 307}/{@code 308} preserve the</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * original method and body. A non-{@linkplain TransportBody#isRepeatable() repeatable} body cannot be safely</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * re-sent, so such a redirect is refused (fail closed) rather than risking a corrupt or partial replay.  The</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * chain is capped at {@link RemoteUrlPolicy#MAX_REDIRECT_HOPS} hops.</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * Caller-set credential headers ({@link RedirectSecurity#stripOnCrossOrigin()}, matched case-insensitively) are</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.remote.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Shared Juneau-controlled redirect loop for SSRF-guard-active ({@link TransportRequest#isSsrfGuardActive()})</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * {@code @Remote} requests.</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * Every first-party transport that supports the SSRF guardrail's connect-time contract (see</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * {@link HttpTransport#supportsUrlPolicy()}) disables its own automatic redirect-following for policy-covered</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * requests and instead routes each hop through {@link #execute(TransportRequest, HopExecutor)}, which re-runs the</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * {@link RemoteUrlPolicy} pre-check &amp;mdash; and, via the supplied {@link HopExecutor}, pin-on-connect &amp;mdash; on</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * every {@code Location} hop.  A public {@code @Url} that redirects to {@code <a href="http://169.254.169.254/" target="alexandria_uri">http://169.254.169.254/</a>} or</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * {@code <a href="http://127.0.0.1/" target="alexandria_uri">http://127.0.0.1/</a>} is rejected exactly as a direct request to that target would be.</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * Follows conventional 3xx semantics: {@code 301}/{@code 302}/{@code 303} rewrite the method to {@code GET} with</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * no body, unless the original method was already {@code GET}/{@code HEAD}; {@code 307}/{@code 308} preserve the</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * original method and body. A non-{@linkplain TransportBody#isRepeatable() repeatable} body cannot be safely</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * re-sent, so such a redirect is refused (fail closed) rather than risking a corrupt or partial replay.  The</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * chain is capped at {@link RemoteUrlPolicy#MAX_REDIRECT_HOPS} hops.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * Caller-set headers other than the content-negotiation and framing headers on {@link RedirectSecurity#forwardOnCrossOrigin()}</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * (and any added with {@code redirectForwardHeaders}), matched case-insensitively, are</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * carried to a hop only when it is the same origin as the &lt;em&gt;first&lt;/em&gt; request in the chain and not an {@code https}</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * &amp;rarr; {@code http} downgrade (see {@link RedirectSecurity#shouldStripCredentials(URI, URI)}); otherwise they are</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * dropped for that hop.  A hop that returns to the first origin gets them back, but only when its method is {@code GET} or {@code HEAD}</em>
@@ -182,14 +182,14 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 				.uri(target2)
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 				.remoteUrlPolicy(<strong class="jxr_keyword">true</strong>, false)
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 				.allowedAddressRanges(current.getAllowedAddressRanges())
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				.redirectStripHeaders(initial.getRedirectStripHeaders())
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				.redirectForwardHeaders(initial.getRedirectForwardHeaders())
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 				.timeout(current.getTimeout());
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<em class="jxr_comment">// Credential headers are forwarded only to the first origin (and never across an https -&gt; http downgrade), so a hop</em>
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<em class="jxr_comment">// that returns to it gets the caller's headers back.  They are taken from the initial request, not the previous hop's.</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<strong class="jxr_keyword">var</strong> stripCredentials = RedirectSecurity.shouldStripCredentials(initial.getUri(), target)
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 				|| (left &amp;&amp; ! safeMethod(rewriteToGet ? <span class="jxr_string">"GET"</span> : current.getMethod()));
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : initial.getHeaders())
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 				<strong class="jxr_keyword">if</strong> (! (stripCredentials &amp;&amp; RedactedHeaders.isSensitive(h.name(), initial.getRedirectStripHeaders())))
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 				<strong class="jxr_keyword">if</strong> (! (stripCredentials &amp;&amp; RedirectSecurity.mustStrip(h.name(), initial.getRedirectForwardHeaders())))
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 					builder.header(h.name(), h.value());
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">if</strong> (! rewriteToGet) {
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 				<strong class="jxr_keyword">var</strong> body = current.getBody();

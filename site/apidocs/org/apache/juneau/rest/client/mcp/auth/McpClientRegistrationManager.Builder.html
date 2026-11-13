@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="McpClientRegistrationManager.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.html#line-70">McpClientRegistrationManager.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.html#line-71">McpClientRegistrationManager.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder.</div>
 </section>
@@ -117,69 +117,74 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#applicationType(org.apache.juneau.rest.client.mcp.auth.McpApplicationType)" class="member-name-link">applicationType</a><wbr>(<a href="McpApplicationType.html" title="enum class in org.apache.juneau.rest.client.mcp.auth">McpApplicationType</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allowPrivateUrls(boolean)" class="member-name-link">allowPrivateUrls</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Allows an AS-advertised registration endpoint that points at a loopback, private, link-local or metadata host.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#applicationType(org.apache.juneau.rest.client.mcp.auth.McpApplicationType)" class="member-name-link">applicationType</a><wbr>(<a href="McpApplicationType.html" title="enum class in org.apache.juneau.rest.client.mcp.auth">McpApplicationType</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the <code>application_type</code> declared when the manager performs DCR.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Builds the manager.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientName(java.lang.String)" class="member-name-link">clientName</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientName(java.lang.String)" class="member-name-link">clientName</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the human-readable client name declared during DCR.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#confidential(boolean)" class="member-name-link">confidential</a><wbr>(boolean&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#confidential(boolean)" class="member-name-link">confidential</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Registers a confidential client during DCR (default public/native).</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> for each DCR request.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpTimeout(java.time.Duration)" class="member-name-link">httpTimeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpTimeout(java.time.Duration)" class="member-name-link">httpTimeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the connect/read timeout applied to DCR requests.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initialAccessToken(java.lang.String)" class="member-name-link">initialAccessToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initialAccessToken(java.lang.String)" class="member-name-link">initialAccessToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the RFC 7591 &sect;3 initial access token for a protected registration endpoint.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#preRegistered(org.apache.juneau.rest.client.mcp.auth.McpClientRegistration)" class="member-name-link">preRegistered</a><wbr>(<a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#preRegistered(org.apache.juneau.rest.client.mcp.auth.McpClientRegistration)" class="member-name-link">preRegistered</a><wbr>(<a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets pre-registered (manually provisioned) credentials bound to a specific AS <code>issuer</code>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redirectUris(java.util.List)" class="member-name-link">redirectUris</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&gt;&nbsp;values)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redirectUris(java.util.List)" class="member-name-link">redirectUris</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&gt;&nbsp;values)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the redirect URIs to register when the manager performs DCR.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redirectUrisSupplier(java.util.function.Supplier)" class="member-name-link">redirectUrisSupplier</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&gt;&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redirectUrisSupplier(java.util.function.Supplier)" class="member-name-link">redirectUrisSupplier</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&gt;&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets a supplier of redirect URIs to register when the manager performs DCR (for the bind-first strategy where
  the loopback port is learned per-connection).</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registrarFunction(java.util.function.Function)" class="member-name-link">registrarFunction</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>,<wbr><a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registrarFunction(java.util.function.Function)" class="member-name-link">registrarFunction</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>,<wbr><a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Overrides the registration function the manager invokes to perform DCR (advanced / test seam).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#scope(java.lang.String...)" class="member-name-link">scope</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#scope(java.lang.String...)" class="member-name-link">scope</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds scopes requested during DCR.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#store(org.apache.juneau.rest.client.mcp.auth.McpClientRegistrationStore)" class="member-name-link">store</a><wbr>(<a href="McpClientRegistrationStore.html" title="interface in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationStore</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#store(org.apache.juneau.rest.client.mcp.auth.McpClientRegistrationStore)" class="member-name-link">store</a><wbr>(<a href="McpClientRegistrationStore.html" title="interface in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationStore</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the optional issuer-keyed credential store.</div>
 </div>
 </div>
@@ -202,7 +207,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-84">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-86">Builder</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -217,7 +222,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="store(org.apache.juneau.rest.client.mcp.auth.McpClientRegistrationStore)">
 <h3>store</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-93">store</a></span><wbr><span class="parameters">(<a href="McpClientRegistrationStore.html" title="interface in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationStore</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-95">store</a></span><wbr><span class="parameters">(<a href="McpClientRegistrationStore.html" title="interface in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationStore</a>&nbsp;value)</span></div>
 <div class="block">Sets the optional issuer-keyed credential store.  When omitted, the manager runs in on-demand mode and
  performs a fresh DCR on every <code>resolve(...)</code> call (compliant).</div>
 <dl class="notes">
@@ -231,7 +236,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="preRegistered(org.apache.juneau.rest.client.mcp.auth.McpClientRegistration)">
 <h3>preRegistered</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-104">preRegistered</a></span><wbr><span class="parameters">(<a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-106">preRegistered</a></span><wbr><span class="parameters">(<a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&nbsp;value)</span></div>
 <div class="block">Sets pre-registered (manually provisioned) credentials bound to a specific AS <code>issuer</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -244,7 +249,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="applicationType(org.apache.juneau.rest.client.mcp.auth.McpApplicationType)">
 <h3>applicationType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-115">applicationType</a></span><wbr><span class="parameters">(<a href="McpApplicationType.html" title="enum class in org.apache.juneau.rest.client.mcp.auth">McpApplicationType</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-117">applicationType</a></span><wbr><span class="parameters">(<a href="McpApplicationType.html" title="enum class in org.apache.juneau.rest.client.mcp.auth">McpApplicationType</a>&nbsp;value)</span></div>
 <div class="block">Sets the <code>application_type</code> declared when the manager performs DCR.  Default <a href="McpApplicationType.html#NATIVE"><code>McpApplicationType.NATIVE</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -257,7 +262,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="redirectUris(java.util.List)">
 <h3>redirectUris</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-127">redirectUris</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-129">redirectUris</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&gt;&nbsp;values)</span></div>
 <div class="block">Sets the redirect URIs to register when the manager performs DCR.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -271,7 +276,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="redirectUrisSupplier(java.util.function.Supplier)">
 <h3>redirectUrisSupplier</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-142">redirectUrisSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&gt;&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-144">redirectUrisSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&gt;&gt;&nbsp;value)</span></div>
 <div class="block">Sets a supplier of redirect URIs to register when the manager performs DCR (for the bind-first strategy where
  the loopback port is learned per-connection).</div>
 <dl class="notes">
@@ -285,7 +290,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="scope(java.lang.String...)">
 <h3>scope</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-153">scope</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-155">scope</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
 <div class="block">Adds scopes requested during DCR.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -298,7 +303,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="confidential(boolean)">
 <h3>confidential</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-168">confidential</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-170">confidential</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Registers a confidential client during DCR (default public/native).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -311,7 +316,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clientName(java.lang.String)">
 <h3>clientName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-179">clientName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-181">clientName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the human-readable client name declared during DCR.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -324,7 +329,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="initialAccessToken(java.lang.String)">
 <h3>initialAccessToken</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-190">initialAccessToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-192">initialAccessToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the RFC 7591 &sect;3 initial access token for a protected registration endpoint.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -337,7 +342,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="httpTimeout(java.time.Duration)">
 <h3>httpTimeout</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-202">httpTimeout</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-204">httpTimeout</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
 <div class="block">Sets the connect/read timeout applied to DCR requests.  Default 10 seconds.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -350,7 +355,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="httpRequestConfigurator(java.util.function.Consumer)">
 <h3>httpRequestConfigurator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-215">httpRequestConfigurator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-217">httpRequestConfigurator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</span></div>
 <div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> for each DCR request.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -363,7 +368,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="registrarFunction(java.util.function.Function)">
 <h3>registrarFunction</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-231">registrarFunction</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>,<wbr><a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-233">registrarFunction</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>,<wbr><a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&gt;&nbsp;value)</span></div>
 <div class="block">Overrides the registration function the manager invokes to perform DCR (advanced / test seam).
 
  <p>
@@ -379,9 +384,27 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="allowPrivateUrls(boolean)">
+<h3>allowPrivateUrls</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-249">allowPrivateUrls</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="block">Allows an AS-advertised registration endpoint that points at a loopback, private, link-local or metadata host.
+
+ <p>
+ By default such endpoints are rejected (the endpoint comes from AS metadata, so a hostile document could
+ otherwise aim the registration request at an internal service).  Intended for local development and
+ testing; plain <code>http</code> is still limited to loopback hosts.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - <jk>true</jk> to skip the host deny-list.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-241">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#line-259">build</a></span>()</div>
 <div class="block">Builds the manager.</div>
 <dl class="notes">
 <dt>Returns:</dt>

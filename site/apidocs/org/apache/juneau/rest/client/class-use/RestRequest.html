@@ -192,32 +192,37 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds query parameters.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#remoteUrlPolicy(boolean,boolean)" class="member-name-link">remoteUrlPolicy</a><wbr>(boolean&nbsp;enforced,
- boolean&nbsp;allowPrivateUrls)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#redirectForwardHeaders(java.lang.String...)" class="member-name-link">redirectForwardHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Adds header names that may be replayed against another origin by a redirect of this request.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#remoteUrlPolicy(boolean,boolean)" class="member-name-link">remoteUrlPolicy</a><wbr>(boolean&nbsp;enforced,
+ boolean&nbsp;allowPrivateUrls)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Marks this request as a <code>@Remote</code>/<code>@Url</code> call subject to the SSRF guardrail (see
  <code>org.apache.juneau.http.remote.RemoteUrlPolicy</code>), and records the effective <code>allowPrivateUrls</code>
  opt-in for it.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#request(java.lang.String,java.lang.String)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#request(java.lang.String,java.lang.String)" class="member-name-link">request</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Creates a request with the given HTTP method and URL.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#requestId(java.lang.String)" class="member-name-link">requestId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#requestId(java.lang.String)" class="member-name-link">requestId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the <code>X-Request-Id</code> correlation id for this request (pre-call).</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#streamBodyEntity(org.apache.juneau.rest.client.RecordStreamBody)" class="member-name-link">streamBodyEntity</a><wbr>(<a href="../RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#streamBodyEntity(org.apache.juneau.rest.client.RecordStreamBody)" class="member-name-link">streamBodyEntity</a><wbr>(<a href="../RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the request body to a token/record-streaming cursor body.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#timeout(java.time.Duration)" class="member-name-link">timeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#timeout(java.time.Duration)" class="member-name-link">timeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets a per-call response timeout for this request.</div>
 </div>
 </div>

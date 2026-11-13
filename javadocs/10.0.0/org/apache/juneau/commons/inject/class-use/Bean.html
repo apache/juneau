@@ -325,14 +325,15 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">App.AppConfig.</span><code><a href="../../../petstore/jetty/App.AppConfig.html#adminBoundary()" class="member-name-link">adminBoundary</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">App.AppConfig.</span><code><a href="../../../petstore/jetty/App.AppConfig.html#apiBoundary()" class="member-name-link">apiBoundary</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">Provides the admin resources' CSRF boundary, covering <code>/config</code>, <code>/logs</code> and <code>/shutdown</code>.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">App.AppConfig.</span><code><a href="../../../petstore/jetty/App.AppConfig.html#apiBoundary()" class="member-name-link">apiBoundary</a>()</code></div>
-<div class="col-last odd-row-color">
 <div class="block">Provides the API's CSRF boundary, covering <code>/petstore/*</code>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../config/Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">App.AppConfig.</span><code><a href="../../../petstore/jetty/App.AppConfig.html#config()" class="member-name-link">config</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Provides the deployment's configuration, named explicitly because the working directory is no longer scanned
+ for <c>*.cfg</c> files.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">App.AppConfig.</span><code><a href="../../../petstore/jetty/App.AppConfig.html#consoleBoundary()" class="member-name-link">consoleBoundary</a>()</code></div>

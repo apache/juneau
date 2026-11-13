@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@Test <strong class="jxr_keyword">void</strong> a02_thymeleafMountInstalled_rendersTemplate() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		ca.get(<span class="jxr_string">"/thymeleaf/templates/about"</span>)
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		ca.get(<span class="jxr_string">"/thymeleaf/about"</span>)
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			.run()
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			.assertContent().asString().isContains(<span class="jxr_string">"About Juneau"</span>);
@@ -85,7 +85,7 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	@Test <strong class="jxr_keyword">void</strong> a03_thymeleafMountInstalled_rendersDotHtml() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<em class="jxr_comment">// Trailing .html is stripped by the handler; both work.</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		ca.get(<span class="jxr_string">"/thymeleaf/templates/about.html"</span>)
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		ca.get(<span class="jxr_string">"/thymeleaf/about.html"</span>)
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			.run()
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.assertContent().asString().isContains(<span class="jxr_string">"About Juneau"</span>);

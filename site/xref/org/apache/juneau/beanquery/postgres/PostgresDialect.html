@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		builtins.put(<span class="jxr_string">"$eqic"</span>, (d, col, type, args) -&gt; eqicFrag(col, type, args.get(0)));
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		builtins.put(<span class="jxr_string">"$ne"</span>, (d, col, type, args) -&gt; ne(col, type, args));
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		builtins.put(<span class="jxr_string">"$in"</span>, (d, col, type, args) -&gt; in(col, type, args));
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		builtins.put(<span class="jxr_string">"$contains"</span>, (d, col, type, args) -&gt; frag(col + <span class="jxr_string">" ILIKE ?"</span>, like(<span class="jxr_string">"%"</span>, text(args.get(0)), <span class="jxr_string">"%"</span>)));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		builtins.put(<span class="jxr_string">"$contains"</span>, (d, col, type, args) -&gt; frag(col + <span class="jxr_string">" ILIKE ? ESCAPE '&#92;&#92;'"</span>, like(<span class="jxr_string">"%"</span>, text(args.get(0)), <span class="jxr_string">"%"</span>)));
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		builtins.put(<span class="jxr_string">"$prefix"</span>, (d, col, type, args) -&gt; prefix(col, type, args.get(0)));
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		builtins.put(<span class="jxr_string">"$regex"</span>, (d, col, type, args) -&gt; regex(col, args));
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		builtins.put(<span class="jxr_string">"$blank"</span>, (d, col, type, args) -&gt; SqlFragment.of(blank(col)));
@@ -146,8 +146,8 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 			<strong class="jxr_keyword">case</strong> TEXT, ID: {
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 				<strong class="jxr_keyword">var</strong> token = text(value);
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 				<strong class="jxr_keyword">if</strong> (quoted || ! hasWildcard(token))
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 					<strong class="jxr_keyword">return</strong> frag(columnSql + <span class="jxr_string">" ILIKE ?"</span>, like(<span class="jxr_string">"%"</span>, token, <span class="jxr_string">"%"</span>));
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 				<strong class="jxr_keyword">return</strong> frag(columnSql + <span class="jxr_string">" ILIKE ?"</span>, glob(token));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 					<strong class="jxr_keyword">return</strong> frag(columnSql + <span class="jxr_string">" ILIKE ? ESCAPE '&#92;&#92;'"</span>, like(<span class="jxr_string">"%"</span>, token, <span class="jxr_string">"%"</span>));
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 				<strong class="jxr_keyword">return</strong> frag(columnSql + <span class="jxr_string">" ILIKE ? ESCAPE '&#92;&#92;'"</span>, glob(token));
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			}
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">case</strong> ENUM: {
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 				<em class="jxr_comment">// Same rule as the in-memory engine: a wildcard pattern is a case-insensitive whole-string glob over the</em>
@@ -155,7 +155,7 @@
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 				<strong class="jxr_keyword">var</strong> token = text(value);
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 				<strong class="jxr_keyword">if</strong> (quoted || ! hasWildcard(token))
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 					<strong class="jxr_keyword">return</strong> eqicFrag(columnSql, type, token);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				<strong class="jxr_keyword">return</strong> frag(textOf(columnSql, type) + <span class="jxr_string">" ILIKE ?"</span>, glob(token));
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				<strong class="jxr_keyword">return</strong> frag(textOf(columnSql, type) + <span class="jxr_string">" ILIKE ? ESCAPE '&#92;&#92;'"</span>, glob(token));
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">case</strong> VERSION:
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 				<strong class="jxr_keyword">return</strong> prefix(columnSql, type, value);
@@ -222,7 +222,7 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<em class="jxr_comment">// Array slice: a stored version with fewer parts than the prefix yields a shorter array, which never equals it.</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">return</strong> frag(versionArray(col) + <span class="jxr_string">"[1:"</span> + n + <span class="jxr_string">"] = "</span> + <span class="jxr_string">"string_to_array(?, '.')::int[]"</span>, v);
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		}
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">return</strong> frag(col + <span class="jxr_string">" ILIKE ?"</span>, like(<span class="jxr_string">""</span>, text(arg), <span class="jxr_string">"%"</span>));
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">return</strong> frag(col + <span class="jxr_string">" ILIKE ? ESCAPE '&#92;&#92;'"</span>, like(<span class="jxr_string">""</span>, text(arg), <span class="jxr_string">"%"</span>));
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 	}
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -272,182 +272,226 @@
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 			javaFlags |= DOTALL;
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 			Pattern.compile(pattern, javaFlags);
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		} <strong class="jxr_keyword">catch</strong> (PatternSyntaxException e) {
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<strong class="jxr_keyword">return</strong> NEVER;  <em class="jxr_comment">// Invalid pattern = no match, like InMemoryMatch/RegexBudget; also keeps it from escaping the \A(?:...)\Z anchors.</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		}
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		String mods;
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">if</strong> (multiline)
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			mods = dotall ? <span class="jxr_string">"(?w)"</span> : <span class="jxr_string">"(?n)"</span>;
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			mods = dotall ? <span class="jxr_string">""</span> : <span class="jxr_string">"(?p)"</span>;
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">return</strong> frag(col + (ci ? <span class="jxr_string">" ~* ?"</span> : <span class="jxr_string">" ~ ?"</span>), mods + <span class="jxr_string">"&#92;&#92;A(?:"</span> + pattern + <span class="jxr_string">")&#92;&#92;Z"</span>);
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	}
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="SqlFragment" href="../../../../../org/apache/juneau/beanquery/sql/SqlFragment.html#SqlFragment">SqlFragment</a> cmp(String col, String <strong class="jxr_keyword">operator</strong>, <a name="SearchType" href="../../../../../org/apache/juneau/commons/beanquery/SearchType.html#SearchType">SearchType</a> type, Object arg) {
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">if</strong> (type == VERSION) {
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">var</strong> v = versionArg(arg);
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">return</strong> v == <strong class="jxr_keyword">null</strong> ? NEVER : frag(versionArray(col) + <strong class="jxr_keyword">operator</strong> + <span class="jxr_string">"string_to_array(?, '.')::int[]"</span>, v);
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		}
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">return</strong> frag(col + <strong class="jxr_keyword">operator</strong> + <span class="jxr_string">"?"</span>, arg);
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	}
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="SqlFragment" href="../../../../../org/apache/juneau/beanquery/sql/SqlFragment.html#SqlFragment">SqlFragment</a> between(String col, <a name="SearchType" href="../../../../../org/apache/juneau/commons/beanquery/SearchType.html#SearchType">SearchType</a> type, Object lo, Object hi) {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">if</strong> (type == VERSION) {
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			<strong class="jxr_keyword">var</strong> l = versionArg(lo);
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			<strong class="jxr_keyword">var</strong> h = versionArg(hi);
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			<strong class="jxr_keyword">return</strong> (l == <strong class="jxr_keyword">null</strong> || h == <strong class="jxr_keyword">null</strong>) ? NEVER : frag(versionArray(col) + <span class="jxr_string">" BETWEEN "</span> + <span class="jxr_string">"string_to_array(?, '.')::int[]"</span> + <span class="jxr_string">" AND "</span> + <span class="jxr_string">"string_to_array(?, '.')::int[]"</span>, l, h);
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		}
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">return</strong> frag(col + <span class="jxr_string">" BETWEEN ? AND ?"</span>, lo, hi);
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<em class="jxr_comment">// VERSION (stored as dotted text; compared as a tuple of integers, like InMemoryMatch.cmpVersion)</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">if</strong> (! isPortable(pattern))
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 				<strong class="jxr_keyword">return</strong> NEVER;
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		} <strong class="jxr_keyword">catch</strong> (PatternSyntaxException e) {
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">return</strong> NEVER;  <em class="jxr_comment">// Invalid pattern = no match, like InMemoryMatch/RegexBudget; also keeps it from escaping the \A(?:...)\Z anchors.</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		}
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		String mods;
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">if</strong> (multiline)
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			mods = dotall ? <span class="jxr_string">"(?w)"</span> : <span class="jxr_string">"(?n)"</span>;
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			mods = dotall ? <span class="jxr_string">""</span> : <span class="jxr_string">"(?p)"</span>;
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">return</strong> frag(col + (ci ? <span class="jxr_string">" ~* ?"</span> : <span class="jxr_string">" ~ ?"</span>), mods + <span class="jxr_string">"&#92;&#92;A(?:"</span> + pattern + <span class="jxr_string">")&#92;&#92;Z"</span>);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	}
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="SqlFragment" href="../../../../../org/apache/juneau/beanquery/sql/SqlFragment.html#SqlFragment">SqlFragment</a> cmp(String col, String <strong class="jxr_keyword">operator</strong>, <a name="SearchType" href="../../../../../org/apache/juneau/commons/beanquery/SearchType.html#SearchType">SearchType</a> type, Object arg) {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">if</strong> (type == VERSION) {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<strong class="jxr_keyword">var</strong> v = versionArg(arg);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			<strong class="jxr_keyword">return</strong> v == <strong class="jxr_keyword">null</strong> ? NEVER : frag(versionArray(col) + <strong class="jxr_keyword">operator</strong> + <span class="jxr_string">"string_to_array(?, '.')::int[]"</span>, v);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		}
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">return</strong> frag(col + <strong class="jxr_keyword">operator</strong> + <span class="jxr_string">"?"</span>, arg);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	}
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="SqlFragment" href="../../../../../org/apache/juneau/beanquery/sql/SqlFragment.html#SqlFragment">SqlFragment</a> between(String col, <a name="SearchType" href="../../../../../org/apache/juneau/commons/beanquery/SearchType.html#SearchType">SearchType</a> type, Object lo, Object hi) {
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">if</strong> (type == VERSION) {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			<strong class="jxr_keyword">var</strong> l = versionArg(lo);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<strong class="jxr_keyword">var</strong> h = versionArg(hi);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<strong class="jxr_keyword">return</strong> (l == <strong class="jxr_keyword">null</strong> || h == <strong class="jxr_keyword">null</strong>) ? NEVER : frag(versionArray(col) + <span class="jxr_string">" BETWEEN "</span> + <span class="jxr_string">"string_to_array(?, '.')::int[]"</span> + <span class="jxr_string">" AND "</span> + <span class="jxr_string">"string_to_array(?, '.')::int[]"</span>, l, h);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		}
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">return</strong> frag(col + <span class="jxr_string">" BETWEEN ? AND ?"</span>, lo, hi);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	}
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	<em class="jxr_javadoccomment">/** The predicate for a version that can never match (an unparseable argument, like in-memory). */</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="SqlFragment" href="../../../../../org/apache/juneau/beanquery/sql/SqlFragment.html#SqlFragment">SqlFragment</a> NEVER = SqlFragment.of(<span class="jxr_string">"(1 = 0)"</span>);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">	 * The column as an {@code int[]}, or {@code NULL} when the stored text is not a dotted sequence of integers.</em>
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 * Postgres compares arrays element by element and then by length, which is exactly the in-memory dotted-tuple order.</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 * The guard literal is an {@code E'...'} string with doubled backslashes, so its meaning does not depend on</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * {@code standard_conforming_strings}, and it contains no {@code ?} that pgjdbc could mistake for a placeholder.</em>
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<span class="jxr_string">"java:S6353"</span> <em class="jxr_comment">// Deliberately ASCII [0-9]: Postgres &#92;&#92;d may match non-ASCII digits in some locales, which would then fail the int cast.</em>
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	})
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String versionArray(String col) {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"(CASE WHEN "</span> + col + <span class="jxr_string">" ~ E'^&#92;&#92;&#92;&#92;s*[0-9]{1,9}(&#92;&#92;&#92;&#92;s*&#92;&#92;&#92;&#92;.&#92;&#92;&#92;&#92;s*[0-9]{1,9})*&#92;&#92;&#92;&#92;s*$' THEN string_to_array("</span> + col + <span class="jxr_string">", '.')::int[] END)"</span>;
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	}
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<em class="jxr_javadoccomment">/** A version argument normalized for {@link #VERSION_BIND}, or &lt;jk&gt;null&lt;/jk&gt; if it is not a dotted sequence of integers. */</em>
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String versionArg(Object arg) {
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<em class="jxr_comment">// Hand-rolled scan of  ws* d{1,9} (ws* '.' ws* d{1,9})* ws*  (ASCII digits/whitespace), equivalent to that regex but</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<em class="jxr_comment">// without a backtracking group.  At most 9 digits per part, so every part fits a Postgres int (no 22003 overflow).</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">var</strong> s = text(arg);
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">var</strong> n = s.length();
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">var</strong> parts = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> i = skipWs(s, 0);
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">var</strong> start = i;
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">while</strong> (i &lt; n &amp;&amp; s.charAt(i) &gt;= '0' &amp;&amp; s.charAt(i) &lt;= '9')
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 				i++;
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">if</strong> (i == start || i - start &gt; 9)
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			parts.add(String.valueOf(Integer.parseInt(s.substring(start, i))));
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			i = skipWs(s, i);
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">if</strong> (i == n)
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 				<strong class="jxr_keyword">return</strong> String.join(<span class="jxr_string">"."</span>, parts);
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<strong class="jxr_keyword">if</strong> (s.charAt(i) != '.')
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			i = skipWs(s, i + 1);
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		}
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	}
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<em class="jxr_javadoccomment">/** Index of the first non-whitespace char at or after {@code i}; whitespace is the regex {@code \s} set (ASCII). */</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> skipWs(String s, <strong class="jxr_keyword">int</strong> i) {
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">while</strong> (i &lt; s.length() &amp;&amp; <span class="jxr_string">" \t\n\u000B\f\r"</span>.indexOf(s.charAt(i)) &gt;= 0)
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			i++;
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">return</strong> i;
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<em class="jxr_javadoccomment">/** Equality against any of the (parseable) versions; renders as never-true when none parses. */</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="SqlFragment" href="../../../../../org/apache/juneau/beanquery/sql/SqlFragment.html#SqlFragment">SqlFragment</a> versionIn(String col, List&lt;Object&gt; args) {
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">var</strong> binds = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : args) {
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<strong class="jxr_keyword">var</strong> v = versionArg(a);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			<strong class="jxr_keyword">if</strong> (v == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 				<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			sb.append(binds.isEmpty() ? <span class="jxr_string">""</span> : <span class="jxr_string">" OR "</span>).append(versionArray(col)).append(<span class="jxr_string">" = "</span>).append(<span class="jxr_string">"string_to_array(?, '.')::int[]"</span>);
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			binds.add(v);
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		}
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">if</strong> (binds.isEmpty())
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			<strong class="jxr_keyword">return</strong> NEVER;
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">return</strong> SqlFragment.of(binds.size() &gt; 1 ? <span class="jxr_string">"("</span> + sb + <span class="jxr_string">")"</span> : sb.toString(), binds);
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	}
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	<em class="jxr_comment">// Helpers</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<em class="jxr_comment">// VERSION (stored as dotted text; compared as a tuple of integers, like InMemoryMatch.cmpVersion)</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	<em class="jxr_javadoccomment">/** The predicate for a version that can never match (an unparseable argument, like in-memory). */</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="SqlFragment" href="../../../../../org/apache/juneau/beanquery/sql/SqlFragment.html#SqlFragment">SqlFragment</a> NEVER = SqlFragment.of(<span class="jxr_string">"(1 = 0)"</span>);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">	 * The column as an {@code int[]}, or {@code NULL} when the stored text is not a dotted sequence of integers.</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * Postgres compares arrays element by element and then by length, which is exactly the in-memory dotted-tuple order.</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 * The guard literal is an {@code E'...'} string with doubled backslashes, so its meaning does not depend on</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 * {@code standard_conforming_strings}, and it contains no {@code ?} that pgjdbc could mistake for a placeholder.</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<span class="jxr_string">"java:S6353"</span> <em class="jxr_comment">// Deliberately ASCII [0-9]: Postgres &#92;&#92;d may match non-ASCII digits in some locales, which would then fail the int cast.</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	})
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String versionArray(String col) {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"(CASE WHEN "</span> + col + <span class="jxr_string">" ~ E'^&#92;&#92;&#92;&#92;s*[0-9]{1,9}(&#92;&#92;&#92;&#92;s*&#92;&#92;&#92;&#92;.&#92;&#92;&#92;&#92;s*[0-9]{1,9})*&#92;&#92;&#92;&#92;s*$' THEN string_to_array("</span> + col + <span class="jxr_string">", '.')::int[] END)"</span>;
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	}
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<em class="jxr_javadoccomment">/** A version argument normalized for {@link #VERSION_BIND}, or &lt;jk&gt;null&lt;/jk&gt; if it is not a dotted sequence of integers. */</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String versionArg(Object arg) {
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<em class="jxr_comment">// Hand-rolled scan of  ws* d{1,9} (ws* '.' ws* d{1,9})* ws*  (ASCII digits/whitespace), equivalent to that regex but</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<em class="jxr_comment">// without a backtracking group.  At most 9 digits per part, so every part fits a Postgres int (no 22003 overflow).</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">var</strong> s = text(arg);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> n = s.length();
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">var</strong> parts = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">var</strong> i = skipWs(s, 0);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">var</strong> start = i;
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">while</strong> (i &lt; n &amp;&amp; s.charAt(i) &gt;= '0' &amp;&amp; s.charAt(i) &lt;= '9')
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 				i++;
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">if</strong> (i == start || i - start &gt; 9)
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			parts.add(String.valueOf(Integer.parseInt(s.substring(start, i))));
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			i = skipWs(s, i);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<strong class="jxr_keyword">if</strong> (i == n)
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 				<strong class="jxr_keyword">return</strong> String.join(<span class="jxr_string">"."</span>, parts);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<strong class="jxr_keyword">if</strong> (s.charAt(i) != '.')
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			i = skipWs(s, i + 1);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		}
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	}
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<em class="jxr_javadoccomment">/** Index of the first non-whitespace char at or after {@code i}; whitespace is the regex {@code \s} set (ASCII). */</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> skipWs(String s, <strong class="jxr_keyword">int</strong> i) {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">while</strong> (i &lt; s.length() &amp;&amp; <span class="jxr_string">" \t\n\u000B\f\r"</span>.indexOf(s.charAt(i)) &gt;= 0)
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			i++;
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">return</strong> i;
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	}
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	<em class="jxr_javadoccomment">/** Equality against any of the (parseable) versions; renders as never-true when none parses. */</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="SqlFragment" href="../../../../../org/apache/juneau/beanquery/sql/SqlFragment.html#SqlFragment">SqlFragment</a> versionIn(String col, List&lt;Object&gt; args) {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">var</strong> binds = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : args) {
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			<strong class="jxr_keyword">var</strong> v = versionArg(a);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<strong class="jxr_keyword">if</strong> (v == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			sb.append(binds.isEmpty() ? <span class="jxr_string">""</span> : <span class="jxr_string">" OR "</span>).append(versionArray(col)).append(<span class="jxr_string">" = "</span>).append(<span class="jxr_string">"string_to_array(?, '.')::int[]"</span>);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			binds.add(v);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		}
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">if</strong> (binds.isEmpty())
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<strong class="jxr_keyword">return</strong> NEVER;
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">return</strong> SqlFragment.of(binds.size() &gt; 1 ? <span class="jxr_string">"("</span> + sb + <span class="jxr_string">")"</span> : sb.toString(), binds);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	}
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	<em class="jxr_javadoccomment">/** The cell is {@code NULL} or ASCII-whitespace only, like the in-memory blank test. */</em>
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String blank(String col) {
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">return</strong> blankOr(col, col) + <span class="jxr_string">")"</span>;
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	}
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<em class="jxr_javadoccomment">/** Opens a parenthesized disjunction with the blank test for {@code textExpr}; the caller appends the rest and closes it. */</em>
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String blankOr(String col, String textExpr) {
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"("</span> + col + <span class="jxr_string">" IS NULL OR btrim("</span> + textExpr + <span class="jxr_string">", "</span> + <span class="jxr_string">"E' &#92;&#92;t&#92;&#92;n&#92;&#92;x0B&#92;&#92;f&#92;&#92;r&#92;&#92;x1C&#92;&#92;x1D&#92;&#92;x1E&#92;&#92;x1F'"</span> + <span class="jxr_string">") = ''"</span>;
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	}
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isCiText(<a name="SearchType" href="../../../../../org/apache/juneau/commons/beanquery/SearchType.html#SearchType">SearchType</a> type) {
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">return</strong> type == TEXT || type == ID || type == ENUM;
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	}
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> hasWildcard(String token) {
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">return</strong> token.indexOf('*') &gt;= 0 || token.indexOf('?') &gt;= 0;
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	<em class="jxr_javadoccomment">/** A bare glob ({@code *} any run, {@code ?} one character) as a LIKE pattern, with LIKE metacharacters escaped first. */</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String glob(String token) {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">return</strong> escapeLike(token).replace(<span class="jxr_string">"*"</span>, <span class="jxr_string">"%"</span>).replace(<span class="jxr_string">"?"</span>, <span class="jxr_string">"_"</span>);
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	}
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	<em class="jxr_javadoccomment">/** The column as text: an ENUM column may be a native Postgres enum, which has no text operators of its own. */</em>
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String textOf(String col, <a name="SearchType" href="../../../../../org/apache/juneau/commons/beanquery/SearchType.html#SearchType">SearchType</a> type) {
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">return</strong> type == ENUM ? col + <span class="jxr_string">"::text"</span> : col;
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	<em class="jxr_javadoccomment">/** Text-like columns bind strings; everything else binds the already-typed value. */</em>
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object bind(<a name="SearchType" href="../../../../../org/apache/juneau/commons/beanquery/SearchType.html#SearchType">SearchType</a> type, Object arg) {
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">return</strong> isCiText(type) ? text(arg) : arg;
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	}
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Object&gt; binds(<a name="SearchType" href="../../../../../org/apache/juneau/commons/beanquery/SearchType.html#SearchType">SearchType</a> type, List&lt;Object&gt; args) {
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">return</strong> args.stream().map(a -&gt; bind(type, a)).toList();
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	}
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> appendPlaceholders(StringBuilder sb, <strong class="jxr_keyword">int</strong> count) {
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; count; i++) {
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			<strong class="jxr_keyword">if</strong> (i &gt; 0)
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 				sb.append(<span class="jxr_string">", "</span>);
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			sb.append('?');
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		}
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	}
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<em class="jxr_javadoccomment">/** Escapes LIKE/ILIKE metacharacters (backslash is the default Postgres LIKE escape). */</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String escapeLike(String s) {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">return</strong> s.replace(<span class="jxr_string">"&#92;&#92;"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;"</span>).replace(<span class="jxr_string">"%"</span>, <span class="jxr_string">"&#92;&#92;%"</span>).replace(<span class="jxr_string">"_"</span>, <span class="jxr_string">"&#92;&#92;_"</span>);
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	}
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String like(String pre, String s, String post) {
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">return</strong> pre + escapeLike(s) + post;
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	}
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 * Asserts that a value on a text-only path is a {@link String}.</em>
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * Values for TEXT / ID / ENUM / VERSION columns are always {@link String}s (design #4 §4: {@link SearchType#parse}</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * leaves them unchanged), so a non-string here is an engine bug, not a user error.</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 * @param o The value.</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 * @return The value as a string.</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 * @throws IllegalStateException If the value is not a {@link String}.</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String text(Object o) {
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">if</strong> (o instanceof String s)
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			<strong class="jxr_keyword">return</strong> s;
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(f(<span class="jxr_string">"Expected a String value for a text comparison but got '%s'."</span>, o == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : o.getClass().getName()));  <em class="jxr_comment">// I believe we have a short for getting class name?</em>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	}
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="SqlFragment" href="../../../../../org/apache/juneau/beanquery/sql/SqlFragment.html#SqlFragment">SqlFragment</a> frag(String sql, Object...binds) {
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">return</strong> SqlFragment.of(sql, binds);
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	}
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> }
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	<em class="jxr_comment">// Helpers</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	<em class="jxr_javadoccomment">/** The cell is {@code NULL} or ASCII-whitespace only, like the in-memory blank test. */</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String blank(String col) {
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">return</strong> blankOr(col, col) + <span class="jxr_string">")"</span>;
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<em class="jxr_javadoccomment">/** Opens a parenthesized disjunction with the blank test for {@code textExpr}; the caller appends the rest and closes it. */</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String blankOr(String col, String textExpr) {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"("</span> + col + <span class="jxr_string">" IS NULL OR btrim("</span> + textExpr + <span class="jxr_string">", "</span> + <span class="jxr_string">"E' &#92;&#92;t&#92;&#92;n&#92;&#92;x0B&#92;&#92;f&#92;&#92;r&#92;&#92;x1C&#92;&#92;x1D&#92;&#92;x1E&#92;&#92;x1F'"</span> + <span class="jxr_string">") = ''"</span>;
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	}
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isCiText(<a name="SearchType" href="../../../../../org/apache/juneau/commons/beanquery/SearchType.html#SearchType">SearchType</a> type) {
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">return</strong> type == TEXT || type == ID || type == ENUM;
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> hasWildcard(String token) {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">return</strong> token.indexOf('*') &gt;= 0 || token.indexOf('?') &gt;= 0;
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	}
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	<em class="jxr_javadoccomment">/** A bare glob ({@code *} any run, {@code ?} one character) as a LIKE pattern, with LIKE metacharacters escaped first. */</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String glob(String token) {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">return</strong> escapeLike(token).replace(<span class="jxr_string">"*"</span>, <span class="jxr_string">"%"</span>).replace(<span class="jxr_string">"?"</span>, <span class="jxr_string">"_"</span>);
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	}
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<em class="jxr_javadoccomment">/** The column as text: an ENUM column may be a native Postgres enum, which has no text operators of its own. */</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String textOf(String col, <a name="SearchType" href="../../../../../org/apache/juneau/commons/beanquery/SearchType.html#SearchType">SearchType</a> type) {
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">return</strong> type == ENUM ? col + <span class="jxr_string">"::text"</span> : col;
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	}
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	<em class="jxr_javadoccomment">/** Text-like columns bind strings; everything else binds the already-typed value. */</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object bind(<a name="SearchType" href="../../../../../org/apache/juneau/commons/beanquery/SearchType.html#SearchType">SearchType</a> type, Object arg) {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">return</strong> isCiText(type) ? text(arg) : arg;
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	}
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Object&gt; binds(<a name="SearchType" href="../../../../../org/apache/juneau/commons/beanquery/SearchType.html#SearchType">SearchType</a> type, List&lt;Object&gt; args) {
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">return</strong> args.stream().map(a -&gt; bind(type, a)).toList();
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	}
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> appendPlaceholders(StringBuilder sb, <strong class="jxr_keyword">int</strong> count) {
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; count; i++) {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<strong class="jxr_keyword">if</strong> (i &gt; 0)
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 				sb.append(<span class="jxr_string">", "</span>);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			sb.append('?');
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		}
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	}
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 * Returns whether a regex uses only constructs with the same meaning in Java and PostgreSQL (ARE): literals, classes,</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * groups, alternation, greedy/lazy quantifiers, anchors, back-references and the {@code \d \w \s} shorthands.</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 * Anything that differs between the flavors (possessive quantifiers, inline flags, lookbehind, named or atomic groups,</em>
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * {@code \p} classes, {@code \b}, {@code \Q...\E}, class intersections and POSIX bracket expressions) makes the</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * pattern non-portable, so it matches nothing instead of being interpreted differently by the server.</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<span class="jxr_string">"java:S3776"</span> <em class="jxr_comment">// Branching is inherent to the regex scanner.</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	})
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isPortable(String p) {
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">var</strong> inClass = false;
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">var</strong> n = p.length();
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">var</strong> i = 0;
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">while</strong> (i &lt; n) {
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<strong class="jxr_keyword">var</strong> c = p.charAt(i);
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<strong class="jxr_keyword">if</strong> (c == '&#92;&#92;') {
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 				i++;
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 				<strong class="jxr_keyword">if</strong> (i &gt;= n || <span class="jxr_string">"pPbBQEhHRXGzZAkNvVuxc0"</span>.indexOf(p.charAt(i)) &gt;= 0)
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 					<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (inClass) {
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 				<strong class="jxr_keyword">if</strong> (c == ']')
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 					inClass = false;
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '[' || (c == '&amp;' &amp;&amp; i + 1 &lt; n &amp;&amp; p.charAt(i + 1) == '&amp;'))
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 					<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '[') {
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 				inClass = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 				<strong class="jxr_keyword">if</strong> (i + 1 &lt; n &amp;&amp; p.charAt(i + 1) == '^')
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 					i++;
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 				<strong class="jxr_keyword">if</strong> (i + 1 &lt; n &amp;&amp; p.charAt(i + 1) == ']')
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 					i++;
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '(' &amp;&amp; i + 1 &lt; n &amp;&amp; p.charAt(i + 1) == '?') {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				<strong class="jxr_keyword">if</strong> (i + 2 &gt;= n || <span class="jxr_string">":=!"</span>.indexOf(p.charAt(i + 2)) &lt; 0)
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 					<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*+?}"</span>.indexOf(c) &gt;= 0 &amp;&amp; i + 1 &lt; n &amp;&amp; p.charAt(i + 1) == '+') {
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			}
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 			i++;
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		}
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<strong class="jxr_keyword">return</strong> ! inClass;
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 	}
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	<em class="jxr_javadoccomment">/** Escapes LIKE/ILIKE metacharacters (backslash is the default Postgres LIKE escape). */</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String escapeLike(String s) {
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<strong class="jxr_keyword">return</strong> s.replace(<span class="jxr_string">"&#92;&#92;"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;"</span>).replace(<span class="jxr_string">"%"</span>, <span class="jxr_string">"&#92;&#92;%"</span>).replace(<span class="jxr_string">"_"</span>, <span class="jxr_string">"&#92;&#92;_"</span>);
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 	}
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String like(String pre, String s, String post) {
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">return</strong> pre + escapeLike(s) + post;
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	}
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * Asserts that a value on a text-only path is a {@link String}.</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * Values for TEXT / ID / ENUM / VERSION columns are always {@link String}s (design #4 §4: {@link SearchType#parse}</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * leaves them unchanged), so a non-string here is an engine bug, not a user error.</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * @param o The value.</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 * @return The value as a string.</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 * @throws IllegalStateException If the value is not a {@link String}.</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String text(Object o) {
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		<strong class="jxr_keyword">if</strong> (o instanceof String s)
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(f(<span class="jxr_string">"Expected a String value for a text comparison but got '%s'."</span>, o == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : o.getClass().getName()));  <em class="jxr_comment">// I believe we have a short for getting class name?</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	}
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="SqlFragment" href="../../../../../org/apache/juneau/beanquery/sql/SqlFragment.html#SqlFragment">SqlFragment</a> frag(String sql, Object...binds) {
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<strong class="jxr_keyword">return</strong> SqlFragment.of(sql, binds);
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 	}
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

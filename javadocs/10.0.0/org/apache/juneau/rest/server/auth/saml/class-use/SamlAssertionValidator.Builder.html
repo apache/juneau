@@ -78,70 +78,85 @@ loadScripts(document, 'script');</script>
 <div class="block">Replaces the default signature-algorithm allowlist with the supplied URIs.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#clock(java.time.Clock)" class="member-name-link">clock</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#allowIdpInitiated()" class="member-name-link">allowIdpInitiated</a>()</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Allows IdP-initiated responses, i.e. a bearer confirmation that carries no <code>InResponseTo</code>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#authnRequestStore(org.apache.juneau.rest.server.auth.saml.AuthnRequestStore)" class="member-name-link">authnRequestStore</a><wbr>(<a href="../AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml">AuthnRequestStore</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Overrides the <a href="../AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml"><code>AuthnRequestStore</code></a> that tracks outstanding authentication request IDs.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#authnRequestTtl(java.time.Duration)" class="member-name-link">authnRequestTtl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Sets how long a request ID registered with <a href="../SamlAssertionValidator.html#rememberAuthnRequest(java.lang.String)"><code>SamlAssertionValidator.rememberAuthnRequest(String)</code></a>
+ stays valid.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#clock(java.time.Clock)" class="member-name-link">clock</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Overrides the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link"><code>Clock</code></a> used for timestamp validation.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#clockSkew(java.time.Duration)" class="member-name-link">clockSkew</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#clockSkew(java.time.Duration)" class="member-name-link">clockSkew</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the clock-skew tolerance for <code>NotBefore</code> / <code>NotOnOrAfter</code> validation.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.</span><code><a href="../SamlAssertionValidator.html#create()" class="member-name-link">create</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static <a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.</span><code><a href="../SamlAssertionValidator.html#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Static creator.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#decryptionCredential(org.opensaml.security.credential.Credential)" class="member-name-link">decryptionCredential</a><wbr>(org.opensaml.security.credential.Credential&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#decryptionCredential(org.opensaml.security.credential.Credential)" class="member-name-link">decryptionCredential</a><wbr>(org.opensaml.security.credential.Credential&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the credential used to decrypt <code>&lt;EncryptedAssertion&gt;</code> elements.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#digestAlgorithms(java.lang.String...)" class="member-name-link">digestAlgorithms</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#digestAlgorithms(java.lang.String...)" class="member-name-link">digestAlgorithms</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Replaces the default reference-digest allowlist with the supplied URIs.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#expectedInResponseTo(java.lang.String)" class="member-name-link">expectedInResponseTo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Sets the request ID a bearer <code>&lt;SubjectConfirmationData&gt;</code> must echo in its <code>InResponseTo</code>
+<div class="col-first odd-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#expectedInResponseTo(java.lang.String)" class="member-name-link">expectedInResponseTo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Pins the request ID a bearer <code>&lt;SubjectConfirmationData&gt;</code> must echo in its <code>InResponseTo</code>
  attribute.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#expectedIssuer(java.lang.String)" class="member-name-link">expectedIssuer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#expectedIssuer(java.lang.String)" class="member-name-link">expectedIssuer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the expected IdP issuer (the <code>&lt;Issuer&gt;</code> element).</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#metadataResolver(org.opensaml.saml.metadata.resolver.MetadataResolver)" class="member-name-link">metadataResolver</a><wbr>(org.opensaml.saml.metadata.resolver.MetadataResolver&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#metadataResolver(org.opensaml.saml.metadata.resolver.MetadataResolver)" class="member-name-link">metadataResolver</a><wbr>(org.opensaml.saml.metadata.resolver.MetadataResolver&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the <code>MetadataResolver</code> used to resolve the IdP's signing credential at validation time.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#recipient(java.lang.String)" class="member-name-link">recipient</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Sets the expected <code>Recipient</code> (this SP's Assertion Consumer Service URL) and, by doing so,
- enables bearer <code>&lt;SubjectConfirmation&gt;</code> validation.</div>
-</div>
 <div class="col-first even-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#replayCache(org.apache.juneau.commons.concurrent.ReplayCache)" class="member-name-link">replayCache</a><wbr>(<a href="../../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent">ReplayCache</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#recipient(java.lang.String)" class="member-name-link">recipient</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Sets the expected <code>Recipient</code> (this SP's Assertion Consumer Service URL).</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#replayCache(org.apache.juneau.commons.concurrent.ReplayCache)" class="member-name-link">replayCache</a><wbr>(<a href="../../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent">ReplayCache</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Overrides the <a href="../../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent"><code>ReplayCache</code></a> used to enforce one-time use of each assertion ID.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#signingCredential(org.opensaml.security.credential.Credential)" class="member-name-link">signingCredential</a><wbr>(org.opensaml.security.credential.Credential&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#signingCredential(org.opensaml.security.credential.Credential)" class="member-name-link">signingCredential</a><wbr>(org.opensaml.security.credential.Credential&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets a static IdP signing credential.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#spEntityId(java.lang.String)" class="member-name-link">spEntityId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#spEntityId(java.lang.String)" class="member-name-link">spEntityId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the Service Provider entity ID used to validate <code>&lt;AudienceRestriction&gt;</code>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#subjectAddress(java.lang.String)" class="member-name-link">subjectAddress</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.Builder.</span><code><a href="../SamlAssertionValidator.Builder.html#subjectAddress(java.lang.String)" class="member-name-link">subjectAddress</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the client address a bearer <code>&lt;SubjectConfirmationData&gt;</code> must name in its <code>Address</code>
  attribute.</div>
 </div>

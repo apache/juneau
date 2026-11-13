@@ -27,44 +27,58 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * Unit tests for {@link JspDispatcher} and its {@link JspDispatcher.Builder}.</em>
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Covers the builder's default/explicit base-path plumbing, plus the defensive</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * {@code basePath == null} guard in {@link JspDispatcher.Builder#build() build()} -- unreachable through</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * the public {@link JspDispatcher.Builder#basePath(String) basePath(...)} setter (which normalizes</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * {@code null}/blank to the default), so this test reaches it directly via the package-private</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * {@code basePath} field, exercising the guard as a defense against a future subclass or same-package</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * caller that mutates the field without going through the setter.</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">class</strong> <a name="JspDispatcher_Test" href="../../../../../../../org/apache/juneau/rest/server/view/jsp/JspDispatcher_Test.html#JspDispatcher_Test">JspDispatcher_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	@Test <strong class="jxr_keyword">void</strong> a01_defaultBasePath() {
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">var</strong> d = JspDispatcher.create().build();
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		assertEquals(JspDispatcher.DEFAULT_BASE_PATH, d.getBasePath());
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	}
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	@Test <strong class="jxr_keyword">void</strong> a02_explicitBasePath() {
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">var</strong> d = JspDispatcher.create().basePath(<span class="jxr_string">"/WEB-INF/views"</span>).build();
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertEquals(<span class="jxr_string">"/WEB-INF/views"</span>, d.getBasePath());
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	@Test <strong class="jxr_keyword">void</strong> a03_blankBasePathResetsToDefault() {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> d = JspDispatcher.create().basePath(<span class="jxr_string">"   "</span>).build();
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		assertEquals(JspDispatcher.DEFAULT_BASE_PATH, d.getBasePath());
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	}
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	@Test <strong class="jxr_keyword">void</strong> a04_builderBasePathFieldNullDirectly_buildThrows() {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">var</strong> b = JspDispatcher.create();
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		b.basePath = <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// Bypasses the basePath(...) setter's null-normalization (package-private field).</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, b::build);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	}
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  }
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.response.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Unit tests for {@link JspDispatcher} and its {@link JspDispatcher.Builder}.</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Covers the builder's default/explicit base-path plumbing, plus the defensive</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * {@code basePath == null} guard in {@link JspDispatcher.Builder#build() build()} -- unreachable through</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * the public {@link JspDispatcher.Builder#basePath(String) basePath(...)} setter (which normalizes</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * {@code null}/blank to the default), so this test reaches it directly via the package-private</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * {@code basePath} field, exercising the guard as a defense against a future subclass or same-package</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * caller that mutates the field without going through the setter.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">class</strong> <a name="JspDispatcher_Test" href="../../../../../../../org/apache/juneau/rest/server/view/jsp/JspDispatcher_Test.html#JspDispatcher_Test">JspDispatcher_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	@Test <strong class="jxr_keyword">void</strong> a01_defaultBasePath() {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">var</strong> d = JspDispatcher.create().build();
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assertEquals(JspDispatcher.DEFAULT_BASE_PATH, d.getBasePath());
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	}
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	@Test <strong class="jxr_keyword">void</strong> a02_explicitBasePath() {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> d = JspDispatcher.create().basePath(<span class="jxr_string">"/WEB-INF/views"</span>).build();
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertEquals(<span class="jxr_string">"/WEB-INF/views"</span>, d.getBasePath());
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	@Test <strong class="jxr_keyword">void</strong> a03_blankBasePathResetsToDefault() {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">var</strong> d = JspDispatcher.create().basePath(<span class="jxr_string">"   "</span>).build();
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertEquals(JspDispatcher.DEFAULT_BASE_PATH, d.getBasePath());
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	@Test <strong class="jxr_keyword">void</strong> a04_builderBasePathFieldNullDirectly_buildThrows() {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> b = JspDispatcher.create();
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		b.basePath = <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// Bypasses the basePath(...) setter's null-normalization (package-private field).</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, b::build);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	}
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	@Test <strong class="jxr_keyword">void</strong> b01_render_nonServableTargetsAreNotFound() {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> d = JspDispatcher.create().build();
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<em class="jxr_comment">// The servability check runs before the request or response is touched.</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		RestRequest req = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		RestResponse res = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertThrows(NotFound.<strong class="jxr_keyword">class</strong>, () -&gt; d.render(<span class="jxr_string">"WEB-INF/secret.jsp"</span>, req, res));
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertThrows(Forbidden.<strong class="jxr_keyword">class</strong>, () -&gt; d.render(<span class="jxr_string">"../WEB-INF/secret.jsp"</span>, req, res));
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertThrows(NotFound.<strong class="jxr_keyword">class</strong>, () -&gt; d.render(<span class="jxr_string">"META-INF/x.jsp"</span>, req, res));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertThrows(NotFound.<strong class="jxr_keyword">class</strong>, () -&gt; d.render(<span class="jxr_string">"page.txt"</span>, req, res));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertThrows(NotFound.<strong class="jxr_keyword">class</strong>, () -&gt; d.render(<span class="jxr_string">"file:page.jsp"</span>, req, res));
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

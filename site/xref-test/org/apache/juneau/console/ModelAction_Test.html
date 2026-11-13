@@ -48,17 +48,18 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@Test <strong class="jxr_keyword">void</strong> id_grammar() {
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; ModelAction.of(<span class="jxr_string">"1 bad"</span>));
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; ModelAction.of(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; ModelAction.of(<span class="jxr_string">"x"</span>.repeat(129)));
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertEquals(<span class="jxr_string">"a.b_c-1"</span>, ModelAction.of(<span class="jxr_string">"a.b_c-1"</span>).id());
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	}
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	@Test <strong class="jxr_keyword">void</strong> handler_badName() {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> action = ModelAction.of(<span class="jxr_string">"go"</span>);
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; action.handler(<span class="jxr_string">"Bad"</span>));
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	@Test <strong class="jxr_keyword">void</strong> handler_inline_json() {
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		assertEquals(Map.of(<span class="jxr_string">"inline"</span>, <span class="jxr_string">"x"</span>), ModelAction.of(<span class="jxr_string">"go"</span>).handler(HandlerRef.inline(<span class="jxr_string">"x"</span>)).toMap().get(<span class="jxr_string">"handler"</span>));
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	}
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  }
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">var</strong> tooLong = <span class="jxr_string">"x"</span>.repeat(129);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; ModelAction.of(tooLong));
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assertEquals(<span class="jxr_string">"a.b_c-1"</span>, ModelAction.of(<span class="jxr_string">"a.b_c-1"</span>).id());
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	}
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	@Test <strong class="jxr_keyword">void</strong> handler_badName() {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">var</strong> action = ModelAction.of(<span class="jxr_string">"go"</span>);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; action.handler(<span class="jxr_string">"Bad"</span>));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	}
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	@Test <strong class="jxr_keyword">void</strong> handler_inline_json() {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		assertEquals(Map.of(<span class="jxr_string">"inline"</span>, <span class="jxr_string">"x"</span>), ModelAction.of(<span class="jxr_string">"go"</span>).handler(HandlerRef.inline(<span class="jxr_string">"x"</span>)).toMap().get(<span class="jxr_string">"handler"</span>));
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	}
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

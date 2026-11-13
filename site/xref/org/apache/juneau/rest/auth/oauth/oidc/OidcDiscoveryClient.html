@@ -175,62 +175,63 @@
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		HTTPRequestModifier cfg = http -&gt; {
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 			http.setConnectTimeout((<strong class="jxr_keyword">int</strong>) httpTimeout.toMillis());
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 			http.setReadTimeout((<strong class="jxr_keyword">int</strong>) httpTimeout.toMillis());
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">if</strong> (httpRequestConfigurator != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				httpRequestConfigurator.accept(http);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			<strong class="jxr_keyword">return</strong> http;
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		};
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<em class="jxr_comment">// RFC 8414 OAuth Authorization Server Metadata first, OIDC Discovery as fallback (spec requires both).</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">return</strong> toMetadata(AuthorizationServerMetadata.resolve(iss, <strong class="jxr_keyword">null</strong>, cfg, false));
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		} <strong class="jxr_keyword">catch</strong> (IOException | GeneralException asFailure) {
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 				<strong class="jxr_keyword">return</strong> toMetadata(OIDCProviderMetadata.resolve(iss, <strong class="jxr_keyword">null</strong>, cfg, false));
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			} <strong class="jxr_keyword">catch</strong> (GeneralException oidcFailure) {
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="OidcDiscoveryException" href="../../../../../../../org/apache/juneau/rest/auth/oauth/oidc/OidcDiscoveryException.html#OidcDiscoveryException">OidcDiscoveryException</a>(<span class="jxr_string">"Failed to resolve authorization-server metadata for "</span> + issuer
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 					+ <span class="jxr_string">" via RFC 8414 or OIDC Discovery"</span>, oidcFailure);
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			}
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		}
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="OidcMetadata" href="../../../../../../../org/apache/juneau/rest/auth/oauth/oidc/OidcMetadata.html#OidcMetadata">OidcMetadata</a> toMetadata(AuthorizationServerMetadata md) {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> extras = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> json = md.toJSONObject();
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : json.entrySet()) {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<strong class="jxr_keyword">var</strong> k = e.getKey();
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">if</strong> (!STANDARD_FIELDS.contains(k))
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 				extras.put(k, e.getValue());
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		}
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		URI userInfo = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		URI endSession = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">if</strong> (md instanceof OIDCProviderMetadata md2) {
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			userInfo = md2.getUserInfoEndpointURI();
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			endSession = md2.getEndSessionEndpointURI();
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		}
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="OidcMetadata" href="../../../../../../../org/apache/juneau/rest/auth/oauth/oidc/OidcMetadata.html#OidcMetadata">OidcMetadata</a>(
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			URI.create(md.getIssuer().getValue()),
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			md.getTokenEndpointURI(),
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			md.getAuthorizationEndpointURI(),
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			md.getIntrospectionEndpointURI(),
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			md.getJWKSetURI(),
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			userInfo,
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			endSession,
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			toScopeSet(md),
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			extras
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		);
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; toScopeSet(AuthorizationServerMetadata md) {
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">var</strong> s = md.getScopes();
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">return</strong> Collections.emptySet();
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(s.toStringList());
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	}
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; STANDARD_FIELDS = Set.of(
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<span class="jxr_string">"issuer"</span>, <span class="jxr_string">"token_endpoint"</span>, <span class="jxr_string">"authorization_endpoint"</span>, <span class="jxr_string">"introspection_endpoint"</span>,
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<span class="jxr_string">"jwks_uri"</span>, <span class="jxr_string">"userinfo_endpoint"</span>, <span class="jxr_string">"end_session_endpoint"</span>, <span class="jxr_string">"scopes_supported"</span>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	);
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> }
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			http.setFollowRedirects(false);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">if</strong> (httpRequestConfigurator != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 				httpRequestConfigurator.accept(http);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">return</strong> http;
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		};
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<em class="jxr_comment">// RFC 8414 OAuth Authorization Server Metadata first, OIDC Discovery as fallback (spec requires both).</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">return</strong> toMetadata(AuthorizationServerMetadata.resolve(iss, <strong class="jxr_keyword">null</strong>, cfg, false));
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		} <strong class="jxr_keyword">catch</strong> (IOException | GeneralException asFailure) {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 				<strong class="jxr_keyword">return</strong> toMetadata(OIDCProviderMetadata.resolve(iss, <strong class="jxr_keyword">null</strong>, cfg, false));
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			} <strong class="jxr_keyword">catch</strong> (GeneralException oidcFailure) {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="OidcDiscoveryException" href="../../../../../../../org/apache/juneau/rest/auth/oauth/oidc/OidcDiscoveryException.html#OidcDiscoveryException">OidcDiscoveryException</a>(<span class="jxr_string">"Failed to resolve authorization-server metadata for "</span> + issuer
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 					+ <span class="jxr_string">" via RFC 8414 or OIDC Discovery"</span>, oidcFailure);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		}
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="OidcMetadata" href="../../../../../../../org/apache/juneau/rest/auth/oauth/oidc/OidcMetadata.html#OidcMetadata">OidcMetadata</a> toMetadata(AuthorizationServerMetadata md) {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> extras = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> json = md.toJSONObject();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : json.entrySet()) {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">var</strong> k = e.getKey();
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">if</strong> (!STANDARD_FIELDS.contains(k))
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				extras.put(k, e.getValue());
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		}
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		URI userInfo = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		URI endSession = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">if</strong> (md instanceof OIDCProviderMetadata md2) {
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			userInfo = md2.getUserInfoEndpointURI();
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			endSession = md2.getEndSessionEndpointURI();
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		}
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="OidcMetadata" href="../../../../../../../org/apache/juneau/rest/auth/oauth/oidc/OidcMetadata.html#OidcMetadata">OidcMetadata</a>(
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			URI.create(md.getIssuer().getValue()),
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			md.getTokenEndpointURI(),
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			md.getAuthorizationEndpointURI(),
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			md.getIntrospectionEndpointURI(),
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			md.getJWKSetURI(),
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			userInfo,
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			endSession,
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			toScopeSet(md),
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			extras
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	}
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; toScopeSet(AuthorizationServerMetadata md) {
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">var</strong> s = md.getScopes();
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">return</strong> Collections.emptySet();
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(s.toStringList());
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	}
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; STANDARD_FIELDS = Set.of(
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<span class="jxr_string">"issuer"</span>, <span class="jxr_string">"token_endpoint"</span>, <span class="jxr_string">"authorization_endpoint"</span>, <span class="jxr_string">"introspection_endpoint"</span>,
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<span class="jxr_string">"jwks_uri"</span>, <span class="jxr_string">"userinfo_endpoint"</span>, <span class="jxr_string">"end_session_endpoint"</span>, <span class="jxr_string">"scopes_supported"</span>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	);
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

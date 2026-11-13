@@ -219,41 +219,42 @@
 <span class="source-line-no">206</span><span id="line-206">   // mount applies, returning the configuration-relative template name.  Delegates to the shared</span>
 <span class="source-line-no">207</span><span id="line-207">   // FileUtils.resolveVirtualPathSafely + FreemarkerDispatcher.stripBasePath used by the raw render path.</span>
 <span class="source-line-no">208</span><span id="line-208">   static String gateTemplateName(String basePath, String templateName) {</span>
-<span class="source-line-no">209</span><span id="line-209">      var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);</span>
-<span class="source-line-no">210</span><span id="line-210">      return FreemarkerDispatcher.stripBasePath(basePath, resolved);</span>
-<span class="source-line-no">211</span><span id="line-211">   }</span>
-<span class="source-line-no">212</span><span id="line-212"></span>
-<span class="source-line-no">213</span><span id="line-213">   // The exact FreemarkerMixin bean, else a bean of any registered subtype; two different beans fail loud.</span>
-<span class="source-line-no">214</span><span id="line-214">   private FreemarkerMixin findMixin(WritableBeanStore store) {</span>
-<span class="source-line-no">215</span><span id="line-215">      FreemarkerMixin found = store.getBean(FreemarkerMixin.class).orElse(null);</span>
-<span class="source-line-no">216</span><span id="line-216">      for (var t : FreemarkerMixin.registeredSubtypes()) {</span>
-<span class="source-line-no">217</span><span id="line-217">         var b = store.getBean(t).orElse(null);</span>
-<span class="source-line-no">218</span><span id="line-218">         if (b == null || b == found)</span>
-<span class="source-line-no">219</span><span id="line-219">            continue;</span>
-<span class="source-line-no">220</span><span id="line-220">         if (found != null)</span>
-<span class="source-line-no">221</span><span id="line-221">            throw new IllegalStateException(f(</span>
-<span class="source-line-no">222</span><span id="line-222">               "Found more than one FreemarkerMixin bean ('%s' and '%s'); declare exactly one.",</span>
-<span class="source-line-no">223</span><span id="line-223">               found.getClass().getSimpleName(), b.getClass().getSimpleName()));</span>
-<span class="source-line-no">224</span><span id="line-224">         found = b;</span>
-<span class="source-line-no">225</span><span id="line-225">      }</span>
-<span class="source-line-no">226</span><span id="line-226">      return found != null ? found : fallbackMixin();</span>
-<span class="source-line-no">227</span><span id="line-227">   }</span>
-<span class="source-line-no">228</span><span id="line-228"></span>
-<span class="source-line-no">229</span><span id="line-229">   // Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.</span>
-<span class="source-line-no">230</span><span id="line-230">   private FreemarkerMixin fallbackMixin() {</span>
-<span class="source-line-no">231</span><span id="line-231">      var local = fallbackMixin;</span>
-<span class="source-line-no">232</span><span id="line-232">      if (local == null) {</span>
-<span class="source-line-no">233</span><span id="line-233">         synchronized (this) {</span>
-<span class="source-line-no">234</span><span id="line-234">            local = fallbackMixin;</span>
-<span class="source-line-no">235</span><span id="line-235">            if (local == null) {</span>
-<span class="source-line-no">236</span><span id="line-236">               local = new FreemarkerMixin();</span>
-<span class="source-line-no">237</span><span id="line-237">               fallbackMixin = local;</span>
-<span class="source-line-no">238</span><span id="line-238">            }</span>
-<span class="source-line-no">239</span><span id="line-239">         }</span>
-<span class="source-line-no">240</span><span id="line-240">      }</span>
-<span class="source-line-no">241</span><span id="line-241">      return local;</span>
-<span class="source-line-no">242</span><span id="line-242">   }</span>
-<span class="source-line-no">243</span><span id="line-243">}</span>
+<span class="source-line-no">209</span><span id="line-209">      ViewTemplateNames.requirePlainName(templateName);</span>
+<span class="source-line-no">210</span><span id="line-210">      var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);</span>
+<span class="source-line-no">211</span><span id="line-211">      return FreemarkerDispatcher.stripBasePath(basePath, resolved);</span>
+<span class="source-line-no">212</span><span id="line-212">   }</span>
+<span class="source-line-no">213</span><span id="line-213"></span>
+<span class="source-line-no">214</span><span id="line-214">   // The exact FreemarkerMixin bean, else a bean of any registered subtype; two different beans fail loud.</span>
+<span class="source-line-no">215</span><span id="line-215">   private FreemarkerMixin findMixin(WritableBeanStore store) {</span>
+<span class="source-line-no">216</span><span id="line-216">      FreemarkerMixin found = store.getBean(FreemarkerMixin.class).orElse(null);</span>
+<span class="source-line-no">217</span><span id="line-217">      for (var t : FreemarkerMixin.registeredSubtypes()) {</span>
+<span class="source-line-no">218</span><span id="line-218">         var b = store.getBean(t).orElse(null);</span>
+<span class="source-line-no">219</span><span id="line-219">         if (b == null || b == found)</span>
+<span class="source-line-no">220</span><span id="line-220">            continue;</span>
+<span class="source-line-no">221</span><span id="line-221">         if (found != null)</span>
+<span class="source-line-no">222</span><span id="line-222">            throw new IllegalStateException(f(</span>
+<span class="source-line-no">223</span><span id="line-223">               "Found more than one FreemarkerMixin bean ('%s' and '%s'); declare exactly one.",</span>
+<span class="source-line-no">224</span><span id="line-224">               found.getClass().getSimpleName(), b.getClass().getSimpleName()));</span>
+<span class="source-line-no">225</span><span id="line-225">         found = b;</span>
+<span class="source-line-no">226</span><span id="line-226">      }</span>
+<span class="source-line-no">227</span><span id="line-227">      return found != null ? found : fallbackMixin();</span>
+<span class="source-line-no">228</span><span id="line-228">   }</span>
+<span class="source-line-no">229</span><span id="line-229"></span>
+<span class="source-line-no">230</span><span id="line-230">   // Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.</span>
+<span class="source-line-no">231</span><span id="line-231">   private FreemarkerMixin fallbackMixin() {</span>
+<span class="source-line-no">232</span><span id="line-232">      var local = fallbackMixin;</span>
+<span class="source-line-no">233</span><span id="line-233">      if (local == null) {</span>
+<span class="source-line-no">234</span><span id="line-234">         synchronized (this) {</span>
+<span class="source-line-no">235</span><span id="line-235">            local = fallbackMixin;</span>
+<span class="source-line-no">236</span><span id="line-236">            if (local == null) {</span>
+<span class="source-line-no">237</span><span id="line-237">               local = new FreemarkerMixin();</span>
+<span class="source-line-no">238</span><span id="line-238">               fallbackMixin = local;</span>
+<span class="source-line-no">239</span><span id="line-239">            }</span>
+<span class="source-line-no">240</span><span id="line-240">         }</span>
+<span class="source-line-no">241</span><span id="line-241">      }</span>
+<span class="source-line-no">242</span><span id="line-242">      return local;</span>
+<span class="source-line-no">243</span><span id="line-243">   }</span>
+<span class="source-line-no">244</span><span id="line-244">}</span>
 
 
 

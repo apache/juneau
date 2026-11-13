@@ -406,253 +406,261 @@
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">return</strong> out;
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 	}
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	<em class="jxr_comment">// Flags a literal init=/css= entry that is neither absolute nor a context:/servlet: URI.  Lists holding an</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	<em class="jxr_comment">// expression (a call or ${...}) are skipped: their entries are not literals.</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkPageAssets(List&lt;Finding&gt; out, String name, <strong class="jxr_keyword">int</strong>[] lines, <strong class="jxr_keyword">int</strong> at, String attrText) {
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">var</strong> m = PAGE_ASSET.matcher(attrText);
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">while</strong> (m.find()) {
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			<strong class="jxr_keyword">var</strong> attr = m.group(1);
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			<strong class="jxr_keyword">var</strong> entries = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<strong class="jxr_keyword">if</strong> (nn(m.group(2))) {
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 				<strong class="jxr_keyword">var</strong> body = m.group(2);
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 				<strong class="jxr_keyword">if</strong> (body.contains(<span class="jxr_string">"("</span>) || body.contains(<span class="jxr_string">"${"</span>))
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 					<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 				<strong class="jxr_keyword">var</strong> q = QUOTED.matcher(body);
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 				<strong class="jxr_keyword">while</strong> (q.find())
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 					entries.add(nn(q.group(1)) ? q.group(1) : q.group(2));
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 				<strong class="jxr_keyword">var</strong> v = nn(m.group(3)) ? m.group(3) : m.group(4);
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 				<strong class="jxr_keyword">if</strong> (v.contains(<span class="jxr_string">"${"</span>))
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 					<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> part : v.split(<span class="jxr_string">","</span>)) {
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 					<strong class="jxr_keyword">var</strong> t = part.trim();
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 					<strong class="jxr_keyword">if</strong> (! t.isEmpty())
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 						entries.add(t);
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 				}
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			}
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : entries)
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 				<strong class="jxr_keyword">if</strong> (! FtlAttrLists.isAbsoluteAsset(e))
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 					add(out, name, lines, at, <span class="jxr_string">"relative-page-asset"</span>, f(
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 						<span class="jxr_string">"&lt;@page&gt; %s= entry '%s' must be absolute (start with '/') or a context: / servlet: URI."</span>, attr, e));
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		}
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	}
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 * Flags a literal {@code view.contractVersion} that differs from {@link ViewsMixin#CONTRACT_VERSION} in a</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 * {@code type="datatables"} card body. An omitted version is fine (the runtime injects it); only a pinned, stale</em>
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 * value is reported. Scans the {@code view:{...}} object at its own nesting depth so nested {@code contractVersion}</em>
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 * keys (quickStats, detail, ...) are never mistaken for it.</em>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkViewVersion(List&lt;Finding&gt; out, String name, <strong class="jxr_keyword">int</strong>[] lines, String text, <strong class="jxr_keyword">int</strong> bodyStart, String cardId) {
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">var</strong> end = text.indexOf(<span class="jxr_string">"&lt;/@card"</span>, bodyStart);
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">var</strong> body = text.substring(bodyStart, end &lt; 0 ? text.length() : end);
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">var</strong> vm = VIEW_KEY.matcher(body);
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">if</strong> (! vm.find())
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">var</strong> depth = 1;
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = vm.end(); i &lt; body.length() &amp;&amp; depth &gt; 0; i++) {
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">var</strong> c = body.charAt(i);
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			<strong class="jxr_keyword">if</strong> (c == '{' || c == '[')
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 				depth++;
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '}' || c == ']')
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				depth--;
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (depth == 1 &amp;&amp; c == 'c') {
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 				<strong class="jxr_keyword">var</strong> v = VIEW_VERSION.matcher(body.substring(i));
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 				<strong class="jxr_keyword">if</strong> (v.find() &amp;&amp; neq(v.group(1), ViewsMixin.CONTRACT_VERSION)) {
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 					add(out, name, lines, bodyStart + i, <span class="jxr_string">"view-contract-version"</span>, f(
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 						<span class="jxr_string">"&lt;@card id='%s'&gt; view.contractVersion is '%s' but the runtime is '%s'; omit it to track the runtime automatically."</span>,
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 						cardId, v.group(1), ViewsMixin.CONTRACT_VERSION));
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 					<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 				}
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			}
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		}
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	<strong class="jxr_keyword">private</strong> record Value(String value, <strong class="jxr_keyword">boolean</strong> literal) {}
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	<em class="jxr_comment">// Mirrors CardTypeRegistry.BASE_KEYS (E-23); visibleWhen is deliberately excluded, same as there.</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; RESERVED_BODY_KEYS = Set.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"type"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"src"</span>, <span class="jxr_string">"template"</span>, <span class="jxr_string">"ref"</span>);
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * The card-body rules: {@code card-src-and-body} and {@code card-reserved-key}.</em>
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * Reads the body the same way {@link #checkViewVersion} does, up to the next {@code &lt;/@card}.</em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<span class="jxr_string">"java:S107"</span> <em class="jxr_comment">// Internal helper whose parameters are the render/validation context.</em>
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	})
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkCardBody(List&lt;Finding&gt; out, String name, <strong class="jxr_keyword">int</strong>[] lines, <strong class="jxr_keyword">int</strong> at, String text, <strong class="jxr_keyword">int</strong> bodyStart, Value id, Value src, Value type) {
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">var</strong> end = text.indexOf(<span class="jxr_string">"&lt;/@card"</span>, bodyStart);
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">var</strong> body = text.substring(bodyStart, end &lt; 0 ? text.length() : end);
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		<strong class="jxr_keyword">var</strong> cardId = n(id) ? <span class="jxr_string">""</span> : id.value;
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<strong class="jxr_keyword">var</strong> trimmed = body.trim();
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		<em class="jxr_comment">// A chart card legitimately takes src= (remote rows) plus a body (kind and options).</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		<strong class="jxr_keyword">var</strong> chart = nn(type) &amp;&amp; type.literal &amp;&amp; <span class="jxr_string">"chart"</span>.equals(type.value);
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">if</strong> (! trimmed.isEmpty() &amp;&amp; nn(src) &amp;&amp; src.literal &amp;&amp; ! chart)
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			add(out, name, lines, at, <span class="jxr_string">"card-src-and-body"</span>, f(
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 				<span class="jxr_string">"&lt;@card id='%s'&gt; has both src='%s' and a body; use exactly one."</span>, cardId, src.value));
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">if</strong> (trimmed.isEmpty() || body.contains(<span class="jxr_string">"${"</span>))
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">var</strong> keys = topLevelJson5Keys(trimmed);
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : keys)
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">if</strong> (RESERVED_BODY_KEYS.contains(k))
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 				add(out, name, lines, at, <span class="jxr_string">"card-reserved-key"</span>, f(
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 					<span class="jxr_string">"&lt;@card id='%s'&gt; body key '%s' is reserved; set it as an attribute."</span>, cardId, k));
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 	}
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	<em class="jxr_comment">// Hand-rolled, like attrs() below: finds JSON5 object keys at brace-depth 0, skipping quoted strings (backslash escapes honored). Not a</em>
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 	<em class="jxr_comment">// general parser — enough to catch literal top-level keys for the two card-body lint rules above.</em>
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; topLevelJson5Keys(String body) {
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">var</strong> s = body.trim();
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">if</strong> (s.startsWith(<span class="jxr_string">"{"</span>) &amp;&amp; s.endsWith(<span class="jxr_string">"}"</span>))
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			s = s.substring(1, s.length() - 1);
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;String&gt;();
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">var</strong> depth = 0;
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">var</strong> i = 0;
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<strong class="jxr_keyword">while</strong> (i &lt; s.length()) {
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 			<strong class="jxr_keyword">if</strong> (c == '&quot;' || c == '\'') {
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 				<em class="jxr_comment">// Honor backslash escapes in both quote styles: skip the escaped character wholesale.</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 				<strong class="jxr_keyword">var</strong> j = i + 1;
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 				<strong class="jxr_keyword">while</strong> (j &lt; s.length() &amp;&amp; s.charAt(j) != c)
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 					j += s.charAt(j) == '&#92;&#92;' ? 2 : 1;
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 				i = j &gt;= s.length() ? s.length() : j + 1;
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '{' || c == '[') {
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 				depth++;
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 				i++;
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '}' || c == ']') {
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 				depth--;
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 				i++;
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (depth == 0 &amp;&amp; (Character.isLetter(c) || c == '_')) {
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 				<strong class="jxr_keyword">var</strong> start = i;
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 				<strong class="jxr_keyword">while</strong> (i &lt; s.length() &amp;&amp; (Character.isLetterOrDigit(s.charAt(i)) || s.charAt(i) == '_'))
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 					i++;
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 				<strong class="jxr_keyword">var</strong> word = s.substring(start, i);
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 				<strong class="jxr_keyword">var</strong> j = i;
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 				<strong class="jxr_keyword">while</strong> (j &lt; s.length() &amp;&amp; Character.isWhitespace(s.charAt(j)))
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 					j++;
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 				<strong class="jxr_keyword">if</strong> (j &lt; s.length() &amp;&amp; s.charAt(j) == ':')
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 					keys.add(word);
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 				i++;
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 			}
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		}
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		<strong class="jxr_keyword">return</strong> keys;
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 	}
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Value&gt; attrs(String s) {
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Value&gt;();
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">var</strong> m = ATTR.matcher(s);
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">while</strong> (m.find()) {
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 			String v;
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 			<strong class="jxr_keyword">boolean</strong> literal;
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 			<strong class="jxr_keyword">if</strong> (nn(m.group(2)) || nn(m.group(3))) {
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 				v = m.group(nn(m.group(2)) ? 2 : 3);
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 				literal = ! v.contains(<span class="jxr_string">"${"</span>);
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 				v = m.group(4);
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 				literal = eqa(v, <span class="jxr_string">"true"</span>, <span class="jxr_string">"false"</span>);
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			}
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 			out.put(m.group(1), <strong class="jxr_keyword">new</strong> Value(v, literal));
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		}
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">return</strong> out;
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 	}
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> collectScope(String name, String text, Set&lt;String&gt; macros, Set&lt;String&gt; namespaces, Set&lt;String&gt; seen) {
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">if</strong> (! seen.add(name))
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">var</strong> m = MACRO.matcher(text);
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		<strong class="jxr_keyword">while</strong> (m.find())
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			macros.add(m.group(1));
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<strong class="jxr_keyword">var</strong> i = IMPORT.matcher(text);
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">while</strong> (i.find())
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			namespaces.add(i.group(1));
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">var</strong> inc = INCLUDE.matcher(text);
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">while</strong> (inc.find()) {
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			<strong class="jxr_keyword">var</strong> target = resolve(name, inc.group(1));
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 			<strong class="jxr_keyword">var</strong> src = load(target);
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			<strong class="jxr_keyword">if</strong> (nn(src))
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 				collectScope(target, blankComments(src), macros, namespaces, seen);
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		}
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 	}
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String resolve(String from, String path) {
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<strong class="jxr_keyword">if</strong> (path.startsWith(<span class="jxr_string">"/"</span>))
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 			<strong class="jxr_keyword">return</strong> path;
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		<strong class="jxr_keyword">var</strong> slash = from.lastIndexOf('/');
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		<strong class="jxr_keyword">return</strong> slash &lt; 0 ? path : from.substring(0, slash + 1) + path;
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	}
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	<em class="jxr_comment">// Template root first, then the classpath root, then (for absolute names) the classpath itself.</em>
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	<strong class="jxr_keyword">private</strong> String load(String name) {
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">var</strong> rel = name.startsWith(<span class="jxr_string">"/"</span>) ? name.substring(1) : name;
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 			<strong class="jxr_keyword">if</strong> (nn(templateRoot)) {
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 				<strong class="jxr_keyword">var</strong> p = templateRoot.resolve(rel);
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 				<strong class="jxr_keyword">if</strong> (Files.isRegularFile(p))
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 					<strong class="jxr_keyword">return</strong> Files.readString(p, UTF_8);
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 			}
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 			<strong class="jxr_keyword">if</strong> (nn(classpathRoot)) {
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 				<strong class="jxr_keyword">var</strong> s = resource(classpathRoot + rel);
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 				<strong class="jxr_keyword">if</strong> (nn(s))
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 					<strong class="jxr_keyword">return</strong> s;
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 			}
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			<strong class="jxr_keyword">return</strong> name.startsWith(<span class="jxr_string">"/"</span>) ? resource(name) : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UncheckedIOException(e);
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		}
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 	}
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String resource(String absPath) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 		<strong class="jxr_keyword">var</strong> cl = Thread.currentThread().getContextClassLoader();
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		<strong class="jxr_keyword">if</strong> (n(cl))
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 			cl = ConsoleTemplateValidator.<strong class="jxr_keyword">class</strong>.getClassLoader();
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = cl.getResourceAsStream(absPath.substring(1))) {
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 			<strong class="jxr_keyword">return</strong> n(in) ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> String(in.readAllBytes(), UTF_8);
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		}
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 	}
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<span class="jxr_string">"unused"</span> <em class="jxr_comment">// the Template is built only so its constructor parses (and may throw)</em>
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	})
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> parse(String name, String source, List&lt;Finding&gt; out) {
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 			<strong class="jxr_keyword">new</strong> Template(name, <strong class="jxr_keyword">new</strong> StringReader(source), PARSE_CFG);
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		} <strong class="jxr_keyword">catch</strong> (ParseException e) {
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			out.add(<strong class="jxr_keyword">new</strong> Finding(name, e.getLineNumber(), e.getColumnNumber(), <span class="jxr_string">"parse-error"</span>, e.getEditorMessage()));
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UncheckedIOException(e);
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		}
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 	}
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 	<em class="jxr_comment">// Replaces each &lt;#-- … --&gt; with spaces (newlines kept), so offsets still map to the original line and column.</em>
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String blankComments(String s) {
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(s);
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">var</strong> m = COMMENT.matcher(s);
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		<strong class="jxr_keyword">while</strong> (m.find())
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = m.start(); i &lt; m.end(); i++)
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 				<strong class="jxr_keyword">if</strong> (sb.charAt(i) != '\n')
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 					sb.setCharAt(i, ' ');
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 	}
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		<span class="jxr_string">"javabugs:S2259"</span> <em class="jxr_comment">// False positive: validate() throws on a null load() result via n(src), which Sonar's flow analysis does not track as a null guard.</em>
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	})
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] lineStarts(String s) {
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 		<strong class="jxr_keyword">var</strong> starts = <strong class="jxr_keyword">new</strong> ArrayList&lt;Integer&gt;();
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		starts.add(0);
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; s.length(); i++)
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 			<strong class="jxr_keyword">if</strong> (s.charAt(i) == '\n')
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 				starts.add(i + 1);
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		<strong class="jxr_keyword">return</strong> starts.stream().mapToInt(Integer::intValue).toArray();
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	}
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> add(List&lt;Finding&gt; out, String name, <strong class="jxr_keyword">int</strong>[] lines, <strong class="jxr_keyword">int</strong> offset, String rule, String message) {
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		<strong class="jxr_keyword">var</strong> i = Arrays.binarySearch(lines, offset);
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<strong class="jxr_keyword">var</strong> line = i &gt;= 0 ? i : -i - 2;
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		out.add(<strong class="jxr_keyword">new</strong> Finding(name, line + 1, offset - lines[line] + 1, rule, message));
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 	}
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> }
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	<em class="jxr_comment">// The literal entries of one init=/css= match, or null when the value holds an expression (a call or ${...}).</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; literalPageAssetEntries(Matcher m) {
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">var</strong> entries = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">if</strong> (nn(m.group(2))) {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			<strong class="jxr_keyword">var</strong> body = m.group(2);
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			<strong class="jxr_keyword">if</strong> (body.contains(<span class="jxr_string">"("</span>) || body.contains(<span class="jxr_string">"${"</span>))
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<strong class="jxr_keyword">var</strong> q = QUOTED.matcher(body);
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<strong class="jxr_keyword">while</strong> (q.find())
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 				entries.add(q.group(nn(q.group(1)) ? 1 : 2));
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			<strong class="jxr_keyword">return</strong> entries;
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		}
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">var</strong> v = m.group(nn(m.group(3)) ? 3 : 4);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">if</strong> (v.contains(<span class="jxr_string">"${"</span>))
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> part : v.split(<span class="jxr_string">","</span>)) {
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			<strong class="jxr_keyword">var</strong> t = part.trim();
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			<strong class="jxr_keyword">if</strong> (! t.isEmpty())
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 				entries.add(t);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		}
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">return</strong> entries;
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	}
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	<em class="jxr_comment">// Flags a literal init=/css= entry that is neither absolute nor a context:/servlet: URI.  Lists holding an</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	<em class="jxr_comment">// expression (a call or ${...}) are skipped: their entries are not literals.</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkPageAssets(List&lt;Finding&gt; out, String name, <strong class="jxr_keyword">int</strong>[] lines, <strong class="jxr_keyword">int</strong> at, String attrText) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">var</strong> m = PAGE_ASSET.matcher(attrText);
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">while</strong> (m.find()) {
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			<strong class="jxr_keyword">var</strong> attr = m.group(1);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<strong class="jxr_keyword">var</strong> entries = literalPageAssetEntries(m);
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<strong class="jxr_keyword">if</strong> (entries == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : entries)
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 				<strong class="jxr_keyword">if</strong> (! FtlAttrLists.isAbsoluteAsset(e))
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 					add(out, name, lines, at, <span class="jxr_string">"relative-page-asset"</span>, f(
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 						<span class="jxr_string">"&lt;@page&gt; %s= entry '%s' must be absolute (start with '/') or a context: / servlet: URI."</span>, attr, e));
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		}
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	}
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * Flags a literal {@code view.contractVersion} that differs from {@link ViewsMixin#CONTRACT_VERSION} in a</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * {@code type="datatables"} card body. An omitted version is fine (the runtime injects it); only a pinned, stale</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * value is reported. Scans the {@code view:{...}} object at its own nesting depth so nested {@code contractVersion}</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * keys (quickStats, detail, ...) are never mistaken for it.</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkViewVersion(List&lt;Finding&gt; out, String name, <strong class="jxr_keyword">int</strong>[] lines, String text, <strong class="jxr_keyword">int</strong> bodyStart, String cardId) {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">var</strong> end = text.indexOf(<span class="jxr_string">"&lt;/@card"</span>, bodyStart);
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">var</strong> body = text.substring(bodyStart, end &lt; 0 ? text.length() : end);
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		<strong class="jxr_keyword">var</strong> vm = VIEW_KEY.matcher(body);
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<strong class="jxr_keyword">if</strong> (! vm.find())
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">var</strong> depth = 1;
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = vm.end(); i &lt; body.length() &amp;&amp; depth &gt; 0; i++) {
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			<strong class="jxr_keyword">var</strong> c = body.charAt(i);
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			<strong class="jxr_keyword">if</strong> (c == '{' || c == '[')
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 				depth++;
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '}' || c == ']')
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 				depth--;
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (depth == 1 &amp;&amp; c == 'c') {
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 				<strong class="jxr_keyword">var</strong> v = VIEW_VERSION.matcher(body.substring(i));
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 				<strong class="jxr_keyword">if</strong> (v.find() &amp;&amp; neq(v.group(1), ViewsMixin.CONTRACT_VERSION)) {
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 					add(out, name, lines, bodyStart + i, <span class="jxr_string">"view-contract-version"</span>, f(
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 						<span class="jxr_string">"&lt;@card id='%s'&gt; view.contractVersion is '%s' but the runtime is '%s'; omit it to track the runtime automatically."</span>,
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 						cardId, v.group(1), ViewsMixin.CONTRACT_VERSION));
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 					<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 				}
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			}
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		}
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 	}
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	<strong class="jxr_keyword">private</strong> record Value(String value, <strong class="jxr_keyword">boolean</strong> literal) {}
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	<em class="jxr_comment">// Mirrors CardTypeRegistry.BASE_KEYS (E-23); visibleWhen is deliberately excluded, same as there.</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; RESERVED_BODY_KEYS = Set.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"type"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"src"</span>, <span class="jxr_string">"template"</span>, <span class="jxr_string">"ref"</span>);
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 * The card-body rules: {@code card-src-and-body} and {@code card-reserved-key}.</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * Reads the body the same way {@link #checkViewVersion} does, up to the next {@code &lt;/@card}.</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		<span class="jxr_string">"java:S107"</span> <em class="jxr_comment">// Internal helper whose parameters are the render/validation context.</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 	})
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkCardBody(List&lt;Finding&gt; out, String name, <strong class="jxr_keyword">int</strong>[] lines, <strong class="jxr_keyword">int</strong> at, String text, <strong class="jxr_keyword">int</strong> bodyStart, Value id, Value src, Value type) {
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<strong class="jxr_keyword">var</strong> end = text.indexOf(<span class="jxr_string">"&lt;/@card"</span>, bodyStart);
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">var</strong> body = text.substring(bodyStart, end &lt; 0 ? text.length() : end);
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">var</strong> cardId = n(id) ? <span class="jxr_string">""</span> : id.value;
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">var</strong> trimmed = body.trim();
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 		<em class="jxr_comment">// A chart card legitimately takes src= (remote rows) plus a body (kind and options).</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 		<strong class="jxr_keyword">var</strong> chart = nn(type) &amp;&amp; type.literal &amp;&amp; <span class="jxr_string">"chart"</span>.equals(type.value);
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		<strong class="jxr_keyword">if</strong> (! trimmed.isEmpty() &amp;&amp; nn(src) &amp;&amp; src.literal &amp;&amp; ! chart)
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 			add(out, name, lines, at, <span class="jxr_string">"card-src-and-body"</span>, f(
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 				<span class="jxr_string">"&lt;@card id='%s'&gt; has both src='%s' and a body; use exactly one."</span>, cardId, src.value));
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<strong class="jxr_keyword">if</strong> (trimmed.isEmpty() || body.contains(<span class="jxr_string">"${"</span>))
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		<strong class="jxr_keyword">var</strong> keys = topLevelJson5Keys(trimmed);
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : keys)
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 			<strong class="jxr_keyword">if</strong> (RESERVED_BODY_KEYS.contains(k))
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 				add(out, name, lines, at, <span class="jxr_string">"card-reserved-key"</span>, f(
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 					<span class="jxr_string">"&lt;@card id='%s'&gt; body key '%s' is reserved; set it as an attribute."</span>, cardId, k));
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	}
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	<em class="jxr_comment">// Hand-rolled, like attrs() below: finds JSON5 object keys at brace-depth 0, skipping quoted strings (backslash escapes honored). Not a</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 	<em class="jxr_comment">// general parser — enough to catch literal top-level keys for the two card-body lint rules above.</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; topLevelJson5Keys(String body) {
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">var</strong> s = body.trim();
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<strong class="jxr_keyword">if</strong> (s.startsWith(<span class="jxr_string">"{"</span>) &amp;&amp; s.endsWith(<span class="jxr_string">"}"</span>))
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 			s = s.substring(1, s.length() - 1);
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;String&gt;();
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		<strong class="jxr_keyword">var</strong> depth = 0;
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<strong class="jxr_keyword">var</strong> i = 0;
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<strong class="jxr_keyword">while</strong> (i &lt; s.length()) {
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 			<strong class="jxr_keyword">if</strong> (c == '&quot;' || c == '\'') {
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 				<em class="jxr_comment">// Honor backslash escapes in both quote styles: skip the escaped character wholesale.</em>
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 				<strong class="jxr_keyword">var</strong> j = i + 1;
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 				<strong class="jxr_keyword">while</strong> (j &lt; s.length() &amp;&amp; s.charAt(j) != c)
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 					j += s.charAt(j) == '&#92;&#92;' ? 2 : 1;
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 				i = j &gt;= s.length() ? s.length() : j + 1;
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '{' || c == '[') {
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 				depth++;
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 				i++;
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '}' || c == ']') {
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 				depth--;
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 				i++;
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (depth == 0 &amp;&amp; (Character.isLetter(c) || c == '_')) {
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 				<strong class="jxr_keyword">var</strong> start = i;
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 				<strong class="jxr_keyword">while</strong> (i &lt; s.length() &amp;&amp; (Character.isLetterOrDigit(s.charAt(i)) || s.charAt(i) == '_'))
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 					i++;
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 				<strong class="jxr_keyword">var</strong> word = s.substring(start, i);
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 				<strong class="jxr_keyword">var</strong> j = i;
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 				<strong class="jxr_keyword">while</strong> (j &lt; s.length() &amp;&amp; Character.isWhitespace(s.charAt(j)))
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 					j++;
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 				<strong class="jxr_keyword">if</strong> (j &lt; s.length() &amp;&amp; s.charAt(j) == ':')
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 					keys.add(word);
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 				i++;
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 			}
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		}
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<strong class="jxr_keyword">return</strong> keys;
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	}
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Value&gt; attrs(String s) {
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Value&gt;();
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		<strong class="jxr_keyword">var</strong> m = ATTR.matcher(s);
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">while</strong> (m.find()) {
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			String v;
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 			<strong class="jxr_keyword">boolean</strong> literal;
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 			<strong class="jxr_keyword">if</strong> (nn(m.group(2)) || nn(m.group(3))) {
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 				v = m.group(nn(m.group(2)) ? 2 : 3);
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 				literal = ! v.contains(<span class="jxr_string">"${"</span>);
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 				v = m.group(4);
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 				literal = eqa(v, <span class="jxr_string">"true"</span>, <span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			}
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			out.put(m.group(1), <strong class="jxr_keyword">new</strong> Value(v, literal));
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		}
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 	}
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> collectScope(String name, String text, Set&lt;String&gt; macros, Set&lt;String&gt; namespaces, Set&lt;String&gt; seen) {
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">if</strong> (! seen.add(name))
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		<strong class="jxr_keyword">var</strong> m = MACRO.matcher(text);
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">while</strong> (m.find())
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			macros.add(m.group(1));
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">var</strong> i = IMPORT.matcher(text);
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">while</strong> (i.find())
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			namespaces.add(i.group(1));
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<strong class="jxr_keyword">var</strong> inc = INCLUDE.matcher(text);
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<strong class="jxr_keyword">while</strong> (inc.find()) {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 			<strong class="jxr_keyword">var</strong> target = resolve(name, inc.group(1));
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 			<strong class="jxr_keyword">var</strong> src = load(target);
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 			<strong class="jxr_keyword">if</strong> (nn(src))
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 				collectScope(target, blankComments(src), macros, namespaces, seen);
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		}
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 	}
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String resolve(String from, String path) {
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">if</strong> (path.startsWith(<span class="jxr_string">"/"</span>))
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 			<strong class="jxr_keyword">return</strong> path;
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">var</strong> slash = from.lastIndexOf('/');
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		<strong class="jxr_keyword">return</strong> slash &lt; 0 ? path : from.substring(0, slash + 1) + path;
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 	}
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	<em class="jxr_comment">// Template root first, then the classpath root, then (for absolute names) the classpath itself.</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	<strong class="jxr_keyword">private</strong> String load(String name) {
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		<strong class="jxr_keyword">var</strong> rel = name.startsWith(<span class="jxr_string">"/"</span>) ? name.substring(1) : name;
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 			<strong class="jxr_keyword">if</strong> (nn(templateRoot)) {
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 				<strong class="jxr_keyword">var</strong> p = templateRoot.resolve(rel);
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 				<strong class="jxr_keyword">if</strong> (Files.isRegularFile(p))
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 					<strong class="jxr_keyword">return</strong> Files.readString(p, UTF_8);
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 			}
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 			<strong class="jxr_keyword">if</strong> (nn(classpathRoot)) {
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 				<strong class="jxr_keyword">var</strong> s = resource(classpathRoot + rel);
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 				<strong class="jxr_keyword">if</strong> (nn(s))
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 					<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 			}
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 			<strong class="jxr_keyword">return</strong> name.startsWith(<span class="jxr_string">"/"</span>) ? resource(name) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UncheckedIOException(e);
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		}
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 	}
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String resource(String absPath) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<strong class="jxr_keyword">var</strong> cl = Thread.currentThread().getContextClassLoader();
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<strong class="jxr_keyword">if</strong> (n(cl))
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 			cl = ConsoleTemplateValidator.<strong class="jxr_keyword">class</strong>.getClassLoader();
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = cl.getResourceAsStream(absPath.substring(1))) {
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 			<strong class="jxr_keyword">return</strong> n(in) ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> String(in.readAllBytes(), UTF_8);
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		}
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 	}
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<span class="jxr_string">"unused"</span> <em class="jxr_comment">// the Template is built only so its constructor parses (and may throw)</em>
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	})
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> parse(String name, String source, List&lt;Finding&gt; out) {
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 			<strong class="jxr_keyword">new</strong> Template(name, <strong class="jxr_keyword">new</strong> StringReader(source), PARSE_CFG);
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		} <strong class="jxr_keyword">catch</strong> (ParseException e) {
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			out.add(<strong class="jxr_keyword">new</strong> Finding(name, e.getLineNumber(), e.getColumnNumber(), <span class="jxr_string">"parse-error"</span>, e.getEditorMessage()));
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UncheckedIOException(e);
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		}
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 	}
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 	<em class="jxr_comment">// Replaces each &lt;#-- … --&gt; with spaces (newlines kept), so offsets still map to the original line and column.</em>
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String blankComments(String s) {
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(s);
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		<strong class="jxr_keyword">var</strong> m = COMMENT.matcher(s);
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		<strong class="jxr_keyword">while</strong> (m.find())
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = m.start(); i &lt; m.end(); i++)
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 				<strong class="jxr_keyword">if</strong> (sb.charAt(i) != '\n')
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 					sb.setCharAt(i, ' ');
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 	}
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		<span class="jxr_string">"javabugs:S2259"</span> <em class="jxr_comment">// False positive: validate() throws on a null load() result via n(src), which Sonar's flow analysis does not track as a null guard.</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	})
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] lineStarts(String s) {
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">var</strong> starts = <strong class="jxr_keyword">new</strong> ArrayList&lt;Integer&gt;();
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		starts.add(0);
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; s.length(); i++)
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			<strong class="jxr_keyword">if</strong> (s.charAt(i) == '\n')
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 				starts.add(i + 1);
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 		<strong class="jxr_keyword">return</strong> starts.stream().mapToInt(Integer::intValue).toArray();
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	}
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> add(List&lt;Finding&gt; out, String name, <strong class="jxr_keyword">int</strong>[] lines, <strong class="jxr_keyword">int</strong> offset, String rule, String message) {
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 		<strong class="jxr_keyword">var</strong> i = Arrays.binarySearch(lines, offset);
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		<strong class="jxr_keyword">var</strong> line = i &gt;= 0 ? i : -i - 2;
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		out.add(<strong class="jxr_keyword">new</strong> Finding(name, line + 1, offset - lines[line] + 1, rule, message));
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 	}
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

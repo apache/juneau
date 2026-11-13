@@ -157,13 +157,13 @@
 <span class="source-line-no">144</span><span id="line-144">      if (e == null)</span>
 <span class="source-line-no">145</span><span id="line-145">         return;</span>
 <span class="source-line-no">146</span><span id="line-146">      if (!isEmpty(e.getEvent()))</span>
-<span class="source-line-no">147</span><span id="line-147">         writeField(w, "event", e.getEvent());</span>
+<span class="source-line-no">147</span><span id="line-147">         writeField(w, "event", stripLineBreaks(e.getEvent()));</span>
 <span class="source-line-no">148</span><span id="line-148">      if (e.getData() != null) {</span>
 <span class="source-line-no">149</span><span id="line-149">         for (var line : splitData(e.getData()))</span>
 <span class="source-line-no">150</span><span id="line-150">            writeField(w, "data", line);</span>
 <span class="source-line-no">151</span><span id="line-151">      }</span>
 <span class="source-line-no">152</span><span id="line-152">      if (e.getId() != null)</span>
-<span class="source-line-no">153</span><span id="line-153">         writeField(w, "id", e.getId());</span>
+<span class="source-line-no">153</span><span id="line-153">         writeField(w, "id", stripLineBreaks(e.getId()));</span>
 <span class="source-line-no">154</span><span id="line-154">      if (e.getRetry() != null)</span>
 <span class="source-line-no">155</span><span id="line-155">         w.write("retry: " + e.getRetry() + "\n");</span>
 <span class="source-line-no">156</span><span id="line-156">      w.write("\n");</span>
@@ -178,10 +178,14 @@
 <span class="source-line-no">165</span><span id="line-165">   }</span>
 <span class="source-line-no">166</span><span id="line-166"></span>
 <span class="source-line-no">167</span><span id="line-167">   static List&lt;String&gt; splitData(String s) {</span>
-<span class="source-line-no">168</span><span id="line-168">      var parts = s.split("\n", -1);</span>
+<span class="source-line-no">168</span><span id="line-168">      var parts = s.split("\r\n|\r|\n", -1);</span>
 <span class="source-line-no">169</span><span id="line-169">      return Arrays.asList(parts);</span>
 <span class="source-line-no">170</span><span id="line-170">   }</span>
-<span class="source-line-no">171</span><span id="line-171">}</span>
+<span class="source-line-no">171</span><span id="line-171"></span>
+<span class="source-line-no">172</span><span id="line-172">   private static String stripLineBreaks(String s) {</span>
+<span class="source-line-no">173</span><span id="line-173">      return s.replace("\r", "").replace("\n", "");</span>
+<span class="source-line-no">174</span><span id="line-174">   }</span>
+<span class="source-line-no">175</span><span id="line-175">}</span>
 
 
 

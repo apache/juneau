@@ -61,6 +61,11 @@ loadScripts(document, 'script');</script>
 <div class="block">Connects terminals to the Juneau server bus: the <code>term.input</code> upstream handler, and the <code>term.nudge:&lt;id&gt;</code>
  downstream nudges that tell a terminal card when new bytes are ready.</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.terminal.region">org.apache.juneau.terminal.region</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Raw command output in the browser: a byte-offset endpoint over a <a href="../TerminalSource.html" title="interface in org.apache.juneau.terminal.region"><code>TerminalSource</code></a>
+ and an xterm.js panel that renders it the way a terminal would.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -81,6 +86,22 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">TerminalNudges.</span><code><a href="../../bus/TerminalNudges.html#create(org.apache.juneau.terminal.region.TerminalAccess)" class="member-name-link">create</a><wbr>(<a href="../TerminalAccess.html" title="interface in org.apache.juneau.terminal.region">TerminalAccess</a>&nbsp;access)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates a publisher.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.terminal.region">
+<h2>Uses of <a href="../TerminalAccess.html" title="interface in org.apache.juneau.terminal.region">TerminalAccess</a> in <a href="../package-summary.html">org.apache.juneau.terminal.region</a></h2>
+<div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.terminal.region</a> that return <a href="../TerminalAccess.html" title="interface in org.apache.juneau.terminal.region">TerminalAccess</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>default <a href="../TerminalAccess.html" title="interface in org.apache.juneau.terminal.region">TerminalAccess</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../TerminalMixin.html#terminalAccess()" class="member-name-link">terminalAccess</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">The access rules applied to the bytes and raw endpoints before the source is resolved.</div>
 </div>
 </div>
 </section>

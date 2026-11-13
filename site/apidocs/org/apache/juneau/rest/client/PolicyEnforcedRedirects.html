@@ -99,7 +99,8 @@ loadScripts(document, 'script');</script>
  chain is capped at <a href="../../http/remote/RemoteUrlPolicy.html#MAX_REDIRECT_HOPS"><code>RemoteUrlPolicy.MAX_REDIRECT_HOPS</code></a> hops.
 
  <p>
- Caller-set credential headers (<a href="RedirectSecurity.html#stripOnCrossOrigin()"><code>RedirectSecurity.stripOnCrossOrigin()</code></a>, matched case-insensitively) are
+ Caller-set headers other than the content-negotiation and framing headers on <a href="RedirectSecurity.html#forwardOnCrossOrigin()"><code>RedirectSecurity.forwardOnCrossOrigin()</code></a>
+ (and any added with <code>redirectForwardHeaders</code>), matched case-insensitively, are
  carried to a hop only when it is the same origin as the <em>first</em> request in the chain and not an <code>https</code>
  &rarr; <code>http</code> downgrade (see <a href="RedirectSecurity.html#shouldStripCredentials(java.net.URI,java.net.URI)"><code>RedirectSecurity.shouldStripCredentials(URI, URI)</code></a>); otherwise they are
  dropped for that hop.  A hop that returns to the first origin gets them back, but only when its method is <code>GET</code> or <code>HEAD</code>

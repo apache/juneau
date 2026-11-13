@@ -77,44 +77,54 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the exact origins a WebSocket handshake may carry when no boundary is set.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#authorizer(java.util.function.BiPredicate)" class="member-name-link">authorizer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiPredicate.html" title="class or interface in java.util.function" class="external-link">BiPredicate</a>&lt;jakarta.servlet.http.HttpServletRequest,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#anyCaller()" class="member-name-link">anyCaller</a>()</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Grants every declared topic to any caller that can reach the bus endpoints.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#authorizer(java.util.function.BiPredicate)" class="member-name-link">authorizer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiPredicate.html" title="class or interface in java.util.function" class="external-link">BiPredicate</a>&lt;jakarta.servlet.http.HttpServletRequest,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets a per-request, per-topic authorizer, consulted for every requested topic at session open.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#boundary(org.apache.juneau.rest.server.filter.RequestBoundary)" class="member-name-link">boundary</a><wbr>(<a href="../../../rest/server/filter/RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter">RequestBoundary</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#boundary(org.apache.juneau.rest.server.filter.RequestBoundary)" class="member-name-link">boundary</a><wbr>(<a href="../../../rest/server/filter/RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter">RequestBoundary</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the request boundary.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BusPolicy.</span><code><a href="../BusPolicy.html#create()" class="member-name-link">create</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static <a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BusPolicy.</span><code><a href="../BusPolicy.html#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Creates a new builder.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#downstream(java.lang.String,boolean)" class="member-name-link">downstream</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topicPattern,
+<div class="col-first odd-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#downstream(java.lang.String,boolean)" class="member-name-link">downstream</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topicPattern,
  boolean&nbsp;retain)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Allows a topic pattern downstream (server → page).</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#heartbeat(java.time.Duration)" class="member-name-link">heartbeat</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#maxFrameBytes(int)" class="member-name-link">maxFrameBytes</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#heartbeat(java.time.Duration)" class="member-name-link">heartbeat</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#maxQueuedFrames(int)" class="member-name-link">maxQueuedFrames</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#maxFrameBytes(int)" class="member-name-link">maxFrameBytes</a><wbr>(int&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#maxSessionAge(java.time.Duration)" class="member-name-link">maxSessionAge</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#maxQueuedFrames(int)" class="member-name-link">maxQueuedFrames</a><wbr>(int&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#maxSessions(int)" class="member-name-link">maxSessions</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#maxSessionAge(java.time.Duration)" class="member-name-link">maxSessionAge</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#maxUpstreamPerSecond(int)" class="member-name-link">maxUpstreamPerSecond</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#maxSessions(int)" class="member-name-link">maxSessions</a><wbr>(int&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#maxUpstreamPerSecond(int)" class="member-name-link">maxUpstreamPerSecond</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#noSameOriginCheck()" class="member-name-link">noSameOriginCheck</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Turns off the default same-origin check applied when no boundary is set.</div>
+</div>
 <div class="col-first odd-row-color"><code><a href="../BusPolicy.Builder.html" title="class in org.apache.juneau.console.bus">BusPolicy.Builder</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">BusPolicy.Builder.</span><code><a href="../BusPolicy.Builder.html#sessionAttributes(java.util.function.Function)" class="member-name-link">sessionAttributes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;jakarta.servlet.http.HttpServletRequest,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;value)</code></div>
 <div class="col-last odd-row-color">

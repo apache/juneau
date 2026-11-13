@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-60">McpMrtrConfig</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-57">McpMrtrConfig</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Binding-owned MRTR (Multi-Round-Trip Request) configuration for a v2 <a href="McpRevision.html" title="class in org.apache.juneau.rest.server.mcp.v20260728"><code>McpRevision</code></a>.
 
@@ -96,24 +96,21 @@ loadScripts(document, 'script');</script>
 
  <p>
  Defaults: <a href="AeadRequestStateCodec.html" title="class in org.apache.juneau.rest.server.mcp.v20260728"><code>AeadRequestStateCodec</code></a> (a fresh instance per <a href="McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728"><code>McpMrtrConfig</code></a>), a 5-minute
- <code>requestState</code> TTL, a max-rounds cap of 10, no <a href="../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent"><code>ReplayCache</code></a> (replay rejection is opt-in; see
+ <code>requestState</code> TTL, a max-rounds cap of 10, a per-process <a href="../../../../commons/concurrent/InMemoryReplayCache.html" title="class in org.apache.juneau.commons.concurrent"><code>InMemoryReplayCache</code></a> (single-use tokens; see
  <a href="#setReplayCache(org.apache.juneau.commons.concurrent.ReplayCache)"><code>setReplayCache(ReplayCache)</code></a>), and a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html#systemUTC()" title="class or interface in java.time" class="external-link"><code>Clock.systemUTC()</code></a> clock for stamping and checking token
  expiry (see <a href="#setClock(java.time.Clock)"><code>setClock(Clock)</code></a>). Operators inject a shared/rotating-key <a href="RequestStateCodec.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728"><code>RequestStateCodec</code></a> here
  for multi-instance or restart-durable resumption.
 
  <h2 class='section'>Trust model:</h2>
  <ul>
-   <li><b><code>requestState</code> is a bearer token.</b> Anyone holding a sealed <code>requestState</code> can resume
-      the paused operation until it expires; the token is not bound to a caller identity. It must be
+   <li><b><code>requestState</code> is a bearer token for its principal.</b> Anyone holding a sealed <code>requestState</code>
+      and authenticated as the same principal can resume the paused operation until it expires. It must be
       transported only over authenticated TLS and <b>never logged</b> (it is opaque ciphertext, but logging
       it hands a replayable credential to anyone with log access). See <a href="RequestStateCodec.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728"><code>RequestStateCodec</code></a>.
-   <li><b>Resume side effects must be idempotent by default.</b> A captured token can be replayed any number
-      of times within its <a href="#getTtlMs()"><code>TTL</code></a> <i>unless</i> a <a href="../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent"><code>ReplayCache</code></a> is configured (see
-      <a href="#setReplayCache(org.apache.juneau.commons.concurrent.ReplayCache)"><code>setReplayCache(ReplayCache)</code></a>) to enforce single-use &mdash; the built-in
-      <a href="../../../../commons/concurrent/InMemoryReplayCache.html" title="class in org.apache.juneau.commons.concurrent"><code>InMemoryReplayCache</code></a> is per-process only, so cross-node single-use requires a shared
-      implementation. The <a href="#getMaxRounds()"><code>max-rounds cap</code></a> bounds the <i>depth</i> of a single resume
-      chain, not the total number of times a given token can be re-submitted, so a handler must not treat a
-      resume as a once-only event unless it knows single-use is enforced.
+   <li><b>Single-use by default.</b> The default <a href="../../../../commons/concurrent/InMemoryReplayCache.html" title="class in org.apache.juneau.commons.concurrent"><code>InMemoryReplayCache</code></a> rejects a second submission of the same
+      token within its <a href="#getTtlMs()"><code>TTL</code></a>; it is per-process only, so cross-node single-use requires a shared
+      <a href="../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent"><code>ReplayCache</code></a> (see <a href="#setReplayCache(org.apache.juneau.commons.concurrent.ReplayCache)"><code>setReplayCache(ReplayCache)</code></a>). Passing <jk>null</jk> disables the check, and
+      a handler must then write idempotent resume side effects.
  </ul></div>
 </section>
 <section class="summary">
@@ -240,7 +237,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_TTL_MS">
 <h3>DEFAULT_TTL_MS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-63">DEFAULT_TTL_MS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-60">DEFAULT_TTL_MS</a></span></div>
 <div class="block">Default <code>requestState</code> TTL in milliseconds: 5 minutes.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -255,7 +252,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_MAX_ROUNDS">
 <h3>DEFAULT_MAX_ROUNDS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-66">DEFAULT_MAX_ROUNDS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-63">DEFAULT_MAX_ROUNDS</a></span></div>
 <div class="block">Default max-rounds cap.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -278,7 +275,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>McpMrtrConfig</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-60">McpMrtrConfig</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-57">McpMrtrConfig</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -292,7 +289,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getCodec()">
 <h3>getCodec</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestStateCodec.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728">RequestStateCodec</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-79">getCodec</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestStateCodec.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728">RequestStateCodec</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-76">getCodec</a></span>()</div>
 <div class="block">The codec used to seal/unseal <code>requestState</code> tokens.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -303,7 +300,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setCodec(org.apache.juneau.rest.server.mcp.v20260728.RequestStateCodec)">
 <h3>setCodec</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpMrtrConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-90">setCodec</a></span><wbr><span class="parameters">(<a href="RequestStateCodec.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728">RequestStateCodec</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpMrtrConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-87">setCodec</a></span><wbr><span class="parameters">(<a href="RequestStateCodec.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728">RequestStateCodec</a>&nbsp;value)</span></div>
 <div class="block">Sets the codec.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -318,7 +315,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setKeyProvider(org.apache.juneau.rest.server.mcp.v20260728.KeyProvider)">
 <h3>setKeyProvider</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpMrtrConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-111">setKeyProvider</a></span><wbr><span class="parameters">(<a href="KeyProvider.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728">KeyProvider</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpMrtrConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-108">setKeyProvider</a></span><wbr><span class="parameters">(<a href="KeyProvider.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728">KeyProvider</a>&nbsp;value)</span></div>
 <div class="block">Sets the key provider, wrapping it in a fresh <a href="AeadRequestStateCodec.html" title="class in org.apache.juneau.rest.server.mcp.v20260728"><code>AeadRequestStateCodec</code></a>.
 
  <p>
@@ -340,7 +337,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTtlMs()">
 <h3>getTtlMs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-122">getTtlMs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-119">getTtlMs</a></span>()</div>
 <div class="block">The <code>requestState</code> time-to-live in milliseconds.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -351,7 +348,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setTtlMs(long)">
 <h3>setTtlMs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpMrtrConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-133">setTtlMs</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpMrtrConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-130">setTtlMs</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
 <div class="block">Sets the TTL.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -366,7 +363,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMaxRounds()">
 <h3>getMaxRounds</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-149">getMaxRounds</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-146">getMaxRounds</a></span>()</div>
 <div class="block">The max-rounds cap.
 
  <p>
@@ -381,7 +378,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setMaxRounds(int)">
 <h3>setMaxRounds</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpMrtrConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-160">setMaxRounds</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpMrtrConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-157">setMaxRounds</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
 <div class="block">Sets the max-rounds cap.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -396,31 +393,31 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getReplayCache()">
 <h3>getReplayCache</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent">ReplayCache</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-179">getReplayCache</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent">ReplayCache</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-176">getReplayCache</a></span>()</div>
 <div class="block">The <a href="../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent"><code>ReplayCache</code></a> used to reject reuse of a consumed <code>requestState</code> token, or <jk>null</jk> if
  none is configured.
 
  <p>
- <b>Unset (<jk>null</jk>) by default &mdash; replay rejection is opt-in.</b> A dispatcher only performs a
- replay check when this returns non-<jk>null</jk> (see <code>McpRevision#resolveMrtrContext</code>); with no
- <a href="../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent"><code>ReplayCache</code></a> configured, a <code>requestState</code> token remains multi-use within its TTL, exactly as
- documented on <a href="RequestStateCodec.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728"><code>RequestStateCodec</code></a>.</div>
+ <b>A per-process <a href="../../../../commons/concurrent/InMemoryReplayCache.html" title="class in org.apache.juneau.commons.concurrent"><code>InMemoryReplayCache</code></a> by default</b>, so a <code>requestState</code> token is single-use.
+ A dispatcher only performs a replay check when this returns non-<jk>null</jk> (see
+ <code>McpRevision#resolveMrtrContext</code>); a deployment that runs several nodes should supply a shared
+ implementation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The configured replay cache, or <jk>null</jk> if replay rejection is disabled (the default).</dd>
+<dd>The configured replay cache, or <jk>null</jk> if replay rejection was explicitly disabled.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="setReplayCache(org.apache.juneau.commons.concurrent.ReplayCache)">
 <h3>setReplayCache</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpMrtrConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-194">setReplayCache</a></span><wbr><span class="parameters">(<a href="../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent">ReplayCache</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpMrtrConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-191">setReplayCache</a></span><wbr><span class="parameters">(<a href="../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent">ReplayCache</a>&nbsp;value)</span></div>
 <div class="block">Sets the replay cache, enabling replay rejection.
 
  <p>
- Passing <jk>null</jk> is allowed and explicitly reverts to the default, opt-out behavior (no replay check;
- a token stays multi-use within its TTL) &mdash; unlike <a href="#setCodec(org.apache.juneau.rest.server.mcp.v20260728.RequestStateCodec)"><code>setCodec(RequestStateCodec)</code></a>, there is no
- always-non-null invariant to preserve here, since "no replay cache" is itself the documented default.</div>
+ Passing <jk>null</jk> is allowed and explicitly disables replay rejection (a token then stays multi-use
+ within its TTL) &mdash; unlike <a href="#setCodec(org.apache.juneau.rest.server.mcp.v20260728.RequestStateCodec)"><code>setCodec(RequestStateCodec)</code></a>, there is no always-non-null invariant to
+ preserve here.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The replay cache to use, or <jk>null</jk> to disable replay rejection.</dd>
@@ -432,7 +429,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getClock()">
 <h3>getClock</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-204">getClock</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-201">getClock</a></span>()</div>
 <div class="block">The clock used to stamp a new <code>requestState</code>'s expiry and to check an echoed one against it.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -443,7 +440,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setClock(java.time.Clock)">
 <h3>setClock</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpMrtrConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-220">setClock</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpMrtrConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#line-217">setClock</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</span></div>
 <div class="block">Sets the clock.
 
  <p>

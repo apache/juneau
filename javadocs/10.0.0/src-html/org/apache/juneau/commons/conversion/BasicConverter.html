@@ -262,7 +262,7 @@
 <span class="source-line-no">249</span><span id="line-249">      if (outType == Byte.class) return (in, memberOf, session, args) -&gt; (O) Byte.valueOf(((Number) in).byteValue());</span>
 <span class="source-line-no">250</span><span id="line-250">      if (outType == AtomicInteger.class) return (in, memberOf, session, args) -&gt; (O) new AtomicInteger(((Number) in).intValue());</span>
 <span class="source-line-no">251</span><span id="line-251">      if (outType == AtomicLong.class) return (in, memberOf, session, args) -&gt; (O) new AtomicLong(((Number) in).longValue());</span>
-<span class="source-line-no">252</span><span id="line-252">      if (outType == BigDecimal.class) return (in, memberOf, session, args) -&gt; (O) new BigDecimal(in.toString());</span>
+<span class="source-line-no">252</span><span id="line-252">      if (outType == BigDecimal.class) return (in, memberOf, session, args) -&gt; (O) parseBigDecimal(in.toString());</span>
 <span class="source-line-no">253</span><span id="line-253">      if (outType == BigInteger.class) return (in, memberOf, session, args) -&gt; {</span>
 <span class="source-line-no">254</span><span id="line-254">         var n = (Number) in;</span>
 <span class="source-line-no">255</span><span id="line-255">         if (n instanceof BigDecimal n2) return (O) n2.toBigInteger();</span>

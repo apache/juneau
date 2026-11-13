@@ -108,7 +108,7 @@
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String get(Microservice ms, String path) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> port = ms.getBeanStore().getBean(TomcatServerComponent.<strong class="jxr_keyword">class</strong>).orElseThrow().getPort();
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> conn = (HttpURLConnection)URI.create(<span class="jxr_string">"http://localhost:"</span> + port + path).toURL().openConnection();
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> conn = (HttpURLConnection)URI.create(<span class="jxr_string">"http://127.0.0.1:"</span> + port + path).toURL().openConnection();
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		conn.setRequestProperty(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"text/plain"</span>);
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		conn.setConnectTimeout(5000);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		conn.setReadTimeout(10000);

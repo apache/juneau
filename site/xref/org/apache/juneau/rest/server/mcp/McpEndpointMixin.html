@@ -113,20 +113,21 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@SerializerConfig(addBeanTypes = <span class="jxr_string">"true"</span>, uriResolution = <span class="jxr_string">"NONE"</span>)
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@RestPost(path = <span class="jxr_string">"/mcp"</span>)
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">default</strong> Object handleMcpRequest(@Content <a name="JsonRpcRequest" href="../../../../../../org/apache/juneau/bean/jsonrpc/JsonRpcRequest.html#JsonRpcRequest">JsonRpcRequest</a> req, RestRequest restReq) {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> bs = <strong class="jxr_keyword">new</strong> BasicBeanStore(restReq.getContext().getBeanStore())
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			.addBean(RestRequest.<strong class="jxr_keyword">class</strong>, restReq);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">var</strong> broker = subscriptionBroker();
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">if</strong> (broker != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			bs.addBean(McpSubscriptionBroker.<strong class="jxr_keyword">class</strong>, broker).addBean(McpSubscriptions.<strong class="jxr_keyword">class</strong>, broker);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> exchange = <strong class="jxr_keyword">new</strong> <a name="McpExchange" href="../../../../../../org/apache/juneau/rest/server/mcp/McpExchange.html#McpExchange">McpExchange</a>(req, n -&gt; restReq.getHeaderParam(n).asString().orElse(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">var</strong> result = revision().dispatch(exchange, getMcpConfig(), bs);
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">if</strong> (result instanceof <a name="McpResponseResult" href="../../../../../../org/apache/juneau/rest/server/mcp/McpResponseResult.html#McpResponseResult">McpResponseResult</a> r)
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<strong class="jxr_keyword">return</strong> r.response();
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">if</strong> (result instanceof <a name="McpStreamResult" href="../../../../../../org/apache/juneau/rest/server/mcp/McpStreamResult.html#McpStreamResult">McpStreamResult</a> r)
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			<strong class="jxr_keyword">return</strong> r.stream();
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	}
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> }
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		McpRequestPolicy.check(getMcpConfig(), restReq);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> bs = <strong class="jxr_keyword">new</strong> BasicBeanStore(restReq.getContext().getBeanStore())
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			.addBean(RestRequest.<strong class="jxr_keyword">class</strong>, restReq);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">var</strong> broker = subscriptionBroker();
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">if</strong> (broker != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			bs.addBean(McpSubscriptionBroker.<strong class="jxr_keyword">class</strong>, broker).addBean(McpSubscriptions.<strong class="jxr_keyword">class</strong>, broker);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">var</strong> exchange = <strong class="jxr_keyword">new</strong> <a name="McpExchange" href="../../../../../../org/apache/juneau/rest/server/mcp/McpExchange.html#McpExchange">McpExchange</a>(req, n -&gt; restReq.getHeaderParam(n).asString().orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">var</strong> result = revision().dispatch(exchange, getMcpConfig(), bs);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">if</strong> (result instanceof <a name="McpResponseResult" href="../../../../../../org/apache/juneau/rest/server/mcp/McpResponseResult.html#McpResponseResult">McpResponseResult</a> r)
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">return</strong> r.response();
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">if</strong> (result instanceof <a name="McpStreamResult" href="../../../../../../org/apache/juneau/rest/server/mcp/McpStreamResult.html#McpStreamResult">McpStreamResult</a> r)
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			<strong class="jxr_keyword">return</strong> r.stream();
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

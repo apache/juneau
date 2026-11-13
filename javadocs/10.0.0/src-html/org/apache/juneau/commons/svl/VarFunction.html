@@ -51,101 +51,102 @@
 <span class="source-line-no">038</span><span id="line-38"> *</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * Implementations can register through any of four discovery channels (later wins on name</span>
-<span class="source-line-no">041</span><span id="line-41"> * collision):</span>
+<span class="source-line-no">041</span><span id="line-41"> * collision, except that {@code ServiceLoader} entries never replace an existing function):</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;ol&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;The built-in catalog auto-registered by {@link VarResolver#DEFAULT}.</span>
-<span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;{@code META-INF/services/org.apache.juneau.commons.svl.VarFunction} (Java {@link java.util.ServiceLoader}).</span>
-<span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;{@code BeanStore.getBeans(VarFunction.class)} on the resolver's bean store.</span>
-<span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;Explicit registrations via {@code VarResolver.Builder.functions(...)}.</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;/ol&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;p&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> * For typed reflection-based dispatch (the recommended path), extend</span>
-<span class="source-line-no">051</span><span id="line-51"> * {@link TypedFunction} — it derives {@link #minArity()}, {@link #maxArity()}, and per-arg</span>
-<span class="source-line-no">052</span><span id="line-52"> * coercion automatically from the subclass's {@code invoke(...)} method signature, eliminating</span>
-<span class="source-line-no">053</span><span id="line-53"> * the per-function plumbing.</span>
-<span class="source-line-no">054</span><span id="line-54"> *</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">057</span><span id="line-57"> *    &lt;jc&gt;// Direct VarFunction impl (less common — TypedFunction is preferred).&lt;/jc&gt;</span>
-<span class="source-line-no">058</span><span id="line-58"> *    &lt;jk&gt;public class&lt;/jk&gt; Reverse &lt;jk&gt;implements&lt;/jk&gt; VarFunction {</span>
-<span class="source-line-no">059</span><span id="line-59"> *       &lt;ja&gt;@Override&lt;/ja&gt; &lt;jk&gt;public&lt;/jk&gt; String name() { &lt;jk&gt;return&lt;/jk&gt; &lt;js&gt;"reverse"&lt;/js&gt;; }</span>
-<span class="source-line-no">060</span><span id="line-60"> *       &lt;ja&gt;@Override&lt;/ja&gt; &lt;jk&gt;public int&lt;/jk&gt; minArity() { &lt;jk&gt;return&lt;/jk&gt; 1; }</span>
-<span class="source-line-no">061</span><span id="line-61"> *       &lt;ja&gt;@Override&lt;/ja&gt; &lt;jk&gt;public int&lt;/jk&gt; maxArity() { &lt;jk&gt;return&lt;/jk&gt; 1; }</span>
-<span class="source-line-no">062</span><span id="line-62"> *       &lt;ja&gt;@Override&lt;/ja&gt; &lt;jk&gt;public&lt;/jk&gt; String invoke(VarResolverSession &lt;jv&gt;session&lt;/jv&gt;, List&amp;lt;Object&amp;gt; &lt;jv&gt;args&lt;/jv&gt;) {</span>
-<span class="source-line-no">063</span><span id="line-63"> *          &lt;jk&gt;return new&lt;/jk&gt; StringBuilder((String) &lt;jv&gt;args&lt;/jv&gt;.get(0)).reverse().toString();</span>
-<span class="source-line-no">064</span><span id="line-64"> *       }</span>
-<span class="source-line-no">065</span><span id="line-65"> *    }</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;/p&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage"&gt;Marshall Simple Variable Language&lt;/a&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> *    &lt;li class='jc'&gt;{@link TypedFunction}</span>
-<span class="source-line-no">071</span><span id="line-71"> * &lt;/ul&gt;</span>
-<span class="source-line-no">072</span><span id="line-72"> */</span>
-<span class="source-line-no">073</span><span id="line-73">public interface VarFunction {</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">   /**</span>
-<span class="source-line-no">076</span><span id="line-76">    * The function's invocation name as it appears between {@code #{}} and the opening</span>
-<span class="source-line-no">077</span><span id="line-77">    * parenthesis in the template. Must consist of ASCII letters, digits, and underscores; must</span>
-<span class="source-line-no">078</span><span id="line-78">    * begin with a letter.</span>
-<span class="source-line-no">079</span><span id="line-79">    *</span>
-<span class="source-line-no">080</span><span id="line-80">    * @return The invocation name. Never {@code null} or empty.</span>
-<span class="source-line-no">081</span><span id="line-81">    */</span>
-<span class="source-line-no">082</span><span id="line-82">   String name();</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">   /**</span>
-<span class="source-line-no">085</span><span id="line-85">    * Minimum argument count this function accepts.</span>
-<span class="source-line-no">086</span><span id="line-86">    *</span>
-<span class="source-line-no">087</span><span id="line-87">    * @return The minimum number of args. {@code 0} means the function may be called with no</span>
-<span class="source-line-no">088</span><span id="line-88">    *  args. Returns {@code -1} for "any number of args" — equivalent to declaring</span>
-<span class="source-line-no">089</span><span id="line-89">    *  {@code minArity == 0 &amp;&amp; maxArity == Integer.MAX_VALUE}.</span>
-<span class="source-line-no">090</span><span id="line-90">    */</span>
-<span class="source-line-no">091</span><span id="line-91">   int minArity();</span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   /**</span>
-<span class="source-line-no">094</span><span id="line-94">    * Maximum argument count this function accepts.</span>
-<span class="source-line-no">095</span><span id="line-95">    *</span>
-<span class="source-line-no">096</span><span id="line-96">    * @return The maximum number of args, or {@link Integer#MAX_VALUE} for unbounded variadic</span>
-<span class="source-line-no">097</span><span id="line-97">    *  functions.</span>
-<span class="source-line-no">098</span><span id="line-98">    */</span>
-<span class="source-line-no">099</span><span id="line-99">   int maxArity();</span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">   /**</span>
-<span class="source-line-no">102</span><span id="line-102">    * Invokes this function with already-resolved, type-coerced arguments.</span>
-<span class="source-line-no">103</span><span id="line-103">    *</span>
-<span class="source-line-no">104</span><span id="line-104">    * &lt;p&gt;</span>
-<span class="source-line-no">105</span><span id="line-105">    * The runtime resolves each {@code #{...}} arg template against the session, then coerces</span>
-<span class="source-line-no">106</span><span id="line-106">    * the resolved string to the target Java type via {@code ArgCoercer}. The resulting</span>
-<span class="source-line-no">107</span><span id="line-107">    * {@code List&lt;Object&gt;} is passed in here.</span>
-<span class="source-line-no">108</span><span id="line-108">    *</span>
-<span class="source-line-no">109</span><span id="line-109">    * @param session The current resolver session. Must not be {@code null}.</span>
-<span class="source-line-no">110</span><span id="line-110">    * @param args The coerced arguments. Size is in {@code [minArity(), maxArity()]}. Each</span>
-<span class="source-line-no">111</span><span id="line-111">    *  element is the type the function expects per its signature; for variadic /</span>
-<span class="source-line-no">112</span><span id="line-112">    *  {@code Object}-typed slots, elements remain {@link String}.</span>
-<span class="source-line-no">113</span><span id="line-113">    * @return The function's result as a {@link String}. May be empty but should not be</span>
-<span class="source-line-no">114</span><span id="line-114">    *  {@code null} (the runtime treats {@code null} as the empty string for SVL output).</span>
-<span class="source-line-no">115</span><span id="line-115">    */</span>
-<span class="source-line-no">116</span><span id="line-116">   String invoke(VarResolverSession session, List&lt;Object&gt; args);</span>
-<span class="source-line-no">117</span><span id="line-117"></span>
-<span class="source-line-no">118</span><span id="line-118">   /**</span>
-<span class="source-line-no">119</span><span id="line-119">    * Typed variant of {@link #invoke(VarResolverSession, List)} used by &lt;c&gt;#{...}&lt;/c&gt; expressions.</span>
-<span class="source-line-no">120</span><span id="line-120">    *</span>
-<span class="source-line-no">121</span><span id="line-121">    * &lt;p&gt;</span>
-<span class="source-line-no">122</span><span id="line-122">    * The default delegates to {@link #invoke(VarResolverSession, List)}.</span>
-<span class="source-line-no">123</span><span id="line-123">    *</span>
-<span class="source-line-no">124</span><span id="line-124">    * @param session The session.</span>
-<span class="source-line-no">125</span><span id="line-125">    * @param args The already-evaluated arguments (typed values, not necessarily strings).</span>
-<span class="source-line-no">126</span><span id="line-126">    * @return The result; &lt;jk&gt;null&lt;/jk&gt; means absent.</span>
-<span class="source-line-no">127</span><span id="line-127">    * @throws Exception Function-specific failure.</span>
-<span class="source-line-no">128</span><span id="line-128">    */</span>
-<span class="source-line-no">129</span><span id="line-129">   @SuppressWarnings({</span>
-<span class="source-line-no">130</span><span id="line-130">      "java:S112" // Functions may fail with any checked exception; this is the public contract</span>
-<span class="source-line-no">131</span><span id="line-131">   })</span>
-<span class="source-line-no">132</span><span id="line-132">   default Object invokeValue(VarResolverSession session, List&lt;Object&gt; args) throws Exception {</span>
-<span class="source-line-no">133</span><span id="line-133">      return invoke(session, args);</span>
-<span class="source-line-no">134</span><span id="line-134">   }</span>
-<span class="source-line-no">135</span><span id="line-135">}</span>
+<span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;{@code META-INF/services/org.apache.juneau.commons.svl.VarFunction} (Java {@link ServiceLoader}),</span>
+<span class="source-line-no">045</span><span id="line-45"> *       only when the resolver is built with {@code VarResolver.Builder.loadServices()}.</span>
+<span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;{@code BeanStore.getBeans(VarFunction.class)} on the resolver's bean store.</span>
+<span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;Explicit registrations via {@code VarResolver.Builder.functions(...)}.</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;/ol&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> *</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;p&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> * For typed reflection-based dispatch (the recommended path), extend</span>
+<span class="source-line-no">052</span><span id="line-52"> * {@link TypedFunction} — it derives {@link #minArity()}, {@link #maxArity()}, and per-arg</span>
+<span class="source-line-no">053</span><span id="line-53"> * coercion automatically from the subclass's {@code invoke(...)} method signature, eliminating</span>
+<span class="source-line-no">054</span><span id="line-54"> * the per-function plumbing.</span>
+<span class="source-line-no">055</span><span id="line-55"> *</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> *    &lt;jc&gt;// Direct VarFunction impl (less common — TypedFunction is preferred).&lt;/jc&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> *    &lt;jk&gt;public class&lt;/jk&gt; Reverse &lt;jk&gt;implements&lt;/jk&gt; VarFunction {</span>
+<span class="source-line-no">060</span><span id="line-60"> *       &lt;ja&gt;@Override&lt;/ja&gt; &lt;jk&gt;public&lt;/jk&gt; String name() { &lt;jk&gt;return&lt;/jk&gt; &lt;js&gt;"reverse"&lt;/js&gt;; }</span>
+<span class="source-line-no">061</span><span id="line-61"> *       &lt;ja&gt;@Override&lt;/ja&gt; &lt;jk&gt;public int&lt;/jk&gt; minArity() { &lt;jk&gt;return&lt;/jk&gt; 1; }</span>
+<span class="source-line-no">062</span><span id="line-62"> *       &lt;ja&gt;@Override&lt;/ja&gt; &lt;jk&gt;public int&lt;/jk&gt; maxArity() { &lt;jk&gt;return&lt;/jk&gt; 1; }</span>
+<span class="source-line-no">063</span><span id="line-63"> *       &lt;ja&gt;@Override&lt;/ja&gt; &lt;jk&gt;public&lt;/jk&gt; String invoke(VarResolverSession &lt;jv&gt;session&lt;/jv&gt;, List&amp;lt;Object&amp;gt; &lt;jv&gt;args&lt;/jv&gt;) {</span>
+<span class="source-line-no">064</span><span id="line-64"> *          &lt;jk&gt;return new&lt;/jk&gt; StringBuilder((String) &lt;jv&gt;args&lt;/jv&gt;.get(0)).reverse().toString();</span>
+<span class="source-line-no">065</span><span id="line-65"> *       }</span>
+<span class="source-line-no">066</span><span id="line-66"> *    }</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;/p&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage"&gt;Marshall Simple Variable Language&lt;/a&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> *    &lt;li class='jc'&gt;{@link TypedFunction}</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;/ul&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> */</span>
+<span class="source-line-no">074</span><span id="line-74">public interface VarFunction {</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">   /**</span>
+<span class="source-line-no">077</span><span id="line-77">    * The function's invocation name as it appears between {@code #{}} and the opening</span>
+<span class="source-line-no">078</span><span id="line-78">    * parenthesis in the template. Must consist of ASCII letters, digits, and underscores; must</span>
+<span class="source-line-no">079</span><span id="line-79">    * begin with a letter.</span>
+<span class="source-line-no">080</span><span id="line-80">    *</span>
+<span class="source-line-no">081</span><span id="line-81">    * @return The invocation name. Never {@code null} or empty.</span>
+<span class="source-line-no">082</span><span id="line-82">    */</span>
+<span class="source-line-no">083</span><span id="line-83">   String name();</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">   /**</span>
+<span class="source-line-no">086</span><span id="line-86">    * Minimum argument count this function accepts.</span>
+<span class="source-line-no">087</span><span id="line-87">    *</span>
+<span class="source-line-no">088</span><span id="line-88">    * @return The minimum number of args. {@code 0} means the function may be called with no</span>
+<span class="source-line-no">089</span><span id="line-89">    *  args. Returns {@code -1} for "any number of args" — equivalent to declaring</span>
+<span class="source-line-no">090</span><span id="line-90">    *  {@code minArity == 0 &amp;&amp; maxArity == Integer.MAX_VALUE}.</span>
+<span class="source-line-no">091</span><span id="line-91">    */</span>
+<span class="source-line-no">092</span><span id="line-92">   int minArity();</span>
+<span class="source-line-no">093</span><span id="line-93"></span>
+<span class="source-line-no">094</span><span id="line-94">   /**</span>
+<span class="source-line-no">095</span><span id="line-95">    * Maximum argument count this function accepts.</span>
+<span class="source-line-no">096</span><span id="line-96">    *</span>
+<span class="source-line-no">097</span><span id="line-97">    * @return The maximum number of args, or {@link Integer#MAX_VALUE} for unbounded variadic</span>
+<span class="source-line-no">098</span><span id="line-98">    *  functions.</span>
+<span class="source-line-no">099</span><span id="line-99">    */</span>
+<span class="source-line-no">100</span><span id="line-100">   int maxArity();</span>
+<span class="source-line-no">101</span><span id="line-101"></span>
+<span class="source-line-no">102</span><span id="line-102">   /**</span>
+<span class="source-line-no">103</span><span id="line-103">    * Invokes this function with already-resolved, type-coerced arguments.</span>
+<span class="source-line-no">104</span><span id="line-104">    *</span>
+<span class="source-line-no">105</span><span id="line-105">    * &lt;p&gt;</span>
+<span class="source-line-no">106</span><span id="line-106">    * The runtime resolves each {@code #{...}} arg template against the session, then coerces</span>
+<span class="source-line-no">107</span><span id="line-107">    * the resolved string to the target Java type via {@code ArgCoercer}. The resulting</span>
+<span class="source-line-no">108</span><span id="line-108">    * {@code List&lt;Object&gt;} is passed in here.</span>
+<span class="source-line-no">109</span><span id="line-109">    *</span>
+<span class="source-line-no">110</span><span id="line-110">    * @param session The current resolver session. Must not be {@code null}.</span>
+<span class="source-line-no">111</span><span id="line-111">    * @param args The coerced arguments. Size is in {@code [minArity(), maxArity()]}. Each</span>
+<span class="source-line-no">112</span><span id="line-112">    *  element is the type the function expects per its signature; for variadic /</span>
+<span class="source-line-no">113</span><span id="line-113">    *  {@code Object}-typed slots, elements remain {@link String}.</span>
+<span class="source-line-no">114</span><span id="line-114">    * @return The function's result as a {@link String}. May be empty but should not be</span>
+<span class="source-line-no">115</span><span id="line-115">    *  {@code null} (the runtime treats {@code null} as the empty string for SVL output).</span>
+<span class="source-line-no">116</span><span id="line-116">    */</span>
+<span class="source-line-no">117</span><span id="line-117">   String invoke(VarResolverSession session, List&lt;Object&gt; args);</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">   /**</span>
+<span class="source-line-no">120</span><span id="line-120">    * Typed variant of {@link #invoke(VarResolverSession, List)} used by &lt;c&gt;#{...}&lt;/c&gt; expressions.</span>
+<span class="source-line-no">121</span><span id="line-121">    *</span>
+<span class="source-line-no">122</span><span id="line-122">    * &lt;p&gt;</span>
+<span class="source-line-no">123</span><span id="line-123">    * The default delegates to {@link #invoke(VarResolverSession, List)}.</span>
+<span class="source-line-no">124</span><span id="line-124">    *</span>
+<span class="source-line-no">125</span><span id="line-125">    * @param session The session.</span>
+<span class="source-line-no">126</span><span id="line-126">    * @param args The already-evaluated arguments (typed values, not necessarily strings).</span>
+<span class="source-line-no">127</span><span id="line-127">    * @return The result; &lt;jk&gt;null&lt;/jk&gt; means absent.</span>
+<span class="source-line-no">128</span><span id="line-128">    * @throws Exception Function-specific failure.</span>
+<span class="source-line-no">129</span><span id="line-129">    */</span>
+<span class="source-line-no">130</span><span id="line-130">   @SuppressWarnings({</span>
+<span class="source-line-no">131</span><span id="line-131">      "java:S112" // Functions may fail with any checked exception; this is the public contract</span>
+<span class="source-line-no">132</span><span id="line-132">   })</span>
+<span class="source-line-no">133</span><span id="line-133">   default Object invokeValue(VarResolverSession session, List&lt;Object&gt; args) throws Exception {</span>
+<span class="source-line-no">134</span><span id="line-134">      return invoke(session, args);</span>
+<span class="source-line-no">135</span><span id="line-135">   }</span>
+<span class="source-line-no">136</span><span id="line-136">}</span>
 
 
 

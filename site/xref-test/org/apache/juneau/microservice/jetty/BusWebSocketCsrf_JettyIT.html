@@ -142,7 +142,7 @@
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		server.addConnector(h2c);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 		boundary = CsrfBoundary.create().tokens(CsrfTokens.perProcess()).build();
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		bus = ServerBus.create(BusPolicy.create()
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		bus = ServerBus.create(BusPolicy.create().anyCaller()
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 			.downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 			.boundary(boundary)
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 			.build());
@@ -542,7 +542,7 @@
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 		conn.setPort(0);
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 		srv.addConnector(conn);
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> 		conn.open();
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">var</strong> b = ServerBus.create(BusPolicy.create().downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>).boundary(boundaryFor.apply(conn.getLocalPort())).build());
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">var</strong> b = ServerBus.create(BusPolicy.create().anyCaller().downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>).boundary(boundaryFor.apply(conn.getLocalPort())).build());
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<strong class="jxr_keyword">var</strong> ctx = <strong class="jxr_keyword">new</strong> ServletContextHandler();
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 		ctx.setContextPath(<span class="jxr_string">"/"</span>);
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 		ctx.addServlet(<strong class="jxr_keyword">new</strong> ServletHolder(<strong class="jxr_keyword">new</strong> OwnBusRest(b)), <span class="jxr_string">"/rest/*"</span>);

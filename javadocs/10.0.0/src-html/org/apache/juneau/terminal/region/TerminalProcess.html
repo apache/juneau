@@ -38,839 +38,882 @@
 <span class="source-line-no">025</span><span id="line-25">import java.nio.*;</span>
 <span class="source-line-no">026</span><span id="line-26">import java.nio.channels.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import java.nio.file.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import java.util.*;</span>
-<span class="source-line-no">029</span><span id="line-29">import java.util.concurrent.*;</span>
-<span class="source-line-no">030</span><span id="line-30">import java.util.concurrent.atomic.*;</span>
-<span class="source-line-no">031</span><span id="line-31">import java.util.concurrent.locks.*;</span>
-<span class="source-line-no">032</span><span id="line-32">import java.util.logging.*;</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.marshall.json.JsonSerializer;</span>
-<span class="source-line-no">035</span><span id="line-35">import org.apache.juneau.marshall.marshaller.Json;</span>
-<span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.terminal.report.*;</span>
-<span class="source-line-no">037</span><span id="line-37">import org.apache.juneau.console.views.*;</span>
-<span class="source-line-no">038</span><span id="line-38"></span>
-<span class="source-line-no">039</span><span id="line-39">/**</span>
-<span class="source-line-no">040</span><span id="line-40"> * Runs one tool under a pseudo-terminal through {@code juneau_terminal.py --pty} and exposes its output as a</span>
-<span class="source-line-no">041</span><span id="line-41"> * {@link FileTerminalSource} and its steps as a {@link FileTerminalViewSource}.</span>
-<span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> * The command line is</span>
-<span class="source-line-no">045</span><span id="line-45"> * {@code python3 &lt;script&gt; --console none --pty --size &lt;cols&gt;x&lt;rows&gt; --full-log &lt;log&gt; --events &lt;events&gt; &lt;tool&gt; -- &lt;cmd...&gt;},</span>
-<span class="source-line-no">046</span><span id="line-46"> * with the log ({@value #LOG_NAME}), its {@code .size} sidecar and the events file ({@value #EVENTS_NAME}) in the</span>
-<span class="source-line-no">047</span><span id="line-47"> * given run directory.  The script is found through the system property {@value #SCRIPT_PROPERTY}, then the</span>
-<span class="source-line-no">048</span><span id="line-48"> * environment variable {@value #SCRIPT_ENV}.</span>
-<span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;p&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> * The run directory is single-use.  It is also the tool's working directory, and the runner's own stdout and stderr</span>
-<span class="source-line-no">052</span><span id="line-52"> * go to {@code runner.out} there, in append mode and uncapped; that file is diagnostic only.</span>
-<span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;p&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> * Both sources share one done flag, set once the process has exited.  If the runner exits without writing a</span>
-<span class="source-line-no">056</span><span id="line-56"> * {@code done} event, a warning {@code note} and {@code done {status:"fail"}} are appended first.  Only the last</span>
-<span class="source-line-no">057</span><span id="line-57"> * {@value #TAIL_BYTES} bytes of the events file are scanned for that {@code done} event, because the protocol puts it</span>
-<span class="source-line-no">058</span><span id="line-58"> * last.</span>
-<span class="source-line-no">059</span><span id="line-59"> *</span>
-<span class="source-line-no">060</span><span id="line-60"> * &lt;p&gt;</span>
-<span class="source-line-no">061</span><span id="line-61"> * The exit hook runs on one daemon thread per process, named {@code juneau-terminal-exit-&lt;pid&gt;}.  Its executor is</span>
-<span class="source-line-no">062</span><span id="line-62"> * shut down once the hook has run, and {@link #close()} waits for that.</span>
-<span class="source-line-no">063</span><span id="line-63"> *</span>
-<span class="source-line-no">064</span><span id="line-64"> * &lt;p&gt;</span>
-<span class="source-line-no">065</span><span id="line-65"> * Started with input on, the runner also gets {@code --input stdin} (right after the events pair) and the process is a</span>
-<span class="source-line-no">066</span><span id="line-66"> * {@link TerminalSink}: {@link #write(byte[])} queues the bytes in a {@value #INPUT_LIMIT}-byte pending buffer and never</span>
-<span class="source-line-no">067</span><span id="line-67"> * blocks, and one daemon thread per process, named {@code juneau-terminal-input-&lt;pid&gt;}, copies them to the runner's</span>
-<span class="source-line-no">068</span><span id="line-68"> * stdin, flushing after each chunk.  A closed or broken pipe turns {@link #acceptsInput()} false and discards the</span>
-<span class="source-line-no">069</span><span id="line-69"> * buffer.  With input off the command line and the streams are exactly as above, no writer thread starts, and</span>
-<span class="source-line-no">070</span><span id="line-70"> * {@link #acceptsInput()} is always false.</span>
-<span class="source-line-no">071</span><span id="line-71"> *</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;p&gt;</span>
-<span class="source-line-no">073</span><span id="line-73"> * Started with a {@link TerminalPrompts}, the runner gets {@code --prompts stdio} and its stdout and stdin become the</span>
-<span class="source-line-no">074</span><span id="line-74"> * prompt channel: one daemon thread per process, named {@code terminal-prompts-&lt;dir name&gt;}, reads the stdout lines (at</span>
-<span class="source-line-no">075</span><span id="line-75"> * most {@value #PROMPT_LINE_LIMIT} bytes each; a longer one is dropped) and hands them to</span>
-<span class="source-line-no">076</span><span id="line-76"> * {@link TerminalPrompts#onLine(String)}, then calls {@link TerminalPrompts#onEnd()} once.  The runner's stderr goes to</span>
-<span class="source-line-no">077</span><span id="line-77"> * {@code runner.out}.  {@link #answer(String)} writes one line back.  Neither a prompt line nor an answer is ever</span>
-<span class="source-line-no">078</span><span id="line-78"> * logged.  Input and prompts are mutually exclusive.</span>
-<span class="source-line-no">079</span><span id="line-79"> *</span>
-<span class="source-line-no">080</span><span id="line-80"> * &lt;p&gt;</span>
-<span class="source-line-no">081</span><span id="line-81"> * POSIX only: there is no Windows pseudo-terminal support.</span>
-<span class="source-line-no">082</span><span id="line-82"> *</span>
-<span class="source-line-no">083</span><span id="line-83"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
-<span class="source-line-no">084</span><span id="line-84"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">085</span><span id="line-85"> *    TerminalProcess &lt;jv&gt;p&lt;/jv&gt; = TerminalProcess.&lt;jsm&gt;start&lt;/jsm&gt;(&lt;js&gt;"maven"&lt;/js&gt;, List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"mvn"&lt;/js&gt;, &lt;js&gt;"test"&lt;/js&gt;), 120, 40, &lt;jv&gt;runDir&lt;/jv&gt;);</span>
-<span class="source-line-no">086</span><span id="line-86"> *    &lt;jv&gt;terminals&lt;/jv&gt;.put(&lt;jv&gt;id&lt;/jv&gt;, &lt;jv&gt;p&lt;/jv&gt;.terminal());</span>
-<span class="source-line-no">087</span><span id="line-87"> *    &lt;jv&gt;terminalViews&lt;/jv&gt;.put(&lt;jv&gt;id&lt;/jv&gt;, &lt;jv&gt;p&lt;/jv&gt;.events());</span>
-<span class="source-line-no">088</span><span id="line-88"> * &lt;/p&gt;</span>
-<span class="source-line-no">089</span><span id="line-89"> */</span>
-<span class="source-line-no">090</span><span id="line-90">@SuppressWarnings({</span>
-<span class="source-line-no">091</span><span id="line-91">   "java:S3776" // Start-up validation and shutdown are linear sequences of independent steps.</span>
-<span class="source-line-no">092</span><span id="line-92">})</span>
-<span class="source-line-no">093</span><span id="line-93">public final class TerminalProcess implements AutoCloseable, TerminalSink {</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">   /** The system property naming {@code juneau_terminal.py}. */</span>
-<span class="source-line-no">096</span><span id="line-96">   public static final String SCRIPT_PROPERTY = "juneau.terminal.script";</span>
-<span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">   /** The environment variable naming {@code juneau_terminal.py}, read when the property is not set. */</span>
-<span class="source-line-no">099</span><span id="line-99">   public static final String SCRIPT_ENV = "JUNEAU_TERMINAL_SCRIPT";</span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">   /** The byte log's file name in the run directory. */</span>
-<span class="source-line-no">102</span><span id="line-102">   public static final String LOG_NAME = "terminal.log";</span>
-<span class="source-line-no">103</span><span id="line-103"></span>
-<span class="source-line-no">104</span><span id="line-104">   /** The events file's name in the run directory. */</span>
-<span class="source-line-no">105</span><span id="line-105">   public static final String EVENTS_NAME = "terminal.events.jsonl";</span>
-<span class="source-line-no">106</span><span id="line-106"></span>
-<span class="source-line-no">107</span><span id="line-107">   /** How much of the end of the events file is scanned for a {@code done} event. */</span>
-<span class="source-line-no">108</span><span id="line-108">   static final int TAIL_BYTES = 64 * 1024;</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   /** How long {@link #close()} waits for the exit hook. */</span>
-<span class="source-line-no">111</span><span id="line-111">   static final int CLOSE_WAIT_SECONDS = 5;</span>
-<span class="source-line-no">112</span><span id="line-112"></span>
-<span class="source-line-no">113</span><span id="line-113">   /** The most input bytes waiting for the writer thread: queued bytes only, not the chunk being written. */</span>
-<span class="source-line-no">114</span><span id="line-114">   static final int INPUT_LIMIT = 64 * 1024;</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   /** The longest prompt line read from the runner, in bytes. */</span>
-<span class="source-line-no">117</span><span id="line-117">   static final int PROMPT_LINE_LIMIT = 1 &lt;&lt; 20;</span>
-<span class="source-line-no">118</span><span id="line-118"></span>
-<span class="source-line-no">119</span><span id="line-119">   /** How long {@link #close()} lets a prompt-channel runner end by itself after its stdin closes, in milliseconds. */</span>
-<span class="source-line-no">120</span><span id="line-120">   static final int PROMPTS_CLOSE_GRACE_MS = 3000;</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">   /** How long {@link #close()} waits for the prompt reader thread, in milliseconds. */</span>
-<span class="source-line-no">123</span><span id="line-123">   static final int PROMPTS_JOIN_MILLIS = 2000;</span>
-<span class="source-line-no">124</span><span id="line-124"></span>
-<span class="source-line-no">125</span><span id="line-125">   /** How often the nudge thread checks the log size, in milliseconds. */</span>
-<span class="source-line-no">126</span><span id="line-126">   static final int NUDGE_POLL_MILLIS = 100;</span>
-<span class="source-line-no">127</span><span id="line-127"></span>
-<span class="source-line-no">128</span><span id="line-128">   /** How long {@link #close()} waits for the nudge thread, in milliseconds. */</span>
-<span class="source-line-no">129</span><span id="line-129">   static final int NUDGE_JOIN_MILLIS = 1000;</span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">   /** How long {@link #close()} waits for the input writer thread, in milliseconds. */</span>
-<span class="source-line-no">132</span><span id="line-132">   static final int WRITER_JOIN_MILLIS = 1000;</span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">   private static final Set&lt;String&gt; TOOLS = Set.of("maven", "pytest", "playwright", "generic");</span>
-<span class="source-line-no">135</span><span id="line-135">   private static final Logger LOG = Logger.getLogger(TerminalProcess.class.getName());</span>
-<span class="source-line-no">136</span><span id="line-136"></span>
-<span class="source-line-no">137</span><span id="line-137">   /** What the launcher reads from its environment; replaced in tests. */</span>
-<span class="source-line-no">138</span><span id="line-138">   record Host(String osName, String scriptProperty, String scriptEnv, String path) {</span>
-<span class="source-line-no">139</span><span id="line-139">      static Host system() {</span>
-<span class="source-line-no">140</span><span id="line-140">         return new Host(System.getProperty("os.name", ""), System.getProperty(SCRIPT_PROPERTY), System.getenv(SCRIPT_ENV), System.getenv("PATH"));</span>
-<span class="source-line-no">141</span><span id="line-141">      }</span>
-<span class="source-line-no">142</span><span id="line-142">   }</span>
-<span class="source-line-no">143</span><span id="line-143"></span>
-<span class="source-line-no">144</span><span id="line-144">   private final Process process;</span>
-<span class="source-line-no">145</span><span id="line-145">   private final Path logFile;</span>
-<span class="source-line-no">146</span><span id="line-146">   private final Path events;</span>
-<span class="source-line-no">147</span><span id="line-147">   private final AtomicBoolean done = new AtomicBoolean();</span>
-<span class="source-line-no">148</span><span id="line-148">   private final FileTerminalSource terminal;</span>
-<span class="source-line-no">149</span><span id="line-149">   private final FileTerminalViewSource terminalView;</span>
-<span class="source-line-no">150</span><span id="line-150">   private final ExecutorService executor;</span>
-<span class="source-line-no">151</span><span id="line-151">   private final CompletableFuture&lt;Integer&gt; exit;</span>
-<span class="source-line-no">152</span><span id="line-152">   private final AtomicReference&lt;Thread&gt; exitThread = new AtomicReference&lt;&gt;();</span>
-<span class="source-line-no">153</span><span id="line-153"></span>
-<span class="source-line-no">154</span><span id="line-154">   // Input mode.  pending, pendingBytes, writing, inputFailed and closed are guarded by inLock.</span>
-<span class="source-line-no">155</span><span id="line-155">   private final boolean input;</span>
-<span class="source-line-no">156</span><span id="line-156">   private final Object inLock = new Object();</span>
-<span class="source-line-no">157</span><span id="line-157">   private final ArrayDeque&lt;byte[]&gt; pending = new ArrayDeque&lt;&gt;();</span>
-<span class="source-line-no">158</span><span id="line-158">   private int pendingBytes;  // Queued bytes only; a chunk leaves the count when the writer takes it, before it is written.</span>
-<span class="source-line-no">159</span><span id="line-159">   private boolean writing;</span>
-<span class="source-line-no">160</span><span id="line-160">   private boolean inputFailed;</span>
-<span class="source-line-no">161</span><span id="line-161">   private boolean closed;</span>
-<span class="source-line-no">162</span><span id="line-162">   private final Thread writer;</span>
-<span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">   // Prompt channel.  answerLock serializes answers; answersClosed is set once the channel can take no more.</span>
-<span class="source-line-no">165</span><span id="line-165">   private final TerminalPrompts prompts;</span>
-<span class="source-line-no">166</span><span id="line-166">   private final ReentrantLock answerLock = new ReentrantLock();</span>
-<span class="source-line-no">167</span><span id="line-167">   private volatile boolean answersClosed;</span>
-<span class="source-line-no">168</span><span id="line-168">   private final Thread promptThread;</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">   // Nudges.  nudgeThread, nudgeSet and nudgeClosed are guarded by nudgeLock.</span>
-<span class="source-line-no">171</span><span id="line-171">   private final Object nudgeLock = new Object();</span>
-<span class="source-line-no">172</span><span id="line-172">   private Thread nudgeThread;</span>
-<span class="source-line-no">173</span><span id="line-173">   private boolean nudgeSet;</span>
-<span class="source-line-no">174</span><span id="line-174">   private boolean nudgeClosed;</span>
-<span class="source-line-no">175</span><span id="line-175">   private volatile boolean nudgeStop;</span>
-<span class="source-line-no">176</span><span id="line-176"></span>
-<span class="source-line-no">177</span><span id="line-177">   /** Appends the missing done event; replaced in tests. */</span>
-<span class="source-line-no">178</span><span id="line-178">   @FunctionalInterface</span>
-<span class="source-line-no">179</span><span id="line-179">   interface DoneWriter {</span>
-<span class="source-line-no">180</span><span id="line-180">      void ensureDone(Path events, int exitCode) throws IOException;</span>
-<span class="source-line-no">181</span><span id="line-181">   }</span>
-<span class="source-line-no">182</span><span id="line-182"></span>
-<span class="source-line-no">183</span><span id="line-183">   private TerminalProcess(Process process, Path log, Path events, DoneWriter doneWriter, boolean input, TerminalPrompts prompts, String name) {</span>
-<span class="source-line-no">184</span><span id="line-184">      this.process = process;</span>
-<span class="source-line-no">185</span><span id="line-185">      this.input = input;</span>
-<span class="source-line-no">186</span><span id="line-186">      this.prompts = prompts;</span>
-<span class="source-line-no">187</span><span id="line-187">      this.logFile = log;</span>
-<span class="source-line-no">188</span><span id="line-188">      this.events = events;</span>
-<span class="source-line-no">189</span><span id="line-189">      terminal = FileTerminalSource.create(log).terminal(done::get).build();</span>
-<span class="source-line-no">190</span><span id="line-190">      terminalView = FileTerminalViewSource.create(events).terminal(done::get).build();</span>
-<span class="source-line-no">191</span><span id="line-191">      executor = Executors.newSingleThreadExecutor(r -&gt; {</span>
-<span class="source-line-no">192</span><span id="line-192">         var t = new Thread(r, "juneau-terminal-exit-" + process.pid());</span>
-<span class="source-line-no">193</span><span id="line-193">         t.setDaemon(true);</span>
-<span class="source-line-no">194</span><span id="line-194">         return t;</span>
-<span class="source-line-no">195</span><span id="line-195">      });</span>
-<span class="source-line-no">196</span><span id="line-196">      exit = process.onExit().thenApplyAsync(p -&gt; {</span>
-<span class="source-line-no">197</span><span id="line-197">         exitThread.set(Thread.currentThread());</span>
-<span class="source-line-no">198</span><span id="line-198">         try {</span>
-<span class="source-line-no">199</span><span id="line-199">            doneWriter.ensureDone(events, p.exitValue());</span>
-<span class="source-line-no">200</span><span id="line-200">         } catch (Exception e) {</span>
-<span class="source-line-no">201</span><span id="line-201">            LOG.log(Level.WARNING, e, () -&gt; "Could not append the done event to '" + events + "'.");</span>
-<span class="source-line-no">202</span><span id="line-202">         } finally {</span>
-<span class="source-line-no">203</span><span id="line-203">            done.set(true);</span>
-<span class="source-line-no">204</span><span id="line-204">            executor.shutdown();</span>
-<span class="source-line-no">205</span><span id="line-205">         }</span>
-<span class="source-line-no">206</span><span id="line-206">         return p.exitValue();</span>
-<span class="source-line-no">207</span><span id="line-207">      }, executor);</span>
-<span class="source-line-no">208</span><span id="line-208">      if (input) {</span>
-<span class="source-line-no">209</span><span id="line-209">         // Every field the writer thread and the onExit callback read is assigned above; keep that order.</span>
-<span class="source-line-no">210</span><span id="line-210">         writer = new Thread(this::pump, "juneau-terminal-input-" + process.pid());</span>
-<span class="source-line-no">211</span><span id="line-211">         writer.setDaemon(true);</span>
-<span class="source-line-no">212</span><span id="line-212">         process.onExit().thenRun(() -&gt; {</span>
-<span class="source-line-no">213</span><span id="line-213">            synchronized (inLock) {</span>
-<span class="source-line-no">214</span><span id="line-214">               inLock.notifyAll();</span>
-<span class="source-line-no">215</span><span id="line-215">            }</span>
-<span class="source-line-no">216</span><span id="line-216">         });</span>
-<span class="source-line-no">217</span><span id="line-217">         writer.start();</span>
-<span class="source-line-no">218</span><span id="line-218">      } else {</span>
-<span class="source-line-no">219</span><span id="line-219">         writer = null;</span>
-<span class="source-line-no">220</span><span id="line-220">      }</span>
-<span class="source-line-no">221</span><span id="line-221">      if (prompts != null) {</span>
-<span class="source-line-no">222</span><span id="line-222">         promptThread = new Thread(this::readPrompts, "terminal-prompts-" + name);</span>
-<span class="source-line-no">223</span><span id="line-223">         promptThread.setDaemon(true);</span>
-<span class="source-line-no">224</span><span id="line-224">         promptThread.start();</span>
-<span class="source-line-no">225</span><span id="line-225">      } else {</span>
-<span class="source-line-no">226</span><span id="line-226">         promptThread = null;</span>
-<span class="source-line-no">227</span><span id="line-227">      }</span>
-<span class="source-line-no">228</span><span id="line-228">   }</span>
-<span class="source-line-no">229</span><span id="line-229"></span>
-<span class="source-line-no">230</span><span id="line-230">   /** The prompt reader thread: hands each stdout line to the prompts, then reports the end exactly once. */</span>
-<span class="source-line-no">231</span><span id="line-231">   private void readPrompts() {</span>
-<span class="source-line-no">232</span><span id="line-232">      try (var in = new BufferedInputStream(process.getInputStream())) {</span>
-<span class="source-line-no">233</span><span id="line-233">         var line = new ByteArrayOutputStream();</span>
-<span class="source-line-no">234</span><span id="line-234">         var over = false;</span>
-<span class="source-line-no">235</span><span id="line-235">         for (var b = in.read(); b &gt;= 0; b = in.read()) {</span>
-<span class="source-line-no">236</span><span id="line-236">            if (b == '\n') {</span>
-<span class="source-line-no">237</span><span id="line-237">               if (over)</span>
-<span class="source-line-no">238</span><span id="line-238">                  LOG.log(Level.WARNING, "prompt line over limit dropped");</span>
-<span class="source-line-no">239</span><span id="line-239">               else</span>
-<span class="source-line-no">240</span><span id="line-240">                  prompts.onLine(line.toString(UTF_8));</span>
-<span class="source-line-no">241</span><span id="line-241">               line.reset();</span>
-<span class="source-line-no">242</span><span id="line-242">               over = false;</span>
-<span class="source-line-no">243</span><span id="line-243">            } else if (! over) {</span>
-<span class="source-line-no">244</span><span id="line-244">               if (line.size() &gt;= PROMPT_LINE_LIMIT) {</span>
-<span class="source-line-no">245</span><span id="line-245">                  over = true;</span>
-<span class="source-line-no">246</span><span id="line-246">                  line.reset();</span>
-<span class="source-line-no">247</span><span id="line-247">               } else {</span>
-<span class="source-line-no">248</span><span id="line-248">                  line.write(b);</span>
-<span class="source-line-no">249</span><span id="line-249">               }</span>
-<span class="source-line-no">250</span><span id="line-250">            }</span>
-<span class="source-line-no">251</span><span id="line-251">         }</span>
-<span class="source-line-no">252</span><span id="line-252">      } catch (IOException e) {</span>
-<span class="source-line-no">253</span><span id="line-253">         // A closed pipe ends the channel; the exception text could hold a prompt, so it is not logged.</span>
-<span class="source-line-no">254</span><span id="line-254">         LOG.log(Level.FINE, () -&gt; "TerminalProcess prompt channel closed for '" + events + "'.");</span>
-<span class="source-line-no">255</span><span id="line-255">      } finally {</span>
-<span class="source-line-no">256</span><span id="line-256">         answersClosed = true;</span>
-<span class="source-line-no">257</span><span id="line-257">         prompts.onEnd();</span>
-<span class="source-line-no">258</span><span id="line-258">      }</span>
-<span class="source-line-no">259</span><span id="line-259">   }</span>
-<span class="source-line-no">260</span><span id="line-260"></span>
-<span class="source-line-no">261</span><span id="line-261">   /** The writer thread: copies pending chunks to stdin, never holding {@link #inLock} while writing. */</span>
-<span class="source-line-no">262</span><span id="line-262">   @SuppressWarnings({</span>
-<span class="source-line-no">263</span><span id="line-263">      "java:S3626" // The early return is what ends the endless writer loop after a failed write.</span>
-<span class="source-line-no">264</span><span id="line-264">   })</span>
-<span class="source-line-no">265</span><span id="line-265">   private void pump() {</span>
-<span class="source-line-no">266</span><span id="line-266">      var out = process.getOutputStream();</span>
-<span class="source-line-no">267</span><span id="line-267">      try {</span>
-<span class="source-line-no">268</span><span id="line-268">         while (true) {</span>
-<span class="source-line-no">269</span><span id="line-269">            byte[] chunk;</span>
-<span class="source-line-no">270</span><span id="line-270">            synchronized (inLock) {</span>
-<span class="source-line-no">271</span><span id="line-271">               while (pending.isEmpty() &amp;&amp; ! closed &amp;&amp; process.isAlive())</span>
-<span class="source-line-no">272</span><span id="line-272">                  inLock.wait();</span>
-<span class="source-line-no">273</span><span id="line-273">               if (closed || pending.isEmpty())</span>
-<span class="source-line-no">274</span><span id="line-274">                  return;</span>
-<span class="source-line-no">275</span><span id="line-275">               chunk = pending.poll();</span>
-<span class="source-line-no">276</span><span id="line-276">               pendingBytes -= chunk.length;</span>
-<span class="source-line-no">277</span><span id="line-277">               writing = true;</span>
-<span class="source-line-no">278</span><span id="line-278">            }</span>
-<span class="source-line-no">279</span><span id="line-279">            if (! writeChunk(out, chunk))</span>
-<span class="source-line-no">280</span><span id="line-280">               return;</span>
-<span class="source-line-no">281</span><span id="line-281">         }</span>
-<span class="source-line-no">282</span><span id="line-282">      } catch (InterruptedException e) {</span>
-<span class="source-line-no">283</span><span id="line-283">         Thread.currentThread().interrupt();</span>
-<span class="source-line-no">284</span><span id="line-284">      } finally {</span>
-<span class="source-line-no">285</span><span id="line-285">         closeQuietly(out);</span>
-<span class="source-line-no">286</span><span id="line-286">      }</span>
-<span class="source-line-no">287</span><span id="line-287">   }</span>
-<span class="source-line-no">288</span><span id="line-288"></span>
-<span class="source-line-no">289</span><span id="line-289">   // Writes one chunk to stdin; false once the pipe has failed and the pending input has been dropped.</span>
-<span class="source-line-no">290</span><span id="line-290">   private boolean writeChunk(OutputStream out, byte[] chunk) {</span>
-<span class="source-line-no">291</span><span id="line-291">      try {</span>
-<span class="source-line-no">292</span><span id="line-292">         out.write(chunk);</span>
-<span class="source-line-no">293</span><span id="line-293">         out.flush();</span>
-<span class="source-line-no">294</span><span id="line-294">         return true;</span>
-<span class="source-line-no">295</span><span id="line-295">      } catch (IOException e) {</span>
-<span class="source-line-no">296</span><span id="line-296">         synchronized (inLock) {</span>
-<span class="source-line-no">297</span><span id="line-297">            inputFailed = true;</span>
-<span class="source-line-no">298</span><span id="line-298">            pending.clear();</span>
-<span class="source-line-no">299</span><span id="line-299">            pendingBytes = 0;</span>
-<span class="source-line-no">300</span><span id="line-300">         }</span>
-<span class="source-line-no">301</span><span id="line-301">         LOG.log(Level.FINE, e, () -&gt; "TerminalProcess input pipe failed for '" + events + "'.");</span>
-<span class="source-line-no">302</span><span id="line-302">         return false;</span>
-<span class="source-line-no">303</span><span id="line-303">      } finally {</span>
-<span class="source-line-no">304</span><span id="line-304">         synchronized (inLock) {</span>
-<span class="source-line-no">305</span><span id="line-305">            writing = false;</span>
+<span class="source-line-no">028</span><span id="line-28">import java.nio.file.attribute.*;</span>
+<span class="source-line-no">029</span><span id="line-29">import java.util.*;</span>
+<span class="source-line-no">030</span><span id="line-30">import java.util.concurrent.*;</span>
+<span class="source-line-no">031</span><span id="line-31">import java.util.concurrent.atomic.*;</span>
+<span class="source-line-no">032</span><span id="line-32">import java.util.concurrent.locks.*;</span>
+<span class="source-line-no">033</span><span id="line-33">import java.util.logging.*;</span>
+<span class="source-line-no">034</span><span id="line-34"></span>
+<span class="source-line-no">035</span><span id="line-35">import org.apache.juneau.marshall.json.JsonSerializer;</span>
+<span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.marshall.marshaller.Json;</span>
+<span class="source-line-no">037</span><span id="line-37">import org.apache.juneau.terminal.report.*;</span>
+<span class="source-line-no">038</span><span id="line-38">import org.apache.juneau.console.views.*;</span>
+<span class="source-line-no">039</span><span id="line-39"></span>
+<span class="source-line-no">040</span><span id="line-40">/**</span>
+<span class="source-line-no">041</span><span id="line-41"> * Runs one tool under a pseudo-terminal through {@code juneau_terminal.py --pty} and exposes its output as a</span>
+<span class="source-line-no">042</span><span id="line-42"> * {@link FileTerminalSource} and its steps as a {@link FileTerminalViewSource}.</span>
+<span class="source-line-no">043</span><span id="line-43"> *</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;p&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * The command line is</span>
+<span class="source-line-no">046</span><span id="line-46"> * {@code python3 &lt;script&gt; --console none --pty --size &lt;cols&gt;x&lt;rows&gt; --full-log &lt;log&gt; --events &lt;events&gt; &lt;tool&gt; -- &lt;cmd...&gt;},</span>
+<span class="source-line-no">047</span><span id="line-47"> * with the log ({@value #LOG_NAME}), its {@code .size} sidecar and the events file ({@value #EVENTS_NAME}) in the</span>
+<span class="source-line-no">048</span><span id="line-48"> * given run directory.  The script is found through the system property {@value #SCRIPT_PROPERTY}, then the</span>
+<span class="source-line-no">049</span><span id="line-49"> * environment variable {@value #SCRIPT_ENV}.</span>
+<span class="source-line-no">050</span><span id="line-50"> *</span>
+<span class="source-line-no">051</span><span id="line-51"> * &lt;p&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> * The run directory is single-use.  The tool's working directory is the {@code work} subdirectory of it, so the log is not in the tool's working directory; the directory is limited to its owner where the file system allows. The runner's own stdout and stderr</span>
+<span class="source-line-no">053</span><span id="line-53"> * go to {@code runner.out} there, in append mode and uncapped; that file is diagnostic only.</span>
+<span class="source-line-no">054</span><span id="line-54"> *</span>
+<span class="source-line-no">055</span><span id="line-55"> * &lt;p&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * Both sources share one done flag, set once the process has exited.  If the runner exits without writing a</span>
+<span class="source-line-no">057</span><span id="line-57"> * {@code done} event, a warning {@code note} and {@code done {status:"fail"}} are appended first.  Only the last</span>
+<span class="source-line-no">058</span><span id="line-58"> * {@value #TAIL_BYTES} bytes of the events file are scanned for that {@code done} event, because the protocol puts it</span>
+<span class="source-line-no">059</span><span id="line-59"> * last.</span>
+<span class="source-line-no">060</span><span id="line-60"> *</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;p&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> * The exit hook runs on one daemon thread per process, named {@code juneau-terminal-exit-&lt;pid&gt;}.  Its executor is</span>
+<span class="source-line-no">063</span><span id="line-63"> * shut down once the hook has run, and {@link #close()} waits for that.</span>
+<span class="source-line-no">064</span><span id="line-64"> *</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;p&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> * Started with input on, the runner also gets {@code --input stdin} (right after the events pair) and the process is a</span>
+<span class="source-line-no">067</span><span id="line-67"> * {@link TerminalSink}: {@link #write(byte[])} queues the bytes in a {@value #INPUT_LIMIT}-byte pending buffer and never</span>
+<span class="source-line-no">068</span><span id="line-68"> * blocks, and one daemon thread per process, named {@code juneau-terminal-input-&lt;pid&gt;}, copies them to the runner's</span>
+<span class="source-line-no">069</span><span id="line-69"> * stdin, flushing after each chunk.  A closed or broken pipe turns {@link #acceptsInput()} false and discards the</span>
+<span class="source-line-no">070</span><span id="line-70"> * buffer.  With input off the command line and the streams are exactly as above, no writer thread starts, and</span>
+<span class="source-line-no">071</span><span id="line-71"> * {@link #acceptsInput()} is always false.</span>
+<span class="source-line-no">072</span><span id="line-72"> *</span>
+<span class="source-line-no">073</span><span id="line-73"> * &lt;p&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> * Started with a {@link TerminalPrompts}, the runner gets {@code --prompts stdio} and its stdout and stdin become the</span>
+<span class="source-line-no">075</span><span id="line-75"> * prompt channel: one daemon thread per process, named {@code terminal-prompts-&lt;dir name&gt;}, reads the stdout lines (at</span>
+<span class="source-line-no">076</span><span id="line-76"> * most {@value #PROMPT_LINE_LIMIT} bytes each; a longer one is dropped) and hands them to</span>
+<span class="source-line-no">077</span><span id="line-77"> * {@link TerminalPrompts#onLine(String)}, then calls {@link TerminalPrompts#onEnd()} once.  The runner's stderr goes to</span>
+<span class="source-line-no">078</span><span id="line-78"> * {@code runner.out}.  {@link #answer(String)} writes one line back.  Neither a prompt line nor an answer is ever</span>
+<span class="source-line-no">079</span><span id="line-79"> * logged.  Input and prompts are mutually exclusive.</span>
+<span class="source-line-no">080</span><span id="line-80"> *</span>
+<span class="source-line-no">081</span><span id="line-81"> * &lt;p&gt;</span>
+<span class="source-line-no">082</span><span id="line-82"> * POSIX only: there is no Windows pseudo-terminal support.</span>
+<span class="source-line-no">083</span><span id="line-83"> *</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> *    TerminalProcess &lt;jv&gt;p&lt;/jv&gt; = TerminalProcess.&lt;jsm&gt;start&lt;/jsm&gt;(&lt;js&gt;"maven"&lt;/js&gt;, List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"mvn"&lt;/js&gt;, &lt;js&gt;"test"&lt;/js&gt;), 120, 40, &lt;jv&gt;runDir&lt;/jv&gt;);</span>
+<span class="source-line-no">087</span><span id="line-87"> *    &lt;jv&gt;terminals&lt;/jv&gt;.put(&lt;jv&gt;id&lt;/jv&gt;, &lt;jv&gt;p&lt;/jv&gt;.terminal());</span>
+<span class="source-line-no">088</span><span id="line-88"> *    &lt;jv&gt;terminalViews&lt;/jv&gt;.put(&lt;jv&gt;id&lt;/jv&gt;, &lt;jv&gt;p&lt;/jv&gt;.events());</span>
+<span class="source-line-no">089</span><span id="line-89"> * &lt;/p&gt;</span>
+<span class="source-line-no">090</span><span id="line-90"> */</span>
+<span class="source-line-no">091</span><span id="line-91">@SuppressWarnings({</span>
+<span class="source-line-no">092</span><span id="line-92">   "java:S3776" // Start-up validation and shutdown are linear sequences of independent steps.</span>
+<span class="source-line-no">093</span><span id="line-93">})</span>
+<span class="source-line-no">094</span><span id="line-94">public final class TerminalProcess implements AutoCloseable, TerminalSink {</span>
+<span class="source-line-no">095</span><span id="line-95"></span>
+<span class="source-line-no">096</span><span id="line-96">   /** The system property naming {@code juneau_terminal.py}. */</span>
+<span class="source-line-no">097</span><span id="line-97">   public static final String SCRIPT_PROPERTY = "juneau.terminal.script";</span>
+<span class="source-line-no">098</span><span id="line-98"></span>
+<span class="source-line-no">099</span><span id="line-99">   /** The environment variable naming {@code juneau_terminal.py}, read when the property is not set. */</span>
+<span class="source-line-no">100</span><span id="line-100">   public static final String SCRIPT_ENV = "JUNEAU_TERMINAL_SCRIPT";</span>
+<span class="source-line-no">101</span><span id="line-101"></span>
+<span class="source-line-no">102</span><span id="line-102">   /** The byte log's file name in the run directory. */</span>
+<span class="source-line-no">103</span><span id="line-103">   public static final String LOG_NAME = "terminal.log";</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">   /** The events file's name in the run directory. */</span>
+<span class="source-line-no">106</span><span id="line-106">   public static final String EVENTS_NAME = "terminal.events.jsonl";</span>
+<span class="source-line-no">107</span><span id="line-107"></span>
+<span class="source-line-no">108</span><span id="line-108">   /** The tool's working directory, a subdirectory of the run directory. */</span>
+<span class="source-line-no">109</span><span id="line-109">   static final String WORK_DIR = "work";</span>
+<span class="source-line-no">110</span><span id="line-110"></span>
+<span class="source-line-no">111</span><span id="line-111">   /** How much of the end of the events file is scanned for a {@code done} event. */</span>
+<span class="source-line-no">112</span><span id="line-112">   static final int TAIL_BYTES = 64 * 1024;</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">   /** How long {@link #close()} waits for the exit hook. */</span>
+<span class="source-line-no">115</span><span id="line-115">   static final int CLOSE_WAIT_SECONDS = 5;</span>
+<span class="source-line-no">116</span><span id="line-116"></span>
+<span class="source-line-no">117</span><span id="line-117">   /** The most input bytes waiting for the writer thread: queued bytes only, not the chunk being written. */</span>
+<span class="source-line-no">118</span><span id="line-118">   static final int INPUT_LIMIT = 64 * 1024;</span>
+<span class="source-line-no">119</span><span id="line-119"></span>
+<span class="source-line-no">120</span><span id="line-120">   /** The longest prompt line read from the runner, in bytes. */</span>
+<span class="source-line-no">121</span><span id="line-121">   static final int PROMPT_LINE_LIMIT = 1 &lt;&lt; 20;</span>
+<span class="source-line-no">122</span><span id="line-122"></span>
+<span class="source-line-no">123</span><span id="line-123">   /** How long {@link #close()} lets a prompt-channel runner end by itself after its stdin closes, in milliseconds. */</span>
+<span class="source-line-no">124</span><span id="line-124">   static final int PROMPTS_CLOSE_GRACE_MS = 3000;</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">   /** How long {@link #close()} waits for the prompt reader thread, in milliseconds. */</span>
+<span class="source-line-no">127</span><span id="line-127">   static final int PROMPTS_JOIN_MILLIS = 2000;</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">   /** How often the nudge thread checks the log size, in milliseconds. */</span>
+<span class="source-line-no">130</span><span id="line-130">   static final int NUDGE_POLL_MILLIS = 100;</span>
+<span class="source-line-no">131</span><span id="line-131"></span>
+<span class="source-line-no">132</span><span id="line-132">   /** How long {@link #close()} waits for the nudge thread, in milliseconds. */</span>
+<span class="source-line-no">133</span><span id="line-133">   static final int NUDGE_JOIN_MILLIS = 1000;</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">   /** How long {@link #close()} waits for the input writer thread, in milliseconds. */</span>
+<span class="source-line-no">136</span><span id="line-136">   static final int WRITER_JOIN_MILLIS = 1000;</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">   private static final Set&lt;String&gt; TOOLS = Set.of("maven", "pytest", "playwright", "generic");</span>
+<span class="source-line-no">139</span><span id="line-139">   private static final Logger LOG = Logger.getLogger(TerminalProcess.class.getName());</span>
+<span class="source-line-no">140</span><span id="line-140"></span>
+<span class="source-line-no">141</span><span id="line-141">   /** What the launcher reads from its environment; replaced in tests. */</span>
+<span class="source-line-no">142</span><span id="line-142">   record Host(String osName, String scriptProperty, String scriptEnv, String path) {</span>
+<span class="source-line-no">143</span><span id="line-143">      static Host system() {</span>
+<span class="source-line-no">144</span><span id="line-144">         return new Host(System.getProperty("os.name", ""), System.getProperty(SCRIPT_PROPERTY), System.getenv(SCRIPT_ENV), System.getenv("PATH"));</span>
+<span class="source-line-no">145</span><span id="line-145">      }</span>
+<span class="source-line-no">146</span><span id="line-146">   }</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">   private final Process process;</span>
+<span class="source-line-no">149</span><span id="line-149">   private final Path logFile;</span>
+<span class="source-line-no">150</span><span id="line-150">   private final Path events;</span>
+<span class="source-line-no">151</span><span id="line-151">   private final Path runDir;</span>
+<span class="source-line-no">152</span><span id="line-152">   private final AtomicBoolean done = new AtomicBoolean();</span>
+<span class="source-line-no">153</span><span id="line-153">   private final FileTerminalSource terminal;</span>
+<span class="source-line-no">154</span><span id="line-154">   private final FileTerminalViewSource terminalView;</span>
+<span class="source-line-no">155</span><span id="line-155">   private final ExecutorService executor;</span>
+<span class="source-line-no">156</span><span id="line-156">   private final CompletableFuture&lt;Integer&gt; exit;</span>
+<span class="source-line-no">157</span><span id="line-157">   private final AtomicReference&lt;Thread&gt; exitThread = new AtomicReference&lt;&gt;();</span>
+<span class="source-line-no">158</span><span id="line-158"></span>
+<span class="source-line-no">159</span><span id="line-159">   // Input mode.  pending, pendingBytes, writing, inputFailed and closed are guarded by inLock.</span>
+<span class="source-line-no">160</span><span id="line-160">   private final boolean input;</span>
+<span class="source-line-no">161</span><span id="line-161">   private final Object inLock = new Object();</span>
+<span class="source-line-no">162</span><span id="line-162">   private final ArrayDeque&lt;byte[]&gt; pending = new ArrayDeque&lt;&gt;();</span>
+<span class="source-line-no">163</span><span id="line-163">   private int pendingBytes;  // Queued bytes only; a chunk leaves the count when the writer takes it, before it is written.</span>
+<span class="source-line-no">164</span><span id="line-164">   private boolean writing;</span>
+<span class="source-line-no">165</span><span id="line-165">   private boolean inputFailed;</span>
+<span class="source-line-no">166</span><span id="line-166">   private boolean closed;</span>
+<span class="source-line-no">167</span><span id="line-167">   private final Thread writer;</span>
+<span class="source-line-no">168</span><span id="line-168"></span>
+<span class="source-line-no">169</span><span id="line-169">   // Prompt channel.  answerLock serializes answers; answersClosed is set once the channel can take no more.</span>
+<span class="source-line-no">170</span><span id="line-170">   private final TerminalPrompts prompts;</span>
+<span class="source-line-no">171</span><span id="line-171">   private final ReentrantLock answerLock = new ReentrantLock();</span>
+<span class="source-line-no">172</span><span id="line-172">   private volatile boolean answersClosed;</span>
+<span class="source-line-no">173</span><span id="line-173">   private final Thread promptThread;</span>
+<span class="source-line-no">174</span><span id="line-174"></span>
+<span class="source-line-no">175</span><span id="line-175">   // Nudges.  nudgeThread, nudgeSet and nudgeClosed are guarded by nudgeLock.</span>
+<span class="source-line-no">176</span><span id="line-176">   private final Object nudgeLock = new Object();</span>
+<span class="source-line-no">177</span><span id="line-177">   private Thread nudgeThread;</span>
+<span class="source-line-no">178</span><span id="line-178">   private boolean nudgeSet;</span>
+<span class="source-line-no">179</span><span id="line-179">   private boolean nudgeClosed;</span>
+<span class="source-line-no">180</span><span id="line-180">   private volatile boolean nudgeStop;</span>
+<span class="source-line-no">181</span><span id="line-181"></span>
+<span class="source-line-no">182</span><span id="line-182">   /** Appends the missing done event; replaced in tests. */</span>
+<span class="source-line-no">183</span><span id="line-183">   @FunctionalInterface</span>
+<span class="source-line-no">184</span><span id="line-184">   interface DoneWriter {</span>
+<span class="source-line-no">185</span><span id="line-185">      void ensureDone(Path events, int exitCode) throws IOException;</span>
+<span class="source-line-no">186</span><span id="line-186">   }</span>
+<span class="source-line-no">187</span><span id="line-187"></span>
+<span class="source-line-no">188</span><span id="line-188">   private TerminalProcess(Process process, Path log, Path events, DoneWriter doneWriter, boolean input, TerminalPrompts prompts, Path runDir) {</span>
+<span class="source-line-no">189</span><span id="line-189">      this.runDir = runDir;</span>
+<span class="source-line-no">190</span><span id="line-190">      this.process = process;</span>
+<span class="source-line-no">191</span><span id="line-191">      this.input = input;</span>
+<span class="source-line-no">192</span><span id="line-192">      this.prompts = prompts;</span>
+<span class="source-line-no">193</span><span id="line-193">      this.logFile = log;</span>
+<span class="source-line-no">194</span><span id="line-194">      this.events = events;</span>
+<span class="source-line-no">195</span><span id="line-195">      terminal = FileTerminalSource.create(log).terminal(done::get).build();</span>
+<span class="source-line-no">196</span><span id="line-196">      terminalView = FileTerminalViewSource.create(events).terminal(done::get).build();</span>
+<span class="source-line-no">197</span><span id="line-197">      executor = Executors.newSingleThreadExecutor(r -&gt; {</span>
+<span class="source-line-no">198</span><span id="line-198">         var t = new Thread(r, "juneau-terminal-exit-" + process.pid());</span>
+<span class="source-line-no">199</span><span id="line-199">         t.setDaemon(true);</span>
+<span class="source-line-no">200</span><span id="line-200">         return t;</span>
+<span class="source-line-no">201</span><span id="line-201">      });</span>
+<span class="source-line-no">202</span><span id="line-202">      exit = process.onExit().thenApplyAsync(p -&gt; {</span>
+<span class="source-line-no">203</span><span id="line-203">         exitThread.set(Thread.currentThread());</span>
+<span class="source-line-no">204</span><span id="line-204">         try {</span>
+<span class="source-line-no">205</span><span id="line-205">            doneWriter.ensureDone(events, p.exitValue());</span>
+<span class="source-line-no">206</span><span id="line-206">         } catch (Exception e) {</span>
+<span class="source-line-no">207</span><span id="line-207">            LOG.log(Level.WARNING, e, () -&gt; "Could not append the done event to '" + events + "'.");</span>
+<span class="source-line-no">208</span><span id="line-208">         } finally {</span>
+<span class="source-line-no">209</span><span id="line-209">            done.set(true);</span>
+<span class="source-line-no">210</span><span id="line-210">            executor.shutdown();</span>
+<span class="source-line-no">211</span><span id="line-211">         }</span>
+<span class="source-line-no">212</span><span id="line-212">         return p.exitValue();</span>
+<span class="source-line-no">213</span><span id="line-213">      }, executor);</span>
+<span class="source-line-no">214</span><span id="line-214">      if (input) {</span>
+<span class="source-line-no">215</span><span id="line-215">         // Every field the writer thread and the onExit callback read is assigned above; keep that order.</span>
+<span class="source-line-no">216</span><span id="line-216">         writer = new Thread(this::pump, "juneau-terminal-input-" + process.pid());</span>
+<span class="source-line-no">217</span><span id="line-217">         writer.setDaemon(true);</span>
+<span class="source-line-no">218</span><span id="line-218">         process.onExit().thenRun(() -&gt; {</span>
+<span class="source-line-no">219</span><span id="line-219">            synchronized (inLock) {</span>
+<span class="source-line-no">220</span><span id="line-220">               inLock.notifyAll();</span>
+<span class="source-line-no">221</span><span id="line-221">            }</span>
+<span class="source-line-no">222</span><span id="line-222">         });</span>
+<span class="source-line-no">223</span><span id="line-223">         writer.start();</span>
+<span class="source-line-no">224</span><span id="line-224">      } else {</span>
+<span class="source-line-no">225</span><span id="line-225">         writer = null;</span>
+<span class="source-line-no">226</span><span id="line-226">      }</span>
+<span class="source-line-no">227</span><span id="line-227">      if (prompts != null) {</span>
+<span class="source-line-no">228</span><span id="line-228">         promptThread = new Thread(this::readPrompts, "terminal-prompts-" + id());</span>
+<span class="source-line-no">229</span><span id="line-229">         promptThread.setDaemon(true);</span>
+<span class="source-line-no">230</span><span id="line-230">         promptThread.start();</span>
+<span class="source-line-no">231</span><span id="line-231">      } else {</span>
+<span class="source-line-no">232</span><span id="line-232">         promptThread = null;</span>
+<span class="source-line-no">233</span><span id="line-233">      }</span>
+<span class="source-line-no">234</span><span id="line-234">   }</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">   /** The prompt reader thread: hands each stdout line to the prompts, then reports the end exactly once. */</span>
+<span class="source-line-no">237</span><span id="line-237">   private void readPrompts() {</span>
+<span class="source-line-no">238</span><span id="line-238">      try (var in = new BufferedInputStream(process.getInputStream())) {</span>
+<span class="source-line-no">239</span><span id="line-239">         var line = new ByteArrayOutputStream();</span>
+<span class="source-line-no">240</span><span id="line-240">         var over = false;</span>
+<span class="source-line-no">241</span><span id="line-241">         for (var b = in.read(); b &gt;= 0; b = in.read()) {</span>
+<span class="source-line-no">242</span><span id="line-242">            if (b == '\n') {</span>
+<span class="source-line-no">243</span><span id="line-243">               if (over)</span>
+<span class="source-line-no">244</span><span id="line-244">                  LOG.log(Level.WARNING, "prompt line over limit dropped");</span>
+<span class="source-line-no">245</span><span id="line-245">               else</span>
+<span class="source-line-no">246</span><span id="line-246">                  prompts.onLine(line.toString(UTF_8));</span>
+<span class="source-line-no">247</span><span id="line-247">               line.reset();</span>
+<span class="source-line-no">248</span><span id="line-248">               over = false;</span>
+<span class="source-line-no">249</span><span id="line-249">            } else if (! over) {</span>
+<span class="source-line-no">250</span><span id="line-250">               if (line.size() &gt;= PROMPT_LINE_LIMIT) {</span>
+<span class="source-line-no">251</span><span id="line-251">                  over = true;</span>
+<span class="source-line-no">252</span><span id="line-252">                  line.reset();</span>
+<span class="source-line-no">253</span><span id="line-253">               } else {</span>
+<span class="source-line-no">254</span><span id="line-254">                  line.write(b);</span>
+<span class="source-line-no">255</span><span id="line-255">               }</span>
+<span class="source-line-no">256</span><span id="line-256">            }</span>
+<span class="source-line-no">257</span><span id="line-257">         }</span>
+<span class="source-line-no">258</span><span id="line-258">      } catch (IOException e) {</span>
+<span class="source-line-no">259</span><span id="line-259">         // A closed pipe ends the channel; the exception text could hold a prompt, so it is not logged.</span>
+<span class="source-line-no">260</span><span id="line-260">         LOG.log(Level.FINE, () -&gt; "TerminalProcess prompt channel closed for '" + events + "'.");</span>
+<span class="source-line-no">261</span><span id="line-261">      } finally {</span>
+<span class="source-line-no">262</span><span id="line-262">         answersClosed = true;</span>
+<span class="source-line-no">263</span><span id="line-263">         prompts.onEnd();</span>
+<span class="source-line-no">264</span><span id="line-264">      }</span>
+<span class="source-line-no">265</span><span id="line-265">   }</span>
+<span class="source-line-no">266</span><span id="line-266"></span>
+<span class="source-line-no">267</span><span id="line-267">   /** The writer thread: copies pending chunks to stdin, never holding {@link #inLock} while writing. */</span>
+<span class="source-line-no">268</span><span id="line-268">   @SuppressWarnings({</span>
+<span class="source-line-no">269</span><span id="line-269">      "java:S3626" // The early return is what ends the endless writer loop after a failed write.</span>
+<span class="source-line-no">270</span><span id="line-270">   })</span>
+<span class="source-line-no">271</span><span id="line-271">   private void pump() {</span>
+<span class="source-line-no">272</span><span id="line-272">      var out = process.getOutputStream();</span>
+<span class="source-line-no">273</span><span id="line-273">      try {</span>
+<span class="source-line-no">274</span><span id="line-274">         while (true) {</span>
+<span class="source-line-no">275</span><span id="line-275">            byte[] chunk;</span>
+<span class="source-line-no">276</span><span id="line-276">            synchronized (inLock) {</span>
+<span class="source-line-no">277</span><span id="line-277">               while (pending.isEmpty() &amp;&amp; ! closed &amp;&amp; process.isAlive())</span>
+<span class="source-line-no">278</span><span id="line-278">                  inLock.wait();</span>
+<span class="source-line-no">279</span><span id="line-279">               if (closed || pending.isEmpty())</span>
+<span class="source-line-no">280</span><span id="line-280">                  return;</span>
+<span class="source-line-no">281</span><span id="line-281">               chunk = pending.poll();</span>
+<span class="source-line-no">282</span><span id="line-282">               pendingBytes -= chunk.length;</span>
+<span class="source-line-no">283</span><span id="line-283">               writing = true;</span>
+<span class="source-line-no">284</span><span id="line-284">            }</span>
+<span class="source-line-no">285</span><span id="line-285">            if (! writeChunk(out, chunk))</span>
+<span class="source-line-no">286</span><span id="line-286">               return;</span>
+<span class="source-line-no">287</span><span id="line-287">         }</span>
+<span class="source-line-no">288</span><span id="line-288">      } catch (InterruptedException e) {</span>
+<span class="source-line-no">289</span><span id="line-289">         Thread.currentThread().interrupt();</span>
+<span class="source-line-no">290</span><span id="line-290">      } finally {</span>
+<span class="source-line-no">291</span><span id="line-291">         closeQuietly(out);</span>
+<span class="source-line-no">292</span><span id="line-292">      }</span>
+<span class="source-line-no">293</span><span id="line-293">   }</span>
+<span class="source-line-no">294</span><span id="line-294"></span>
+<span class="source-line-no">295</span><span id="line-295">   // Writes one chunk to stdin; false once the pipe has failed and the pending input has been dropped.</span>
+<span class="source-line-no">296</span><span id="line-296">   private boolean writeChunk(OutputStream out, byte[] chunk) {</span>
+<span class="source-line-no">297</span><span id="line-297">      try {</span>
+<span class="source-line-no">298</span><span id="line-298">         out.write(chunk);</span>
+<span class="source-line-no">299</span><span id="line-299">         out.flush();</span>
+<span class="source-line-no">300</span><span id="line-300">         return true;</span>
+<span class="source-line-no">301</span><span id="line-301">      } catch (IOException e) {</span>
+<span class="source-line-no">302</span><span id="line-302">         synchronized (inLock) {</span>
+<span class="source-line-no">303</span><span id="line-303">            inputFailed = true;</span>
+<span class="source-line-no">304</span><span id="line-304">            pending.clear();</span>
+<span class="source-line-no">305</span><span id="line-305">            pendingBytes = 0;</span>
 <span class="source-line-no">306</span><span id="line-306">         }</span>
-<span class="source-line-no">307</span><span id="line-307">      }</span>
-<span class="source-line-no">308</span><span id="line-308">   }</span>
-<span class="source-line-no">309</span><span id="line-309"></span>
-<span class="source-line-no">310</span><span id="line-310">   private static void closeQuietly(OutputStream out) {</span>
-<span class="source-line-no">311</span><span id="line-311">      try {</span>
-<span class="source-line-no">312</span><span id="line-312">         out.close();</span>
-<span class="source-line-no">313</span><span id="line-313">      } catch (IOException e) {</span>
-<span class="source-line-no">314</span><span id="line-314">         // A broken pipe has nothing left to close.</span>
-<span class="source-line-no">315</span><span id="line-315">      }</span>
-<span class="source-line-no">316</span><span id="line-316">   }</span>
-<span class="source-line-no">317</span><span id="line-317"></span>
-<span class="source-line-no">318</span><span id="line-318">   /**</span>
-<span class="source-line-no">319</span><span id="line-319">    * Starts a tool under a pseudo-terminal.</span>
-<span class="source-line-no">320</span><span id="line-320">    *</span>
-<span class="source-line-no">321</span><span id="line-321">    * @param tool The juneau_terminal tool parser: {@code maven}, {@code pytest}, {@code playwright} or {@code generic}.</span>
-<span class="source-line-no">322</span><span id="line-322">    * @param cmd The command and its arguments; at least one element.</span>
-<span class="source-line-no">323</span><span id="line-323">    *    It is a token list: each element reaches the tool as one argument, through {@link ProcessBuilder}.  It is never</span>
-<span class="source-line-no">324</span><span id="line-324">    *    joined into a string or given to a shell, so shell metacharacters in an element are literal.</span>
-<span class="source-line-no">325</span><span id="line-325">    * @param cols The terminal width, 1-9999.</span>
-<span class="source-line-no">326</span><span id="line-326">    * @param rows The terminal height, 1-9999.</span>
-<span class="source-line-no">327</span><span id="line-327">    * @param dir The run directory; created if missing.  Each run needs its own: the log and events files must be</span>
-<span class="source-line-no">328</span><span id="line-328">    *    missing or empty.  It is also the tool's working directory, and the runner's own stdout and stderr go to</span>
-<span class="source-line-no">329</span><span id="line-329">    *    {@code runner.out} in it, in append mode and uncapped; that file is diagnostic only.</span>
-<span class="source-line-no">330</span><span id="line-330">    * @return The running process.</span>
-<span class="source-line-no">331</span><span id="line-331">    * @throws IOException If the directory could not be prepared or the process could not start.</span>
-<span class="source-line-no">332</span><span id="line-332">    * @throws IllegalArgumentException If an argument is out of range.</span>
-<span class="source-line-no">333</span><span id="line-333">    * @throws IllegalStateException If the script is not configured, {@code python3} is not on the {@code PATH}, or</span>
-<span class="source-line-no">334</span><span id="line-334">    *    the run directory already holds a run.</span>
-<span class="source-line-no">335</span><span id="line-335">    * @throws UnsupportedOperationException On Windows.</span>
-<span class="source-line-no">336</span><span id="line-336">    */</span>
-<span class="source-line-no">337</span><span id="line-337">   public static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path dir) throws IOException {</span>
-<span class="source-line-no">338</span><span id="line-338">      return start(tool, cmd, cols, rows, dir, false);</span>
-<span class="source-line-no">339</span><span id="line-339">   }</span>
-<span class="source-line-no">340</span><span id="line-340"></span>
-<span class="source-line-no">341</span><span id="line-341">   /**</span>
-<span class="source-line-no">342</span><span id="line-342">    * Starts a tool under a pseudo-terminal, optionally with input.</span>
-<span class="source-line-no">343</span><span id="line-343">    *</span>
-<span class="source-line-no">344</span><span id="line-344">    * &lt;p&gt;</span>
-<span class="source-line-no">345</span><span id="line-345">    * Same as {@link #start(String, List, int, int, Path)}, except that with {@code input} on the runner gets</span>
-<span class="source-line-no">346</span><span id="line-346">    * {@code --input stdin} and the returned process accepts {@link #write(byte[])}.</span>
-<span class="source-line-no">347</span><span id="line-347">    *</span>
-<span class="source-line-no">348</span><span id="line-348">    * @param tool The juneau_terminal tool parser.</span>
-<span class="source-line-no">349</span><span id="line-349">    * @param cmd The command and its arguments; at least one element.</span>
-<span class="source-line-no">350</span><span id="line-350">    * @param cols The terminal width, 1-9999.</span>
-<span class="source-line-no">351</span><span id="line-351">    * @param rows The terminal height, 1-9999.</span>
-<span class="source-line-no">352</span><span id="line-352">    * @param dir The run directory; see {@link #start(String, List, int, int, Path)}.</span>
-<span class="source-line-no">353</span><span id="line-353">    * @param input Whether the job takes input through {@link #write(byte[])}.</span>
-<span class="source-line-no">354</span><span id="line-354">    * @return The running process.</span>
-<span class="source-line-no">355</span><span id="line-355">    * @throws IOException If the directory could not be prepared or the process could not start.</span>
-<span class="source-line-no">356</span><span id="line-356">    * @throws IllegalArgumentException If an argument is out of range.</span>
-<span class="source-line-no">357</span><span id="line-357">    * @throws IllegalStateException If the script is not configured, {@code python3} is not on the {@code PATH}, or</span>
-<span class="source-line-no">358</span><span id="line-358">    *    the run directory already holds a run.</span>
-<span class="source-line-no">359</span><span id="line-359">    * @throws UnsupportedOperationException On Windows.</span>
-<span class="source-line-no">360</span><span id="line-360">    */</span>
-<span class="source-line-no">361</span><span id="line-361">   public static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path dir, boolean input) throws IOException {</span>
-<span class="source-line-no">362</span><span id="line-362">      return start(tool, cmd, cols, rows, dir, Host.system(), input);</span>
-<span class="source-line-no">363</span><span id="line-363">   }</span>
-<span class="source-line-no">364</span><span id="line-364"></span>
-<span class="source-line-no">365</span><span id="line-365">   /**</span>
-<span class="source-line-no">366</span><span id="line-366">    * Starts a tool under a pseudo-terminal with a prompt channel.</span>
-<span class="source-line-no">367</span><span id="line-367">    *</span>
-<span class="source-line-no">368</span><span id="line-368">    * &lt;p&gt;</span>
-<span class="source-line-no">369</span><span id="line-369">    * Same as {@link #start(String, List, int, int, Path)}, except that the runner gets {@code --prompts stdio}, the</span>
-<span class="source-line-no">370</span><span id="line-370">    * script's prompt lines go to {@code prompts} and {@link #answer(String)} sends the replies.</span>
-<span class="source-line-no">371</span><span id="line-371">    *</span>
-<span class="source-line-no">372</span><span id="line-372">    * @param tool The juneau_terminal tool parser.</span>
-<span class="source-line-no">373</span><span id="line-373">    * @param cmd The command and its arguments; at least one element.</span>
-<span class="source-line-no">374</span><span id="line-374">    * @param cols The terminal width, 1-9999.</span>
-<span class="source-line-no">375</span><span id="line-375">    * @param rows The terminal height, 1-9999.</span>
-<span class="source-line-no">376</span><span id="line-376">    * @param dir The run directory; see {@link #start(String, List, int, int, Path)}.</span>
-<span class="source-line-no">377</span><span id="line-377">    * @param prompts Receives the prompt lines; not &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">378</span><span id="line-378">    * @return The running process.</span>
-<span class="source-line-no">379</span><span id="line-379">    * @throws IOException If the directory could not be prepared or the process could not start.</span>
-<span class="source-line-no">380</span><span id="line-380">    * @throws IllegalArgumentException If an argument is out of range.</span>
-<span class="source-line-no">381</span><span id="line-381">    * @throws IllegalStateException If the script is not configured, {@code python3} is not on the {@code PATH}, or</span>
-<span class="source-line-no">382</span><span id="line-382">    *    the run directory already holds a run.</span>
-<span class="source-line-no">383</span><span id="line-383">    * @throws UnsupportedOperationException On Windows.</span>
-<span class="source-line-no">384</span><span id="line-384">    */</span>
-<span class="source-line-no">385</span><span id="line-385">   public static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path dir, TerminalPrompts prompts) throws IOException {</span>
-<span class="source-line-no">386</span><span id="line-386">      Objects.requireNonNull(prompts, "prompts");</span>
-<span class="source-line-no">387</span><span id="line-387">      return start(tool, cmd, cols, rows, dir, Host.system(), TerminalProcess::ensureDone, false, prompts);</span>
-<span class="source-line-no">388</span><span id="line-388">   }</span>
-<span class="source-line-no">389</span><span id="line-389"></span>
-<span class="source-line-no">390</span><span id="line-390">   /**</span>
-<span class="source-line-no">391</span><span id="line-391">    * Starts a tool under a pseudo-terminal with extra environment variables.</span>
-<span class="source-line-no">392</span><span id="line-392">    *</span>
-<span class="source-line-no">393</span><span id="line-393">    * &lt;p&gt;</span>
-<span class="source-line-no">394</span><span id="line-394">    * Same as {@link #start(String, List, int, int, Path)}, except that {@code env} is added to the child's</span>
-<span class="source-line-no">395</span><span id="line-395">    * environment (over what it inherits).</span>
-<span class="source-line-no">396</span><span id="line-396">    * Use it for values that must not appear on the command line, such as secrets.</span>
+<span class="source-line-no">307</span><span id="line-307">         LOG.log(Level.FINE, e, () -&gt; "TerminalProcess input pipe failed for '" + events + "'.");</span>
+<span class="source-line-no">308</span><span id="line-308">         return false;</span>
+<span class="source-line-no">309</span><span id="line-309">      } finally {</span>
+<span class="source-line-no">310</span><span id="line-310">         synchronized (inLock) {</span>
+<span class="source-line-no">311</span><span id="line-311">            writing = false;</span>
+<span class="source-line-no">312</span><span id="line-312">         }</span>
+<span class="source-line-no">313</span><span id="line-313">      }</span>
+<span class="source-line-no">314</span><span id="line-314">   }</span>
+<span class="source-line-no">315</span><span id="line-315"></span>
+<span class="source-line-no">316</span><span id="line-316">   private static void closeQuietly(OutputStream out) {</span>
+<span class="source-line-no">317</span><span id="line-317">      try {</span>
+<span class="source-line-no">318</span><span id="line-318">         out.close();</span>
+<span class="source-line-no">319</span><span id="line-319">      } catch (IOException e) {</span>
+<span class="source-line-no">320</span><span id="line-320">         // A broken pipe has nothing left to close.</span>
+<span class="source-line-no">321</span><span id="line-321">      }</span>
+<span class="source-line-no">322</span><span id="line-322">   }</span>
+<span class="source-line-no">323</span><span id="line-323"></span>
+<span class="source-line-no">324</span><span id="line-324">   /**</span>
+<span class="source-line-no">325</span><span id="line-325">    * Starts a tool under a pseudo-terminal.</span>
+<span class="source-line-no">326</span><span id="line-326">    *</span>
+<span class="source-line-no">327</span><span id="line-327">    * @param tool The juneau_terminal tool parser: {@code maven}, {@code pytest}, {@code playwright} or {@code generic}.</span>
+<span class="source-line-no">328</span><span id="line-328">    * @param cmd The command and its arguments; at least one element.</span>
+<span class="source-line-no">329</span><span id="line-329">    *    It is a token list: each element reaches the tool as one argument, through {@link ProcessBuilder}.  It is never</span>
+<span class="source-line-no">330</span><span id="line-330">    *    joined into a string or given to a shell, so shell metacharacters in an element are literal.</span>
+<span class="source-line-no">331</span><span id="line-331">    * @param cols The terminal width, 1-9999.</span>
+<span class="source-line-no">332</span><span id="line-332">    * @param rows The terminal height, 1-9999.</span>
+<span class="source-line-no">333</span><span id="line-333">    * @param root The configured root directory for runs; created if missing.  The process creates and owns a new run</span>
+<span class="source-line-no">334</span><span id="line-334">    *    directory under it (mode 700, named by a generated id); callers never choose that path.  The tool works in a</span>
+<span class="source-line-no">335</span><span id="line-335">    *    {@code work} subdirectory of the run directory, and the runner's own stdout and stderr go to</span>
+<span class="source-line-no">336</span><span id="line-336">    *    {@code runner.out} in the run directory, in append mode and uncapped; that file is diagnostic only.</span>
+<span class="source-line-no">337</span><span id="line-337">    *    See {@link #runDir()} and {@link #id()}.</span>
+<span class="source-line-no">338</span><span id="line-338">    * @return The running process.</span>
+<span class="source-line-no">339</span><span id="line-339">    * @throws IOException If the directory could not be prepared or the process could not start.</span>
+<span class="source-line-no">340</span><span id="line-340">    * @throws IllegalArgumentException If an argument is out of range.</span>
+<span class="source-line-no">341</span><span id="line-341">    * @throws IllegalStateException If the script is not configured or {@code python3} is not on the {@code PATH}.</span>
+<span class="source-line-no">342</span><span id="line-342">    * @throws UnsupportedOperationException On Windows.</span>
+<span class="source-line-no">343</span><span id="line-343">    */</span>
+<span class="source-line-no">344</span><span id="line-344">   public static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path root) throws IOException {</span>
+<span class="source-line-no">345</span><span id="line-345">      return start(tool, cmd, cols, rows, root, false);</span>
+<span class="source-line-no">346</span><span id="line-346">   }</span>
+<span class="source-line-no">347</span><span id="line-347"></span>
+<span class="source-line-no">348</span><span id="line-348">   /**</span>
+<span class="source-line-no">349</span><span id="line-349">    * Starts a tool under a pseudo-terminal, optionally with input.</span>
+<span class="source-line-no">350</span><span id="line-350">    *</span>
+<span class="source-line-no">351</span><span id="line-351">    * &lt;p&gt;</span>
+<span class="source-line-no">352</span><span id="line-352">    * Same as {@link #start(String, List, int, int, Path)}, except that with {@code input} on the runner gets</span>
+<span class="source-line-no">353</span><span id="line-353">    * {@code --input stdin} and the returned process accepts {@link #write(byte[])}.</span>
+<span class="source-line-no">354</span><span id="line-354">    *</span>
+<span class="source-line-no">355</span><span id="line-355">    * @param tool The juneau_terminal tool parser.</span>
+<span class="source-line-no">356</span><span id="line-356">    * @param cmd The command and its arguments; at least one element.</span>
+<span class="source-line-no">357</span><span id="line-357">    * @param cols The terminal width, 1-9999.</span>
+<span class="source-line-no">358</span><span id="line-358">    * @param rows The terminal height, 1-9999.</span>
+<span class="source-line-no">359</span><span id="line-359">    * @param root The run root; see {@link #start(String, List, int, int, Path)}.</span>
+<span class="source-line-no">360</span><span id="line-360">    * @param input Whether the job takes input through {@link #write(byte[])}.</span>
+<span class="source-line-no">361</span><span id="line-361">    * @return The running process.</span>
+<span class="source-line-no">362</span><span id="line-362">    * @throws IOException If the directory could not be prepared or the process could not start.</span>
+<span class="source-line-no">363</span><span id="line-363">    * @throws IllegalArgumentException If an argument is out of range.</span>
+<span class="source-line-no">364</span><span id="line-364">    * @throws IllegalStateException If the script is not configured or {@code python3} is not on the {@code PATH}.</span>
+<span class="source-line-no">365</span><span id="line-365">    * @throws UnsupportedOperationException On Windows.</span>
+<span class="source-line-no">366</span><span id="line-366">    */</span>
+<span class="source-line-no">367</span><span id="line-367">   public static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path root, boolean input) throws IOException {</span>
+<span class="source-line-no">368</span><span id="line-368">      return start(tool, cmd, cols, rows, root, Host.system(), input);</span>
+<span class="source-line-no">369</span><span id="line-369">   }</span>
+<span class="source-line-no">370</span><span id="line-370"></span>
+<span class="source-line-no">371</span><span id="line-371">   /**</span>
+<span class="source-line-no">372</span><span id="line-372">    * Starts a tool under a pseudo-terminal with a prompt channel.</span>
+<span class="source-line-no">373</span><span id="line-373">    *</span>
+<span class="source-line-no">374</span><span id="line-374">    * &lt;p&gt;</span>
+<span class="source-line-no">375</span><span id="line-375">    * Same as {@link #start(String, List, int, int, Path)}, except that the runner gets {@code --prompts stdio}, the</span>
+<span class="source-line-no">376</span><span id="line-376">    * script's prompt lines go to {@code prompts} and {@link #answer(String)} sends the replies.</span>
+<span class="source-line-no">377</span><span id="line-377">    *</span>
+<span class="source-line-no">378</span><span id="line-378">    * @param tool The juneau_terminal tool parser.</span>
+<span class="source-line-no">379</span><span id="line-379">    * @param cmd The command and its arguments; at least one element.</span>
+<span class="source-line-no">380</span><span id="line-380">    * @param cols The terminal width, 1-9999.</span>
+<span class="source-line-no">381</span><span id="line-381">    * @param rows The terminal height, 1-9999.</span>
+<span class="source-line-no">382</span><span id="line-382">    * @param root The run root; see {@link #start(String, List, int, int, Path)}.</span>
+<span class="source-line-no">383</span><span id="line-383">    * @param prompts Receives the prompt lines; not &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">384</span><span id="line-384">    * @return The running process.</span>
+<span class="source-line-no">385</span><span id="line-385">    * @throws IOException If the directory could not be prepared or the process could not start.</span>
+<span class="source-line-no">386</span><span id="line-386">    * @throws IllegalArgumentException If an argument is out of range.</span>
+<span class="source-line-no">387</span><span id="line-387">    * @throws IllegalStateException If the script is not configured or {@code python3} is not on the {@code PATH}.</span>
+<span class="source-line-no">388</span><span id="line-388">    * @throws UnsupportedOperationException On Windows.</span>
+<span class="source-line-no">389</span><span id="line-389">    */</span>
+<span class="source-line-no">390</span><span id="line-390">   public static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path root, TerminalPrompts prompts) throws IOException {</span>
+<span class="source-line-no">391</span><span id="line-391">      Objects.requireNonNull(prompts, "prompts");</span>
+<span class="source-line-no">392</span><span id="line-392">      return start(tool, cmd, cols, rows, root, Host.system(), TerminalProcess::ensureDone, false, prompts);</span>
+<span class="source-line-no">393</span><span id="line-393">   }</span>
+<span class="source-line-no">394</span><span id="line-394"></span>
+<span class="source-line-no">395</span><span id="line-395">   /**</span>
+<span class="source-line-no">396</span><span id="line-396">    * Starts a tool under a pseudo-terminal with extra environment variables.</span>
 <span class="source-line-no">397</span><span id="line-397">    *</span>
-<span class="source-line-no">398</span><span id="line-398">    * @param tool The juneau_terminal tool parser.</span>
-<span class="source-line-no">399</span><span id="line-399">    * @param cmd The command and its arguments; at least one element.</span>
-<span class="source-line-no">400</span><span id="line-400">    * @param cols The terminal width, 1-9999.</span>
-<span class="source-line-no">401</span><span id="line-401">    * @param rows The terminal height, 1-9999.</span>
-<span class="source-line-no">402</span><span id="line-402">    * @param dir The run directory; see {@link #start(String, List, int, int, Path)}.</span>
-<span class="source-line-no">403</span><span id="line-403">    * @param env Variables to add to the child's environment; not &lt;jk&gt;null&lt;/jk&gt;, may be empty.</span>
-<span class="source-line-no">404</span><span id="line-404">    * @return The running process.</span>
-<span class="source-line-no">405</span><span id="line-405">    * @throws IOException If the directory could not be prepared or the process could not start.</span>
-<span class="source-line-no">406</span><span id="line-406">    * @throws IllegalArgumentException If an argument is out of range.</span>
-<span class="source-line-no">407</span><span id="line-407">    * @throws IllegalStateException If the script is not configured, {@code python3} is not on the {@code PATH}, or</span>
-<span class="source-line-no">408</span><span id="line-408">    *    the run directory already holds a run.</span>
-<span class="source-line-no">409</span><span id="line-409">    * @throws UnsupportedOperationException On Windows.</span>
-<span class="source-line-no">410</span><span id="line-410">    */</span>
-<span class="source-line-no">411</span><span id="line-411">   public static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path dir, Map&lt;String,String&gt; env) throws IOException {</span>
-<span class="source-line-no">412</span><span id="line-412">      Objects.requireNonNull(env, "env");</span>
-<span class="source-line-no">413</span><span id="line-413">      return start(tool, cmd, cols, rows, dir, Host.system(), TerminalProcess::ensureDone, false, null, env);</span>
-<span class="source-line-no">414</span><span id="line-414">   }</span>
-<span class="source-line-no">415</span><span id="line-415"></span>
-<span class="source-line-no">416</span><span id="line-416">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path dir, Host host, Map&lt;String,String&gt; env) throws IOException {</span>
-<span class="source-line-no">417</span><span id="line-417">      Objects.requireNonNull(env, "env");</span>
-<span class="source-line-no">418</span><span id="line-418">      return start(tool, cmd, cols, rows, dir, host, TerminalProcess::ensureDone, false, null, env);</span>
-<span class="source-line-no">419</span><span id="line-419">   }</span>
-<span class="source-line-no">420</span><span id="line-420"></span>
-<span class="source-line-no">421</span><span id="line-421">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path dir, Host host) throws IOException {</span>
-<span class="source-line-no">422</span><span id="line-422">      return start(tool, cmd, cols, rows, dir, host, false);</span>
+<span class="source-line-no">398</span><span id="line-398">    * &lt;p&gt;</span>
+<span class="source-line-no">399</span><span id="line-399">    * Same as {@link #start(String, List, int, int, Path)}, except that {@code env} is added to the child's</span>
+<span class="source-line-no">400</span><span id="line-400">    * environment (over what it inherits).</span>
+<span class="source-line-no">401</span><span id="line-401">    * Use it for values that must not appear on the command line, such as secrets.</span>
+<span class="source-line-no">402</span><span id="line-402">    *</span>
+<span class="source-line-no">403</span><span id="line-403">    * @param tool The juneau_terminal tool parser.</span>
+<span class="source-line-no">404</span><span id="line-404">    * @param cmd The command and its arguments; at least one element.</span>
+<span class="source-line-no">405</span><span id="line-405">    * @param cols The terminal width, 1-9999.</span>
+<span class="source-line-no">406</span><span id="line-406">    * @param rows The terminal height, 1-9999.</span>
+<span class="source-line-no">407</span><span id="line-407">    * @param root The run root; see {@link #start(String, List, int, int, Path)}.</span>
+<span class="source-line-no">408</span><span id="line-408">    * @param env Variables to add to the child's environment; not &lt;jk&gt;null&lt;/jk&gt;, may be empty.</span>
+<span class="source-line-no">409</span><span id="line-409">    * @return The running process.</span>
+<span class="source-line-no">410</span><span id="line-410">    * @throws IOException If the directory could not be prepared or the process could not start.</span>
+<span class="source-line-no">411</span><span id="line-411">    * @throws IllegalArgumentException If an argument is out of range.</span>
+<span class="source-line-no">412</span><span id="line-412">    * @throws IllegalStateException If the script is not configured or {@code python3} is not on the {@code PATH}.</span>
+<span class="source-line-no">413</span><span id="line-413">    * @throws UnsupportedOperationException On Windows.</span>
+<span class="source-line-no">414</span><span id="line-414">    */</span>
+<span class="source-line-no">415</span><span id="line-415">   public static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path root, Map&lt;String,String&gt; env) throws IOException {</span>
+<span class="source-line-no">416</span><span id="line-416">      Objects.requireNonNull(env, "env");</span>
+<span class="source-line-no">417</span><span id="line-417">      return start(tool, cmd, cols, rows, root, Host.system(), TerminalProcess::ensureDone, false, null, env);</span>
+<span class="source-line-no">418</span><span id="line-418">   }</span>
+<span class="source-line-no">419</span><span id="line-419"></span>
+<span class="source-line-no">420</span><span id="line-420">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path root, Host host, Map&lt;String,String&gt; env) throws IOException {</span>
+<span class="source-line-no">421</span><span id="line-421">      Objects.requireNonNull(env, "env");</span>
+<span class="source-line-no">422</span><span id="line-422">      return start(tool, cmd, cols, rows, root, host, TerminalProcess::ensureDone, false, null, env);</span>
 <span class="source-line-no">423</span><span id="line-423">   }</span>
 <span class="source-line-no">424</span><span id="line-424"></span>
-<span class="source-line-no">425</span><span id="line-425">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path dir, Host host, boolean input) throws IOException {</span>
-<span class="source-line-no">426</span><span id="line-426">      return start(tool, cmd, cols, rows, dir, host, TerminalProcess::ensureDone, input);</span>
+<span class="source-line-no">425</span><span id="line-425">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path root, Host host) throws IOException {</span>
+<span class="source-line-no">426</span><span id="line-426">      return start(tool, cmd, cols, rows, root, host, false);</span>
 <span class="source-line-no">427</span><span id="line-427">   }</span>
 <span class="source-line-no">428</span><span id="line-428"></span>
-<span class="source-line-no">429</span><span id="line-429">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter) throws IOException {</span>
-<span class="source-line-no">430</span><span id="line-430">      return start(tool, cmd, cols, rows, dir, host, doneWriter, false);</span>
+<span class="source-line-no">429</span><span id="line-429">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path root, Host host, boolean input) throws IOException {</span>
+<span class="source-line-no">430</span><span id="line-430">      return start(tool, cmd, cols, rows, root, host, TerminalProcess::ensureDone, input);</span>
 <span class="source-line-no">431</span><span id="line-431">   }</span>
 <span class="source-line-no">432</span><span id="line-432"></span>
-<span class="source-line-no">433</span><span id="line-433">   @SuppressWarnings({</span>
-<span class="source-line-no">434</span><span id="line-434">      "java:S107" // internal entry point; the parameters are the process configuration</span>
-<span class="source-line-no">435</span><span id="line-435">   })</span>
-<span class="source-line-no">436</span><span id="line-436">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter, boolean input) throws IOException {</span>
-<span class="source-line-no">437</span><span id="line-437">      return start(tool, cmd, cols, rows, dir, host, doneWriter, input, null);</span>
-<span class="source-line-no">438</span><span id="line-438">   }</span>
-<span class="source-line-no">439</span><span id="line-439"></span>
-<span class="source-line-no">440</span><span id="line-440">   @SuppressWarnings({</span>
-<span class="source-line-no">441</span><span id="line-441">      "java:S107" // internal entry point; the parameters are the process configuration</span>
-<span class="source-line-no">442</span><span id="line-442">   })</span>
-<span class="source-line-no">443</span><span id="line-443">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter, boolean input, TerminalPrompts prompts) throws IOException {</span>
-<span class="source-line-no">444</span><span id="line-444">      return start(tool, cmd, cols, rows, dir, host, doneWriter, input, prompts, Map.of());</span>
-<span class="source-line-no">445</span><span id="line-445">   }</span>
-<span class="source-line-no">446</span><span id="line-446"></span>
-<span class="source-line-no">447</span><span id="line-447">   @SuppressWarnings({</span>
-<span class="source-line-no">448</span><span id="line-448">      "java:S107" // internal entry point; the parameters are the process configuration</span>
-<span class="source-line-no">449</span><span id="line-449">   })</span>
-<span class="source-line-no">450</span><span id="line-450">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter, boolean input, TerminalPrompts prompts, Map&lt;String,String&gt; env) throws IOException {</span>
-<span class="source-line-no">451</span><span id="line-451">      if (input &amp;&amp; prompts != null)</span>
-<span class="source-line-no">452</span><span id="line-452">         throw new IllegalArgumentException("input and prompts are mutually exclusive");</span>
-<span class="source-line-no">453</span><span id="line-453">      if (host.osName().toLowerCase(Locale.ROOT).startsWith("windows"))</span>
-<span class="source-line-no">454</span><span id="line-454">         throw new UnsupportedOperationException("TerminalProcess needs a POSIX pseudo-terminal; Windows is not supported.");</span>
-<span class="source-line-no">455</span><span id="line-455">      if (! TOOLS.contains(tool))</span>
-<span class="source-line-no">456</span><span id="line-456">         throw iaex("TerminalProcess tool must be one of %s; got '%s'.", new TreeSet&lt;&gt;(TOOLS), tool);</span>
-<span class="source-line-no">457</span><span id="line-457">      if (ie(cmd))</span>
-<span class="source-line-no">458</span><span id="line-458">         throw iaex("TerminalProcess cmd must have at least one element.");</span>
-<span class="source-line-no">459</span><span id="line-459">      if (cols &lt; 1 || cols &gt; 9999 || rows &lt; 1 || rows &gt; 9999)</span>
-<span class="source-line-no">460</span><span id="line-460">         throw iaex("TerminalProcess size must be 1-9999 x 1-9999; got '%sx%s'.", cols, rows);</span>
-<span class="source-line-no">461</span><span id="line-461">      var script = host.scriptProperty() != null &amp;&amp; ! host.scriptProperty().isBlank() ? host.scriptProperty() : host.scriptEnv();</span>
-<span class="source-line-no">462</span><span id="line-462">      if (ib(script))</span>
-<span class="source-line-no">463</span><span id="line-463">         throw new IllegalStateException("TerminalProcess cannot find juneau_terminal.py: set the system property " + SCRIPT_PROPERTY + " or the environment variable " + SCRIPT_ENV + ".");</span>
-<span class="source-line-no">464</span><span id="line-464">      var python = findOnPath("python3", host.path());</span>
-<span class="source-line-no">465</span><span id="line-465">      if (python == null)</span>
-<span class="source-line-no">466</span><span id="line-466">         throw new IllegalStateException("TerminalProcess cannot find python3 on the PATH.");</span>
-<span class="source-line-no">467</span><span id="line-467">      Files.createDirectories(dir);</span>
-<span class="source-line-no">468</span><span id="line-468">      var log = dir.resolve(LOG_NAME);</span>
-<span class="source-line-no">469</span><span id="line-469">      var events = dir.resolve(EVENTS_NAME);</span>
-<span class="source-line-no">470</span><span id="line-470">      for (var f : List.of(log, events))</span>
-<span class="source-line-no">471</span><span id="line-471">         if (Files.exists(f) &amp;&amp; Files.size(f) &gt; 0)</span>
-<span class="source-line-no">472</span><span id="line-472">            throw new IllegalStateException("TerminalProcess run directory '" + dir + "' already holds a run: '" + f.getFileName() + "' is not empty.");</span>
-<span class="source-line-no">473</span><span id="line-473">      // Written here as well as by juneau_terminal, so a request that arrives before the child starts sees the real size.</span>
-<span class="source-line-no">474</span><span id="line-474">      Files.writeString(log.resolveSibling(LOG_NAME + ".size"), "{\"cols\":" + cols + ",\"rows\":" + rows + "}");</span>
-<span class="source-line-no">475</span><span id="line-475">      var argv = new ArrayList&lt;String&gt;();</span>
-<span class="source-line-no">476</span><span id="line-476">      argv.addAll(List.of(python.toString(), script, "--console", "none", "--pty", "--size", cols + "x" + rows,</span>
-<span class="source-line-no">477</span><span id="line-477">         "--full-log", log.toString(), "--events", events.toString()));</span>
-<span class="source-line-no">478</span><span id="line-478">      if (input)</span>
-<span class="source-line-no">479</span><span id="line-479">         argv.addAll(List.of("--input", "stdin"));</span>
-<span class="source-line-no">480</span><span id="line-480">      if (prompts != null)</span>
-<span class="source-line-no">481</span><span id="line-481">         argv.addAll(List.of("--prompts", "stdio"));</span>
-<span class="source-line-no">482</span><span id="line-482">      argv.addAll(List.of(tool, "--"));</span>
-<span class="source-line-no">483</span><span id="line-483">      argv.addAll(cmd);</span>
-<span class="source-line-no">484</span><span id="line-484">      var runnerOut = ProcessBuilder.Redirect.appendTo(dir.resolve("runner.out").toFile());</span>
-<span class="source-line-no">485</span><span id="line-485">      var pb = new ProcessBuilder(argv).directory(dir.toFile());</span>
-<span class="source-line-no">486</span><span id="line-486">      pb.environment().putAll(env);</span>
-<span class="source-line-no">487</span><span id="line-487">      if (prompts == null)</span>
-<span class="source-line-no">488</span><span id="line-488">         pb.redirectErrorStream(true).redirectOutput(runnerOut);</span>
-<span class="source-line-no">489</span><span id="line-489">      else</span>
-<span class="source-line-no">490</span><span id="line-490">         pb.redirectError(runnerOut);  // stdout stays a pipe: it is the prompt channel.</span>
-<span class="source-line-no">491</span><span id="line-491">      return new TerminalProcess(pb.start(), log, events, doneWriter, input, prompts, String.valueOf(dir.getFileName()));</span>
-<span class="source-line-no">492</span><span id="line-492">   }</span>
-<span class="source-line-no">493</span><span id="line-493"></span>
-<span class="source-line-no">494</span><span id="line-494">   /** Returns the first executable {@code name} in the {@code PATH} directories, or &lt;jk&gt;null&lt;/jk&gt;. */</span>
-<span class="source-line-no">495</span><span id="line-495">   static Path findOnPath(String name, String path) {</span>
-<span class="source-line-no">496</span><span id="line-496">      if (path == null)</span>
-<span class="source-line-no">497</span><span id="line-497">         return null;</span>
-<span class="source-line-no">498</span><span id="line-498">      for (var d : path.split(File.pathSeparator)) {</span>
-<span class="source-line-no">499</span><span id="line-499">         if (d.isEmpty())</span>
-<span class="source-line-no">500</span><span id="line-500">            continue;</span>
-<span class="source-line-no">501</span><span id="line-501">         var p = Paths.get(d, name);</span>
-<span class="source-line-no">502</span><span id="line-502">         if (Files.isRegularFile(p) &amp;&amp; Files.isExecutable(p))</span>
-<span class="source-line-no">503</span><span id="line-503">            return p;</span>
-<span class="source-line-no">504</span><span id="line-504">      }</span>
-<span class="source-line-no">505</span><span id="line-505">      return null;</span>
-<span class="source-line-no">506</span><span id="line-506">   }</span>
-<span class="source-line-no">507</span><span id="line-507"></span>
-<span class="source-line-no">508</span><span id="line-508">   /** Appends a warning note and a failing done event when the last {@value #TAIL_BYTES} bytes of the events file hold no done event. */</span>
-<span class="source-line-no">509</span><span id="line-509">   static void ensureDone(Path events, int exitCode) throws IOException {</span>
-<span class="source-line-no">510</span><span id="line-510">      var text = "";</span>
-<span class="source-line-no">511</span><span id="line-511">      if (Files.exists(events)) {</span>
-<span class="source-line-no">512</span><span id="line-512">         try (var ch = FileChannel.open(events, StandardOpenOption.READ)) {</span>
-<span class="source-line-no">513</span><span id="line-513">            var from = Math.max(0, ch.size() - TAIL_BYTES);</span>
-<span class="source-line-no">514</span><span id="line-514">            var buf = ByteBuffer.allocate((int)(ch.size() - from));</span>
-<span class="source-line-no">515</span><span id="line-515">            while (buf.hasRemaining() &amp;&amp; ch.read(buf, from + buf.position()) &gt;= 0) {</span>
-<span class="source-line-no">516</span><span id="line-516">               // The condition does the reading; the loop has no body.</span>
-<span class="source-line-no">517</span><span id="line-517">            }</span>
-<span class="source-line-no">518</span><span id="line-518">            text = new String(buf.array(), 0, buf.position(), UTF_8);</span>
-<span class="source-line-no">519</span><span id="line-519">         }</span>
-<span class="source-line-no">520</span><span id="line-520">      }</span>
-<span class="source-line-no">521</span><span id="line-521">      // A fragment at the start of the tail never parses, so it is never taken for a done event.</span>
-<span class="source-line-no">522</span><span id="line-522">      for (var line : text.split("\n")) {</span>
-<span class="source-line-no">523</span><span id="line-523">         if (isDone(line))</span>
-<span class="source-line-no">524</span><span id="line-524">            return;</span>
-<span class="source-line-no">525</span><span id="line-525">      }</span>
-<span class="source-line-no">526</span><span id="line-526">      var sb = new StringBuilder();</span>
-<span class="source-line-no">527</span><span id="line-527">      if (! text.isEmpty() &amp;&amp; ! text.endsWith("\n"))</span>
-<span class="source-line-no">528</span><span id="line-528">         sb.append('\n');</span>
-<span class="source-line-no">529</span><span id="line-529">      sb.append(JsonSerializer.DEFAULT.toString(TerminalEvent.note(TerminalEvent.Level.WARN, "runner exited without done, exit " + exitCode).toContractMap())).append('\n');</span>
-<span class="source-line-no">530</span><span id="line-530">      sb.append(JsonSerializer.DEFAULT.toString(TerminalEvent.done(TerminalEvent.DoneStatus.FAIL).toContractMap())).append('\n');</span>
-<span class="source-line-no">531</span><span id="line-531">      Files.writeString(events, sb, UTF_8, CREATE, APPEND);</span>
-<span class="source-line-no">532</span><span id="line-532">   }</span>
-<span class="source-line-no">533</span><span id="line-533"></span>
-<span class="source-line-no">534</span><span id="line-534">   private static boolean isDone(String line) {</span>
-<span class="source-line-no">535</span><span id="line-535">      if (line.isBlank())</span>
-<span class="source-line-no">536</span><span id="line-536">         return false;</span>
-<span class="source-line-no">537</span><span id="line-537">      try {</span>
-<span class="source-line-no">538</span><span id="line-538">         return TerminalEvent.fromMap(Json.to(line, Map.class)).kind() == TerminalEvent.Kind.DONE;</span>
-<span class="source-line-no">539</span><span id="line-539">      } catch (Exception e) {</span>
-<span class="source-line-no">540</span><span id="line-540">         return false;</span>
-<span class="source-line-no">541</span><span id="line-541">      }</span>
-<span class="source-line-no">542</span><span id="line-542">   }</span>
-<span class="source-line-no">543</span><span id="line-543"></span>
-<span class="source-line-no">544</span><span id="line-544">   /**</span>
-<span class="source-line-no">545</span><span id="line-545">    * The raw byte source over the log.</span>
-<span class="source-line-no">546</span><span id="line-546">    *</span>
-<span class="source-line-no">547</span><span id="line-547">    * @return The source.</span>
-<span class="source-line-no">548</span><span id="line-548">    */</span>
-<span class="source-line-no">549</span><span id="line-549">   public FileTerminalSource terminal() {</span>
-<span class="source-line-no">550</span><span id="line-550">      return terminal;</span>
-<span class="source-line-no">551</span><span id="line-551">   }</span>
-<span class="source-line-no">552</span><span id="line-552"></span>
-<span class="source-line-no">553</span><span id="line-553">   /**</span>
-<span class="source-line-no">554</span><span id="line-554">    * The step events source over the events file.</span>
-<span class="source-line-no">555</span><span id="line-555">    *</span>
-<span class="source-line-no">556</span><span id="line-556">    * @return The source.</span>
-<span class="source-line-no">557</span><span id="line-557">    */</span>
-<span class="source-line-no">558</span><span id="line-558">   public FileTerminalViewSource events() {</span>
-<span class="source-line-no">559</span><span id="line-559">      return terminalView;</span>
-<span class="source-line-no">560</span><span id="line-560">   }</span>
-<span class="source-line-no">561</span><span id="line-561"></span>
-<span class="source-line-no">562</span><span id="line-562">   /**</span>
-<span class="source-line-no">563</span><span id="line-563">    * The byte log.</span>
-<span class="source-line-no">564</span><span id="line-564">    *</span>
-<span class="source-line-no">565</span><span id="line-565">    * @return The log path.</span>
-<span class="source-line-no">566</span><span id="line-566">    */</span>
-<span class="source-line-no">567</span><span id="line-567">   public Path log() {</span>
-<span class="source-line-no">568</span><span id="line-568">      return logFile;</span>
-<span class="source-line-no">569</span><span id="line-569">   }</span>
-<span class="source-line-no">570</span><span id="line-570"></span>
-<span class="source-line-no">571</span><span id="line-571">   /**</span>
-<span class="source-line-no">572</span><span id="line-572">    * The events file.</span>
-<span class="source-line-no">573</span><span id="line-573">    *</span>
-<span class="source-line-no">574</span><span id="line-574">    * @return The events path.</span>
-<span class="source-line-no">575</span><span id="line-575">    */</span>
-<span class="source-line-no">576</span><span id="line-576">   public Path eventsFile() {</span>
-<span class="source-line-no">577</span><span id="line-577">      return events;</span>
-<span class="source-line-no">578</span><span id="line-578">   }</span>
-<span class="source-line-no">579</span><span id="line-579"></span>
-<span class="source-line-no">580</span><span id="line-580">   /**</span>
-<span class="source-line-no">581</span><span id="line-581">    * Whether the process has exited and the events file ends with a {@code done} event.</span>
-<span class="source-line-no">582</span><span id="line-582">    *</span>
-<span class="source-line-no">583</span><span id="line-583">    * @return &lt;jk&gt;true&lt;/jk&gt; once finished.</span>
-<span class="source-line-no">584</span><span id="line-584">    */</span>
-<span class="source-line-no">585</span><span id="line-585">   public boolean isDone() {</span>
-<span class="source-line-no">586</span><span id="line-586">      return done.get();</span>
-<span class="source-line-no">587</span><span id="line-587">   }</span>
-<span class="source-line-no">588</span><span id="line-588"></span>
-<span class="source-line-no">589</span><span id="line-589">   /**</span>
-<span class="source-line-no">590</span><span id="line-590">    * Waits for the process to exit and for the done event to be in place.</span>
-<span class="source-line-no">591</span><span id="line-591">    *</span>
-<span class="source-line-no">592</span><span id="line-592">    * @param timeout The longest wait.</span>
-<span class="source-line-no">593</span><span id="line-593">    * @param unit The unit of {@code timeout}.</span>
-<span class="source-line-no">594</span><span id="line-594">    * @return The runner's exit code.</span>
-<span class="source-line-no">595</span><span id="line-595">    * @throws InterruptedException If interrupted.</span>
-<span class="source-line-no">596</span><span id="line-596">    * @throws TimeoutException If the process is still running.</span>
-<span class="source-line-no">597</span><span id="line-597">    */</span>
-<span class="source-line-no">598</span><span id="line-598">   public int waitFor(long timeout, TimeUnit unit) throws InterruptedException, TimeoutException {</span>
-<span class="source-line-no">599</span><span id="line-599">      try {</span>
-<span class="source-line-no">600</span><span id="line-600">         return exit.get(timeout, unit);</span>
-<span class="source-line-no">601</span><span id="line-601">      } catch (ExecutionException e) {</span>
-<span class="source-line-no">602</span><span id="line-602">         throw new IllegalStateException(e.getCause());</span>
-<span class="source-line-no">603</span><span id="line-603">      }</span>
-<span class="source-line-no">604</span><span id="line-604">   }</span>
-<span class="source-line-no">605</span><span id="line-605"></span>
-<span class="source-line-no">606</span><span id="line-606">   /**</span>
-<span class="source-line-no">607</span><span id="line-607">    * Whether input is accepted right now.</span>
-<span class="source-line-no">608</span><span id="line-608">    *</span>
-<span class="source-line-no">609</span><span id="line-609">    * @return &lt;jk&gt;true&lt;/jk&gt; only when input is on, the process is alive, no write has failed and the process has not been</span>
-<span class="source-line-no">610</span><span id="line-610">    *    closed.</span>
-<span class="source-line-no">611</span><span id="line-611">    */</span>
-<span class="source-line-no">612</span><span id="line-612">   @Override /* TerminalSink */</span>
-<span class="source-line-no">613</span><span id="line-613">   public boolean acceptsInput() {</span>
-<span class="source-line-no">614</span><span id="line-614">      synchronized (inLock) {</span>
-<span class="source-line-no">615</span><span id="line-615">         // HTT: close() waits for the process to exit, so isAlive() is already false afterwards.  The closed term</span>
-<span class="source-line-no">616</span><span id="line-616">         // guards the window inside close(); it is not observable without a test seam.</span>
-<span class="source-line-no">617</span><span id="line-617">         return input &amp;&amp; ! closed &amp;&amp; ! inputFailed &amp;&amp; process.isAlive();</span>
-<span class="source-line-no">618</span><span id="line-618">      }</span>
-<span class="source-line-no">619</span><span id="line-619">   }</span>
-<span class="source-line-no">620</span><span id="line-620"></span>
-<span class="source-line-no">621</span><span id="line-621">   /**</span>
-<span class="source-line-no">622</span><span id="line-622">    * Queues the bytes for the runner's stdin; never blocks.</span>
-<span class="source-line-no">623</span><span id="line-623">    *</span>
-<span class="source-line-no">624</span><span id="line-624">    * @param bytes The bytes to send; copied.</span>
-<span class="source-line-no">625</span><span id="line-625">    * @return &lt;jk&gt;false&lt;/jk&gt; when input is not accepted, or when the bytes do not fit in the {@value #INPUT_LIMIT}-byte</span>
-<span class="source-line-no">626</span><span id="line-626">    *    pending buffer.  An empty array returns {@link #acceptsInput()}.</span>
+<span class="source-line-no">433</span><span id="line-433">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path root, Host host, DoneWriter doneWriter) throws IOException {</span>
+<span class="source-line-no">434</span><span id="line-434">      return start(tool, cmd, cols, rows, root, host, doneWriter, false);</span>
+<span class="source-line-no">435</span><span id="line-435">   }</span>
+<span class="source-line-no">436</span><span id="line-436"></span>
+<span class="source-line-no">437</span><span id="line-437">   @SuppressWarnings({</span>
+<span class="source-line-no">438</span><span id="line-438">      "java:S107" // internal entry point; the parameters are the process configuration</span>
+<span class="source-line-no">439</span><span id="line-439">   })</span>
+<span class="source-line-no">440</span><span id="line-440">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path root, Host host, DoneWriter doneWriter, boolean input) throws IOException {</span>
+<span class="source-line-no">441</span><span id="line-441">      return start(tool, cmd, cols, rows, root, host, doneWriter, input, null);</span>
+<span class="source-line-no">442</span><span id="line-442">   }</span>
+<span class="source-line-no">443</span><span id="line-443"></span>
+<span class="source-line-no">444</span><span id="line-444">   @SuppressWarnings({</span>
+<span class="source-line-no">445</span><span id="line-445">      "java:S107" // internal entry point; the parameters are the process configuration</span>
+<span class="source-line-no">446</span><span id="line-446">   })</span>
+<span class="source-line-no">447</span><span id="line-447">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path root, Host host, DoneWriter doneWriter, boolean input, TerminalPrompts prompts) throws IOException {</span>
+<span class="source-line-no">448</span><span id="line-448">      return start(tool, cmd, cols, rows, root, host, doneWriter, input, prompts, Map.of());</span>
+<span class="source-line-no">449</span><span id="line-449">   }</span>
+<span class="source-line-no">450</span><span id="line-450"></span>
+<span class="source-line-no">451</span><span id="line-451">   @SuppressWarnings({</span>
+<span class="source-line-no">452</span><span id="line-452">      "java:S107" // internal entry point; the parameters are the process configuration</span>
+<span class="source-line-no">453</span><span id="line-453">   })</span>
+<span class="source-line-no">454</span><span id="line-454">   static TerminalProcess start(String tool, List&lt;String&gt; cmd, int cols, int rows, Path root, Host host, DoneWriter doneWriter, boolean input, TerminalPrompts prompts, Map&lt;String,String&gt; env) throws IOException {</span>
+<span class="source-line-no">455</span><span id="line-455">      if (input &amp;&amp; prompts != null)</span>
+<span class="source-line-no">456</span><span id="line-456">         throw new IllegalArgumentException("input and prompts are mutually exclusive");</span>
+<span class="source-line-no">457</span><span id="line-457">      if (host.osName().toLowerCase(Locale.ROOT).startsWith("windows"))</span>
+<span class="source-line-no">458</span><span id="line-458">         throw new UnsupportedOperationException("TerminalProcess needs a POSIX pseudo-terminal; Windows is not supported.");</span>
+<span class="source-line-no">459</span><span id="line-459">      if (! TOOLS.contains(tool))</span>
+<span class="source-line-no">460</span><span id="line-460">         throw iaex("TerminalProcess tool must be one of %s; got '%s'.", new TreeSet&lt;&gt;(TOOLS), tool);</span>
+<span class="source-line-no">461</span><span id="line-461">      if (ie(cmd))</span>
+<span class="source-line-no">462</span><span id="line-462">         throw iaex("TerminalProcess cmd must have at least one element.");</span>
+<span class="source-line-no">463</span><span id="line-463">      if (cols &lt; 1 || cols &gt; 9999 || rows &lt; 1 || rows &gt; 9999)</span>
+<span class="source-line-no">464</span><span id="line-464">         throw iaex("TerminalProcess size must be 1-9999 x 1-9999; got '%sx%s'.", cols, rows);</span>
+<span class="source-line-no">465</span><span id="line-465">      var script = host.scriptProperty() != null &amp;&amp; ! host.scriptProperty().isBlank() ? host.scriptProperty() : host.scriptEnv();</span>
+<span class="source-line-no">466</span><span id="line-466">      if (ib(script))</span>
+<span class="source-line-no">467</span><span id="line-467">         throw new IllegalStateException("TerminalProcess cannot find juneau_terminal.py: set the system property " + SCRIPT_PROPERTY + " or the environment variable " + SCRIPT_ENV + ".");</span>
+<span class="source-line-no">468</span><span id="line-468">      var python = findOnPath("python3", host.path());</span>
+<span class="source-line-no">469</span><span id="line-469">      if (python == null)</span>
+<span class="source-line-no">470</span><span id="line-470">         throw new IllegalStateException("TerminalProcess cannot find python3 on the PATH.");</span>
+<span class="source-line-no">471</span><span id="line-471">      var dir = newRunDir(root);</span>
+<span class="source-line-no">472</span><span id="line-472">      // The tool works in its own subdirectory, so the log, events and size files sit outside its working directory.</span>
+<span class="source-line-no">473</span><span id="line-473">      var work = dir.resolve(WORK_DIR);</span>
+<span class="source-line-no">474</span><span id="line-474">      Files.createDirectories(work);</span>
+<span class="source-line-no">475</span><span id="line-475">      restrictToOwner(work);</span>
+<span class="source-line-no">476</span><span id="line-476">      var log = dir.resolve(LOG_NAME);</span>
+<span class="source-line-no">477</span><span id="line-477">      var events = dir.resolve(EVENTS_NAME);</span>
+<span class="source-line-no">478</span><span id="line-478">      // Written here as well as by juneau_terminal, so a request that arrives before the child starts sees the real size.</span>
+<span class="source-line-no">479</span><span id="line-479">      Files.writeString(log.resolveSibling(LOG_NAME + ".size"), "{\"cols\":" + cols + ",\"rows\":" + rows + "}");</span>
+<span class="source-line-no">480</span><span id="line-480">      var argv = new ArrayList&lt;String&gt;();</span>
+<span class="source-line-no">481</span><span id="line-481">      argv.addAll(List.of(python.toString(), script, "--console", "none", "--pty", "--size", cols + "x" + rows,</span>
+<span class="source-line-no">482</span><span id="line-482">         "--full-log", log.toString(), "--events", events.toString()));</span>
+<span class="source-line-no">483</span><span id="line-483">      if (input)</span>
+<span class="source-line-no">484</span><span id="line-484">         argv.addAll(List.of("--input", "stdin"));</span>
+<span class="source-line-no">485</span><span id="line-485">      if (prompts != null)</span>
+<span class="source-line-no">486</span><span id="line-486">         argv.addAll(List.of("--prompts", "stdio"));</span>
+<span class="source-line-no">487</span><span id="line-487">      argv.addAll(List.of(tool, "--"));</span>
+<span class="source-line-no">488</span><span id="line-488">      argv.addAll(cmd);</span>
+<span class="source-line-no">489</span><span id="line-489">      var runnerOut = ProcessBuilder.Redirect.appendTo(dir.resolve("runner.out").toFile());</span>
+<span class="source-line-no">490</span><span id="line-490">      var pb = new ProcessBuilder(argv).directory(work.toFile());</span>
+<span class="source-line-no">491</span><span id="line-491">      pb.environment().putAll(env);</span>
+<span class="source-line-no">492</span><span id="line-492">      if (prompts == null)</span>
+<span class="source-line-no">493</span><span id="line-493">         pb.redirectErrorStream(true).redirectOutput(runnerOut);</span>
+<span class="source-line-no">494</span><span id="line-494">      else</span>
+<span class="source-line-no">495</span><span id="line-495">         pb.redirectError(runnerOut);  // stdout stays a pipe: it is the prompt channel.</span>
+<span class="source-line-no">496</span><span id="line-496">      return new TerminalProcess(pb.start(), log, events, doneWriter, input, prompts, dir);</span>
+<span class="source-line-no">497</span><span id="line-497">   }</span>
+<span class="source-line-no">498</span><span id="line-498"></span>
+<span class="source-line-no">499</span><span id="line-499">   /** Creates a new, empty run directory under the root, readable only by its owner; the name is generated. */</span>
+<span class="source-line-no">500</span><span id="line-500">   private static Path newRunDir(Path root) throws IOException {</span>
+<span class="source-line-no">501</span><span id="line-501">      Files.createDirectories(root);</span>
+<span class="source-line-no">502</span><span id="line-502">      try {</span>
+<span class="source-line-no">503</span><span id="line-503">         return Files.createTempDirectory(root, "run-", PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------")));</span>
+<span class="source-line-no">504</span><span id="line-504">      } catch (UnsupportedOperationException e) {</span>
+<span class="source-line-no">505</span><span id="line-505">         LOG.log(Level.FINE, e, () -&gt; "No POSIX permissions for '" + root + "'.");</span>
+<span class="source-line-no">506</span><span id="line-506">         return Files.createTempDirectory(root, "run-");</span>
+<span class="source-line-no">507</span><span id="line-507">      }</span>
+<span class="source-line-no">508</span><span id="line-508">   }</span>
+<span class="source-line-no">509</span><span id="line-509"></span>
+<span class="source-line-no">510</span><span id="line-510">   /** Limits a run directory to its owner (mode 700) where the file system supports POSIX permissions. */</span>
+<span class="source-line-no">511</span><span id="line-511">   private static void restrictToOwner(Path d) throws IOException {</span>
+<span class="source-line-no">512</span><span id="line-512">      try {</span>
+<span class="source-line-no">513</span><span id="line-513">         Files.setPosixFilePermissions(d, PosixFilePermissions.fromString("rwx------"));</span>
+<span class="source-line-no">514</span><span id="line-514">      } catch (UnsupportedOperationException e) {</span>
+<span class="source-line-no">515</span><span id="line-515">         LOG.log(Level.FINE, e, () -&gt; "No POSIX permissions for '" + d + "'.");</span>
+<span class="source-line-no">516</span><span id="line-516">      }</span>
+<span class="source-line-no">517</span><span id="line-517">   }</span>
+<span class="source-line-no">518</span><span id="line-518"></span>
+<span class="source-line-no">519</span><span id="line-519">   /** Returns the first executable {@code name} in the {@code PATH} directories, or &lt;jk&gt;null&lt;/jk&gt;. */</span>
+<span class="source-line-no">520</span><span id="line-520">   static Path findOnPath(String name, String path) {</span>
+<span class="source-line-no">521</span><span id="line-521">      if (path == null)</span>
+<span class="source-line-no">522</span><span id="line-522">         return null;</span>
+<span class="source-line-no">523</span><span id="line-523">      for (var d : path.split(File.pathSeparator)) {</span>
+<span class="source-line-no">524</span><span id="line-524">         if (d.isEmpty())</span>
+<span class="source-line-no">525</span><span id="line-525">            continue;</span>
+<span class="source-line-no">526</span><span id="line-526">         var p = Paths.get(d, name);</span>
+<span class="source-line-no">527</span><span id="line-527">         if (Files.isRegularFile(p) &amp;&amp; Files.isExecutable(p))</span>
+<span class="source-line-no">528</span><span id="line-528">            return p;</span>
+<span class="source-line-no">529</span><span id="line-529">      }</span>
+<span class="source-line-no">530</span><span id="line-530">      return null;</span>
+<span class="source-line-no">531</span><span id="line-531">   }</span>
+<span class="source-line-no">532</span><span id="line-532"></span>
+<span class="source-line-no">533</span><span id="line-533">   /** Appends a warning note and a failing done event when the last {@value #TAIL_BYTES} bytes of the events file hold no done event. */</span>
+<span class="source-line-no">534</span><span id="line-534">   static void ensureDone(Path events, int exitCode) throws IOException {</span>
+<span class="source-line-no">535</span><span id="line-535">      var text = "";</span>
+<span class="source-line-no">536</span><span id="line-536">      if (Files.exists(events)) {</span>
+<span class="source-line-no">537</span><span id="line-537">         try (var ch = FileChannel.open(events, StandardOpenOption.READ)) {</span>
+<span class="source-line-no">538</span><span id="line-538">            var from = Math.max(0, ch.size() - TAIL_BYTES);</span>
+<span class="source-line-no">539</span><span id="line-539">            var buf = ByteBuffer.allocate((int)(ch.size() - from));</span>
+<span class="source-line-no">540</span><span id="line-540">            while (buf.hasRemaining() &amp;&amp; ch.read(buf, from + buf.position()) &gt;= 0) {</span>
+<span class="source-line-no">541</span><span id="line-541">               // The condition does the reading; the loop has no body.</span>
+<span class="source-line-no">542</span><span id="line-542">            }</span>
+<span class="source-line-no">543</span><span id="line-543">            text = new String(buf.array(), 0, buf.position(), UTF_8);</span>
+<span class="source-line-no">544</span><span id="line-544">         }</span>
+<span class="source-line-no">545</span><span id="line-545">      }</span>
+<span class="source-line-no">546</span><span id="line-546">      // A fragment at the start of the tail never parses, so it is never taken for a done event.</span>
+<span class="source-line-no">547</span><span id="line-547">      for (var line : text.split("\n")) {</span>
+<span class="source-line-no">548</span><span id="line-548">         if (isDone(line))</span>
+<span class="source-line-no">549</span><span id="line-549">            return;</span>
+<span class="source-line-no">550</span><span id="line-550">      }</span>
+<span class="source-line-no">551</span><span id="line-551">      var sb = new StringBuilder();</span>
+<span class="source-line-no">552</span><span id="line-552">      if (! text.isEmpty() &amp;&amp; ! text.endsWith("\n"))</span>
+<span class="source-line-no">553</span><span id="line-553">         sb.append('\n');</span>
+<span class="source-line-no">554</span><span id="line-554">      sb.append(JsonSerializer.DEFAULT.toString(TerminalEvent.note(TerminalEvent.Level.WARN, "runner exited without done, exit " + exitCode).toContractMap())).append('\n');</span>
+<span class="source-line-no">555</span><span id="line-555">      sb.append(JsonSerializer.DEFAULT.toString(TerminalEvent.done(TerminalEvent.DoneStatus.FAIL).toContractMap())).append('\n');</span>
+<span class="source-line-no">556</span><span id="line-556">      Files.writeString(events, sb, UTF_8, CREATE, APPEND);</span>
+<span class="source-line-no">557</span><span id="line-557">   }</span>
+<span class="source-line-no">558</span><span id="line-558"></span>
+<span class="source-line-no">559</span><span id="line-559">   private static boolean isDone(String line) {</span>
+<span class="source-line-no">560</span><span id="line-560">      if (line.isBlank())</span>
+<span class="source-line-no">561</span><span id="line-561">         return false;</span>
+<span class="source-line-no">562</span><span id="line-562">      try {</span>
+<span class="source-line-no">563</span><span id="line-563">         return TerminalEvent.fromMap(Json.to(line, Map.class)).kind() == TerminalEvent.Kind.DONE;</span>
+<span class="source-line-no">564</span><span id="line-564">      } catch (Exception e) {</span>
+<span class="source-line-no">565</span><span id="line-565">         return false;</span>
+<span class="source-line-no">566</span><span id="line-566">      }</span>
+<span class="source-line-no">567</span><span id="line-567">   }</span>
+<span class="source-line-no">568</span><span id="line-568"></span>
+<span class="source-line-no">569</span><span id="line-569">   /**</span>
+<span class="source-line-no">570</span><span id="line-570">    * The raw byte source over the log.</span>
+<span class="source-line-no">571</span><span id="line-571">    *</span>
+<span class="source-line-no">572</span><span id="line-572">    * @return The source.</span>
+<span class="source-line-no">573</span><span id="line-573">    */</span>
+<span class="source-line-no">574</span><span id="line-574">   public FileTerminalSource terminal() {</span>
+<span class="source-line-no">575</span><span id="line-575">      return terminal;</span>
+<span class="source-line-no">576</span><span id="line-576">   }</span>
+<span class="source-line-no">577</span><span id="line-577"></span>
+<span class="source-line-no">578</span><span id="line-578">   /**</span>
+<span class="source-line-no">579</span><span id="line-579">    * The step events source over the events file.</span>
+<span class="source-line-no">580</span><span id="line-580">    *</span>
+<span class="source-line-no">581</span><span id="line-581">    * @return The source.</span>
+<span class="source-line-no">582</span><span id="line-582">    */</span>
+<span class="source-line-no">583</span><span id="line-583">   public FileTerminalViewSource events() {</span>
+<span class="source-line-no">584</span><span id="line-584">      return terminalView;</span>
+<span class="source-line-no">585</span><span id="line-585">   }</span>
+<span class="source-line-no">586</span><span id="line-586"></span>
+<span class="source-line-no">587</span><span id="line-587">   /**</span>
+<span class="source-line-no">588</span><span id="line-588">    * The run directory the process created under its root.</span>
+<span class="source-line-no">589</span><span id="line-589">    *</span>
+<span class="source-line-no">590</span><span id="line-590">    * @return The run directory.</span>
+<span class="source-line-no">591</span><span id="line-591">    */</span>
+<span class="source-line-no">592</span><span id="line-592">   public Path runDir() {</span>
+<span class="source-line-no">593</span><span id="line-593">      return runDir;</span>
+<span class="source-line-no">594</span><span id="line-594">   }</span>
+<span class="source-line-no">595</span><span id="line-595"></span>
+<span class="source-line-no">596</span><span id="line-596">   /**</span>
+<span class="source-line-no">597</span><span id="line-597">    * The generated run id, the name of the run directory.</span>
+<span class="source-line-no">598</span><span id="line-598">    *</span>
+<span class="source-line-no">599</span><span id="line-599">    * @return The id; it satisfies the terminal id grammar.</span>
+<span class="source-line-no">600</span><span id="line-600">    */</span>
+<span class="source-line-no">601</span><span id="line-601">   public String id() {</span>
+<span class="source-line-no">602</span><span id="line-602">      return String.valueOf(runDir.getFileName());</span>
+<span class="source-line-no">603</span><span id="line-603">   }</span>
+<span class="source-line-no">604</span><span id="line-604"></span>
+<span class="source-line-no">605</span><span id="line-605">   /**</span>
+<span class="source-line-no">606</span><span id="line-606">    * The byte log.</span>
+<span class="source-line-no">607</span><span id="line-607">    *</span>
+<span class="source-line-no">608</span><span id="line-608">    * @return The log path.</span>
+<span class="source-line-no">609</span><span id="line-609">    */</span>
+<span class="source-line-no">610</span><span id="line-610">   public Path log() {</span>
+<span class="source-line-no">611</span><span id="line-611">      return logFile;</span>
+<span class="source-line-no">612</span><span id="line-612">   }</span>
+<span class="source-line-no">613</span><span id="line-613"></span>
+<span class="source-line-no">614</span><span id="line-614">   /**</span>
+<span class="source-line-no">615</span><span id="line-615">    * The events file.</span>
+<span class="source-line-no">616</span><span id="line-616">    *</span>
+<span class="source-line-no">617</span><span id="line-617">    * @return The events path.</span>
+<span class="source-line-no">618</span><span id="line-618">    */</span>
+<span class="source-line-no">619</span><span id="line-619">   public Path eventsFile() {</span>
+<span class="source-line-no">620</span><span id="line-620">      return events;</span>
+<span class="source-line-no">621</span><span id="line-621">   }</span>
+<span class="source-line-no">622</span><span id="line-622"></span>
+<span class="source-line-no">623</span><span id="line-623">   /**</span>
+<span class="source-line-no">624</span><span id="line-624">    * Whether the process has exited and the events file ends with a {@code done} event.</span>
+<span class="source-line-no">625</span><span id="line-625">    *</span>
+<span class="source-line-no">626</span><span id="line-626">    * @return &lt;jk&gt;true&lt;/jk&gt; once finished.</span>
 <span class="source-line-no">627</span><span id="line-627">    */</span>
-<span class="source-line-no">628</span><span id="line-628">   @Override /* TerminalSink */</span>
-<span class="source-line-no">629</span><span id="line-629">   public boolean write(byte[] bytes) {</span>
-<span class="source-line-no">630</span><span id="line-630">      synchronized (inLock) {</span>
-<span class="source-line-no">631</span><span id="line-631">         if (! acceptsInput())</span>
-<span class="source-line-no">632</span><span id="line-632">            return false;</span>
-<span class="source-line-no">633</span><span id="line-633">         if (bytes.length == 0)</span>
-<span class="source-line-no">634</span><span id="line-634">            return true;</span>
-<span class="source-line-no">635</span><span id="line-635">         if (pendingBytes + bytes.length &gt; INPUT_LIMIT)</span>
-<span class="source-line-no">636</span><span id="line-636">            return false;</span>
-<span class="source-line-no">637</span><span id="line-637">         pending.add(bytes.clone());</span>
-<span class="source-line-no">638</span><span id="line-638">         pendingBytes += bytes.length;</span>
-<span class="source-line-no">639</span><span id="line-639">         inLock.notifyAll();</span>
-<span class="source-line-no">640</span><span id="line-640">         return true;</span>
-<span class="source-line-no">641</span><span id="line-641">      }</span>
-<span class="source-line-no">642</span><span id="line-642">   }</span>
-<span class="source-line-no">643</span><span id="line-643"></span>
-<span class="source-line-no">644</span><span id="line-644">   /**</span>
-<span class="source-line-no">645</span><span id="line-645">    * Whether an answer can be sent right now.</span>
-<span class="source-line-no">646</span><span id="line-646">    *</span>
-<span class="source-line-no">647</span><span id="line-647">    * @return &lt;jk&gt;true&lt;/jk&gt; only when a prompt channel is on, the process is alive and the channel has not ended or failed.</span>
-<span class="source-line-no">648</span><span id="line-648">    */</span>
-<span class="source-line-no">649</span><span id="line-649">   public boolean acceptsAnswers() {</span>
-<span class="source-line-no">650</span><span id="line-650">      return prompts != null &amp;&amp; ! answersClosed &amp;&amp; process.isAlive();</span>
-<span class="source-line-no">651</span><span id="line-651">   }</span>
-<span class="source-line-no">652</span><span id="line-652"></span>
-<span class="source-line-no">653</span><span id="line-653">   /**</span>
-<span class="source-line-no">654</span><span id="line-654">    * Writes one answer line to the script's prompt channel; never blocks behind another answer and never logs the line.</span>
-<span class="source-line-no">655</span><span id="line-655">    *</span>
-<span class="source-line-no">656</span><span id="line-656">    * @param jsonLine The answer as one JSON line, without a newline.</span>
-<span class="source-line-no">657</span><span id="line-657">    * @return &lt;jk&gt;false&lt;/jk&gt; when there is no channel, it has ended, the line holds a newline, another answer is being</span>
-<span class="source-line-no">658</span><span id="line-658">    *    written, or the write failed.</span>
-<span class="source-line-no">659</span><span id="line-659">    */</span>
-<span class="source-line-no">660</span><span id="line-660">   public boolean answer(String jsonLine) {</span>
-<span class="source-line-no">661</span><span id="line-661">      if (jsonLine.indexOf('\n') &gt;= 0 || ! acceptsAnswers() || ! answerLock.tryLock())</span>
-<span class="source-line-no">662</span><span id="line-662">         return false;</span>
-<span class="source-line-no">663</span><span id="line-663">      try {</span>
-<span class="source-line-no">664</span><span id="line-664">         var out = process.getOutputStream();</span>
-<span class="source-line-no">665</span><span id="line-665">         out.write((jsonLine + "\n").getBytes(UTF_8));</span>
-<span class="source-line-no">666</span><span id="line-666">         out.flush();</span>
-<span class="source-line-no">667</span><span id="line-667">         return true;</span>
-<span class="source-line-no">668</span><span id="line-668">      } catch (IOException e) {</span>
-<span class="source-line-no">669</span><span id="line-669">         answersClosed = true;</span>
-<span class="source-line-no">670</span><span id="line-670">         return false;</span>
-<span class="source-line-no">671</span><span id="line-671">      } finally {</span>
-<span class="source-line-no">672</span><span id="line-672">         answerLock.unlock();</span>
-<span class="source-line-no">673</span><span id="line-673">      }</span>
-<span class="source-line-no">674</span><span id="line-674">   }</span>
-<span class="source-line-no">675</span><span id="line-675"></span>
-<span class="source-line-no">676</span><span id="line-676">   /**</span>
-<span class="source-line-no">677</span><span id="line-677">    * Polls the log's size every 100 ms and reports growth, then a final done, to a publisher.</span>
-<span class="source-line-no">678</span><span id="line-678">    *</span>
-<span class="source-line-no">679</span><span id="line-679">    * &lt;p&gt;</span>
-<span class="source-line-no">680</span><span id="line-680">    * The runner writes the log in another process, so there is no in-process append hook to use.  The publisher runs on</span>
-<span class="source-line-no">681</span><span id="line-681">    * a daemon thread named {@code juneau-terminal-nudge-&lt;pid&gt;}; a {@link RuntimeException} it throws is logged at</span>
-<span class="source-line-no">682</span><span id="line-682">    * {@code FINE} and otherwise ignored.  The thread ends after the done report, or when {@link #close()} is called.</span>
-<span class="source-line-no">683</span><span id="line-683">    *</span>
-<span class="source-line-no">684</span><span id="line-684">    * @param terminalId The terminal id passed to the publisher; must be a valid run id.</span>
-<span class="source-line-no">685</span><span id="line-685">    * @param publisher The publisher.</span>
-<span class="source-line-no">686</span><span id="line-686">    * @return This object.</span>
-<span class="source-line-no">687</span><span id="line-687">    * @throws NullPointerException If an argument is &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">688</span><span id="line-688">    * @throws IllegalArgumentException If the id is not a valid run id.</span>
-<span class="source-line-no">689</span><span id="line-689">    * @throws IllegalStateException If a publisher is already set, or this process has been closed.</span>
-<span class="source-line-no">690</span><span id="line-690">    */</span>
-<span class="source-line-no">691</span><span id="line-691">   public TerminalProcess nudges(String terminalId, TerminalNudgePublisher publisher) {</span>
-<span class="source-line-no">692</span><span id="line-692">      Objects.requireNonNull(terminalId, "terminalId");</span>
-<span class="source-line-no">693</span><span id="line-693">      Objects.requireNonNull(publisher, "publisher");</span>
-<span class="source-line-no">694</span><span id="line-694">      if (! isRunId(terminalId))</span>
-<span class="source-line-no">695</span><span id="line-695">         throw iaex("TerminalProcess nudge id is not a valid run id: '%s'.", terminalId);</span>
-<span class="source-line-no">696</span><span id="line-696">      synchronized (nudgeLock) {</span>
-<span class="source-line-no">697</span><span id="line-697">         if (nudgeClosed)</span>
-<span class="source-line-no">698</span><span id="line-698">            throw new IllegalStateException("TerminalProcess is closed.");</span>
-<span class="source-line-no">699</span><span id="line-699">         if (nudgeSet)</span>
-<span class="source-line-no">700</span><span id="line-700">            throw new IllegalStateException("TerminalProcess nudges are already set.");</span>
-<span class="source-line-no">701</span><span id="line-701">         nudgeSet = true;</span>
-<span class="source-line-no">702</span><span id="line-702">         nudgeThread = new Thread(() -&gt; watch(terminalId, publisher), "juneau-terminal-nudge-" + process.pid());</span>
-<span class="source-line-no">703</span><span id="line-703">         nudgeThread.setDaemon(true);</span>
-<span class="source-line-no">704</span><span id="line-704">         nudgeThread.start();</span>
-<span class="source-line-no">705</span><span id="line-705">      }</span>
-<span class="source-line-no">706</span><span id="line-706">      return this;</span>
-<span class="source-line-no">707</span><span id="line-707">   }</span>
-<span class="source-line-no">708</span><span id="line-708"></span>
-<span class="source-line-no">709</span><span id="line-709">   /** The nudge thread: reports log growth until the process is done or the thread is stopped. */</span>
-<span class="source-line-no">710</span><span id="line-710">   private void watch(String id, TerminalNudgePublisher publisher) {</span>
-<span class="source-line-no">711</span><span id="line-711">      var last = -1L;</span>
-<span class="source-line-no">712</span><span id="line-712">      while (! nudgeStop) {</span>
-<span class="source-line-no">713</span><span id="line-713">         var fin = isDone();</span>
-<span class="source-line-no">714</span><span id="line-714">         var size = sizeOrZero(logFile);</span>
-<span class="source-line-no">715</span><span id="line-715">         if (size &gt; last || fin) {</span>
-<span class="source-line-no">716</span><span id="line-716">            try {</span>
-<span class="source-line-no">717</span><span id="line-717">               publisher.nudge(id, size, fin);</span>
-<span class="source-line-no">718</span><span id="line-718">            } catch (RuntimeException e) {</span>
-<span class="source-line-no">719</span><span id="line-719">               LOG.log(Level.FINE, e, () -&gt; "Terminal nudge publisher failed for '" + id + "'.");</span>
-<span class="source-line-no">720</span><span id="line-720">            }</span>
-<span class="source-line-no">721</span><span id="line-721">            last = size;</span>
-<span class="source-line-no">722</span><span id="line-722">         }</span>
-<span class="source-line-no">723</span><span id="line-723">         if (fin)</span>
-<span class="source-line-no">724</span><span id="line-724">            return;</span>
-<span class="source-line-no">725</span><span id="line-725">         try {</span>
-<span class="source-line-no">726</span><span id="line-726">            Thread.sleep(NUDGE_POLL_MILLIS);</span>
-<span class="source-line-no">727</span><span id="line-727">         } catch (InterruptedException e) {</span>
-<span class="source-line-no">728</span><span id="line-728">            Thread.currentThread().interrupt();</span>
-<span class="source-line-no">729</span><span id="line-729">            return;</span>
-<span class="source-line-no">730</span><span id="line-730">         }</span>
-<span class="source-line-no">731</span><span id="line-731">      }</span>
-<span class="source-line-no">732</span><span id="line-732">   }</span>
-<span class="source-line-no">733</span><span id="line-733"></span>
-<span class="source-line-no">734</span><span id="line-734">   private static long sizeOrZero(Path p) {</span>
-<span class="source-line-no">735</span><span id="line-735">      try {</span>
-<span class="source-line-no">736</span><span id="line-736">         return Files.size(p);</span>
-<span class="source-line-no">737</span><span id="line-737">      } catch (IOException e) {</span>
-<span class="source-line-no">738</span><span id="line-738">         return 0;</span>
-<span class="source-line-no">739</span><span id="line-739">      }</span>
-<span class="source-line-no">740</span><span id="line-740">   }</span>
-<span class="source-line-no">741</span><span id="line-741"></span>
-<span class="source-line-no">742</span><span id="line-742">   /** The exit hook's executor; for tests. */</span>
-<span class="source-line-no">743</span><span id="line-743">   ExecutorService executor() {</span>
-<span class="source-line-no">744</span><span id="line-744">      return executor;</span>
-<span class="source-line-no">745</span><span id="line-745">   }</span>
-<span class="source-line-no">746</span><span id="line-746"></span>
-<span class="source-line-no">747</span><span id="line-747">   /** The thread the exit hook ran on, or &lt;jk&gt;null&lt;/jk&gt; before it has run; for tests. */</span>
-<span class="source-line-no">748</span><span id="line-748">   Thread exitThread() {</span>
-<span class="source-line-no">749</span><span id="line-749">      return exitThread.get();</span>
+<span class="source-line-no">628</span><span id="line-628">   public boolean isDone() {</span>
+<span class="source-line-no">629</span><span id="line-629">      return done.get();</span>
+<span class="source-line-no">630</span><span id="line-630">   }</span>
+<span class="source-line-no">631</span><span id="line-631"></span>
+<span class="source-line-no">632</span><span id="line-632">   /**</span>
+<span class="source-line-no">633</span><span id="line-633">    * Waits for the process to exit and for the done event to be in place.</span>
+<span class="source-line-no">634</span><span id="line-634">    *</span>
+<span class="source-line-no">635</span><span id="line-635">    * @param timeout The longest wait.</span>
+<span class="source-line-no">636</span><span id="line-636">    * @param unit The unit of {@code timeout}.</span>
+<span class="source-line-no">637</span><span id="line-637">    * @return The runner's exit code.</span>
+<span class="source-line-no">638</span><span id="line-638">    * @throws InterruptedException If interrupted.</span>
+<span class="source-line-no">639</span><span id="line-639">    * @throws TimeoutException If the process is still running.</span>
+<span class="source-line-no">640</span><span id="line-640">    */</span>
+<span class="source-line-no">641</span><span id="line-641">   public int waitFor(long timeout, TimeUnit unit) throws InterruptedException, TimeoutException {</span>
+<span class="source-line-no">642</span><span id="line-642">      try {</span>
+<span class="source-line-no">643</span><span id="line-643">         return exit.get(timeout, unit);</span>
+<span class="source-line-no">644</span><span id="line-644">      } catch (ExecutionException e) {</span>
+<span class="source-line-no">645</span><span id="line-645">         throw new IllegalStateException(e.getCause());</span>
+<span class="source-line-no">646</span><span id="line-646">      }</span>
+<span class="source-line-no">647</span><span id="line-647">   }</span>
+<span class="source-line-no">648</span><span id="line-648"></span>
+<span class="source-line-no">649</span><span id="line-649">   /**</span>
+<span class="source-line-no">650</span><span id="line-650">    * Whether input is accepted right now.</span>
+<span class="source-line-no">651</span><span id="line-651">    *</span>
+<span class="source-line-no">652</span><span id="line-652">    * @return &lt;jk&gt;true&lt;/jk&gt; only when input is on, the process is alive, no write has failed and the process has not been</span>
+<span class="source-line-no">653</span><span id="line-653">    *    closed.</span>
+<span class="source-line-no">654</span><span id="line-654">    */</span>
+<span class="source-line-no">655</span><span id="line-655">   @Override /* TerminalSink */</span>
+<span class="source-line-no">656</span><span id="line-656">   public boolean acceptsInput() {</span>
+<span class="source-line-no">657</span><span id="line-657">      synchronized (inLock) {</span>
+<span class="source-line-no">658</span><span id="line-658">         // HTT: close() waits for the process to exit, so isAlive() is already false afterwards.  The closed term</span>
+<span class="source-line-no">659</span><span id="line-659">         // guards the window inside close(); it is not observable without a test seam.</span>
+<span class="source-line-no">660</span><span id="line-660">         return input &amp;&amp; ! closed &amp;&amp; ! inputFailed &amp;&amp; process.isAlive();</span>
+<span class="source-line-no">661</span><span id="line-661">      }</span>
+<span class="source-line-no">662</span><span id="line-662">   }</span>
+<span class="source-line-no">663</span><span id="line-663"></span>
+<span class="source-line-no">664</span><span id="line-664">   /**</span>
+<span class="source-line-no">665</span><span id="line-665">    * Queues the bytes for the runner's stdin; never blocks.</span>
+<span class="source-line-no">666</span><span id="line-666">    *</span>
+<span class="source-line-no">667</span><span id="line-667">    * @param bytes The bytes to send; copied.</span>
+<span class="source-line-no">668</span><span id="line-668">    * @return &lt;jk&gt;false&lt;/jk&gt; when input is not accepted, or when the bytes do not fit in the {@value #INPUT_LIMIT}-byte</span>
+<span class="source-line-no">669</span><span id="line-669">    *    pending buffer.  An empty array returns {@link #acceptsInput()}.</span>
+<span class="source-line-no">670</span><span id="line-670">    */</span>
+<span class="source-line-no">671</span><span id="line-671">   @Override /* TerminalSink */</span>
+<span class="source-line-no">672</span><span id="line-672">   public boolean write(byte[] bytes) {</span>
+<span class="source-line-no">673</span><span id="line-673">      synchronized (inLock) {</span>
+<span class="source-line-no">674</span><span id="line-674">         if (! acceptsInput())</span>
+<span class="source-line-no">675</span><span id="line-675">            return false;</span>
+<span class="source-line-no">676</span><span id="line-676">         if (bytes.length == 0)</span>
+<span class="source-line-no">677</span><span id="line-677">            return true;</span>
+<span class="source-line-no">678</span><span id="line-678">         if (pendingBytes + bytes.length &gt; INPUT_LIMIT)</span>
+<span class="source-line-no">679</span><span id="line-679">            return false;</span>
+<span class="source-line-no">680</span><span id="line-680">         pending.add(bytes.clone());</span>
+<span class="source-line-no">681</span><span id="line-681">         pendingBytes += bytes.length;</span>
+<span class="source-line-no">682</span><span id="line-682">         inLock.notifyAll();</span>
+<span class="source-line-no">683</span><span id="line-683">         return true;</span>
+<span class="source-line-no">684</span><span id="line-684">      }</span>
+<span class="source-line-no">685</span><span id="line-685">   }</span>
+<span class="source-line-no">686</span><span id="line-686"></span>
+<span class="source-line-no">687</span><span id="line-687">   /**</span>
+<span class="source-line-no">688</span><span id="line-688">    * Whether an answer can be sent right now.</span>
+<span class="source-line-no">689</span><span id="line-689">    *</span>
+<span class="source-line-no">690</span><span id="line-690">    * @return &lt;jk&gt;true&lt;/jk&gt; only when a prompt channel is on, the process is alive and the channel has not ended or failed.</span>
+<span class="source-line-no">691</span><span id="line-691">    */</span>
+<span class="source-line-no">692</span><span id="line-692">   public boolean acceptsAnswers() {</span>
+<span class="source-line-no">693</span><span id="line-693">      return prompts != null &amp;&amp; ! answersClosed &amp;&amp; process.isAlive();</span>
+<span class="source-line-no">694</span><span id="line-694">   }</span>
+<span class="source-line-no">695</span><span id="line-695"></span>
+<span class="source-line-no">696</span><span id="line-696">   /**</span>
+<span class="source-line-no">697</span><span id="line-697">    * Writes one answer line to the script's prompt channel; never blocks behind another answer and never logs the line.</span>
+<span class="source-line-no">698</span><span id="line-698">    *</span>
+<span class="source-line-no">699</span><span id="line-699">    * @param jsonLine The answer as one JSON line, without a newline.</span>
+<span class="source-line-no">700</span><span id="line-700">    * @return &lt;jk&gt;false&lt;/jk&gt; when there is no channel, it has ended, the line holds a newline, another answer is being</span>
+<span class="source-line-no">701</span><span id="line-701">    *    written, or the write failed.</span>
+<span class="source-line-no">702</span><span id="line-702">    */</span>
+<span class="source-line-no">703</span><span id="line-703">   public boolean answer(String jsonLine) {</span>
+<span class="source-line-no">704</span><span id="line-704">      if (jsonLine.indexOf('\n') &gt;= 0 || ! acceptsAnswers() || ! answerLock.tryLock())</span>
+<span class="source-line-no">705</span><span id="line-705">         return false;</span>
+<span class="source-line-no">706</span><span id="line-706">      try {</span>
+<span class="source-line-no">707</span><span id="line-707">         var out = process.getOutputStream();</span>
+<span class="source-line-no">708</span><span id="line-708">         out.write((jsonLine + "\n").getBytes(UTF_8));</span>
+<span class="source-line-no">709</span><span id="line-709">         out.flush();</span>
+<span class="source-line-no">710</span><span id="line-710">         return true;</span>
+<span class="source-line-no">711</span><span id="line-711">      } catch (IOException e) {</span>
+<span class="source-line-no">712</span><span id="line-712">         answersClosed = true;</span>
+<span class="source-line-no">713</span><span id="line-713">         return false;</span>
+<span class="source-line-no">714</span><span id="line-714">      } finally {</span>
+<span class="source-line-no">715</span><span id="line-715">         answerLock.unlock();</span>
+<span class="source-line-no">716</span><span id="line-716">      }</span>
+<span class="source-line-no">717</span><span id="line-717">   }</span>
+<span class="source-line-no">718</span><span id="line-718"></span>
+<span class="source-line-no">719</span><span id="line-719">   /**</span>
+<span class="source-line-no">720</span><span id="line-720">    * Polls the log's size every 100 ms and reports growth, then a final done, to a publisher.</span>
+<span class="source-line-no">721</span><span id="line-721">    *</span>
+<span class="source-line-no">722</span><span id="line-722">    * &lt;p&gt;</span>
+<span class="source-line-no">723</span><span id="line-723">    * The runner writes the log in another process, so there is no in-process append hook to use.  The publisher runs on</span>
+<span class="source-line-no">724</span><span id="line-724">    * a daemon thread named {@code juneau-terminal-nudge-&lt;pid&gt;}; a {@link RuntimeException} it throws is logged at</span>
+<span class="source-line-no">725</span><span id="line-725">    * {@code FINE} and otherwise ignored.  The thread ends after the done report, or when {@link #close()} is called.</span>
+<span class="source-line-no">726</span><span id="line-726">    *</span>
+<span class="source-line-no">727</span><span id="line-727">    * @param terminalId The terminal id passed to the publisher; must be a valid run id.</span>
+<span class="source-line-no">728</span><span id="line-728">    * @param publisher The publisher.</span>
+<span class="source-line-no">729</span><span id="line-729">    * @return This object.</span>
+<span class="source-line-no">730</span><span id="line-730">    * @throws NullPointerException If an argument is &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">731</span><span id="line-731">    * @throws IllegalArgumentException If the id is not a valid run id.</span>
+<span class="source-line-no">732</span><span id="line-732">    * @throws IllegalStateException If a publisher is already set, or this process has been closed.</span>
+<span class="source-line-no">733</span><span id="line-733">    */</span>
+<span class="source-line-no">734</span><span id="line-734">   public TerminalProcess nudges(String terminalId, TerminalNudgePublisher publisher) {</span>
+<span class="source-line-no">735</span><span id="line-735">      Objects.requireNonNull(terminalId, "terminalId");</span>
+<span class="source-line-no">736</span><span id="line-736">      Objects.requireNonNull(publisher, "publisher");</span>
+<span class="source-line-no">737</span><span id="line-737">      if (! isRunId(terminalId))</span>
+<span class="source-line-no">738</span><span id="line-738">         throw iaex("TerminalProcess nudge id is not a valid run id: '%s'.", terminalId);</span>
+<span class="source-line-no">739</span><span id="line-739">      synchronized (nudgeLock) {</span>
+<span class="source-line-no">740</span><span id="line-740">         if (nudgeClosed)</span>
+<span class="source-line-no">741</span><span id="line-741">            throw new IllegalStateException("TerminalProcess is closed.");</span>
+<span class="source-line-no">742</span><span id="line-742">         if (nudgeSet)</span>
+<span class="source-line-no">743</span><span id="line-743">            throw new IllegalStateException("TerminalProcess nudges are already set.");</span>
+<span class="source-line-no">744</span><span id="line-744">         nudgeSet = true;</span>
+<span class="source-line-no">745</span><span id="line-745">         nudgeThread = new Thread(() -&gt; watch(terminalId, publisher), "juneau-terminal-nudge-" + process.pid());</span>
+<span class="source-line-no">746</span><span id="line-746">         nudgeThread.setDaemon(true);</span>
+<span class="source-line-no">747</span><span id="line-747">         nudgeThread.start();</span>
+<span class="source-line-no">748</span><span id="line-748">      }</span>
+<span class="source-line-no">749</span><span id="line-749">      return this;</span>
 <span class="source-line-no">750</span><span id="line-750">   }</span>
 <span class="source-line-no">751</span><span id="line-751"></span>
-<span class="source-line-no">752</span><span id="line-752">   /**</span>
-<span class="source-line-no">753</span><span id="line-753">    * Asks the runner to stop and waits for it, killing it if it does not.</span>
-<span class="source-line-no">754</span><span id="line-754">    *</span>
-<span class="source-line-no">755</span><span id="line-755">    * &lt;p&gt;</span>
-<span class="source-line-no">756</span><span id="line-756">    * Sends SIGTERM to the runner, which passes it to the tool so that the tool can clean up and record that it was</span>
-<span class="source-line-no">757</span><span id="line-757">    * cancelled.  If the process is still running after {@code grace}, this falls back to {@link #close()}, which kills it.</span>
-<span class="source-line-no">758</span><span id="line-758">    * It does nothing when the process has already exited, and it is safe to call more than once.</span>
-<span class="source-line-no">759</span><span id="line-759">    * Call {@link #close()} afterwards as usual to release the process's resources.</span>
-<span class="source-line-no">760</span><span id="line-760">    *</span>
-<span class="source-line-no">761</span><span id="line-761">    * @param grace How long to wait for the process to exit after SIGTERM; not &lt;jk&gt;null&lt;/jk&gt;, zero or negative kills at once.</span>
-<span class="source-line-no">762</span><span id="line-762">    */</span>
-<span class="source-line-no">763</span><span id="line-763">   public void terminate(java.time.Duration grace) {</span>
-<span class="source-line-no">764</span><span id="line-764">      Objects.requireNonNull(grace, "grace");</span>
-<span class="source-line-no">765</span><span id="line-765">      if (! process.isAlive())</span>
-<span class="source-line-no">766</span><span id="line-766">         return;</span>
-<span class="source-line-no">767</span><span id="line-767">      process.destroy();</span>
-<span class="source-line-no">768</span><span id="line-768">      try {</span>
-<span class="source-line-no">769</span><span id="line-769">         if (process.waitFor(Math.max(0, grace.toMillis()), TimeUnit.MILLISECONDS))</span>
-<span class="source-line-no">770</span><span id="line-770">            return;</span>
-<span class="source-line-no">771</span><span id="line-771">      } catch (InterruptedException e) {</span>
-<span class="source-line-no">772</span><span id="line-772">         Thread.currentThread().interrupt();</span>
-<span class="source-line-no">773</span><span id="line-773">      }</span>
-<span class="source-line-no">774</span><span id="line-774">      close();</span>
+<span class="source-line-no">752</span><span id="line-752">   /** The nudge thread: reports log growth until the process is done or the thread is stopped. */</span>
+<span class="source-line-no">753</span><span id="line-753">   private void watch(String id, TerminalNudgePublisher publisher) {</span>
+<span class="source-line-no">754</span><span id="line-754">      var last = -1L;</span>
+<span class="source-line-no">755</span><span id="line-755">      while (! nudgeStop) {</span>
+<span class="source-line-no">756</span><span id="line-756">         var fin = isDone();</span>
+<span class="source-line-no">757</span><span id="line-757">         var size = sizeOrZero(logFile);</span>
+<span class="source-line-no">758</span><span id="line-758">         if (size &gt; last || fin) {</span>
+<span class="source-line-no">759</span><span id="line-759">            try {</span>
+<span class="source-line-no">760</span><span id="line-760">               publisher.nudge(id, size, fin);</span>
+<span class="source-line-no">761</span><span id="line-761">            } catch (RuntimeException e) {</span>
+<span class="source-line-no">762</span><span id="line-762">               LOG.log(Level.FINE, e, () -&gt; "Terminal nudge publisher failed for '" + id + "'.");</span>
+<span class="source-line-no">763</span><span id="line-763">            }</span>
+<span class="source-line-no">764</span><span id="line-764">            last = size;</span>
+<span class="source-line-no">765</span><span id="line-765">         }</span>
+<span class="source-line-no">766</span><span id="line-766">         if (fin)</span>
+<span class="source-line-no">767</span><span id="line-767">            return;</span>
+<span class="source-line-no">768</span><span id="line-768">         try {</span>
+<span class="source-line-no">769</span><span id="line-769">            Thread.sleep(NUDGE_POLL_MILLIS);</span>
+<span class="source-line-no">770</span><span id="line-770">         } catch (InterruptedException e) {</span>
+<span class="source-line-no">771</span><span id="line-771">            Thread.currentThread().interrupt();</span>
+<span class="source-line-no">772</span><span id="line-772">            return;</span>
+<span class="source-line-no">773</span><span id="line-773">         }</span>
+<span class="source-line-no">774</span><span id="line-774">      }</span>
 <span class="source-line-no">775</span><span id="line-775">   }</span>
 <span class="source-line-no">776</span><span id="line-776"></span>
-<span class="source-line-no">777</span><span id="line-777">   /**</span>
-<span class="source-line-no">778</span><span id="line-778">    * Kills the runner and its tool if they are still running, then waits up to {@value #CLOSE_WAIT_SECONDS} seconds for</span>
-<span class="source-line-no">779</span><span id="line-779">    * the exit hook.</span>
-<span class="source-line-no">780</span><span id="line-780">    *</span>
-<span class="source-line-no">781</span><span id="line-781">    * &lt;p&gt;</span>
-<span class="source-line-no">782</span><span id="line-782">    * The hook writes the done event and shuts its executor down, so once this returns normally both have happened.  The</span>
-<span class="source-line-no">783</span><span id="line-783">    * executor is not shut down here: a hook submitted after that would be refused, and the done flag would never be set.</span>
-<span class="source-line-no">784</span><span id="line-784">    *</span>
-<span class="source-line-no">785</span><span id="line-785">    * &lt;p&gt;</span>
-<span class="source-line-no">786</span><span id="line-786">    * With input on, it first stops input: pending bytes are dropped, stdin is closed and the writer thread is told to</span>
-<span class="source-line-no">787</span><span id="line-787">    * stop.  If the writer thread is blocked writing to a full pipe, it closes stdin itself once the kill breaks the pipe.</span>
-<span class="source-line-no">788</span><span id="line-788">    * Afterwards this waits up to {@value #WRITER_JOIN_MILLIS} ms for the writer thread.  The nudge thread, if any, is</span>
-<span class="source-line-no">789</span><span id="line-789">    * stopped first of all and joined for up to {@value #NUDGE_JOIN_MILLIS} ms.  With input off, it only kills.</span>
-<span class="source-line-no">790</span><span id="line-790">    */</span>
-<span class="source-line-no">791</span><span id="line-791">   @Override /* AutoCloseable */</span>
-<span class="source-line-no">792</span><span id="line-792">   public void close() {</span>
-<span class="source-line-no">793</span><span id="line-793">      Thread nudger;</span>
-<span class="source-line-no">794</span><span id="line-794">      synchronized (nudgeLock) {</span>
-<span class="source-line-no">795</span><span id="line-795">         nudgeClosed = true;</span>
-<span class="source-line-no">796</span><span id="line-796">         nudgeStop = true;</span>
-<span class="source-line-no">797</span><span id="line-797">         nudger = nudgeThread;</span>
-<span class="source-line-no">798</span><span id="line-798">      }</span>
-<span class="source-line-no">799</span><span id="line-799">      if (nudger != null)</span>
-<span class="source-line-no">800</span><span id="line-800">         nudger.interrupt();</span>
-<span class="source-line-no">801</span><span id="line-801">      if (prompts != null) {</span>
-<span class="source-line-no">802</span><span id="line-802">         // Closing stdin tells the runner the host is gone; it ends the job and writes done itself.</span>
-<span class="source-line-no">803</span><span id="line-803">         answersClosed = true;</span>
-<span class="source-line-no">804</span><span id="line-804">         closeQuietly(process.getOutputStream());</span>
-<span class="source-line-no">805</span><span id="line-805">         try {</span>
-<span class="source-line-no">806</span><span id="line-806">            process.waitFor(PROMPTS_CLOSE_GRACE_MS, TimeUnit.MILLISECONDS);</span>
-<span class="source-line-no">807</span><span id="line-807">         } catch (InterruptedException e) {</span>
-<span class="source-line-no">808</span><span id="line-808">            Thread.currentThread().interrupt();</span>
-<span class="source-line-no">809</span><span id="line-809">         }</span>
-<span class="source-line-no">810</span><span id="line-810">      }</span>
-<span class="source-line-no">811</span><span id="line-811">      if (input) {</span>
-<span class="source-line-no">812</span><span id="line-812">         synchronized (inLock) {</span>
-<span class="source-line-no">813</span><span id="line-813">            closed = true;</span>
-<span class="source-line-no">814</span><span id="line-814">            pending.clear();</span>
-<span class="source-line-no">815</span><span id="line-815">            pendingBytes = 0;</span>
-<span class="source-line-no">816</span><span id="line-816">            inLock.notifyAll();</span>
-<span class="source-line-no">817</span><span id="line-817">            // Closing flushes the stream, which waits for a write in progress; the writer flushes after every chunk, so</span>
-<span class="source-line-no">818</span><span id="line-818">            // with no write in progress there is nothing to flush and this cannot block.</span>
-<span class="source-line-no">819</span><span id="line-819">            if (! writing)</span>
-<span class="source-line-no">820</span><span id="line-820">               closeQuietly(process.getOutputStream());</span>
-<span class="source-line-no">821</span><span id="line-821">         }</span>
-<span class="source-line-no">822</span><span id="line-822">      }</span>
-<span class="source-line-no">823</span><span id="line-823">      process.descendants().forEach(ProcessHandle::destroyForcibly);</span>
-<span class="source-line-no">824</span><span id="line-824">      process.destroyForcibly();</span>
-<span class="source-line-no">825</span><span id="line-825">      try {</span>
-<span class="source-line-no">826</span><span id="line-826">         exit.get(CLOSE_WAIT_SECONDS, TimeUnit.SECONDS);</span>
-<span class="source-line-no">827</span><span id="line-827">      } catch (InterruptedException e) {</span>
-<span class="source-line-no">828</span><span id="line-828">         Thread.currentThread().interrupt();</span>
-<span class="source-line-no">829</span><span id="line-829">      } catch (ExecutionException | TimeoutException e) {</span>
-<span class="source-line-no">830</span><span id="line-830">         LOG.log(Level.WARNING, e, () -&gt; "TerminalProcess exit hook did not finish for '" + events + "'.");</span>
-<span class="source-line-no">831</span><span id="line-831">      }</span>
-<span class="source-line-no">832</span><span id="line-832">      if (nudger != null) {</span>
-<span class="source-line-no">833</span><span id="line-833">         try {</span>
-<span class="source-line-no">834</span><span id="line-834">            nudger.join(NUDGE_JOIN_MILLIS);</span>
-<span class="source-line-no">835</span><span id="line-835">         } catch (InterruptedException e) {</span>
-<span class="source-line-no">836</span><span id="line-836">            Thread.currentThread().interrupt();</span>
-<span class="source-line-no">837</span><span id="line-837">         }</span>
-<span class="source-line-no">838</span><span id="line-838">         if (nudger.isAlive())</span>
-<span class="source-line-no">839</span><span id="line-839">            LOG.log(Level.WARNING, () -&gt; "TerminalProcess nudge thread did not stop for '" + events + "'.");</span>
-<span class="source-line-no">840</span><span id="line-840">      }</span>
-<span class="source-line-no">841</span><span id="line-841">      if (promptThread != null) {</span>
-<span class="source-line-no">842</span><span id="line-842">         try {</span>
-<span class="source-line-no">843</span><span id="line-843">            promptThread.join(PROMPTS_JOIN_MILLIS);</span>
-<span class="source-line-no">844</span><span id="line-844">         } catch (InterruptedException e) {</span>
-<span class="source-line-no">845</span><span id="line-845">            Thread.currentThread().interrupt();</span>
-<span class="source-line-no">846</span><span id="line-846">         }</span>
-<span class="source-line-no">847</span><span id="line-847">         if (promptThread.isAlive())</span>
-<span class="source-line-no">848</span><span id="line-848">            LOG.log(Level.WARNING, () -&gt; "TerminalProcess prompt thread did not stop for '" + events + "'.");</span>
-<span class="source-line-no">849</span><span id="line-849">      }</span>
-<span class="source-line-no">850</span><span id="line-850">      if (writer != null) {</span>
-<span class="source-line-no">851</span><span id="line-851">         try {</span>
-<span class="source-line-no">852</span><span id="line-852">            writer.join(WRITER_JOIN_MILLIS);</span>
-<span class="source-line-no">853</span><span id="line-853">         } catch (InterruptedException e) {</span>
-<span class="source-line-no">854</span><span id="line-854">            Thread.currentThread().interrupt();</span>
-<span class="source-line-no">855</span><span id="line-855">         }</span>
-<span class="source-line-no">856</span><span id="line-856">         if (writer.isAlive())</span>
-<span class="source-line-no">857</span><span id="line-857">            LOG.log(Level.WARNING, () -&gt; "TerminalProcess input writer thread did not stop for '" + events + "'.");</span>
-<span class="source-line-no">858</span><span id="line-858">      }</span>
-<span class="source-line-no">859</span><span id="line-859">   }</span>
-<span class="source-line-no">860</span><span id="line-860">}</span>
+<span class="source-line-no">777</span><span id="line-777">   private static long sizeOrZero(Path p) {</span>
+<span class="source-line-no">778</span><span id="line-778">      try {</span>
+<span class="source-line-no">779</span><span id="line-779">         return Files.size(p);</span>
+<span class="source-line-no">780</span><span id="line-780">      } catch (IOException e) {</span>
+<span class="source-line-no">781</span><span id="line-781">         return 0;</span>
+<span class="source-line-no">782</span><span id="line-782">      }</span>
+<span class="source-line-no">783</span><span id="line-783">   }</span>
+<span class="source-line-no">784</span><span id="line-784"></span>
+<span class="source-line-no">785</span><span id="line-785">   /** The exit hook's executor; for tests. */</span>
+<span class="source-line-no">786</span><span id="line-786">   ExecutorService executor() {</span>
+<span class="source-line-no">787</span><span id="line-787">      return executor;</span>
+<span class="source-line-no">788</span><span id="line-788">   }</span>
+<span class="source-line-no">789</span><span id="line-789"></span>
+<span class="source-line-no">790</span><span id="line-790">   /** The thread the exit hook ran on, or &lt;jk&gt;null&lt;/jk&gt; before it has run; for tests. */</span>
+<span class="source-line-no">791</span><span id="line-791">   Thread exitThread() {</span>
+<span class="source-line-no">792</span><span id="line-792">      return exitThread.get();</span>
+<span class="source-line-no">793</span><span id="line-793">   }</span>
+<span class="source-line-no">794</span><span id="line-794"></span>
+<span class="source-line-no">795</span><span id="line-795">   /**</span>
+<span class="source-line-no">796</span><span id="line-796">    * Asks the runner to stop and waits for it, killing it if it does not.</span>
+<span class="source-line-no">797</span><span id="line-797">    *</span>
+<span class="source-line-no">798</span><span id="line-798">    * &lt;p&gt;</span>
+<span class="source-line-no">799</span><span id="line-799">    * Sends SIGTERM to the runner, which passes it to the tool so that the tool can clean up and record that it was</span>
+<span class="source-line-no">800</span><span id="line-800">    * cancelled.  If the process is still running after {@code grace}, this falls back to {@link #close()}, which kills it.</span>
+<span class="source-line-no">801</span><span id="line-801">    * It does nothing when the process has already exited, and it is safe to call more than once.</span>
+<span class="source-line-no">802</span><span id="line-802">    * Call {@link #close()} afterwards as usual to release the process's resources.</span>
+<span class="source-line-no">803</span><span id="line-803">    *</span>
+<span class="source-line-no">804</span><span id="line-804">    * @param grace How long to wait for the process to exit after SIGTERM; not &lt;jk&gt;null&lt;/jk&gt;, zero or negative kills at once.</span>
+<span class="source-line-no">805</span><span id="line-805">    */</span>
+<span class="source-line-no">806</span><span id="line-806">   public void terminate(java.time.Duration grace) {</span>
+<span class="source-line-no">807</span><span id="line-807">      Objects.requireNonNull(grace, "grace");</span>
+<span class="source-line-no">808</span><span id="line-808">      if (! process.isAlive())</span>
+<span class="source-line-no">809</span><span id="line-809">         return;</span>
+<span class="source-line-no">810</span><span id="line-810">      process.destroy();</span>
+<span class="source-line-no">811</span><span id="line-811">      try {</span>
+<span class="source-line-no">812</span><span id="line-812">         if (process.waitFor(Math.max(0, grace.toMillis()), TimeUnit.MILLISECONDS))</span>
+<span class="source-line-no">813</span><span id="line-813">            return;</span>
+<span class="source-line-no">814</span><span id="line-814">      } catch (InterruptedException e) {</span>
+<span class="source-line-no">815</span><span id="line-815">         Thread.currentThread().interrupt();</span>
+<span class="source-line-no">816</span><span id="line-816">      }</span>
+<span class="source-line-no">817</span><span id="line-817">      close();</span>
+<span class="source-line-no">818</span><span id="line-818">   }</span>
+<span class="source-line-no">819</span><span id="line-819"></span>
+<span class="source-line-no">820</span><span id="line-820">   /**</span>
+<span class="source-line-no">821</span><span id="line-821">    * Kills the runner and its tool if they are still running, then waits up to {@value #CLOSE_WAIT_SECONDS} seconds for</span>
+<span class="source-line-no">822</span><span id="line-822">    * the exit hook.</span>
+<span class="source-line-no">823</span><span id="line-823">    *</span>
+<span class="source-line-no">824</span><span id="line-824">    * &lt;p&gt;</span>
+<span class="source-line-no">825</span><span id="line-825">    * The hook writes the done event and shuts its executor down, so once this returns normally both have happened.  The</span>
+<span class="source-line-no">826</span><span id="line-826">    * executor is not shut down here: a hook submitted after that would be refused, and the done flag would never be set.</span>
+<span class="source-line-no">827</span><span id="line-827">    *</span>
+<span class="source-line-no">828</span><span id="line-828">    * &lt;p&gt;</span>
+<span class="source-line-no">829</span><span id="line-829">    * With input on, it first stops input: pending bytes are dropped, stdin is closed and the writer thread is told to</span>
+<span class="source-line-no">830</span><span id="line-830">    * stop.  If the writer thread is blocked writing to a full pipe, it closes stdin itself once the kill breaks the pipe.</span>
+<span class="source-line-no">831</span><span id="line-831">    * Afterwards this waits up to {@value #WRITER_JOIN_MILLIS} ms for the writer thread.  The nudge thread, if any, is</span>
+<span class="source-line-no">832</span><span id="line-832">    * stopped first of all and joined for up to {@value #NUDGE_JOIN_MILLIS} ms.  With input off, it only kills.</span>
+<span class="source-line-no">833</span><span id="line-833">    */</span>
+<span class="source-line-no">834</span><span id="line-834">   @Override /* AutoCloseable */</span>
+<span class="source-line-no">835</span><span id="line-835">   public void close() {</span>
+<span class="source-line-no">836</span><span id="line-836">      Thread nudger;</span>
+<span class="source-line-no">837</span><span id="line-837">      synchronized (nudgeLock) {</span>
+<span class="source-line-no">838</span><span id="line-838">         nudgeClosed = true;</span>
+<span class="source-line-no">839</span><span id="line-839">         nudgeStop = true;</span>
+<span class="source-line-no">840</span><span id="line-840">         nudger = nudgeThread;</span>
+<span class="source-line-no">841</span><span id="line-841">      }</span>
+<span class="source-line-no">842</span><span id="line-842">      if (nudger != null)</span>
+<span class="source-line-no">843</span><span id="line-843">         nudger.interrupt();</span>
+<span class="source-line-no">844</span><span id="line-844">      if (prompts != null) {</span>
+<span class="source-line-no">845</span><span id="line-845">         // Closing stdin tells the runner the host is gone; it ends the job and writes done itself.</span>
+<span class="source-line-no">846</span><span id="line-846">         answersClosed = true;</span>
+<span class="source-line-no">847</span><span id="line-847">         closeQuietly(process.getOutputStream());</span>
+<span class="source-line-no">848</span><span id="line-848">         try {</span>
+<span class="source-line-no">849</span><span id="line-849">            process.waitFor(PROMPTS_CLOSE_GRACE_MS, TimeUnit.MILLISECONDS);</span>
+<span class="source-line-no">850</span><span id="line-850">         } catch (InterruptedException e) {</span>
+<span class="source-line-no">851</span><span id="line-851">            Thread.currentThread().interrupt();</span>
+<span class="source-line-no">852</span><span id="line-852">         }</span>
+<span class="source-line-no">853</span><span id="line-853">      }</span>
+<span class="source-line-no">854</span><span id="line-854">      if (input) {</span>
+<span class="source-line-no">855</span><span id="line-855">         synchronized (inLock) {</span>
+<span class="source-line-no">856</span><span id="line-856">            closed = true;</span>
+<span class="source-line-no">857</span><span id="line-857">            pending.clear();</span>
+<span class="source-line-no">858</span><span id="line-858">            pendingBytes = 0;</span>
+<span class="source-line-no">859</span><span id="line-859">            inLock.notifyAll();</span>
+<span class="source-line-no">860</span><span id="line-860">            // Closing flushes the stream, which waits for a write in progress; the writer flushes after every chunk, so</span>
+<span class="source-line-no">861</span><span id="line-861">            // with no write in progress there is nothing to flush and this cannot block.</span>
+<span class="source-line-no">862</span><span id="line-862">            if (! writing)</span>
+<span class="source-line-no">863</span><span id="line-863">               closeQuietly(process.getOutputStream());</span>
+<span class="source-line-no">864</span><span id="line-864">         }</span>
+<span class="source-line-no">865</span><span id="line-865">      }</span>
+<span class="source-line-no">866</span><span id="line-866">      process.descendants().forEach(ProcessHandle::destroyForcibly);</span>
+<span class="source-line-no">867</span><span id="line-867">      process.destroyForcibly();</span>
+<span class="source-line-no">868</span><span id="line-868">      try {</span>
+<span class="source-line-no">869</span><span id="line-869">         exit.get(CLOSE_WAIT_SECONDS, TimeUnit.SECONDS);</span>
+<span class="source-line-no">870</span><span id="line-870">      } catch (InterruptedException e) {</span>
+<span class="source-line-no">871</span><span id="line-871">         Thread.currentThread().interrupt();</span>
+<span class="source-line-no">872</span><span id="line-872">      } catch (ExecutionException | TimeoutException e) {</span>
+<span class="source-line-no">873</span><span id="line-873">         LOG.log(Level.WARNING, e, () -&gt; "TerminalProcess exit hook did not finish for '" + events + "'.");</span>
+<span class="source-line-no">874</span><span id="line-874">      }</span>
+<span class="source-line-no">875</span><span id="line-875">      if (nudger != null) {</span>
+<span class="source-line-no">876</span><span id="line-876">         try {</span>
+<span class="source-line-no">877</span><span id="line-877">            nudger.join(NUDGE_JOIN_MILLIS);</span>
+<span class="source-line-no">878</span><span id="line-878">         } catch (InterruptedException e) {</span>
+<span class="source-line-no">879</span><span id="line-879">            Thread.currentThread().interrupt();</span>
+<span class="source-line-no">880</span><span id="line-880">         }</span>
+<span class="source-line-no">881</span><span id="line-881">         if (nudger.isAlive())</span>
+<span class="source-line-no">882</span><span id="line-882">            LOG.log(Level.WARNING, () -&gt; "TerminalProcess nudge thread did not stop for '" + events + "'.");</span>
+<span class="source-line-no">883</span><span id="line-883">      }</span>
+<span class="source-line-no">884</span><span id="line-884">      if (promptThread != null) {</span>
+<span class="source-line-no">885</span><span id="line-885">         try {</span>
+<span class="source-line-no">886</span><span id="line-886">            promptThread.join(PROMPTS_JOIN_MILLIS);</span>
+<span class="source-line-no">887</span><span id="line-887">         } catch (InterruptedException e) {</span>
+<span class="source-line-no">888</span><span id="line-888">            Thread.currentThread().interrupt();</span>
+<span class="source-line-no">889</span><span id="line-889">         }</span>
+<span class="source-line-no">890</span><span id="line-890">         if (promptThread.isAlive())</span>
+<span class="source-line-no">891</span><span id="line-891">            LOG.log(Level.WARNING, () -&gt; "TerminalProcess prompt thread did not stop for '" + events + "'.");</span>
+<span class="source-line-no">892</span><span id="line-892">      }</span>
+<span class="source-line-no">893</span><span id="line-893">      if (writer != null) {</span>
+<span class="source-line-no">894</span><span id="line-894">         try {</span>
+<span class="source-line-no">895</span><span id="line-895">            writer.join(WRITER_JOIN_MILLIS);</span>
+<span class="source-line-no">896</span><span id="line-896">         } catch (InterruptedException e) {</span>
+<span class="source-line-no">897</span><span id="line-897">            Thread.currentThread().interrupt();</span>
+<span class="source-line-no">898</span><span id="line-898">         }</span>
+<span class="source-line-no">899</span><span id="line-899">         if (writer.isAlive())</span>
+<span class="source-line-no">900</span><span id="line-900">            LOG.log(Level.WARNING, () -&gt; "TerminalProcess input writer thread did not stop for '" + events + "'.");</span>
+<span class="source-line-no">901</span><span id="line-901">      }</span>
+<span class="source-line-no">902</span><span id="line-902">   }</span>
+<span class="source-line-no">903</span><span id="line-903">}</span>
 
 
 

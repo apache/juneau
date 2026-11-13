@@ -122,7 +122,7 @@
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 			assertTrue(log(p).contains(<span class="jxr_string">"GOT 7"</span>), log(p));
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 			assertFalse(log(p).contains(<span class="jxr_string">"hunter2"</span>));
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 			assertFalse(Files.readString(p.eventsFile()).contains(<span class="jxr_string">"hunter2"</span>));
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			assertFalse(Files.readString(run.resolve(<span class="jxr_string">"runner.out"</span>)).contains(<span class="jxr_string">"hunter2"</span>));
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			assertFalse(Files.readString(p.runDir().resolve(<span class="jxr_string">"runner.out"</span>)).contains(<span class="jxr_string">"hunter2"</span>));
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		}
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 
@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> p = startReal(List.of(<span class="jxr_string">"python3"</span>, <span class="jxr_string">"-c"</span>, job), sink)) {
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			assertEquals(0, p.waitFor(60, TimeUnit.SECONDS));
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			assertTrue(sink.ended.await(10, TimeUnit.SECONDS));
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			assertTrue(Files.readString(run.resolve(<span class="jxr_string">"runner.out"</span>)).contains(<span class="jxr_string">"is not JSON"</span>));
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			assertTrue(Files.readString(p.runDir().resolve(<span class="jxr_string">"runner.out"</span>)).contains(<span class="jxr_string">"is not JSON"</span>));
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 			assertTrue(log(p).contains(<span class="jxr_string">"to-stderr"</span>), <span class="jxr_string">"the job's stderr is on its terminal"</span>);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			assertEquals(List.of(), <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(sink.lines), <span class="jxr_string">"nothing but valid prompt lines reaches onLine"</span>);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		}

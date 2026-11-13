@@ -83,8 +83,8 @@ loadScripts(document, 'script');</script>
 <dt>Record Components:</dt>
 <dd><code><span id="param-accessToken">accessToken</span></code> - The opaque or JWT access-token string.  Never <code>null</code>.</dd>
 <dd><code><span id="param-tokenType">tokenType</span></code> - The token type per RFC 6749 &sect;5.1 (typically <code>"Bearer"</code>).  Never <code>null</code>.</dd>
-<dd><code><span id="param-expiresAt">expiresAt</span></code> - The instant at which the access token expires.  May be <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html#MAX" title="class or interface in java.time" class="external-link"><code>Instant.MAX</code></a> when the
-   IdP returned no <code>expires_in</code>.</dd>
+<dd><code><span id="param-expiresAt">expiresAt</span></code> - The instant at which the access token expires.  Tokens acquired through the flows in this
+   package carry a 5-minute lifetime when the IdP returned no (or a zero) <code>expires_in</code>.</dd>
 <dd><code><span id="param-refreshToken">refreshToken</span></code> - The refresh token, if the IdP issued one.</dd>
 <dd><code><span id="param-scope">scope</span></code> - The granted scopes, if the IdP returned a <code>scope</code> field.</dd>
 <dd><code><span id="param-idToken">idToken</span></code> - The OIDC ID token (a JWT), if the flow scope included <code>openid</code>.  <b>Not validated</b>

@@ -891,203 +891,214 @@
 <a class="jxr_linenumber" name="L883" href="#L883">883</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L884" href="#L884">884</a> 	<strong class="jxr_keyword">protected</strong> &lt;T&gt; T readAnything(ClassMeta&lt;T&gt; eType, String currAttr, XmlReader r, Object <strong class="jxr_keyword">outer</strong>, <strong class="jxr_keyword">boolean</strong> isRoot, BeanPropertyMeta pMeta)
 <a class="jxr_linenumber" name="L885" href="#L885">885</a> 		<strong class="jxr_keyword">throws</strong> IOException, ParseException, ExecutableException, XMLStreamException {
-<a class="jxr_linenumber" name="L886" href="#L886">886</a> 
-<a class="jxr_linenumber" name="L887" href="#L887">887</a> 		<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L888" href="#L888">888</a> 			eType = (ClassMeta&lt;T&gt;)object();
-<a class="jxr_linenumber" name="L889" href="#L889">889</a> 		<strong class="jxr_keyword">var</strong> swap = (ObjectSwap&lt;T,Object&gt;)eType.getSwap(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L890" href="#L890">890</a> 		<strong class="jxr_keyword">var</strong> builder = (BuilderSwap&lt;T,Object&gt;)eType.getBuilderSwap(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		ClassMeta&lt;?&gt; sType = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L892" href="#L892">892</a> 		<strong class="jxr_keyword">if</strong> (nn(builder))
-<a class="jxr_linenumber" name="L893" href="#L893">893</a> 			sType = builder.getBuilderClassMeta(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L894" href="#L894">894</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(swap))
-<a class="jxr_linenumber" name="L895" href="#L895">895</a> 			sType = swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L896" href="#L896">896</a> 		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L897" href="#L897">897</a> 			sType = eType;
-<a class="jxr_linenumber" name="L898" href="#L898">898</a> 
-<a class="jxr_linenumber" name="L899" href="#L899">899</a> 		<strong class="jxr_keyword">if</strong> (sType.isOptional())
-<a class="jxr_linenumber" name="L900" href="#L900">900</a> 			<strong class="jxr_keyword">return</strong> (T)o(readAnything(eType.getElementType(), currAttr, r, <strong class="jxr_keyword">outer</strong>, isRoot, pMeta));
-<a class="jxr_linenumber" name="L901" href="#L901">901</a> 
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		setCurrentClass(sType);
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> 
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		<strong class="jxr_keyword">var</strong> wrapperAttr = (isRoot &amp;&amp; isPreserveRootElement()) ? r.getName().getLocalPart() : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L905" href="#L905">905</a> 		<strong class="jxr_keyword">var</strong> typeAttr = r.getAttributeValue(<strong class="jxr_keyword">null</strong>, getBeanTypePropertyName(eType));
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> 		<strong class="jxr_keyword">var</strong> isNil = eq(r.getAttributeValue(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"nil"</span>), <span class="jxr_string">"true"</span>);
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		<strong class="jxr_keyword">var</strong> jsonType = getJsonType(typeAttr);
-<a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<strong class="jxr_keyword">var</strong> elementName = getElementName(r);
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		<strong class="jxr_keyword">if</strong> (jsonType == 0) {
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 			<strong class="jxr_keyword">if</strong> (elementName == <strong class="jxr_keyword">null</strong> || elementName.equals(currAttr))
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 				jsonType = UNKNOWN;
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> 			<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> 				typeAttr = elementName;
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> 				jsonType = getJsonType(elementName);
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> 			}
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 		}
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> 
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> 		ClassMeta tcm = getClassMeta(typeAttr, pMeta, eType);
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		<strong class="jxr_keyword">if</strong> (tcm == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(elementName) &amp;&amp; ! elementName.equals(currAttr))
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> 			tcm = getClassMeta(elementName, pMeta, eType);
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> 		<strong class="jxr_keyword">if</strong> (nn(tcm))
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> 			sType = eType = tcm;
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> 
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> 		Object o = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> 		<strong class="jxr_keyword">if</strong> (jsonType == NULL) {
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> 			r.nextTag();	<em class="jxr_comment">// Discard end tag</em>
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> 		}
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> 
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<strong class="jxr_keyword">if</strong> (sType.isObject()) {
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 			<strong class="jxr_keyword">if</strong> (jsonType == OBJECT) {
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> 				<strong class="jxr_keyword">var</strong> m = newGenericMap();
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> 				readIntoMap(r, m, string(), object(), pMeta);
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> 				<strong class="jxr_keyword">if</strong> (nn(wrapperAttr))
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> 					m = newGenericMap().append(wrapperAttr, m);
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> 				o = <strong class="jxr_keyword">cast</strong>(m, pMeta, eType);
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (jsonType == ARRAY)
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> 				o = readIntoCollection(r, newGenericList(), <strong class="jxr_keyword">null</strong>, pMeta);
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (jsonType == STRING) {
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 				o = getElementText(r);
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> 				<strong class="jxr_keyword">if</strong> (sType.isChar())
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 					o = parseCharacter(o);
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (jsonType == NUMBER)
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> 				o = parseNumber(getElementText(r), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (jsonType == BOOLEAN)
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> 				o = Boolean.parseBoolean(getElementText(r));
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (jsonType == UNKNOWN)
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 				o = getUnknown(r);
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(builder) || sType.canCreateNewBean(<strong class="jxr_keyword">outer</strong>)) {
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 			<strong class="jxr_keyword">if</strong> (getXmlClassMeta(sType).getFormat() == COLLAPSED) {
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 				<strong class="jxr_keyword">var</strong> fieldName = r.getLocalName();
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 				<strong class="jxr_keyword">var</strong> m = nn(builder) ? toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType)) : newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 				<strong class="jxr_keyword">var</strong> bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> 				<strong class="jxr_keyword">var</strong> cm = (ClassMeta&lt;?&gt;) m.getMeta().getBeanInfo();
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> 				<strong class="jxr_keyword">var</strong> pb = swapParentBean(m.getBean(false));
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> 					Object value = readAnything(cm, currAttr, r, m.getBean(false), false, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> 					setName(cm, value, currAttr);
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 					bpm.set(m, currAttr, value);
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 				} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 					swapParentBean(pb);
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 				}
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 				o = nn(builder) ? builder.build(<strong class="jxr_keyword">this</strong>, checkRequired(m).getBean(), eType) : checkRequired(m).getBean();
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 				<strong class="jxr_keyword">var</strong> m = nn(builder) ? toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType)) : newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 		enterParseDepth();
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 			<strong class="jxr_keyword">return</strong> readAnything0(eType, currAttr, r, <strong class="jxr_keyword">outer</strong>, isRoot, pMeta);
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 			exitParseDepth();
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		}
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 	}
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 	<em class="jxr_comment">// Workhorse method, wrapped by readAnything() with the recursion-depth guard.</em>
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T readAnything0(ClassMeta&lt;T&gt; eType, String currAttr, XmlReader r, Object <strong class="jxr_keyword">outer</strong>, <strong class="jxr_keyword">boolean</strong> isRoot, BeanPropertyMeta pMeta)
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> 		<strong class="jxr_keyword">throws</strong> IOException, ParseException, ExecutableException, XMLStreamException {
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 		<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> 			eType = (ClassMeta&lt;T&gt;)object();
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 		<strong class="jxr_keyword">var</strong> swap = (ObjectSwap&lt;T,Object&gt;)eType.getSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 		<strong class="jxr_keyword">var</strong> builder = (BuilderSwap&lt;T,Object&gt;)eType.getBuilderSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		ClassMeta&lt;?&gt; sType = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 		<strong class="jxr_keyword">if</strong> (nn(builder))
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 			sType = builder.getBuilderClassMeta(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(swap))
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 			sType = swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 			sType = eType;
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<strong class="jxr_keyword">if</strong> (sType.isOptional())
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 			<strong class="jxr_keyword">return</strong> (T)o(readAnything(eType.getElementType(), currAttr, r, <strong class="jxr_keyword">outer</strong>, isRoot, pMeta));
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 		setCurrentClass(sType);
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 		<strong class="jxr_keyword">var</strong> wrapperAttr = (isRoot &amp;&amp; isPreserveRootElement()) ? r.getName().getLocalPart() : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 		<strong class="jxr_keyword">var</strong> typeAttr = r.getAttributeValue(<strong class="jxr_keyword">null</strong>, getBeanTypePropertyName(eType));
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 		<strong class="jxr_keyword">var</strong> isNil = eq(r.getAttributeValue(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"nil"</span>), <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 		<strong class="jxr_keyword">var</strong> jsonType = getJsonType(typeAttr);
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		<strong class="jxr_keyword">var</strong> elementName = getElementName(r);
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		<strong class="jxr_keyword">if</strong> (jsonType == 0) {
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 			<strong class="jxr_keyword">if</strong> (elementName == <strong class="jxr_keyword">null</strong> || elementName.equals(currAttr))
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 				jsonType = UNKNOWN;
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 			<strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 				typeAttr = elementName;
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 				jsonType = getJsonType(elementName);
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 			}
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 		}
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 		ClassMeta tcm = getClassMeta(typeAttr, pMeta, eType);
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		<strong class="jxr_keyword">if</strong> (tcm == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(elementName) &amp;&amp; ! elementName.equals(currAttr))
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 			tcm = getClassMeta(elementName, pMeta, eType);
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 		<strong class="jxr_keyword">if</strong> (nn(tcm))
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 			sType = eType = tcm;
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 		Object o = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> 		<strong class="jxr_keyword">if</strong> (jsonType == NULL) {
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> 			r.nextTag();	<em class="jxr_comment">// Discard end tag</em>
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 		}
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 		<strong class="jxr_keyword">if</strong> (sType.isObject()) {
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 			<strong class="jxr_keyword">if</strong> (jsonType == OBJECT) {
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 				<strong class="jxr_keyword">var</strong> m = newGenericMap();
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 				readIntoMap(r, m, string(), object(), pMeta);
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 				<strong class="jxr_keyword">if</strong> (nn(wrapperAttr))
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 					m = newGenericMap().append(wrapperAttr, m);
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 				o = <strong class="jxr_keyword">cast</strong>(m, pMeta, eType);
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (jsonType == ARRAY)
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> 				o = readIntoCollection(r, newGenericList(), <strong class="jxr_keyword">null</strong>, pMeta);
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (jsonType == STRING) {
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 				o = getElementText(r);
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 				<strong class="jxr_keyword">if</strong> (sType.isChar())
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 					o = parseCharacter(o);
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (jsonType == NUMBER)
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 				o = parseNumber(getElementText(r), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (jsonType == BOOLEAN)
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 				o = Boolean.parseBoolean(getElementText(r));
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (jsonType == UNKNOWN)
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 				o = getUnknown(r);
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(builder) || sType.canCreateNewBean(<strong class="jxr_keyword">outer</strong>)) {
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 			<strong class="jxr_keyword">if</strong> (getXmlClassMeta(sType).getFormat() == COLLAPSED) {
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 				<strong class="jxr_keyword">var</strong> fieldName = r.getLocalName();
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 				<strong class="jxr_keyword">var</strong> m = nn(builder) ? toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType)) : newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 				<strong class="jxr_keyword">var</strong> bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 				<strong class="jxr_keyword">var</strong> cm = (ClassMeta&lt;?&gt;) m.getMeta().getBeanInfo();
 <a class="jxr_linenumber" name="L967" href="#L967">967</a> 				<strong class="jxr_keyword">var</strong> pb = swapParentBean(m.getBean(false));
 <a class="jxr_linenumber" name="L968" href="#L968">968</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> 					m = readIntoBean(r, m, isNil);
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> 				} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> 					swapParentBean(pb);
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 				}
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 				o = nn(builder) ? builder.build(<strong class="jxr_keyword">this</strong>, checkRequired(m).getBean(), eType) : checkRequired(m).getBean();
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> 			}
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isMap()) {
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 			<strong class="jxr_keyword">var</strong> m = (sType.canCreateNewInstance(<strong class="jxr_keyword">outer</strong>) ? (Map)sType.newInstance(<strong class="jxr_keyword">outer</strong>) : newGenericMap(sType));
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> 			o = readIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 			<strong class="jxr_keyword">if</strong> (nn(wrapperAttr)) {
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 				<strong class="jxr_keyword">var</strong> wrapper = (sType.canCreateNewInstance(<strong class="jxr_keyword">outer</strong>) ? (Map)sType.newInstance(<strong class="jxr_keyword">outer</strong>) : newGenericMap());
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 				wrapper.put(wrapperAttr, m);
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 				o = wrapper;
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> 			}
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isCollection()) {
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 			<strong class="jxr_keyword">var</strong> l = (sType.canCreateNewInstance(<strong class="jxr_keyword">outer</strong>) ? (Collection)sType.newInstance(<strong class="jxr_keyword">outer</strong>) : newGenericList());
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 			o = readIntoCollection(r, l, sType, pMeta);
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isArray() || sType.isArgs()) {
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 			<strong class="jxr_keyword">var</strong> l = (ArrayList)readIntoCollection(r, list(), sType, pMeta);
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 			o = toArray(sType, l);
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isCharSequence()) {
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 			o = getElementText(r);
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isChar()) {
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 			o = parseCharacter(getElementText(r));
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isNumber()) {
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> 			o = parseNumber(getElementText(r), (Class&lt;? <strong class="jxr_keyword">extends</strong> Number&gt;)sType.<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isBoolean()) {
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> 			o = Boolean.parseBoolean(getElementText(r));
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isDate()) {
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> 			o = readDate(getElementText(r), sType);
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isCalendar()) {
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 			o = readCalendar(getElementText(r), sType);
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isTemporal()) {
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 			o = readTemporal(getElementText(r), sType);
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isDuration()) {
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 			o = readDuration(getElementText(r));
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isPeriod()) {
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 			o = readPeriod(getElementText(r));
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.canCreateNewInstanceFromString(<strong class="jxr_keyword">outer</strong>)) {
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 			o = sType.newInstanceFromString(<strong class="jxr_keyword">outer</strong>, getElementText(r));
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(sType.getProxyInvocationHandler())) {
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 			<strong class="jxr_keyword">var</strong> m = newGenericMap();
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 			readIntoMap(r, m, string(), object(), pMeta);
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 			<strong class="jxr_keyword">if</strong> (nn(wrapperAttr))
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 				m = newGenericMap().append(wrapperAttr, m);
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 			o = checkRequired(newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>()).load(m)).getBean();
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ParseException(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Class '%s' could not be instantiated.  Reason: '%s', property: '%s'"</span>, cn(sType), sType.getNotABeanReason(),
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 				pMeta == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : pMeta.getName());
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 		}
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 		<strong class="jxr_keyword">if</strong> (nn(swap) &amp;&amp; nn(o))
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 			o = unswap(swap, o, eType);
-<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 
-<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 		<strong class="jxr_keyword">if</strong> (nn(parentBean()))
-<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 			setParent(eType, o, parentBean());
-<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 
-<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		<strong class="jxr_keyword">return</strong> (T)o;
-<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 	}
-<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 
-<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">	 * Parses the current element as text.</em>
-<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> <em class="jxr_javadoccomment">	 * @param r The input reader.</em>
-<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> <em class="jxr_javadoccomment">	 * @return The parsed text.</em>
-<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> <em class="jxr_javadoccomment">	 * @throws XMLStreamException Thrown by underlying reader.</em>
-<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
-<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> <em class="jxr_javadoccomment">	 * @throws ParseException Malformed input encountered.</em>
-<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 	<strong class="jxr_keyword">protected</strong> String readText(XmlReader r) <strong class="jxr_keyword">throws</strong> IOException, XMLStreamException, ParseException {
-<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 		<em class="jxr_comment">// Note that this is different than {@link #getText(XmlReader)} since it assumes that we're pointing to a</em>
-<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		<em class="jxr_comment">// whitespace element.</em>
-<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 
-<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 		<strong class="jxr_keyword">var</strong> sb2 = getStringBuilder();
-<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 
-<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 		<strong class="jxr_keyword">int</strong> depth = 0;
-<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 		<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
-<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 			<strong class="jxr_keyword">var</strong> et = r.getEventType();
-<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 			<strong class="jxr_keyword">if</strong> (et == START_ELEMENT) {
-<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 				sb2.append(getElementAsString(r));
-<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 				depth++;
-<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (et == CHARACTERS) {
-<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 				sb2.append(getText(r));
-<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (et == END_ELEMENT) {
-<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 				sb2.append(getElementAsString(r));
-<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 				depth--;
-<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 				<strong class="jxr_keyword">if</strong> (depth &lt;= 0)
-<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 					<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 			}
-<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 			r.next();
-<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 		}
-<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 		<strong class="jxr_keyword">var</strong> s = sb2.toString();
-<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 		returnStringBuilder(sb2);
-<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 		<strong class="jxr_keyword">return</strong> s;
-<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 	}
-<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 
-<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> <em class="jxr_javadoccomment">	 * Parses the current whitespace element.</em>
-<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> <em class="jxr_javadoccomment">	 * For the XML parser, this always returns &lt;jk&gt;null&lt;/jk&gt; since there is no concept of a whitespace element.</em>
-<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> <em class="jxr_javadoccomment">	 * However, the HTML parser defines various whitespace elements such as &lt;js&gt;"br"&lt;/js&gt; and &lt;js&gt;"sp"&lt;/js&gt;.</em>
-<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> <em class="jxr_javadoccomment">	 * @param r The XML stream reader to read the current event from.</em>
-<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> <em class="jxr_javadoccomment">	 * @return The whitespace character or characters.</em>
-<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> <em class="jxr_javadoccomment">	 * @throws XMLStreamException Thrown by underlying reader.</em>
-<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
-<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> <em class="jxr_javadoccomment">	 * @throws ParseException Malformed input encountered.</em>
-<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 	<strong class="jxr_keyword">protected</strong> String readWhitespaceElement(XmlReader r) <strong class="jxr_keyword">throws</strong> IOException, XMLStreamException, ParseException {
-<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 	}
-<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> }
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 					Object value = readAnything(cm, currAttr, r, m.getBean(false), false, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 					setName(cm, value, currAttr);
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> 					bpm.set(m, currAttr, value);
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 				} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 					swapParentBean(pb);
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 				}
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 				o = nn(builder) ? builder.build(<strong class="jxr_keyword">this</strong>, checkRequired(m).getBean(), eType) : checkRequired(m).getBean();
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> 				<strong class="jxr_keyword">var</strong> m = nn(builder) ? toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType)) : newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 				<strong class="jxr_keyword">var</strong> pb = swapParentBean(m.getBean(false));
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 					m = readIntoBean(r, m, isNil);
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 				} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 					swapParentBean(pb);
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 				}
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 				o = nn(builder) ? builder.build(<strong class="jxr_keyword">this</strong>, checkRequired(m).getBean(), eType) : checkRequired(m).getBean();
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 			}
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isMap()) {
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 			<strong class="jxr_keyword">var</strong> m = (sType.canCreateNewInstance(<strong class="jxr_keyword">outer</strong>) ? (Map)sType.newInstance(<strong class="jxr_keyword">outer</strong>) : newGenericMap(sType));
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 			o = readIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 			<strong class="jxr_keyword">if</strong> (nn(wrapperAttr)) {
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 				<strong class="jxr_keyword">var</strong> wrapper = (sType.canCreateNewInstance(<strong class="jxr_keyword">outer</strong>) ? (Map)sType.newInstance(<strong class="jxr_keyword">outer</strong>) : newGenericMap());
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 				wrapper.put(wrapperAttr, m);
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 				o = wrapper;
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 			}
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isCollection()) {
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 			<strong class="jxr_keyword">var</strong> l = (sType.canCreateNewInstance(<strong class="jxr_keyword">outer</strong>) ? (Collection)sType.newInstance(<strong class="jxr_keyword">outer</strong>) : newGenericList());
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> 			o = readIntoCollection(r, l, sType, pMeta);
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isArray() || sType.isArgs()) {
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> 			<strong class="jxr_keyword">var</strong> l = (ArrayList)readIntoCollection(r, list(), sType, pMeta);
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 			o = toArray(sType, l);
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isCharSequence()) {
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 			o = getElementText(r);
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isChar()) {
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 			o = parseCharacter(getElementText(r));
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isNumber()) {
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 			o = parseNumber(getElementText(r), (Class&lt;? <strong class="jxr_keyword">extends</strong> Number&gt;)sType.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isBoolean()) {
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 			o = Boolean.parseBoolean(getElementText(r));
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isDate()) {
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 			o = readDate(getElementText(r), sType);
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isCalendar()) {
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 			o = readCalendar(getElementText(r), sType);
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isTemporal()) {
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 			o = readTemporal(getElementText(r), sType);
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isDuration()) {
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 			o = readDuration(getElementText(r));
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isPeriod()) {
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 			o = readPeriod(getElementText(r));
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.canCreateNewInstanceFromString(<strong class="jxr_keyword">outer</strong>)) {
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 			o = sType.newInstanceFromString(<strong class="jxr_keyword">outer</strong>, getElementText(r));
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(sType.getProxyInvocationHandler())) {
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 			<strong class="jxr_keyword">var</strong> m = newGenericMap();
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 			readIntoMap(r, m, string(), object(), pMeta);
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 			<strong class="jxr_keyword">if</strong> (nn(wrapperAttr))
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 				m = newGenericMap().append(wrapperAttr, m);
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 			o = checkRequired(newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.<strong class="jxr_keyword">inner</strong>()).load(m)).getBean();
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ParseException(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Class '%s' could not be instantiated.  Reason: '%s', property: '%s'"</span>, cn(sType), sType.getNotABeanReason(),
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 				pMeta == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : pMeta.getName());
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 		}
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 		<strong class="jxr_keyword">if</strong> (nn(swap) &amp;&amp; nn(o))
+<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 			o = unswap(swap, o, eType);
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 		<strong class="jxr_keyword">if</strong> (nn(parentBean()))
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 			setParent(eType, o, parentBean());
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 		<strong class="jxr_keyword">return</strong> (T)o;
+<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 	}
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> <em class="jxr_javadoccomment">	 * Parses the current element as text.</em>
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> <em class="jxr_javadoccomment">	 * @param r The input reader.</em>
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> <em class="jxr_javadoccomment">	 * @return The parsed text.</em>
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> <em class="jxr_javadoccomment">	 * @throws XMLStreamException Thrown by underlying reader.</em>
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> <em class="jxr_javadoccomment">	 * @throws ParseException Malformed input encountered.</em>
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 	<strong class="jxr_keyword">protected</strong> String readText(XmlReader r) <strong class="jxr_keyword">throws</strong> IOException, XMLStreamException, ParseException {
+<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 		<em class="jxr_comment">// Note that this is different than {@link #getText(XmlReader)} since it assumes that we're pointing to a</em>
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 		<em class="jxr_comment">// whitespace element.</em>
+<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 		<strong class="jxr_keyword">var</strong> sb2 = getStringBuilder();
+<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 
+<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 		<strong class="jxr_keyword">int</strong> depth = 0;
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 		<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 			<strong class="jxr_keyword">var</strong> et = r.getEventType();
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 			<strong class="jxr_keyword">if</strong> (et == START_ELEMENT) {
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 				sb2.append(getElementAsString(r));
+<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 				depth++;
+<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (et == CHARACTERS) {
+<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 				sb2.append(getText(r));
+<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (et == END_ELEMENT) {
+<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 				sb2.append(getElementAsString(r));
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 				depth--;
+<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 				<strong class="jxr_keyword">if</strong> (depth &lt;= 0)
+<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 					<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 			}
+<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 			r.next();
+<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 		}
+<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 		<strong class="jxr_keyword">var</strong> s = sb2.toString();
+<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 		returnStringBuilder(sb2);
+<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 		<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 	}
+<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 
+<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> <em class="jxr_javadoccomment">	 * Parses the current whitespace element.</em>
+<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> <em class="jxr_javadoccomment">	 * For the XML parser, this always returns &lt;jk&gt;null&lt;/jk&gt; since there is no concept of a whitespace element.</em>
+<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> <em class="jxr_javadoccomment">	 * However, the HTML parser defines various whitespace elements such as &lt;js&gt;"br"&lt;/js&gt; and &lt;js&gt;"sp"&lt;/js&gt;.</em>
+<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> <em class="jxr_javadoccomment">	 * @param r The XML stream reader to read the current event from.</em>
+<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> <em class="jxr_javadoccomment">	 * @return The whitespace character or characters.</em>
+<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> <em class="jxr_javadoccomment">	 * @throws XMLStreamException Thrown by underlying reader.</em>
+<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
+<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> <em class="jxr_javadoccomment">	 * @throws ParseException Malformed input encountered.</em>
+<a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 	<strong class="jxr_keyword">protected</strong> String readWhitespaceElement(XmlReader r) <strong class="jxr_keyword">throws</strong> IOException, XMLStreamException, ParseException {
+<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 	}
+<a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

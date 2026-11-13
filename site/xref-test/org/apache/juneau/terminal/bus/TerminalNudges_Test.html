@@ -155,7 +155,7 @@
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> BusPolicy.Builder policy() {
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">return</strong> BusPolicy.create().downstream(<span class="jxr_string">"term.nudge:*"</span>, false);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">return</strong> BusPolicy.create().anyCaller().downstream(<span class="jxr_string">"term.nudge:*"</span>, false);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ServerBus bus(BusPolicy p) {
@@ -208,8 +208,8 @@
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 	@Test <strong class="jxr_keyword">void</strong> a03_bindPolicy() {
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> none = bus(BusPolicy.create().downstream(<span class="jxr_string">"other.topic"</span>, false).build());
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> retained = bus(BusPolicy.create().downstream(<span class="jxr_string">"term.nudge:*"</span>, <strong class="jxr_keyword">true</strong>).build());
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> none = bus(BusPolicy.create().anyCaller().downstream(<span class="jxr_string">"other.topic"</span>, false).build());
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> retained = bus(BusPolicy.create().anyCaller().downstream(<span class="jxr_string">"term.nudge:*"</span>, <strong class="jxr_keyword">true</strong>).build());
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> n1 = <strong class="jxr_keyword">new</strong> TerminalNudges(access, <strong class="jxr_keyword">new</strong> Manual(), () -&gt; 0L); <strong class="jxr_keyword">var</strong> n2 = <strong class="jxr_keyword">new</strong> TerminalNudges(access, <strong class="jxr_keyword">new</strong> Manual(), () -&gt; 0L)) {
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 				assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; n1.bind(none));

@@ -140,81 +140,87 @@
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertEquals(20, p.maxUpstreamPerSecond());
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertNull(p.boundary());
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertEquals(List.of(), p.allowedOrigins());
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertTrue(p.authorizer().test(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"ops.jobs"</span>));
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertEquals(Map.of(), p.sessionAttributes().apply(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<em class="jxr_comment">// d) check(contract): E-55</em>
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonMap contract(Object... bridges) {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">return</strong> JsonMap.of(<span class="jxr_string">"bridges"</span>, List.of(bridges));
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	@Test <strong class="jxr_keyword">void</strong> d01_checkPassesWhenEveryRequestedTopicIsGranted() {
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> p = BusPolicy.create().downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>).downstream(<span class="jxr_string">"cmd:jobs"</span>, false)
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			.upstream(<span class="jxr_string">"ops.cancel-all"</span>, NOOP).build();
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertDoesNotThrow(() -&gt; p.check(contract(JsonMap.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"ops"</span>, <span class="jxr_string">"transport"</span>, <span class="jxr_string">"websocket"</span>,
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<span class="jxr_string">"downstream"</span>, List.of(<span class="jxr_string">"ops.jobs"</span>, <span class="jxr_string">"cmd:jobs"</span>), <span class="jxr_string">"upstream"</span>, List.of(<span class="jxr_string">"ops.cancel-all"</span>)))));
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertDoesNotThrow(() -&gt; p.check(JsonMap.of()), <span class="jxr_string">"a page with no bridges requests nothing"</span>);
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	@Test <strong class="jxr_keyword">void</strong> d02_checkListsEveryDenial() {
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">var</strong> p = BusPolicy.create().downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>).build();
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> c = contract(
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			JsonMap.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"ops"</span>, <span class="jxr_string">"transport"</span>, <span class="jxr_string">"websocket"</span>,
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				<span class="jxr_string">"downstream"</span>, List.of(<span class="jxr_string">"ops.jobs"</span>, <span class="jxr_string">"ops.secret"</span>), <span class="jxr_string">"upstream"</span>, List.of(<span class="jxr_string">"ops.cancel-all"</span>)));
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; p.check(c));
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertEquals(<span class="jxr_string">"E-55: BusPolicy denies downstream topic 'ops.secret' that bridge 'ops' requests\n"</span>
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			+ <span class="jxr_string">"E-55: BusPolicy denies upstream topic 'ops.cancel-all' that bridge 'ops' requests"</span>, e.getMessage());
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	@Test <strong class="jxr_keyword">void</strong> d03_checkListsEveryDenialAcrossTopicsAndBridges() {
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">var</strong> p = BusPolicy.create().downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>).build();
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> c = contract(
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			JsonMap.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"transport"</span>, <span class="jxr_string">"sse"</span>, <span class="jxr_string">"downstream"</span>, List.of(<span class="jxr_string">"ops.x"</span>, <span class="jxr_string">"ops.y"</span>)),
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			JsonMap.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"transport"</span>, <span class="jxr_string">"sse"</span>, <span class="jxr_string">"downstream"</span>, List.of(<span class="jxr_string">"ops.z"</span>)));
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; p.check(c));
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertEquals(<span class="jxr_string">""</span><span class="jxr_string">"
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			E-55: BusPolicy denies downstream topic 'ops.x' that bridge 'a' requests
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			E-55: BusPolicy denies downstream topic 'ops.y' that bridge 'a' requests
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			E-55: BusPolicy denies downstream topic 'ops.z' that bridge 'b' requests<span class="jxr_string">""</span><span class="jxr_string">", e.getMessage());
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<em class="jxr_comment">// e) Malformed topics, builder null checks, keyed upstream</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	@Test <strong class="jxr_keyword">void</strong> e01_malformedTopicIsNeverCoveredByAWildcard() {
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">var</strong> p = BusPolicy.create().downstream(<span class="jxr_string">"ops.alert:*"</span>, false).downstream(<span class="jxr_string">"job:*"</span>, <strong class="jxr_keyword">true</strong>).build();
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bad : List.of(<span class="jxr_string">"ops.alert:a:b"</span>, <span class="jxr_string">"ops.alert:"</span>, <span class="jxr_string">"ops.alert:a b"</span>, <span class="jxr_string">"job:a:b"</span>, <span class="jxr_string">"OPS.alert:x"</span>, <span class="jxr_string">"ops.alert:"</span> + <span class="jxr_string">"x"</span>.repeat(129)))
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			assertTrue(p.downstreamRetain(bad).isEmpty(), bad);
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertEquals(Optional.of(false), p.downstreamRetain(<span class="jxr_string">"ops.alert:"</span> + <span class="jxr_string">"x"</span>.repeat(128)));
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	@Test <strong class="jxr_keyword">void</strong> e02_allowedOriginsRejectsNullAndBlank() {
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> b = BusPolicy.create();
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertThrows(NullPointerException.<strong class="jxr_keyword">class</strong>, () -&gt; b.allowedOrigins((String[]) <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; b.allowedOrigins(<span class="jxr_string">"https://a.example"</span>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; b.allowedOrigins(<span class="jxr_string">"https://a.example"</span>, <span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertEquals(List.of(<span class="jxr_string">"https://a.example"</span>), BusPolicy.create().allowedOrigins(<span class="jxr_string">"https://a.example"</span>).build().allowedOrigins());
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	}
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	@Test <strong class="jxr_keyword">void</strong> e03_authorizerAndSessionAttributesRejectNull() {
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">var</strong> b = BusPolicy.create();
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertThrows(NullPointerException.<strong class="jxr_keyword">class</strong>, () -&gt; b.authorizer(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertThrows(NullPointerException.<strong class="jxr_keyword">class</strong>, () -&gt; b.sessionAttributes(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	@Test <strong class="jxr_keyword">void</strong> e04_keyedUpstreamIsExact() {
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> p = BusPolicy.create().upstream(<span class="jxr_string">"ops.cancel:one"</span>, NOOP).build();
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertTrue(p.allowsUpstream(<span class="jxr_string">"ops.cancel:one"</span>));
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertFalse(p.allowsUpstream(<span class="jxr_string">"ops.cancel"</span>));
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertFalse(p.allowsUpstream(<span class="jxr_string">"ops.cancel:two"</span>));
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertSame(NOOP, p.upstreamHandler(<span class="jxr_string">"ops.cancel:one"</span>));
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> }
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertFalse(p.authorizer().test(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"ops.jobs"</span>));
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertTrue(BusPolicy.create().anyCaller().build().authorizer().test(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"ops.jobs"</span>));
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		assertEquals(Map.of(), p.sessionAttributes().apply(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	}
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<em class="jxr_comment">// d) check(contract): E-55</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonMap contract(Object... bridges) {
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">return</strong> JsonMap.of(<span class="jxr_string">"bridges"</span>, List.of(bridges));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> d01_checkPassesWhenEveryRequestedTopicIsGranted() {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> p = BusPolicy.create().downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>).downstream(<span class="jxr_string">"cmd:jobs"</span>, false)
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			.upstream(<span class="jxr_string">"ops.cancel-all"</span>, NOOP).build();
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertDoesNotThrow(() -&gt; p.check(contract(JsonMap.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"ops"</span>, <span class="jxr_string">"transport"</span>, <span class="jxr_string">"websocket"</span>,
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<span class="jxr_string">"downstream"</span>, List.of(<span class="jxr_string">"ops.jobs"</span>, <span class="jxr_string">"cmd:jobs"</span>), <span class="jxr_string">"upstream"</span>, List.of(<span class="jxr_string">"ops.cancel-all"</span>)))));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertDoesNotThrow(() -&gt; p.check(JsonMap.of()), <span class="jxr_string">"a page with no bridges requests nothing"</span>);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	}
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	@Test <strong class="jxr_keyword">void</strong> d02_checkListsEveryDenial() {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> p = BusPolicy.create().downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>).build();
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> c = contract(
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			JsonMap.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"ops"</span>, <span class="jxr_string">"transport"</span>, <span class="jxr_string">"websocket"</span>,
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 				<span class="jxr_string">"downstream"</span>, List.of(<span class="jxr_string">"ops.jobs"</span>, <span class="jxr_string">"ops.secret"</span>), <span class="jxr_string">"upstream"</span>, List.of(<span class="jxr_string">"ops.cancel-all"</span>)));
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; p.check(c));
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertEquals(<span class="jxr_string">"E-55: BusPolicy denies downstream topic 'ops.secret' that bridge 'ops' requests\n"</span>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			+ <span class="jxr_string">"E-55: BusPolicy denies upstream topic 'ops.cancel-all' that bridge 'ops' requests"</span>, e.getMessage());
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	@Test <strong class="jxr_keyword">void</strong> d03_checkListsEveryDenialAcrossTopicsAndBridges() {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> p = BusPolicy.create().downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>).build();
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> c = contract(
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			JsonMap.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"transport"</span>, <span class="jxr_string">"sse"</span>, <span class="jxr_string">"downstream"</span>, List.of(<span class="jxr_string">"ops.x"</span>, <span class="jxr_string">"ops.y"</span>)),
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			JsonMap.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"transport"</span>, <span class="jxr_string">"sse"</span>, <span class="jxr_string">"downstream"</span>, List.of(<span class="jxr_string">"ops.z"</span>)));
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; p.check(c));
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertEquals(<span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			E-55: BusPolicy denies downstream topic 'ops.x' that bridge 'a' requests
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			E-55: BusPolicy denies downstream topic 'ops.y' that bridge 'a' requests
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			E-55: BusPolicy denies downstream topic 'ops.z' that bridge 'b' requests<span class="jxr_string">""</span><span class="jxr_string">", e.getMessage());
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<em class="jxr_comment">// e) Malformed topics, builder null checks, keyed upstream</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	@Test <strong class="jxr_keyword">void</strong> e01_malformedTopicIsNeverCoveredByAWildcard() {
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> p = BusPolicy.create().downstream(<span class="jxr_string">"ops.alert:*"</span>, false).downstream(<span class="jxr_string">"job:*"</span>, <strong class="jxr_keyword">true</strong>).build();
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bad : List.of(<span class="jxr_string">"ops.alert:a:b"</span>, <span class="jxr_string">"ops.alert:"</span>, <span class="jxr_string">"ops.alert:a b"</span>, <span class="jxr_string">"job:a:b"</span>, <span class="jxr_string">"OPS.alert:x"</span>, <span class="jxr_string">"ops.alert:"</span> + <span class="jxr_string">"x"</span>.repeat(129)))
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			assertTrue(p.downstreamRetain(bad).isEmpty(), bad);
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertEquals(Optional.of(false), p.downstreamRetain(<span class="jxr_string">"ops.alert:"</span> + <span class="jxr_string">"x"</span>.repeat(128)));
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	}
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	@Test <strong class="jxr_keyword">void</strong> e02_allowedOriginsRejectsNullAndBlank() {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> b = BusPolicy.create();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertThrows(NullPointerException.<strong class="jxr_keyword">class</strong>, () -&gt; b.allowedOrigins((String[]) <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; b.allowedOrigins(<span class="jxr_string">"https://a.example"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; b.allowedOrigins(<span class="jxr_string">"https://a.example"</span>, <span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertEquals(List.of(<span class="jxr_string">"https://a.example"</span>), BusPolicy.create().allowedOrigins(<span class="jxr_string">"https://a.example"</span>).build().allowedOrigins());
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	}
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	@Test <strong class="jxr_keyword">void</strong> e03_authorizerAndSessionAttributesRejectNull() {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">var</strong> b = BusPolicy.create();
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertThrows(NullPointerException.<strong class="jxr_keyword">class</strong>, () -&gt; b.authorizer(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertThrows(NullPointerException.<strong class="jxr_keyword">class</strong>, () -&gt; b.sessionAttributes(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	}
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	@Test <strong class="jxr_keyword">void</strong> e04_keyedUpstreamIsExact() {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> p = BusPolicy.create().upstream(<span class="jxr_string">"ops.cancel:one"</span>, NOOP).build();
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertTrue(p.allowsUpstream(<span class="jxr_string">"ops.cancel:one"</span>));
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertFalse(p.allowsUpstream(<span class="jxr_string">"ops.cancel"</span>));
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertFalse(p.allowsUpstream(<span class="jxr_string">"ops.cancel:two"</span>));
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertSame(NOOP, p.upstreamHandler(<span class="jxr_string">"ops.cancel:one"</span>));
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	}
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	@Test <strong class="jxr_keyword">void</strong> z01_sameOriginCheckDefaultsOnAndCanBeDisabled() {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		assertTrue(BusPolicy.create().build().sameOriginCheck());
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		assertFalse(BusPolicy.create().noSameOriginCheck().build().sameOriginCheck());
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

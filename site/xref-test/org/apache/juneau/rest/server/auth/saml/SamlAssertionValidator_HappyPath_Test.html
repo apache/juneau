@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> xml = SamlTestSupport.buildSignedResponse(cred, ISSUER, AUDIENCE, <span class="jxr_string">"alice"</span>,
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  			now.minusSeconds(60), now.plusSeconds(300), Map.of(<span class="jxr_string">"dept"</span>, <span class="jxr_string">"engineering"</span>));
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> validator = SamlAssertionValidator.create()
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> validator = SamlAssertionValidator.create().recipient(<span class="jxr_string">"https://sp.example.com/saml/acs"</span>).allowIdpInitiated()
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  			.spEntityId(AUDIENCE)
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  			.expectedIssuer(ISSUER)
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  			.signingCredential(cred)
@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> xml = SamlTestSupport.buildSignedResponse(cred, ISSUER, AUDIENCE, <span class="jxr_string">"alice"</span>,
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			past.minusSeconds(60), past, Map.of());
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">var</strong> validator = SamlAssertionValidator.create()
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">var</strong> validator = SamlAssertionValidator.create().recipient(<span class="jxr_string">"https://sp.example.com/saml/acs"</span>).allowIdpInitiated()
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			.spEntityId(AUDIENCE)
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			.expectedIssuer(ISSUER)
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			.signingCredential(cred)
@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> xml = SamlTestSupport.buildSignedResponse(cred, ISSUER, <span class="jxr_string">"https://other.example.com"</span>, <span class="jxr_string">"alice"</span>,
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			now.minusSeconds(60), now.plusSeconds(300), Map.of());
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> validator = SamlAssertionValidator.create()
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> validator = SamlAssertionValidator.create().recipient(<span class="jxr_string">"https://sp.example.com/saml/acs"</span>).allowIdpInitiated()
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  			.spEntityId(AUDIENCE)
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			.expectedIssuer(ISSUER)
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			.signingCredential(cred)
@@ -109,7 +109,7 @@
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">var</strong> xml = SamlTestSupport.buildSignedResponse(cred, <span class="jxr_string">"https://malicious.example.com"</span>, AUDIENCE, <span class="jxr_string">"alice"</span>,
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 			now.minusSeconds(60), now.plusSeconds(300), Map.of());
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">var</strong> validator = SamlAssertionValidator.create()
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">var</strong> validator = SamlAssertionValidator.create().recipient(<span class="jxr_string">"https://sp.example.com/saml/acs"</span>).allowIdpInitiated()
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 			.spEntityId(AUDIENCE)
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 			.expectedIssuer(ISSUER)
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 			.signingCredential(cred)
@@ -125,7 +125,7 @@
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">var</strong> xml = SamlTestSupport.buildSignedResponse(signing, ISSUER, AUDIENCE, <span class="jxr_string">"alice"</span>,
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 			now.minusSeconds(60), now.plusSeconds(300), Map.of());
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> validator = SamlAssertionValidator.create()
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> validator = SamlAssertionValidator.create().recipient(<span class="jxr_string">"https://sp.example.com/saml/acs"</span>).allowIdpInitiated()
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 			.spEntityId(AUDIENCE)
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 			.expectedIssuer(ISSUER)
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 			.signingCredential(verifyingDifferent)
@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	@Test <strong class="jxr_keyword">void</strong> b05_malformedXml_rejected() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> validator = SamlAssertionValidator.create()
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> validator = SamlAssertionValidator.create().recipient(<span class="jxr_string">"https://sp.example.com/saml/acs"</span>).allowIdpInitiated()
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 			.spEntityId(AUDIENCE)
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			.expectedIssuer(ISSUER)
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 			.signingCredential(cred)

@@ -78,7 +78,7 @@
 <span class="source-line-no">065</span><span id="line-65">   protected Entry(Config config, ConfigMap configMap, String sectionName, String entryName) {</span>
 <span class="source-line-no">066</span><span id="line-66">      this.configEntry = configMap.getEntry(sectionName, entryName);</span>
 <span class="source-line-no">067</span><span id="line-67">      this.config = config;</span>
-<span class="source-line-no">068</span><span id="line-68">      this.value = configEntry == null ? null : config.removeMods(configEntry.getModifiers(), configEntry.getValue());</span>
+<span class="source-line-no">068</span><span id="line-68">      this.value = configEntry == null ? null : configEntry.getValue();</span>
 <span class="source-line-no">069</span><span id="line-69">   }</span>
 <span class="source-line-no">070</span><span id="line-70"></span>
 <span class="source-line-no">071</span><span id="line-71">   /**</span>
@@ -504,82 +504,75 @@
 <span class="source-line-no">491</span><span id="line-491">   public String getKey() { return configEntry == null ? null : configEntry.getKey(); }</span>
 <span class="source-line-no">492</span><span id="line-492"></span>
 <span class="source-line-no">493</span><span id="line-493">   /**</span>
-<span class="source-line-no">494</span><span id="line-494">    * Returns the modifiers for this entry.</span>
+<span class="source-line-no">494</span><span id="line-494">    * Returns the pre-lines of this entry.</span>
 <span class="source-line-no">495</span><span id="line-495">    *</span>
-<span class="source-line-no">496</span><span id="line-496">    * @return The modifiers for this entry, or &lt;jk&gt;null&lt;/jk&gt; if it has no modifiers or this entry does not exist in the config.</span>
+<span class="source-line-no">496</span><span id="line-496">    * @return The pre-lines of this entry as an unmodifiable list, or &lt;jk&gt;null&lt;/jk&gt; if this entry does not exist in the config.</span>
 <span class="source-line-no">497</span><span id="line-497">    */</span>
-<span class="source-line-no">498</span><span id="line-498">   public String getModifiers() { return configEntry == null ? null : configEntry.getModifiers(); }</span>
+<span class="source-line-no">498</span><span id="line-498">   public List&lt;String&gt; getPreLines() { return configEntry == null ? null : configEntry.getPreLines(); }</span>
 <span class="source-line-no">499</span><span id="line-499"></span>
 <span class="source-line-no">500</span><span id="line-500">   /**</span>
-<span class="source-line-no">501</span><span id="line-501">    * Returns the pre-lines of this entry.</span>
+<span class="source-line-no">501</span><span id="line-501">    * Returns the raw value of this entry.</span>
 <span class="source-line-no">502</span><span id="line-502">    *</span>
-<span class="source-line-no">503</span><span id="line-503">    * @return The pre-lines of this entry as an unmodifiable list, or &lt;jk&gt;null&lt;/jk&gt; if this entry does not exist in the config.</span>
+<span class="source-line-no">503</span><span id="line-503">    * @return The raw value of this entry, or &lt;jk&gt;null&lt;/jk&gt; if this entry does not exist in the config.</span>
 <span class="source-line-no">504</span><span id="line-504">    */</span>
-<span class="source-line-no">505</span><span id="line-505">   public List&lt;String&gt; getPreLines() { return configEntry == null ? null : configEntry.getPreLines(); }</span>
+<span class="source-line-no">505</span><span id="line-505">   public String getValue() { return configEntry == null ? null : configEntry.getValue(); }</span>
 <span class="source-line-no">506</span><span id="line-506"></span>
 <span class="source-line-no">507</span><span id="line-507">   /**</span>
-<span class="source-line-no">508</span><span id="line-508">    * Returns the raw value of this entry.</span>
+<span class="source-line-no">508</span><span id="line-508">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this entry exists in the config and is not empty.</span>
 <span class="source-line-no">509</span><span id="line-509">    *</span>
-<span class="source-line-no">510</span><span id="line-510">    * @return The raw value of this entry, or &lt;jk&gt;null&lt;/jk&gt; if this entry does not exist in the config.</span>
+<span class="source-line-no">510</span><span id="line-510">    * @return &lt;jk&gt;true&lt;/jk&gt; if this entry exists in the config and is not empty.</span>
 <span class="source-line-no">511</span><span id="line-511">    */</span>
-<span class="source-line-no">512</span><span id="line-512">   public String getValue() { return configEntry == null ? null : configEntry.getValue(); }</span>
+<span class="source-line-no">512</span><span id="line-512">   public boolean isNotEmpty() { return ! isEmpty(); }</span>
 <span class="source-line-no">513</span><span id="line-513"></span>
 <span class="source-line-no">514</span><span id="line-514">   /**</span>
-<span class="source-line-no">515</span><span id="line-515">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this entry exists in the config and is not empty.</span>
+<span class="source-line-no">515</span><span id="line-515">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this entry exists in the config.</span>
 <span class="source-line-no">516</span><span id="line-516">    *</span>
-<span class="source-line-no">517</span><span id="line-517">    * @return &lt;jk&gt;true&lt;/jk&gt; if this entry exists in the config and is not empty.</span>
+<span class="source-line-no">517</span><span id="line-517">    * @return &lt;jk&gt;true&lt;/jk&gt; if this entry exists in the config.</span>
 <span class="source-line-no">518</span><span id="line-518">    */</span>
-<span class="source-line-no">519</span><span id="line-519">   public boolean isNotEmpty() { return ! isEmpty(); }</span>
+<span class="source-line-no">519</span><span id="line-519">   public boolean isPresent() { return ! isNull(); }</span>
 <span class="source-line-no">520</span><span id="line-520"></span>
 <span class="source-line-no">521</span><span id="line-521">   /**</span>
-<span class="source-line-no">522</span><span id="line-522">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this entry exists in the config.</span>
+<span class="source-line-no">522</span><span id="line-522">    * Returns this entry converted to the specified type or returns the default value.</span>
 <span class="source-line-no">523</span><span id="line-523">    *</span>
-<span class="source-line-no">524</span><span id="line-524">    * @return &lt;jk&gt;true&lt;/jk&gt; if this entry exists in the config.</span>
-<span class="source-line-no">525</span><span id="line-525">    */</span>
-<span class="source-line-no">526</span><span id="line-526">   public boolean isPresent() { return ! isNull(); }</span>
-<span class="source-line-no">527</span><span id="line-527"></span>
-<span class="source-line-no">528</span><span id="line-528">   /**</span>
-<span class="source-line-no">529</span><span id="line-529">    * Returns this entry converted to the specified type or returns the default value.</span>
-<span class="source-line-no">530</span><span id="line-530">    *</span>
-<span class="source-line-no">531</span><span id="line-531">    * &lt;p&gt;</span>
-<span class="source-line-no">532</span><span id="line-532">    * This is equivalent to calling &lt;c&gt;as(&lt;jv&gt;def&lt;/jv&gt;.getClass()).orElse(&lt;jv&gt;def&lt;/jv&gt;)&lt;/c&gt; but is simpler and</span>
-<span class="source-line-no">533</span><span id="line-533">    * avoids the creation of an {@link Optional} object.</span>
-<span class="source-line-no">534</span><span id="line-534">    *</span>
-<span class="source-line-no">535</span><span id="line-535">    * @param def The default value to return if value does not exist.</span>
-<span class="source-line-no">536</span><span id="line-536">    * @return This entry converted to the specified type or returns the default value.</span>
-<span class="source-line-no">537</span><span id="line-537">    */</span>
-<span class="source-line-no">538</span><span id="line-538">   public String orElse(String def) {</span>
-<span class="source-line-no">539</span><span id="line-539">      return isNull() ? def : get();</span>
-<span class="source-line-no">540</span><span id="line-540">   }</span>
-<span class="source-line-no">541</span><span id="line-541"></span>
-<span class="source-line-no">542</span><span id="line-542">   /**</span>
-<span class="source-line-no">543</span><span id="line-543">    * Returns this entry converted to the specified type or returns the default value.</span>
-<span class="source-line-no">544</span><span id="line-544">    *</span>
-<span class="source-line-no">545</span><span id="line-545">    * &lt;p&gt;</span>
-<span class="source-line-no">546</span><span id="line-546">    * This is equivalent to calling &lt;c&gt;as(&lt;jv&gt;def&lt;/jv&gt;.getClass()).orElse(&lt;jv&gt;def&lt;/jv&gt;)&lt;/c&gt; but is simpler and</span>
-<span class="source-line-no">547</span><span id="line-547">    * avoids the creation of an {@link Optional} object.</span>
-<span class="source-line-no">548</span><span id="line-548">    *</span>
-<span class="source-line-no">549</span><span id="line-549">    * @param def The default value to return if value does not exist.</span>
-<span class="source-line-no">550</span><span id="line-550">    * @return This entry converted to the specified type or returns the default value.</span>
-<span class="source-line-no">551</span><span id="line-551">    */</span>
-<span class="source-line-no">552</span><span id="line-552">   public String orElseGet(Supplier&lt;String&gt; def) {</span>
-<span class="source-line-no">553</span><span id="line-553">      return isNull() ? def.get() : get();</span>
-<span class="source-line-no">554</span><span id="line-554">   }</span>
-<span class="source-line-no">555</span><span id="line-555"></span>
-<span class="source-line-no">556</span><span id="line-556">   /**</span>
-<span class="source-line-no">557</span><span id="line-557">    * Returns this entry as a string.</span>
-<span class="source-line-no">558</span><span id="line-558">    *</span>
-<span class="source-line-no">559</span><span id="line-559">    * @return This entry as a string, or &lt;jk&gt;null&lt;/jk&gt; if the entry does not exist.</span>
-<span class="source-line-no">560</span><span id="line-560">    */</span>
-<span class="source-line-no">561</span><span id="line-561">   @Override</span>
-<span class="source-line-no">562</span><span id="line-562">   public String toString() {</span>
-<span class="source-line-no">563</span><span id="line-563">      return isPresent() ? config.varSession.resolve(value) : null;</span>
-<span class="source-line-no">564</span><span id="line-564">   }</span>
-<span class="source-line-no">565</span><span id="line-565"></span>
-<span class="source-line-no">566</span><span id="line-566">   private boolean isEmpty() { return Shorts.ie(value); }  // NOAI</span>
-<span class="source-line-no">567</span><span id="line-567"></span>
-<span class="source-line-no">568</span><span id="line-568">   private boolean isNull() { return value == null; }</span>
-<span class="source-line-no">569</span><span id="line-569">}</span>
+<span class="source-line-no">524</span><span id="line-524">    * &lt;p&gt;</span>
+<span class="source-line-no">525</span><span id="line-525">    * This is equivalent to calling &lt;c&gt;as(&lt;jv&gt;def&lt;/jv&gt;.getClass()).orElse(&lt;jv&gt;def&lt;/jv&gt;)&lt;/c&gt; but is simpler and</span>
+<span class="source-line-no">526</span><span id="line-526">    * avoids the creation of an {@link Optional} object.</span>
+<span class="source-line-no">527</span><span id="line-527">    *</span>
+<span class="source-line-no">528</span><span id="line-528">    * @param def The default value to return if value does not exist.</span>
+<span class="source-line-no">529</span><span id="line-529">    * @return This entry converted to the specified type or returns the default value.</span>
+<span class="source-line-no">530</span><span id="line-530">    */</span>
+<span class="source-line-no">531</span><span id="line-531">   public String orElse(String def) {</span>
+<span class="source-line-no">532</span><span id="line-532">      return isNull() ? def : get();</span>
+<span class="source-line-no">533</span><span id="line-533">   }</span>
+<span class="source-line-no">534</span><span id="line-534"></span>
+<span class="source-line-no">535</span><span id="line-535">   /**</span>
+<span class="source-line-no">536</span><span id="line-536">    * Returns this entry converted to the specified type or returns the default value.</span>
+<span class="source-line-no">537</span><span id="line-537">    *</span>
+<span class="source-line-no">538</span><span id="line-538">    * &lt;p&gt;</span>
+<span class="source-line-no">539</span><span id="line-539">    * This is equivalent to calling &lt;c&gt;as(&lt;jv&gt;def&lt;/jv&gt;.getClass()).orElse(&lt;jv&gt;def&lt;/jv&gt;)&lt;/c&gt; but is simpler and</span>
+<span class="source-line-no">540</span><span id="line-540">    * avoids the creation of an {@link Optional} object.</span>
+<span class="source-line-no">541</span><span id="line-541">    *</span>
+<span class="source-line-no">542</span><span id="line-542">    * @param def The default value to return if value does not exist.</span>
+<span class="source-line-no">543</span><span id="line-543">    * @return This entry converted to the specified type or returns the default value.</span>
+<span class="source-line-no">544</span><span id="line-544">    */</span>
+<span class="source-line-no">545</span><span id="line-545">   public String orElseGet(Supplier&lt;String&gt; def) {</span>
+<span class="source-line-no">546</span><span id="line-546">      return isNull() ? def.get() : get();</span>
+<span class="source-line-no">547</span><span id="line-547">   }</span>
+<span class="source-line-no">548</span><span id="line-548"></span>
+<span class="source-line-no">549</span><span id="line-549">   /**</span>
+<span class="source-line-no">550</span><span id="line-550">    * Returns this entry as a string.</span>
+<span class="source-line-no">551</span><span id="line-551">    *</span>
+<span class="source-line-no">552</span><span id="line-552">    * @return This entry as a string, or &lt;jk&gt;null&lt;/jk&gt; if the entry does not exist.</span>
+<span class="source-line-no">553</span><span id="line-553">    */</span>
+<span class="source-line-no">554</span><span id="line-554">   @Override</span>
+<span class="source-line-no">555</span><span id="line-555">   public String toString() {</span>
+<span class="source-line-no">556</span><span id="line-556">      return isPresent() ? config.varSession.resolve(value) : null;</span>
+<span class="source-line-no">557</span><span id="line-557">   }</span>
+<span class="source-line-no">558</span><span id="line-558"></span>
+<span class="source-line-no">559</span><span id="line-559">   private boolean isEmpty() { return Shorts.ie(value); }  // NOAI</span>
+<span class="source-line-no">560</span><span id="line-560"></span>
+<span class="source-line-no">561</span><span id="line-561">   private boolean isNull() { return value == null; }</span>
+<span class="source-line-no">562</span><span id="line-562">}</span>
 
 
 

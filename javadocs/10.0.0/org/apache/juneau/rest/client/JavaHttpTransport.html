@@ -47,13 +47,13 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code>, <code><a href="HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransport.html#line-82">JavaHttpTransport</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransport.html#line-83">JavaHttpTransport</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></span></div>
 <div class="block"><a href="HttpTransport.html" title="interface in org.apache.juneau.rest.client"><code>HttpTransport</code></a> implementation backed by the JDK's built-in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link"><code>HttpClient</code></a>.
@@ -138,6 +138,33 @@ implements <a href="HttpTransport.html" title="interface in org.apache.juneau.re
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
+<div class="col-second even-row-color"><code><a href="#DEFAULT_CONNECT_TIMEOUT" class="member-name-link">DEFAULT_CONNECT_TIMEOUT</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Default connect timeout of the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link"><code>HttpClient</code></a> this transport creates when none is supplied.</div>
+</div>
+<div class="col-first odd-row-color"><code>static final long</code></div>
+<div class="col-second odd-row-color"><code><a href="#DEFAULT_MAX_RESPONSE_BYTES" class="member-name-link">DEFAULT_MAX_RESPONSE_BYTES</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Default cap, in bytes, on the response body this transport will deliver.</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
+<div class="col-second even-row-color"><code><a href="#DEFAULT_REQUEST_TIMEOUT" class="member-name-link">DEFAULT_REQUEST_TIMEOUT</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Default per-request timeout (until the response headers arrive) applied when the request carries none.</div>
+</div>
+</div>
+</section>
+</li>
 <!-- ========== METHOD SUMMARY =========== -->
 <li>
 <section class="method-summary" id="method-summary">
@@ -187,6 +214,43 @@ implements <a href="HttpTransport.html" title="interface in org.apache.juneau.re
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="DEFAULT_CONNECT_TIMEOUT">
+<h3>DEFAULT_CONNECT_TIMEOUT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransport.html#line-89">DEFAULT_CONNECT_TIMEOUT</a></span></div>
+<div class="block">Default connect timeout of the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link"><code>HttpClient</code></a> this transport creates when none is supplied.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="DEFAULT_REQUEST_TIMEOUT">
+<h3>DEFAULT_REQUEST_TIMEOUT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransport.html#line-92">DEFAULT_REQUEST_TIMEOUT</a></span></div>
+<div class="block">Default per-request timeout (until the response headers arrive) applied when the request carries none.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="DEFAULT_MAX_RESPONSE_BYTES">
+<h3>DEFAULT_MAX_RESPONSE_BYTES</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransport.html#line-95">DEFAULT_MAX_RESPONSE_BYTES</a></span></div>
+<div class="block">Default cap, in bytes, on the response body this transport will deliver.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../constant-values.html#org.apache.juneau.rest.client.JavaHttpTransport.DEFAULT_MAX_RESPONSE_BYTES">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ============ METHOD DETAIL ========== -->
 <li>
 <section class="method-details" id="method-detail">
@@ -195,7 +259,7 @@ implements <a href="HttpTransport.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="builder()">
 <h3>builder</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JavaHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransport.html#line-116">builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JavaHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransport.html#line-124">builder</a></span>()</div>
 <div class="block">Returns a new builder for this transport.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -206,7 +270,7 @@ implements <a href="HttpTransport.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client">JavaHttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransport.html#line-125">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client">JavaHttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransport.html#line-133">create</a></span>()</div>
 <div class="block">Returns a new instance backed by a default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link"><code>HttpClient</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -217,7 +281,7 @@ implements <a href="HttpTransport.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="execute(org.apache.juneau.rest.client.TransportRequest)">
 <h3>execute</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TransportResponse.html" title="class in org.apache.juneau.rest.client">TransportResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransport.html#line-129">execute</a></span><wbr><span class="parameters">(<a href="TransportRequest.html" title="class in org.apache.juneau.rest.client">TransportRequest</a>&nbsp;request)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TransportResponse.html" title="class in org.apache.juneau.rest.client">TransportResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransport.html#line-137">execute</a></span><wbr><span class="parameters">(<a href="TransportRequest.html" title="class in org.apache.juneau.rest.client">TransportRequest</a>&nbsp;request)</span>
                           throws <span class="exceptions"><a href="TransportException.html" title="class in org.apache.juneau.rest.client">TransportException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="HttpTransport.html#execute(org.apache.juneau.rest.client.TransportRequest)">HttpTransport</a></code></span></div>
 <div class="block">Executes the given request and returns the response.
@@ -239,7 +303,7 @@ implements <a href="HttpTransport.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="supportsUrlPolicy()">
 <h3>supportsUrlPolicy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransport.html#line-149">supportsUrlPolicy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/JavaHttpTransport.html#line-157">supportsUrlPolicy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="HttpTransport.html#supportsUrlPolicy()">HttpTransport</a></code></span></div>
 <div class="block">Returns <code>true</code> if this transport can honor the SSRF guardrail's connect-time contract for a
  policy-covered request (<a href="TransportRequest.html#isSsrfGuardActive()"><code>TransportRequest.isSsrfGuardActive()</code></a>): pin-on-connect to a resolved address

@@ -118,30 +118,31 @@
 <span class="source-line-no">105</span><span id="line-105">      public String invoke(int length) { return invoke(length, ALPHA_NUM); }</span>
 <span class="source-line-no">106</span><span id="line-106">      public String invoke(int length, String charset) {</span>
 <span class="source-line-no">107</span><span id="line-107">         if (length &lt; 0) throw iaex("randString: length must be &gt;= 0");</span>
-<span class="source-line-no">108</span><span id="line-108">         if (ie(charset)) charset = ALPHA_NUM;</span>
-<span class="source-line-no">109</span><span id="line-109">         var rnd = ThreadLocalRandom.current();</span>
-<span class="source-line-no">110</span><span id="line-110">         var sb = new StringBuilder(length);</span>
-<span class="source-line-no">111</span><span id="line-111">         for (var i = 0; i &lt; length; i++)</span>
-<span class="source-line-no">112</span><span id="line-112">            sb.append(charset.charAt(rnd.nextInt(charset.length())));</span>
-<span class="source-line-no">113</span><span id="line-113">         return sb.toString();</span>
-<span class="source-line-no">114</span><span id="line-114">      }</span>
-<span class="source-line-no">115</span><span id="line-115">   }</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   /** {@code #{randChoice(option1, option2, ...)}} — variadic. Returns one arg chosen uniformly. */</span>
-<span class="source-line-no">118</span><span id="line-118">   public static class RandChoice extends TypedFunction {</span>
-<span class="source-line-no">119</span><span id="line-119">      @Override public String name() { return "randChoice"; }</span>
-<span class="source-line-no">120</span><span id="line-120">      public String invoke(String[] options) {</span>
-<span class="source-line-no">121</span><span id="line-121">         if (options.length == 0) throw iaex("randChoice: at least one option required");</span>
-<span class="source-line-no">122</span><span id="line-122">         return options[ThreadLocalRandom.current().nextInt(options.length)];</span>
-<span class="source-line-no">123</span><span id="line-123">      }</span>
-<span class="source-line-no">124</span><span id="line-124">   }</span>
-<span class="source-line-no">125</span><span id="line-125"></span>
-<span class="source-line-no">126</span><span id="line-126">   /** {@code #{uuid()}} — random UUID via {@link UUID#randomUUID()}. Cryptographically strong. */</span>
-<span class="source-line-no">127</span><span id="line-127">   public static class Uuid extends TypedFunction {</span>
-<span class="source-line-no">128</span><span id="line-128">      @Override public String name() { return "uuid"; }</span>
-<span class="source-line-no">129</span><span id="line-129">      public String invoke() { return UUID.randomUUID().toString(); }</span>
-<span class="source-line-no">130</span><span id="line-130">   }</span>
-<span class="source-line-no">131</span><span id="line-131">}</span>
+<span class="source-line-no">108</span><span id="line-108">         if (length &gt; StringFunctions.MAX_RESULT_LENGTH) throw iaex("randString: length must be &lt;= %s", StringFunctions.MAX_RESULT_LENGTH);</span>
+<span class="source-line-no">109</span><span id="line-109">         if (ie(charset)) charset = ALPHA_NUM;</span>
+<span class="source-line-no">110</span><span id="line-110">         var rnd = ThreadLocalRandom.current();</span>
+<span class="source-line-no">111</span><span id="line-111">         var sb = new StringBuilder(length);</span>
+<span class="source-line-no">112</span><span id="line-112">         for (var i = 0; i &lt; length; i++)</span>
+<span class="source-line-no">113</span><span id="line-113">            sb.append(charset.charAt(rnd.nextInt(charset.length())));</span>
+<span class="source-line-no">114</span><span id="line-114">         return sb.toString();</span>
+<span class="source-line-no">115</span><span id="line-115">      }</span>
+<span class="source-line-no">116</span><span id="line-116">   }</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">   /** {@code #{randChoice(option1, option2, ...)}} — variadic. Returns one arg chosen uniformly. */</span>
+<span class="source-line-no">119</span><span id="line-119">   public static class RandChoice extends TypedFunction {</span>
+<span class="source-line-no">120</span><span id="line-120">      @Override public String name() { return "randChoice"; }</span>
+<span class="source-line-no">121</span><span id="line-121">      public String invoke(String[] options) {</span>
+<span class="source-line-no">122</span><span id="line-122">         if (options.length == 0) throw iaex("randChoice: at least one option required");</span>
+<span class="source-line-no">123</span><span id="line-123">         return options[ThreadLocalRandom.current().nextInt(options.length)];</span>
+<span class="source-line-no">124</span><span id="line-124">      }</span>
+<span class="source-line-no">125</span><span id="line-125">   }</span>
+<span class="source-line-no">126</span><span id="line-126"></span>
+<span class="source-line-no">127</span><span id="line-127">   /** {@code #{uuid()}} — random UUID via {@link UUID#randomUUID()}. Cryptographically strong. */</span>
+<span class="source-line-no">128</span><span id="line-128">   public static class Uuid extends TypedFunction {</span>
+<span class="source-line-no">129</span><span id="line-129">      @Override public String name() { return "uuid"; }</span>
+<span class="source-line-no">130</span><span id="line-130">      public String invoke() { return UUID.randomUUID().toString(); }</span>
+<span class="source-line-no">131</span><span id="line-131">   }</span>
+<span class="source-line-no">132</span><span id="line-132">}</span>
 
 
 

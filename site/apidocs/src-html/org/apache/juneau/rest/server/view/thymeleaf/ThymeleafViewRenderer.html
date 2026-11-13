@@ -180,25 +180,26 @@
 <span class="source-line-no">167</span><span id="line-167">   // mount applies, returning the engine-relative template name.  Delegates to the shared</span>
 <span class="source-line-no">168</span><span id="line-168">   // FileUtils.resolveVirtualPathSafely + ThymeleafDispatcher.stripBasePath used by the raw render path.</span>
 <span class="source-line-no">169</span><span id="line-169">   static String gateTemplateName(String basePath, String templateName) {</span>
-<span class="source-line-no">170</span><span id="line-170">      var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);</span>
-<span class="source-line-no">171</span><span id="line-171">      return ThymeleafDispatcher.stripBasePath(basePath, resolved);</span>
-<span class="source-line-no">172</span><span id="line-172">   }</span>
-<span class="source-line-no">173</span><span id="line-173"></span>
-<span class="source-line-no">174</span><span id="line-174">   // Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.</span>
-<span class="source-line-no">175</span><span id="line-175">   private ThymeleafMixin fallbackMixin() {</span>
-<span class="source-line-no">176</span><span id="line-176">      var local = fallbackMixin;</span>
-<span class="source-line-no">177</span><span id="line-177">      if (local == null) {</span>
-<span class="source-line-no">178</span><span id="line-178">         synchronized (this) {</span>
-<span class="source-line-no">179</span><span id="line-179">            local = fallbackMixin;</span>
-<span class="source-line-no">180</span><span id="line-180">            if (local == null) {</span>
-<span class="source-line-no">181</span><span id="line-181">               local = new ThymeleafMixin();</span>
-<span class="source-line-no">182</span><span id="line-182">               fallbackMixin = local;</span>
-<span class="source-line-no">183</span><span id="line-183">            }</span>
-<span class="source-line-no">184</span><span id="line-184">         }</span>
-<span class="source-line-no">185</span><span id="line-185">      }</span>
-<span class="source-line-no">186</span><span id="line-186">      return local;</span>
-<span class="source-line-no">187</span><span id="line-187">   }</span>
-<span class="source-line-no">188</span><span id="line-188">}</span>
+<span class="source-line-no">170</span><span id="line-170">      ViewTemplateNames.requirePlainName(templateName);</span>
+<span class="source-line-no">171</span><span id="line-171">      var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);</span>
+<span class="source-line-no">172</span><span id="line-172">      return ThymeleafDispatcher.stripBasePath(basePath, resolved);</span>
+<span class="source-line-no">173</span><span id="line-173">   }</span>
+<span class="source-line-no">174</span><span id="line-174"></span>
+<span class="source-line-no">175</span><span id="line-175">   // Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.</span>
+<span class="source-line-no">176</span><span id="line-176">   private ThymeleafMixin fallbackMixin() {</span>
+<span class="source-line-no">177</span><span id="line-177">      var local = fallbackMixin;</span>
+<span class="source-line-no">178</span><span id="line-178">      if (local == null) {</span>
+<span class="source-line-no">179</span><span id="line-179">         synchronized (this) {</span>
+<span class="source-line-no">180</span><span id="line-180">            local = fallbackMixin;</span>
+<span class="source-line-no">181</span><span id="line-181">            if (local == null) {</span>
+<span class="source-line-no">182</span><span id="line-182">               local = new ThymeleafMixin();</span>
+<span class="source-line-no">183</span><span id="line-183">               fallbackMixin = local;</span>
+<span class="source-line-no">184</span><span id="line-184">            }</span>
+<span class="source-line-no">185</span><span id="line-185">         }</span>
+<span class="source-line-no">186</span><span id="line-186">      }</span>
+<span class="source-line-no">187</span><span id="line-187">      return local;</span>
+<span class="source-line-no">188</span><span id="line-188">   }</span>
+<span class="source-line-no">189</span><span id="line-189">}</span>
 
 
 

@@ -136,9 +136,9 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertEquals(<span class="jxr_string">"keyProvider must not be null"</span>, e.getMessage());
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test <strong class="jxr_keyword">void</strong> a10_defaultReplayCacheIsNull() {
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<em class="jxr_comment">// Replay rejection must be disabled by default -- no ReplayCache is auto-wired.</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertNull(<strong class="jxr_keyword">new</strong> McpMrtrConfig().getReplayCache());
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test <strong class="jxr_keyword">void</strong> a10_defaultReplayCacheIsInMemory() {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<em class="jxr_comment">// Single-use tokens by default: an in-memory ReplayCache is wired unless the operator replaces it.</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertInstanceOf(InMemoryReplayCache.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> McpMrtrConfig().getReplayCache());
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	}
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@Test <strong class="jxr_keyword">void</strong> a11_setReplayCacheRoundTripsThroughGetter() {

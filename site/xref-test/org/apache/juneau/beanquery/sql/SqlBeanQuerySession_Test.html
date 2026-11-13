@@ -92,7 +92,7 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> thrown = <strong class="jxr_keyword">new</strong> BeanQueryExecutionException[1];
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> records = LogRecordCapture.quietly(SqlBeanQuerySession.<strong class="jxr_keyword">class</strong>, () -&gt; thrown[0] = assertThrows(BeanQueryExecutionException.<strong class="jxr_keyword">class</strong>, body));
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertSize(records::toString, 1, records);
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertTrue(records.get(0).getMessage().startsWith(<span class="jxr_string">"Bean query failed: "</span>), records.get(0).getMessage());
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertTrue(records.get(0).getMessage().startsWith(<span class="jxr_string">"Bean query failed ("</span>), records.get(0).getMessage());
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">return</strong> thrown[0];
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  

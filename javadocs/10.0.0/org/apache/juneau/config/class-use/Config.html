@@ -68,8 +68,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Example / demo Microservice REST Resources</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.jetty">org.apache.juneau.petstore.jetty</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Apache Juneau Petstore - Jetty/Microservice deployment.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Server API</div>
 </div>
 </div>
@@ -89,135 +93,129 @@ loadScripts(document, 'script');</script>
 <div class="block">Add a listener to this config to react to modification events.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#applyMods()" class="member-name-link">applyMods</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Encodes and unencoded entries in this config.</div>
-</div>
+<div class="col-second odd-row-color"><span class="type-name-label">Config.Builder.</span><code><a href="../Config.Builder.html#build()" class="member-name-link">build</a>()</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Config.Builder.</span><code><a href="../Config.Builder.html#build()" class="member-name-link">build</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#commit()" class="member-name-link">commit</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#commit()" class="member-name-link">commit</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Commit the changes in this config to the store.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#getSystemDefault()" class="member-name-link">getSystemDefault</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static <a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#getSystemDefault()" class="member-name-link">getSystemDefault</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Returns the system default configuration.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#load(java.io.Reader,boolean)" class="member-name-link">load</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;contents,
- boolean&nbsp;synchronous)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Overwrites the contents of the config file.</div>
-</div>
 <div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#load(java.lang.String,boolean)" class="member-name-link">load</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contents,
+<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#load(java.io.Reader,boolean)" class="member-name-link">load</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;contents,
  boolean&nbsp;synchronous)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Overwrites the contents of the config file.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#load(java.util.Map)" class="member-name-link">load</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;m)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#load(java.lang.String,boolean)" class="member-name-link">load</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contents,
+ boolean&nbsp;synchronous)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Overwrites the contents of the config file.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#load(java.util.Map)" class="member-name-link">load</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;m)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Loads the contents of the specified map of maps into this config.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#remove(java.lang.String)" class="member-name-link">remove</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#remove(java.lang.String)" class="member-name-link">remove</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Removes an entry with the specified key.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#removeImport(java.lang.String,java.lang.String)" class="member-name-link">removeImport</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionName,
+<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#removeImport(java.lang.String,java.lang.String)" class="member-name-link">removeImport</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;importName)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Removes the import statement with the specified name from the specified section.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#removeListener(org.apache.juneau.config.event.ConfigEventListener)" class="member-name-link">removeListener</a><wbr>(<a href="../event/ConfigEventListener.html" title="interface in org.apache.juneau.config.event">ConfigEventListener</a>&nbsp;listener)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#removeListener(org.apache.juneau.config.event.ConfigEventListener)" class="member-name-link">removeListener</a><wbr>(<a href="../event/ConfigEventListener.html" title="interface in org.apache.juneau.config.event">ConfigEventListener</a>&nbsp;listener)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Removes a listener from this config.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#removeSection(java.lang.String)" class="member-name-link">removeSection</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#removeSection(java.lang.String)" class="member-name-link">removeSection</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Removes the section with the specified name.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#resolving(org.apache.juneau.commons.svl.VarResolverSession)" class="member-name-link">resolving</a><wbr>(<a href="../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;varSession)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#resolving(org.apache.juneau.commons.svl.VarResolverSession)" class="member-name-link">resolving</a><wbr>(<a href="../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;varSession)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Creates a copy of this config using the specified var session for resolving variables.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#rollback()" class="member-name-link">rollback</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#rollback()" class="member-name-link">rollback</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Does a rollback of any changes on this config currently in memory.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#set(java.lang.String,java.lang.Object)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#set(java.lang.String,java.lang.Object)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Adds or replaces an entry with the specified key with a POJO serialized to a string using the registered
  serializer.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#set(java.lang.String,java.lang.Object,org.apache.juneau.marshall.serializer.Serializer)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#set(java.lang.String,java.lang.Object,org.apache.juneau.marshall.serializer.Serializer)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;serializer)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Same as <a href="../Config.html#set(java.lang.String,java.lang.Object)"><code>set(String, Object)</code></a> but allows you to specify the serializer to use to serialize the
  value.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#set(java.lang.String,java.lang.Object,org.apache.juneau.marshall.serializer.Serializer,java.lang.String,java.lang.String,java.util.List)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#set(java.lang.String,java.lang.Object,org.apache.juneau.marshall.serializer.Serializer,java.lang.String,java.util.List)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;serializer,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;modifiers,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;comment,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;preLines)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Same as <a href="../Config.html#set(java.lang.String,java.lang.Object)"><code>set(String, Object)</code></a> but allows you to specify all aspects of a value.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#set(java.lang.String,java.lang.String)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#set(java.lang.String,java.lang.String)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Sets a value in this config.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">EntryBuilder.</span><code><a href="../EntryBuilder.html#set()" class="member-name-link">set</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">EntryBuilder.</span><code><a href="../EntryBuilder.html#set()" class="member-name-link">set</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Adds or updates the entry using the value specified via <a href="../EntryBuilder.html#value(java.lang.Object)"><code>EntryBuilder.value(Object)</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">EntryBuilder.</span><code><a href="../EntryBuilder.html#set(java.lang.Object)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">EntryBuilder.</span><code><a href="../EntryBuilder.html#set(java.lang.Object)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Adds or updates the entry using the specified value.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#setImport(java.lang.String,java.lang.String,java.util.List)" class="member-name-link">setImport</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionName,
+<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#setImport(java.lang.String,java.lang.String,java.util.List)" class="member-name-link">setImport</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sectionName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;importName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;preLines)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Creates the specified import statement if it doesn't exist.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#setSection(java.lang.String,java.util.List)" class="member-name-link">setSection</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#setSection(java.lang.String,java.util.List)" class="member-name-link">setSection</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;preLines)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates the specified section if it doesn't exist.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#setSection(java.lang.String,java.util.List,java.util.Map)" class="member-name-link">setSection</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;preLines,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;contents)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates the specified section if it doesn't exist.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#setSection(java.lang.String,java.util.List,java.util.Map)" class="member-name-link">setSection</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;preLines,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;contents)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#setSystemProperties()" class="member-name-link">setSystemProperties</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">Creates the specified section if it doesn't exist.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Config.</span><code><a href="../Config.html#setSystemProperties()" class="member-name-link">setSystemProperties</a>()</code></div>
-<div class="col-last odd-row-color">
 <div class="block">Takes the settings defined in this configuration and sets them as system properties.</div>
 </div>
 </div>
@@ -321,6 +319,23 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="../../microservice/examples/DirectoryResource.html#%3Cinit%3E(org.apache.juneau.config.Config)" class="member-name-link">DirectoryResource</a><wbr>(<a href="../Config.html" title="class in org.apache.juneau.config">Config</a>&nbsp;c)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.jetty">
+<h2>Uses of <a href="../Config.html" title="class in org.apache.juneau.config">Config</a> in <a href="../../petstore/jetty/package-summary.html">org.apache.juneau.petstore.jetty</a></h2>
+<div class="caption"><span>Methods in <a href="../../petstore/jetty/package-summary.html">org.apache.juneau.petstore.jetty</a> that return <a href="../Config.html" title="class in org.apache.juneau.config">Config</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../Config.html" title="class in org.apache.juneau.config">Config</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">App.AppConfig.</span><code><a href="../../petstore/jetty/App.AppConfig.html#config()" class="member-name-link">config</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Provides the deployment's configuration, named explicitly because the working directory is no longer scanned
+ for <c>*.cfg</c> files.</div>
 </div>
 </div>
 </section>
