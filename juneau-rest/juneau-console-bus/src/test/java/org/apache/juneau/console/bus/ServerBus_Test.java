@@ -91,7 +91,7 @@ class ServerBus_Test extends TestBase {
 	private final List<String> handled = new ArrayList<>();
 
 	private BusPolicy.Builder policy() {
-		return BusPolicy.create()
+		return BusPolicy.create().anyCaller()
 			.downstream("ops.jobs", true)
 			.downstream("ops.alert:*", false)
 			.downstream("ops.host:*", true)

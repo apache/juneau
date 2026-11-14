@@ -49,7 +49,7 @@ class RestContext_ValueAdoption_Test extends TestBase {
 		"RestContext.allowedHeaderParams",
 		"RestContext.allowedMethodHeaders",
 		"RestContext.allowedMethodParams",
-		"RestContext.disableContentParam",
+		"RestContext.allowContentParam",
 		"RestContext.renderResponseStackTraces",
 		"RestContext.problemDetails",
 		"RestContext.virtualThreads",
@@ -95,7 +95,7 @@ class RestContext_ValueAdoption_Test extends TestBase {
 
 	@Test
 	void a02_allowedHeaderParams_unset() throws Exception {
-		assertEquals("Accept,Content-Type", ctx().getRestContextProperties().getAllowedHeaderParams());
+		assertEquals("Accept", ctx().getRestContextProperties().getAllowedHeaderParams());
 	}
 
 	@Test
@@ -123,23 +123,23 @@ class RestContext_ValueAdoption_Test extends TestBase {
 		assertEquals("PUT", ctx().getRestContextProperties().getAllowedMethodParams());
 	}
 
-	// -------------------- disableContentParam (boolean) --------------------
+	// -------------------- allowContentParam (boolean) --------------------
 
 	@Test
-	void c01_disableContentParam_set() throws Exception {
-		System.setProperty("RestContext.disableContentParam", "true");
-		assertEquals("true", ctx().getRestContextProperties().getDisableContentParamRaw());
+	void c01_allowContentParam_set() throws Exception {
+		System.setProperty("RestContext.allowContentParam", "true");
+		assertEquals("true", ctx().getRestContextProperties().getAllowContentParamRaw());
 	}
 
 	@Test
-	void c02_disableContentParam_unset() throws Exception {
-		assertEquals("false", ctx().getRestContextProperties().getDisableContentParamRaw());
+	void c02_allowContentParam_unset() throws Exception {
+		assertEquals("false", ctx().getRestContextProperties().getAllowContentParamRaw());
 	}
 
 	@Test
-	void c03_disableContentParam_setGlobal() throws Exception {
-		Settings.get().setGlobal("RestContext.disableContentParam", "true");
-		assertEquals("true", ctx().getRestContextProperties().getDisableContentParamRaw());
+	void c03_allowContentParam_setGlobal() throws Exception {
+		Settings.get().setGlobal("RestContext.allowContentParam", "true");
+		assertEquals("true", ctx().getRestContextProperties().getAllowContentParamRaw());
 	}
 
 	// -------------------- renderResponseStackTraces (boolean) --------------------

@@ -194,6 +194,30 @@ public @interface ParserConfig {
 	String trimStrings() default "";
 
 	/**
+	 * Include input snippet in parse errors.
+	 *
+	 * <p>
+	 * When <js>"true"</js>, {@link ParseException} messages include the lines of input around the error location.
+	 * Off by default; debug mode alone does not enable it.
+	 *
+	 * <h4 class='section'>Notes:</h4><ul>
+	 * 	<li class='note'>
+	 * 		Format: boolean
+	 * 	<li class='note'>
+	 * 		Default: false
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h4 class='section'>See Also:</h4><ul>
+	 * 	<li class='jm'>{@link Parser.Builder#includeInputInErrors()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String includeInputInErrors() default "";
+
+	/**
 	 * Default per-property null-coercion policy applied during parsing.
 	 *
 	 * <p>

@@ -167,6 +167,7 @@ public class OidcDiscoveryClient {
 		HTTPRequestModifier cfg = http -> {
 			http.setConnectTimeout((int) httpTimeout.toMillis());
 			http.setReadTimeout((int) httpTimeout.toMillis());
+			http.setFollowRedirects(false);
 			if (httpRequestConfigurator != null)
 				httpRequestConfigurator.accept(http);
 			return http;

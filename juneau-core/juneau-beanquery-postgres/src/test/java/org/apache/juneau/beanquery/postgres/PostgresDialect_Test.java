@@ -82,13 +82,13 @@ class PostgresDialect_Test {
 	@Test
 	void a03_contains() {
 		var f = where("name", "$contains(err)");
-		assertBean(f, "sql,binds", "\"name\" ILIKE ?,[%err%]");
+		assertBean(f, "sql,binds", "\"name\" ILIKE ? ESCAPE '\\',[%err%]");
 	}
 
 	@Test
 	void a04_prefixText() {
 		var f = where("name", "$prefix(ab)");
-		assertBean(f, "sql,binds", "\"name\" ILIKE ?,[ab%]");
+		assertBean(f, "sql,binds", "\"name\" ILIKE ? ESCAPE '\\',[ab%]");
 	}
 
 	@Test
@@ -162,13 +162,13 @@ class PostgresDialect_Test {
 	@Test
 	void b03_bareText() {
 		var f = where("name", "Bill");
-		assertBean(f, "sql,binds", "\"name\" ILIKE ?,[%Bill%]");
+		assertBean(f, "sql,binds", "\"name\" ILIKE ? ESCAPE '\\',[%Bill%]");
 	}
 
 	@Test
 	void b04_bareWildcard() {
 		var f = where("name", "*Bi*ll*");
-		assertBean(f, "sql,binds", "\"name\" ILIKE ?,[%Bi%ll%]");
+		assertBean(f, "sql,binds", "\"name\" ILIKE ? ESCAPE '\\',[%Bi%ll%]");
 	}
 
 	@Test
@@ -301,19 +301,19 @@ class PostgresDialect_Test {
 	@Test
 	void e03_bareQuestionWildcard_mapsToUnderscore() {
 		var f = where("name", "a?c");
-		assertBean(f, "sql,binds", "\"name\" ILIKE ?,[a_c]");
+		assertBean(f, "sql,binds", "\"name\" ILIKE ? ESCAPE '\\',[a_c]");
 	}
 
 	@Test
 	void e04_bareStarAndQuestionCombine() {
 		var f = where("name", "a*b?c");
-		assertBean(f, "sql,binds", "\"name\" ILIKE ?,[a%b_c]");
+		assertBean(f, "sql,binds", "\"name\" ILIKE ? ESCAPE '\\',[a%b_c]");
 	}
 
 	@Test
 	void e05_quotedBare_bypassesWildcardMapping() {
 		var f = where("name", "\"a*\"");
-		assertBean(f, "sql,binds", "\"name\" ILIKE ?,[%a*%]");  // * is not a Postgres LIKE metachar, so it's left as literal text here
+		assertBean(f, "sql,binds", "\"name\" ILIKE ? ESCAPE '\\',[%a*%]");  // * is not a Postgres LIKE metachar, so it's left as literal text here
 	}
 
 	@Test
@@ -370,14 +370,14 @@ class PostgresDialect_Test {
 	@Test
 	void g01_bareEnumStar_isWholeStringCaseInsensitiveGlobOverCastColumn() {
 		var f = where("status", "op*");
-		assertEquals("\"status\"::text ILIKE ?", f.sql());
+		assertEquals("\"status\"::text ILIKE ? ESCAPE '\\'", f.sql());
 		assertEquals(List.of("op%"), f.binds());
 	}
 
 	@Test
 	void g02_bareEnumQuestion_mapsToUnderscore() {
 		var f = where("status", "OPE?");
-		assertEquals("\"status\"::text ILIKE ?", f.sql());
+		assertEquals("\"status\"::text ILIKE ? ESCAPE '\\'", f.sql());
 		assertEquals(List.of("OPE_"), f.binds());
 	}
 
@@ -623,7 +623,7 @@ class PostgresDialect_Test {
 	@Test
 	void k07_columnLevelNot_coalescesInnerPredicate() {
 		assertBean(where("age", "$not($gt(5))"), "sql,binds", "(NOT COALESCE(\"age\" > ?, FALSE)),[5]");
-		assertEquals("(NOT COALESCE(\"name\" ILIKE ?, FALSE))", where("name", "$not($contains(x))").sql());
+		assertEquals("(NOT COALESCE(\"name\" ILIKE ? ESCAPE '\\', FALSE))", where("name", "$not($contains(x))").sql());
 	}
 
 	@Test
@@ -653,5 +653,25 @@ class PostgresDialect_Test {
 		assertFalse(iso.sql().toLowerCase().contains("interval") || iso.sql().toLowerCase().contains("now()"), iso.sql());
 		assertSize(1, iso.binds());
 		assertInstanceOf(java.time.OffsetDateTime.class, iso.binds().get(0));
+	}
+
+	@Test
+	void z01_isPortable_acceptsCommonSyntaxAndRejectsFlavorSpecificConstructs() {
+		for (var ok : new String[]{"abc", "a.*b", "(a|b)+c", "[a-z0-9]{2,4}", "\\d+\\.\\d*", "(?:x)y", "^a+?$", "[^]a]"})
+			assertTrue(PostgresDialect.isPortable(ok), ok);
+		for (var bad : new String[]{"a++", "a*+", "\\p{L}+", "(?i)abc", "(?<=a)b", "(?<n>a)", "\\bword", "\\Qa.b\\E", "[a-z&&[^b]]", "[[:alpha:]]", "a\\", "[abc"})
+			assertFalse(PostgresDialect.isPortable(bad), bad);
+	}
+
+	@Test
+	void z02_regexWithNonPortableSyntaxNeverMatches() {
+		var f = where("name", "$regex(a++)");
+		assertBean(f, "sql", "(1 = 0)");
+	}
+
+	@Test
+	void z03_ilikeStatementsDeclareTheEscapeCharacter() {
+		var f = where("name", "$contains(a_b)");
+		assertTrue(f.sql().contains("ILIKE ? ESCAPE '\\'"), f.sql());
 	}
 }

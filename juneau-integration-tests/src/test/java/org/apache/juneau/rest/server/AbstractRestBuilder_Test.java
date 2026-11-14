@@ -149,6 +149,12 @@ class AbstractRestBuilder_Test extends TestBase {
 		assertEquals("X-Foo", b().allowedHeaderParams("X-Foo").toRestAnnotation().allowedHeaderParams());
 	}
 
+	@Test void c02b_allowedOriginsAndRelatedFlags() {
+		assertEquals("https://a.example", b().allowedOrigins("https://a.example").toRestAnnotation().allowedOrigins());
+		assertEquals("true", b().allowCrossSite("true").toRestAnnotation().allowCrossSite());
+		assertEquals("X-A", b().allowedResponseHeaders("X-A").toRestAnnotation().allowedResponseHeaders());
+	}
+
 	@Test void c02_allowedMethodHeaders() {
 		assertEquals("X-Method", b().allowedMethodHeaders("X-Method").toRestAnnotation().allowedMethodHeaders());
 	}
@@ -188,8 +194,8 @@ class AbstractRestBuilder_Test extends TestBase {
 		assertArrayEquals(new String[]{"X-Bar: baz"}, b.toRestAnnotation().defaultResponseHeaders());
 	}
 
-	@Test void c11_disableContentParam() {
-		assertEquals("true", b().disableContentParam("true").toRestAnnotation().disableContentParam());
+	@Test void c11_allowContentParam() {
+		assertEquals("true", b().allowContentParam("true").toRestAnnotation().allowContentParam());
 	}
 
 	@Test void c12_maxInput() {

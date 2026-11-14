@@ -56,13 +56,26 @@ public interface TerminalSource {
 	 * @throws IOException If the source could not be read or the stream written.
 	 */
 	default void copyTo(OutputStream out) throws IOException {
+		copyTo(out, Long.MAX_VALUE);
+	}
+
+	/**
+	 * Copies the bytes still held like {@link #copyTo(OutputStream)}, stopping once {@code maxBytes} have been written.
+	 *
+	 * @param out The stream to write to.
+	 * @param maxBytes The most bytes to write.
+	 * @throws IOException If the source could not be read or the stream written.
+	 */
+	default void copyTo(OutputStream out, long maxBytes) throws IOException {
 		var from = 0L;
 		var stop = -1L;
-		while (true) {
-			var c = read(from, MAX_READ_BYTES);
+		var written = 0L;
+		while (written < maxBytes) {
+			var c = read(from, (int)Math.min(MAX_READ_BYTES, maxBytes - written));
 			if (stop < 0)
 				stop = c.end();
 			out.write(c.bytes());
+			written += c.bytes().length;
 			if (c.gone() || c.bytes().length == 0 || c.next() >= stop)
 				return;
 			from = c.next();

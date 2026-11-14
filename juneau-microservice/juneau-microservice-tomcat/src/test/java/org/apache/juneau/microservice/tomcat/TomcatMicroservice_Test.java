@@ -23,6 +23,8 @@ import java.net.*;
 import java.nio.charset.*;
 import java.util.stream.*;
 
+import org.apache.catalina.startup.*;
+import org.apache.coyote.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.server.*;
@@ -75,7 +77,10 @@ class TomcatMicroservice_Test {
 			var localPort = tsc.getPort();
 			assertTrue(localPort > 0, "Tomcat should bind to an ephemeral port");
 
-			var url = URI.create("http://localhost:" + localPort + "/hello").toURL();
+			var connector = ms.getBeanStore().getBean(Tomcat.class).orElseThrow().getConnector();
+			assertEquals(InetAddress.getByName("127.0.0.1"), ((AbstractProtocol<?>)connector.getProtocolHandler()).getAddress(), "Tomcat must bind to loopback by default");
+
+			var url = URI.create("http://127.0.0.1:" + localPort + "/hello").toURL();
 			var conn = (HttpURLConnection)url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "text/plain");

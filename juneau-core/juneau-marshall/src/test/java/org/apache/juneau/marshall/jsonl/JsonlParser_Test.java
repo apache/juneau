@@ -124,7 +124,7 @@ class JsonlParser_Test extends TestBase {
 
 	@Test
 	void a11_readMalformedLine() {
-		assertThrowsWithMessage(ParseException.class, "invalid", () ->
+		assertThrowsWithMessage(ParseException.class, "Unquoted attribute", () ->
 			Jsonl.to("{\"a\":1}\n{invalid json}", List.class, JsonMap.class));
 	}
 }

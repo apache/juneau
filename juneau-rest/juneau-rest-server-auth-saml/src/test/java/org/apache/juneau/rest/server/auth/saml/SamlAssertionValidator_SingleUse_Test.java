@@ -42,7 +42,7 @@ class SamlAssertionValidator_SingleUse_Test extends TestBase {
 	private static final Clock CLOCK = Clock.fixed(NOW, ZoneOffset.UTC);
 
 	private static SamlAssertionValidator.Builder base(org.opensaml.security.credential.Credential cred) {
-		return SamlAssertionValidator.create()
+		return SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)

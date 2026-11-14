@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.*;
 import java.security.*;
 import java.time.*;
 import java.util.*;
@@ -122,6 +123,7 @@ public class OidcRelyingParty {
 	private static final String DEFAULT_COOKIE_NAME = "JUNEAU_OIDC_SESSION";
 	private static final String DEFAULT_ROLES_CLAIM = "scope";
 	private static final Duration DEFAULT_SESSION_TTL = Duration.ofHours(8);
+	private static final int USERINFO_TIMEOUT_MS = 5_000;
 
 	/**
 	 * Static creator.
@@ -628,7 +630,8 @@ public class OidcRelyingParty {
 		var challenge = CodeChallenge.compute(CodeChallengeMethod.S256, verifier);
 		var redirectTarget = safeRelativePath(req.getParameter("redirect"));
 		var createdAt = clock.instant();
-		var pending = new LoginStateStore.PendingLogin(nonce, verifier.getValue(), redirectTarget, createdAt, createdAt.plus(stateNonceTtl));
+		var binding = new State().getValue();
+		var pending = new LoginStateStore.PendingLogin(nonce, verifier.getValue(), redirectTarget, createdAt, createdAt.plus(stateNonceTtl), hashBinding(binding));
 		try {
 			loginStateStore.store(state, pending);
 		} catch (RuntimeException e) {
@@ -639,6 +642,7 @@ public class OidcRelyingParty {
 		}
 		var authUrl = codeFlow().buildAuthenticationUrl(state, challenge, nonce, authenticationRequestCustomizer);
 		noStore(res);
+		res.addHeader("Set-Cookie", buildLoginBindingCookie(binding, stateNonceTtl.toSeconds()));
 		res.sendRedirect(authUrl.toString());
 	}
 
@@ -684,6 +688,11 @@ public class OidcRelyingParty {
 		}
 		var pending = consumed.orElseThrow(
 			() -> new AuthenticationException("OIDC callback state is missing, expired, or already used"));
+
+		// The login must complete in the same browser that started it: the callback must present the binding cookie
+		// whose hash was stored with the state.
+		if (! bindingMatches(readCookie(req, loginBindingCookieName()), pending.bindingHash()))
+			throw new AuthenticationException("OIDC callback is not bound to the browser that started the login");
 
 		// Fail-closed expiry re-check BEFORE the token exchange: the framework owns the TTL ceiling independently
 		// of the store, so an honest store that failed to expire an over-age record cannot extend usability.  Null
@@ -737,6 +746,11 @@ public class OidcRelyingParty {
 	public void logout(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		reqnn("req", req);
 		reqnn("res", res);
+		if (! "POST".equals(req.getMethod())) {
+			res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			res.setHeader("Allow", "POST");
+			return;
+		}
 		var cookieValue = readCookie(req);
 		JWT idTokenHint = null;
 		if (cookieValue != null) {
@@ -927,7 +941,7 @@ public class OidcRelyingParty {
 	}
 
 	/**
-	 * Requires the token-bearing endpoints resolved from metadata (issuer, token, JWKS) to use https or a
+	 * Requires the token-bearing endpoints resolved from metadata (issuer, token, JWKS, authorization, UserInfo, end-session) to use https or a
 	 * loopback host, so key material and client credentials are never exchanged over plaintext to a remote host.
 	 */
 	private static OidcMetadata validateEndpoints(OidcMetadata m) {
@@ -937,6 +951,12 @@ public class OidcRelyingParty {
 			UriUtils.assertSecureOrLoopback(m.tokenEndpoint());
 		if (m.jwksUri() != null)
 			UriUtils.assertSecureOrLoopback(m.jwksUri());
+		if (m.authorizationEndpoint() != null)
+			UriUtils.assertSecureOrLoopback(m.authorizationEndpoint());
+		if (m.userinfoEndpoint() != null)
+			UriUtils.assertSecureOrLoopback(m.userinfoEndpoint());
+		if (m.endSessionEndpoint() != null)
+			UriUtils.assertSecureOrLoopback(m.endSessionEndpoint());
 		return m;
 	}
 
@@ -1051,12 +1071,17 @@ public class OidcRelyingParty {
 			return principal;
 		try {
 			var http = new UserInfoRequest(endpoint, new BearerAccessToken(token.accessToken())).toHTTPRequest();
+			http.setConnectTimeout(USERINFO_TIMEOUT_MS);
+			http.setReadTimeout(USERINFO_TIMEOUT_MS);
+			http.setFollowRedirects(false);
 			if (httpRequestConfigurator != null)
 				httpRequestConfigurator.accept(http);
 			var resp = UserInfoResponse.parse(http.send());
 			if (! resp.indicatesSuccess())
 				return principal;
 			var ui = resp.toSuccessResponse().getUserInfo().toJSONObject();
+			if (! Objects.equals(principal.getName(), ui.get("sub")))
+				return principal;  // The UserInfo subject must match the ID-token subject.
 			var merged = new LinkedHashMap<String,Object>(principal.getClaims());
 			for (var c : userInfoClaims)
 				if (! merged.containsKey(c) && ui.containsKey(c))
@@ -1121,11 +1146,47 @@ public class OidcRelyingParty {
 	}
 
 	private String readCookie(HttpServletRequest req) {
+		return readCookie(req, cookieName);
+	}
+
+	private String loginBindingCookieName() {
+		return cookieName + "_LOGIN";
+	}
+
+	private String buildLoginBindingCookie(String value, long maxAgeSeconds) {
+		// SameSite=Lax regardless of the session-cookie setting: the IdP callback is a cross-site top-level navigation.
+		var sb = new StringBuilder();
+		sb.append(loginBindingCookieName()).append('=').append(value);
+		sb.append("; Path=/; Max-Age=").append(maxAgeSeconds).append("; HttpOnly");
+		if (cookieSecure)
+			sb.append("; Secure");
+		sb.append("; SameSite=Lax");
+		return sb.toString();
+	}
+
+	private static String hashBinding(String value) {
+		try {
+			return Base64.getUrlEncoder().withoutPadding().encodeToString(
+				MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8)));
+		} catch (NoSuchAlgorithmException e) {
+			throw new IllegalStateException(e);  // HTT: SHA-256 is always available
+		}
+	}
+
+	private static boolean bindingMatches(String cookieValue, String expectedHash) {
+		if (cookieValue == null || expectedHash == null)
+			return false;
+		return MessageDigest.isEqual(
+			hashBinding(cookieValue).getBytes(StandardCharsets.UTF_8),
+			expectedHash.getBytes(StandardCharsets.UTF_8));
+	}
+
+	private static String readCookie(HttpServletRequest req, String name) {
 		var cookies = req.getCookies();
 		if (cookies == null)
 			return null;
 		for (var c : cookies)
-			if (eq(cookieName, c.getName()) && c.getValue() != null && ! c.getValue().isBlank())
+			if (eq(name, c.getName()) && c.getValue() != null && ! c.getValue().isBlank())
 				return c.getValue();
 		return null;
 	}
@@ -1154,6 +1215,11 @@ public class OidcRelyingParty {
 			return null;
 		if (value.startsWith("//") || value.contains("\\") || value.contains("://"))
 			return null;
+		for (var i = 0; i < value.length(); i++) {
+			var ch = value.charAt(i);
+			if (ch <= 0x20 || ch == 0x7f)
+				return null;
+		}
 		return value;
 	}
 

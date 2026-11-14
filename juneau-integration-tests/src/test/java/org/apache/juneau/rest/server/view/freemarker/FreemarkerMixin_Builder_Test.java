@@ -42,10 +42,10 @@ class FreemarkerMixin_Builder_Test extends TestBase {
 	 * Section A: builder surface
 	 * ---------------------------------------------------------------------------------------- */
 
-	@Test void a01_defaultBasePathIsRoot() {
+	@Test void a01_defaultBasePathIsTemplates() {
 		var r = FreemarkerMixin.create().build();
 		assertEquals(FreemarkerMixin.DEFAULT_BASE_PATH, r.getBasePath());
-		assertEquals("/", r.getBasePath());
+		assertEquals("/templates/", r.getBasePath());
 	}
 
 	@Test void a02_basePathSetterRoundTrips() {

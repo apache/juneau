@@ -83,24 +83,29 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 			+ "\"id_token_signing_alg_values_supported\":[\"RS256\"]}";
 	}
 
+	/** Builder pre-configured for the loopback stub: private hosts allowed and the stub's own resource expected. */
+	private McpProtectedResourceMetadataClient.Builder local() {
+		return McpProtectedResourceMetadataClient.create().allowPrivateUrls(true).expectedResource(URI.create(base()));
+	}
+
 	// -----------------------------------------------------------------------------------------------------------------
 	// A: parse
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_parseHappy() {
-		var prm = McpProtectedResourceMetadataClient.create().build().parse(prmJson(), null);
+		var prm = local().build().parse(prmJson(), null);
 		assertEquals(URI.create(base()), prm.resource());
 		assertEquals(URI.create(base()), prm.firstAuthorizationServer().orElseThrow());
 		assertTrue(prm.scopesSupported().contains("mcp:read"));
 	}
 
 	@Test void a02_parseMissingResourceThrows() {
-		var client = McpProtectedResourceMetadataClient.create().build();
+		var client = local().build();
 		assertThrows(McpAuthException.class, () -> client.parse("{\"authorization_servers\":[\"https://as\"]}", null));
 	}
 
 	@Test void a03_parseMalformedJsonThrows() {
-		var client = McpProtectedResourceMetadataClient.create().build();
+		var client = local().build();
 		assertThrows(McpAuthException.class, () -> client.parse("not json", null));
 	}
 
@@ -109,14 +114,25 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_fetchHappy() {
-		var prm = McpProtectedResourceMetadataClient.create().build()
+		var prm = local().build()
 			.fetch(URI.create(base() + "/.well-known/oauth-protected-resource"));
 		assertEquals(URI.create(base()), prm.resource());
 	}
 
 	@Test void b02_fetch404Throws() {
-		var client = McpProtectedResourceMetadataClient.create().build();
+		var client = local().build();
 		var url = URI.create(base() + "/does-not-exist");
+		assertThrows(McpAuthException.class, () -> client.fetch(url));
+	}
+
+	@Test void b03_fetchDoesNotFollowRedirects() {
+		server.createContext("/moved", ex -> {
+			ex.getResponseHeaders().add("Location", base() + "/.well-known/oauth-protected-resource");
+			ex.sendResponseHeaders(302, -1);
+			ex.close();
+		});
+		var client = local().build();
+		var url = URI.create(base() + "/moved");
 		assertThrows(McpAuthException.class, () -> client.fetch(url));
 	}
 
@@ -125,7 +141,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_discoverAuthorizationServer() {
-		var client = McpProtectedResourceMetadataClient.create().build();
+		var client = local().build();
 		var prm = client.fetch(URI.create(base() + "/.well-known/oauth-protected-resource"));
 		var md = client.discoverAuthorizationServer(prm);
 		assertEquals(URI.create(base()), md.issuer());
@@ -135,20 +151,20 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 	@Test void c02_issuerMismatchRejected() {
 		// AS metadata advertises a different issuer than requested -> RFC 8414 issuer check fails.
 		issuerInDoc = "https://evil.example.com";
-		var client = McpProtectedResourceMetadataClient.create().build();
+		var client = local().build();
 		var prm = client.parse(prmJson(), null);
 		assertThrows(McpAuthException.class, () -> client.discoverAuthorizationServer(prm));
 	}
 
 	@Test void c03_noAuthorizationServersThrows() {
-		var client = McpProtectedResourceMetadataClient.create().build();
+		var client = local().build();
 		var prm = client.parse("{\"resource\":\"" + base() + "\"}", null);
 		assertThrows(McpAuthException.class, () -> client.discoverAuthorizationServer(prm));
 	}
 
 	@Test void c04_resourceMismatchRejected() {
 		// The PRM document's resource field must match the resource the client was talking to.
-		var client = McpProtectedResourceMetadataClient.create()
+		var client = McpProtectedResourceMetadataClient.create().allowPrivateUrls(true)
 			.expectedResource(URI.create("https://different.example.com")).build();
 		var json = prmJson();
 		var e = assertThrows(McpAuthException.class, () -> client.parse(json, null));
@@ -157,8 +173,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 
 	@Test void c05_resourceMatchAccepted() {
 		// A matching resource identity passes.
-		var client = McpProtectedResourceMetadataClient.create()
-			.expectedResource(URI.create(base())).build();
+		var client = local().build();
 		var prm = client.parse(prmJson(), null);
 		assertEquals(URI.create(base()), prm.resource());
 	}
@@ -168,7 +183,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 		// discovery must still succeed via the AuthorizationServerMetadata path.
 		server.removeContext("/.well-known/openid-configuration");
 		server.createContext("/.well-known/oauth-authorization-server", ex -> respond(ex, oidcMetadataJson()));
-		var client = McpProtectedResourceMetadataClient.create().build();
+		var client = local().build();
 		var prm = client.parse(prmJson(), null);
 		var md = client.discoverAuthorizationServer(prm);
 		assertEquals(URI.create(base()), md.issuer());
@@ -181,7 +196,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 
 	@Test void d01_insecureNonLoopbackPrmUrlRejected() {
 		// A non-loopback plain-http PRM URL is rejected before any network I/O.
-		var client = McpProtectedResourceMetadataClient.create().build();
+		var client = local().build();
 		var url = URI.create("http://example.com/.well-known/oauth-protected-resource");
 		var e = assertThrows(McpAuthException.class, () -> client.fetch(url));
 		assertTrue(e.getMessage().contains("https"), e::getMessage);
@@ -190,7 +205,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 	@Test void d02_allowInsecureHttpOptOut() {
 		// The opt-out disables the scheme check (loopback http already works; this asserts the flag path builds
 		// and fetches over the loopback stub).
-		var prm = McpProtectedResourceMetadataClient.create().allowInsecureHttp(true).build()
+		var prm = local().allowInsecureHttp(true).build()
 			.fetch(URI.create(base() + "/.well-known/oauth-protected-resource"));
 		assertEquals(URI.create(base()), prm.resource());
 	}
@@ -215,7 +230,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 
 	@Test void e02_requestConfiguratorAppliedToFetchAndDiscovery() {
 		var calls = new AtomicInteger();
-		var client = McpProtectedResourceMetadataClient.create()
+		var client = local()
 			.httpTimeout(Duration.ofSeconds(5))
 			.httpRequestConfigurator(r -> calls.incrementAndGet())
 			.build();
@@ -228,30 +243,66 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 	@Test void e03_unreachableHostSurfacesAsMcpAuthException() throws IOException {
 		// https to a closed loopback port: passes the scheme check (https branch) and then fails at connect time.
 		var url = URI.create("https://127.0.0.1:" + closedLoopbackPort() + "/.well-known/oauth-protected-resource");
-		var client = McpProtectedResourceMetadataClient.create().build();
+		var client = local().build();
 		var e = assertThrows(McpAuthException.class, () -> client.fetch(url));
 		assertTrue(e.getMessage().contains("fetch failed"), e::getMessage);
 	}
 
 	@Test void e04_localhostHostnameTreatedAsLoopback() throws IOException {
 		var url = URI.create("http://localhost:" + closedLoopbackPort() + "/prm");
-		var client = McpProtectedResourceMetadataClient.create().build();
+		var client = local().build();
 		var e = assertThrows(McpAuthException.class, () -> client.fetch(url));
 		assertTrue(e.getMessage().contains("fetch failed"), e::getMessage);  // got past the scheme check
 	}
 
 	@Test void e05_hostlessUriIsNotLoopback() {
 		var url = URI.create("urn:example:prm");
-		var client = McpProtectedResourceMetadataClient.create().build();
+		var client = local().build();
 		var e = assertThrows(McpAuthException.class, () -> client.fetch(url));
-		assertTrue(e.getMessage().contains("must use https"), e::getMessage);
+		assertTrue(e.getMessage().contains("not permitted"), e::getMessage);
 	}
 
 	@Test void e06_nonStandardFieldsSurfacedAsExtras() {
 		var json = "{\"resource\":\"" + base() + "\",\"bearer_methods_supported\":[\"header\"],\"resource_name\":\"Demo\"}";
-		var prm = McpProtectedResourceMetadataClient.create().build().parse(json, null);
+		var prm = local().build().parse(json, null);
 		assertEquals("Demo", prm.extras().get("resource_name"));
 		assertTrue(prm.extras().containsKey("bearer_methods_supported"));
 		assertFalse(prm.extras().containsKey("resource"));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// Host deny-list and required resource identity
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_loopbackPrmUrlRejectedByDefault() {
+		var client = McpProtectedResourceMetadataClient.create().expectedResource(URI.create(base())).build();
+		var url = URI.create(base() + "/.well-known/oauth-protected-resource");
+		var e = assertThrows(McpAuthException.class, () -> client.fetch(url));
+		assertTrue(e.getMessage().contains("not permitted"), e::getMessage);
+	}
+
+	@Test void f02_metadataAddressPrmUrlRejectedByDefault() {
+		var client = McpProtectedResourceMetadataClient.create().expectedResource(URI.create("https://mcp.example.com")).build();
+		var url = URI.create("https://169.254.169.254/latest/meta-data");
+		assertThrows(McpAuthException.class, () -> client.fetch(url));
+	}
+
+	@Test void f03_expectedResourceRequiredByDefault() {
+		var client = McpProtectedResourceMetadataClient.create().allowPrivateUrls(true).build();
+		var json = prmJson();
+		var e = assertThrows(McpAuthException.class, () -> client.parse(json, null));
+		assertTrue(e.getMessage().contains("expected resource"), e::getMessage);
+	}
+
+	@Test void f04_skipResourceValidationOptOut() {
+		var client = McpProtectedResourceMetadataClient.create().skipResourceValidation(true).build();
+		assertEquals(URI.create(base()), client.parse(prmJson(), null).resource());
+	}
+
+	@Test void f05_discoveredEndpointOnPrivateHostRejectedByDefault() {
+		// Authorization server on a public-looking host advertising a loopback token endpoint is rejected.
+		var client = McpProtectedResourceMetadataClient.create().expectedResource(URI.create(base())).build();
+		var prm = client.parse(prmJson(), null);
+		assertThrows(McpAuthException.class, () -> client.discoverAuthorizationServer(prm));
 	}
 }

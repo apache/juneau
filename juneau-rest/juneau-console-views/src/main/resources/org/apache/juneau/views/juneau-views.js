@@ -1022,6 +1022,8 @@
 		if (col.name != null) def.name = col.name;
 		if (col.className != null) def.className = col.className;
 		if (col.visible === false) def.visible = false;
+		// Cell data is escaped text unless the column explicitly opts in to raw HTML with `html: true`.
+		if (col.html === true) def.juneauRawHtml = true;
 
 		if (col.render) {
 			const spec = deps.parseRenderId(col.render);
@@ -1042,7 +1044,7 @@
 				let html = data == null ? "" : String(data);
 				if (renderer?.display) {
 						try { html = renderer.display(data, rowData, meta); }
-						catch (e) { html = data == null ? "" : String(data); } // NOSONAR javascript:S2486 -- a throwing renderer falls back to the escaped raw value
+						catch (e) { html = escapingTextRender(data, "display"); } // NOSONAR javascript:S2486 -- a throwing renderer falls back to the escaped raw value
 						if (html == null) html = "";
 						else html = String(html);
 					}
@@ -1182,9 +1184,6 @@
 			// named renderer is forced through a text renderer - DataTables renders cell data as HTML by default.
 			opts.serverSide = false;
 			opts.data = staticRows;
-			opts.columns.forEach(function (colDef) {
-				if (!colDef.render) colDef.render = escapingTextRender;
-			});
 		} else if (viewDef.dataMode === "server") {
 			opts.serverSide = true;
 			buildServerAjax(opts, viewDef, deps);
@@ -1193,6 +1192,12 @@
 			opts.ajax = { url: viewDef.dataUrl, dataSrc: "" };
 			if (deps?.urlStateParams) opts.ajax.data = function () { return deps.urlStateParams(); };
 		}
+
+		// Every column without a renderer is forced through the text renderer in all data modes (inline, ajax and
+		// server) - DataTables renders cell data as HTML by default.  `html: true` on a column opts out.
+		opts.columns.forEach(function (colDef) {
+			if (!colDef.render && !colDef.juneauRawHtml) colDef.render = escapingTextRender;
+		});
 
 		// Nested-table parent scoping.  `deps.nestedScope`, present ONLY for a nested table, merges exactly ONE extra
 		// query parameter (its declared scope-param name -> the parent row id) into the request in BOTH data modes -

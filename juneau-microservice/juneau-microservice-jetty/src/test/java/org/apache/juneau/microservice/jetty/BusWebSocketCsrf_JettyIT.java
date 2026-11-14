@@ -134,7 +134,7 @@ class BusWebSocketCsrf_JettyIT extends TestBase {
 		server.addConnector(h2c);
 
 		boundary = CsrfBoundary.create().tokens(CsrfTokens.perProcess()).build();
-		bus = ServerBus.create(BusPolicy.create()
+		bus = ServerBus.create(BusPolicy.create().anyCaller()
 			.downstream("ops.jobs", true)
 			.boundary(boundary)
 			.build());
@@ -534,7 +534,7 @@ class BusWebSocketCsrf_JettyIT extends TestBase {
 		conn.setPort(0);
 		srv.addConnector(conn);
 		conn.open();
-		var b = ServerBus.create(BusPolicy.create().downstream("ops.jobs", true).boundary(boundaryFor.apply(conn.getLocalPort())).build());
+		var b = ServerBus.create(BusPolicy.create().anyCaller().downstream("ops.jobs", true).boundary(boundaryFor.apply(conn.getLocalPort())).build());
 		var ctx = new ServletContextHandler();
 		ctx.setContextPath("/");
 		ctx.addServlet(new ServletHolder(new OwnBusRest(b)), "/rest/*");

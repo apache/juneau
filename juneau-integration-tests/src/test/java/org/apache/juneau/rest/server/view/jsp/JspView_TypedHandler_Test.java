@@ -111,7 +111,7 @@ class JspView_TypedHandler_Test extends ViewIntegrationTestBase {
 
 		@RestGet("/thy-hello")
 		public View thyHello() {
-			return ThymeleafView.of("templates/hello.html").attr("name", "Alice");
+			return ThymeleafView.of("hello.html").attr("name", "Alice");
 		}
 	}
 

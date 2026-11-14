@@ -31,23 +31,23 @@ class ConfigEvent_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void a01_getters() {
-		var e = ConfigEvent.setEntry("myconfig.cfg", "MySection", "myKey", "myValue", "*", "myComment", l("line1"));
-		assertBean(e, "config,section,key,value,modifiers,comment,preLines,type", "myconfig.cfg,MySection,myKey,myValue,*,myComment,[line1],SET_ENTRY");
+		var e = ConfigEvent.setEntry("myconfig.cfg", "MySection", "myKey", "myValue", "myComment", l("line1"));
+		assertBean(e, "config,section,key,value,comment,preLines,type", "myconfig.cfg,MySection,myKey,myValue,myComment,[line1],SET_ENTRY");
 	}
 
 	@Test void a02_removeEntry_getters() {
 		var e = ConfigEvent.removeEntry("cfg.cfg", "S", "k");
-		assertBean(e, "config,section,key,value,modifiers,comment,preLines,type", "cfg.cfg,S,k,<null>,<null>,<null>,<null>,REMOVE_ENTRY");
+		assertBean(e, "config,section,key,value,comment,preLines,type", "cfg.cfg,S,k,<null>,<null>,<null>,REMOVE_ENTRY");
 	}
 
 	@Test void a03_removeSection_getters() {
 		var e = ConfigEvent.removeSection("cfg.cfg", "S");
-		assertBean(e, "config,section,key,value,modifiers,comment,preLines,type", "cfg.cfg,S,<null>,<null>,<null>,<null>,<null>,REMOVE_SECTION");
+		assertBean(e, "config,section,key,value,comment,preLines,type", "cfg.cfg,S,<null>,<null>,<null>,<null>,REMOVE_SECTION");
 	}
 
 	@Test void a04_setSection_getters() {
 		var e = ConfigEvent.setSection("cfg.cfg", "S", l("# comment"));
-		assertBean(e, "config,section,key,value,modifiers,comment,preLines,type", "cfg.cfg,S,<null>,<null>,<null>,<null>,[# comment],SET_SECTION");
+		assertBean(e, "config,section,key,value,comment,preLines,type", "cfg.cfg,S,<null>,<null>,<null>,[# comment],SET_SECTION");
 	}
 
 	//====================================================================================================
@@ -80,43 +80,38 @@ class ConfigEvent_Test extends TestBase {
 	}
 
 	@Test void b06_toString_setEntry_basic() {
-		var e = ConfigEvent.setEntry("cfg.cfg", "S", "key", "value", null, null, null);
+		var e = ConfigEvent.setEntry("cfg.cfg", "S", "key", "value", null, null);
 		assertEquals("SET(S/key = value)", e.toString());
 	}
 
 	@Test void b07_toString_setEntry_emptySection() {
-		var e = ConfigEvent.setEntry("cfg.cfg", "", "key", "value", null, null, null);
+		var e = ConfigEvent.setEntry("cfg.cfg", "", "key", "value", null, null);
 		assertEquals("SET(key = value)", e.toString());
 	}
 
-	@Test void b08_toString_setEntry_withModifiers() {
-		var e = ConfigEvent.setEntry("cfg.cfg", "S", "key", "value", "*", null, null);
-		assertEquals("SET(S/key* = value)", e.toString());
-	}
-
 	@Test void b09_toString_setEntry_withComment() {
-		var e = ConfigEvent.setEntry("cfg.cfg", "S", "key", "value", null, "my comment", null);
+		var e = ConfigEvent.setEntry("cfg.cfg", "S", "key", "value", "my comment", null);
 		assertEquals("SET(S/key = value # my comment)", e.toString());
 	}
 
 	@Test void b10_toString_setEntry_valueWithNewline() {
-		var e = ConfigEvent.setEntry("cfg.cfg", "S", "key", "line1\nline2", null, null, null);
+		var e = ConfigEvent.setEntry("cfg.cfg", "S", "key", "line1\nline2", null, null);
 		var result = e.toString();
 		assertTrue(result.startsWith("SET(S/key = line1\n\tline2)"), "Unexpected: " + result);
 	}
 
 	@Test void b11_toString_setEntry_valueWithHash() {
-		var e = ConfigEvent.setEntry("cfg.cfg", "S", "key", "val#ue", null, null, null);
+		var e = ConfigEvent.setEntry("cfg.cfg", "S", "key", "val#ue", null, null);
 		assertEquals("SET(S/key = val\\#ue)", e.toString());
 	}
 
 	@Test void b12_toString_setEntry_nullValue() {
-		var e = ConfigEvent.setEntry("cfg.cfg", "S", "key", null, null, null, null);
+		var e = ConfigEvent.setEntry("cfg.cfg", "S", "key", null, null, null);
 		assertEquals("SET(S/key = null)", e.toString());
 	}
 
-	@Test void b13_toString_setEntry_modifiersAndComment() {
-		var e = ConfigEvent.setEntry("cfg.cfg", "S", "key", "val", "*", "the comment", null);
-		assertEquals("SET(S/key* = val # the comment)", e.toString());
+	@Test void b13_toString_setEntry_commentOnly() {
+		var e = ConfigEvent.setEntry("cfg.cfg", "S", "key", "val", "the comment", null);
+		assertEquals("SET(S/key = val # the comment)", e.toString());
 	}
 }

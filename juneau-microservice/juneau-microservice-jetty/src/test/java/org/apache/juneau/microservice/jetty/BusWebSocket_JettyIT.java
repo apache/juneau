@@ -71,7 +71,7 @@ class BusWebSocket_JettyIT extends TestBase {
 		server.addConnector(connector);
 		connector.open();                       // the port, and so the exact Origin, is known before start
 		origin = "http://127.0.0.1:" + connector.getLocalPort();
-		bus = ServerBus.create(BusPolicy.create()
+		bus = ServerBus.create(BusPolicy.create().anyCaller()
 			.downstream("ops.jobs", true)
 			.downstream("ops.audit", true)
 			.upstream("ops.cancel-all", (s, t, p) -> UPSTREAM.countDown())

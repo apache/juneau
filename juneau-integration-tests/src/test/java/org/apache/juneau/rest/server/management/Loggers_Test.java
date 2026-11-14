@@ -21,8 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
@@ -37,7 +39,10 @@ class Loggers_Test extends TestBase {
 	@Rest(mixins={LoggersMixin.class})
 	public static class A extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@org.apache.juneau.commons.inject.Bean public LoggersSettings loggersSettings() {
+		@Bean public RestGuardList guards(BeanStore bs) {
+			return RestGuardList.create(bs).build();
+		}
+		@Bean public LoggersSettings loggersSettings() {
 			return LoggersSettings.create().enableWrite().build();
 		}
 	}
@@ -166,7 +171,10 @@ class Loggers_Test extends TestBase {
 	// subclass — mirroring the HealthResource child-flavor test precedent.
 	@Rest(path="/loggers")
 	public static class LoggersChild extends LoggersResource {
-		@org.apache.juneau.commons.inject.Bean public LoggersSettings loggersSettings() {
+		@Bean public RestGuardList guards(BeanStore bs) {
+			return RestGuardList.create(bs).build();
+		}
+		@Bean public LoggersSettings loggersSettings() {
 			return LoggersSettings.create().enableWrite().build();
 		}
 	}
@@ -196,7 +204,11 @@ class Loggers_Test extends TestBase {
 
 	// Resource child with no LoggersSettings bean -> write denied.
 	@Rest(path="/loggers")
-	public static class LoggersChildReadOnly extends LoggersResource {}
+	public static class LoggersChildReadOnly extends LoggersResource {
+		@Bean public RestGuardList guards(BeanStore bs) {
+			return RestGuardList.create(bs).build();
+		}
+	}
 
 	@Rest(children={LoggersChildReadOnly.class})
 	public static class E extends BasicRestServlet {
@@ -218,6 +230,28 @@ class Loggers_Test extends TestBase {
 	@Rest(mixins={LoggersMixin.class})
 	public static class C extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
+		@Bean public RestGuardList guards(BeanStore bs) {
+			return RestGuardList.create(bs).build();
+		}
+	}
+
+	// Without a guard bean, every logger endpoint is denied.
+	@Rest(mixins={LoggersMixin.class})
+	public static class F extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Rest(children={LoggersResource.class})
+	public static class G extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void d02_readsDeniedWithoutGuardBean() throws Exception {
+		var c = MockRestClient.buildLax(F.class);
+		c.get("/loggers").accept("application/json").run().assertStatus(403);
+		c.get("/loggers/" + L_NAME).run().assertStatus(403);
+		var g = MockRestClient.buildLax(G.class);
+		g.get("/loggers").accept("application/json").run().assertStatus(403);
 	}
 
 	@Test void d01_writeDeniedByDefault() throws Exception {

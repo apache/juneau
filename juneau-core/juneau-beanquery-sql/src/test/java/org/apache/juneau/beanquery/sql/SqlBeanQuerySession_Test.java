@@ -84,7 +84,7 @@ class SqlBeanQuerySession_Test {
 		var thrown = new BeanQueryExecutionException[1];
 		var records = LogRecordCapture.quietly(SqlBeanQuerySession.class, () -> thrown[0] = assertThrows(BeanQueryExecutionException.class, body));
 		assertSize(records::toString, 1, records);
-		assertTrue(records.get(0).getMessage().startsWith("Bean query failed: "), records.get(0).getMessage());
+		assertTrue(records.get(0).getMessage().startsWith("Bean query failed ("), records.get(0).getMessage());
 		return thrown[0];
 	}
 

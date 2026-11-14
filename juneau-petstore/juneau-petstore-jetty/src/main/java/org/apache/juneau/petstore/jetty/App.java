@@ -16,14 +16,9 @@
  */
 package org.apache.juneau.petstore.jetty;
 
-import static org.apache.juneau.commons.utils.Shorts.*;
-
-import java.util.*;
-
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.commons.settings.*;
+import org.apache.juneau.config.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.microservice.examples.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.petstore.console.*;
 
@@ -41,13 +36,6 @@ import jakarta.servlet.*;
  * </ul>
  */
 public class App {
-
-	/**
-	 * Setting (system property, environment, or any registered source) listing the host names the admin resources
-	 * answer to: comma-separated, no ports.  Unset or blank, only the loopback names {@link AdminBoundary#LOOPBACK_HOSTS}
-	 * are answered.  Independent of {@value PetstoreApiBoundary#ALLOWED_HOSTS_PROPERTY}.
-	 */
-	public static final String ADMIN_ALLOWED_HOSTS_PROPERTY = "petstore.admin.allowedHosts";
 
 	/**
 	 * Entry point.
@@ -75,6 +63,20 @@ public class App {
 	@Configuration
 	public static class AppConfig {
 
+		/** Name of the deployment's configuration file, read from the working directory. */
+		public static final String CONFIG_NAME = "juneau-petstore-jetty.cfg";
+
+		/**
+		 * Provides the deployment's configuration, named explicitly because the working directory is no longer scanned
+		 * for <c>*.cfg</c> files.
+		 *
+		 * @return The configuration.
+		 */
+		@Bean
+		public Config config() {
+			return Config.create().name(CONFIG_NAME).build();
+		}
+
 		// Shared by both boundary beans: the console publishes tokens from the instance the API filter verifies them with.
 		private final PetstoreApiBoundary apiBoundary = new PetstoreApiBoundary();
 
@@ -93,8 +95,7 @@ public class App {
 		 * Provides the console's CSRF boundary, covering {@code /console} only.
 		 *
 		 * <p>
-		 * The {@code /petstore} API is covered by {@link #apiBoundary()} and the admin resources by
-		 * {@link #adminBoundary()}; {@code /petstore-ui} is outside all three: see {@link PetstoreConsoleBoundary}.
+		 * The {@code /petstore} API is covered by {@link #apiBoundary()}; {@code /petstore-ui} is outside both: see {@link PetstoreConsoleBoundary}.
 		 * It runs ahead of routing and ahead of authentication, for the request, forward, async and error dispatches;
 		 * the include dispatch is deliberately not mapped.  It is built over the same {@link PetstoreApiBoundary} that
 		 * {@link #apiBoundary()} mounts, so the API token its pages carry is one the API filter accepts.
@@ -127,31 +128,6 @@ public class App {
 				.dispatcherTypes(DispatcherType.REQUEST)
 				.order(ServletFilterRegistration.HIGHEST_PRECEDENCE + 10)
 				.build();
-		}
-
-		/**
-		 * Provides the admin resources' CSRF boundary, covering {@code /config}, {@code /logs} and {@code /shutdown}.
-		 *
-		 * <p>
-		 * A filter of its own, answering to the host names in {@value App#ADMIN_ALLOWED_HOSTS_PROPERTY}, or to the
-		 * loopback names only while that is unset.  The admin resources have no forms, so a browser write to them is
-		 * refused, and command-line writes are admitted: see {@link AdminBoundary}.  The boundary does not authenticate:
-		 * the admin resources must not be exposed on an untrusted network.
-		 *
-		 * @return The filter registration.
-		 * @throws IllegalArgumentException If {@value App#ADMIN_ALLOWED_HOSTS_PROPERTY} holds an entry that is blank or
-		 * 	not a bare host name.
-		 */
-		@Bean(name="adminBoundary")
-		public ServletFilterRegistration adminBoundary() {
-			return AdminBoundary.registration("", hosts(Settings.get().get(ADMIN_ALLOWED_HOSTS_PROPERTY).orElse(null)));
-		}
-
-		// The comma-separated entries, trimmed, blank ones kept so the boundary refuses them; none when unset.
-		private static String[] hosts(String setting) {
-			if (ib(setting))
-				return new String[0];
-			return Arrays.stream(setting.split(",", -1)).map(String::trim).toArray(String[]::new);
 		}
 	}
 }

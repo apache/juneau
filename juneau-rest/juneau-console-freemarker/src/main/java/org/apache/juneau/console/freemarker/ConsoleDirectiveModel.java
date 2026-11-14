@@ -206,6 +206,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 
 		if (cap.allowInlineHandlers())
 			checkInlineCsp(req);
+		addFrameAncestors(req);
 
 		var out = env.getOut();
 		var nonce = req.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.class).orElse(null);
@@ -335,6 +336,26 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		for (var v : values)
 			if (! allowsEval(v))
 				throw new IllegalStateException("allowInlineHandlers(true) needs 'unsafe-eval' in script-src; the response CSP is: " + String.join(", ", values));
+	}
+
+	/**
+	 * Restricts framing of the page to its own origin unless the application already set a framing policy.
+	 *
+	 * <p>
+	 * Adds {@code Content-Security-Policy: frame-ancestors 'self'} when the response carries neither an
+	 * {@code X-Frame-Options} header nor a {@code Content-Security-Policy} value with a {@code frame-ancestors}
+	 * directive, so an application keeps full control by setting its own.
+	 */
+	private static void addFrameAncestors(RestRequest req) {
+		var res = req.getResponse().getHttpServletResponse();
+		if (res.isCommitted() || res.containsHeader("X-Frame-Options"))
+			return;
+		var values = res.getHeaders("Content-Security-Policy");
+		if (values != null)
+			for (var v : values)
+				if (v.toLowerCase(Locale.ROOT).contains("frame-ancestors"))
+					return;
+		res.addHeader("Content-Security-Policy", "frame-ancestors 'self'");
 	}
 
 	private static boolean allowsEval(String policy) {

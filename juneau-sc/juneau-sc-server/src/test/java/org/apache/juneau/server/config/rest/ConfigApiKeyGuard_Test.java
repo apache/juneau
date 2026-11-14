@@ -57,4 +57,22 @@ class ConfigApiKeyGuard_Test {
 		// juneau-server-config.cfg in the test classpath/working dir sets no Security/apiKey.
 		assertNull(g.configuredKey());
 	}
+
+	@Test void b01_secureChannel_accepted() {
+		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(true, "10.1.2.3", false));
+	}
+
+	@Test void b02_insecureLoopback_accepted() {
+		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(false, "127.0.0.1", false));
+		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(false, "::1", false));
+	}
+
+	@Test void b03_insecureRemote_refused() {
+		assertFalse(ConfigApiKeyGuard.isChannelAcceptable(false, "10.1.2.3", false));
+		assertFalse(ConfigApiKeyGuard.isChannelAcceptable(false, null, false));
+	}
+
+	@Test void b04_insecureRemote_acceptedWhenAllowInsecure() {
+		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(false, "10.1.2.3", true));
+	}
 }

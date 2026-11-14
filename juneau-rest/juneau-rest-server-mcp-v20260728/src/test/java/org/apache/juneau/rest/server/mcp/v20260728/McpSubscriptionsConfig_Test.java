@@ -27,7 +27,7 @@ class McpSubscriptionsConfig_Test {
 		assertEquals(256, McpSubscriptionsConfig.DEFAULT_MAX_CONCURRENT_SUBSCRIPTIONS);
 		assertEquals(1024, McpSubscriptionsConfig.DEFAULT_QUEUE_SIZE);
 		assertEquals(15_000L, McpSubscriptionsConfig.DEFAULT_HEARTBEAT_INTERVAL_MS);
-		assertEquals(0L, McpSubscriptionsConfig.DEFAULT_IDLE_TIMEOUT_MS);
+		assertEquals(300_000L, McpSubscriptionsConfig.DEFAULT_IDLE_TIMEOUT_MS);
 		assertEquals(McpSubscriptionsConfig.DEFAULT_MAX_CONCURRENT_SUBSCRIPTIONS, a.getMaxConcurrentSubscriptions());
 		assertEquals(McpSubscriptionsConfig.DEFAULT_QUEUE_SIZE, a.getQueueSize());
 		assertEquals(McpSubscriptionsConfig.DEFAULT_HEARTBEAT_INTERVAL_MS, a.getHeartbeatIntervalMs());

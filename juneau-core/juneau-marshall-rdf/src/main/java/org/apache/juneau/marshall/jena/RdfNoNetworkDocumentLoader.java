@@ -14,7 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.apache.juneau.marshall.jena;
+
+import java.net.*;
+
+import com.apicatalog.jsonld.*;
+import com.apicatalog.jsonld.document.*;
+import com.apicatalog.jsonld.loader.*;
+
 /**
- * Configuration Encoding Support
+ * JSON-LD document loader that refuses to load any remote document or context.
+ *
+ * <p>
+ * Used by the RDF parsers unless remote JSON-LD contexts have been explicitly enabled.
  */
-package org.apache.juneau.config.mod;
+final class RdfNoNetworkDocumentLoader implements DocumentLoader {
+
+	static final RdfNoNetworkDocumentLoader INSTANCE = new RdfNoNetworkDocumentLoader();
+
+	private RdfNoNetworkDocumentLoader() {}
+
+	@Override /* Overridden from DocumentLoader */
+	public Document loadDocument(URI url, DocumentLoaderOptions options) throws JsonLdError {
+		throw new JsonLdError(JsonLdErrorCode.LOADING_REMOTE_CONTEXT_FAILED, "Remote JSON-LD contexts are not enabled.");
+	}
+}

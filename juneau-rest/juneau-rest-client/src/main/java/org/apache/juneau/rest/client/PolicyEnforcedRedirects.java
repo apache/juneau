@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.*;
 import java.net.*;
 
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
 
 /**
@@ -44,7 +43,8 @@ import org.apache.juneau.http.remote.*;
  * chain is capped at {@link RemoteUrlPolicy#MAX_REDIRECT_HOPS} hops.
  *
  * <p>
- * Caller-set credential headers ({@link RedirectSecurity#stripOnCrossOrigin()}, matched case-insensitively) are
+ * Caller-set headers other than the content-negotiation and framing headers on {@link RedirectSecurity#forwardOnCrossOrigin()}
+ * (and any added with {@code redirectForwardHeaders}), matched case-insensitively, are
  * carried to a hop only when it is the same origin as the <em>first</em> request in the chain and not an {@code https}
  * &rarr; {@code http} downgrade (see {@link RedirectSecurity#shouldStripCredentials(URI, URI)}); otherwise they are
  * dropped for that hop.  A hop that returns to the first origin gets them back, but only when its method is {@code GET} or {@code HEAD}
@@ -174,14 +174,14 @@ public final class PolicyEnforcedRedirects {
 				.uri(target2)
 				.remoteUrlPolicy(true, false)
 				.allowedAddressRanges(current.getAllowedAddressRanges())
-				.redirectStripHeaders(initial.getRedirectStripHeaders())
+				.redirectForwardHeaders(initial.getRedirectForwardHeaders())
 				.timeout(current.getTimeout());
 			// Credential headers are forwarded only to the first origin (and never across an https -> http downgrade), so a hop
 			// that returns to it gets the caller's headers back.  They are taken from the initial request, not the previous hop's.
 			var stripCredentials = RedirectSecurity.shouldStripCredentials(initial.getUri(), target)
 				|| (left && ! safeMethod(rewriteToGet ? "GET" : current.getMethod()));
 			for (var h : initial.getHeaders())
-				if (! (stripCredentials && RedactedHeaders.isSensitive(h.name(), initial.getRedirectStripHeaders())))
+				if (! (stripCredentials && RedirectSecurity.mustStrip(h.name(), initial.getRedirectForwardHeaders())))
 					builder.header(h.name(), h.value());
 			if (! rewriteToGet) {
 				var body = current.getBody();

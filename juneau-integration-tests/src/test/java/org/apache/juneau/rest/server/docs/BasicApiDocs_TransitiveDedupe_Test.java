@@ -41,9 +41,9 @@ import org.junit.jupiter.api.*;
  * Acceptance:
  * <ul>
  * 	<li>The four api-docs mixin classes are present in the host's {@code mixinContexts} map, alongside the
- * 		four residual op-mixins ({@code ErrorMixin}, {@code HtdocMixin}, {@code StatsMixin},
+ * 		three residual op-mixins ({@code ErrorMixin}, {@code HtdocMixin},
  * 		{@code FaviconMixin}) contributed by {@code BasicRestServlet}.
- * 	<li>Each mixin appears exactly once (no duplicates) &mdash; eight in total.
+ * 	<li>Each mixin appears exactly once (no duplicates) &mdash; seven in total.
  * 	<li>All six api-docs URL paths resolve correctly.
  * </ul>
  */
@@ -70,10 +70,9 @@ class BasicApiDocs_TransitiveDedupe_Test extends TestBase {
 		// Residual op-mixins contributed by BasicRestServlet.
 		assertNotNull(contexts.get(ErrorMixin.class));
 		assertNotNull(contexts.get(HtdocMixin.class));
-		assertNotNull(contexts.get(StatsMixin.class));
 		assertNotNull(contexts.get(FaviconMixin.class));
 
-		assertSize(() -> "Expected exactly eight mixin contexts (no duplicates); got: " + contexts.keySet(), 8, contexts);
+		assertSize(() -> "Expected exactly seven mixin contexts (no duplicates); got: " + contexts.keySet(), 7, contexts);
 	}
 
 	@Test void a02_apiPathReachable() throws Exception {

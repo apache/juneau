@@ -24,6 +24,7 @@ import java.net.http.*;
 import java.net.http.HttpClient.*;
 import java.net.http.HttpRequest.*;
 import java.net.http.HttpResponse.*;
+import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.http.*;
@@ -84,28 +85,35 @@ import org.apache.juneau.http.remote.*;
 })
 public final class JavaHttpTransport implements HttpTransport {
 
+	/** Default connect timeout of the {@link HttpClient} this transport creates when none is supplied. */
+	public static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(30);
+
+	/** Default per-request timeout (until the response headers arrive) applied when the request carries none. */
+	public static final Duration DEFAULT_REQUEST_TIMEOUT = Duration.ofSeconds(60);
+
+	/** Default cap, in bytes, on the response body this transport will deliver. */
+	public static final long DEFAULT_MAX_RESPONSE_BYTES = 128L * 1024 * 1024;
+
 	private static final String RESTRICTED_HEADERS_PROPERTY = "jdk.httpclient.allowRestrictedHeaders";
 
-	static {
-		// Best-effort: the JDK HttpClient rejects a caller-set "Host" header by default -- a fixed, JVM-wide,
-		// first-touch-wins setting cached the first time any HttpRequest.Builder.header() call reaches the JDK's
-		// internal restricted-header table. Setting this here, as early as this class is loaded (typically before
-		// any unrelated HttpClient usage elsewhere in the same JVM), lets HTTP pin-on-connect preserve the
-		// original Host header for virtual-hosted targets after the IP-literal rewrite. If some other code
-		// already forced that first touch, this has no effect and sendOncePinned() below fails closed instead of
-		// silently sending the wrong Host.
+	private final HttpClient httpClient;
+
+	private final long maxResponseBytes;
+
+	JavaHttpTransport(JavaHttpTransportBuilder builder) {
+		this.httpClient = builder.httpClient != null ? builder.httpClient : HttpClient.newBuilder().connectTimeout(DEFAULT_CONNECT_TIMEOUT).build();
+		this.maxResponseBytes = builder.maxResponseBytes;
+		if (builder.allowHostHeaderOverride)
+			allowHostHeader();
+	}
+
+	// Raw System property access is intentional: the JDK reads this value from System properties only, so Settings overrides/sources must not be consulted.
+	private static void allowHostHeader() {
 		var existing = System.getProperty(RESTRICTED_HEADERS_PROPERTY);
 		if (ib(existing))
 			System.setProperty(RESTRICTED_HEADERS_PROPERTY, "host");
 		else if (! existing.toLowerCase(Locale.ROOT).contains("host"))
 			System.setProperty(RESTRICTED_HEADERS_PROPERTY, existing + ",host");
-		// Raw System property access is intentional: the JDK reads this value from System properties only, so Settings overrides/sources must not be consulted.
-	}
-
-	private final HttpClient httpClient;
-
-	JavaHttpTransport(JavaHttpTransportBuilder builder) {
-		this.httpClient = builder.httpClient != null ? builder.httpClient : HttpClient.newHttpClient();
 	}
 
 	/**
@@ -157,7 +165,7 @@ public final class JavaHttpTransport implements HttpTransport {
 		if (httpClient.followRedirects() == Redirect.NEVER)
 			return;
 		for (var h : request.getHeaders())
-			if (RedactedHeaders.isSensitive(h.name(), request.getRedirectStripHeaders()))
+			if (RedactedHeaders.isSensitive(h.name(), RedirectSecurity.stripOnCrossOrigin()))
 				throw new TransportException("Refusing to send a request carrying the credential header '" + h.name()
 					+ "' through a JavaHttpTransport whose HttpClient auto-follows redirects (" + httpClient.followRedirects()
 					+ "); the JDK client would forward it to a redirect target of another origin.  Build the HttpClient with "
@@ -235,13 +243,12 @@ public final class JavaHttpTransport implements HttpTransport {
 			// with a null host) or an invalid header.
 			if (hostHeader == null)
 				throw new TransportException("Could not build the HTTP request for " + request.getUri() + ": " + e.getMessage(), e);
-			// With hostHeader set, the JDK rejected the "Host" header override -- i.e. the static
-			// allowRestrictedHeaders attempt above lost the first-touch race to some other HttpClient usage in this
-			// JVM. Fail closed rather than silently pinning without preserving the original Host.
+			// With hostHeader set, the JDK rejected the "Host" header override -- i.e. the JVM
+			// was not started with -Djdk.httpclient.allowRestrictedHeaders=host. Fail closed rather than silently pinning without preserving the original Host.
 			throw new TransportException("Could not preserve the original Host header while pin-on-connecting a "
-				+ "policy-covered HTTP request (the JDK HttpClient's restricted-header allowlist was already "
-				+ "initialized elsewhere in this JVM); refusing (fail closed): " + request.getUri()
-				+ ".  Set the JVM flag -Djdk.httpclient.allowRestrictedHeaders=host, use a transport with native "
+				+ "policy-covered HTTP request (the JDK HttpClient restricts the Host header unless the JVM "
+				+ "is started with the flag below); refusing (fail closed): " + request.getUri()
+				+ ".  Call allowHostHeaderOverride() on the transport builder (a JVM-wide setting) or set the JVM flag -Djdk.httpclient.allowRestrictedHeaders=host, use a transport with native "
 				+ "connect-time pinning support (e.g. Apache HttpClient 4.5/5), or set allowPrivateUrls(true) if "
 				+ "this is an intentional local-dev/intranet target.", e);
 		}
@@ -258,7 +265,7 @@ public final class JavaHttpTransport implements HttpTransport {
 			Thread.currentThread().interrupt();
 			throw new TransportException("HTTP request interrupted", e);
 		}
-		return buildTransportResponse(jdkResponse);
+		return buildTransportResponse(jdkResponse, maxResponseBytes);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -290,8 +297,7 @@ public final class JavaHttpTransport implements HttpTransport {
 		for (var h : request.getHeaders())
 			builder.header(h.name(), h.value());
 		var timeout = request.getTimeout();
-		if (timeout != null)
-			builder.timeout(timeout);
+		builder.timeout(timeout != null ? timeout : DEFAULT_REQUEST_TIMEOUT);
 		return builder.build();
 	}
 
@@ -336,15 +342,57 @@ public final class JavaHttpTransport implements HttpTransport {
 		return publisher;
 	}
 
-	private static TransportResponse buildTransportResponse(HttpResponse<InputStream> jdkResponse) {
-		var body = jdkResponse.body();
+	private static TransportResponse buildTransportResponse(HttpResponse<InputStream> jdkResponse, long maxBytes) {
+		var raw = jdkResponse.body();
+		var body = maxBytes > 0 ? new LimitedInputStream(raw, maxBytes) : raw;
 		var builder = TransportResponse.builder()
 			.statusCode(jdkResponse.statusCode())
 			.body(body)
-			.closeCallback(body);
+			.closeCallback(raw);
 		jdkResponse.headers().map().forEach((name, values) ->
 			values.forEach(value -> builder.header(name, value)));
 		return builder.build();
+	}
+
+	// Fails a read once more than the configured number of body bytes has been delivered.
+	private static final class LimitedInputStream extends FilterInputStream {
+		private final long limit;
+		private long count;
+
+		LimitedInputStream(InputStream in, long limit) {
+			super(in);
+			this.limit = limit;
+		}
+
+		@Override /* InputStream */
+		public int read() throws IOException {
+			var b = super.read();
+			if (b >= 0)
+				add(1);
+			return b;
+		}
+
+		@Override /* InputStream */
+		public int read(byte[] b, int off, int len) throws IOException {
+			var n = super.read(b, off, len);
+			if (n > 0)
+				add(n);
+			return n;
+		}
+
+		@Override /* InputStream */
+		public long skip(long n) throws IOException {
+			var skipped = super.skip(n);
+			if (skipped > 0)
+				add(skipped);
+			return skipped;
+		}
+
+		private void add(long n) throws IOException {
+			count += n;
+			if (count > limit)
+				throw new IOException("Response body exceeds the configured maximum of " + limit + " bytes");
+		}
 	}
 
 	// Internal signal that a pre-response stale-connection failure occurred and may be retried once.  Carries the

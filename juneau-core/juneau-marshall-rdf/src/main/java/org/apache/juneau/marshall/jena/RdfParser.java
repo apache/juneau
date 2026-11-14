@@ -75,6 +75,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		private static final Namespace DEFAULT_JUNEAUBP_NS = Namespace.of("jp", "http://www.apache.org/juneaubp/");
 
 		boolean trimWhitespace;
+		boolean allowRemoteContexts;
 		boolean looseCollections;
 		String language;
 		Namespace juneauNs;
@@ -104,6 +105,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 */
 		protected Builder(Builder<?> copyFrom) {
 			super(reqnn("copyFrom", copyFrom));
+			allowRemoteContexts = copyFrom.allowRemoteContexts;
 			collectionFormat = copyFrom.collectionFormat;
 			juneauBpNs = copyFrom.juneauBpNs;
 			juneauNs = copyFrom.juneauNs;
@@ -121,6 +123,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 */
 		protected Builder(RdfParser copyFrom) {
 			super(reqnn("copyFrom", copyFrom));
+			allowRemoteContexts = copyFrom.allowRemoteContexts;
 			collectionFormat = copyFrom.collectionFormat;
 			juneauBpNs = copyFrom.juneauBpNs;
 			juneauNs = copyFrom.juneauNs;
@@ -128,6 +131,33 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			looseCollections = copyFrom.looseCollections;
 			trimWhitespace = copyFrom.trimWhitespace;
 			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
+		}
+
+		/**
+		 * Allow remote JSON-LD contexts.
+		 *
+		 * <p>
+		 * When enabled, JSON-LD input may reference remote <js>"@context"</js> documents, which the parser will then fetch over the network.
+		 * Only enable this when the input is trusted.
+		 *
+		 * <p>
+		 * The default is <jk>false</jk>:  documents that reference a remote context fail to parse.
+		 *
+		 * @return This object.
+		 */
+		public SELF allowRemoteContexts() {
+			return allowRemoteContexts(true);
+		}
+
+		/**
+		 * Same as {@link #allowRemoteContexts()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public SELF allowRemoteContexts(boolean value) {
+			allowRemoteContexts = value;
+			return self();
 		}
 
 		@Override /* Overridden from Context.Builder<?> */
@@ -169,6 +199,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return HashKey.of(
 				super.hashKey(),
 				trimWhitespace,
+				allowRemoteContexts,
 				looseCollections,
 				language,
 				collectionFormat,
@@ -1013,6 +1044,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		};
 	}
 
+	protected final boolean allowRemoteContexts;
 	protected final boolean looseCollections;
 	protected final boolean trimWhitespace;
 	protected final Namespace juneauBpNs;
@@ -1039,6 +1071,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	public RdfParser(Builder<?> builder) {
 		super(builder.consumes(getConsumes(builder)));
 
+		allowRemoteContexts = builder.allowRemoteContexts;
 		collectionFormat = builder.collectionFormat;
 		juneauBpNs = builder.juneauBpNs;
 		juneauNs = builder.juneauNs;

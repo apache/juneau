@@ -25,6 +25,7 @@ import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
 import java.nio.file.*;
+import java.nio.file.attribute.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -48,7 +49,7 @@ import org.apache.juneau.console.views.*;
  * environment variable {@value #SCRIPT_ENV}.
  *
  * <p>
- * The run directory is single-use.  It is also the tool's working directory, and the runner's own stdout and stderr
+ * The run directory is single-use.  The tool's working directory is the {@code work} subdirectory of it, so the log is not in the tool's working directory; the directory is limited to its owner where the file system allows. The runner's own stdout and stderr
  * go to {@code runner.out} there, in append mode and uncapped; that file is diagnostic only.
  *
  * <p>
@@ -104,6 +105,9 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	/** The events file's name in the run directory. */
 	public static final String EVENTS_NAME = "terminal.events.jsonl";
 
+	/** The tool's working directory, a subdirectory of the run directory. */
+	static final String WORK_DIR = "work";
+
 	/** How much of the end of the events file is scanned for a {@code done} event. */
 	static final int TAIL_BYTES = 64 * 1024;
 
@@ -144,6 +148,7 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	private final Process process;
 	private final Path logFile;
 	private final Path events;
+	private final Path runDir;
 	private final AtomicBoolean done = new AtomicBoolean();
 	private final FileTerminalSource terminal;
 	private final FileTerminalViewSource terminalView;
@@ -180,7 +185,8 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 		void ensureDone(Path events, int exitCode) throws IOException;
 	}
 
-	private TerminalProcess(Process process, Path log, Path events, DoneWriter doneWriter, boolean input, TerminalPrompts prompts, String name) {
+	private TerminalProcess(Process process, Path log, Path events, DoneWriter doneWriter, boolean input, TerminalPrompts prompts, Path runDir) {
+		this.runDir = runDir;
 		this.process = process;
 		this.input = input;
 		this.prompts = prompts;
@@ -219,7 +225,7 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 			writer = null;
 		}
 		if (prompts != null) {
-			promptThread = new Thread(this::readPrompts, "terminal-prompts-" + name);
+			promptThread = new Thread(this::readPrompts, "terminal-prompts-" + id());
 			promptThread.setDaemon(true);
 			promptThread.start();
 		} else {
@@ -324,18 +330,19 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	 * 	joined into a string or given to a shell, so shell metacharacters in an element are literal.
 	 * @param cols The terminal width, 1-9999.
 	 * @param rows The terminal height, 1-9999.
-	 * @param dir The run directory; created if missing.  Each run needs its own: the log and events files must be
-	 * 	missing or empty.  It is also the tool's working directory, and the runner's own stdout and stderr go to
-	 * 	{@code runner.out} in it, in append mode and uncapped; that file is diagnostic only.
+	 * @param root The configured root directory for runs; created if missing.  The process creates and owns a new run
+	 * 	directory under it (mode 700, named by a generated id); callers never choose that path.  The tool works in a
+	 * 	{@code work} subdirectory of the run directory, and the runner's own stdout and stderr go to
+	 * 	{@code runner.out} in the run directory, in append mode and uncapped; that file is diagnostic only.
+	 * 	See {@link #runDir()} and {@link #id()}.
 	 * @return The running process.
 	 * @throws IOException If the directory could not be prepared or the process could not start.
 	 * @throws IllegalArgumentException If an argument is out of range.
-	 * @throws IllegalStateException If the script is not configured, {@code python3} is not on the {@code PATH}, or
-	 * 	the run directory already holds a run.
+	 * @throws IllegalStateException If the script is not configured or {@code python3} is not on the {@code PATH}.
 	 * @throws UnsupportedOperationException On Windows.
 	 */
-	public static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir) throws IOException {
-		return start(tool, cmd, cols, rows, dir, false);
+	public static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path root) throws IOException {
+		return start(tool, cmd, cols, rows, root, false);
 	}
 
 	/**
@@ -349,17 +356,16 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	 * @param cmd The command and its arguments; at least one element.
 	 * @param cols The terminal width, 1-9999.
 	 * @param rows The terminal height, 1-9999.
-	 * @param dir The run directory; see {@link #start(String, List, int, int, Path)}.
+	 * @param root The run root; see {@link #start(String, List, int, int, Path)}.
 	 * @param input Whether the job takes input through {@link #write(byte[])}.
 	 * @return The running process.
 	 * @throws IOException If the directory could not be prepared or the process could not start.
 	 * @throws IllegalArgumentException If an argument is out of range.
-	 * @throws IllegalStateException If the script is not configured, {@code python3} is not on the {@code PATH}, or
-	 * 	the run directory already holds a run.
+	 * @throws IllegalStateException If the script is not configured or {@code python3} is not on the {@code PATH}.
 	 * @throws UnsupportedOperationException On Windows.
 	 */
-	public static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, boolean input) throws IOException {
-		return start(tool, cmd, cols, rows, dir, Host.system(), input);
+	public static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path root, boolean input) throws IOException {
+		return start(tool, cmd, cols, rows, root, Host.system(), input);
 	}
 
 	/**
@@ -373,18 +379,17 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	 * @param cmd The command and its arguments; at least one element.
 	 * @param cols The terminal width, 1-9999.
 	 * @param rows The terminal height, 1-9999.
-	 * @param dir The run directory; see {@link #start(String, List, int, int, Path)}.
+	 * @param root The run root; see {@link #start(String, List, int, int, Path)}.
 	 * @param prompts Receives the prompt lines; not <jk>null</jk>.
 	 * @return The running process.
 	 * @throws IOException If the directory could not be prepared or the process could not start.
 	 * @throws IllegalArgumentException If an argument is out of range.
-	 * @throws IllegalStateException If the script is not configured, {@code python3} is not on the {@code PATH}, or
-	 * 	the run directory already holds a run.
+	 * @throws IllegalStateException If the script is not configured or {@code python3} is not on the {@code PATH}.
 	 * @throws UnsupportedOperationException On Windows.
 	 */
-	public static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, TerminalPrompts prompts) throws IOException {
+	public static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path root, TerminalPrompts prompts) throws IOException {
 		Objects.requireNonNull(prompts, "prompts");
-		return start(tool, cmd, cols, rows, dir, Host.system(), TerminalProcess::ensureDone, false, prompts);
+		return start(tool, cmd, cols, rows, root, Host.system(), TerminalProcess::ensureDone, false, prompts);
 	}
 
 	/**
@@ -399,55 +404,54 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	 * @param cmd The command and its arguments; at least one element.
 	 * @param cols The terminal width, 1-9999.
 	 * @param rows The terminal height, 1-9999.
-	 * @param dir The run directory; see {@link #start(String, List, int, int, Path)}.
+	 * @param root The run root; see {@link #start(String, List, int, int, Path)}.
 	 * @param env Variables to add to the child's environment; not <jk>null</jk>, may be empty.
 	 * @return The running process.
 	 * @throws IOException If the directory could not be prepared or the process could not start.
 	 * @throws IllegalArgumentException If an argument is out of range.
-	 * @throws IllegalStateException If the script is not configured, {@code python3} is not on the {@code PATH}, or
-	 * 	the run directory already holds a run.
+	 * @throws IllegalStateException If the script is not configured or {@code python3} is not on the {@code PATH}.
 	 * @throws UnsupportedOperationException On Windows.
 	 */
-	public static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Map<String,String> env) throws IOException {
+	public static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path root, Map<String,String> env) throws IOException {
 		Objects.requireNonNull(env, "env");
-		return start(tool, cmd, cols, rows, dir, Host.system(), TerminalProcess::ensureDone, false, null, env);
+		return start(tool, cmd, cols, rows, root, Host.system(), TerminalProcess::ensureDone, false, null, env);
 	}
 
-	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, Map<String,String> env) throws IOException {
+	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path root, Host host, Map<String,String> env) throws IOException {
 		Objects.requireNonNull(env, "env");
-		return start(tool, cmd, cols, rows, dir, host, TerminalProcess::ensureDone, false, null, env);
+		return start(tool, cmd, cols, rows, root, host, TerminalProcess::ensureDone, false, null, env);
 	}
 
-	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host) throws IOException {
-		return start(tool, cmd, cols, rows, dir, host, false);
+	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path root, Host host) throws IOException {
+		return start(tool, cmd, cols, rows, root, host, false);
 	}
 
-	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, boolean input) throws IOException {
-		return start(tool, cmd, cols, rows, dir, host, TerminalProcess::ensureDone, input);
+	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path root, Host host, boolean input) throws IOException {
+		return start(tool, cmd, cols, rows, root, host, TerminalProcess::ensureDone, input);
 	}
 
-	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter) throws IOException {
-		return start(tool, cmd, cols, rows, dir, host, doneWriter, false);
-	}
-
-	@SuppressWarnings({
-		"java:S107" // internal entry point; the parameters are the process configuration
-	})
-	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter, boolean input) throws IOException {
-		return start(tool, cmd, cols, rows, dir, host, doneWriter, input, null);
+	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path root, Host host, DoneWriter doneWriter) throws IOException {
+		return start(tool, cmd, cols, rows, root, host, doneWriter, false);
 	}
 
 	@SuppressWarnings({
 		"java:S107" // internal entry point; the parameters are the process configuration
 	})
-	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter, boolean input, TerminalPrompts prompts) throws IOException {
-		return start(tool, cmd, cols, rows, dir, host, doneWriter, input, prompts, Map.of());
+	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path root, Host host, DoneWriter doneWriter, boolean input) throws IOException {
+		return start(tool, cmd, cols, rows, root, host, doneWriter, input, null);
 	}
 
 	@SuppressWarnings({
 		"java:S107" // internal entry point; the parameters are the process configuration
 	})
-	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter, boolean input, TerminalPrompts prompts, Map<String,String> env) throws IOException {
+	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path root, Host host, DoneWriter doneWriter, boolean input, TerminalPrompts prompts) throws IOException {
+		return start(tool, cmd, cols, rows, root, host, doneWriter, input, prompts, Map.of());
+	}
+
+	@SuppressWarnings({
+		"java:S107" // internal entry point; the parameters are the process configuration
+	})
+	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path root, Host host, DoneWriter doneWriter, boolean input, TerminalPrompts prompts, Map<String,String> env) throws IOException {
 		if (input && prompts != null)
 			throw new IllegalArgumentException("input and prompts are mutually exclusive");
 		if (host.osName().toLowerCase(Locale.ROOT).startsWith("windows"))
@@ -464,12 +468,13 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 		var python = findOnPath("python3", host.path());
 		if (python == null)
 			throw new IllegalStateException("TerminalProcess cannot find python3 on the PATH.");
-		Files.createDirectories(dir);
+		var dir = newRunDir(root);
+		// The tool works in its own subdirectory, so the log, events and size files sit outside its working directory.
+		var work = dir.resolve(WORK_DIR);
+		Files.createDirectories(work);
+		restrictToOwner(work);
 		var log = dir.resolve(LOG_NAME);
 		var events = dir.resolve(EVENTS_NAME);
-		for (var f : List.of(log, events))
-			if (Files.exists(f) && Files.size(f) > 0)
-				throw new IllegalStateException("TerminalProcess run directory '" + dir + "' already holds a run: '" + f.getFileName() + "' is not empty.");
 		// Written here as well as by juneau_terminal, so a request that arrives before the child starts sees the real size.
 		Files.writeString(log.resolveSibling(LOG_NAME + ".size"), "{\"cols\":" + cols + ",\"rows\":" + rows + "}");
 		var argv = new ArrayList<String>();
@@ -482,13 +487,33 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 		argv.addAll(List.of(tool, "--"));
 		argv.addAll(cmd);
 		var runnerOut = ProcessBuilder.Redirect.appendTo(dir.resolve("runner.out").toFile());
-		var pb = new ProcessBuilder(argv).directory(dir.toFile());
+		var pb = new ProcessBuilder(argv).directory(work.toFile());
 		pb.environment().putAll(env);
 		if (prompts == null)
 			pb.redirectErrorStream(true).redirectOutput(runnerOut);
 		else
 			pb.redirectError(runnerOut);  // stdout stays a pipe: it is the prompt channel.
-		return new TerminalProcess(pb.start(), log, events, doneWriter, input, prompts, String.valueOf(dir.getFileName()));
+		return new TerminalProcess(pb.start(), log, events, doneWriter, input, prompts, dir);
+	}
+
+	/** Creates a new, empty run directory under the root, readable only by its owner; the name is generated. */
+	private static Path newRunDir(Path root) throws IOException {
+		Files.createDirectories(root);
+		try {
+			return Files.createTempDirectory(root, "run-", PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------")));
+		} catch (UnsupportedOperationException e) {
+			LOG.log(Level.FINE, e, () -> "No POSIX permissions for '" + root + "'.");
+			return Files.createTempDirectory(root, "run-");
+		}
+	}
+
+	/** Limits a run directory to its owner (mode 700) where the file system supports POSIX permissions. */
+	private static void restrictToOwner(Path d) throws IOException {
+		try {
+			Files.setPosixFilePermissions(d, PosixFilePermissions.fromString("rwx------"));
+		} catch (UnsupportedOperationException e) {
+			LOG.log(Level.FINE, e, () -> "No POSIX permissions for '" + d + "'.");
+		}
 	}
 
 	/** Returns the first executable {@code name} in the {@code PATH} directories, or <jk>null</jk>. */
@@ -557,6 +582,24 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	 */
 	public FileTerminalViewSource events() {
 		return terminalView;
+	}
+
+	/**
+	 * The run directory the process created under its root.
+	 *
+	 * @return The run directory.
+	 */
+	public Path runDir() {
+		return runDir;
+	}
+
+	/**
+	 * The generated run id, the name of the run directory.
+	 *
+	 * @return The id; it satisfies the terminal id grammar.
+	 */
+	public String id() {
+		return String.valueOf(runDir.getFileName());
 	}
 
 	/**

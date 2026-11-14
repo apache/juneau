@@ -53,7 +53,7 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 	private static final Instant NOA = NOW.plusSeconds(300);
 
 	private static SamlAssertionValidator validator(BasicCredential cred) {
-		return SamlAssertionValidator.create()
+		return SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
@@ -116,23 +116,21 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 	// D: nameId() — null subject → "<no-subject>"; NameID with null value → "<no-subject>"
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_nullSubject_nameIsNoSubject() throws Exception {
+	@Test void d01_nullSubject_rejected() throws Exception {
 		var pair = SamlTestSupport.generateRsaKeyPair();
 		var cred = SamlTestSupport.credential(pair);
 		var assertion = SamlTestSupport.buildMinimalAssertionWithSubject(ISSUER, AUDIENCE, null, NBF, NOA);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var principal = validator(cred).validate(xml);
-		assertEquals("<no-subject>", principal.getName());
+		assertThrows(AuthenticationException.class, () -> validator(cred).validate(xml));
 	}
 
-	@Test void d02_nullNameIdValue_nameIsNoSubject() throws Exception {
+	@Test void d02_nullNameIdValue_rejected() throws Exception {
 		var pair = SamlTestSupport.generateRsaKeyPair();
 		var cred = SamlTestSupport.credential(pair);
 		var sub = SamlTestSupport.subjectWithNullNameIdValue();
 		var assertion = SamlTestSupport.buildMinimalAssertionWithSubject(ISSUER, AUDIENCE, sub, NBF, NOA);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var principal = validator(cred).validate(xml);
-		assertEquals("<no-subject>", principal.getName());
+		assertThrows(AuthenticationException.class, () -> validator(cred).validate(xml));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -186,7 +184,7 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 		var cred = SamlTestSupport.credential(pair);
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NBF, NOA);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var v = SamlAssertionValidator.create()
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.metadataResolver(resolver)
@@ -202,7 +200,7 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 		var cred = SamlTestSupport.credential(pair);
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NBF, NOA);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var v = SamlAssertionValidator.create()
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.metadataResolver(resolver)
@@ -221,7 +219,7 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 		var cred = SamlTestSupport.credential(pair);
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NBF, NOA);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var v = SamlAssertionValidator.create()
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.metadataResolver(resolver)
@@ -242,7 +240,7 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 		var cred = SamlTestSupport.credential(pair);
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NBF, NOA);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var v = SamlAssertionValidator.create()
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.metadataResolver(resolver)
@@ -296,14 +294,13 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 	// K: nameId() — subject with no NameID element → "<no-subject>" (line 602 null branch)
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void k01_subjectWithNoNameId_nameIsNoSubject() throws Exception {
+	@Test void k01_subjectWithNoNameId_rejected() throws Exception {
 		var pair = SamlTestSupport.generateRsaKeyPair();
 		var cred = SamlTestSupport.credential(pair);
 		var sub = SamlTestSupport.subjectWithNoNameId();
 		var assertion = SamlTestSupport.buildMinimalAssertionWithSubject(ISSUER, AUDIENCE, sub, NBF, NOA);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var principal = validator(cred).validate(xml);
-		assertEquals("<no-subject>", principal.getName());
+		assertThrows(AuthenticationException.class, () -> validator(cred).validate(xml));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -363,7 +360,7 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 		var cred = SamlTestSupport.credential(pair);
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NBF, NOA);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var v = SamlAssertionValidator.create()
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE).expectedIssuer(ISSUER).metadataResolver(resolver).clock(CLOCK).build();
 		assertThrows(AuthenticationException.class, () -> v.validate(xml));
 	}
@@ -382,7 +379,7 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 		var cred = SamlTestSupport.credential(pair);
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NBF, NOA);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var v = SamlAssertionValidator.create()
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE).expectedIssuer(ISSUER).metadataResolver(resolver).clock(CLOCK).build();
 		assertThrows(AuthenticationException.class, () -> v.validate(xml));
 	}
@@ -404,7 +401,7 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 		var cred = SamlTestSupport.credential(pair);
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NBF, NOA);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var v = SamlAssertionValidator.create()
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE).expectedIssuer(ISSUER).metadataResolver(resolver).clock(CLOCK).build();
 		assertThrows(AuthenticationException.class, () -> v.validate(xml));
 	}
@@ -427,7 +424,7 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 		var cred = SamlTestSupport.credential(pair);
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NBF, NOA);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var v = SamlAssertionValidator.create()
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE).expectedIssuer(ISSUER).metadataResolver(resolver).clock(CLOCK).build();
 		assertThrows(AuthenticationException.class, () -> v.validate(xml));
 	}
@@ -453,7 +450,7 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 		var cred = SamlTestSupport.credential(pair);
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NBF, NOA);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var v = SamlAssertionValidator.create()
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE).expectedIssuer(ISSUER).metadataResolver(resolver).clock(CLOCK).build();
 		assertThrows(AuthenticationException.class, () -> v.validate(xml));
 	}
@@ -479,7 +476,7 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 		var cred = SamlTestSupport.credential(pair);
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NBF, NOA);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var v = SamlAssertionValidator.create()
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE).expectedIssuer(ISSUER).metadataResolver(resolver).clock(CLOCK).build();
 		assertThrows(AuthenticationException.class, () -> v.validate(xml));
 	}
@@ -495,7 +492,7 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
 		// The assertion was signed with RSA-SHA256. Configure the validator to allow ONLY ECDSA-SHA256 →
 		// RSA-SHA256 is not in the allowlist → rejected at the algorithm check (line 424 true branch).
-		var v = SamlAssertionValidator.create()
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)

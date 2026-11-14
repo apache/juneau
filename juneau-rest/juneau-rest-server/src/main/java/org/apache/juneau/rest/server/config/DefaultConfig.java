@@ -100,7 +100,7 @@ import org.apache.juneau.rest.server.swagger.*;
 	serializers={},
 
 	// Configurable settings.
-	allowedHeaderParams="${S:j.allowedHeaderParams:${E:J_ALLOWED_HEADER_PARAMS:Accept,Content-Type}}",
+	allowedHeaderParams="${S:j.allowedHeaderParams:${E:J_ALLOWED_HEADER_PARAMS:Accept}}",
 	allowedMethodHeaders="${S:j.allowedMethodHeaders:${E:J_ALLOWED_METHOD_HEADERS:}}",
 	allowedMethodParams="${S:j.allowedMethodParams:${E:J_ALLOWED_METHOD_PARAMS:HEAD,OPTIONS}}",
 	clientVersionHeader="${S:j.clientVersionHeader:${E:J_CLIENT_VERSION_HEADER:Client-Version}}",
@@ -110,7 +110,7 @@ import org.apache.juneau.rest.server.swagger.*;
 	defaultRequestAttributes="${S:j.defaultRequestAttributes:${E:J_DEFAULT_REQUEST_ATTRIBUTES:}}",
 	defaultRequestHeaders="${S:j.defaultRequestHeaders:${E:J_DEFAULT_REQUEST_HEADERS:}}",
 	defaultResponseHeaders="${S:j.defaultResponseHeaders:${E:J_DEFAULT_RESPONSE_HEADERS:}}",
-	disableContentParam="${S:j.disableContentParam:${E:J_DISABLE_CONTENT_PARAM:false}}",
+	allowContentParam="${S:j.allowContentParam:${E:J_ALLOW_CONTENT_PARAM:false}}",
 	maxInput="${S:j.maxInput:${E:J_MAX_INPUT:1000000}}",
 	messages="${S:j.messages:${E:J_MESSAGES:}}",
 	renderResponseStackTraces="${S:j.renderResponseStackTraces:${E:J_RENDER_RESPONSE_STACK_TRACES:false}}",

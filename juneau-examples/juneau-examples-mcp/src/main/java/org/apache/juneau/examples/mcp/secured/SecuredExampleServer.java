@@ -83,6 +83,8 @@ public final class SecuredExampleServer implements AutoCloseable {
 		try {
 			var jetty = new Server();
 			connector = new ServerConnector(jetty);
+			// Listens on the loopback interface unless the juneau.bindAddress system property names another address.
+			connector.setHost(System.getProperty("juneau.bindAddress", "127.0.0.1"));
 			connector.setPort(port);
 			jetty.addConnector(connector);
 			// Bind the (possibly ephemeral) listen socket now, before the servlet context (and therefore
@@ -90,7 +92,7 @@ public final class SecuredExampleServer implements AutoCloseable {
 			// by the time anything asks the servlet for it. See the class javadoc for why that ordering
 			// matters here specifically.
 			connector.open();
-			var rootUrl = URI.create("http://localhost:" + connector.getLocalPort() + "/");
+			var rootUrl = URI.create("http://127.0.0.1:" + connector.getLocalPort() + "/");
 
 			var handler = new ServletContextHandler();
 			handler.setContextPath("/");

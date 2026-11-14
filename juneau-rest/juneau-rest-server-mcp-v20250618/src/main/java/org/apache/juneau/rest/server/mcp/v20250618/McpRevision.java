@@ -21,6 +21,8 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20250618.*;
@@ -106,6 +108,10 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	public static final String DEFAULT_SERVER_NAME = "juneau-rest-server-mcp";
 
 	private static final String PARAM_ARGUMENTS = "arguments";
+
+	private static final String INTERNAL_ERROR_MESSAGE = "Internal error";
+
+	private static final Logger LOG = Logger.getLogger(McpRevision.class.getName());
 
 	private static final Set<String> SUPPORTED_SCHEMA_KEYWORDS =
 		Set.of("type", "properties", "required", "additionalProperties", "items", "$defs");
@@ -261,8 +267,8 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		} catch (Exception e) {
 			if (JsonRpcResponse.notification(id))
 				return null;
-			var message = e.getMessage() == null ? cns(e) : e.getMessage();
-			return JsonRpcResponse.errorResponse(id, errorCode(McpErrorKind.INTERNAL_ERROR), message, JsonMap.of("type", cn(e)));
+			LOG.log(Level.WARNING, e, () -> "MCP request failed with an internal error.");
+			return JsonRpcResponse.errorResponse(id, errorCode(McpErrorKind.INTERNAL_ERROR), INTERNAL_ERROR_MESSAGE);
 		}
 	}
 
@@ -331,6 +337,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			.findFirst()
 			.orElseThrow(() -> new McpException(errorCode(McpErrorKind.TOOL_NOT_FOUND), "Tool not found: " + name));
 		var args = McpParamUtils.mapParam(p, PARAM_ARGUMENTS);
+		McpSchemaSafety.validateInput(handler.descriptor().getInputSchema(), args);
 		var outcome = handler.call(args, ctx);
 		validateStructuredOutput(outcome);
 		return McpWire.toWire(outcome);

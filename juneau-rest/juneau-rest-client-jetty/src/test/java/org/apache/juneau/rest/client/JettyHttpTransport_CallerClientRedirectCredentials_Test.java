@@ -118,7 +118,7 @@ class JettyHttpTransport_CallerClientRedirectCredentials_Test {
 
 	@Test
 	void a01_crossOrigin_callerClient_stripsCallerCredentials() throws Exception {
-		assertEquals("auth=none|cookie=none|key=none|trace=t-1", get("/redirect-cross"));
+		assertEquals("auth=none|cookie=none|key=none|trace=none", get("/redirect-cross"));
 	}
 
 	@Test
@@ -130,17 +130,17 @@ class JettyHttpTransport_CallerClientRedirectCredentials_Test {
 	void a03_crossOrigin_callerClient_cookieStoreStillApplies() throws Exception {
 		// The cookie A sets on its redirect lives in the caller client's cookie store; a cookie's domain ignores the port, so
 		// the store sends it on to B.  Only the caller-set Cookie value is dropped.
-		assertEquals("auth=none|cookie=store=s-1|key=none|trace=t-1", get("/redirect-cross-set-cookie"));
+		assertEquals("auth=none|cookie=store=s-1|key=none|trace=none", get("/redirect-cross-set-cookie"));
 	}
 
 	@Test
 	void a04_crossOrigin307_callerClient_stripsCallerCredentials() throws Exception {
-		assertEquals("auth=none|cookie=none|key=none|trace=t-1", get("/redirect-cross-307"));
+		assertEquals("auth=none|cookie=none|key=none|trace=none", get("/redirect-cross-307"));
 	}
 
 	@Test
 	void a05_crossOrigin308_callerClient_stripsCallerCredentials() throws Exception {
-		assertEquals("auth=none|cookie=none|key=none|trace=t-1", get("/redirect-cross-308"));
+		assertEquals("auth=none|cookie=none|key=none|trace=none", get("/redirect-cross-308"));
 	}
 
 	@Test

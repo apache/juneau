@@ -39,6 +39,9 @@ public final class Flows {
 	/** Default connect/read timeout applied to every token-endpoint request when the caller sets none. */
 	static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(10);
 
+	/** Lifetime assumed for an access token when the token endpoint returns no usable {@code expires_in}. */
+	static final Duration DEFAULT_TOKEN_LIFETIME = Duration.ofMinutes(5);
+
 	private Flows() {}
 
 	/**
@@ -91,6 +94,7 @@ public final class Flows {
 		var ms = (int) Math.min(t.toMillis(), Integer.MAX_VALUE);
 		http.setConnectTimeout(ms);
 		http.setReadTimeout(ms);
+		http.setFollowRedirects(false); // token requests carry credentials; a redirect must not be followed
 	}
 
 	private static OAuthToken toOAuthToken(AccessTokenResponse success) {
@@ -115,7 +119,7 @@ public final class Flows {
 	private static Instant computeExpiry(com.nimbusds.oauth2.sdk.token.AccessToken access) {
 		var lifetime = access.getLifetime();
 		if (lifetime <= 0L)
-			return Instant.MAX;
+			return Instant.now().plus(DEFAULT_TOKEN_LIFETIME);
 		return Instant.now().plusSeconds(lifetime);
 	}
 }

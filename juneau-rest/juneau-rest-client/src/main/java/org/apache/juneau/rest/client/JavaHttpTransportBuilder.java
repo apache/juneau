@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import java.io.*;
 import java.net.http.*;
 
 /**
@@ -37,7 +38,42 @@ public final class JavaHttpTransportBuilder {
 
 	HttpClient httpClient;
 
+	long maxResponseBytes = JavaHttpTransport.DEFAULT_MAX_RESPONSE_BYTES;
+
+	boolean allowHostHeaderOverride;
+
 	JavaHttpTransportBuilder() {}
+
+	/**
+	 * Opts in to sending a caller-controlled {@code Host} header, which pinning a policy-covered HTTP request needs.
+	 *
+	 * <p>
+	 * The JDK {@link HttpClient} rejects a {@code Host} header unless the JVM property {@code jdk.httpclient.allowRestrictedHeaders}
+	 * lists it.  Without this opt-in a policy-covered HTTP request that needs a {@code Host} override fails closed.
+	 *
+	 * <p>
+	 * <b>This setting changes a JVM-wide property.</b>  Building the transport adds {@code host} to the system property
+	 * {@code jdk.httpclient.allowRestrictedHeaders}, which affects every {@link HttpClient} in the JVM.  The JDK reads the
+	 * property once, the first time any code builds a request header, so it only takes effect if that has not happened yet; otherwise
+	 * start the JVM with {@code -Djdk.httpclient.allowRestrictedHeaders=host}.
+	 *
+	 * @return This object.
+	 */
+	public JavaHttpTransportBuilder allowHostHeaderOverride() {
+		allowHostHeaderOverride = true;
+		return this;
+	}
+
+	/**
+	 * Sets the maximum number of response body bytes the transport delivers; reading further fails with an {@link IOException}.
+	 *
+	 * @param value The cap in bytes.  Zero or negative means unlimited.  Defaults to {@link JavaHttpTransport#DEFAULT_MAX_RESPONSE_BYTES}.
+	 * @return This object.
+	 */
+	public JavaHttpTransportBuilder maxResponseBytes(long value) {
+		maxResponseBytes = value;
+		return this;
+	}
 
 	/**
 	 * Sets the underlying {@link HttpClient} to use.

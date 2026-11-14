@@ -65,7 +65,8 @@ import java.util.*;
  */
 @SuppressWarnings({
 	"java:S135", // Loops use continue and break for lenient-mode skips
-	"java:S1192" // Duplicated literals are diagnostic message fragments that read more clearly inline
+	"java:S1192", // Duplicated literals are diagnostic message fragments that read more clearly inline
+	"java:S3776" // Branching is inherent to the expression evaluator's node walkers.
 })
 final class ExprEvaluator {
 

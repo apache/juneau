@@ -32,6 +32,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- The JDK reads this once per JVM on first use, so tests that pin a Host override cannot rely on the transport builder setting alone. -->
+		<surefire.extraArgs>-Djdk.httpclient.allowRestrictedHeaders=host</surefire.extraArgs>
 	</properties>
 
 	<dependencies>

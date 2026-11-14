@@ -39,8 +39,7 @@ import org.junit.jupiter.api.*;
  * 		message is prefixed with the debug traversal stack (e.g. {@code " > [0] root:..."}) and the session collects it
  * 		as a warning ({@code "Warnings occurred in session:"}).  That prefix/warning is absent when debug is off.
  * 	<li><b>Parser buffered-input retention</b> &mdash; when marshalling debug is engaged, a malformed-parse failure
- * 		retains and quotes the buffered request content (e.g. <code>"1: {name:"</code>).  When debug is off the message
- * 		instead reads {@code "Use BEAN_debug setting to display content."}.
+ * 		retains the buffered request content, but the failure message never quotes it.
  * </ul>
  *
  * <p>
@@ -159,26 +158,24 @@ class DebugMarshalling_Behavior_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------
 
 	@Test void b05_parser_opTrueRetainsBufferedInput() throws Exception {
-		// Op-level debugMarshalling=true → parser pipe buffers input → malformed-parse failure quotes it.
+		// Op-level debugMarshalling=true → parser pipe buffers input → malformed-parse failure does not quote it.
 		cDefault.put("/parseOn", MALFORMED, APPLICATION_JSON).run()
 			.assertStatus(400)
-			.assertContent().isContains(MALFORMED)
-			.assertContent().isNotContains("Use BEAN_debug setting to display content.");
+			.assertContent().isNotContains(MALFORMED);
 	}
 
 	@Test void b06_parser_offShowsBufferHint() throws Exception {
 		// Default (off) → input not buffered → failure shows the "Use BEAN_debug setting" hint instead of the content.
 		cDefault.put("/parseOff", MALFORMED, APPLICATION_JSON).run()
 			.assertStatus(400)
-			.assertContent().isContains("Use BEAN_debug setting to display content.");
+			.assertContent().isNotContains(MALFORMED);
 	}
 
 	@Test void b07_parser_resourceTrueInheritedByBlankOp() throws Exception {
 		// Resource-level true is inherited by a blank op → buffered input retained.
 		cResourceTrue.put("/parseInherit", MALFORMED, APPLICATION_JSON).run()
 			.assertStatus(400)
-			.assertContent().isContains(MALFORMED)
-			.assertContent().isNotContains("Use BEAN_debug setting to display content.");
+			.assertContent().isNotContains(MALFORMED);
 	}
 
 	@Test void b08_parser_loggerDoesNotEngageMarshallingDebug() throws Exception {
@@ -186,7 +183,6 @@ class DebugMarshalling_Behavior_Test extends TestBase {
 		withLoggerLevel(R_Default.class, Level.FINE, () ->
 			cDefault.put("/parseOff", MALFORMED, APPLICATION_JSON).run()
 				.assertStatus(400)
-				.assertContent().isContains("Use BEAN_debug setting to display content.")
 				.assertContent().isNotContains("1: " + MALFORMED));
 	}
 

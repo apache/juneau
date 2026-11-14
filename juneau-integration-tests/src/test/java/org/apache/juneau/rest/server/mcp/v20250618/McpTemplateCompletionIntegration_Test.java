@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
@@ -44,6 +45,16 @@ import org.junit.jupiter.api.*;
 	"resource" // MockRestClient is a Closeable test helper; lifetime is bounded by the test method.
 })
 class McpTemplateCompletionIntegration_Test {
+
+	private static LogRecordCapture.Quiet quietMcp;
+
+	@BeforeAll static void silenceMcpWarnings() {
+		quietMcp = LogRecordCapture.quiet(McpRevision.class);
+	}
+
+	@AfterAll static void restoreMcpLogging() {
+		quietMcp.close();
+	}
 
 	private static McpResourceHandler resource(String uri, String body) {
 		return new McpResourceHandler() {

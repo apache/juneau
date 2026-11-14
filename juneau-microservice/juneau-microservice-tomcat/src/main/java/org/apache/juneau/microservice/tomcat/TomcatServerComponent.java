@@ -36,6 +36,7 @@ import java.util.logging.*;
 
 import org.apache.catalina.*;
 import org.apache.catalina.startup.*;
+import org.apache.coyote.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.config.event.*;
@@ -131,11 +132,11 @@ public class TomcatServerComponent implements MicroserviceListener {
 		return out;
 	}
 
-	private static int findOpenPort(int[] ports) {
+	private static int findOpenPort(int[] ports, String bindAddress) {
 		for (var port : ports) {
 			if (port == 0)
 				port = RANDOM.nextInt(32767 - ports[0] + 1) + ports[0];
-			try (var ss = new ServerSocket(port)) {
+			try (var ss = new ServerSocket(port, 50, InetAddress.getByName(bindAddress))) {
 				return port;
 			} catch (IOException e) {
 				// Port is in use, try next port in array
@@ -216,7 +217,9 @@ public class TomcatServerComponent implements MicroserviceListener {
 			if (ports == null)
 				ports = cf.get("Tomcat/port").as(int[].class)
 					.orElseGet(() -> mf.get("Tomcat-Port").map(TomcatServerComponent::parseIntArray).orElseGet(() -> ints(8000)));
-			var availablePort = findOpenPort(ports);
+			// Binds to the loopback interface by default; set the juneau.bindAddress system property to listen elsewhere.
+			var bindAddress = System.getProperty("juneau.bindAddress", "127.0.0.1");
+			var availablePort = findOpenPort(ports, bindAddress);
 
 			if (availablePortEnv.isEmpty())
 				// Intentional real-JVM-property publish: the bound port is exposed as a process-global system
@@ -235,7 +238,9 @@ public class TomcatServerComponent implements MicroserviceListener {
 				tomcat.set(createServer(factory, resolveBaseDir(settings)));
 			}
 			tomcat.get().setPort(availablePort);
-			tomcat.get().getConnector();
+			var connector = tomcat.get().getConnector();
+			if (connector.getProtocolHandler() instanceof AbstractProtocol<?> ap)
+				ap.setAddress(InetAddress.getByName(bindAddress));
 
 			// Publish back to the store for downstream beans / lookups.
 			store.addBean(Tomcat.class, tomcat.get());

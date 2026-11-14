@@ -168,6 +168,7 @@ public abstract class AbstractMcpRestServlet extends BasicRestServlet implements
 	})
 	@RestPost(path = "/")
 	public Object handleMcp(@Content JsonRpcRequest req, RestRequest restReq) {
+		McpRequestPolicy.check(getMcpConfig(), restReq);
 		var bs = new BasicBeanStore(restReq.getContext().getBeanStore())
 			.addBean(RestRequest.class, restReq);
 		var broker = getSubscriptionBroker();

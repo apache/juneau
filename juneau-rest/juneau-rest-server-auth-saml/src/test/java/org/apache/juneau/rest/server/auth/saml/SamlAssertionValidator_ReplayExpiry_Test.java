@@ -56,7 +56,7 @@ class SamlAssertionValidator_ReplayExpiry_Test extends TestBase {
 	private static final Instant NBF = NOW.minusSeconds(60);
 
 	private static SamlAssertionValidator.Builder base(Credential cred) {
-		return SamlAssertionValidator.create()
+		return SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
@@ -101,8 +101,7 @@ class SamlAssertionValidator_ReplayExpiry_Test extends TestBase {
 	@Test void b01_missingConditionsNoa_fallsBackToBearerConfirmationNoa() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
 		var confNoa = NOW.plusSeconds(600);
-		// Conditions has no NotOnOrAfter, but a bearer confirmation supplies one; recipient(...) is NOT configured,
-		// so the confirmation is not enforced during validation, yet must still bound the replay-cache retention.
+		// Conditions has no NotOnOrAfter, but a bearer confirmation supplies one; the confirmation must still bound the replay-cache retention.
 		var sc = SamlTestSupport.bearerConfirmation(ACS, null, confNoa, null, null);
 		var sub = SamlTestSupport.subjectWithConfirmations("alice", sc);
 		var assertion = SamlTestSupport.buildMinimalAssertionWithSubject(ISSUER, AUDIENCE, sub, NBF, null);
@@ -155,7 +154,7 @@ class SamlAssertionValidator_ReplayExpiry_Test extends TestBase {
 	@Test void c01_nonBearerConfirmation_ignoredForRetention() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
 		var condNoa = NOW.plusSeconds(300);
-		var sub = SamlTestSupport.subjectWithConfirmations("alice", holderOfKeyConfirmation());
+		var sub = SamlTestSupport.subjectWithConfirmations("alice", holderOfKeyConfirmation(), SamlTestSupport.bearerConfirmation(ACS, null, condNoa, null, null));
 		var assertion = SamlTestSupport.buildMinimalAssertionWithSubject(ISSUER, AUDIENCE, sub, NBF, condNoa);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
 		var cache = new CapturingCache();
@@ -166,7 +165,7 @@ class SamlAssertionValidator_ReplayExpiry_Test extends TestBase {
 	@Test void c02_bearerConfirmationWithNoData_ignoredForRetention() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
 		var condNoa = NOW.plusSeconds(300);
-		var sub = SamlTestSupport.subjectWithConfirmations("alice", bearerConfirmationNoData());
+		var sub = SamlTestSupport.subjectWithConfirmations("alice", bearerConfirmationNoData(), SamlTestSupport.bearerConfirmation(ACS, null, condNoa, null, null));
 		var assertion = SamlTestSupport.buildMinimalAssertionWithSubject(ISSUER, AUDIENCE, sub, NBF, condNoa);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
 		var cache = new CapturingCache();
@@ -179,7 +178,7 @@ class SamlAssertionValidator_ReplayExpiry_Test extends TestBase {
 		var condNoa = NOW.plusSeconds(300);
 		// Bearer confirmation carries a SubjectConfirmationData but no NotOnOrAfter → contributes nothing.
 		var sc = SamlTestSupport.bearerConfirmation(null, null, null, null, null);
-		var sub = SamlTestSupport.subjectWithConfirmations("alice", sc);
+		var sub = SamlTestSupport.subjectWithConfirmations("alice", sc, SamlTestSupport.bearerConfirmation(ACS, null, condNoa, null, null));
 		var assertion = SamlTestSupport.buildMinimalAssertionWithSubject(ISSUER, AUDIENCE, sub, NBF, condNoa);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
 		var cache = new CapturingCache();

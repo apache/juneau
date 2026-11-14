@@ -54,8 +54,11 @@ final class CredentialGuardingHttpClient extends HttpClient {
 	 */
 	static <R extends Request> R stripIfCrossOrigin(Request oldRequest, URI newURI, R copy) {
 		if (shouldStrip(originOf(oldRequest), newURI))
-			for (var name : RedirectSecurity.stripOnCrossOrigin())
-				copy.headers(fields -> fields.remove(name));
+			copy.headers(fields -> {
+				for (var name : fields.getFieldNamesCollection().toArray(String[]::new))
+					if (RedirectSecurity.mustStrip(name, null))
+						fields.remove(name);
+			});
 		return copy;
 	}
 

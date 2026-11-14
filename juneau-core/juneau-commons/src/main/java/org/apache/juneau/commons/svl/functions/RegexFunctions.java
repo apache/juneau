@@ -41,6 +41,32 @@ public final class RegexFunctions {
 	// created per invocation, so behavior is identical to compiling on every call.
 	static final Cache<String,Pattern> PATTERN_CACHE = Cache.of(String.class, Pattern.class).maxSize(1000).supplier(Pattern::compile).build();
 
+	/** Maximum time, in milliseconds, a single regex evaluation may run before it is aborted. */
+	static final long REGEX_TIMEOUT_MS = 2000;
+
+	/** Input wrapper that aborts a runaway match once its deadline passes. */
+	private static final class Deadline implements CharSequence {
+		private final CharSequence s;
+		private final long end = System.nanoTime() + REGEX_TIMEOUT_MS * 1_000_000L;
+
+		Deadline(CharSequence s) {
+			this.s = s;
+		}
+
+		@Override public char charAt(int i) {
+			if ((i & 0xFF) == 0 && System.nanoTime() > end)
+				throw new IllegalStateException("Regular expression evaluation timed out.");
+			return s.charAt(i);
+		}
+		@Override public int length() { return s.length(); }
+		@Override public CharSequence subSequence(int a, int b) { return new Deadline(s.subSequence(a, b)); }
+		@Override public String toString() { return s.toString(); }
+	}
+
+	private static Matcher matcher(String regex, String s) {
+		return PATTERN_CACHE.get(regex).matcher(new Deadline(s));
+	}
+
 	/** All function classes in this category. */
 	@SuppressWarnings({
 		"java:S2386", // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
@@ -55,7 +81,7 @@ public final class RegexFunctions {
 		@Override public String name() { return "match"; }
 		public String invoke(String s, String regex) {
 			if (s == null || regex == null) return "false";
-			return String.valueOf(PATTERN_CACHE.get(regex).matcher(s).find());
+			return String.valueOf(matcher(regex, s).find());
 		}
 	}
 
@@ -69,7 +95,7 @@ public final class RegexFunctions {
 		public String invoke(String s, String regex) { return invoke(s, regex, 0); }
 		public String invoke(String s, String regex, int group) {
 			if (s == null || regex == null) return "";
-			var m = PATTERN_CACHE.get(regex).matcher(s);
+			var m = matcher(regex, s);
 			if (!m.find()) return "";
 			if (group < 0 || group > m.groupCount()) return "";
 			var v = m.group(group);
@@ -83,7 +109,7 @@ public final class RegexFunctions {
 		public String invoke(String s, String regex, String replacement) {
 			if (s == null) return "";
 			if (regex == null) return s;
-			return PATTERN_CACHE.get(regex).matcher(s).replaceAll(replacement == null ? "" : replacement);
+			return matcher(regex, s).replaceAll(replacement == null ? "" : replacement);
 		}
 	}
 }

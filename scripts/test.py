@@ -298,9 +298,26 @@ def discover_module_stats(repo_root: Path) -> dict:
 # A Reactor Summary row, read the way juneau_terminal's Maven parser reads it (MavenParser.SUMMARY_ROW in juneau_terminal.py).
 SECTION = re.compile(r"^\[([\w.-]+)\]$")
 REACTOR_SUMMARY = re.compile(r"^\[INFO\] Reactor Summary")
-SUMMARY_ROW = re.compile(r"^\[INFO\] (.+?)(?: \.++)? (SUCCESS|FAILURE|SKIPPED)(?: \[\s*([^\]]+?)\s*\])?\s*$")
+# The name keeps its dot leader here; reactor_times strips it.
+SUMMARY_PREFIX = "[INFO] "
+SUMMARY_STATUS = re.compile(r" (?:SUCCESS|FAILURE|SKIPPED)")
+SUMMARY_TAIL = re.compile(r" (SUCCESS|FAILURE|SKIPPED)(?: \[\s*([^\]\s][^\]]*)\])?$")
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
 POM_SKIP_DIRS = {"target", "node_modules", "src", "build-overlay"}
+
+
+def summary_row(line: str):
+	"""(name, status, time text or None) for a Reactor Summary row, else None; the name is the longest valid prefix."""
+	if not line.startswith(SUMMARY_PREFIX):
+		return None
+	body = line[len(SUMMARY_PREFIX):].rstrip()
+	for m in reversed(list(SUMMARY_STATUS.finditer(body))):
+		if m.start() < 1:
+			continue
+		tail = SUMMARY_TAIL.match(body, m.start())
+		if tail:
+			return body[:m.start()], tail.group(1), tail.group(2)
+	return None
 
 
 def _summary_seconds(text):
@@ -323,9 +340,9 @@ def reactor_times(output: str) -> dict:
 		if REACTOR_SUMMARY.match(line):
 			in_summary = True
 			continue
-		row = SUMMARY_ROW.match(line) if in_summary else None
-		if row and row.group(2) == "SUCCESS" and row.group(3):
-			times[row.group(1).strip()] = _summary_seconds(row.group(3))
+		row = summary_row(line) if in_summary else None
+		if row and row[1] == "SUCCESS" and row[2]:
+			times[row[0].rstrip(" .")] = _summary_seconds(row[2])
 	return times
 
 

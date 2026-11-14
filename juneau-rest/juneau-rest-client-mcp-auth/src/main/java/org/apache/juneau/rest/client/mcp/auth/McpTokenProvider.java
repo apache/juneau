@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client.mcp.auth;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.UriUtils.*;
 
 import java.net.*;
 import java.time.*;
@@ -140,7 +141,7 @@ public class McpTokenProvider implements Supplier<String> {
 		 * @return This object.
 		 */
 		public Builder tokenEndpoint(URI value) {
-			tokenEndpoint = reqnn("value", value);
+			tokenEndpoint = assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 

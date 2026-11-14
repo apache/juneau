@@ -277,7 +277,7 @@ public class ThymeleafMixin {
 		 * Sets the classpath base path under which template resources are resolved.
 		 *
 		 * <p>
-		 * Defaults to {@link ThymeleafMixin#DEFAULT_BASE_PATH "/"}. A typical configured
+		 * Defaults to {@link ThymeleafMixin#DEFAULT_BASE_PATH "/templates/"}. A typical configured
 		 * value is {@code "/templates/"} &mdash; the Spring-Boot-compatible layout convention.
 		 *
 		 * @param value The base path. {@code null} or blank values reset to the default

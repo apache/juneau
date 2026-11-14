@@ -296,7 +296,7 @@ public class JspMixin {
 		 * Sets the classpath / webapp base path under which {@code .jsp} resources are resolved.
 		 *
 		 * <p>
-		 * Defaults to {@link JspMixin#DEFAULT_BASE_PATH "/"}. A typical configured value
+		 * Defaults to {@link JspMixin#DEFAULT_BASE_PATH "/templates/"}. A typical configured value
 		 * is {@code "/WEB-INF/views/"} &mdash; the Servlet-spec convention for hiding template
 		 * files from direct HTTP access.
 		 *

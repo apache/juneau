@@ -489,7 +489,7 @@ class PetstoreSpringboot_Test {
 
 	// Premise pin, not CSRF evidence: stays green with the API boundary deleted.
 	@ParameterizedTest(name="{0}")
-	@CsvSource({"/petstore,404", "/petstore/pets/1,200", "/petstore/pets,200", "/petstore/api,200", "/petstore/stats,200"})
+	@CsvSource({"/petstore,404", "/petstore/pets/1,200", "/petstore/pets,200", "/petstore/api,200", "/petstore/stats,404"})
 	void h10_apiHtmlPagesRenderNoPostForm(String path, int status) throws Exception {
 		// The bare /petstore path has no HTML page (404 for text/html), so its premise is that the error body has no POST form either.
 		var resp = get(path, "text/html");

@@ -38,7 +38,8 @@ class OAuthIntrospectionValidator_Builder_Test extends TestBase {
 		return OAuthIntrospectionValidator.create()
 			.introspectionEndpoint(URI.create("https://idp.example.com/oauth2/introspect"))
 			.clientId("api-server")
-			.clientSecret("secret");
+			.clientSecret("secret")
+			.anyAudience();
 	}
 
 	@Test void a01_build_happyPath() {
@@ -124,7 +125,7 @@ class OAuthIntrospectionValidator_Builder_Test extends TestBase {
 	@Test void e02_introspectionEndpoint_loopbackHttp_allowed() {
 		var v = OAuthIntrospectionValidator.create()
 			.introspectionEndpoint(URI.create("http://127.0.0.1:9000/oauth2/introspect"))
-			.clientId("api-server").clientSecret("secret").build();
+			.clientId("api-server").clientSecret("secret").anyAudience().build();
 		assertNotNull(v);
 	}
 }

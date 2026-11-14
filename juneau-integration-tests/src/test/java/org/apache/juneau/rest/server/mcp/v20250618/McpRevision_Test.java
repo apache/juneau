@@ -24,6 +24,7 @@ import java.util.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.*;
@@ -32,6 +33,16 @@ import org.junit.jupiter.api.*;
  * Coverage for {@link McpRevision}.
  */
 class McpRevision_Test {
+
+	private static LogRecordCapture.Quiet quietMcp;
+
+	@BeforeAll static void silenceMcpWarnings() {
+		quietMcp = LogRecordCapture.quiet(McpRevision.class);
+	}
+
+	@AfterAll static void restoreMcpLogging() {
+		quietMcp.close();
+	}
 
 	private final BeanStore ctx = new BasicBeanStore();
 
@@ -270,17 +281,17 @@ class McpRevision_Test {
 		}));
 		var resp = send(config, req(1, McpMethods.TOOLS_CALL, JsonMap.of("name", "e")));
 		assertEquals(McpRevision.CODE_INTERNAL_ERROR, resp.getError().getCode());
-		assertString("boom", resp.getError().getMessage());
+		assertString("Internal error", resp.getError().getMessage());
 	}
 
 	@Test
-	void handler_throwingRuntimeExceptionWithoutMessage_usesClassName() {
+	void handler_throwingRuntimeExceptionWithoutMessage_genericMessage() {
 		var config = new McpServerConfig().addTool(tool("e", a -> {
 			throw new IllegalStateException();
 		}));
 		var resp = send(config, req(1, McpMethods.TOOLS_CALL, JsonMap.of("name", "e")));
 		assertEquals(McpRevision.CODE_INTERNAL_ERROR, resp.getError().getCode());
-		assertString("IllegalStateException", resp.getError().getMessage());
+		assertString("Internal error", resp.getError().getMessage());
 	}
 
 	// -------- prompts ---------

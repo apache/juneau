@@ -41,18 +41,17 @@ class SamlAuthFilter_Fallback_Test extends TestBase {
 
 	private static final String B64 = Base64.getEncoder().encodeToString("<x/>".getBytes(StandardCharsets.UTF_8));
 
-	/** A validator that records the recipient it was asked to bind and returns a principal carrying {@code claims}. */
-	private static SamlAssertionValidator capturing(String[] recipient, Map<String,Object> claims) throws Exception {
+	/** A validator that returns a principal carrying {@code claims}. */
+	private static SamlAssertionValidator capturing(Map<String,Object> claims) throws Exception {
 		var kp = KeyPairGenerator.getInstance("RSA");
 		kp.initialize(2048);
 		var pair = kp.generateKeyPair();
 		return new SamlAssertionValidator(
-				SamlAssertionValidator.create()
+				SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 					.spEntityId("https://sp.example.com")
 					.expectedIssuer("https://idp.example.com")
 					.signingCredential(new BasicCredential(pair.getPublic(), pair.getPrivate()))) {
-			@Override public Principal validate(String xml, String r) {
-				recipient[0] = r;
+			@Override public Principal validate(String xml) {
 				return new ClaimsPrincipal("alice", claims);
 			}
 		};
@@ -71,59 +70,12 @@ class SamlAuthFilter_Fallback_Test extends TestBase {
 		return r;
 	}
 
-	private static String reconstructed(String scheme, String host, int port, String uri) throws Exception {
-		var recipient = new String[1];
-		var f = SamlAuthFilter.create().validator(capturing(recipient, Map.of())).build();
-		assertTrue(f.authenticate(noUrlReq(scheme, host, port, uri)).isPresent());
-		return recipient[0];
-	}
-
-	// -----------------------------------------------------------------------------------------------------------------
-	// A: recipient reconstruction when getRequestURL() is null
-	// -----------------------------------------------------------------------------------------------------------------
-
-	@Test void a01_httpsDefaultPort_omitted() throws Exception {
-		assertEquals("https://sp.example.com/saml/acs", reconstructed("https", "sp.example.com", 443, "/saml/acs"));
-	}
-
-	@Test void a02_httpDefaultPort_omitted() throws Exception {
-		assertEquals("http://sp.example.com/saml/acs", reconstructed("http", "sp.example.com", 80, "/saml/acs"));
-	}
-
-	@Test void a03_nonDefaultPort_included() throws Exception {
-		assertEquals("https://sp.example.com:8443/saml/acs", reconstructed("https", "sp.example.com", 8443, "/saml/acs"));
-	}
-
-	@Test void a04_port80OnHttps_included() throws Exception {
-		assertEquals("https://sp.example.com:80/saml/acs", reconstructed("https", "sp.example.com", 80, "/saml/acs"));
-	}
-
-	@Test void a05_port443OnHttp_included() throws Exception {
-		assertEquals("http://sp.example.com:443/saml/acs", reconstructed("http", "sp.example.com", 443, "/saml/acs"));
-	}
-
-	@Test void a06_unknownPort_omitted() throws Exception {
-		assertEquals("https://sp.example.com/saml/acs", reconstructed("https", "sp.example.com", -1, "/saml/acs"));
-	}
-
-	@Test void a07_blankSchemeHostOrUri_rejectedWithChallenge() throws Exception {
-		var f = SamlAuthFilter.create().validator(capturing(new String[1], Map.of())).build();
-		for (var r : List.of(
-				noUrlReq(null, "sp.example.com", 443, "/saml/acs"),
-				noUrlReq("https", " ", 443, "/saml/acs"),
-				noUrlReq("https", "sp.example.com", 443, null))) {
-			var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(r));
-			assertTrue(ex.getMessage().contains("Unable to derive SAML ACS recipient"), ex.getMessage());
-			assertTrue(ex.getHeaders().stream().anyMatch(h -> eqic("WWW-Authenticate", h.getName())));
-		}
-	}
-
 	// -----------------------------------------------------------------------------------------------------------------
 	// B: builder settings
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_consumerPath_customPathMatches_defaultNoLongerDoes() throws Exception {
-		var f = SamlAuthFilter.create().validator(capturing(new String[1], Map.of())).consumerPath("/sso/post").build();
+		var f = SamlAuthFilter.create().validator(capturing(Map.of())).consumerPath("/sso/post").build();
 		var custom = noUrlReq("https", "sp.example.com", 443, "/sso/post");
 		when(custom.getPathInfo()).thenReturn("/sso/post");
 		assertTrue(f.authenticate(custom).isPresent());
@@ -132,14 +84,15 @@ class SamlAuthFilter_Fallback_Test extends TestBase {
 
 	@Test void b02_rolesClaim_customClaimNameUsed() throws Exception {
 		var claims = Map.<String,Object>of("roles", List.of("ignored"), "groups", List.of("admin", "ops"));
-		var f = SamlAuthFilter.create().validator(capturing(new String[1], claims)).rolesClaim("groups").build();
+		var f = SamlAuthFilter.create().validator(capturing(claims)).rolesClaim("groups").build();
 		var result = f.authenticate(noUrlReq("https", "sp.example.com", 443, "/saml/acs"));
 		assertEquals(Set.of("admin", "ops"), result.orElseThrow().getRoles());
 	}
 
 	@Test void b03_realm_usedInChallenge() throws Exception {
-		var f = SamlAuthFilter.create().validator(capturing(new String[1], Map.of())).realm("corp").build();
-		var r = noUrlReq("https", null, 443, "/saml/acs");
+		var f = SamlAuthFilter.create().validator(capturing(Map.of())).realm("corp").build();
+		var r = noUrlReq("https", "sp.example.com", 443, "/saml/acs");
+		when(r.getParameter("SAMLResponse")).thenReturn("!!!not-base64!!!");
 		var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(r));
 		var header = ex.getHeaders().stream().filter(h -> eqic("WWW-Authenticate", h.getName())).findFirst().orElseThrow();
 		assertEquals("SAML realm=\"corp\"", header.getValue());

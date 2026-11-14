@@ -167,6 +167,7 @@ public class ThymeleafViewRenderer implements ViewRenderer {
 	// mount applies, returning the engine-relative template name.  Delegates to the shared
 	// FileUtils.resolveVirtualPathSafely + ThymeleafDispatcher.stripBasePath used by the raw render path.
 	static String gateTemplateName(String basePath, String templateName) {
+		ViewTemplateNames.requirePlainName(templateName);
 		var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);
 		return ThymeleafDispatcher.stripBasePath(basePath, resolved);
 	}

@@ -65,7 +65,7 @@ public class Entry {
 	protected Entry(Config config, ConfigMap configMap, String sectionName, String entryName) {
 		this.configEntry = configMap.getEntry(sectionName, entryName);
 		this.config = config;
-		this.value = configEntry == null ? null : config.removeMods(configEntry.getModifiers(), configEntry.getValue());
+		this.value = configEntry == null ? null : configEntry.getValue();
 	}
 
 	/**
@@ -489,13 +489,6 @@ public class Entry {
 	 * @return The name of this entry, or <jk>null</jk> if this entry does not exist in the config.
 	 */
 	public String getKey() { return configEntry == null ? null : configEntry.getKey(); }
-
-	/**
-	 * Returns the modifiers for this entry.
-	 *
-	 * @return The modifiers for this entry, or <jk>null</jk> if it has no modifiers or this entry does not exist in the config.
-	 */
-	public String getModifiers() { return configEntry == null ? null : configEntry.getModifiers(); }
 
 	/**
 	 * Returns the pre-lines of this entry.

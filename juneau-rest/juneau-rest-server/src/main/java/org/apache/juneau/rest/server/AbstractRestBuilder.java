@@ -226,6 +226,15 @@ public abstract class AbstractRestBuilder<R,SELF extends AbstractRestBuilder<R,S
 	public SELF allowedMethodHeaders(String value) { anno.allowedMethodHeaders(value); return self(); }
 
 	@Override /* RestBuilder<?> */
+	public SELF allowedResponseHeaders(String value) { anno.allowedResponseHeaders(value); return self(); }
+
+	@Override /* RestBuilder<?> */
+	public SELF allowCrossSite(String value) { anno.allowCrossSite(value); return self(); }
+
+	@Override /* Overridden from RestBuilder */
+	public SELF allowedOrigins(String value) { anno.allowedOrigins(value); return self(); }
+
+	@Override /* RestBuilder<?> */
 	public SELF allowedMethodParams(String value) { anno.allowedMethodParams(value); return self(); }
 
 	@Override /* RestBuilder<?> */
@@ -250,7 +259,7 @@ public abstract class AbstractRestBuilder<R,SELF extends AbstractRestBuilder<R,S
 	public SELF defaultResponseHeaders(String... value) { anno.defaultResponseHeaders(value); return self(); }
 
 	@Override /* RestBuilder<?> */
-	public SELF disableContentParam(String value) { anno.disableContentParam(value); return self(); }
+	public SELF allowContentParam(String value) { anno.allowContentParam(value); return self(); }
 
 	@Override /* RestBuilder<?> */
 	public SELF maxInput(String value) { anno.maxInput(value); return self(); }

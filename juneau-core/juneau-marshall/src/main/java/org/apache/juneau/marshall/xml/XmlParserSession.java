@@ -883,6 +883,17 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 */
 	protected <T> T readAnything(ClassMeta<T> eType, String currAttr, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
+		enterParseDepth();
+		try {
+			return readAnything0(eType, currAttr, r, outer, isRoot, pMeta);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	// Workhorse method, wrapped by readAnything() with the recursion-depth guard.
+	private <T> T readAnything0(ClassMeta<T> eType, String currAttr, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta)
+		throws IOException, ParseException, ExecutableException, XMLStreamException {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();

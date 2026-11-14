@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
  * <ol>
  * 	<li><b>Missing decryption credential</b> &mdash; when an envelope carries {@code <EncryptedAssertion>}
  * 		but the validator has no {@code decryptionCredential(...)} configured, validation fails fast with
- * 		an {@code AuthenticationException} bearing the {@code decryption_required} challenge.
+ * 		an {@code AuthenticationException} bearing the {@code decryption_failed} challenge.
  * 	<li><b>Decrypt fails &mdash; then validation fails</b> &mdash; when the wrong decryption key is
  * 		configured, validation fails with {@code decryption_failed} rather than silently producing a bogus
  * 		principal.
@@ -68,7 +68,7 @@ class SamlAssertionValidator_EncryptedAssertion_Test extends TestBase {
 
 	@Test void a01_missingDecryptionCredential_rejected() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
-		var validator = SamlAssertionValidator.create()
+		var validator = SamlAssertionValidator.create().recipient("https://sp.example.com/saml/acs").allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
@@ -77,14 +77,14 @@ class SamlAssertionValidator_EncryptedAssertion_Test extends TestBase {
 		var hdr = ex.getHeaders().stream()
 			.filter(h -> eqic("WWW-Authenticate", h.getName()))
 			.findFirst().orElseThrow();
-		assertTrue(hdr.getValue().contains("decryption_required"),
-			"Expected WWW-Authenticate to contain 'decryption_required', got: " + hdr.getValue());
+		assertTrue(hdr.getValue().contains("decryption_failed"),
+			"Expected WWW-Authenticate to contain 'decryption_failed', got: " + hdr.getValue());
 	}
 
 	@Test void a02_wrongDecryptionCredential_rejected() throws Exception {
 		var signing = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
 		var decryption = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
-		var validator = SamlAssertionValidator.create()
+		var validator = SamlAssertionValidator.create().recipient("https://sp.example.com/saml/acs").allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(signing)

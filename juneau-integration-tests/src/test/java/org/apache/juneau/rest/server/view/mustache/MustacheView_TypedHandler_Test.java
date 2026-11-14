@@ -115,12 +115,12 @@ class MustacheView_TypedHandler_Test extends ViewIntegrationTestBase {
 
 		@RestGet("/mu-hello")
 		public View muHello() {
-			return MustacheView.of("mustache-templates/hello.mustache").attr("name", "Alice");
+			return MustacheView.of("hello.mustache").attr("name", "Alice");
 		}
 
 		@RestGet("/thy-hello")
 		public View thyHello() {
-			return ThymeleafView.of("templates/hello.html").attr("name", "Alice");
+			return ThymeleafView.of("hello.html").attr("name", "Alice");
 		}
 	}
 
@@ -150,7 +150,7 @@ class MustacheView_TypedHandler_Test extends ViewIntegrationTestBase {
 
 		@RestGet("/hello/{name}")
 		public View hello(@Path String name) {
-			return MustacheView.of("mustache-templates/hello.mustache").attr("name", name);
+			return MustacheView.of("hello.mustache").attr("name", name);
 		}
 	}
 
@@ -178,7 +178,7 @@ class MustacheView_TypedHandler_Test extends ViewIntegrationTestBase {
 
 		@RestGet("/hello")
 		public View hello() {
-			return MustacheView.of("mustache-templates/hello.mustache").attr("name", "Alice");
+			return MustacheView.of("hello.mustache").attr("name", "Alice");
 		}
 	}
 

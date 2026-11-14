@@ -102,17 +102,20 @@ class LoginStateStore_Test extends TestBase {
 			.build();
 	}
 
+	private MockServletResponse lastStart;
+
 	private String startLoginGetState(OidcRelyingParty rp) throws Exception {
 		var req = MockServletRequest.create("GET", "/auth/login");
 		var res = MockServletResponse.create();
 		rp.startLogin(req, res);
+		lastStart = res;
 		var loc = res.getHeader("Location");
 		assertNotNull(loc, "startLogin must redirect to the IdP");
 		return queryParam(loc, "state");
 	}
 
 	private MockServletResponse completeLogin(OidcRelyingParty rp, String state) throws Exception {
-		var req = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc123&state=" + state);
+		var req = OidcRelyingParty_Test.callbackReq(lastStart, "abc123", state);
 		var res = MockServletResponse.create();
 		rp.completeLogin(req, res);
 		return res;
@@ -124,7 +127,7 @@ class LoginStateStore_Test extends TestBase {
 	}
 
 	private static PendingLogin pending(String redirect, Instant createdAt, Instant expiresAt) {
-		return new PendingLogin(FAKE_NONCE, FAKE_VERIFIER, redirect, createdAt, expiresAt);
+		return new PendingLogin(FAKE_NONCE, FAKE_VERIFIER, redirect, createdAt, expiresAt, null);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -135,6 +138,7 @@ class LoginStateStore_Test extends TestBase {
 		final IntegerHolder storeCount = IntegerHolder.create();
 		final IntegerHolder consumeCount = IntegerHolder.create();
 		volatile String lastStoreState;
+		volatile PendingLogin lastStored;
 		volatile String lastConsumeState;
 		volatile Optional<PendingLogin> lastConsumeReturned = Optional.empty();
 
@@ -145,6 +149,7 @@ class LoginStateStore_Test extends TestBase {
 		@Override public void store(String state, PendingLogin p) {
 			storeCount.increment();
 			lastStoreState = state;
+			lastStored = p;
 			if (storeThrows != null)
 				throw storeThrows;
 		}
@@ -154,8 +159,10 @@ class LoginStateStore_Test extends TestBase {
 			lastConsumeState = state;
 			if (consumeThrows != null)
 				throw consumeThrows;
-			lastConsumeReturned = consumeResult;
-			return consumeResult;
+			// The fake returns its distinctive record but carries over the framework-minted binding hash.
+			var r = consumeResult.map(c -> new PendingLogin(c.nonce(), c.codeVerifier(), c.redirectTarget(), c.createdAt(), c.expiresAt(), lastStored == null ? null : lastStored.bindingHash()));
+			lastConsumeReturned = r;
+			return r;
 		}
 	}
 
@@ -332,7 +339,7 @@ class LoginStateStore_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void g08_pendingLogin_toString_redactsSecrets() {
-		var p = new PendingLogin("nonce123", "verifierXYZ", "/home", NOW, NOW.plus(Duration.ofMinutes(5)));
+		var p = new PendingLogin("nonce123", "verifierXYZ", "/home", NOW, NOW.plus(Duration.ofMinutes(5)), null);
 		var s = p.toString();
 		assertFalse(s.contains("nonce123"), "nonce must be redacted");
 		assertFalse(s.contains("verifierXYZ"), "code_verifier must be redacted");

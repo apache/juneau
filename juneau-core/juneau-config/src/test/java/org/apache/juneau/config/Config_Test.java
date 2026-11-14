@@ -30,7 +30,6 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.config.event.*;
-import org.apache.juneau.config.mod.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
@@ -181,24 +180,24 @@ class Config_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	//	public Config set(String key, Object value, Serializer serializer, ConfigMod[] modifiers, String comment, List<String> preLines)
+	//	public Config set(String key, Object value, Serializer serializer, String comment, List<String> preLines)
 	//====================================================================================================
 	@Test void b05_set4() throws Exception {
 		var c = init("a1=1", "[S]", "b1=1");
 
 		var b = new ABean().init();
-		c.set("a1", b, UonSerializer.DEFAULT, "*", "comment", l("#c1","#c2"));
-		c.set("a2", b, UonSerializer.DEFAULT, "*", "comment", l("#c1","#c2"));
-		c.set("a3", b, UonSerializer.DEFAULT, "*", "comment", l("#c1","#c2"));
-		c.set("S/b1", b, UonSerializer.DEFAULT, "*", "comment", l("#c1","#c2"));
-		c.set("S/b2", b, UonSerializer.DEFAULT, "*", "comment", l("#c1","#c2"));
-		c.set("T/c1", b, UonSerializer.DEFAULT, "*", "comment", l("#c1","#c2"));
+		c.set("a1", b, UonSerializer.DEFAULT, "comment", l("#c1","#c2"));
+		c.set("a2", b, UonSerializer.DEFAULT, "comment", l("#c1","#c2"));
+		c.set("a3", b, UonSerializer.DEFAULT, "comment", l("#c1","#c2"));
+		c.set("S/b1", b, UonSerializer.DEFAULT, "comment", l("#c1","#c2"));
+		c.set("S/b2", b, UonSerializer.DEFAULT, "comment", l("#c1","#c2"));
+		c.set("T/c1", b, UonSerializer.DEFAULT, "comment", l("#c1","#c2"));
 
-		assertEquals("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|", pipedLines(c));
+		assertEquals("#c1|#c2|a1 = (foo=bar) # comment|#c1|#c2|a2 = (foo=bar) # comment|#c1|#c2|a3 = (foo=bar) # comment|[S]|#c1|#c2|b1 = (foo=bar) # comment|#c1|#c2|b2 = (foo=bar) # comment|[T]|#c1|#c2|c1 = (foo=bar) # comment|", pipedLines(c));
 		c.commit();
-		assertEquals("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|", pipedLines(c));
+		assertEquals("#c1|#c2|a1 = (foo=bar) # comment|#c1|#c2|a2 = (foo=bar) # comment|#c1|#c2|a3 = (foo=bar) # comment|[S]|#c1|#c2|b1 = (foo=bar) # comment|#c1|#c2|b2 = (foo=bar) # comment|[T]|#c1|#c2|c1 = (foo=bar) # comment|", pipedLines(c));
 		c = cb.build();
-		assertEquals("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|", pipedLines(c));
+		assertEquals("#c1|#c2|a1 = (foo=bar) # comment|#c1|#c2|a2 = (foo=bar) # comment|#c1|#c2|a3 = (foo=bar) # comment|[S]|#c1|#c2|b1 = (foo=bar) # comment|#c1|#c2|b2 = (foo=bar) # comment|[T]|#c1|#c2|c1 = (foo=bar) # comment|", pipedLines(c));
 
 		assertEquals("(foo=bar)", c.get("a1").get());
 		assertEquals("(foo=bar)", c.get("a2").get());
@@ -217,15 +216,14 @@ class Config_Test extends TestBase {
 		var b = new ABean().init();
 
 		// Equivalent 6-arg call.
-		c.set("a1", b, UonSerializer.DEFAULT, "*", "comment", l("#c1", "#c2"));
+		c.set("a1", b, UonSerializer.DEFAULT, "comment", l("#c1", "#c2"));
 		// Fluent equivalent - each facet expressed explicitly.
-		c.entry("a2").serializer(UonSerializer.DEFAULT).modifiers("*").comment("comment").preLines(l("#c1", "#c2")).set(b);
+		c.entry("a2").serializer(UonSerializer.DEFAULT).comment("comment").preLines(l("#c1", "#c2")).set(b);
 
 		// Both paths produce an identical stored result.
 		var e1 = c.get("a1");
 		var e2 = c.get("a2");
 		assertEquals(e1.getValue(), e2.getValue());
-		assertEquals(e1.getModifiers(), e2.getModifiers());
 		assertEquals(e1.getComment(), e2.getComment());
 		assertEquals(e1.getPreLines(), e2.getPreLines());
 		assertEquals("(foo=bar)", e2.get());
@@ -257,7 +255,7 @@ class Config_Test extends TestBase {
 		var c = init("a1=1", "[S]", "b1=1");
 
 		var b = new ABean().init();
-		c.entry("a1").serializer(UonSerializer.DEFAULT).modifiers("*").comment("comment").preLines(l("#c1", "#c2")).set(b);
+		c.entry("a1").serializer(UonSerializer.DEFAULT).comment("comment").preLines(l("#c1", "#c2")).set(b);
 		c.entry("S/b1").serializer(UonSerializer.DEFAULT).comment("comment2").set(b);
 
 		var before = pipedLines(c);
@@ -318,6 +316,14 @@ class Config_Test extends TestBase {
 		assertEquals("", c.get("S/b2").as(String.class).orElse(null));
 		assertEquals(null, c.get("S/b3").as(String.class).orElse(null));
 		assertEquals(null, c.get("T/c1").as(String.class).orElse(null));
+	}
+
+	@Test void b07b_getRaw_doesNotResolveVariables() {
+		var c = init("a1=${S:user.dir}", "[S]", "b1=x");
+
+		assertEquals("${S:user.dir}", c.getRaw("a1"));
+		assertEquals("x", c.getRaw("S/b1"));
+		assertNull(c.getRaw("S/b2"));
 	}
 
 	//====================================================================================================
@@ -1126,49 +1132,6 @@ class Config_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// testEncodedValues
-	//====================================================================================================
-	@Test void a03_encodedValues() throws Exception {
-		var cf = init(
-			"[s1]", "", "foo<*> = "
-		);
-
-		cf.set("s1/foo", "mypassword");
-
-		assertEquals("mypassword", cf.get("s1/foo").get());
-
-		cf.commit();
-
-		assertEquals("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|", pipedLines(cf));
-
-		assertEquals("mypassword", cf.get("s1/foo").get());
-
-		cf.load(reader("[s1]\nfoo<*> = mypassword2\n"), true);
-
-		assertEquals("mypassword2", cf.get("s1/foo").get());
-
-		cf.set("s1/foo", "mypassword");
-
-		// INI output should be encoded
-		var sw = new StringWriter();
-		cf.writeTo(new PrintWriter(sw));
-		assertEquals("[s1]|foo<*> = {AwwJVhwUQFZEMg==}|", pipedLines(sw));
-	}
-
-	//====================================================================================================
-	// public Config encodeEntries()
-	//====================================================================================================
-	@Test void a04_encodeEntries() throws Exception {
-		var cf = init(
-			"[s1]", "", "foo<*> = mypassword"
-		);
-
-		cf.applyMods();
-		cf.commit();
-		assertEquals("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|", pipedLines(MemoryStore.DEFAULT.read("Test.cfg")));
-	}
-
-	//====================================================================================================
 	// testVariables
 	//====================================================================================================
 	@Test void a05_variables() {
@@ -1194,36 +1157,19 @@ class Config_Test extends TestBase {
 		assertEquals("123", cf.get("s1/f2").get());
 		assertEquals("bar", cf.get("s1/f3").get());
 
+		// Values from system properties are not re-resolved.
 		System.setProperty("foo", "${S:bar}");
 		System.setProperty("bar", "baz");
-		assertEquals("baz", cf.get("s1/f1").get());
-		assertEquals("baz", cf.get("s1/f2").get());
+		assertEquals("${S:bar}", cf.get("s1/f1").get());
+		assertEquals("${S:bar}", cf.get("s1/f2").get());
 		assertEquals("bar", cf.get("s1/f3").get());
 
 		System.setProperty("bing", "${S:foo}");
-		assertEquals("baz", cf.get("s1/f3").get());
+		assertEquals("${S:foo}", cf.get("s1/f3").get());
 
 		System.setProperty("baz", "foo");
 		System.setProperty("foo", "123");
 		assertEquals("123", cf.get("s1/f3").get());
-	}
-
-	//====================================================================================================
-	// testXorEncoder
-	//====================================================================================================
-	@Test void a06_xorEncoder() {
-		testXor("foo");
-		testXor("");
-		testXor("123");
-		testXor("€");  // 3-byte UTF-8 character
-		testXor("𤭢"); // 4-byte UTF-8 character
-	}
-
-	private static void testXor(String in) {
-		var e = new XorEncodeMod();
-		var s = e.apply(in);
-		var s2 = e.remove(s);
-		assertEquals(in, s2);
 	}
 
 	//====================================================================================================
@@ -1338,17 +1284,17 @@ class Config_Test extends TestBase {
 
 		// Encoded
 		changes.clear();
-		cf.set("a4", "4", null, "*", null, null);
-		cf.set("B/b4", "4", null, "*", null, null);
+		cf.set("a4", "4", null, null, null);
+		cf.set("B/b4", "4", null, null, null);
 		cf.commit();
-		assertJson("['a4={Wg==}','B/b4={Wg==}']", changes);
+		assertJson("['a4=4','B/b4=4']", changes);
 
 		// Encoded overwrite
 		changes.clear();
 		cf.set("a4", "5");
 		cf.set("B/b4", "5");
 		cf.commit();
-		assertJson("['a4={Ww==}','B/b4={Ww==}']", changes);
+		assertJson("['a4=5','B/b4=5']", changes);
 
 		// Remove entries
 		changes.clear();
@@ -1565,7 +1511,7 @@ class Config_Test extends TestBase {
 		assertEquals("a,#b,=c", cf.get("a").get());
 		assertEquals("a,#b,=c", cf.get("A/a").get());
 
-		cf.set("a", "a,#b,=c", null, null, "comment#comment", null);
+		cf.set("a", "a,#b,=c", null, "comment#comment", null);
 		assertEquals("a = a,\\u0023b,=c # comment#comment|[A]|a = a,\\u0023b,=c|", pipedLines(cf));
 		assertEquals("a,#b,=c", cf.get("a").get());
 	}
@@ -1596,7 +1542,7 @@ class Config_Test extends TestBase {
 		assertJson("['foo.txt']", Config.getCandidateSystemDefaultConfigNames());
 
 		System.clearProperty("juneau.configFile");
-		assertJson("['test.cfg','juneau.cfg','default.cfg','application.cfg','app.cfg','settings.cfg','application.properties']", Config.getCandidateSystemDefaultConfigNames());
+		assertJson("['juneau.cfg','default.cfg','application.cfg','app.cfg','settings.cfg','application.properties']", Config.getCandidateSystemDefaultConfigNames());
 	}
 
 	//====================================================================================================
@@ -1764,16 +1710,15 @@ class Config_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Entry.getComment(), getKey(), getModifiers(), getPreLines(), getValue()
+	// Entry.getComment(), getKey(), getPreLines(), getValue()
 	//====================================================================================================
 
 	@Test void a34_entryMetadataGetters() throws Exception {
 		var c = init();
-		c.set("a", "hello", null, "*", "my comment", l("#preline"));
+		c.set("a", "hello", null, "my comment", l("#preline"));
 		var entry = c.get("a");
 		assertEquals("a", entry.getKey());
 		assertEquals("my comment", entry.getComment());
-		assertEquals("*", entry.getModifiers());
 		assertSize(1, entry.getPreLines());
 		assertEquals("#preline", entry.getPreLines().get(0));
 		assertNotNull(entry.getValue());
@@ -2084,18 +2029,6 @@ class Config_Test extends TestBase {
 			.rollback();
 		c.set("a", List.of("x", "y", "z"));
 		assertNotNull(c.get("a").orElse(null));
-	}
-
-	@Test void a66_applyMods_nullBranches() {
-		var c = init();
-		assertEquals("x", c.applyMods(null, "x"));
-		assertEquals(null, c.applyMods("x", null));
-	}
-
-	@Test void a67_removeMods_nullBranches() {
-		var c = init();
-		assertEquals("x", c.removeMods(null, "x"));
-		assertEquals(null, c.removeMods("x", null));
 	}
 
 	@Test void a68_setSystemProperties() throws Exception {

@@ -38,6 +38,12 @@ class TerminalMixin_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 		static final Map<String,TerminalSource> SOURCES = new ConcurrentHashMap<>();
 		static final List<String> RESOLVED = new CopyOnWriteArrayList<>();
+		static final Set<String> DENIED = ConcurrentHashMap.newKeySet();
+
+		@Override
+		public TerminalAccess terminalAccess() {
+			return (caller, id) -> ! DENIED.contains(id);
+		}
 
 		@Override
 		public Optional<TerminalSource> terminalSource(String id, RestRequest req) {
@@ -60,6 +66,7 @@ class TerminalMixin_Test extends TestBase {
 	}
 
 	@BeforeEach void clear() {
+		R.DENIED.clear();
 		R.RESOLVED.clear();
 	}
 
@@ -68,6 +75,15 @@ class TerminalMixin_Test extends TestBase {
 		assertEquals("/juneau-terminal/{id}/raw", TerminalMixin.RAW_PATH);
 		assertEquals("/juneau-terminal.js", TerminalMixin.JS_PATH);
 		assertEquals("/juneau-terminal.css", TerminalMixin.CSS_PATH);
+	}
+
+	@Test void b00_deniedCallerGets404OnBytesAndRaw() throws Exception {
+		R.DENIED.add("t1");
+		c.get("/juneau-terminal/t1/raw").run().assertStatus(404);
+		c.get("/juneau-terminal/t1/bytes?from=0").run().assertStatus(404);
+		assertTrue(R.RESOLVED.isEmpty());
+		R.DENIED.clear();
+		c.get("/juneau-terminal/t1/raw").run().assertStatus(200);
 	}
 
 	@Test void b01_bytesAndHeaders() throws Exception {

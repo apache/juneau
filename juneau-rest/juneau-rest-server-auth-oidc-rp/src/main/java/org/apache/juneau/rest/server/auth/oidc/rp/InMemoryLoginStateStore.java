@@ -35,8 +35,9 @@ import java.util.*;
  * 		guarantees single-use within one JVM.
  * 	<li><b>TTL-bounded</b> &mdash; entries at or past their framework-minted {@code expiresAt} are treated as a
  * 		miss and swept.
- * 	<li><b>Size-bounded</b> &mdash; an LRU cap (default 10 000) prevents unbounded growth from abandoned
- * 		login attempts; eviction mirrors the {@code BoundedLruTokenCache} shape.
+ * 	<li><b>Size-bounded</b> &mdash; a cap (default 10 000) prevents unbounded growth from abandoned
+ * 		login attempts.  When the store is full of unexpired entries, new logins are rejected (the store throws)
+ * 		rather than evicting pending ones, so in-flight logins cannot be displaced by a flood.
  * </ul>
  *
  * <p>
@@ -69,7 +70,7 @@ public class InMemoryLoginStateStore implements LoginStateStore {
 	 * @param ttl The single-use TTL.  Must be positive and not exceed {@link LoginStateStore#MAX_TTL}.  Bounds
 	 * 	sweep of abandoned entries and asserts the framework ceiling for the default path; per-entry expiry is
 	 * 	driven by the framework-minted {@link LoginStateStore.PendingLogin#expiresAt()}.
-	 * @param maxEntries The LRU size cap.  Must be positive.
+	 * @param maxEntries The size cap.  Must be positive.
 	 * @param clock The clock for TTL sweeping.  Must not be <jk>null</jk>.
 	 */
 	public InMemoryLoginStateStore(Duration ttl, int maxEntries, Clock clock) {
@@ -79,13 +80,7 @@ public class InMemoryLoginStateStore implements LoginStateStore {
 		req(maxEntries > 0, "maxEntries must be positive (was %s)", maxEntries);
 		this.maxEntries = maxEntries;
 		this.clock = reqnn("clock", clock);
-		this.entries = new LinkedHashMap<>(16, 0.75f, true) {
-			private static final long serialVersionUID = 1L;
-			@Override
-			protected boolean removeEldestEntry(Map.Entry<String,PendingLogin> eldest) {
-				return size() > InMemoryLoginStateStore.this.maxEntries;
-			}
-		};
+		this.entries = new HashMap<>();
 	}
 
 	@Override /* LoginStateStore */
@@ -95,6 +90,8 @@ public class InMemoryLoginStateStore implements LoginStateStore {
 		var now = clock.instant();
 		synchronized (lock) {
 			sweepExpired(now);
+			if (entries.size() >= maxEntries && ! entries.containsKey(state))
+				throw new IllegalStateException("Login state store is full");
 			entries.put(state, pending);
 		}
 	}

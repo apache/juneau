@@ -62,7 +62,7 @@ class SamlAssertionValidator_Metadata_Test extends TestBase {
 	private SamlAssertionValidator validator(String metadataXml, Clock clock) throws Exception {
 		var file = tmp.resolve("metadata.xml");
 		Files.writeString(file, metadataXml, StandardCharsets.UTF_8);
-		return SamlAssertionValidator.create()
+		return SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.metadataResolver(SamlMetadataResolvers.file(file))

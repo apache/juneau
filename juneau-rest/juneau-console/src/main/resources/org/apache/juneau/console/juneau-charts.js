@@ -1505,7 +1505,7 @@
 
 	// ---- J1. chrome: caption, banner, plot, overlay, the data table ----
 
-	function chrome(st) {
+	function chrome(st) { // NOSONAR javascript:S3776 - linear DOM assembly of one chart card; splitting adds no clarity
 		const doc = st.ctx.document, card = st.card;
 		disposeInst(st);
 		clear(st.body);

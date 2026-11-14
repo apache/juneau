@@ -471,7 +471,7 @@ public class JwtTokenValidator implements TokenValidator {
 
 		var subject = claims.getSubject();
 		if (isBlank(subject))
-			subject = "<no-sub>";
+			throw reject("\"sub\" claim is required");
 		return new ClaimsPrincipal(subject, claims.toJSONObject());
 	}
 

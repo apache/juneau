@@ -114,8 +114,8 @@ class WwwAuthenticateChallenge_Test extends TestBase {
 	}
 
 	@Test void c04_leadingAndRepeatedSeparatorsTolerated() {
-		var c = WwwAuthenticateChallenge.parse("Bearer ,, ,error=x").orElseThrow();
-		assertEquals("x", c.error().orElseThrow());
+		var c = WwwAuthenticateChallenge.parse("Bearer ,, ,error=invalid_token").orElseThrow();
+		assertEquals("invalid_token", c.error().orElseThrow());
 	}
 
 	@Test void c05_emptyBareValueAtEndOfInput() {
@@ -124,14 +124,20 @@ class WwwAuthenticateChallenge_Test extends TestBase {
 	}
 
 	@Test void c06_firstDuplicateParamWins() {
-		var c = WwwAuthenticateChallenge.parse("Bearer error=first, error=second").orElseThrow();
-		assertEquals("first", c.error().orElseThrow());
+		var c = WwwAuthenticateChallenge.parse("Bearer error=invalid_token, error=invalid_request").orElseThrow();
+		assertEquals("invalid_token", c.error().orElseThrow());
 	}
 
 	@Test void c07_quotedValueHonorsEscapes() {
-		var c = WwwAuthenticateChallenge.parse("Bearer error_description=\"say \\\"hi\\\", ok\", error=x").orElseThrow();
+		var c = WwwAuthenticateChallenge.parse("Bearer error_description=\"say \\\"hi\\\", ok\", error=invalid_token").orElseThrow();
 		assertEquals("say \"hi\", ok", c.parameter("error_description").orElseThrow());
-		assertEquals("x", c.error().orElseThrow());
+		assertEquals("invalid_token", c.error().orElseThrow());
+	}
+
+	@Test void c07b_unknownErrorCodeIsNotSurfaced() {
+		var c = WwwAuthenticateChallenge.parse("Bearer error=\"<b>made_up</b>\"").orElseThrow();
+		assertTrue(c.error().isEmpty());
+		assertEquals("<b>made_up</b>", c.parameter("error").orElseThrow());
 	}
 
 	@Test void c08_trailingBackslashInQuotedValueKeptLiterally() {
@@ -153,5 +159,18 @@ class WwwAuthenticateChallenge_Test extends TestBase {
 	@Test void c13_scopesSplitOnAnyWhitespaceRun() {
 		var c = WwwAuthenticateChallenge.parse("Bearer scope=\"  read   write\t admin \"").orElseThrow();
 		assertEquals(List.of("read", "write", "admin"), List.copyOf(c.scopes()));
+	}
+
+	@Test void d01_parameterCountIsBounded() {
+		var sb = new StringBuilder("Bearer ");
+		for (var i = 0; i < 1000; i++)
+			sb.append("p").append(i).append("=v,");
+		var c = WwwAuthenticateChallenge.parse(sb.toString()).orElseThrow();
+		assertEquals(WwwAuthenticateChallenge.MAX_PARAMETERS, c.parameters().size());
+	}
+
+	@Test void d02_oversizedHeaderIsNotAChallenge() {
+		var header = "Bearer scope=\"" + "a".repeat(WwwAuthenticateChallenge.MAX_HEADER_LENGTH) + "\"";
+		assertTrue(WwwAuthenticateChallenge.parse(header).isEmpty());
 	}
 }

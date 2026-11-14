@@ -71,7 +71,7 @@ class BusWebSocketEndpoint_Test extends TestBase {
 	private boolean autoComplete = true;
 
 	@BeforeEach void setUp() throws Exception {
-		bus = ServerBus.create(BusPolicy.create()
+		bus = ServerBus.create(BusPolicy.create().anyCaller()
 			.downstream("ops.jobs", true)
 			.upstream("ops.cancel-all", (s, t, p) -> handled.add(p.get("reason")))
 			.allowedOrigins("https://ops.example.com")

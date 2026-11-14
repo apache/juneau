@@ -30,6 +30,11 @@ import jakarta.servlet.*;
  * The CSRF boundary for the admin resources {@link ConfigResource}, {@link LogsResource} and {@link ShutdownResource}.
  *
  * <p>
+ * This boundary is not authentication.  It checks the {@code Host} and {@code Origin} headers a browser sends; it does
+ * not identify the caller, and any client that is not a browser passes it.  The admin resources have no authentication
+ * of their own, so an application that mounts them must add its own, and must not expose them on an untrusted network.
+ *
+ * <p>
  * {@link #registration(String, String...)} returns a {@link ServletFilterRegistration} that puts the three resources
  * behind their own {@link CsrfBoundary}.  A write from another site's page is refused with {@code 403} and an
  * {@value RequestBoundaryFilter#REJECTION_HEADER} header naming the reason.  So is a write that a browser could

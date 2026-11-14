@@ -910,9 +910,14 @@ public class PathTraversal {
 		return null;	// Never gets here.
 	}
 
+	/** Maximum number of slots an array may be grown by a single set operation. */
+	private static final int MAX_ARRAY_GROWTH = 1000;
+
 	private Object[] setArrayEntry(Object o, int index, Object val, ClassMeta componentType) {
 		var a = (Object[])o;
 		if (a.length <= index) {
+			if (index - a.length > MAX_ARRAY_GROWTH)
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Array index %s is too far beyond the end of the array.", index);
 			// Expand out the array.
 			var a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), index + 1);
 			System.arraycopy(a, 0, a2, 0, a.length);

@@ -5498,6 +5498,32 @@ public class StringUtils {
 		return result;
 	}
 
+	/** Maximum length of a decimal string accepted by {@link #parseBigDecimal(String)}. */
+	private static final int MAX_BIG_DECIMAL_LENGTH = 1000;
+
+	/** Maximum magnitude of the decimal exponent accepted by {@link #parseBigDecimal(String)}. */
+	private static final int MAX_BIG_DECIMAL_EXPONENT = 10_000;
+
+	/**
+	 * Parses a decimal string into a {@link BigDecimal}, rejecting values that would be expensive to process.
+	 *
+	 * <p>
+	 * Strings longer than 1,000 characters, and values whose decimal exponent is larger than 10,000 in magnitude
+	 * (e.g. <js>"1e100000"</js>), are rejected.
+	 *
+	 * @param s The string to parse.  Must not be <jk>null</jk>.
+	 * @return The parsed value.
+	 * @throws NumberFormatException If the string is not a valid decimal, is too long, or has an exponent that is too large.
+	 */
+	public static BigDecimal parseBigDecimal(String s) {
+		if (s.length() > MAX_BIG_DECIMAL_LENGTH)
+			throw new NumberFormatException("Decimal value is too long.");
+		var bd = new BigDecimal(s);
+		if (Math.abs((long)bd.precision() - bd.scale() - 1) > MAX_BIG_DECIMAL_EXPONENT)
+			throw new NumberFormatException("Decimal exponent is out of range.");
+		return bd;
+	}
+
 	/**
 	 * Parses a number from the specified string.
 	 *
@@ -5564,7 +5590,7 @@ public class StringUtils {
 		if (type == Float.class || type == Float.TYPE)
 			return Float.valueOf(s);
 		if (type == BigDecimal.class)
-			return new BigDecimal(s);
+			return parseBigDecimal(s);
 		if (type == Long.class || type == Long.TYPE || type == AtomicLong.class) {
 			try {
 				var l = parseLongWithSuffix(s);

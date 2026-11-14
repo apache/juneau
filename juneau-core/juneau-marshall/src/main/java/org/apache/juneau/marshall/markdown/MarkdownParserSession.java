@@ -155,6 +155,16 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * @throws ParseException If parsing fails.
 	 */
 	protected <T> T readAnything(List<String> lines, ClassMeta<T> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException {
+		enterParseDepth();
+		try {
+			return readAnything0(lines, eType, outer, pMeta);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	// Workhorse method, wrapped by readAnything() with the recursion-depth guard.
+	private <T> T readAnything0(List<String> lines, ClassMeta<T> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException {
 		if (eType == null)
 			eType = (ClassMeta<T>) object();
 

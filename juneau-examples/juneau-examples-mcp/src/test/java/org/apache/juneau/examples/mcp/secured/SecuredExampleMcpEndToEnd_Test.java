@@ -221,7 +221,7 @@ class SecuredExampleMcpEndToEnd_Test extends TestBase {
 		var prmUrl = server.getRootUrl().resolve(".well-known/oauth-protected-resource");
 		var response = http.send(HttpRequest.newBuilder(prmUrl).GET().build(), HttpResponse.BodyHandlers.ofString());
 		assertEquals(200, response.statusCode());
-		var prm = McpProtectedResourceMetadataClient.create().build().parse(response.body(), prmUrl);
+		var prm = McpProtectedResourceMetadataClient.create().expectedResource(server.getRootUrl()).build().parse(response.body(), prmUrl);
 		assertEquals(server.getRootUrl(), prm.resource());
 		assertEquals(List.of(server.getAuthServer().issuerUri()), prm.authorizationServers());
 		// H3: addOperationScope(...) also advertises mcp.write as supported, on top of the mcp.read baseline.

@@ -144,13 +144,13 @@ public class SseSerializerSession extends WriterSerializerSession implements Rec
 		if (e == null)
 			return;
 		if (!isEmpty(e.getEvent()))
-			writeField(w, "event", e.getEvent());
+			writeField(w, "event", stripLineBreaks(e.getEvent()));
 		if (e.getData() != null) {
 			for (var line : splitData(e.getData()))
 				writeField(w, "data", line);
 		}
 		if (e.getId() != null)
-			writeField(w, "id", e.getId());
+			writeField(w, "id", stripLineBreaks(e.getId()));
 		if (e.getRetry() != null)
 			w.write("retry: " + e.getRetry() + "\n");
 		w.write("\n");
@@ -165,7 +165,11 @@ public class SseSerializerSession extends WriterSerializerSession implements Rec
 	}
 
 	static List<String> splitData(String s) {
-		var parts = s.split("\n", -1);
+		var parts = s.split("\r\n|\r|\n", -1);
 		return Arrays.asList(parts);
+	}
+
+	private static String stripLineBreaks(String s) {
+		return s.replace("\r", "").replace("\n", "");
 	}
 }

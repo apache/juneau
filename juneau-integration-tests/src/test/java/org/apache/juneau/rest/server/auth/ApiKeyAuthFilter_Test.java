@@ -51,7 +51,7 @@ class ApiKeyAuthFilter_Test extends TestBase {
 
 	private static HttpServletRequest reqWithQuery(String param, String value) {
 		var r = mock(HttpServletRequest.class);
-		when(r.getParameter(param)).thenReturn(value);
+		when(r.getQueryString()).thenReturn(value == null ? null : param + "=" + value);
 		when(r.getCookies()).thenReturn(null);
 		return r;
 	}

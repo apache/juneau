@@ -23,6 +23,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Represents a single entry in a configuration.
@@ -33,12 +34,11 @@ import org.apache.juneau.commons.lang.*;
  * @param key The name of this entry.
  * @param value The raw value of this entry.
  * @param comment The same-line comment of this entry, or <jk>null</jk> if it has no comment.
- * @param modifiers The modifiers for this entry, or <jk>null</jk> if it has no modifiers.
  * @param preLines The pre-lines of this entry as an unmodifiable list.
  */
-public record ConfigMapEntry(String rawLine, String key, String value, String comment, String modifiers, List<String> preLines) {
+public record ConfigMapEntry(String rawLine, String key, String value, String comment, List<String> preLines) {
 
-	static final ConfigMapEntry NULL = new ConfigMapEntry(null, null, null, null, null, null);
+	static final ConfigMapEntry NULL = new ConfigMapEntry(null, null, null, null, null);
 	private static final AsciiSet REPLACE_CHARS = AsciiSet.of("\\#");
 
 	/**
@@ -56,12 +56,11 @@ public record ConfigMapEntry(String rawLine, String key, String value, String co
 	 *
 	 * @param key The name of this entry.
 	 * @param value The raw value of this entry.
-	 * @param modifiers The modifiers for this entry, or <jk>null</jk> if it has no modifiers.
 	 * @param comment The same-line comment of this entry, or <jk>null</jk> if it has no comment.
 	 * @param preLines The pre-lines of this entry.  Can be <jk>null</jk> (treated as an empty list).
 	 */
-	ConfigMapEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
-		this(null, key, value, comment, modifiers, preLines);
+	ConfigMapEntry(String key, String value, String comment, List<String> preLines) {
+		this(null, key, value, comment, preLines);
 	}
 
 	/**
@@ -77,8 +76,9 @@ public record ConfigMapEntry(String rawLine, String key, String value, String co
 
 		var m1 = key2.indexOf('<');
 		var m2 = key2.indexOf('>');
+		if (m1 > -1 && m2 > m1)
+			throw new ConfigException("Entry modifiers were removed in 10.0 (found on entry '%s'); use ${SEC:...} for secrets instead.", key2.substring(0, m1).trim());
 
-		var modifiers = nie((m1 > -1 && m2 > m1) ? key2.substring(m1 + 1, m2) : null);
 		var key = m1 == -1 ? key2 : key2.substring(0, m1);
 
 		var rest = line.substring(i + 1);
@@ -93,7 +93,7 @@ public record ConfigMapEntry(String rawLine, String key, String value, String co
 
 		var value = replaceUnicodeSequences(rest.trim());
 
-		return new ConfigMapEntry(line, key, value, comment, modifiers, preLines);
+		return new ConfigMapEntry(line, key, value, comment, preLines);
 	}
 
 	/**
@@ -109,13 +109,6 @@ public record ConfigMapEntry(String rawLine, String key, String value, String co
 	 * @return The name of this entry.
 	 */
 	public String getKey() { return key; }
-
-	/**
-	 * Returns the modifiers for this entry.
-	 *
-	 * @return The modifiers for this entry, or <jk>null</jk> if it has no modifiers.
-	 */
-	public String getModifiers() { return modifiers; }
 
 	/**
 	 * Returns the pre-lines of this entry.
@@ -150,8 +143,6 @@ public record ConfigMapEntry(String rawLine, String key, String value, String co
 			w.append('\n');
 		} else {
 			w.append(key);
-			if (nn(modifiers))
-				w.append('<').append(modifiers).append('>');
 			w.append(" = ");
 
 			var val = value;

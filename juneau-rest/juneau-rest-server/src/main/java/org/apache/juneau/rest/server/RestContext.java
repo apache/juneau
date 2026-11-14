@@ -82,6 +82,7 @@ import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.config.*;
+import org.apache.juneau.rest.server.filter.*;
 import org.apache.juneau.rest.server.httppart.*;
 import org.apache.juneau.rest.server.logging.*;
 import org.apache.juneau.rest.server.metrics.*;
@@ -135,6 +136,13 @@ import jakarta.servlet.http.*;
  *
  * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
+ * 	<li class='note'>
+ * 		No authentication, authorization or CSRF filter is registered by default; those are opt-in
+ * 		(see {@link CsrfBoundary} and the auth modules).
+ * 		The one default request check is the cross-site refusal for unsafe methods:  a request using a method other
+ * 		than <c>GET</c>, <c>HEAD</c>, <c>OPTIONS</c> or <c>TRACE</c> is answered with a <c>403</c> when the browser marks it
+ * 		<c>Sec-Fetch-Site: cross-site</c>, or when its <c>Origin</c> does not match the <c>Host</c>.
+ * 		It is on unless {@link Rest#allowCrossSite()} is set, and {@link Rest#allowedOrigins()} lists trusted origins.
  * </ul>
  *
  * <h2 class='section'>See Also:</h2><ul>
@@ -3203,7 +3211,7 @@ public class RestContext extends Context {
 
 	/**
 	 * Header names that may be passed via URL query parameter; resolved from {@code @Rest(allowedHeaderParams)},
-	 * default {@code "Accept,Content-Type"}.
+	 * default {@code "Accept"}.
 	 */
 	private final Memoizer<Set<String>> allowedHeaderParams = memoizer(() ->
 		u(newCaseInsensitiveSet(mergeReplacedStringAttribute("allowedHeaderParams", getRestContextProperties().getAllowedHeaderParams()))));
@@ -3216,6 +3224,13 @@ public class RestContext extends Context {
 		u(newCaseInsensitiveSet(mergeReplacedStringAttribute("allowedMethodHeaders", getRestContextProperties().getAllowedMethodHeaders()))));
 
 	/**
+	 * Response header names a client may request via {@code x-response-headers}; resolved from
+	 * {@code @Rest(allowedResponseHeaders)}, default empty (feature off).
+	 */
+	private final Memoizer<Set<String>> allowedResponseHeaders = memoizer(() ->
+		u(newCaseInsensitiveSet(mergeReplacedStringAttribute("allowedResponseHeaders", ""))));
+
+	/**
 	 * HTTP method names that may be specified via URL query parameter; resolved from {@code @Rest(allowedMethodParams)},
 	 * default {@code "HEAD,OPTIONS"}.
 	 */
@@ -3223,11 +3238,24 @@ public class RestContext extends Context {
 		u(newCaseInsensitiveSet(mergeReplacedStringAttribute("allowedMethodParams", getRestContextProperties().getAllowedMethodParams()))));
 
 	/**
-	 * Whether a {@code &content=} URL parameter may override the request body; inverse of
-	 * {@code @Rest(disableContentParam)}.
+	 * Whether a {@code &content=} URL parameter may override the request body; resolved from
+	 * {@code @Rest(allowContentParam)}, default {@code false}.
 	 */
 	private final Memoizer<Boolean> allowContentParam = memoizer(() ->
-		!mergeReplacedBooleanAttribute("disableContentParam", resolveBooleanDefault(getRestContextProperties().getDisableContentParamRaw())));
+		mergeReplacedBooleanAttribute("allowContentParam", resolveBooleanDefault(getRestContextProperties().getAllowContentParamRaw())));
+
+	/**
+	 * Whether cross-site requests using unsafe methods are allowed; resolved from
+	 * {@code @Rest(allowCrossSite)}, default {@code false}.
+	 */
+	private final Memoizer<Boolean> allowCrossSite = memoizer(() ->
+		mergeReplacedBooleanAttribute("allowCrossSite", false));
+
+	/**
+	 * Trusted origins for the cross-site check; resolved from {@code @Rest(allowedOrigins)}, default empty.
+	 */
+	private final Memoizer<Set<String>> allowedOrigins = memoizer(() ->
+		u(newCaseInsensitiveSet(mergeReplacedStringAttribute("allowedOrigins", ""))));
 
 	/**
 	 * Whether exception stack traces are rendered in error responses; resolved from
@@ -3996,6 +4024,19 @@ public class RestContext extends Context {
 	public Set<String> getAllowedMethodHeaders() { return allowedMethodHeaders.get(); }
 
 	/**
+	 * Allowed response headers.
+	 *
+	 * <h4 class='section'>See Also:</h4><ul>
+	 * 	<li class='ja'>{@link Rest#allowedResponseHeaders}
+	 * </ul>
+	 *
+	 * @return
+	 * 	The header names a client may ask the server to add to the response via <c>x-response-headers</c>.
+	 * 	<br>The set is case-insensitive ordered and unmodifiable; empty by default.
+	 */
+	public Set<String> getAllowedResponseHeaders() { return allowedResponseHeaders.get(); }
+
+	/**
 	 * Allowed method URL parameters.
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -4717,12 +4758,34 @@ public class RestContext extends Context {
 	 * an endpoint's real <c>Content-Type</c> gate.
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
-	 * 	<li class='ja'>{@link Rest#disableContentParam()}
+	 * 	<li class='ja'>{@link Rest#allowContentParam()}
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
 	 */
 	public boolean isAllowContentParam() { return allowContentParam.get(); }
+
+	/**
+	 * Whether cross-site requests using unsafe methods are allowed.
+	 *
+	 * <h4 class='section'>See Also:</h4><ul>
+	 * 	<li class='ja'>{@link Rest#allowCrossSite()}
+	 * </ul>
+	 *
+	 * @return <jk>true</jk> if cross-site requests are not refused.
+	 */
+	public boolean isAllowCrossSite() { return allowCrossSite.get(); }
+
+	/**
+	 * Origins trusted by the cross-site check.
+	 *
+	 * <h4 class='section'>See Also:</h4><ul>
+	 * 	<li class='ja'>{@link Rest#allowedOrigins()}
+	 * </ul>
+	 *
+	 * @return An unmodifiable case-insensitive set of origins.  Never <jk>null</jk>.
+	 */
+	public Set<String> getAllowedOrigins() { return allowedOrigins.get(); }
 
 	/**
 	 * Returns whether it's safe to render stack traces in HTTP responses.
@@ -5113,6 +5176,10 @@ public class RestContext extends Context {
 	 * 		<js>"Query execution failed."</js>; the original exception (and its cause) stays attached for logging.
 	 * 	<li><js>"*AccessDenied*"</js> - Converted to {@link Unauthorized}.
 	 * 	<li><js>"*Empty*"</js>,<js>"*NotFound*"</js> - Converted to {@link NotFound}.
+	 * 	<li>Any other exception - Converted to {@link InternalServerError} with the generic message
+	 * 		<js>"Internal Server Error."</js>; the original exception stays attached as the cause.
+	 * 		Returned unchanged when {@link #isRenderResponseStackTraces()} is enabled, or when the throwable is a
+	 * 		problem-details exception, a legacy HTTP response exception, or has a registered {@link ProblemMapper}.
 	 * </ul>
 	 *
 	 * @param t The thrown object.
@@ -5152,7 +5219,36 @@ public class RestContext extends Context {
 		if (co(n, "Empty") || co(n, "NotFound"))
 			return new NotFound(t);
 
-		return t;
+		// Any other exception is an unplanned failure: its class name and message were never written for a client audience,
+		// so hide them behind a generic 500 (the original stays attached as the cause for logging and for RRPC).
+		if (isRenderResponseStackTraces() || isIntentionalResponse(t))
+			return t;
+		return new InternalServerError(t, "Internal Server Error.");
+	}
+
+	private static final Class<?> LEGACY_HTTP_RESPONSE = loadClassOrNull("org.apache.http.HttpResponse");
+
+	private static Class<?> loadClassOrNull(String name) {
+		try {
+			return Class.forName(name);
+		} catch (ClassNotFoundException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the throwable is itself a response the application chose to send (a problem-details
+	 * exception, a legacy HTTP response exception, or a type with a registered problem mapper) rather than an unplanned failure.
+	 */
+	private boolean isIntentionalResponse(Throwable t) {
+		if (t instanceof ProblemException || (nn(LEGACY_HTTP_RESPONSE) && LEGACY_HTTP_RESPONSE.isInstance(t)))
+			return true;
+		var bs = getBeanStore();
+		var list = bs.getBean(ProblemMapperList.class).map(ProblemMapperList::asList).orElse(List.of());
+		for (var m : list)
+			if (m.getExceptionType().isInstance(t))
+				return true;
+		return list.isEmpty() && bs.getBean(ProblemMapper.class).map(m -> m.getExceptionType().isInstance(t)).orElse(false);
 	}
 
 	/**
@@ -5386,7 +5482,8 @@ public class RestContext extends Context {
 	 * @param rpcDispatch {@code true} if the call being reported on is an RRPC dispatch (see
 	 * 	{@link #isRpcDispatch(RestSession)}), in which case the header is included even when
 	 * 	{@code renderResponseStackTraces} is off, since the RRPC/{@code @Remote} client depends on it to
-	 * 	reconstruct the original exception type.
+	 * 	reconstruct the original exception type.  In that case only the exception class name is included; the
+	 * 	message is added only when {@code renderResponseStackTraces} is on.
 	 * @return The header to set, or {@code null} if none should be set (neither condition permits it, or
 	 * 	there's no distinct root cause to report).
 	 */
@@ -5394,7 +5491,12 @@ public class RestContext extends Context {
 		if (!renderResponseStackTraces && !rpcDispatch)
 			return null;
 		var t = e2.getRootCause();
-		return nn(t) ? Thrown.of(t) : null;
+		if (t == null)
+			return null;
+		if (renderResponseStackTraces)
+			return Thrown.of(t);
+		// RRPC callers need the exception class to rebuild it locally; the message text stays server-side.
+		return Thrown.of(urlEncode(UnmodifiableBean.logicalType(t).getName()) + ";");
 	}
 
 	/**
@@ -5638,9 +5740,12 @@ public class RestContext extends Context {
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a("allowContentParam", isAllowContentParam())
+			.a("allowCrossSite", isAllowCrossSite())
 			.a("allowedHeaderParams", getAllowedHeaderParams())
+			.a("allowedOrigins", getAllowedOrigins())
 			.a("allowedMethodHeaders", getAllowedMethodHeaders())
 			.a("allowedMethodParams", getAllowedMethodParams())
+			.a("allowedResponseHeaders", getAllowedResponseHeaders())
 			.a("beanStore", beanStore)
 			.a("clientVersionHeader", getClientVersionHeader())
 			.a("consumes", getConsumes())

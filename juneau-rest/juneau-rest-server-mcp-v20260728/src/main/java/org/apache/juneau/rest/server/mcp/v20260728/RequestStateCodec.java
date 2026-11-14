@@ -41,12 +41,11 @@ import org.apache.juneau.commons.concurrent.*;
  * <b>Trust model &mdash; {@code requestState} is a bearer token.</b> The sealed token is a replayable credential:
  * anyone who holds it can resume the paused operation until it expires, and it carries no caller identity. A
  * codec (and every call site) must treat it accordingly &mdash; transport only over authenticated TLS, and
- * <b>never log</b> a {@code requestState}. <b>Multi-use within TTL by default:</b> a captured token can be
- * replayed any number of times within its TTL unless an operator configures a {@link ReplayCache} (see
- * {@link McpMrtrConfig#setReplayCache(ReplayCache)}) to enforce single-use &mdash; the built-in
- * {@link InMemoryReplayCache} is per-process only, so cross-node single-use requires a shared implementation. A
- * handler must still write idempotent resume side effects unless it knows a single-use {@link ReplayCache} is in
- * effect; the max-rounds cap bounds chain depth, not replay count (see {@link McpMrtrConfig}).
+ * <b>never log</b> a {@code requestState}. <b>Single-use by default:</b> {@link McpMrtrConfig} wires an
+ * {@link InMemoryReplayCache} unless the operator replaces it (see {@link McpMrtrConfig#setReplayCache(ReplayCache)});
+ * it is per-process only, so cross-node single-use requires a shared implementation. With the check disabled a
+ * handler must write idempotent resume side effects; the max-rounds cap bounds chain depth, not replay count (see
+ * {@link McpMrtrConfig}).
  *
  * <p>
  * <b>Canonical AAD format.</b> The dispatcher binds each token to the request that produced it by passing a

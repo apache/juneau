@@ -44,7 +44,7 @@ class SamlAssertionValidator_Rejections_Test extends TestBase {
 	private static final Instant NOA = NOW.plusSeconds(300);
 
 	private static SamlAssertionValidator.Builder base(BasicCredential cred) {
-		return SamlAssertionValidator.create()
+		return SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
@@ -194,7 +194,7 @@ class SamlAssertionValidator_Rejections_Test extends TestBase {
 		sc.setMethod(SubjectConfirmation.METHOD_BEARER);
 		var xml = signedWithConfirmation(cred, sc);
 		var v = base(cred).build();
-		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml, ACS));
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertTrue(ex.getMessage().contains("SubjectConfirmationData> is missing"), ex.getMessage());
 	}
 
@@ -202,7 +202,7 @@ class SamlAssertionValidator_Rejections_Test extends TestBase {
 		var cred = cred();
 		var xml = signedWithConfirmation(cred, SamlTestSupport.bearerConfirmation(ACS, NOW.plusSeconds(600), NOA, null, null));
 		var v = base(cred).build();
-		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml, ACS));
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertTrue(ex.getMessage().contains("not yet valid"), ex.getMessage());
 	}
 
@@ -210,14 +210,14 @@ class SamlAssertionValidator_Rejections_Test extends TestBase {
 		var cred = cred();
 		var xml = signedWithConfirmation(cred, SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req1", null));
 		var v = base(cred).build();
-		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml, ACS));
-		assertTrue(ex.getMessage().contains("unsolicited"), ex.getMessage());
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
+		assertTrue(ex.getMessage().contains("outstanding request"), ex.getMessage());
 	}
 
 	@Test void d04_confirmationNotBeforeInWindow_accepted() throws Exception {
 		var cred = cred();
 		var xml = signedWithConfirmation(cred, SamlTestSupport.bearerConfirmation(ACS, NBF, NOA, null, null));
-		assertEquals("alice", base(cred).build().validate(xml, ACS).getName());
+		assertEquals("alice", base(cred).build().validate(xml).getName());
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

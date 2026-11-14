@@ -47,7 +47,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 		var xml = SamlTestSupport.buildSignedResponse(cred, ISSUER, AUDIENCE, "alice",
 			now.minusSeconds(60), now.plusSeconds(300), Map.of("dept", "engineering"));
 
-		var validator = SamlAssertionValidator.create()
+		var validator = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
@@ -69,7 +69,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 		var xml = SamlTestSupport.buildSignedResponse(cred, ISSUER, AUDIENCE, "alice",
 			past.minusSeconds(60), past, Map.of());
 
-		var validator = SamlAssertionValidator.create()
+		var validator = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
@@ -85,7 +85,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 		var xml = SamlTestSupport.buildSignedResponse(cred, ISSUER, "https://other.example.com", "alice",
 			now.minusSeconds(60), now.plusSeconds(300), Map.of());
 
-		var validator = SamlAssertionValidator.create()
+		var validator = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
@@ -101,7 +101,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 		var xml = SamlTestSupport.buildSignedResponse(cred, "https://malicious.example.com", AUDIENCE, "alice",
 			now.minusSeconds(60), now.plusSeconds(300), Map.of());
 
-		var validator = SamlAssertionValidator.create()
+		var validator = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
@@ -117,7 +117,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 		var xml = SamlTestSupport.buildSignedResponse(signing, ISSUER, AUDIENCE, "alice",
 			now.minusSeconds(60), now.plusSeconds(300), Map.of());
 
-		var validator = SamlAssertionValidator.create()
+		var validator = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(verifyingDifferent)
@@ -128,7 +128,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 
 	@Test void b05_malformedXml_rejected() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
-		var validator = SamlAssertionValidator.create()
+		var validator = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)

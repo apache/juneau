@@ -109,12 +109,12 @@ class ThymeleafView_TypedHandler_Test extends ViewIntegrationTestBase {
 
 		@RestGet("/thy-hello")
 		public View thyHello() {
-			return ThymeleafView.of("templates/hello.html").attr("name", "Alice");
+			return ThymeleafView.of("hello.html").attr("name", "Alice");
 		}
 
 		@RestGet("/fm-hello")
 		public View fmHello() {
-			return FreemarkerView.of("freemarker-templates/hello.ftlh").attr("name", "Alice");
+			return FreemarkerView.of("hello.ftlh").attr("name", "Alice");
 		}
 	}
 
@@ -144,7 +144,7 @@ class ThymeleafView_TypedHandler_Test extends ViewIntegrationTestBase {
 
 		@RestGet("/hello/{name}")
 		public View hello(@Path String name) {
-			return ThymeleafView.of("templates/hello.html").attr("name", name);
+			return ThymeleafView.of("hello.html").attr("name", name);
 		}
 	}
 
@@ -172,7 +172,7 @@ class ThymeleafView_TypedHandler_Test extends ViewIntegrationTestBase {
 
 		@RestGet("/hello")
 		public View hello() {
-			return ThymeleafView.of("templates/hello.html").attr("name", "Alice");
+			return ThymeleafView.of("hello.html").attr("name", "Alice");
 		}
 	}
 

@@ -104,7 +104,7 @@ class ApacheHc5Transport_RedirectCredentials_Test {
 		var client = run("http://a.example.com/cross");
 		assertList(uris(client), "http://a.example.com/cross", "http://b.example.com/echo");
 		assertList(headerNames(client.sent.get(0)), "Authorization", "Cookie", "X-Trace");
-		assertList(headerNames(client.sent.get(1)), "X-Trace");
+		assertList(headerNames(client.sent.get(1)));
 	}
 
 	@Test void a02_sameOriginRedirect_keepsCredentialHeaders() throws Exception {
@@ -134,13 +134,13 @@ class ApacheHc5Transport_RedirectCredentials_Test {
 	@Test void a04_apiKeyAndProxyAuthorizationOnly_crossOriginDropped() throws Exception {
 		var client = runWith("http://a.example.com/cross", "X-API-Key", "k-1", "Proxy-Authorization", "Basic abc", "X-Trace", "t-1");
 		assertList(uris(client), "http://a.example.com/cross", "http://b.example.com/echo");
-		assertList(headerNames(client.sent.get(1)), "X-Trace");
+		assertList(headerNames(client.sent.get(1)));
 	}
 
 	@Test void a05_mixedCaseNames_flaggedSensitiveAndDropped() throws Exception {
 		var client = runWith("http://a.example.com/cross", "x-api-key", "k-1", "PROXY-authorization", "Basic abc", "cOoKiE", "s=1", "X-Trace", "t-1");
 		assertList(sensitiveNames(client.sent.get(0)), "x-api-key", "PROXY-authorization", "cOoKiE");
-		assertList(headerNames(client.sent.get(1)), "X-Trace");
+		assertList(headerNames(client.sent.get(1)));
 	}
 
 	@Test void a06_apiKeyAndProxyAuthorizationOnly_sameOriginKept() throws Exception {

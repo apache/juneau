@@ -192,7 +192,7 @@ class McpTypedHandlers_Test {
 		var ctx = new BasicBeanStore();
 		var b = assertThrows(McpException.class, () -> a.call(arguments, ctx));
 		assertEquals(-32602, b.getCode());
-		assertContains(Args.class.getTypeName(), b.getMessage());
+		assertEquals("Invalid tool arguments.", b.getMessage());
 	}
 
 	@Test void c02_resultCanonicalizationAndBoundsAreInternalErrors() {

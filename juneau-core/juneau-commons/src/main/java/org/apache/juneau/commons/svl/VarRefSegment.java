@@ -163,6 +163,7 @@ final class VarRefSegment extends TemplateSegment {
 			if (replacement.indexOf('$') != -1 && v.allowRecurse())
 				replacement = session.resolveRecursive(replacement);
 		}
+		session.charge(replacement.length());
 		return session.applyHtmlDocChromeEncoding(prefix, replacement);
 	}
 

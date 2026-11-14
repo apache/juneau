@@ -127,7 +127,9 @@ final class OkHttpRedirectCredentialGuard implements Interceptor {
 			// downgraded to cleartext to the proxy).  Without a proxy, or when the proxy changed, it is stripped like the rest.
 			var keepProxyAuth = tag != null && proxyAddress != null && ! first.isHttps() && ! request.isHttps() && proxyAddress.equals(tag.proxyAddress);
 			Request.Builder b = null;
-			for (var name : RedirectSecurity.stripOnCrossOrigin()) {
+			for (var name : request.headers().names()) {
+				if (! RedirectSecurity.mustStrip(name, null))
+					continue;
 				if (keepProxyAuth && "Proxy-Authorization".equalsIgnoreCase(name))
 					continue;
 				var values = request.headers(name);

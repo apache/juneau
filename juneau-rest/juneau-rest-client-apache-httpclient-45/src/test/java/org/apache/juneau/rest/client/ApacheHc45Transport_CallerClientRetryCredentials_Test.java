@@ -46,7 +46,7 @@ import org.junit.jupiter.api.*;
 class ApacheHc45Transport_CallerClientRetryCredentials_Test {
 
 	private static final Map<String,String> ALL = Map.of("authorization", "Bearer secret-token", "cookie", "session=abc123", "x-api-key", "k-1", "x-trace", "t-1");
-	private static final Map<String,String> STRIPPED = Map.of("x-trace", "t-1");
+	private static final Map<String,String> STRIPPED = Map.of();
 
 	/** Scripted server: {@code script} gets the request path and returns a raw response, or {@code null} to drop the connection. */
 	private static final class Server implements AutoCloseable {

@@ -95,6 +95,13 @@ public class VarResolverSession {
 	private final WritableBeanStore beanStore;
 
 	private int recursionDepth;
+	private int resolveDepth;
+	private int budgetSegments;
+	private long budgetChars;
+
+	// Per top-level resolve() work caps: bound the total variable substitutions and the text they produce.
+	static final int MAX_SEGMENTS = 10_000;
+	static final long MAX_OUTPUT_CHARS = 1L << 20;
 
 	/** Number of {@code ${...}} references inside {@code #{...}} currently being resolved on this session. */
 	private int exprVarDepth;
@@ -314,7 +321,27 @@ public class VarResolverSession {
 			return null;
 		if (s.isEmpty())
 			return s;
-		return context.compile(s).resolve(this);
+		if (resolveDepth++ == 0) {
+			budgetSegments = 0;
+			budgetChars = 0;
+		}
+		try {
+			return context.compile(s).resolve(this);
+		} finally {
+			resolveDepth--;
+		}
+	}
+
+	/**
+	 * Charges one variable substitution of the given size against this resolve's work budget.
+	 *
+	 * @param chars The number of characters produced by the substitution.
+	 * @throws VarResolverException If the budget is exhausted.
+	 */
+	void charge(int chars) {
+		budgetChars += chars;
+		if (++budgetSegments > MAX_SEGMENTS || budgetChars > MAX_OUTPUT_CHARS)
+			throw new VarResolverException("Variable resolution work limit exceeded (%s substitutions, %s characters).", MAX_SEGMENTS, MAX_OUTPUT_CHARS);
 	}
 
 	/**

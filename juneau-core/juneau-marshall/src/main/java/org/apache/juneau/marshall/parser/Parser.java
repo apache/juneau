@@ -155,6 +155,7 @@ public class Parser extends MarshallingContextable {
 
 		private boolean autoCloseStreams;
 		private boolean trimStrings;
+		private boolean includeInputInErrors;
 		private boolean unbuffered;
 		private Class<? extends ParserListener> listener;
 		private int debugOutputLines;
@@ -167,6 +168,7 @@ public class Parser extends MarshallingContextable {
 		protected Builder() {
 			autoCloseStreams = env("Parser.autoCloseStreams", false);
 			trimStrings = env("Parser.trimStrings", false);
+			includeInputInErrors = env("Parser.includeInputInErrors", false);
 			unbuffered = env("Parser.unbuffered", false);
 			debugOutputLines = env("Parser.debugOutputLines", 5);
 			listener = null;
@@ -184,6 +186,7 @@ public class Parser extends MarshallingContextable {
 			super(copyFrom);
 			autoCloseStreams = copyFrom.autoCloseStreams;
 			trimStrings = copyFrom.trimStrings;
+			includeInputInErrors = copyFrom.includeInputInErrors;
 			unbuffered = copyFrom.unbuffered;
 			debugOutputLines = copyFrom.debugOutputLines;
 			listener = copyFrom.listener;
@@ -201,6 +204,7 @@ public class Parser extends MarshallingContextable {
 			super(copyFrom);
 			autoCloseStreams = copyFrom.autoCloseStreams;
 			trimStrings = copyFrom.trimStrings;
+			includeInputInErrors = copyFrom.includeInputInErrors;
 			unbuffered = copyFrom.unbuffered;
 			debugOutputLines = copyFrom.debugOutputLines;
 			listener = copyFrom.listener;
@@ -283,7 +287,8 @@ public class Parser extends MarshallingContextable {
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
 		 * 		.debug()  <jc>// Enable debug mode to capture Reader contents as strings.</jc>
-		 * 		.debugOuputLines(100)
+		 * 		.includeInputInErrors()  <jc>// Include the input lines around the error in exception messages.</jc>
+		 * 		.debugOutputLines(100)
 		 * 		.build();
 		 *
 		 * 	Reader <jv>myReader</jv> = <jk>new</jk> FileReader(<js>"/tmp/mybadfile.json"</js>);
@@ -323,6 +328,7 @@ public class Parser extends MarshallingContextable {
 				super.hashKey(),
 				autoCloseStreams,
 				trimStrings,
+				includeInputInErrors,
 				unbuffered,
 				debugOutputLines,
 				listener,
@@ -452,6 +458,35 @@ public class Parser extends MarshallingContextable {
 		 */
 		public SELF trimStrings() {
 			return trimStrings(true);
+		}
+
+		/**
+		 * Include input snippet in parse errors.
+		 *
+		 * <p>
+		 * When enabled, {@link ParseException} messages include the lines of input around the error location
+		 * (see {@link #debugOutputLines(int)}).
+		 * <br>The input is only available for <c>String</c>/<c>Reader</c>-style input, or when
+		 * {@link org.apache.juneau.marshall.Context.Builder#debug() debug} mode is enabled to capture it.
+		 *
+		 * <p>
+		 * Off by default because the input may contain sensitive data.  Debug mode alone does not enable it.
+		 *
+		 * @return This object.
+		 */
+		public SELF includeInputInErrors() {
+			return includeInputInErrors(true);
+		}
+
+		/**
+		 * Same as {@link #includeInputInErrors()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public SELF includeInputInErrors(boolean value) {
+			includeInputInErrors = value;
+			return self();
 		}
 
 		/**
@@ -591,6 +626,7 @@ public class Parser extends MarshallingContextable {
 
 	protected final boolean autoCloseStreams;
 	protected final boolean trimStrings;
+	protected final boolean includeInputInErrors;
 	protected final boolean unbuffered;
 	protected final int debugOutputLines;
 	protected final Class<? extends ParserListener> listener;
@@ -612,6 +648,7 @@ public class Parser extends MarshallingContextable {
 		debugOutputLines = builder.debugOutputLines;
 		listener = builder.listener;
 		trimStrings = builder.trimStrings;
+		includeInputInErrors = builder.includeInputInErrors;
 		unbuffered = builder.unbuffered;
 		nulls = builder.nulls == null ? Nulls.NOT_SET : builder.nulls;
 
@@ -1021,6 +1058,15 @@ public class Parser extends MarshallingContextable {
 	protected final boolean isTrimStrings() { return trimStrings; }
 
 	/**
+	 * Include input in errors.
+	 *
+	 * @see Parser.Builder#includeInputInErrors()
+	 * @return
+	 * 	<jk>true</jk> if {@link ParseException} messages include a snippet of the input around the error location.
+	 */
+	protected final boolean isIncludeInputInErrors() { return includeInputInErrors; }
+
+	/**
 	 * Returns the context-level {@link Nulls} default consulted at parse-time when no per-property
 	 * {@link MarshalledProp#nulls() @MarshalledProp(nulls=…)} is configured.
 	 *
@@ -1047,6 +1093,7 @@ public class Parser extends MarshallingContextable {
 			.a("listener", listener)
 			.a("nulls", nulls)
 			.a("trimStrings", trimStrings)
+			.a("includeInputInErrors", includeInputInErrors)
 			.a("unbuffered", unbuffered);
 	}
 }

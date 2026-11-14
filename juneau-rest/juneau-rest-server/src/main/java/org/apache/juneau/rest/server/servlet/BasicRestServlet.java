@@ -36,11 +36,11 @@ import org.apache.juneau.rest.server.ops.*;
  *
  * <p>
  * The residual cross-cutting endpoints are supplied by single-responsibility op-mixins ({@link ErrorMixin},
- * {@link HtdocMixin}, {@link StatsMixin}, and {@link FaviconMixin}), and the api-docs surface by the
+ * {@link HtdocMixin}, and {@link FaviconMixin}), and the api-docs surface by the
  * api-docs mixin pack ({@link SwaggerUiMixin} and {@link RedocMixin}, which transitively pull in
  * {@link SwaggerMixin} and {@link OpenApiMixin}). Resulting endpoints:
  * {@code /api}, {@code /swagger}, {@code /openapi}, {@code /openapi.json}, {@code /openapi.yaml},
- * {@code /redoc}, {@code /htdocs/*}, {@code /favicon.ico}, {@code /stats}, {@code /error}.
+ * {@code /redoc}, {@code /htdocs/*}, {@code /favicon.ico}, {@code /error}.
  *
  * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class</a>
@@ -49,13 +49,12 @@ import org.apache.juneau.rest.server.ops.*;
  * @serial exclude
  */
 // @formatter:off
-@Rest(mixins={SwaggerUiMixin.class, RedocMixin.class, ErrorMixin.class, HtdocMixin.class, StatsMixin.class, FaviconMixin.class})
+@Rest(mixins={SwaggerUiMixin.class, RedocMixin.class, ErrorMixin.class, HtdocMixin.class, FaviconMixin.class})
 @HtmlDocConfig(
 	// Basic page navigation links.
 	navlinks={
 		"up: request:/..",
-		"api: servlet:/api",
-		"stats: servlet:/stats"
+		"api: servlet:/api"
 	}
 )
 @JsonSchemaConfig(

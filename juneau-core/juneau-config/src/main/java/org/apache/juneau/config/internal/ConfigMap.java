@@ -44,7 +44,7 @@ import org.apache.juneau.marshall.collections.*;
  * reference.  Reads ({@link #getEntry(String,String)}, {@link #getKeys(String)}, {@link #getSections()},
  * {@link #asMap()}, {@link #toString()}, etc.) are <b>lock-free</b>: they take a single snapshot of the current state
  * and operate entirely on immutable collections, so there is no live-view leak and no
- * {@link ConcurrentModificationException} hazard.  Writes ({@link #setEntry(String,String,String,String,String,List)},
+ * {@link ConcurrentModificationException} hazard.  Writes ({@link #setEntry(String,String,String,String,List)},
  * {@link #commit()}, {@link #onChange(String)}, etc.) build a fresh immutable state and swap it under a write lock,
  * which is still required to make read-modify-write sequences atomic.
  */
@@ -674,9 +674,6 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @param value
 	 * 	The entry value.
 	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
-	 * @param modifiers
-	 * 	Optional modifiers.
-	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
 	 * @param comment
 	 * 	Optional comment.
 	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
@@ -685,10 +682,10 @@ public class ConfigMap implements ConfigStoreListener {
 	 * 	<br>If <jk>null</jk>, the previous value will not be overwritten.
 	 * @return This object.
 	 */
-	public ConfigMap setEntry(String section, String key, String value, String modifiers, String comment, List<String> preLines) {
+	public ConfigMap setEntry(String section, String key, String value, String comment, List<String> preLines) {
 		checkSectionName(section);
 		checkKeyName(key);
-		return applyChange(true, ConfigEvent.setEntry(name, section, key, value, modifiers, comment, preLines));
+		return applyChange(true, ConfigEvent.setEntry(name, section, key, value, comment, preLines));
 	}
 
 	/**
@@ -792,7 +789,6 @@ public class ConfigMap implements ConfigStoreListener {
 					cs2 = cs2.withEntry(new ConfigMapEntry(
 						ce.getKey(),
 						ce.getValue() == null ? oe.value() : ce.getValue(),
-						ce.getModifiers() == null ? oe.modifiers() : ce.getModifiers(),
 						ce.getComment() == null ? oe.comment() : ce.getComment(),
 						ce.getPreLines() == null ? oe.preLines() : ce.getPreLines()
 					));
@@ -861,7 +857,7 @@ public class ConfigMap implements ConfigStoreListener {
 				for (var s : i.getConfigMap().state.entries().values()) {
 					for (var e : s.oentries.values()) {
 						if (! newMap.hasEntry(s.name, e.key())) {
-							changes2.add(ConfigEvent.setEntry(name, s.name, e.key(), e.value(), e.modifiers(), e.comment(), e.preLines()));
+							changes2.add(ConfigEvent.setEntry(name, s.name, e.key(), e.value(), e.comment(), e.preLines()));
 						}
 					}
 				}
@@ -885,13 +881,13 @@ public class ConfigMap implements ConfigStoreListener {
 			var s = state.oentries().get(ns.name);
 			if (s == null) {
 				for (var ne : ns.entries.values()) {
-					changes2.add(ConfigEvent.setEntry(name, ns.name, ne.key(), ne.value(), ne.modifiers(), ne.comment(), ne.preLines()));
+					changes2.add(ConfigEvent.setEntry(name, ns.name, ne.key(), ne.value(), ne.comment(), ne.preLines()));
 				}
 			} else {
 				for (var ne : ns.oentries.values()) {
 					var e = s.oentries.get(ne.key());
 					if (e == null || neq(e.value(), ne.value())) {
-						changes2.add(ConfigEvent.setEntry(name, s.name, ne.key(), ne.value(), ne.modifiers(), ne.comment(), ne.preLines()));
+						changes2.add(ConfigEvent.setEntry(name, s.name, ne.key(), ne.value(), ne.comment(), ne.preLines()));
 					}
 				}
 				for (var e : s.oentries.values()) {

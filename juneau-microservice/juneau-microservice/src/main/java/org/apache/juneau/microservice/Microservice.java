@@ -248,8 +248,6 @@ public class Microservice implements ConfigEventListener {
 		 * 				(e.g. <js>"java -jar myjar.jar"</js> will look for <js>"myjar.cfg"</js>).
 		 * 		</ul>
 		 * 	<li>
-		 * 		Resolve any <js>"*.cfg"</js> file that can be found in the working directory.
-		 * 	<li>
 		 * 		Resolve any of the following files in the classpath:  <js>"juneau.cfg"</js>, <js>"system.cfg"</js>
 		 * </ol>
 		 *
@@ -770,7 +768,14 @@ public class Microservice implements ConfigEventListener {
 		var configBuilder = builder.configBuilder.varResolver(builder.varResolver.build()).store(MemoryStore.DEFAULT);
 		if (config2 == null) {
 			var store = builder.configStore;
-			var cfs = workingDir == null ? FileStore.DEFAULT : FileStore.create().directory(workingDir).build();
+			// An absolute configName supplied by the operator through the builder is trusted; every other name must stay inside the directory.
+			var absoluteConfigName = nn(configName) && Paths.get(configName).isAbsolute();
+			var fsb = FileStore.create();
+			if (workingDir != null)
+				fsb.directory(workingDir);
+			if (absoluteConfigName)
+				fsb.allowAbsoluteNames();
+			var cfs = workingDir == null && ! absoluteConfigName ? FileStore.DEFAULT : fsb.build();
 			boolean found = false;
 			for (var name : getCandidateConfigNames()) {
 				if (found)

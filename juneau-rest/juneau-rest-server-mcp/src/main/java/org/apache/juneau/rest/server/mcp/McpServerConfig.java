@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.rest.server.auth.TokenValidator;
 
 /**
  * Aggregate configuration consumed by the bound {@link McpRevision}.
@@ -54,6 +55,8 @@ public class McpServerConfig {
 	private volatile List<McpResourceTemplateHandler> validatedResourceTemplatesSnapshot = List.of();
 	private volatile Map<McpResourceTemplateHandler, McpUriTemplateMatcher> compiledResourceTemplateMatchers = Map.of();
 	private McpCursor cursor = McpCursor.SINGLE_PAGE;
+	private TokenValidator tokenValidator;
+	private boolean allowUnauthenticated;
 
 	/**
 	 * Server name reported in {@code initialize}.
@@ -731,6 +734,50 @@ public class McpServerConfig {
 	 */
 	public McpServerConfig setCursor(McpCursor cursor) {
 		this.cursor = cursor == null ? McpCursor.SINGLE_PAGE : cursor;
+		return this;
+	}
+
+	/**
+	 * The validator used to authenticate {@code Authorization: Bearer} tokens on MCP POST requests.
+	 *
+	 * @return The validator, or {@code null} if none is configured.
+	 */
+	public TokenValidator getTokenValidator() {
+		return tokenValidator;
+	}
+
+	/**
+	 * Requires a valid bearer token on MCP POST requests, verified by the given validator.
+	 *
+	 * @param value The validator.  Can be {@code null} to clear.
+	 * @return This object (for method chaining).
+	 */
+	public McpServerConfig setTokenValidator(TokenValidator value) {
+		tokenValidator = value;
+		return this;
+	}
+
+	/**
+	 * Whether an endpoint with no authentication serves callers that are not on a loopback address.
+	 *
+	 * @return {@code true} if unauthenticated non-loopback callers are served.  Defaults to {@code false}.
+	 */
+	public boolean isAllowUnauthenticated() {
+		return allowUnauthenticated;
+	}
+
+	/**
+	 * Allows an endpoint with no authentication to serve callers that are not on a loopback address.
+	 *
+	 * <p>
+	 * Without this, an MCP endpoint that has neither a {@link #setTokenValidator(TokenValidator) token validator} nor
+	 * another authentication layer answers {@code 403} to non-loopback callers.
+	 *
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public McpServerConfig allowUnauthenticated(boolean value) {
+		allowUnauthenticated = value;
 		return this;
 	}
 }

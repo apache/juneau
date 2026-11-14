@@ -23,6 +23,7 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.auth.oauth.oidc.*;
 
 import com.nimbusds.oauth2.sdk.http.*;
@@ -79,6 +80,7 @@ public class McpClientRegistrationManager {
 		Duration httpTimeout = McpDynamicClientRegistrar.DEFAULT_HTTP_TIMEOUT;
 		Consumer<HTTPRequest> httpRequestConfigurator;
 		Function<OidcMetadata,McpClientRegistration> dcrOverride;
+		boolean allowPrivateUrls;
 
 		/** Constructor. */
 		protected Builder() {}
@@ -234,6 +236,22 @@ public class McpClientRegistrationManager {
 		}
 
 		/**
+		 * Allows an AS-advertised registration endpoint that points at a loopback, private, link-local or metadata host.
+		 *
+		 * <p>
+		 * By default such endpoints are rejected (the endpoint comes from AS metadata, so a hostile document could
+		 * otherwise aim the registration request at an internal service).  Intended for local development and
+		 * testing; plain {@code http} is still limited to loopback hosts.
+		 *
+		 * @param value <jk>true</jk> to skip the host deny-list.
+		 * @return This object.
+		 */
+		public Builder allowPrivateUrls(boolean value) {
+			allowPrivateUrls = value;
+			return this;
+		}
+
+		/**
 		 * Builds the manager.
 		 *
 		 * @return A new {@link McpClientRegistrationManager}.
@@ -254,6 +272,7 @@ public class McpClientRegistrationManager {
 	private final Duration httpTimeout;
 	private final Consumer<HTTPRequest> httpRequestConfigurator;
 	private final Function<OidcMetadata,McpClientRegistration> dcrOverride;
+	private final boolean allowPrivateUrls;
 
 	/**
 	 * Constructor.
@@ -272,6 +291,7 @@ public class McpClientRegistrationManager {
 		this.httpTimeout = b.httpTimeout;
 		this.httpRequestConfigurator = b.httpRequestConfigurator;
 		this.dcrOverride = b.dcrOverride;
+		this.allowPrivateUrls = b.allowPrivateUrls;
 	}
 
 	/**
@@ -322,7 +342,7 @@ public class McpClientRegistrationManager {
 	private McpClientRegistration register(OidcMetadata as) {
 		if (dcrOverride != null)
 			return dcrOverride.apply(as);
-		var regEndpoint = registrationEndpoint(as)
+		var regEndpoint = registrationEndpoint(as, allowPrivateUrls)
 			.orElseThrow(() -> new McpAuthException("Authorization server '" + as.issuer()
 				+ "' advertises no registration_endpoint and no matching pre-registered credentials are configured"
 				+ " (Dynamic Client Registration not possible; CIMD is out of scope)"));
@@ -354,7 +374,7 @@ public class McpClientRegistrationManager {
 	 * {@link IllegalArgumentException} (from {@code URI.create}) or a downstream {@link IllegalStateException} (from the
 	 * registrar's https gate).
 	 */
-	static Optional<URI> registrationEndpoint(OidcMetadata as) {
+	static Optional<URI> registrationEndpoint(OidcMetadata as, boolean allowPrivateUrls) {
 		var v = as.extras().get("registration_endpoint");
 		if (v == null)
 			return oe();
@@ -363,6 +383,11 @@ public class McpClientRegistrationManager {
 			uri = URI.create(v.toString());
 		} catch (IllegalArgumentException e) {
 			throw new McpAuthException("Authorization server advertised a malformed registration_endpoint: '" + v + "'", e);
+		}
+		try {
+			RemoteUrlPolicy.requireAllowedUrl(uri.toString(), allowPrivateUrls);
+		} catch (IllegalArgumentException e) {
+			throw new McpAuthException("Authorization server advertised a registration_endpoint that is not permitted: '" + uri + "': " + e.getMessage(), e);
 		}
 		if (! McpDynamicClientRegistrar.isSecureOrLoopback(uri))
 			throw new McpAuthException("Authorization server advertised a non-https registration_endpoint (loopback exempt): '" + uri + "'");

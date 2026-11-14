@@ -506,7 +506,9 @@ class Remote_Test extends TestBase {
 
 	@Test void e05_rrpc_rethrownCheckedException() {
 		var x = client(E5.class).build();
-		assertThrowsWithMessage(Remote_Test.E5a.class, "foobar", ()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo"));
+		// The exception type is rebuilt on the client; the server-side message is not sent.
+		var e = assertThrows(Remote_Test.E5a.class, ()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo"));
+		assertFalse(String.valueOf(e.getMessage()).contains("foobar"));
 	}
 
 	@Rest
@@ -521,7 +523,8 @@ class Remote_Test extends TestBase {
 
 	@Test void e06_rrpc_rethrownUncheckedException() {
 		var x = client(E6.class).build();
-		assertThrowsWithMessage(Exception.class, "foobar", ()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo"));
+		var e = assertThrows(Exception.class, ()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo"));
+		assertFalse(String.valueOf(e.getMessage()).contains("foobar"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

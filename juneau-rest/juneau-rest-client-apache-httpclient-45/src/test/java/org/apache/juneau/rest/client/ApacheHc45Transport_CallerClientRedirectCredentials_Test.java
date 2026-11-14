@@ -165,7 +165,7 @@ class ApacheHc45Transport_CallerClientRedirectCredentials_Test {
 
 	@Test
 	void a01_crossOrigin_callerClient_stripsCallerCredentials() throws Exception {
-		assertEquals("auth=none|cookie=none|key=none|trace=t-1", get(HttpClients.createDefault(), "/redirect-cross"));
+		assertEquals("auth=none|cookie=none|key=none|trace=none", get(HttpClients.createDefault(), "/redirect-cross"));
 	}
 
 	@Test
@@ -178,7 +178,7 @@ class ApacheHc45Transport_CallerClientRedirectCredentials_Test {
 		// the cookie A sets lives in the caller's cookie store, which would send it on to B (a cookie's domain ignores
 		// the port).  The guard strips every credential header on a cross-origin hop, so the store's Cookie goes too.
 		var callerClient = HttpClients.custom().setDefaultCookieStore(new BasicCookieStore()).build();
-		assertEquals("auth=none|cookie=none|key=none|trace=t-1", get(callerClient, "/redirect-cross-set-cookie"));
+		assertEquals("auth=none|cookie=none|key=none|trace=none", get(callerClient, "/redirect-cross-set-cookie"));
 	}
 
 	@Test
@@ -191,7 +191,7 @@ class ApacheHc45Transport_CallerClientRedirectCredentials_Test {
 
 	@Test
 	void a05_crossOrigin307_callerClient_stripsCallerCredentials() throws Exception {
-		assertEquals("auth=none|cookie=none|key=none|trace=t-1", get(HttpClients.createDefault(), "/redirect-cross-307"));
+		assertEquals("auth=none|cookie=none|key=none|trace=none", get(HttpClients.createDefault(), "/redirect-cross-307"));
 	}
 
 	@Test
@@ -244,7 +244,7 @@ class ApacheHc45Transport_CallerClientRedirectCredentials_Test {
 
 	@Test
 	void b03_callerClient_crossOrigin_preemptiveAuthorizationStripped() throws Exception {
-		assertEquals("auth=none|cookie=none|key=none|trace=t-1", get(preemptive(), "/redirect-cross"));
+		assertEquals("auth=none|cookie=none|key=none|trace=none", get(preemptive(), "/redirect-cross"));
 	}
 
 	@Test
@@ -265,8 +265,8 @@ class ApacheHc45Transport_CallerClientRedirectCredentials_Test {
 
 	@Test
 	void c01_transportBuilt_crossOrigin_stripsHeaderAndCookieStore() throws Exception {
-		assertEquals("auth=none|cookie=none|key=none|trace=t-1", get(ApacheHc45Transport.create(), "/redirect-cross"));
-		assertEquals("auth=none|cookie=none|key=none|trace=t-1", get(ApacheHc45Transport.create(), "/redirect-cross-set-cookie"));
+		assertEquals("auth=none|cookie=none|key=none|trace=none", get(ApacheHc45Transport.create(), "/redirect-cross"));
+		assertEquals("auth=none|cookie=none|key=none|trace=none", get(ApacheHc45Transport.create(), "/redirect-cross-set-cookie"));
 	}
 
 	@Test
@@ -302,7 +302,7 @@ class ApacheHc45Transport_CallerClientRedirectCredentials_Test {
 	@Test
 	void d04_callerClient_aToBToAToB_secondBStripped() throws Exception {
 		midHopAuth.set(null);
-		assertEquals("auth=none|cookie=none|key=none|trace=t-1", get(HttpClients.createDefault(), "/redirect-a-b-a-b"));
+		assertEquals("auth=none|cookie=none|key=none|trace=none", get(HttpClients.createDefault(), "/redirect-a-b-a-b"));
 		assertEquals("Bearer secret-token", midHopAuth.get(), "the hop back at A carried the credentials");
 	}
 

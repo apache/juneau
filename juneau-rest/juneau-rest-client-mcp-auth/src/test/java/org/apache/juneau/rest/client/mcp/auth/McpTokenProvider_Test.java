@@ -84,6 +84,28 @@ class McpTokenProvider_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
+	@Test void a03_tokenEndpointMustBeHttpsOrLoopback() {
+		var b = McpTokenProvider.clientCredentials();
+		var insecure = URI.create("http://idp.example.com/token");
+		assertThrows(IllegalArgumentException.class, () -> b.tokenEndpoint(insecure));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	@Test void a04_tokenRequestDoesNotFollowRedirects() {
+		server.createContext("/redirect", ex -> {
+			ex.getResponseHeaders().add("Location", tokenEndpoint().toString());
+			ex.sendResponseHeaders(302, -1);
+			ex.close();
+		});
+		responses.add(tokenJson("should-not-be-fetched", 3600));
+		var p = McpTokenProvider.clientCredentials()
+			.tokenEndpoint(URI.create("http://127.0.0.1:" + server.getAddress().getPort() + "/redirect"))
+			.clientId("id").clientSecret("s").resource(RES).build();
+		assertThrows(RuntimeException.class, p::get);
+		assertTrue(requestBodies.isEmpty(), "redirect target must not receive the token request");
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
 	// A: static / pre-provisioned
 	// -----------------------------------------------------------------------------------------------------------------
 

@@ -17,6 +17,7 @@
 package org.apache.juneau.server.config;
 
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.config.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.server.config.rest.*;
@@ -35,6 +36,7 @@ public class App {
 	 * @throws Exception Error occurred.
 	 */
 	public static void main(String[] args) throws Exception {
+		checkRequiredSettings();
 		// @formatter:off
 		Microservice
 			.create()
@@ -45,6 +47,22 @@ public class App {
 			.startConsole()
 			.join();
 		// @formatter:on
+	}
+
+	/**
+	 * Refuses to start until the settings that ship as commented-out placeholders have been provided.
+	 *
+	 * @throws IllegalStateException If a required setting is missing.
+	 */
+	static void checkRequiredSettings() {
+		var c = Config.create().name("juneau-server-config.cfg").build();
+		try {
+			for (var key : new String[]{"GitServer/pathLocal", "GitServer/gitRemote", "Security/apiKey"})
+				if (c.get(key).orElse("").isBlank())
+					throw new IllegalStateException("Required setting '" + key + "' is not set in juneau-server-config.cfg.");
+		} finally {
+			c.close();
+		}
 	}
 
 	/**

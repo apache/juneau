@@ -34,8 +34,8 @@ import org.apache.juneau.rest.server.servlet.*;
  *
  * <p>
  * <b>{@code /info} and {@code /loggers} are off by default</b> &mdash; unlike health, they are not mounted
- * on the bare group, since {@link InfoMixin} discloses the full manifest and {@link LoggersMixin}'s read side
- * discloses logger topology, neither behind any auth. Turn either back on (either approach suffices):
+ * on the bare group, since {@link InfoMixin} discloses the full manifest and {@link LoggersMixin}
+ * discloses logger topology (it is deny-all until a guard bean is registered). Turn either back on (either approach suffices):
  * <ul>
  * 	<li><b>A-la-carte (recommended):</b> mount {@link InfoMixin} / {@link LoggersMixin} on a resource you
  * 		control, e.g. a {@code BasicActuatorGroup} subclass with

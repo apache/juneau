@@ -47,11 +47,11 @@ class SamlAuthFilter_MaxInflate_Test extends TestBase {
 		kp.initialize(2048);
 		var pair = kp.generateKeyPair();
 		return new SamlAssertionValidator(
-				SamlAssertionValidator.create()
+				SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 					.spEntityId("https://sp.example.com")
 					.expectedIssuer("https://idp.example.com")
 					.signingCredential(new BasicCredential(pair.getPublic(), pair.getPrivate()))) {
-			@Override public Principal validate(String xml, String recipient) {
+			@Override public Principal validate(String xml) {
 				return impl.apply(xml);
 			}
 		};

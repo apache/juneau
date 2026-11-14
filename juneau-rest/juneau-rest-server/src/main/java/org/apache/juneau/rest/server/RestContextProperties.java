@@ -60,10 +60,10 @@ public class RestContextProperties {
 
 	private static final String FALSE = "false";
 
-	private String allowedHeaderParams = "Accept,Content-Type";
+	private String allowedHeaderParams = "Accept";
 	private String allowedMethodHeaders = "";
 	private String allowedMethodParams = "HEAD,OPTIONS";
-	private String disableContentParam = FALSE;
+	private String allowContentParam = FALSE;
 	private String renderResponseStackTraces = FALSE;
 	private String problemDetails = FALSE;
 	private String debugMarshalling = FALSE;
@@ -104,8 +104,8 @@ public class RestContextProperties {
 	}
 
 	/**
-	 * The raw (unresolved) {@code @Rest(disableContentParam)} default &mdash; whether the {@code &content=} URL
-	 * parameter is disabled.
+	 * The raw (unresolved) {@code @Rest(allowContentParam)} default &mdash; whether the {@code &content=} URL
+	 * parameter is allowed.
 	 *
 	 * <p>
 	 * The value is stored verbatim &mdash; without SVL variable resolution or boolean conversion &mdash; because SVL
@@ -114,8 +114,8 @@ public class RestContextProperties {
 	 *
 	 * @return The raw value. Never <jk>null</jk>.
 	 */
-	public String getDisableContentParamRaw() {
-		return disableContentParam;
+	public String getAllowContentParamRaw() {
+		return allowContentParam;
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class RestContextProperties {
 	 * in error responses.
 	 *
 	 * <p>
-	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getDisableContentParamRaw()}).
+	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getAllowContentParamRaw()}).
 	 *
 	 * @return The raw value. Never <jk>null</jk>.
 	 */
@@ -136,7 +136,7 @@ public class RestContextProperties {
 	 * {@code application/problem+json} responses are emitted.
 	 *
 	 * <p>
-	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getDisableContentParamRaw()}).
+	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getAllowContentParamRaw()}).
 	 *
 	 * @return The raw value. Never <jk>null</jk>.
 	 */
@@ -149,7 +149,7 @@ public class RestContextProperties {
 	 * behavior is enabled.
 	 *
 	 * <p>
-	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getDisableContentParamRaw()}).
+	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getAllowContentParamRaw()}).
 	 *
 	 * @return The raw value. Never <jk>null</jk>.
 	 */
@@ -162,7 +162,7 @@ public class RestContextProperties {
 	 * opted into on Java 21+.
 	 *
 	 * <p>
-	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getDisableContentParamRaw()}).
+	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getAllowContentParamRaw()}).
 	 *
 	 * @return The raw value. Never <jk>null</jk>.
 	 */
@@ -175,7 +175,7 @@ public class RestContextProperties {
 	 * response headers when a tracer is active. Defaults to {@code "true"}.
 	 *
 	 * <p>
-	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getDisableContentParamRaw()}).
+	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getAllowContentParamRaw()}).
 	 *
 	 * @return The raw value. Never <jk>null</jk>.
 	 */
@@ -188,7 +188,7 @@ public class RestContextProperties {
 	 * asynchronous completion threads. Defaults to {@code "true"}.
 	 *
 	 * <p>
-	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getDisableContentParamRaw()}).
+	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getAllowContentParamRaw()}).
 	 *
 	 * @return The raw value. Never <jk>null</jk>.
 	 */
@@ -201,7 +201,7 @@ public class RestContextProperties {
 	 * during construction.
 	 *
 	 * <p>
-	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getDisableContentParamRaw()}).
+	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getAllowContentParamRaw()}).
 	 *
 	 * @return The raw value. Never <jk>null</jk>.
 	 */
@@ -213,7 +213,7 @@ public class RestContextProperties {
 	 * The raw (unresolved) {@code @Rest(lazyChildren)} default &mdash; whether child-context construction is deferred.
 	 *
 	 * <p>
-	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getDisableContentParamRaw()}).
+	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getAllowContentParamRaw()}).
 	 *
 	 * @return The raw value. Never <jk>null</jk>.
 	 */

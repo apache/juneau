@@ -380,7 +380,7 @@ class RestContext_Getters_Coverage_Test extends TestBase {
 			}
 		}
 
-		// renderResponseStackTraces, disableContentParam, allowedHeaderParams and allowedMethodParams are all fixed by
+		// renderResponseStackTraces, allowContentParam, allowedHeaderParams and allowedMethodParams are all fixed by
 		// the framework DefaultConfig annotation chain, so their RestContext.* env value reaches the bound bean but is
 		// masked at the resolved RestContext getter. These assert the value is adopted into the correct bean accessor
 		// (with a sibling left at its default) so a delegation swap among them is caught at the bean seam.
@@ -390,20 +390,20 @@ class RestContext_Getters_Coverage_Test extends TestBase {
 			try {
 				var p = build().getRestContextProperties();
 				assertEquals("true", p.getRenderResponseStackTracesRaw());
-				assertEquals("false", p.getDisableContentParamRaw());
+				assertEquals("false", p.getAllowContentParamRaw());
 			} finally {
 				System.clearProperty("RestContext.renderResponseStackTraces");
 			}
 		}
 
-		@Test void x09_disableContentParam() throws Exception {
-			System.setProperty("RestContext.disableContentParam", "true");
+		@Test void x09_allowContentParam() throws Exception {
+			System.setProperty("RestContext.allowContentParam", "true");
 			try {
 				var p = build().getRestContextProperties();
-				assertEquals("true", p.getDisableContentParamRaw());
+				assertEquals("true", p.getAllowContentParamRaw());
 				assertEquals("false", p.getRenderResponseStackTracesRaw());
 			} finally {
-				System.clearProperty("RestContext.disableContentParam");
+				System.clearProperty("RestContext.allowContentParam");
 			}
 		}
 
@@ -423,7 +423,7 @@ class RestContext_Getters_Coverage_Test extends TestBase {
 			try {
 				var p = build().getRestContextProperties();
 				assertEquals("TRACE", p.getAllowedMethodParams());
-				assertEquals("Accept,Content-Type", p.getAllowedHeaderParams());
+				assertEquals("Accept", p.getAllowedHeaderParams());
 			} finally {
 				System.clearProperty("RestContext.allowedMethodParams");
 			}

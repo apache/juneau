@@ -840,6 +840,16 @@ class PathTraversal_Test extends TestBase {
 		assertEquals("B", ((String[])map.get("arr"))[1]);
 	}
 
+	@Test void h05b_put_intoArray_growthIsBounded() {
+		var map = new Json5Map();
+		map.put("arr", new String[]{"a"});
+		var model = PathTraversal.create(map);
+		model.put("arr/5", "x");
+		assertEquals(6, ((String[])map.get("arr")).length);
+		assertThrows(PathTraversalException.class, () -> model.put("arr/2000000000", "x"));
+		assertEquals(6, ((String[])map.get("arr")).length);
+	}
+
 	@Test void h06_put_intoArray_parentBean() {
 		var p = new Person("a", 1, new Address("s","c","st",1,true), new Address("s2","c2","st2",2,false));
 		var model = PathTraversal.create(p);

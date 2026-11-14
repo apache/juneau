@@ -128,9 +128,9 @@ class McpMrtrConfig_Test {
 		assertEquals("keyProvider must not be null", e.getMessage());
 	}
 
-	@Test void a10_defaultReplayCacheIsNull() {
-		// Replay rejection must be disabled by default -- no ReplayCache is auto-wired.
-		assertNull(new McpMrtrConfig().getReplayCache());
+	@Test void a10_defaultReplayCacheIsInMemory() {
+		// Single-use tokens by default: an in-memory ReplayCache is wired unless the operator replaces it.
+		assertInstanceOf(InMemoryReplayCache.class, new McpMrtrConfig().getReplayCache());
 	}
 
 	@Test void a11_setReplayCacheRoundTripsThroughGetter() {

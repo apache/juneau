@@ -41,6 +41,11 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 	// Serializes pull/checkout/pull on the single shared checkout so concurrent requests cannot interleave branches.
 	private static final Object GIT_LOCK = new Object();
 
+	// Remote pulls are throttled: at most one fetch per interval (settable as [GitServer] pullInterval, in seconds).
+	private static final long DEFAULT_PULL_INTERVAL_SECONDS = 60;
+	private static long lastPullNanos;
+	private static boolean pulledOnce;
+
 	private final Map<String,ConfigItem> configs = new HashMap<>();
 
 	@SuppressWarnings({
@@ -67,11 +72,17 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 	@Override
 	public void execute() throws Exception {
 
+		String pathStr;
+		String git;
+		long pullInterval;
 		var config = Config.create().name("juneau-server-config.cfg").build();
-
-		var pathStr = config.get("GitServer/pathLocal").orElse(null);
-
-		var git = config.get("GitServer/gitRemote").orElse(null);
+		try {
+			pathStr = config.get("GitServer/pathLocal").orElse(null);
+			git = config.get("GitServer/gitRemote").orElse(null);
+			pullInterval = config.get("GitServer/pullInterval").asLong().orElse(DEFAULT_PULL_INTERVAL_SECONDS);
+		} finally {
+			config.close();
+		}
 
 		// Fail fast with a clear message when the operator has not configured the local checkout directory,
 		// rather than surfacing an opaque NullPointerException from new File(null) below.
@@ -90,14 +101,21 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 		synchronized (GIT_LOCK) {
 			try (var gitControl = new GitControl(pathStr, git)) {
 
-				if (root.isDirectory()) {
-					gitControl.pullFromRepo();
-				} else {
+				var now = System.nanoTime();
+				var due = ! pulledOnce || now - lastPullNanos >= pullInterval * 1_000_000_000L;
+				if (! root.isDirectory()) {
 					gitControl.cloneRepo();
+					pulledOnce = true;
+					lastPullNanos = now;
+				} else if (due) {
+					gitControl.pullFromRepo();
+					pulledOnce = true;
+					lastPullNanos = now;
 				}
 
 				gitControl.branch(branch);
-				gitControl.pullFromRepo();
+				if (due)
+					gitControl.pullFromRepo();
 			}
 
 			readFiles(root, fileDefaultStr, fileProjectStr);

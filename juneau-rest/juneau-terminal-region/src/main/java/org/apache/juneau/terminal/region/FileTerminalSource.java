@@ -22,7 +22,9 @@ import static org.apache.juneau.terminal.report.TerminalViewChecks.*;
 import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
+import java.nio.charset.*;
 import java.nio.file.*;
+import java.nio.file.attribute.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
@@ -73,6 +75,9 @@ public final class FileTerminalSource implements TerminalSource, AutoCloseable {
 	/** How long {@link #close()} waits for the nudge thread, in milliseconds. */
 	static final int NUDGE_JOIN_MILLIS = 1000;
 
+	/** The most bytes read from the size sidecar. */
+	static final int MAX_SIZE_BYTES = 32;
+
 	private static final Logger LOG = Logger.getLogger(FileTerminalSource.class.getName());
 
 	/**
@@ -112,6 +117,7 @@ public final class FileTerminalSource implements TerminalSource, AutoCloseable {
 	private final Path sizeFile;
 	private final BooleanSupplier terminal;
 	private final AtomicReference<int[]> sizeRef = new AtomicReference<>();
+	private final AtomicReference<Object> fileKey = new AtomicReference<>();
 	private volatile boolean seen;
 	private volatile boolean warned;
 
@@ -247,7 +253,13 @@ public final class FileTerminalSource implements TerminalSource, AutoCloseable {
 		var sz = size();
 		long end;
 		try {
-			end = Files.size(file);
+			var attrs = Files.readAttributes(file, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+			if (! attrs.isRegularFile())
+				throw new IOException("Terminal log is not a regular file: '" + file + "'.");
+			var key = attrs.fileKey();
+			if (key != null && ! fileKey.compareAndSet(null, key) && ! key.equals(fileKey.get()))
+				throw new IOException("Terminal log was replaced: '" + file + "'.");
+			end = attrs.size();
 		} catch (NoSuchFileException e) {
 			if (seen)
 				return gone(fromOffset, sz);
@@ -258,7 +270,7 @@ public final class FileTerminalSource implements TerminalSource, AutoCloseable {
 			return new TerminalChunk(new byte[0], end, end, done, sz[0], sz[1], false, false);
 		var len = (int)Math.min(Math.max(0, Math.min(maxBytes, MAX_READ_BYTES)), end - fromOffset);
 		var buf = ByteBuffer.allocate(len);
-		try (var ch = FileChannel.open(file, StandardOpenOption.READ)) {
+		try (var ch = FileChannel.open(file, StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS)) {
 			while (buf.hasRemaining()) {
 				if (ch.read(buf, fromOffset + buf.position()) < 0)
 					break;
@@ -291,13 +303,26 @@ public final class FileTerminalSource implements TerminalSource, AutoCloseable {
 		return new int[] { DEFAULT_COLS, DEFAULT_ROWS };
 	}
 
+	/** Reads a size sidecar of at most {@value #MAX_SIZE_BYTES} bytes, without following a symlink. */
+	private static String readCapped(Path p) throws IOException {
+		try (var ch = FileChannel.open(p, StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS)) {
+			var buf = ByteBuffer.allocate(MAX_SIZE_BYTES + 1);
+			while (buf.hasRemaining() && ch.read(buf) >= 0) {
+				// The condition does the reading; the loop has no body.
+			}
+			if (buf.position() > MAX_SIZE_BYTES)
+				throw new IOException("Size sidecar is over " + MAX_SIZE_BYTES + " bytes: '" + p + "'.");
+			return new String(buf.array(), 0, buf.position(), StandardCharsets.UTF_8);
+		}
+	}
+
 	/** Returns {cols, rows} from a {"cols":C,"rows":R} file, or null when it is missing or malformed. */
 	@SuppressWarnings({
 		"java:S1168" // null means the size sidecar is missing or malformed; callers test for it
 	})
 	static int[] parseSize(Path p) {
 		try {
-			var m = Json.to(Files.readString(p), Map.class);
+			var m = Json.to(readCapped(p), Map.class);
 			if (m.get("cols") instanceof Number c && m.get("rows") instanceof Number r) {
 				var cols = c.doubleValue();
 				var rows = r.doubleValue();

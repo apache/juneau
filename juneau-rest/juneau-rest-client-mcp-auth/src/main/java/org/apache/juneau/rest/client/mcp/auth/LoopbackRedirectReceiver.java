@@ -22,6 +22,7 @@ import java.net.*;
 import java.nio.charset.*;
 import java.time.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
 import com.sun.net.httpserver.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -54,6 +55,7 @@ public class LoopbackRedirectReceiver implements AutoCloseable {
 	private final int port;
 	private final String host;
 	private final CompletableFuture<URI> callback = new CompletableFuture<>();
+	private final AtomicReference<String> expectedState = new AtomicReference<>();
 
 	/**
 	 * Opens a receiver on an ephemeral loopback port using the default callback path {@code /callback}.
@@ -104,6 +106,11 @@ public class LoopbackRedirectReceiver implements AutoCloseable {
 		port = svr.getAddress().getPort();
 		host = hostLiteral(svr.getAddress().getAddress());
 		svr.createContext(path, ex -> {
+			if (! acceptable(ex)) {
+				ex.sendResponseHeaders(400, -1);
+				ex.close();
+				return;
+			}
 			var full = URI.create("http://" + host + ":" + port + ex.getRequestURI().toString());
 			callback.complete(full);
 			ex.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
@@ -114,6 +121,42 @@ public class LoopbackRedirectReceiver implements AutoCloseable {
 		});
 		svr.start();
 		server = svr;
+	}
+
+	/**
+	 * Sets the {@code state} value a callback must carry to be accepted.
+	 *
+	 * <p>
+	 * Requests that are not {@code GET}, do not target the exact callback path, or (once this is set) carry a different
+	 * {@code state} are answered with {@code 400} and ignored; the receiver keeps listening until a valid callback
+	 * arrives or the wait times out.
+	 *
+	 * @param state The expected state.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public LoopbackRedirectReceiver expectState(String state) {
+		expectedState.set(reqnn("state", state));
+		return this;
+	}
+
+	private boolean acceptable(HttpExchange ex) {
+		if (! "GET".equals(ex.getRequestMethod()))
+			return false;
+		var uri = ex.getRequestURI();
+		if (! path.equals(uri.getPath()))
+			return false;
+		var want = expectedState.get();
+		if (want == null)
+			return true;
+		var q = uri.getRawQuery();
+		if (q == null)
+			return false;
+		for (var kv : q.split("&")) {
+			var i = kv.indexOf('=');
+			if (i > 0 && "state".equals(kv.substring(0, i)))
+				return want.equals(URLDecoder.decode(kv.substring(i + 1), StandardCharsets.UTF_8));
+		}
+		return false;
 	}
 
 	/** Formats the bound loopback address as a URI host literal, bracketing IPv6 (e.g. {@code [::1]}). */

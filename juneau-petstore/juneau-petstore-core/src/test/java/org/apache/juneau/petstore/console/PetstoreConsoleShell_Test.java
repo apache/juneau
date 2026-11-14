@@ -84,11 +84,24 @@ class PetstoreConsoleShell_Test extends TestBase {
 		assertContains("\"logo\":{\"symbol\":\"paw_print\"", html);
 	}
 
+	// The value of the first href="..." attribute whose value contains the needle, or null.
+	private static String firstHrefContaining(String html, String needle) {
+		var marker = "href=\"";
+		for (var at = html.indexOf(marker); at >= 0; at = html.indexOf(marker, at + marker.length())) {
+			var end = html.indexOf('"', at + marker.length());
+			if (end < 0)
+				return null;
+			var value = html.substring(at + marker.length(), end);
+			if (value.contains(needle))
+				return value;
+		}
+		return null;
+	}
+
 	@Test void a09_petPageFaviconResolves() throws Exception {
 		var html = client().get("/console/pets/1/summary").accept("text/html").run().assertStatus(200).getContent().asString();
-		var m = java.util.regex.Pattern.compile("href=\"([^\"]*paw_print[^\"]*)\"").matcher(html);
-		org.junit.jupiter.api.Assertions.assertTrue(m.find(), html.substring(0, Math.min(html.length(), 1500)));
-		var href = m.group(1);
+		var href = firstHrefContaining(html, "paw_print");
+		org.junit.jupiter.api.Assertions.assertNotNull(href, html.substring(0, Math.min(html.length(), 1500)));
 		client().get(href).accept("image/svg+xml").run().assertStatus(200);
 	}
 

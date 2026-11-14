@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.rest.auth.oauth.flow.*;
+import org.apache.juneau.rest.auth.oauth.oidc.*;
 
 import com.nimbusds.oauth2.sdk.*;
 import com.nimbusds.oauth2.sdk.http.*;
@@ -213,10 +214,25 @@ public class McpAuthorizationCodeAcquirer {
 		}
 
 		/**
+		 * Applies the discovered authorization-server metadata: sets the expected issuer and requires the {@code iss}
+		 * response parameter when the server advertises {@code authorization_response_iss_parameter_supported}
+		 * (RFC 9207).
+		 *
+		 * @param metadata The discovered metadata.  Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder authorizationServer(OidcMetadata metadata) {
+			reqnn("metadata", metadata);
+			expectedIssuer = metadata.issuer();
+			requireIssuerResponseParameter = metadata.authorizationResponseIssParameterSupported();
+			return this;
+		}
+
+		/**
 		 * Requires the authorization response to carry an {@code iss} parameter, rejecting a response that omits it.
 		 *
 		 * <p>
-		 * Set this when the discovered authorization-server metadata advertises
+		 * Set automatically by {@link #authorizationServer(OidcMetadata)}; set explicitly when the discovered authorization-server metadata advertises
 		 * {@code authorization_response_iss_parameter_supported} (RFC 9207); see
 		 * {@link org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata#authorizationResponseIssParameterSupported()}.
 		 *
@@ -423,6 +439,7 @@ public class McpAuthorizationCodeAcquirer {
 			var state = new State().getValue();
 			var authUrl = buildAuthorizationUrl(flow, state, verifier);
 			store.store(state, verifier.getValue(), expectedIssuer);
+			receiver.expectState(state);
 			browserLauncher.accept(authUrl);
 			var callbackUri = receiver.awaitCallback(timeout);
 			return handleCallback(flow, callbackUri);

@@ -72,4 +72,10 @@ class MustacheViewRenderer_Test extends TestBase {
 	@Test void b05_gateRejectsNestedTraversal() {
 		assertThrows(IllegalArgumentException.class, () -> MustacheViewRenderer.gateTemplateName("/templates/", "a/b/../../../secret"));
 	}
+
+	@Test void b06_gateRejectsSchemeNames() {
+		assertThrows(IllegalArgumentException.class, () -> MustacheViewRenderer.gateTemplateName("/templates/", "file:/etc/passwd"));
+		assertThrows(IllegalArgumentException.class, () -> MustacheViewRenderer.gateTemplateName("/templates/", "classpath:x.mustache"));
+		assertThrows(IllegalArgumentException.class, () -> MustacheViewRenderer.gateTemplateName("/templates/", "a\\b.mustache"));
+	}
 }

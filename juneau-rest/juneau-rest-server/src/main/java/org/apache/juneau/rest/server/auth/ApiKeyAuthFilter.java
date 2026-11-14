@@ -19,6 +19,8 @@ package org.apache.juneau.rest.server.auth;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
+import java.net.*;
+import java.nio.charset.*;
 import java.util.*;
 
 
@@ -68,7 +70,7 @@ public class ApiKeyAuthFilter extends AuthFilter {
 	public enum Source {
 		/** Read from a request header (default; default header name is {@code X-API-Key}). */
 		HEADER,
-		/** Read from a query parameter. */
+		/** Read from a URL query parameter (never from a form body). Not the default; keys in URLs can be logged, so prefer a header. */
 		QUERY,
 		/** Read from a cookie. */
 		COOKIE
@@ -236,8 +238,24 @@ public class ApiKeyAuthFilter extends AuthFilter {
 	private String readKey(HttpServletRequest req) {
 		return switch (source) {
 			case HEADER -> req.getHeader(name);
-			case QUERY -> req.getParameter(name);
+			case QUERY -> readQueryString(req, name);
 			case COOKIE -> ApiKeyExtractor.readCookie(req, name);
 		};
+	}
+
+	/**
+	 * Reads the named parameter from the URL query string only, so a value posted in a form body is never accepted.
+	 */
+	private static String readQueryString(HttpServletRequest req, String name) {
+		var qs = req.getQueryString();
+		if (qs == null)
+			return null;
+		for (var pair : qs.split("&")) {
+			var i = pair.indexOf('=');
+			var k = URLDecoder.decode(i < 0 ? pair : pair.substring(0, i), StandardCharsets.UTF_8);
+			if (k.equals(name))
+				return i < 0 ? "" : URLDecoder.decode(pair.substring(i + 1), StandardCharsets.UTF_8);
+		}
+		return null;
 	}
 }

@@ -57,9 +57,9 @@ class MustacheMixin_SvlPathOverride_Test extends TestBase {
 		try {
 			var c = MockRestClient.buildLax(A01_OverridePath.class);
 
-			c.get("/mustache/mustache-templates/about.mustache").run().assertStatus(404);
+			c.get("/mustache/about.mustache").run().assertStatus(404);
 
-			c.get("/views/mustache-templates/about.mustache")
+			c.get("/views/about.mustache")
 				.run()
 				.assertStatus(200)
 				.assertContent().asString().isContains("About Juneau");

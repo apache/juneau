@@ -19,6 +19,7 @@ package org.apache.juneau.marshall;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.math.*;
 import java.time.*;
@@ -1135,7 +1136,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				if (o instanceof BigDecimal o2)
 					return o2;
 				if (o instanceof Number o2)
-					return new BigDecimal(o2.toString());
+					return parseBigDecimal(o2.toString());
 				return BigNumberFormat.parse(o.toString(), format, BigDecimal.class);
 			}
 		};

@@ -68,17 +68,16 @@ import net.shibboleth.shared.resolver.*;
  * 	<li><b>Clock skew</b> &mdash; defaults to 60 seconds tolerance on {@code NotBefore} /
  * 		{@code NotOnOrAfter}; capped at 300 seconds.
  * 	<li><b>Audience restriction</b> &mdash; {@code <AudienceRestriction>} must list the configured SP entity ID.
- * 	<li><b>Bearer subject confirmation</b> &mdash; enforced whenever a {@code recipient} (the SP ACS URL) is
- * 		known, either because {@link Builder#recipient(String)} was configured on this validator or because
- * 		the caller invoked {@link #validate(String, String)} with one.  {@link SamlAuthFilter} always calls
- * 		{@link #validate(String, String)} with the ACS URL derived from the current request, so a validator
- * 		reached only through the filter can never skip this check.  When enforced, the assertion must carry a
- * 		{@code bearer} {@code <SubjectConfirmation>} whose {@code <SubjectConfirmationData>} matches the
- * 		expected {@code Recipient}, is within its {@code NotBefore}/{@code NotOnOrAfter} window, and satisfies
- * 		the configured {@code InResponseTo}/{@code Address} expectations.  A validator used standalone (not
- * 		through {@link SamlAuthFilter}) skips this check unless {@link Builder#recipient(String)} is
- * 		configured &mdash; that mode is <b>not</b> safe for browser-SSO ACS endpoints, since nothing then binds
- * 		the assertion to a specific recipient.
+ * 	<li><b>Bearer subject confirmation</b> &mdash; always enforced.  The ACS URL configured with
+ * 		{@link Builder#recipient(String)} is required, and the assertion must carry a {@code bearer}
+ * 		{@code <SubjectConfirmation>} whose {@code <SubjectConfirmationData>} names exactly that {@code Recipient},
+ * 		is within its {@code NotBefore}/{@code NotOnOrAfter} window (the {@code NotOnOrAfter} is mandatory), and
+ * 		satisfies the configured {@code Address} expectation.  The recipient is never taken from the request.
+ * 		When the response carries a {@code Destination}, it must equal the configured ACS URL.
+ * 	<li><b>Request binding</b> &mdash; a confirmation carrying {@code InResponseTo} must reference an
+ * 		authentication request ID previously registered with {@link #rememberAuthnRequest(String)}; each ID is
+ * 		accepted once.  A confirmation with no {@code InResponseTo} (an IdP-initiated response) is rejected unless
+ * 		{@link Builder#allowIdpInitiated()} was set.
  * 	<li><b>One-time use</b> &mdash; each assertion ID is recorded in a {@link ReplayCache} and a second
  * 		presentation of the same ID is rejected.  The check is fail-closed: if the cache cannot answer, the
  * 		assertion is rejected.  An assertion whose validity window is unbounded &mdash; carrying neither a
@@ -86,7 +85,9 @@ import net.shibboleth.shared.resolver.*;
  * 		rejected outright, and the cache record is retained until the resolved {@code NotOnOrAfter} (plus clock
  * 		skew) rather than a short default window that would later expire and re-open replay.
  * 	<li><b>Encrypted assertions</b> &mdash; if the response contains
- * 		{@code <EncryptedAssertion>}, a {@code decryptionCredential} must be configured.
+ * 		{@code <EncryptedAssertion>}, a {@code decryptionCredential} must be configured.  Only RSA-OAEP key
+ * 		transport and AES-GCM content encryption are accepted, and every decryption problem is reported with the
+ * 		same generic error.
  * </ul>
  *
  * <h2 class='topic'>Marker claim</h2>
@@ -103,18 +104,15 @@ import net.shibboleth.shared.resolver.*;
  * <h2 class='topic'>Builder usage</h2>
  *
  * <p>
- * This recipe builds a <b>standalone</b> validator with no {@link Builder#recipient(String)} configured, so
- * bearer subject-confirmation is not enforced.  It is safe for assertion-only / non-browser callers that
- * validate an assertion outside of an ACS redirect.  Deploying it behind {@link SamlAuthFilter} for
- * browser-SSO is always safe regardless: the filter derives the ACS recipient from the request and calls
- * {@link #validate(String, String)}, which enforces bearer confirmation for that call no matter how this
- * validator was built.
+ * The ACS URL is mandatory.  Register each outgoing authentication request ID with
+ * {@link #rememberAuthnRequest(String)} so the response can be bound to it.
  *
  * <p class='bjava'>
  * 	<jk>var</jk> validator = SamlAssertionValidator.<jsm>create</jsm>()
  * 		.metadataResolver(SamlMetadataResolvers.<jsm>url</jsm>(<js>"https://idp.example.com/metadata"</js>))
  * 		.spEntityId(<js>"https://sp.example.com"</js>)
  * 		.expectedIssuer(<js>"https://idp.example.com"</js>)
+ * 		.recipient(<js>"https://sp.example.com/saml/acs"</js>)
  * 		.build();
  * </p>
  *
@@ -153,6 +151,24 @@ public class SamlAssertionValidator {
 		SignatureConstants.ALGO_ID_SIGNATURE_ECDSA_SHA256
 	);
 
+	/** Decryption allowlist: RSA-OAEP key transport and AES-GCM content encryption only. */
+	private static final Set<String> DECRYPTION_ALGORITHMS = Set.of(
+		EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP,
+		EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP11,
+		EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128_GCM,
+		EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES192_GCM,
+		EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES256_GCM,
+		// RSA-OAEP parameters: the OAEP digest (SHA-1 is the OAEP default and is not collision-sensitive there) and MGF1.
+		SignatureConstants.ALGO_ID_DIGEST_SHA1,
+		SignatureConstants.ALGO_ID_DIGEST_SHA256,
+		SignatureConstants.ALGO_ID_DIGEST_SHA384,
+		SignatureConstants.ALGO_ID_DIGEST_SHA512,
+		EncryptionConstants.ALGO_ID_MGF1_SHA1,
+		EncryptionConstants.ALGO_ID_MGF1_SHA256,
+		EncryptionConstants.ALGO_ID_MGF1_SHA384,
+		EncryptionConstants.ALGO_ID_MGF1_SHA512
+	);
+
 	/** Default allowlist of XML reference digest algorithms.  SHA-1 is deliberately excluded. */
 	private static final Set<String> DEFAULT_DIGEST_ALGORITHMS = Set.of(
 		SignatureConstants.ALGO_ID_DIGEST_SHA256,
@@ -185,7 +201,10 @@ public class SamlAssertionValidator {
 		private Set<String> digestAlgorithms = new LinkedHashSet<>(DEFAULT_DIGEST_ALGORITHMS);
 		private Duration clockSkew = Duration.ofSeconds(60);
 		private Clock clock = Clock.systemUTC();
-		private ReplayCache replayCache = new InMemoryReplayCache();
+		private ReplayCache replayCache;
+		private AuthnRequestStore authnRequestStore;
+		private boolean allowIdpInitiated;
+		private Duration authnRequestTtl = Duration.ofMinutes(10);
 
 		/** Constructor. */
 		protected Builder() {}
@@ -195,6 +214,11 @@ public class SamlAssertionValidator {
 		 *
 		 * <p>
 		 * Mutually exclusive with {@link #signingCredential(Credential)}.
+		 *
+		 * <p>
+		 * The metadata supplies the trust anchor, so prefer a resolver whose metadata signature is verified against
+		 * a pinned certificate, e.g. {@link SamlMetadataResolvers#url(String, java.security.cert.X509Certificate)}.
+		 * Unsigned metadata is only as trustworthy as the transport it was fetched over.
 		 *
 		 * @param value The metadata resolver.  Must not be <jk>null</jk>.
 		 * @return This object.
@@ -305,18 +329,13 @@ public class SamlAssertionValidator {
 		}
 
 		/**
-		 * Sets the expected {@code Recipient} (this SP's Assertion Consumer Service URL) and, by doing so,
-		 * enables bearer {@code <SubjectConfirmation>} validation.
+		 * Sets the expected {@code Recipient} (this SP's Assertion Consumer Service URL).  Required.
 		 *
 		 * <p>
-		 * When set, every validated assertion must carry a {@code bearer} {@code <SubjectConfirmation>} whose
+		 * Every validated assertion must carry a {@code bearer} {@code <SubjectConfirmation>} whose
 		 * {@code <SubjectConfirmationData>} names this exact {@code Recipient}, is within its
-		 * {@code NotBefore}/{@code NotOnOrAfter} window, and satisfies the {@link #expectedInResponseTo(String)}
-		 * / {@link #subjectAddress(String)} expectations.  When left unset (the default), subject-confirmation
-		 * validation is skipped for calls to {@link SamlAssertionValidator#validate(String)} &mdash; safe only
-		 * for assertion-only / non-browser callers.  A validator reached through {@link SamlAuthFilter} enforces
-		 * bearer confirmation regardless of this setting, since the filter derives the recipient from the
-		 * request and calls {@link SamlAssertionValidator#validate(String, String)}.
+		 * {@code NotBefore}/{@code NotOnOrAfter} window, and satisfies the {@link #subjectAddress(String)}
+		 * expectation.  A response carrying a {@code Destination} must name this URL as well.
 		 *
 		 * @param value The expected ACS URL.  Must not be <jk>null</jk> or blank.
 		 * @return This object.
@@ -327,15 +346,13 @@ public class SamlAssertionValidator {
 		}
 
 		/**
-		 * Sets the request ID a bearer {@code <SubjectConfirmationData>} must echo in its {@code InResponseTo}
+		 * Pins the request ID a bearer {@code <SubjectConfirmationData>} must echo in its {@code InResponseTo}
 		 * attribute.
 		 *
 		 * <p>
-		 * Only consulted when {@link #recipient(String)} is configured.  When set, the confirmation's
-		 * {@code InResponseTo} must equal this value (a solicited, SP-initiated flow).  When left unset (the
-		 * default), the confirmation must <i>not</i> carry an {@code InResponseTo} at all (an unsolicited,
-		 * IdP-initiated flow) &mdash; a captured solicited assertion cannot be injected into the unsolicited
-		 * path.
+		 * When set, the confirmation's {@code InResponseTo} must equal this value.  When left unset (the default),
+		 * a present {@code InResponseTo} must reference an ID registered with
+		 * {@link SamlAssertionValidator#rememberAuthnRequest(String)}.
 		 *
 		 * @param value The expected request ID.  Must not be <jk>null</jk> or blank.
 		 * @return This object.
@@ -350,7 +367,7 @@ public class SamlAssertionValidator {
 		 * attribute.
 		 *
 		 * <p>
-		 * Only consulted when {@link #recipient(String)} is configured.  When set, the confirmation's
+		 * When set, the confirmation's
 		 * {@code Address} must equal this value; when unset (the default) the {@code Address} attribute is not
 		 * checked.
 		 *
@@ -366,7 +383,8 @@ public class SamlAssertionValidator {
 		 * Overrides the {@link ReplayCache} used to enforce one-time use of each assertion ID.
 		 *
 		 * <p>
-		 * Defaults to a per-process {@link InMemoryReplayCache}, which enforces single-use within one JVM.
+		 * Defaults to a per-process {@link InMemoryReplayCache}, which enforces single-use within one JVM; a
+		 * warning is logged when the default is used.
 		 * Multi-node deployments should inject a {@link ReplayCache} backed by a store shared across every node
 		 * so an assertion consumed against one node cannot be replayed against another.  The check is always
 		 * fail-closed: a cache that cannot answer causes the assertion to be rejected.
@@ -376,6 +394,51 @@ public class SamlAssertionValidator {
 		 */
 		public Builder replayCache(ReplayCache value) {
 			replayCache = reqnn("value", value);
+			return this;
+		}
+
+		/**
+		 * Allows IdP-initiated responses, i.e. a bearer confirmation that carries no {@code InResponseTo}.
+		 *
+		 * <p>
+		 * Off by default.  An unsolicited response cannot be bound to a request this SP made, so enable it only
+		 * when the IdP starts the login flow.
+		 *
+		 * @return This object.
+		 */
+		public Builder allowIdpInitiated() {
+			allowIdpInitiated = true;
+			return this;
+		}
+
+		/**
+		 * Overrides the {@link AuthnRequestStore} that tracks outstanding authentication request IDs.
+		 *
+		 * <p>
+		 * Defaults to a per-process {@link InMemoryAuthnRequestStore}, which holds up to
+		 * {@link InMemoryAuthnRequestStore#DEFAULT_MAX_ENTRIES} IDs and is not shared between nodes; a warning is
+		 * logged when the default is used.  Multi-node deployments should inject a store shared across every node.
+		 *
+		 * @param value The store.  Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder authnRequestStore(AuthnRequestStore value) {
+			authnRequestStore = reqnn("value", value);
+			return this;
+		}
+
+		/**
+		 * Sets how long a request ID registered with {@link SamlAssertionValidator#rememberAuthnRequest(String)}
+		 * stays valid.  Defaults to 10 minutes.
+		 *
+		 * @param value The lifetime.  Must be positive.
+		 * @return This object.
+		 */
+		public Builder authnRequestTtl(Duration value) {
+			reqnn("value", value);
+			if (value.isNegative() || value.isZero())
+				throw iaex("authnRequestTtl must be positive");
+			authnRequestTtl = value;
 			return this;
 		}
 
@@ -420,6 +483,16 @@ public class SamlAssertionValidator {
 				throw new IllegalStateException("SamlAssertionValidator requires either metadataResolver(...) or signingCredential(...)");
 			if (metadataResolver != null && signingCredential != null)
 				throw new IllegalStateException("SamlAssertionValidator: metadataResolver(...) and signingCredential(...) are mutually exclusive");
+			if (recipient == null)
+				throw new IllegalStateException("SamlAssertionValidator requires recipient(...) (the SP assertion consumer service URL)");
+			if (replayCache == null) {
+				LOG.warning("SamlAssertionValidator is using the default in-memory replay cache, which is not shared between nodes; configure replayCache(...) for multi-node deployments.");
+				replayCache = new InMemoryReplayCache();
+			}
+			if (authnRequestStore == null) {
+				LOG.warning("SamlAssertionValidator is using the default in-memory authentication request store, which is not shared between nodes; configure authnRequestStore(...) for multi-node deployments.");
+				authnRequestStore = new InMemoryAuthnRequestStore();
+			}
 			return new SamlAssertionValidator(this);
 		}
 	}
@@ -437,6 +510,12 @@ public class SamlAssertionValidator {
 	private final Duration clockSkew;
 	private final Clock clock;
 	private final ReplayCache replayCache;
+	private final boolean allowIdpInitiated;
+	private final Duration authnRequestTtl;
+	private final AuthnRequestStore authnRequestStore;
+
+	/** Attribute names that cannot replace the validator-set claims. */
+	private static final Set<String> RESERVED_CLAIMS = Set.of(ISSUER_TYPE_CLAIM, "iss", "aud");
 
 	/**
 	 * Constructor.
@@ -458,6 +537,9 @@ public class SamlAssertionValidator {
 		this.clockSkew = b.clockSkew;
 		this.clock = b.clock;
 		this.replayCache = b.replayCache;
+		this.authnRequestStore = b.authnRequestStore;
+		this.allowIdpInitiated = b.allowIdpInitiated;
+		this.authnRequestTtl = b.authnRequestTtl;
 	}
 
 	/**
@@ -497,6 +579,26 @@ public class SamlAssertionValidator {
 	}
 
 	/**
+	 * Registers the ID of an authentication request this SP sent, so a response answering it can be accepted.
+	 *
+	 * <p>
+	 * Each registered ID is accepted once and expires after the configured request lifetime.  The registry is the
+	 * {@link AuthnRequestStore} supplied to {@link Builder#authnRequestStore(AuthnRequestStore)} (in-memory by default).
+	 *
+	 * @param id The {@code ID} attribute of the outgoing {@code <AuthnRequest>}.  Must not be <jk>null</jk> or blank.
+	 * @throws IllegalStateException If the store cannot accept more outstanding requests.
+	 */
+	public void rememberAuthnRequest(String id) {
+		reqnb("id", id);
+		var now = clock.millis();
+		authnRequestStore.remember(id, now + authnRequestTtl.toMillis(), now);
+	}
+
+	private boolean consumeAuthnRequest(String id) {
+		return authnRequestStore.consume(id, clock.millis());
+	}
+
+	/**
 	 * Validates the supplied SAML 2.0 {@code <samlp:Response>} XML and returns the resolved principal.
 	 *
 	 * @param xml The full XML payload (already base64-decoded; already URL-decoded and inflated for the
@@ -507,44 +609,23 @@ public class SamlAssertionValidator {
 	 */
 	public Principal validate(String xml) throws AuthenticationException {
 		reqnb("xml", xml);
-		return validateInternal(xml, recipient);
-	}
-
-	/**
-	 * Validates the supplied SAML 2.0 {@code <samlp:Response>} XML, enforcing bearer
-	 * {@code <SubjectConfirmation>} against the given {@code recipient} for this call.
-	 *
-	 * <p>
-	 * Unlike {@link #validate(String)}, bearer subject-confirmation is always enforced here &mdash;
-	 * {@code recipient} overrides whatever {@link Builder#recipient(String)} this validator was built with
-	 * (including unset).  {@link SamlAuthFilter} calls this overload with the ACS URL derived from the
-	 * current request so that a validator built without {@link Builder#recipient(String)} configured still
-	 * rejects an assertion bearer-confirmed to a different endpoint on the filter path.
-	 *
-	 * @param xml The full XML payload (already base64-decoded; already URL-decoded and inflated for the
-	 * 	REDIRECT binding).  Must be a {@code <samlp:Response>} envelope.
-	 * @param recipient The expected {@code Recipient} (this SP's ACS URL) for bearer subject-confirmation.
-	 * 	Must not be <jk>null</jk> or blank.
-	 * @return A {@link ClaimsPrincipal} carrying the IdP-supplied claims plus the {@code issuerType=SAML}
-	 * 	marker.
-	 * @throws AuthenticationException If the response cannot be parsed or validation fails.
-	 */
-	public Principal validate(String xml, String recipient) throws AuthenticationException {
-		reqnb("xml", xml);
-		reqnb("recipient", recipient);
-		return validateInternal(xml, recipient);
-	}
-
-	private Principal validateInternal(String xml, String recipient) throws AuthenticationException {
 		var response = parseResponse(xml);
 		validateStatus(response);
+		validateDestination(response);
 		var assertion = extractAndDecryptAssertion(response);
 		verifySignature(assertion);
 		var claims = buildClaims(response, assertion);
-		validateSubjectConfirmation(assertion, recipient);
+		validateSubjectConfirmation(assertion);
 		recordSingleUse(assertion);
 		var subject = nameId(assertion);
 		return new ClaimsPrincipal(subject, claims);
+	}
+
+	private void validateDestination(Response response) throws AuthenticationException {
+		var destination = response.getDestination();
+		if (destination != null && neq(recipient, destination))
+			throw new AuthenticationException("SAML response <Destination> does not match the expected ACS URL")
+				.wwwAuthenticate("SAML error=\"invalid_response\"");
 	}
 
 	private void validateStatus(Response response) throws AuthenticationException {
@@ -583,24 +664,30 @@ public class SamlAssertionValidator {
 			throw new AuthenticationException("SAML response contains no <Assertion>")
 				.wwwAuthenticate("SAML error=\"invalid_response\"");
 		if (!encrypted.isEmpty()) {
-			if (decryptionCredential == null)
-				throw new AuthenticationException("SAML response contains <EncryptedAssertion> but no decryption credential is configured")
-					.wwwAuthenticate("SAML error=\"decryption_required\"");
+			if (decryptionCredential == null) {
+				LOG.fine("SAML response contains <EncryptedAssertion> but no decryption credential is configured");
+				throw decryptionFailed();
+			}
 			var resolver = (KeyInfoCredentialResolver) new StaticKeyInfoCredentialResolver(decryptionCredential);
 			EncryptedKeyResolver keyResolver = new ChainingEncryptedKeyResolver(List.of(
 				new InlineEncryptedKeyResolver(),
 				new SimpleRetrievalMethodEncryptedKeyResolver()
 			));
-			var decrypter = new Decrypter(null, resolver, keyResolver);
-			decrypter.setRootInNewDocument(true);
 			try {
+				var decrypter = new Decrypter(null, resolver, keyResolver, DECRYPTION_ALGORITHMS, null);
+				decrypter.setRootInNewDocument(true);
 				return decrypter.decrypt(encrypted.get(0));
-			} catch (org.opensaml.xmlsec.encryption.support.DecryptionException e) {
-				throw new AuthenticationException(e, "SAML <EncryptedAssertion> could not be decrypted")
-					.wwwAuthenticate("SAML error=\"decryption_failed\"");
+			} catch (DecryptionException | RuntimeException e) {
+				LOG.log(Level.FINE, e, () -> "SAML <EncryptedAssertion> could not be decrypted");
+				throw decryptionFailed();
 			}
 		}
 		return assertions.get(0);
+	}
+
+	private static AuthenticationException decryptionFailed() {
+		return new AuthenticationException("SAML response could not be decrypted")
+			.wwwAuthenticate("SAML error=\"decryption_failed\"");
 	}
 
 	private void verifySignature(Assertion assertion) throws AuthenticationException {
@@ -727,7 +814,7 @@ public class SamlAssertionValidator {
 		for (var stmt : assertion.getAttributeStatements()) {
 			for (var attr : stmt.getAttributes()) {
 				var name = attr.getName();
-				if (name == null)
+				if (name == null || RESERVED_CLAIMS.contains(name))
 					continue;
 				var values = l();
 				for (var av : attr.getAttributeValues())
@@ -789,9 +876,7 @@ public class SamlAssertionValidator {
 		}
 	}
 
-	private void validateSubjectConfirmation(Assertion assertion, String recipient) throws AuthenticationException {
-		if (recipient == null)  // Bearer subject-confirmation validation is enabled by configuring recipient(...) or calling validate(xml, recipient).
-			return;
+	private void validateSubjectConfirmation(Assertion assertion) throws AuthenticationException {
 		var subject = assertion.getSubject();
 		if (subject == null)
 			throw rejectAssertion("missing <Subject> for bearer confirmation");
@@ -801,7 +886,7 @@ public class SamlAssertionValidator {
 			if (! SubjectConfirmation.METHOD_BEARER.equals(sc.getMethod()))
 				continue;
 			sawBearer = true;
-			var reason = confirmationFailureReason(sc, recipient);
+			var reason = confirmationFailureReason(sc);
 			if (reason == null)
 				return;  // A valid bearer confirmation was found.
 			failure = reason;
@@ -811,7 +896,10 @@ public class SamlAssertionValidator {
 		throw rejectAssertion(failure);
 	}
 
-	private String confirmationFailureReason(SubjectConfirmation sc, String recipient) {
+	@SuppressWarnings({
+		"java:S3776" // Branching is inherent to the ordered bearer-confirmation checks.
+	})
+	private String confirmationFailureReason(SubjectConfirmation sc) {
 		var data = sc.getSubjectConfirmationData();
 		if (data == null)
 			return "bearer <SubjectConfirmationData> is missing";
@@ -827,11 +915,15 @@ public class SamlAssertionValidator {
 		if (nbf != null && nbf.minus(clockSkew).isAfter(now))
 			return "bearer confirmation is not yet valid";
 		var inResponseTo = data.getInResponseTo();
+		var hasInResponseTo = inResponseTo != null && ! inResponseTo.isEmpty(); // HTT: OpenSAML trims an empty InResponseTo to null; kept as a fail-closed guard
 		if (expectedInResponseTo != null) {
 			if (neq(expectedInResponseTo, inResponseTo))
 				return "bearer confirmation <InResponseTo> does not match the expected request ID";
-		} else if (inResponseTo != null && ! inResponseTo.isEmpty()) { // HTT: OpenSAML trims an empty InResponseTo to null, so the isEmpty() branch cannot run; kept as a fail-closed guard
-			return "unsolicited bearer confirmation must not carry <InResponseTo>";
+		} else if (hasInResponseTo) {
+			if (! consumeAuthnRequest(inResponseTo))
+				return "bearer confirmation <InResponseTo> does not reference an outstanding request";
+		} else if (! allowIdpInitiated) {
+			return "unsolicited (IdP-initiated) responses are not allowed";
 		}
 		if (expectedAddress != null && neq(expectedAddress, data.getAddress()))
 			return "bearer confirmation <Address> does not match the expected client address";
@@ -903,14 +995,12 @@ public class SamlAssertionValidator {
 		return av.toString(); // HTT: the response is always parsed from XML, so every unmarshalled value carries its DOM
 	}
 
-	private static String nameId(Assertion assertion) {
+	private static String nameId(Assertion assertion) throws AuthenticationException {
 		var subject = assertion.getSubject();
-		if (subject == null)
-			return "<no-subject>";
-		var nameID = subject.getNameID();
-		if (nameID != null && nameID.getValue() != null)
-			return nameID.getValue();
-		return "<no-subject>";
+		var nameID = subject == null ? null : subject.getNameID();
+		if (nameID == null || nameID.getValue() == null || nameID.getValue().isBlank())
+			throw rejectAssertion("missing <NameID> subject");
+		return nameID.getValue();
 	}
 
 	private static AuthenticationException rejectAssertion(String reason) {

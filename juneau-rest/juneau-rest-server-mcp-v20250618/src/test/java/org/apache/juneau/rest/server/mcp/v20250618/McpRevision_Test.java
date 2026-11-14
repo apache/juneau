@@ -20,10 +20,12 @@ import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.*;
@@ -32,6 +34,16 @@ import org.junit.jupiter.api.*;
  * Coverage for {@link McpRevision}.
  */
 class McpRevision_Test {
+
+	private static LogRecordCapture.Quiet quietMcp;
+
+	@BeforeAll static void silenceMcpWarnings() {
+		quietMcp = LogRecordCapture.quiet(McpRevision.class);
+	}
+
+	@AfterAll static void restoreMcpLogging() {
+		quietMcp.close();
+	}
 
 	private final BeanStore ctx = new BasicBeanStore();
 
@@ -270,17 +282,17 @@ class McpRevision_Test {
 		}));
 		var resp = send(config, req(1, McpMethods.TOOLS_CALL, JsonMap.of("name", "e")));
 		assertEquals(McpRevision.CODE_INTERNAL_ERROR, resp.getError().getCode());
-		assertString("boom", resp.getError().getMessage());
+		assertString("Internal error", resp.getError().getMessage());
 	}
 
 	@Test
-	void d08_handler_throwingRuntimeExceptionWithoutMessage_usesClassName() {
+	void d08_handler_throwingRuntimeExceptionWithoutMessage_genericMessage() {
 		var config = new McpServerConfig().addTool(tool("e", a -> {
 			throw new IllegalStateException();
 		}));
 		var resp = send(config, req(1, McpMethods.TOOLS_CALL, JsonMap.of("name", "e")));
 		assertEquals(McpRevision.CODE_INTERNAL_ERROR, resp.getError().getCode());
-		assertString("IllegalStateException", resp.getError().getMessage());
+		assertString("Internal error", resp.getError().getMessage());
 	}
 
 	// -------- prompts ---------
@@ -383,5 +395,31 @@ class McpRevision_Test {
 		var result = new McpRevision(null).dispatch(new McpExchange(req, n -> null), new McpServerConfig().addTool(handler), ctx);
 		var response = ((McpResponseResult) result).response();
 		assertBean(response, "error,result", "<null>,<null>");
+	}
+
+	@Test
+	void z01_unexpectedException_returnsGenericInternalError() {
+		var config = new McpServerConfig().addTool(tool("boom", a -> { throw new IllegalStateException("secret-detail"); }));
+		var resp = send(config, req(1, McpMethods.TOOLS_CALL, JsonMap.of("name", "boom", "arguments", JsonMap.of())));
+		assertEquals(-32603, resp.getError().getCode());
+		assertEquals("Internal error", resp.getError().getMessage());
+		assertNull(resp.getError().getData());
+	}
+
+	@Test
+	void z02_toolsCall_validatesArgumentsAgainstInputSchema() {
+		var schema = McpSchema.of(JsonMap.of("type", "object", "properties", JsonMap.of("n", JsonMap.of("type", "integer")), "required", List.of("n")));
+		var called = new AtomicInteger();
+		var handler = new McpToolHandler() {
+			@Override public McpToolSpec descriptor() { return new McpToolSpec().setName("t").setInputSchema(schema); }
+			@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) { called.incrementAndGet(); return new McpToolOutcome(); }
+		};
+		var config = new McpServerConfig().addTool(handler);
+		var bad = send(config, req(1, McpMethods.TOOLS_CALL, JsonMap.of("name", "t", "arguments", JsonMap.of("n", "not-a-number"))));
+		assertEquals(-32602, bad.getError().getCode());
+		assertEquals(0, called.get());
+		var ok = send(config, req(2, McpMethods.TOOLS_CALL, JsonMap.of("name", "t", "arguments", JsonMap.of("n", 3))));
+		assertNull(ok.getError());
+		assertEquals(1, called.get());
 	}
 }

@@ -110,7 +110,7 @@ class JavaHttpTransport_RedirectCredentials_Test {
 	})
 	private static RecordingHttpClient run(String uri) throws Exception {
 		var client = new RecordingHttpClient();
-		var transport = JavaHttpTransport.builder().httpClient(client).build();
+		var transport = JavaHttpTransport.builder().allowHostHeaderOverride().httpClient(client).build();
 		transport.execute(request(uri));
 		return client;
 	}
@@ -119,7 +119,7 @@ class JavaHttpTransport_RedirectCredentials_Test {
 		var client = run(ORIGIN_A + "/cross");
 		assertList(client.sent.stream().map(HttpRequest::uri).toList(), ORIGIN_A + "/cross", ORIGIN_B + "/echo");
 		assertList(headerNames(client.sent.get(0)), "Authorization", "Cookie", "Host", "X-Trace");
-		assertList(headerNames(client.sent.get(1)), "Host", "X-Trace");
+		assertList(headerNames(client.sent.get(1)), "Host");
 	}
 
 	@Test void a02_sameOriginRedirect_keepsCredentialHeaders() throws Exception {
@@ -131,7 +131,7 @@ class JavaHttpTransport_RedirectCredentials_Test {
 	@Test void a03_nonPolicyRequestWithCredentials_throughAutoFollowingClient_isRefused() {
 		var client = new RecordingHttpClient();
 		client.redirect = HttpClient.Redirect.NORMAL;
-		var transport = JavaHttpTransport.builder().httpClient(client).build();
+		var transport = JavaHttpTransport.builder().allowHostHeaderOverride().httpClient(client).build();
 		var req = TransportRequest.builder().method("GET").uri(ORIGIN_A + "/cross").header("Authorization", "Bearer secret-token").build();
 		assertThrows(TransportException.class, () -> transport.execute(req));
 		assertEquals(0, client.sent.size(), "nothing may be sent when the client would follow the redirect itself");
@@ -140,20 +140,34 @@ class JavaHttpTransport_RedirectCredentials_Test {
 	@Test void a04_nonPolicyRequestWithoutCredentials_throughAutoFollowingClient_isSent() throws Exception {
 		var client = new RecordingHttpClient();
 		client.redirect = HttpClient.Redirect.ALWAYS;
-		var transport = JavaHttpTransport.builder().httpClient(client).build();
+		var transport = JavaHttpTransport.builder().allowHostHeaderOverride().httpClient(client).build();
 		var req = TransportRequest.builder().method("GET").uri(ORIGIN_A + "/echo").header("X-Trace", "t-1").build();
 		try (var res = transport.execute(req)) {
 			assertEquals(200, res.getStatusCode());
 		}
 	}
 
-	@Test void a05_extraStripHeader_isDroppedOnCrossOriginRedirect() throws Exception {
+	@Test void a05_customHeaders_areDroppedOnCrossOriginRedirect_exceptAllowListed() throws Exception {
 		var client = new RecordingHttpClient();
-		var transport = JavaHttpTransport.builder().httpClient(client).build();
+		var transport = JavaHttpTransport.builder().allowHostHeaderOverride().httpClient(client).build();
 		var req = TransportRequest.builder().method("GET").uri(ORIGIN_A + "/cross").remoteUrlPolicy(true, false)
-			.header("X-Api-Key", "k").header("X-Trace", "t-1").redirectStripHeaders(List.of("x-api-key")).build();
+			.header("X-Auth-Token", "k").header("X-Trace", "t-1").header("Accept", "text/plain")
+			.redirectForwardHeaders(List.of("x-trace")).build();
 		transport.execute(req).close();
-		assertList(headerNames(client.sent.get(0)), "Host", "X-Api-Key", "X-Trace");
-		assertList(headerNames(client.sent.get(1)), "Host", "X-Trace");
+		assertList(headerNames(client.sent.get(0)), "Accept", "Host", "X-Auth-Token", "X-Trace");
+		assertList(headerNames(client.sent.get(1)), "Accept", "Host", "X-Trace");
+	}
+
+	@Test void a06_perRequestForwardList_isMergedWithClientList() throws Exception {
+		var stub = new RecordingHttpClient();
+		var transport = JavaHttpTransport.builder().allowHostHeaderOverride().httpClient(stub).build();
+		try (var client = RestClient.builder().transport(transport).rootUrl(ORIGIN_A).redirectForwardHeaders("X-Client").build();
+				var response = client.get("/cross").remoteUrlPolicy(true, false).redirectForwardHeaders("X-Keep").header("X-Keep", "k").header("X-Drop", "d").header("X-Client", "c").run()) {
+			assertEquals(200, response.getStatusCode());
+		}
+		var names = headerNames(stub.sent.get(1));
+		assertTrue(names.contains("X-Keep"), names.toString());
+		assertTrue(names.contains("X-Client"), names.toString());
+		assertFalse(names.contains("X-Drop"), names.toString());
 	}
 }

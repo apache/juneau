@@ -121,7 +121,7 @@ class CsrfBoundaryForwarded_JettyIT extends TestBase {
 
 	private App start(String host, boolean customizer, CsrfBoundary.Builder b) throws Exception {
 		var boundary = b.tokens(CsrfTokens.perProcess()).build();
-		var bus = ServerBus.create(BusPolicy.create().downstream("ops.jobs", true).boundary(boundary).build());
+		var bus = ServerBus.create(BusPolicy.create().anyCaller().downstream("ops.jobs", true).boundary(boundary).build());
 		var server = new Server();
 		var config = new HttpConfiguration();
 		if (customizer)

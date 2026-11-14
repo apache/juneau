@@ -60,6 +60,16 @@ import org.junit.jupiter.api.*;
  */
 class McpMrtrDispatch_Test {
 
+	private static LogRecordCapture.Quiet quietMcp;
+
+	@BeforeAll static void silenceMcpWarnings() {
+		quietMcp = LogRecordCapture.quiet(McpRevision.class);
+	}
+
+	@AfterAll static void restoreMcpLogging() {
+		quietMcp.close();
+	}
+
 	private final BeanStore ctx = new BasicBeanStore();
 
 	// -------- request/harness helpers ---------
@@ -658,11 +668,10 @@ class McpMrtrDispatch_Test {
 		assertEquals(-32025, resp.getError().getCode());
 	}
 
-	@Test void f03_defaultConfigWithoutReplayCache_doesNotRejectReplay() {
-		// Pins that with no ReplayCache wired (the default), a requestState token remains the documented
-		// multi-use bearer credential -- the exact same token may be resubmitted repeatedly within its TTL.
+	@Test void f03_replayCacheExplicitlyDisabled_doesNotRejectReplay() {
+		// Pins that with the replay cache explicitly disabled, a requestState token stays multi-use within its TTL.
 		var codec = new AeadRequestStateCodec();
-		var rev = revision(mrtr(codec));  // no ReplayCache wired
+		var rev = revision(mrtr(codec).setReplayCache(null));
 		var calls = new AtomicInteger();
 		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
 		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
@@ -833,10 +842,10 @@ class McpMrtrDispatch_Test {
 
 	@Test void f11_absentNullEmptyArgumentsAreInterchangeable() {
 		// absent "arguments", an explicit null "arguments", and an empty {} all resolve to Map.of() and hash to
-		// the same sentinel, so all three faithfully resume a token sealed with the sentinel hash. No replay
-		// cache is wired, so the single token stays usable across all three submissions.
+		// the same sentinel, so all three faithfully resume a token sealed with the sentinel hash. The replay
+		// cache is disabled, so the single token stays usable across all three submissions.
 		var codec = new AeadRequestStateCodec();
-		var rev = revision(mrtr(codec));
+		var rev = revision(mrtr(codec).setReplayCache(null));
 		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> text("done")));
 		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
 

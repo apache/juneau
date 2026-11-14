@@ -99,7 +99,7 @@ class SamlXmlSecurity_Test extends TestBase {
 	}
 
 	private SamlAssertionValidator validator() {
-		return SamlAssertionValidator.create().spEntityId(AUDIENCE).expectedIssuer(ISSUER)
+		return SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated().spEntityId(AUDIENCE).expectedIssuer(ISSUER)
 			.signingCredential(credential).clock(Clock.fixed(NOW, ZoneOffset.UTC)).build();
 	}
 

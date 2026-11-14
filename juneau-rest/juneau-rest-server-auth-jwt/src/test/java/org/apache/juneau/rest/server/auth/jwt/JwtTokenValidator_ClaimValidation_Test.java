@@ -147,9 +147,8 @@ class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 		assertTrue(ex.getMessage().toLowerCase().contains("\"aud\""));
 	}
 
-	@Test void a09_blankSubject_yieldsPlaceholderName() throws Exception {
-		// A signed, otherwise-valid JWT with no "sub" still validates; the resulting principal
-		// carries the documented "<no-sub>" placeholder.
+	@Test void a09_blankSubject_rejected() throws Exception {
+		// A signed, otherwise-valid JWT with no "sub" is rejected.
 		var rsa = generateRsa("kid-1");
 		var claims = new com.nimbusds.jwt.JWTClaimsSet.Builder()
 			.issuer(DEFAULT_ISSUER)
@@ -158,8 +157,9 @@ class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 			.expirationTime(Date.from(NOW.plus(Duration.ofMinutes(5))))
 			.build();
 		var token = signRsa(rsa, claims);
-		var principal = newValidator(fixed(rsa)).validate(token);
-		assertEquals("<no-sub>", principal.getName());
+		var validator = newValidator(fixed(rsa));
+		var ex = assertThrows(AuthenticationException.class, () -> validator.validate(token));
+		assertTrue(ex.getMessage().contains("\"sub\""));
 	}
 
 	@Test void b01_clockSkew_acceptsRecentlyExpiredJwtWithinSkew() throws Exception {

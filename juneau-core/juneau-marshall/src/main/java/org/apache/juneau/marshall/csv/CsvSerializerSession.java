@@ -55,6 +55,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 
 	private final CsvByteArrayCellFormat byteArrayFormat;
 	private final boolean allowNestedStructures;
+	private final boolean neutralizeFormulas;
 	private final String nullValue;
 
 	/**
@@ -64,6 +65,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 
 		private CsvByteArrayCellFormat byteArrayFormat;
 		private boolean allowNestedStructures;
+		private boolean neutralizeFormulas;
 		private String nullValue;
 
 		/**
@@ -76,6 +78,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 			super(reqnn("ctx", ctx));
 			byteArrayFormat = ctx.getByteArrayFormat();
 			allowNestedStructures = ctx.isAllowNestedStructures();
+			neutralizeFormulas = ctx.isNeutralizeFormulas();
 			nullValue = ctx.getNullValue();
 		}
 
@@ -87,6 +90,17 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 		 */
 		public Builder allowNestedStructures(boolean value) {
 			allowNestedStructures = value;
+			return this;
+		}
+
+		/**
+		 * Neutralize spreadsheet formulas in string cells.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder neutralizeFormulas(boolean value) {
+			neutralizeFormulas = value;
 			return this;
 		}
 
@@ -129,6 +143,8 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 					return byteArrayFormat(cvt(value, CsvByteArrayCellFormat.class));
 				case "allowNestedStructures", "CsvSerializerSession.allowNestedStructures":
 					return allowNestedStructures(cvt(value, Boolean.class));
+				case "neutralizeFormulas", "CsvSerializerSession.neutralizeFormulas":
+					return neutralizeFormulas(cvt(value, Boolean.class));
 				case "nullValue", "CsvSerializerSession.nullValue":
 					return nullValue(cvt(value, String.class));
 				default:
@@ -159,6 +175,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 		super(builder);
 		byteArrayFormat = builder.byteArrayFormat;
 		allowNestedStructures = builder.allowNestedStructures;
+		neutralizeFormulas = builder.neutralizeFormulas;
 		nullValue = or(builder.nullValue, "<NULL>");
 	}
 
@@ -529,7 +546,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 		var output = out.getRawOutput();
 		if (output instanceof CsvWriter output2)
 			return output2;
-		var w = new CsvWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), getQuoteChar(), isTrimStrings(), getUriResolver());
+		var w = new CsvWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), getQuoteChar(), isTrimStrings(), getUriResolver()).neutralizeFormulas(neutralizeFormulas);
 		out.setWriter(w);
 		return w;
 	}

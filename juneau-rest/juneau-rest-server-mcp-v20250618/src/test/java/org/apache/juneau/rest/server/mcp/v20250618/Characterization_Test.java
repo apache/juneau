@@ -27,12 +27,14 @@ import java.util.function.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20250618.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.mcp.*;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -52,6 +54,16 @@ import org.junit.jupiter.params.provider.*;
  * {@code mvn test -Drat.skip=true -pl juneau-rest/juneau-rest-server-mcp-v20250618 -Dtest=Characterization_Test -Djuneau.mcp.characterization.write=true}
  */
 class Characterization_Test {
+
+	private static LogRecordCapture.Quiet quietMcp;
+
+	@BeforeAll static void silenceMcpWarnings() {
+		quietMcp = LogRecordCapture.quiet(McpRevision.class);
+	}
+
+	@AfterAll static void restoreMcpLogging() {
+		quietMcp.close();
+	}
 
 	private static final Path DIR = Paths.get("src/test/resources/characterization");
 	private static final boolean WRITE = Boolean.getBoolean("juneau.mcp.characterization.write");

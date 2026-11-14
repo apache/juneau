@@ -31,6 +31,7 @@ import javax.crypto.spec.*;
 
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.http.tracing.TraceContextCarrier;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
@@ -59,6 +60,16 @@ import org.junit.jupiter.params.provider.*;
 	"resource" // MockRestClient is a Closeable test helper; lifetime is bounded by the test method.
 })
 class Characterization_Test {
+
+	private static LogRecordCapture.Quiet quietMcp;
+
+	@BeforeAll static void silenceMcpWarnings() {
+		quietMcp = LogRecordCapture.quiet(McpRevision.class);
+	}
+
+	@AfterAll static void restoreMcpLogging() {
+		quietMcp.close();
+	}
 
 	private static final Path DIR = Paths.get("src/test/resources/characterization");
 	private static final boolean WRITE = Boolean.getBoolean("juneau.mcp.characterization.write");
@@ -523,13 +534,13 @@ class Characterization_Test {
 	private static String mrtrToken(String fixture) {
 		var codec = new FixedKeyGcmCodec();
 		return switch (fixture) {
-			case "MRTR-resume-complete" -> codec.seal(new McpRequestState("complete-me", "tools/call", 1, FAR_FUTURE_MS, "jti-complete", NO_ARGS_HASH), aad("tools/call", "ask"));
-			case "MRTR-resume-input-required-again" -> codec.seal(new McpRequestState("pause-again", "tools/call", 1, FAR_FUTURE_MS, "jti-pause-again", NO_ARGS_HASH), aad("tools/call", "ask"));
-			case "MRTR-expired-request-state" -> codec.seal(new McpRequestState("cont-1", "tools/call", 1, PAST_MS, "jti-expired", NO_ARGS_HASH), aad("tools/call", "ask"));
-			case "MRTR-max-rounds-exceeded" -> codec.seal(new McpRequestState("cont-1", "tools/call", McpMrtrConfig.DEFAULT_MAX_ROUNDS, FAR_FUTURE_MS, "jti-max-rounds", NO_ARGS_HASH), aad("tools/call", "ask"));
-			case "MRTR-tampered-request-state" -> tamper(codec.seal(new McpRequestState("cont-1", "tools/call", 1, FAR_FUTURE_MS, "jti-tampered", NO_ARGS_HASH), aad("tools/call", "ask")));
+			case "MRTR-resume-complete" -> codec.seal(new McpRequestState("complete-me", "tools/call", 1, FAR_FUTURE_MS, "jti-" + UUID.randomUUID(), NO_ARGS_HASH), aad("tools/call", "ask"));
+			case "MRTR-resume-input-required-again" -> codec.seal(new McpRequestState("pause-again", "tools/call", 1, FAR_FUTURE_MS, "jti-" + UUID.randomUUID(), NO_ARGS_HASH), aad("tools/call", "ask"));
+			case "MRTR-expired-request-state" -> codec.seal(new McpRequestState("cont-1", "tools/call", 1, PAST_MS, "jti-" + UUID.randomUUID(), NO_ARGS_HASH), aad("tools/call", "ask"));
+			case "MRTR-max-rounds-exceeded" -> codec.seal(new McpRequestState("cont-1", "tools/call", McpMrtrConfig.DEFAULT_MAX_ROUNDS, FAR_FUTURE_MS, "jti-" + UUID.randomUUID(), NO_ARGS_HASH), aad("tools/call", "ask"));
+			case "MRTR-tampered-request-state" -> tamper(codec.seal(new McpRequestState("cont-1", "tools/call", 1, FAR_FUTURE_MS, "jti-" + UUID.randomUUID(), NO_ARGS_HASH), aad("tools/call", "ask")));
 			case "ELICIT-resume-accept-complete", "ELICIT-resume-decline", "ELICIT-resume-cancel" ->
-				codec.seal(new McpRequestState("cont-1", "tools/call", 1, FAR_FUTURE_MS, "jti-elicit", NO_ARGS_HASH), aad("tools/call", "confirm"));
+				codec.seal(new McpRequestState("cont-1", "tools/call", 1, FAR_FUTURE_MS, "jti-" + UUID.randomUUID(), NO_ARGS_HASH), aad("tools/call", "confirm"));
 			default -> throw new IllegalArgumentException("No MRTR token mapping for fixture: " + fixture);
 		};
 	}

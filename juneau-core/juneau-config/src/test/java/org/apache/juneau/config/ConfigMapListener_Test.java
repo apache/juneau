@@ -58,7 +58,7 @@ class ConfigMapListener_Test extends TestBase {
 
 		var cm = s.getMap("A.cfg");
 		cm.register(l);
-		cm.setEntry("", "foo", "baz", null, null, null);
+		cm.setEntry("", "foo", "baz", null, null);
 		cm.commit();
 		wait(latch);
 		assertNull(l.error);
@@ -84,7 +84,7 @@ class ConfigMapListener_Test extends TestBase {
 
 		var cm = s.getMap("A.cfg");
 		cm.register(l);
-		cm.setEntry("S1", "foo", "baz", null, null, null);
+		cm.setEntry("S1", "foo", "baz", null, null);
 		cm.commit();
 		wait(latch);
 		assertNull(l.error);
@@ -111,8 +111,8 @@ class ConfigMapListener_Test extends TestBase {
 
 		var cm = s.getMap("A.cfg");
 		cm.register(l);
-		cm.setEntry("", "k", "vb", null, null, null);
-		cm.setEntry("S1", "k1", "v1b", null, null, null);
+		cm.setEntry("", "k", "vb", null, null);
+		cm.setEntry("S1", "k1", "v1b", null, null);
 		cm.commit();
 		wait(latch);
 		assertNull(l.error);
@@ -129,20 +129,20 @@ class ConfigMapListener_Test extends TestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertString("[SET(k^* = kb # C),SET(S1/k1^* = k1b # C1)]", events);
+				assertString("[SET(k = kb # C),SET(S1/k1 = k1b # C1)]", events);
 			}
 		};
 
 		var cm = s.getMap("A.cfg");
 		cm.register(l);
-		cm.setEntry("", "k", "kb", "^*", "C", l("#k"));
-		cm.setEntry("S1", "k1", "k1b", "^*", "C1", l("#k1"));
+		cm.setEntry("", "k", "kb", "C", l("#k"));
+		cm.setEntry("S1", "k1", "k1b", "C1", l("#k1"));
 		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertEquals("#k|k<^*> = kb # C|[S1]|#k1|k1<^*> = k1b # C1|", pipedLines(cm));
+		assertEquals("#k|k = kb # C|[S1]|#k1|k1 = k1b # C1|", pipedLines(cm));
 	}
 
 	@Test void a05_addExistingEntriesWithAttributes() throws Exception {
@@ -160,20 +160,20 @@ class ConfigMapListener_Test extends TestBase {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertString("[SET(k^* = kb # Cb),SET(S1/k1^* = k1b # Cb1)]", events);
+				assertString("[SET(k = kb # Cb),SET(S1/k1 = k1b # Cb1)]", events);
 			}
 		};
 
 		var cm = s.getMap("A.cfg");
 		cm.register(l);
-		cm.setEntry("", "k", "kb", "^*", "Cb", l("#kb"));
-		cm.setEntry("S1", "k1", "k1b", "^*", "Cb1", l("#k1b"));
+		cm.setEntry("", "k", "kb", "Cb", l("#kb"));
+		cm.setEntry("S1", "k1", "k1b", "Cb1", l("#k1b"));
 		cm.commit();
 		wait(latch);
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertEquals("#kb|k<^*> = kb # Cb|#S1|[S1]|#k1b|k1<^*> = k1b # Cb1|", pipedLines(cm));
+		assertEquals("#kb|k = kb # Cb|#S1|[S1]|#k1b|k1 = k1b # Cb1|", pipedLines(cm));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -261,7 +261,7 @@ class ConfigMapListener_Test extends TestBase {
 		cm.setSection("S1", l("#S1"));
 		cm.setSection("S2", null);
 		cm.setSection("S3", Collections.<String>emptyList());
-		cm.setEntry("S3", "k3", "v3", null, null, null);
+		cm.setEntry("S3", "k3", "v3", null, null);
 		cm.commit();
 		wait(latch);
 		assertNull(l.error);
@@ -295,7 +295,7 @@ class ConfigMapListener_Test extends TestBase {
 		cm.setSection("S1", l("#S1b"));
 		cm.setSection("S2", null);
 		cm.setSection("S3", Collections.<String>emptyList());
-		cm.setEntry("S3", "k3", "v3", null, null, null);
+		cm.setEntry("S3", "k3", "v3", null, null);
 		cm.commit();
 		wait(latch);
 		assertNull(l.error);
@@ -410,7 +410,7 @@ class ConfigMapListener_Test extends TestBase {
 
 		var cm = s.getMap("A.cfg");
 		cm.register(l);
-		cm.setEntry("S2", "k2", "v2b", null, null, null);
+		cm.setEntry("S2", "k2", "v2b", null, null);
 		s.update("A.cfg",
 			"[S1]",
 			"k1 = v1b"
@@ -447,7 +447,7 @@ class ConfigMapListener_Test extends TestBase {
 
 		var cm = s.getMap("A.cfg");
 		cm.register(l);
-		cm.setEntry("S1", "k1", "v1c", null, null, null);
+		cm.setEntry("S1", "k1", "v1c", null, null);
 		s.update("A.cfg",
 			"[S1]",
 			"k1 = v1b"
@@ -492,7 +492,7 @@ class ConfigMapListener_Test extends TestBase {
 
 			var cm = s.getMap("A.cfg");
 			cm.register(l);
-			cm.setEntry("S1", "k1", "v1c", null, null, null);
+			cm.setEntry("S1", "k1", "v1c", null, null);
 			cm.commit();
 			wait(latch);
 			assertNull(l.error);
@@ -533,7 +533,7 @@ class ConfigMapListener_Test extends TestBase {
 
 			var cm = s.getMap("A.cfg");
 			cm.register(l);
-			cm.setEntry("S1", "k1", "v1c", null, null, null);
+			cm.setEntry("S1", "k1", "v1c", null, null);
 			assertThrowsWithMessage(ConfigException.class, "Unable to store contents of config to store.", cm::commit);
 			wait(latch);
 			assertNull(l.error);

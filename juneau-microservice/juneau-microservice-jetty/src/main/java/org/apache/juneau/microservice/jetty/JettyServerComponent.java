@@ -27,6 +27,7 @@ import static org.apache.juneau.marshall.collections.JsonMap.*;
 import java.io.*;
 import java.net.*;
 import java.nio.file.*;
+import java.nio.file.attribute.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -118,6 +119,7 @@ public class JettyServerComponent implements MicroserviceListener {
 	 * Creates the directory the bundled <c>jetty.xml</c>'s request log writes into, so a fresh working directory starts.
 	 *
 	 * <p>
+	 * A newly created directory is readable only by its owner, where the file system supports POSIX permissions.
 	 * A failure is logged rather than thrown; Jetty reports the unusable directory when the request log starts.
 	 *
 	 * @param dir The log directory (<c>Logging/logDir</c>).
@@ -125,7 +127,12 @@ public class JettyServerComponent implements MicroserviceListener {
 	 */
 	static void createLogDir(String dir, Logger logger) {
 		try {
-			Files.createDirectories(Path.of(dir));
+			var p = Path.of(dir);
+			var created = ! Files.exists(p);
+			Files.createDirectories(p);
+			// A directory this method created is private to the process owner where the file system supports POSIX permissions.
+			if (created && p.getFileSystem().supportedFileAttributeViews().contains("posix"))
+				Files.setPosixFilePermissions(p, PosixFilePermissions.fromString("rwx------"));
 		} catch (IOException | InvalidPathException e) {
 			logger.warning("Could not create log directory '" + dir + "': " + e);
 		}

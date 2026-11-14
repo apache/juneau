@@ -54,7 +54,7 @@ class CredentialGuardingContext_Test {
 	}
 
 	private static final List<String> ALL = List.of("Authorization", "Cookie", "Proxy-Authorization", "X-API-Key", "X-Trace");
-	private static final List<String> STRIPPED = List.of("X-Trace");
+	private static final List<String> STRIPPED = List.of();
 
 	// Records the first request, then the hop, and returns the hop's remaining header names.
 	private static List<String> hop(String from, String to) {
@@ -189,7 +189,7 @@ class CredentialGuardingContext_Test {
 		// Proxy-Authorization on a plain (not tunnelled) proxied route authenticates to the proxy, which every hop goes
 		// through; stripping it would make the proxy answer 407 again.
 		var route = new HttpRoute(TARGET_B, null, PROXY, false, TunnelType.PLAIN, LayerType.PLAIN);
-		assertEquals(List.of("Proxy-Authorization", "X-Trace"), hop("http://a.example:8080/x", "http://b.example:8080/y", route));
+		assertEquals(List.of("Proxy-Authorization"), hop("http://a.example:8080/x", "http://b.example:8080/y", route));
 	}
 
 	@Test
@@ -213,7 +213,7 @@ class CredentialGuardingContext_Test {
 	void a19_underscoreHostNames_comparedAsHosts() {
 		// java.net.URI cannot parse a host name with an underscore; the context compares HttpClient's own host objects.
 		assertEquals(ALL, underscoreHop("my_service", "my_service"));
-		assertEquals(List.of("X-Trace"), underscoreHop("my_service", "other_service"));
+		assertEquals(List.of(), underscoreHop("my_service", "other_service"));
 	}
 
 	private static List<String> underscoreHop(String fromHost, String toHost) {

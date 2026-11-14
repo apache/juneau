@@ -114,7 +114,7 @@ class TerminalProcessPrompts_Test extends TestBase {
 			assertTrue(log(p).contains("GOT 7"), log(p));
 			assertFalse(log(p).contains("hunter2"));
 			assertFalse(Files.readString(p.eventsFile()).contains("hunter2"));
-			assertFalse(Files.readString(run.resolve("runner.out")).contains("hunter2"));
+			assertFalse(Files.readString(p.runDir().resolve("runner.out")).contains("hunter2"));
 		}
 	}
 
@@ -128,7 +128,7 @@ class TerminalProcessPrompts_Test extends TestBase {
 		try (var p = startReal(List.of("python3", "-c", job), sink)) {
 			assertEquals(0, p.waitFor(60, TimeUnit.SECONDS));
 			assertTrue(sink.ended.await(10, TimeUnit.SECONDS));
-			assertTrue(Files.readString(run.resolve("runner.out")).contains("is not JSON"));
+			assertTrue(Files.readString(p.runDir().resolve("runner.out")).contains("is not JSON"));
 			assertTrue(log(p).contains("to-stderr"), "the job's stderr is on its terminal");
 			assertEquals(List.of(), new ArrayList<>(sink.lines), "nothing but valid prompt lines reaches onLine");
 		}

@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.math.*;
 
@@ -207,7 +208,7 @@ public enum BigNumberFormat {
 			if (BigInteger.class.equals(targetType))
 				return (T) new BigInteger(s);
 			if (BigDecimal.class.equals(targetType))
-				return (T) new BigDecimal(s);
+				return (T) parseBigDecimal(s);
 			throw iaex("Unsupported BigNumberFormat target type: %s", targetType.getName());
 		} catch (NumberFormatException e) {
 			throw iaex("Invalid big-number value '%s' for format %s: %s", value, format, e.getMessage());

@@ -84,7 +84,12 @@ class TerminalProcessInput_Test extends TestBase {
 		return Thread.getAllStackTraces().keySet().stream().filter(t -> t.getName().equals(name)).findFirst().orElse(null);
 	}
 
-	private List<String> expectedArgv(String... extra) {
+	/** The run directory the process created, read back from the {@code --full-log} argument. */
+	private static Path runDirOf(List<String> argv) {
+		return Path.of(argv.get(argv.indexOf("--full-log") + 1)).getParent();
+	}
+
+	private List<String> expectedArgv(Path run, String... extra) {
 		var argv = new ArrayList<>(List.of("/x/juneau_terminal.py", "--console", "none", "--pty", "--size", "100x30",
 			"--full-log", run.resolve(TerminalProcess.LOG_NAME).toString(), "--events", run.resolve(TerminalProcess.EVENTS_NAME).toString()));
 		argv.addAll(List.of(extra));
@@ -98,8 +103,8 @@ class TerminalProcessInput_Test extends TestBase {
 			assertEquals(0, p.waitFor(30, TimeUnit.SECONDS));
 		}
 		var argv = Files.readAllLines(bin.resolve("argv.txt"));
-		assertEquals(expectedArgv("--input", "stdin"), argv);
-		assertEquals(run.resolve(TerminalProcess.EVENTS_NAME).toString(), argv.get(9), "${10} is still the events file");
+		assertEquals(expectedArgv(runDirOf(argv), "--input", "stdin"), argv);
+		assertEquals(runDirOf(argv).resolve(TerminalProcess.EVENTS_NAME).toString(), argv.get(9), "${10} is still the events file");
 	}
 
 	@Test void a02_argvWithoutInputUnchanged() throws Exception {
@@ -107,7 +112,7 @@ class TerminalProcessInput_Test extends TestBase {
 		try (var p = start(false)) {
 			assertEquals(0, p.waitFor(30, TimeUnit.SECONDS));
 		}
-		assertEquals(expectedArgv(), Files.readAllLines(bin.resolve("argv.txt")));
+		assertEquals(expectedArgv(runDirOf(Files.readAllLines(bin.resolve("argv.txt")))), Files.readAllLines(bin.resolve("argv.txt")));
 		fakePython("exit 0");
 		try (var p = TerminalProcess.start("maven", List.of("mvn", "-q", "test"), 100, 30, dir.resolve("run2"), host())) {
 			assertEquals(0, p.waitFor(30, TimeUnit.SECONDS));

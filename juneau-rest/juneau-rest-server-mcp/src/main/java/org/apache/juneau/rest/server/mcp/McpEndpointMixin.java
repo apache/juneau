@@ -105,6 +105,7 @@ public interface McpEndpointMixin {
 	@SerializerConfig(addBeanTypes = "true", uriResolution = "NONE")
 	@RestPost(path = "/mcp")
 	default Object handleMcpRequest(@Content JsonRpcRequest req, RestRequest restReq) {
+		McpRequestPolicy.check(getMcpConfig(), restReq);
 		var bs = new BasicBeanStore(restReq.getContext().getBeanStore())
 			.addBean(RestRequest.class, restReq);
 		var broker = subscriptionBroker();

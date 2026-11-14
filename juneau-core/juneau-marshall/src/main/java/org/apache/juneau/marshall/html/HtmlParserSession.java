@@ -182,6 +182,16 @@ public class HtmlParserSession extends XmlParserSession {
 	 * Postcondition:  Pointing at outer END_ELEMENT.
 	 */
 	private <T> T readAnything(ClassMeta<T> eType, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
+		enterParseDepth();
+		try {
+			return readAnything0(eType, r, outer, isRoot, pMeta);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	// Workhorse method, wrapped by readAnything() with the recursion-depth guard.
+	private <T> T readAnything0(ClassMeta<T> eType, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();

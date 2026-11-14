@@ -50,7 +50,7 @@ class Content_Test extends TestBase {
 	// @Body on parameter
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=Json5Serializer.class, parsers=Json5Parser.class, defaultAccept="text/json")
+	@Rest(serializers=Json5Serializer.class, parsers=Json5Parser.class, defaultAccept="text/json", allowContentParam="true")
 	public static class A {
 		@RestPut(path="/String")
 		public String a(@Content String b) {
@@ -650,7 +650,7 @@ class Content_Test extends TestBase {
 	// Complex POJOs
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=Json5Serializer.class, parsers=Json5Parser.class, defaultAccept="application/json")
+	@Rest(serializers=Json5Serializer.class, parsers=Json5Parser.class, defaultAccept="application/json", allowContentParam="true")
 	public static class E {
 		@RestPut(path="/B")
 		public XBeans.XB a(@Content XBeans.XB b) {
@@ -686,7 +686,7 @@ class Content_Test extends TestBase {
 			.assertContent(expected);
 	}
 
-	@Rest(serializers=Json5Serializer.class, parsers=Json5Parser.class, defaultAccept="application/json")
+	@Rest(serializers=Json5Serializer.class, parsers=Json5Parser.class, defaultAccept="application/json", allowContentParam="true")
 	@MarshalledApply(on="A,B,C",value=@Marshalled)
 	@UrlEncodingApply(on="C",value=@UrlEncoding(expandedParams=true))
 	public static class E2 {

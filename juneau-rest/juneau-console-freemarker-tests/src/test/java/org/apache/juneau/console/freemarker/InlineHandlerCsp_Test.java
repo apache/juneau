@@ -18,6 +18,8 @@ package org.apache.juneau.console.freemarker;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.mock.classic.*;
@@ -83,6 +85,14 @@ class InlineHandlerCsp_Test extends TestBase {
 			t.on("loaded", HandlerRef.inline("return 1"));   // added after table(...) captured the table
 			return page.view(req);
 		}
+		@RestGet(path="/xfo") public View xfo(RestRequest req) {
+			req.getResponse().setHeader("X-Frame-Options", "DENY");
+			return spec(false).view(req);
+		}
+		@RestGet(path="/own-ancestors") public View ownAncestors(RestRequest req) {
+			req.getResponse().setHeader("Content-Security-Policy", "frame-ancestors https://partner.example");
+			return spec(false).view(req);
+		}
 		@RestGet(path="/csp-elem-only") public View cspElemOnly(RestRequest req) {
 			req.getResponse().setHeader("Content-Security-Policy", "script-src 'self' 'unsafe-eval'; script-src-elem 'self'");
 			return spec(true).view(req);
@@ -94,6 +104,22 @@ class InlineHandlerCsp_Test extends TestBase {
 			rsp.assertStatus(status);
 			return rsp.getContent().asString();
 		}
+	}
+
+	private static List<String> cspHeaders(String path) throws Exception {
+		try (var c = MockRestClient.buildLax(Host.class); var rsp = c.get(path).run()) {
+			rsp.assertStatus(200);
+			return Arrays.stream(rsp.getHeaders("Content-Security-Policy")).map(h -> h.getValue()).toList();
+		}
+	}
+
+	@Test void c01_pageDefaultsToSameOriginFraming() throws Exception {
+		assertEquals(List.of("frame-ancestors 'self'"), cspHeaders("/plain"));
+	}
+
+	@Test void c02_appFramingPolicyIsKept() throws Exception {
+		assertEquals(List.of("frame-ancestors https://partner.example"), cspHeaders("/own-ancestors"));
+		assertEquals(List.of(), cspHeaders("/xfo"));
 	}
 
 	@Test void a01_modelJs_followsBus() throws Exception {

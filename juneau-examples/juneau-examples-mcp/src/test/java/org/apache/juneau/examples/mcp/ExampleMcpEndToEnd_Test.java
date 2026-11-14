@@ -19,6 +19,7 @@ package org.apache.juneau.examples.mcp;
 import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.net.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -62,6 +63,12 @@ class ExampleMcpEndToEnd_Test extends TestBase {
 		// Regression guard: a lingering subscriptions/listen stream used to hold Jetty's graceful
 		// drain open for its full 30s stopTimeout.  Shutdown must now end open streams and return promptly.
 		assertTrue(elapsed.compareTo(Duration.ofSeconds(10)) < 0, "Server shutdown took " + elapsed + "; open SSE streams are blocking the graceful drain.");
+	}
+
+	@Test
+	void a00_serverListensOnLoopbackOnly() {
+		assertEquals("127.0.0.1", server.getRootUrl().getHost());
+		assertTrue(InetAddress.getLoopbackAddress().isLoopbackAddress());
 	}
 
 	// A fresh client per test avoids reusing a pooled keep-alive connection that the server may have closed while

@@ -57,9 +57,9 @@ class ThymeleafMixin_SvlPathOverride_Test extends TestBase {
 		try {
 			var c = MockRestClient.buildLax(A01_OverridePath.class);
 
-			c.get("/thymeleaf/templates/about").run().assertStatus(404);
+			c.get("/thymeleaf/about").run().assertStatus(404);
 
-			c.get("/views/templates/about")
+			c.get("/views/about")
 				.run()
 				.assertStatus(200)
 				.assertContent().asString().isContains("About Juneau");

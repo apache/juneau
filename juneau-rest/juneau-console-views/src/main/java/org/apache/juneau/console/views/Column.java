@@ -87,6 +87,7 @@ public final class Column {
 	private String href;
 	private String className;
 	private boolean defaultVisible = true;
+	private boolean html;
 
 	private Column(String name) {
 		this.name = name;
@@ -202,6 +203,21 @@ public final class Column {
 	}
 
 	/**
+	 * Sets whether this column's cell values are rendered as raw HTML.
+	 *
+	 * <p>
+	 * Defaults to <jk>false</jk>: a column without a {@link #render(Render) renderer} displays its values as escaped
+	 * text. Only set this for columns whose values are trusted markup.
+	 *
+	 * @param v Whether cell values are raw HTML.
+	 * @return This object.
+	 */
+	public Column html(boolean v) {
+		html = v;
+		return this;
+	}
+
+	/**
 	 * Sets whether this column starts visible.
 	 *
 	 * <p>
@@ -270,6 +286,8 @@ public final class Column {
 			m.put("className", className);
 		if (! defaultVisible)
 			m.put("defaultVisible", false);
+		if (html)
+			m.put("html", true);
 		if (searchType != null) {
 			m.put("searchType", searchType.wire());
 			var effective = operators != null ? operators : tableDefault;

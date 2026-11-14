@@ -154,6 +154,7 @@ public class MustacheViewRenderer implements ViewRenderer {
 	// mount applies, returning the configuration-relative template name.  Delegates to the shared
 	// FileUtils.resolveVirtualPathSafely + MustacheDispatcher.stripBasePath used by the raw render path.
 	static String gateTemplateName(String basePath, String templateName) {
+		ViewTemplateNames.requirePlainName(templateName);
 		var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);
 		return MustacheDispatcher.stripBasePath(basePath, resolved);
 	}

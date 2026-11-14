@@ -148,7 +148,7 @@ class TerminalInput_BrowserTest extends TestBase {
 			}
 		};
 		var input = TerminalInput.create(access);
-		bus = ServerBus.create(BusPolicy.create()
+		bus = ServerBus.create(BusPolicy.create().anyCaller()
 			.allowedOrigins(origin)
 			.upstream(TerminalInput.TOPIC, input)
 			.downstream(TerminalInput.STATUS_TOPIC, false)
@@ -200,7 +200,7 @@ class TerminalInput_BrowserTest extends TestBase {
 
 	/** Starts {@code sh -c script} under the runner's pseudo-terminal, with input on, as terminal and run {@code id}. */
 	private static void job(String id, String script) throws IOException {
-		JOBS.put(id, TerminalProcess.start("generic", List.of("sh", "-c", script), 100, 30, dir.resolve(id), true));
+		JOBS.put(id, TerminalProcess.start("generic", List.of("sh", "-c", script), 100, 30, dir, true));
 	}
 
 	/** {@code juneau-terminal/src/main/python/juneau_terminal.py}, from {@code basedir} or the working directory. */

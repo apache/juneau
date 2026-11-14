@@ -248,6 +248,30 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	SELF allowedMethodHeaders(String value);
 
 	/**
+	 * Specifies the {@link Rest#allowedResponseHeaders() allowedResponseHeaders} for this resource.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	SELF allowedResponseHeaders(String value);
+
+	/**
+	 * Specifies the {@link Rest#allowCrossSite() allowCrossSite} flag for this resource.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	SELF allowCrossSite(String value);
+
+	/**
+	 * Specifies the {@link Rest#allowedOrigins() allowedOrigins} for this resource.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	SELF allowedOrigins(String value);
+
+	/**
 	 * Specifies the {@link Rest#allowedMethodParams() allowedMethodParams} for this resource.
 	 *
 	 * @param value The new value for this property.
@@ -312,12 +336,12 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	SELF defaultResponseHeaders(String... value);
 
 	/**
-	 * Specifies the {@link Rest#disableContentParam() disableContentParam} flag for this resource.
+	 * Specifies the {@link Rest#allowContentParam() allowContentParam} flag for this resource.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
-	SELF disableContentParam(String value);
+	SELF allowContentParam(String value);
 
 	/**
 	 * Specifies the {@link Rest#maxInput() maxInput} for this resource.

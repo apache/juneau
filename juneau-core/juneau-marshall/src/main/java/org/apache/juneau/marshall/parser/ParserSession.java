@@ -770,6 +770,8 @@ public class ParserSession extends MarshallingSession {
 			return doReadIntoMap(p, m, keyType, valueType);
 		} catch (ParseException e) {
 			throw e;
+		} catch (@SuppressWarnings("unused") StackOverflowError e) {
+			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (Exception e) {
 			throw new ParseException(this, e);
 		} finally {
@@ -1223,6 +1225,14 @@ public class ParserSession extends MarshallingSession {
 	protected final boolean isTrimStrings() { return trimStrings; }
 
 	/**
+	 * Include input in errors.
+	 *
+	 * @see Parser.Builder#includeInputInErrors()
+	 * @return <jk>true</jk> if {@link ParseException} messages include a snippet of the input around the error location.
+	 */
+	protected final boolean isIncludeInputInErrors() { return ctx.isIncludeInputInErrors(); }
+
+	/**
 	 * Returns the effective {@link Nulls} default for this session — the per-session override (set via
 	 * {@link ParserSession.Builder#nulls(Nulls)}) when present, otherwise the parser context's
 	 * {@link Parser#getNulls()} value.
@@ -1362,15 +1372,11 @@ public class ParserSession extends MarshallingSession {
 	 * budget (default {@value #DEFAULT_MAX_PARSE_DEPTH}).
 	 *
 	 * <p>
-	 * Binary codec sessions (CBOR, Protobuf, MsgPack) call this at their recursive databind entry point before
-	 * descending into a nested array/map/message element, and must call {@link #exitParseDepth()} in a matching
-	 * <jk>finally</jk> block regardless of outcome.  Exceeding the budget throws a {@link ParseException} so an
-	 * adversarial deeply-nested document fails cleanly instead of exhausting the call stack with a
-	 * {@link StackOverflowError}.
-	 *
-	 * <p>
-	 * Intentionally not applied to the JSON/XML/text parsers, whose recursive-descent parsers already rely on
-	 * {@link StackOverflowError} conversion at the outer parse boundary.
+	 * Format parsers (JSON, UON, URL-encoding, XML, HTML, YAML, Markdown, CBOR, Protobuf, MsgPack) call this at their
+	 * recursive databind entry point before descending into a nested array/map/message element, and must call
+	 * {@link #exitParseDepth()} in a matching <jk>finally</jk> block regardless of outcome.  Exceeding the budget
+	 * throws a {@link ParseException} so an adversarial deeply-nested document fails cleanly instead of exhausting
+	 * the call stack with a {@link StackOverflowError}.
 	 *
 	 * @throws ParseException If the configured maximum parse depth was exceeded.
 	 */

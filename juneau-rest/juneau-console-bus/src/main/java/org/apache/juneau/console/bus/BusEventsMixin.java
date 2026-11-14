@@ -18,6 +18,8 @@ package org.apache.juneau.console.bus;
 
 import java.io.*;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
@@ -110,6 +112,10 @@ public interface BusEventsMixin {
 				return JsonMap.of("code", "bus:refused", "message", r.message());
 			}
 		}
+		else if (bus.policy().sameOriginCheck() && ! sameOrigin(hreq)) {
+			res.setStatus(403);
+			return JsonMap.of("code", "bus:refused", "message", "Cross-origin request refused.");
+		}
 		try {
 			var session = bus.openSession(hreq, sessionBody(req));
 			return bus.grant(session, servletBase(req) + BUS_PREFIX, req.getContextPath());
@@ -118,6 +124,22 @@ public interface BusEventsMixin {
 			e.retryAfterSeconds().ifPresent(x -> res.setHeader("Retry-After", String.valueOf(x)));
 			return e.toJson();
 		}
+	}
+
+	/**
+	 * The default check applied when the policy has no boundary: a request with an {@code Origin} header passes only
+	 * when that origin's authority equals the request's {@code Host}.  A request with no {@code Origin} passes.
+	 *
+	 * @param req The servlet request.
+	 * @return <jk>true</jk> if the request is allowed.
+	 */
+	private static boolean sameOrigin(HttpServletRequest req) {
+		var origin = req.getHeader("Origin");
+		if (origin == null)
+			return true;
+		var host = req.getHeader("Host");
+		var i = origin.indexOf("://");
+		return host != null && i > 0 && origin.substring(i + 3).equalsIgnoreCase(host);
 	}
 
 	/**
@@ -153,6 +175,10 @@ public interface BusEventsMixin {
 				res.setStatus(r.status());
 				return;
 			}
+		}
+		else if (bus.policy().sameOriginCheck() && ! sameOrigin(hreq)) {
+			res.setStatus(403);
+			return;
 		}
 		var session = bus.session(id, hreq.getUserPrincipal()).orElse(null);
 		if (session == null) {

@@ -82,9 +82,9 @@ final class CredentialGuardingContext extends HttpClientContext {
 			stripping = true;
 		if (stripping) {
 			var keepProxyAuthorization = isPlainProxyRoute(getHttpRoute());
-			for (var name : RedirectSecurity.stripOnCrossOrigin())
-				if (! (keepProxyAuthorization && eqic(name, HttpHeaders.PROXY_AUTHORIZATION)))
-					request.removeHeaders(name);
+			for (var h : request.getHeaders())
+				if (RedirectSecurity.mustStrip(h.getName(), null) && ! (keepProxyAuthorization && eqic(h.getName(), HttpHeaders.PROXY_AUTHORIZATION)))
+					request.removeHeader(h);
 		}
 	}
 

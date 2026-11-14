@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 import java.util.logging.*;
 
@@ -753,6 +754,71 @@ public class RestSession extends ContextSession {
 	public UrlPathMatch getUrlPathMatch() { return urlPathMatch; }
 
 	/**
+	 * Rejects an unsafe-method request that a browser marks as cross-site, unless the resource allows it.
+	 *
+	 * <p>
+	 * A request is refused when <c>Sec-Fetch-Site</c> is <c>cross-site</c>, or when an <c>Origin</c> header is
+	 * present (without <c>Sec-Fetch-Site</c>) and neither matches the <c>Host</c> header nor is listed in {@link Rest#allowedOrigins()}.  Requests with neither header pass.
+	 */
+	private void checkCrossSite() {
+		if (context.isAllowCrossSite())
+			return;
+		var m = req.getMethod();
+		if ("GET".equalsIgnoreCase(m) || "HEAD".equalsIgnoreCase(m) || "OPTIONS".equalsIgnoreCase(m) || "TRACE".equalsIgnoreCase(m))
+			return;
+		var site = req.getHeader("Sec-Fetch-Site");
+		var origin = req.getHeader("Origin");
+		var cross = "cross-site".equalsIgnoreCase(site);
+		// A browser-supplied Sec-Fetch-Site is authoritative; Origin is only compared to Host when it is absent.
+		if (! cross && site == null && origin != null) {
+			var host = req.getHeader("Host");
+			cross = host == null || ! originMatchesHost(origin, host);
+			if (cross)
+				cross = ! isTrustedOrigin(origin);
+		}
+		if (cross)
+			throw new Forbidden("Cross-site request refused.");
+	}
+
+	private boolean isTrustedOrigin(String origin) {
+		var trusted = context.getAllowedOrigins();
+		if (trusted.isEmpty())
+			return false;
+		var o = origin.endsWith("/") ? origin.substring(0, origin.length() - 1) : origin;
+		if (trusted.contains(o))
+			return true;
+		var fwd = req.getHeader("X-Forwarded-Host");
+		if (fwd == null)
+			return false;
+		for (var t : trusted) {
+			try {
+				var u = URI.create(t);
+				if (u.getAuthority() != null && u.getAuthority().equalsIgnoreCase(fwd.trim()))
+					return originMatchesHost(origin, fwd.trim());
+			} catch (IllegalArgumentException e) {
+				// Ignore malformed entry.
+			}
+		}
+		return false;
+	}
+
+	static boolean originMatchesHost(String origin, String host) {
+		try {
+			var u = URI.create(origin);
+			var h = u.getHost();
+			if (h == null || u.getScheme() == null)
+				return false;
+			var port = u.getPort();
+			var defaultPort = "https".equalsIgnoreCase(u.getScheme()) ? 443 : 80;
+			var authority = port < 0 || port == defaultPort ? h : h + ":" + port;
+			var hostNorm = host.endsWith(":" + defaultPort) ? host.substring(0, host.length() - (":" + defaultPort).length()) : host;
+			return authority.equalsIgnoreCase(hostNorm);
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+	}
+
+	/**
 	 * Runs this session.
 	 *
 	 * <p>
@@ -771,6 +837,7 @@ public class RestSession extends ContextSession {
 	 */
 	public void run() throws Exception {
 		try {
+			checkCrossSite();
 			var op = context.getRestOperations().findOperation(this);
 			checkOverride(op);
 			opSession = op.createSession(this).build();

@@ -136,6 +136,9 @@ public class JspViewRenderer implements ViewRenderer {
 				content2.getTemplateName());
 		}
 
+		if (! JspDispatcher.isServable(basePath, target))
+			throw new InternalServerError("JSP template is not servable: '%s'", content2.getTemplateName());
+
 		// Find the JSP engine via the servlet context. Both forward() failure modes (missing
 		// engine, dispatcher==null, ClassNotFoundException during forward) surface as a clear
 		// diagnostic naming the missing dependency.
@@ -181,6 +184,7 @@ public class JspViewRenderer implements ViewRenderer {
 	 * 	{@code ..} segments.
 	 */
 	static String joinPath(String basePath, String template) {
+		ViewTemplateNames.requirePlainName(template);
 		var bp = isEmpty(basePath) ? "/" : basePath;
 		return FileUtils.resolveVirtualPathSafely(bp, template);
 	}

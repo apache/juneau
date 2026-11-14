@@ -55,8 +55,9 @@ final class ClassicRedirectCredentialGuard implements HttpRequestInterceptor {
 			return;
 		}
 		if (shouldStrip(origin, current))
-			for (var name : RedirectSecurity.stripOnCrossOrigin())
-				request.removeHeaders(name);
+			for (var h : request.getAllHeaders())
+				if (RedirectSecurity.mustStrip(h.getName(), null))
+					request.removeHeader(h);
 	}
 
 	// Fails closed: an origin that cannot be compared (no parsable host, e.g. an underscore host name) is treated as different.

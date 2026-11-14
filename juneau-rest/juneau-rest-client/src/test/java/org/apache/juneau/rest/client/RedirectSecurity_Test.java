@@ -19,6 +19,7 @@ package org.apache.juneau.rest.client;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -95,6 +96,13 @@ class RedirectSecurity_Test extends TestBase {
 
 	@Test void e01_stripOnCrossOrigin_reusesRedactedHeadersDefault() {
 		assertEquals(org.apache.juneau.http.RedactedHeaders.DEFAULT, RedirectSecurity.stripOnCrossOrigin());
+	}
+
+	@Test void e03_mustStrip_defaultsToStrippingEverythingOffTheForwardList() {
+		assertTrue(RedirectSecurity.mustStrip("X-Auth-Token", null));
+		assertTrue(RedirectSecurity.mustStrip("Authorization", null));
+		assertFalse(RedirectSecurity.mustStrip("accept", null));
+		assertFalse(RedirectSecurity.mustStrip("X-Trace", List.of("x-TRACE")));
 	}
 
 	@Test void e02_hostCaseInsensitive() {

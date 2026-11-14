@@ -538,7 +538,8 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			var resp = capGet("/asyncCap/finestError");
 			assertEquals(500, resp.statusCode(), resp.body());
 
-			var recs = handler.forLogger(opLogger.getName());
+			// The error path can emit just after the 500 is flushed to this client — poll (see awaitRecords javadoc).
+			var recs = awaitRecords(handler, opLogger.getName(), 1);
 			assertSize(() -> "error path must still emit exactly one completion-path record", 1, recs);
 			var rec = recs.get(0);
 			assertEquals(Level.INFO, rec.getLevel());

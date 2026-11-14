@@ -399,6 +399,7 @@ public class McpDynamicClientRegistrar {
 		var ms = (int) Math.min(httpTimeout.toMillis(), Integer.MAX_VALUE);
 		http.setConnectTimeout(ms);
 		http.setReadTimeout(ms);
+		http.setFollowRedirects(false);
 		if (httpRequestConfigurator != null)
 			httpRequestConfigurator.accept(http);
 		HTTPResponse httpResp;

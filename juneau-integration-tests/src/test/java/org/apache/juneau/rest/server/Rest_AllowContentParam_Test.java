@@ -25,28 +25,41 @@ import org.junit.jupiter.api.*;
 class Rest_AllowContentParam_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Rest(disableBodyParam)
+	// @Rest(allowContentParam)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(disableContentParam="false")
+	@Rest(allowContentParam="true")
 	public static class A1 {
 		@RestOp
 		public Json5Map put(@Content Json5Map body) {
 			return body;
 		}
 	}
-	@Rest(disableContentParam="true")
+	@Rest(allowContentParam="false")
 	public static class A2 {
 		@RestOp
 		public Json5Map put(@Content Json5Map body) {
 			return body;
 		}
 	}
-	@Rest(disableContentParam="true")
+	@Rest(allowContentParam="false")
 	public static class A3 extends A1 {}
 
-	@Rest(disableContentParam="false")
+	@Rest(allowContentParam="true")
 	public static class A4 extends A2 {}
+
+	@Rest
+	public static class A5 {
+		@RestOp
+		public Json5Map put(@Content Json5Map body) {
+			return body;
+		}
+	}
+
+	@Test void a02_offByDefault() throws Exception {
+		var a5 = MockRestClient.build(A5.class);
+		a5.put("/?content=(c=d)", "{a:'b'}").run().assertContent("{a:'b'}");
+	}
 
 	@Test void a01_basic() throws Exception {
 		var a1 = MockRestClient.build(A1.class);

@@ -25,6 +25,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.http.tracing.TraceContextCarrier;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
@@ -65,6 +66,16 @@ import org.junit.jupiter.api.*;
 	"resource" // Test helpers return Closeables; Eclipse JDT @Owning warning is by design.
 })
 class McpTraceContext_Test extends TestBase {
+
+	private static LogRecordCapture.Quiet quietMcp;
+
+	@BeforeAll static void silenceMcpWarnings() {
+		quietMcp = LogRecordCapture.quiet(McpRevision.class);
+	}
+
+	@AfterAll static void restoreMcpLogging() {
+		quietMcp.close();
+	}
 
 	// -----------------------------------------------------------------------------------------------------------------
 	// Neutral test doubles.

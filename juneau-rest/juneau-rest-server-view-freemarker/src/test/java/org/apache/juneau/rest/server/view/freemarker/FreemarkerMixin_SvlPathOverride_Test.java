@@ -57,9 +57,9 @@ class FreemarkerMixin_SvlPathOverride_Test extends TestBase {
 		try {
 			var c = MockRestClient.buildLax(A01_OverridePath.class);
 
-			c.get("/freemarker/freemarker-templates/about.ftlh").run().assertStatus(404);
+			c.get("/freemarker/about.ftlh").run().assertStatus(404);
 
-			c.get("/views/freemarker-templates/about.ftlh")
+			c.get("/views/about.ftlh")
 				.run()
 				.assertStatus(200)
 				.assertContent().asString().isContains("About Juneau");

@@ -33,6 +33,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.logging.*;
+import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.http.ParseException;
@@ -2066,8 +2067,10 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				var pathVar = "{" + name + "}";
 				if (path.indexOf(pathVar) == -1 && neq(name, "/*"))
 					throw isex("Path variable {%s} was not found in path.", name);
-				if (eq(name, "/*"))
-					path = path.replaceAll("\\/\\*$", URI_PATH_SEPARATOR + value);
+				var remainder = eq(name, "/*");
+				requireSafePathValue(name, value, remainder);
+				if (remainder)
+					path = path.replaceAll("\\/\\*$", Matcher.quoteReplacement(URI_PATH_SEPARATOR + value));
 				else
 					path = path.replace(pathVar, String.valueOf(value));
 				uriBuilder.setPath(path);
@@ -2396,8 +2399,20 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	// The shared RedirectSecurity set, plus Proxy-Authorization whatever that set holds: a guarded call never goes
 	// through a proxy (one is refused), so on any hop it could only be a credential sent to the target itself.
 	// Defense in depth: the shared set holds Proxy-Authorization today, so no test can tell this pin from it.
+	// A path variable fills one path segment (or, for the remainder form, a run of segments): dot segments, and a '/'
+	// inside a single-segment value, would change which resource the call addresses.  Query/fragment characters, '\\' and '%' are
+	// percent-encoded when the URI is built.
+	private static void requireSafePathValue(String name, Object value, boolean remainder) {
+		var v = String.valueOf(value);
+		if (! remainder && (v.indexOf('/') >= 0))
+			throw iaex("Path variable {%s} must not contain '/'.", name);
+		for (var seg : v.split("/", -1))
+			if (eq(seg, ".") || eq(seg, ".."))
+				throw iaex("Path variable {%s} must not contain a '.' or '..' segment.", name);
+	}
+
 	private static boolean isCredentialHeader(String name) {
-		return eqic(name, "Proxy-Authorization") || RedirectSecurity.stripOnCrossOrigin().stream().anyMatch(x -> eqic(x, name));
+		return eqic(name, "Proxy-Authorization") || RedirectSecurity.mustStrip(name, null);
 	}
 
 	private static void resetTargetAuthState(HttpContext context) {

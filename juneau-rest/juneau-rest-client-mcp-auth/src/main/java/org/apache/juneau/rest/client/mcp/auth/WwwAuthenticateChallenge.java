@@ -42,6 +42,12 @@ public class WwwAuthenticateChallenge implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	/** Longest header value that will be parsed; longer values are treated as not a challenge. */
+	static final int MAX_HEADER_LENGTH = 8192;
+
+	/** Most parameters read from one challenge; the rest are ignored. */
+	static final int MAX_PARAMETERS = 32;
+
 	private final String scheme;
 	private final Map<String,String> parameters;
 
@@ -70,7 +76,7 @@ public class WwwAuthenticateChallenge implements Serializable {
 		if (headerValue == null)
 			return oe();
 		var s = headerValue.strip();
-		if (s.isEmpty())
+		if (s.isEmpty() || s.length() > MAX_HEADER_LENGTH)
 			return oe();
 		var sp = s.indexOf(' ');
 		if (sp < 0)
@@ -87,6 +93,8 @@ public class WwwAuthenticateChallenge implements Serializable {
 		while ((i = skipSeparators(s, i, n)) < n) {
 			var param = parseParam(s, i, n);
 			i = param.nextIndex();
+			if (out.size() >= MAX_PARAMETERS)
+				break;
 			if (param.key() != null && !param.key().isEmpty())
 				out.putIfAbsent(param.key(), param.value());
 		}
@@ -211,8 +219,12 @@ public class WwwAuthenticateChallenge implements Serializable {
 	 * @return The error code, or {@link Optional#empty()}.
 	 */
 	public Optional<String> error() {
-		return o(parameters.get("error"));
+		var v = parameters.get("error");
+		return o(v != null && KNOWN_ERRORS.contains(v) ? v : null);
 	}
+
+	private static final Set<String> KNOWN_ERRORS = Set.of(
+		"invalid_request", "invalid_token", "insufficient_scope");
 
 	/**
 	 * Returns the space-delimited {@code scope} param as an order-preserving set.

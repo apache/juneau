@@ -133,13 +133,62 @@ public final class RedirectSecurity {
 	}
 
 	/**
-	 * Returns the header names that must be stripped from a request before it is replayed
-	 * cross-origin. Reuses the canonical credential-header set from {@link RedactedHeaders#DEFAULT}.
+	 * Returns the well-known credential header names, used to mark them sensitive (for example to keep them out of logs).
 	 *
-	 * @return The set of header names to strip on a cross-origin (or downgraded) redirect.
+	 * <p>
+	 * This is not the strip list: a cross-origin redirect removes every header that is not on
+	 * {@link #forwardOnCrossOrigin()}.
+	 *
+	 * @return The set of credential header names.
 	 */
 	public static Set<String> stripOnCrossOrigin() {
 		return RedactedHeaders.DEFAULT;
+	}
+
+	private static final Set<String> FORWARD_ON_CROSS_ORIGIN = Set.of(
+		"accept", "accept-charset", "accept-encoding", "accept-language", "cache-control", "connection", "content-encoding",
+		"content-language", "content-length", "content-type", "expect", "host", "pragma", "te", "transfer-encoding",
+		"upgrade-insecure-requests", "user-agent");
+
+	/**
+	 * Returns the lower-cased names of the headers that may be replayed against another origin.
+	 *
+	 * <p>
+	 * Every other caller-set header is removed from a request replayed cross-origin (or across an {@code https} &rarr;
+	 * {@code http} downgrade).  Additional names can be forwarded per client with
+	 * {@link RestClient.Builder#redirectForwardHeaders(String...)}.
+	 *
+	 * @return An unmodifiable set of lower-cased header names.
+	 */
+	public static Set<String> forwardOnCrossOrigin() {
+		return FORWARD_ON_CROSS_ORIGIN;
+	}
+
+	/**
+	 * Returns whether a header may be replayed against another origin.
+	 *
+	 * @param name The header name.  Compared case-insensitively.
+	 * @return <jk>true</jk> if the header is on the built-in forward list.
+	 */
+	public static boolean isForwardedCrossOrigin(String name) {
+		return name != null && FORWARD_ON_CROSS_ORIGIN.contains(name.toLowerCase(Locale.ROOT));
+	}
+
+	/**
+	 * Returns whether a header must be removed from a request replayed against another origin.
+	 *
+	 * @param name The header name.
+	 * @param extraForward Additional header names the caller allows to be forwarded.  May be <jk>null</jk>.
+	 * @return <jk>true</jk> if the header is on neither the built-in nor the caller-supplied forward list.
+	 */
+	public static boolean mustStrip(String name, Collection<String> extraForward) {
+		if (isForwardedCrossOrigin(name))
+			return false;
+		if (extraForward != null)
+			for (var n : extraForward)
+				if (n != null && n.equalsIgnoreCase(name))
+					return false;
+		return true;
 	}
 
 	private static int normalizedPort(URI uri) {

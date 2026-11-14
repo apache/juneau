@@ -155,13 +155,14 @@ class Flows_Live_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// H: lifetime == 0 → Instant.MAX (Flows.java line 99 true branch)
+	// H: lifetime == 0 → 5-minute default (Flows.java line 99 true branch)
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void h01_zeroLifetime_expiresAtMax() {
-		// expires_in:0 → lifetime==0 → Instant.MAX
+		// expires_in:0 → lifetime==0 → default 5-minute lifetime
 		var t = acquire("{\"access_token\":\"at\",\"token_type\":\"Bearer\",\"expires_in\":0}");
-		assertEquals(Instant.MAX, t.expiresAt());
+		assertTrue(t.expiresAt().isAfter(Instant.now().plusSeconds(240)));
+		assertTrue(t.expiresAt().isBefore(Instant.now().plusSeconds(360)));
 	}
 
 	@Test void i01_tokenCachePutAfterAcquire() {

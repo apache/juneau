@@ -184,13 +184,13 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 
 	@BeforeAll static void start() throws Exception {
 		boundary = CsrfBoundary.create().tokens(CsrfTokens.perProcess()).build();
-		bus = ServerBus.create(BusPolicy.create()
+		bus = ServerBus.create(BusPolicy.create().anyCaller()
 			.downstream("ops.jobs", true)
 			.boundary(boundary)
 			.build());
 		trustedBoundary = CsrfBoundary.create().tokens(CsrfTokens.perProcess())
 			.trustedForwarding(CsrfBoundary.ForwardedSource.X_FORWARDED).trustedProxies("127.0.0.1/32").build();
-		trustedBus = ServerBus.create(BusPolicy.create()
+		trustedBus = ServerBus.create(BusPolicy.create().anyCaller()
 			.downstream("ops.jobs", true)
 			.boundary(trustedBoundary)
 			.build());

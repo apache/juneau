@@ -37,6 +37,7 @@ import jakarta.servlet.http.*;
  * </ul>
 */
 @SuppressWarnings({
+	"java:S1192", // The "UTF-8" default-encoding literal reads clearer inline than behind a constant
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)
 	"java:S4144", // Identical methods intentional for different test scenarios
 	"resource" // Streams returned to servlet container; lifecycle managed by the container

@@ -62,6 +62,7 @@ class RestContext_Test extends org.apache.juneau.TestBase {
 		assertNotNull(t);
 		assertEquals("Thrown", t.getName());
 		assertTrue(t.getValue().contains("IllegalStateException"));
+		assertEquals(stackTraces, t.getValue().contains("internal"));
 	}
 
 	@Test void a03_resolveThrownHeader_stackTracesOn_noRootCause_returnsNull() {

@@ -58,7 +58,10 @@ import org.thymeleaf.templateresolver.*;
 public class ThymeleafDispatcher implements RawTemplateDispatcher {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */
-	public static final String DEFAULT_BASE_PATH = "/";
+	@SuppressWarnings({
+		"java:S1075" // Default for the configurable basePath setting, not a hardcoded location.
+	})
+	public static final String DEFAULT_BASE_PATH = "/templates/";
 
 	/** Default template-cache flag &mdash; production-safe; opt out per-builder for dev. */
 	public static final boolean DEFAULT_CACHE_TEMPLATES = true;
@@ -209,6 +212,8 @@ public class ThymeleafDispatcher implements RawTemplateDispatcher {
 		// name like "../../etc/passwd" or "a/b/../../../secret" is rejected before reaching the
 		// engine. We re-derive the engine-relative template name from the safe result by
 		// stripping the (already-normalized) basePath prefix.
+		if (! ViewTemplateNames.isPlainName(template))
+			throw new NotFound("Template not found.");
 		String safeTemplate;
 		try {
 			var resolved = FileUtils.resolveVirtualPathSafely(basePath, template);

@@ -73,6 +73,7 @@ class PolicyEnforcedRedirects_Test {
 			.header("X-API-Key", "key-123")
 			.header("Accept", "application/json")
 			.header("X-Trace", "t-1")
+			.redirectForwardHeaders(List.of("X-Trace"))
 			.build();
 	}
 

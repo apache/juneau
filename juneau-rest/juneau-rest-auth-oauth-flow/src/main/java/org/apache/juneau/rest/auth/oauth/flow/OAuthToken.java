@@ -30,8 +30,8 @@ import java.util.*;
  *
  * @param accessToken The opaque or JWT access-token string.  Never {@code null}.
  * @param tokenType The token type per RFC 6749 &sect;5.1 (typically {@code "Bearer"}).  Never {@code null}.
- * @param expiresAt The instant at which the access token expires.  May be {@link Instant#MAX} when the
- * 	IdP returned no {@code expires_in}.
+ * @param expiresAt The instant at which the access token expires.  Tokens acquired through the flows in this
+ * 	package carry a 5-minute lifetime when the IdP returned no (or a zero) {@code expires_in}.
  * @param refreshToken The refresh token, if the IdP issued one.
  * @param scope The granted scopes, if the IdP returned a {@code scope} field.
  * @param idToken The OIDC ID token (a JWT), if the flow scope included {@code openid}.  <b>Not validated</b>

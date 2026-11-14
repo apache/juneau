@@ -92,6 +92,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, 
 
 		private CsvByteArrayCellFormat byteArrayFormat;
 		private boolean allowNestedStructures;
+		private boolean neutralizeFormulas;
 		private String nullValue;
 
 		/**
@@ -113,6 +114,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, 
 			super(reqnn("copyFrom", copyFrom));
 			byteArrayFormat = copyFrom.byteArrayFormat;
 			allowNestedStructures = copyFrom.allowNestedStructures;
+			neutralizeFormulas = copyFrom.neutralizeFormulas;
 			nullValue = copyFrom.nullValue;
 		}
 
@@ -126,6 +128,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, 
 			super(reqnn("copyFrom", copyFrom));
 			byteArrayFormat = copyFrom.byteArrayFormat;
 			allowNestedStructures = copyFrom.allowNestedStructures;
+			neutralizeFormulas = copyFrom.neutralizeFormulas;
 			nullValue = copyFrom.nullValue;
 		}
 
@@ -155,6 +158,24 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, 
 		}
 
 		/**
+		 * Neutralizes spreadsheet formulas in string cells.
+		 *
+		 * <p>
+		 * When enabled, string cells (and header names) that begin with <js>'='</js>, <js>'+'</js>, <js>'-'</js>, <js>'@'</js>,
+		 * a tab or a carriage return are prefixed with a single quote so that spreadsheet applications treat them as text.
+		 * Numbers and other non-string values are not modified.
+		 * Enable this when CSV output containing untrusted text will be opened in a spreadsheet.
+		 * The default is <jk>false</jk>, so that values round-trip through {@link CsvParser} unchanged.
+		 *
+		 * @param value Whether to neutralize formulas.
+		 * @return This object.
+		 */
+		public Builder neutralizeFormulas(boolean value) {
+			neutralizeFormulas = value;
+			return this;
+		}
+
+		/**
 		 * Format for serializing {@code byte[]} arrays in CSV cells.
 		 *
 		 * <p>
@@ -170,7 +191,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, 
 
 		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
-			return HashKey.of(super.hashKey(), byteArrayFormat, allowNestedStructures, nullValue);
+			return HashKey.of(super.hashKey(), byteArrayFormat, allowNestedStructures, neutralizeFormulas, nullValue);
 		}
 
 		@Override /* Overridden from Context.Builder<?> */
@@ -202,6 +223,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, 
 	private final Map<BeanPropertyMeta,CsvBeanPropertyMeta> csvBeanPropertyMetas = new ConcurrentHashMap<>();
 	private final CsvByteArrayCellFormat byteArrayFormat;
 	private final boolean allowNestedStructures;
+	private final boolean neutralizeFormulas;
 	private final String nullValue;
 
 	/**
@@ -213,6 +235,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, 
 		super(builder);
 		byteArrayFormat = or(builder.byteArrayFormat, CsvByteArrayCellFormat.BASE64);
 		allowNestedStructures = builder.allowNestedStructures;
+		neutralizeFormulas = builder.neutralizeFormulas;
 		nullValue = or(builder.nullValue, "<NULL>");
 	}
 
@@ -232,6 +255,15 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, 
 	 */
 	public boolean isAllowNestedStructures() {
 		return allowNestedStructures;
+	}
+
+	/**
+	 * Returns whether spreadsheet formulas in string cells are neutralized.
+	 *
+	 * @return Whether formulas are neutralized.
+	 */
+	public boolean isNeutralizeFormulas() {
+		return neutralizeFormulas;
 	}
 
 	/**

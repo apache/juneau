@@ -88,7 +88,7 @@ class FreemarkerMixin_MockRest_Test extends TestBase {
 	@Test void a02_freemarkerMountInstalled_rendersTemplate() throws Exception {
 		// Default basePath="/" + no templateSuffix → request path is taken as-is, FreeMarker's
 		// root-of-classpath loader resolves it directly.
-		ca.get("/freemarker/freemarker-templates/about.ftlh")
+		ca.get("/freemarker/about.ftlh")
 			.run()
 			.assertStatus(200)
 			.assertContent().asString().isContains("About Juneau");

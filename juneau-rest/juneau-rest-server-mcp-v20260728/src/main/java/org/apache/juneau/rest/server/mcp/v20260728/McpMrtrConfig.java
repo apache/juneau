@@ -37,24 +37,21 @@ import org.apache.juneau.commons.concurrent.*;
  *
  * <p>
  * Defaults: {@link AeadRequestStateCodec} (a fresh instance per {@link McpMrtrConfig}), a 5-minute
- * {@code requestState} TTL, a max-rounds cap of 10, no {@link ReplayCache} (replay rejection is opt-in; see
+ * {@code requestState} TTL, a max-rounds cap of 10, a per-process {@link InMemoryReplayCache} (single-use tokens; see
  * {@link #setReplayCache(ReplayCache)}), and a {@link Clock#systemUTC()} clock for stamping and checking token
  * expiry (see {@link #setClock(Clock)}). Operators inject a shared/rotating-key {@link RequestStateCodec} here
  * for multi-instance or restart-durable resumption.
  *
  * <h2 class='section'>Trust model:</h2>
  * <ul>
- * 	<li><b>{@code requestState} is a bearer token.</b> Anyone holding a sealed {@code requestState} can resume
- * 		the paused operation until it expires; the token is not bound to a caller identity. It must be
+ * 	<li><b>{@code requestState} is a bearer token for its principal.</b> Anyone holding a sealed {@code requestState}
+ * 		and authenticated as the same principal can resume the paused operation until it expires. It must be
  * 		transported only over authenticated TLS and <b>never logged</b> (it is opaque ciphertext, but logging
  * 		it hands a replayable credential to anyone with log access). See {@link RequestStateCodec}.
- * 	<li><b>Resume side effects must be idempotent by default.</b> A captured token can be replayed any number
- * 		of times within its {@link #getTtlMs() TTL} <i>unless</i> a {@link ReplayCache} is configured (see
- * 		{@link #setReplayCache(ReplayCache)}) to enforce single-use &mdash; the built-in
- * 		{@link InMemoryReplayCache} is per-process only, so cross-node single-use requires a shared
- * 		implementation. The {@link #getMaxRounds() max-rounds cap} bounds the <i>depth</i> of a single resume
- * 		chain, not the total number of times a given token can be re-submitted, so a handler must not treat a
- * 		resume as a once-only event unless it knows single-use is enforced.
+ * 	<li><b>Single-use by default.</b> The default {@link InMemoryReplayCache} rejects a second submission of the same
+ * 		token within its {@link #getTtlMs() TTL}; it is per-process only, so cross-node single-use requires a shared
+ * 		{@link ReplayCache} (see {@link #setReplayCache(ReplayCache)}). Passing <jk>null</jk> disables the check, and
+ * 		a handler must then write idempotent resume side effects.
  * </ul>
  */
 public class McpMrtrConfig {
@@ -68,7 +65,7 @@ public class McpMrtrConfig {
 	private RequestStateCodec codec = new AeadRequestStateCodec();
 	private long ttlMs = DEFAULT_TTL_MS;
 	private int maxRounds = DEFAULT_MAX_ROUNDS;
-	private ReplayCache replayCache;
+	private ReplayCache replayCache = new InMemoryReplayCache();
 	private Clock clock = Clock.systemUTC();
 
 	/**
@@ -169,12 +166,12 @@ public class McpMrtrConfig {
 	 * none is configured.
 	 *
 	 * <p>
-	 * <b>Unset (<jk>null</jk>) by default &mdash; replay rejection is opt-in.</b> A dispatcher only performs a
-	 * replay check when this returns non-<jk>null</jk> (see {@code McpRevision#resolveMrtrContext}); with no
-	 * {@link ReplayCache} configured, a {@code requestState} token remains multi-use within its TTL, exactly as
-	 * documented on {@link RequestStateCodec}.
+	 * <b>A per-process {@link InMemoryReplayCache} by default</b>, so a {@code requestState} token is single-use.
+	 * A dispatcher only performs a replay check when this returns non-<jk>null</jk> (see
+	 * {@code McpRevision#resolveMrtrContext}); a deployment that runs several nodes should supply a shared
+	 * implementation.
 	 *
-	 * @return The configured replay cache, or <jk>null</jk> if replay rejection is disabled (the default).
+	 * @return The configured replay cache, or <jk>null</jk> if replay rejection was explicitly disabled.
 	 */
 	public ReplayCache getReplayCache() {
 		return replayCache;
@@ -184,9 +181,9 @@ public class McpMrtrConfig {
 	 * Sets the replay cache, enabling replay rejection.
 	 *
 	 * <p>
-	 * Passing <jk>null</jk> is allowed and explicitly reverts to the default, opt-out behavior (no replay check;
-	 * a token stays multi-use within its TTL) &mdash; unlike {@link #setCodec(RequestStateCodec)}, there is no
-	 * always-non-null invariant to preserve here, since "no replay cache" is itself the documented default.
+	 * Passing <jk>null</jk> is allowed and explicitly disables replay rejection (a token then stays multi-use
+	 * within its TTL) &mdash; unlike {@link #setCodec(RequestStateCodec)}, there is no always-non-null invariant to
+	 * preserve here.
 	 *
 	 * @param value The replay cache to use, or <jk>null</jk> to disable replay rejection.
 	 * @return This object.

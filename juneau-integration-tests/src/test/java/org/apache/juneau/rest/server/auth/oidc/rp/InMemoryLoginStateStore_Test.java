@@ -49,7 +49,7 @@ class InMemoryLoginStateStore_Test extends TestBase {
 	/** Builds a framework-shaped record stamped from the given clock (createdAt=now, expiresAt=now+TTL). */
 	private static PendingLogin pending(Clock clock, String nonce, String verifier, String redirect) {
 		var now = clock.instant();
-		return new PendingLogin(nonce, verifier, redirect, now, now.plus(TTL));
+		return new PendingLogin(nonce, verifier, redirect, now, now.plus(TTL), null);
 	}
 
 	@Test void a01_storeThenConsume_roundTrips() {
@@ -101,18 +101,19 @@ class InMemoryLoginStateStore_Test extends TestBase {
 	@Test void b03_nullExpiresAt_isTreatedAsExpired() {
 		var s = store(CLOCK);
 		var now = CLOCK.instant();
-		s.store("state-1", new PendingLogin("nonce-1", "verifier-1", null, now, null));
+		s.store("state-1", new PendingLogin("nonce-1", "verifier-1", null, now, null, null));
 		assertTrue(s.consume("state-1").isEmpty(), "null expiresAt must fail closed as expired");
 	}
 
-	@Test void c01_sizeCap_evictsEldest() {
+	@Test void c01_sizeCap_rejectsNewWhenFull() {
 		var s = new InMemoryLoginStateStore(TTL, 3, CLOCK);
 		s.store("s1", pending(CLOCK, "n", "v", null));
 		s.store("s2", pending(CLOCK, "n", "v", null));
 		s.store("s3", pending(CLOCK, "n", "v", null));
-		s.store("s4", pending(CLOCK, "n", "v", null));  // evicts s1
+		assertThrows(IllegalStateException.class, () -> s.store("s4", pending(CLOCK, "n", "v", null)));
 		assertSize(3, s);
-		assertTrue(s.consume("s1").isEmpty());
+		assertTrue(s.consume("s1").isPresent(), "existing entries must not be evicted");
+		s.store("s4", pending(CLOCK, "n", "v", null));  // room again after a consume
 		assertTrue(s.consume("s4").isPresent());
 	}
 

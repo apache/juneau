@@ -77,6 +77,21 @@ public interface TerminalMixin {
 	Optional<TerminalSource> terminalSource(String id, RestRequest req);
 
 	/**
+	 * The access rules applied to the bytes and raw endpoints before the source is resolved.
+	 *
+	 * <p>
+	 * A caller that may not watch the id is answered {@code 404}, the same as an unknown id.  The caller handed to the
+	 * rules is the request's principal and request attributes.  Override to share one {@link TerminalAccess} with the
+	 * bus input path; the default admits every caller and leaves the decision to
+	 * {@link #terminalSource(String, RestRequest)}.
+	 *
+	 * @return The access rules.  Never <jk>null</jk>.
+	 */
+	default TerminalAccess terminalAccess() {
+		return (caller, id) -> true;
+	}
+
+	/**
 	 * [GET /juneau-terminal/{id}/bytes] &mdash; raw bytes from an offset.
 	 *
 	 * @param id The terminal id.
@@ -86,7 +101,7 @@ public interface TerminalMixin {
 	 */
 	@RestGet(path=BYTES_PATH, summary="Terminal bytes", swagger=@OpSwagger(ignore=true))
 	default void terminalBytes(@Path("id") String id, RestRequest req, RestResponse res) throws IOException {
-		TerminalEndpoints.bytes(terminalSource(TerminalEndpoints.checkId(id), req), req, res);
+		TerminalEndpoints.bytes(permitted(TerminalEndpoints.checkId(id), req), req, res);
 	}
 
 	/**
@@ -99,7 +114,19 @@ public interface TerminalMixin {
 	 */
 	@RestGet(path=RAW_PATH, summary="Terminal raw log", swagger=@OpSwagger(ignore=true))
 	default void terminalRaw(@Path("id") String id, RestRequest req, RestResponse res) throws IOException {
-		TerminalEndpoints.raw(terminalSource(TerminalEndpoints.checkId(id), req), id, res);
+		TerminalEndpoints.raw(permitted(TerminalEndpoints.checkId(id), req), id, res);
+	}
+
+	/**
+	 * Resolves the source for an id once {@link #terminalAccess()} allows the caller to watch it.
+	 *
+	 * @param id The checked terminal id.
+	 * @param req The request.
+	 * @return The source, or empty when the caller is denied or the id is unknown.
+	 */
+	private Optional<TerminalSource> permitted(String id, RestRequest req) {
+		var caller = TerminalEndpoints.caller(req);
+		return terminalAccess().canWatch(caller, id) ? terminalSource(id, req) : Optional.empty();
 	}
 
 	/**

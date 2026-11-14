@@ -169,7 +169,7 @@ class ServletFilterRegistration_TomcatMount_Test extends TestBase {
 
 	private static String get(Microservice ms, String path) throws Exception {
 		var port = ms.getBeanStore().getBean(TomcatServerComponent.class).orElseThrow().getPort();
-		var conn = (HttpURLConnection)URI.create("http://localhost:" + port + path).toURL().openConnection();
+		var conn = (HttpURLConnection)URI.create("http://127.0.0.1:" + port + path).toURL().openConnection();
 		conn.setConnectTimeout(5000);
 		conn.setReadTimeout(5000);
 		try {

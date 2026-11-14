@@ -249,7 +249,7 @@ public class BasicConverter extends CachingConverter {
 		if (outType == Byte.class) return (in, memberOf, session, args) -> (O) Byte.valueOf(((Number) in).byteValue());
 		if (outType == AtomicInteger.class) return (in, memberOf, session, args) -> (O) new AtomicInteger(((Number) in).intValue());
 		if (outType == AtomicLong.class) return (in, memberOf, session, args) -> (O) new AtomicLong(((Number) in).longValue());
-		if (outType == BigDecimal.class) return (in, memberOf, session, args) -> (O) new BigDecimal(in.toString());
+		if (outType == BigDecimal.class) return (in, memberOf, session, args) -> (O) parseBigDecimal(in.toString());
 		if (outType == BigInteger.class) return (in, memberOf, session, args) -> {
 			var n = (Number) in;
 			if (n instanceof BigDecimal n2) return (O) n2.toBigInteger();

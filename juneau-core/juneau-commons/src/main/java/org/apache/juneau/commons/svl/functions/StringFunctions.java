@@ -34,6 +34,9 @@ import org.apache.juneau.commons.svl.*;
  */
 public final class StringFunctions {
 
+	/** Maximum length of a string produced by {@code repeat} or {@code randString}. */
+	static final int MAX_RESULT_LENGTH = 1 << 20;
+
 	private StringFunctions() {}
 
 	/** All function classes in this category, in registration order. */
@@ -235,6 +238,7 @@ public final class StringFunctions {
 		@Override public String name() { return "repeat"; }
 		public String invoke(String s, int n) {
 			if (s == null || n <= 0) return "";
+			if ((long)s.length() * n > MAX_RESULT_LENGTH) throw iaex("repeat: result would exceed %s characters", MAX_RESULT_LENGTH);
 			return s.repeat(n);
 		}
 	}

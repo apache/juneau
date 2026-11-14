@@ -52,6 +52,7 @@ public final class SecureValidators {
 			.introspectionEndpoint(endpoint)
 			.clientId(clientId)
 			.clientSecret(clientSecret)
+			.audience(AUDIENCE)
 			.requiredScopes("orders:read")
 			.build();
 	}

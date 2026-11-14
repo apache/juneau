@@ -80,9 +80,12 @@ public class RestAnnotation {
 		private boolean mergeResponseProcessorsIntoHost;
 		private Class<?>[] parsers = {};
 		private Swagger swagger = SwaggerAnnotation.DEFAULT;
-		private String disableContentParam = "";
+		private String allowContentParam = "";
 		private String allowedHeaderParams = "";
 		private String allowedMethodHeaders = "";
+		private String allowedResponseHeaders = "";
+		private String allowCrossSite = "";
+		private String allowedOrigins = "";
 		private String allowedMethodParams = "";
 		private String clientVersionHeader = "";
 		private String config = "";
@@ -149,6 +152,39 @@ public class RestAnnotation {
 		 */
 		public Builder allowedMethodHeaders(String value) {
 			allowedMethodHeaders = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#allowCrossSite()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowCrossSite(String value) {
+			allowCrossSite = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#allowedOrigins()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedOrigins(String value) {
+			allowedOrigins = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#allowedResponseHeaders()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedResponseHeaders(String value) {
+			allowedResponseHeaders = value;
 			return this;
 		}
 
@@ -416,13 +452,13 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#disableContentParam()} property on this annotation.
+		 * Sets the {@link Rest#allowContentParam()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder disableContentParam(String value) {
-			disableContentParam = value;
+		public Builder allowContentParam(String value) {
+			allowContentParam = value;
 			return this;
 		}
 
@@ -810,9 +846,12 @@ public class RestAnnotation {
 		private final boolean mergeResponseProcessorsIntoHost;
 		private final Class<?>[] parsers;
 		private final Swagger swagger;
-		private final String disableContentParam;
+		private final String allowContentParam;
 		private final String allowedHeaderParams;
 		private final String allowedMethodHeaders;
+		private final String allowedResponseHeaders;
+		private final String allowCrossSite;
+		private final String allowedOrigins;
 		private final String allowedMethodParams;
 		private final String clientVersionHeader;
 		private final String config;
@@ -856,9 +895,12 @@ public class RestAnnotation {
 		Object(RestAnnotation.Builder b) {
 			super(b);
 			description = cp(b.description);
-			disableContentParam = b.disableContentParam;
+			allowContentParam = b.allowContentParam;
 			allowedHeaderParams = b.allowedHeaderParams;
 			allowedMethodHeaders = b.allowedMethodHeaders;
+			allowedResponseHeaders = b.allowedResponseHeaders;
+			allowCrossSite = b.allowCrossSite;
+			allowedOrigins = b.allowedOrigins;
 			allowedMethodParams = b.allowedMethodParams;
 			authenticator = b.authenticator;
 			children = cp(b.children);
@@ -927,6 +969,21 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public String allowedMethodHeaders() {
 			return allowedMethodHeaders;
+		}
+
+		@Override /* Overridden from Rest */
+		public String allowCrossSite() {
+			return allowCrossSite;
+		}
+
+		@Override /* Overridden from Rest */
+		public String allowedOrigins() {
+			return allowedOrigins;
+		}
+
+		@Override /* Overridden from Rest */
+		public String allowedResponseHeaders() {
+			return allowedResponseHeaders;
 		}
 
 		@Override /* Overridden from Rest */
@@ -1040,8 +1097,8 @@ public class RestAnnotation {
 		}
 
 		@Override /* Overridden from Rest */
-		public String disableContentParam() {
-			return disableContentParam;
+		public String allowContentParam() {
+			return allowContentParam;
 		}
 
 		@Override /* Overridden from Rest */

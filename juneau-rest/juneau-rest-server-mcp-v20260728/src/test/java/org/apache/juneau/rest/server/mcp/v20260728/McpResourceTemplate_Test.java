@@ -25,6 +25,7 @@ import java.util.function.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.mcp.McpExchange;
 import org.apache.juneau.rest.server.mcp.McpResourceContents;
@@ -52,6 +53,16 @@ import org.junit.jupiter.api.*;
 	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class McpResourceTemplate_Test {
+
+	private static LogRecordCapture.Quiet quietMcp;
+
+	@BeforeAll static void silenceMcpWarnings() {
+		quietMcp = LogRecordCapture.quiet(McpRevision.class);
+	}
+
+	@AfterAll static void restoreMcpLogging() {
+		quietMcp.close();
+	}
 
 	private final BeanStore ctx = new BasicBeanStore();
 
@@ -211,7 +222,7 @@ class McpResourceTemplate_Test {
 		}));
 		var resp = readResponse(config, "file:///a");
 		assertEquals(McpRevision.CODE_INTERNAL_ERROR, resp.getError().getCode());
-		assertEquals("boom", resp.getError().getMessage());
+		assertEquals("Internal error", resp.getError().getMessage());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

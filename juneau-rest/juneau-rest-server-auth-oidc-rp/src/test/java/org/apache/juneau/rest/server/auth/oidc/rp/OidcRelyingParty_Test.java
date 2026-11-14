@@ -89,6 +89,18 @@ class OidcRelyingParty_Test extends TestBase {
 			.build();
 	}
 
+	/** Builds the IdP callback request, carrying the login-binding cookie set by the start-login response. */
+	static MockServletRequest callbackReq(MockServletResponse startRes, String code, String state) {
+		var req = MockServletRequest.create("GET", REDIRECT_URI + "?code=" + code + "&state=" + state);
+		var cookies = new ArrayList<Cookie>();
+		for (var h : startRes.getHeaders("Set-Cookie")) {
+			var nv = h.split(";", 2)[0];
+			var i = nv.indexOf('=');
+			cookies.add(new Cookie(nv.substring(0, i), nv.substring(i + 1)));
+		}
+		return req.cookies(cookies.toArray(new Cookie[0]));
+	}
+
 	/** Drives startLogin + completeLogin; returns the session cookie value. */
 	private String login(OidcRelyingParty rp, String sub, String sid, String redirectParam) throws Exception {
 		var loginUri = "/auth/login" + (redirectParam == null ? "" : "?redirect=" + redirectParam);
@@ -103,7 +115,7 @@ class OidcRelyingParty_Test extends TestBase {
 		assertNotNull(nonce);
 		idp.idToken = signIdToken(key, idp.issuer, CID, sub, sid, nonce, Instant.now(), Duration.ofMinutes(5),
 			Map.of("scope", "openid profile"));
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc123&state=" + state);
+		var req2 = callbackReq(res1, "abc123", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		assertEquals("no-store", res2.getHeader("Cache-Control"));
@@ -174,7 +186,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		var setCookie = res2.getHeader("Set-Cookie");
@@ -191,7 +203,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		assertEquals("/dashboard", res2.getHeader("Location"));
@@ -205,7 +217,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		assertEquals("/", res2.getHeader("Location"), "absolute redirect target must be rejected (open-redirect defense)");
@@ -223,9 +235,9 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
-		rp.completeLogin(MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state), MockServletResponse.create());
+		rp.completeLogin(callbackReq(res1, "abc", state), MockServletResponse.create());
 		// Second callback with the same (already-consumed) state must fail.
-		var replayReq = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var replayReq = callbackReq(res1, "abc", state);
 		var replayRes = MockServletResponse.create();
 		assertThrows(AuthenticationException.class, () -> rp.completeLogin(replayReq, replayRes));
 	}
@@ -244,9 +256,61 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", "WRONG-NONCE", Instant.now(), Duration.ofMinutes(5), null);
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		assertThrows(AuthenticationException.class, () -> rp.completeLogin(req2, res2));
+	}
+
+	@Test void b04_missingBindingCookie_isRejected() throws Exception {
+		var rp = rp(InMemorySessionStore.create());
+		var res1 = MockServletResponse.create();
+		rp.startLogin(MockServletRequest.create("GET", "/auth/login"), res1);
+		var state = queryParam(res1.getHeader("Location"), "state");
+		var nonce = queryParam(res1.getHeader("Location"), "nonce");
+		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		var req = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		assertThrows(AuthenticationException.class, () -> rp.completeLogin(req, MockServletResponse.create()));
+	}
+
+	@Test void b05_mismatchedBindingCookie_isRejected() throws Exception {
+		var rp = rp(InMemorySessionStore.create());
+		var res1 = MockServletResponse.create();
+		rp.startLogin(MockServletRequest.create("GET", "/auth/login"), res1);
+		var state = queryParam(res1.getHeader("Location"), "state");
+		var nonce = queryParam(res1.getHeader("Location"), "nonce");
+		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		var req = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state)
+			.cookies(new Cookie[]{ new Cookie(rp.cookieName() + "_LOGIN", "some-other-value") });
+		assertThrows(AuthenticationException.class, () -> rp.completeLogin(req, MockServletResponse.create()));
+	}
+
+	@Test void b06_startLogin_setsBindingCookie() throws Exception {
+		var rp = rp(InMemorySessionStore.create());
+		var res1 = MockServletResponse.create();
+		rp.startLogin(MockServletRequest.create("GET", "/auth/login"), res1);
+		var c = res1.getHeaders("Set-Cookie").stream().filter(h -> h.startsWith(rp.cookieName() + "_LOGIN=")).findFirst().orElseThrow();
+		assertTrue(c.contains("HttpOnly") && c.contains("SameSite=Lax") && c.contains("Secure"), c);
+	}
+
+	@Test void b07_redirectWithControlCharacters_fallsBackToDefault() throws Exception {
+		var rp = rp(InMemorySessionStore.create());
+		var req1 = MockServletRequest.create("GET", "/auth/login?redirect=/ok%09/x");
+		var res1 = MockServletResponse.create();
+		rp.startLogin(req1, res1);
+		var state = queryParam(res1.getHeader("Location"), "state");
+		var nonce = queryParam(res1.getHeader("Location"), "nonce");
+		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		var res2 = MockServletResponse.create();
+		rp.completeLogin(callbackReq(res1, "abc", state), res2);
+		assertEquals("/", res2.getHeader("Location"));
+	}
+
+	@Test void b08_logout_getIsRejected() throws Exception {
+		var rp = rp(InMemorySessionStore.create());
+		var res = MockServletResponse.create();
+		rp.logout(MockServletRequest.create("GET", "/auth/logout"), res);
+		assertEquals(405, res.getStatus());
+		assertNull(res.getHeader("Location"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -257,7 +321,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var store = InMemorySessionStore.create();
 		var rp = rp(store);
 		var cookie = login(rp, "alice", "sess-1", null);
-		var req = MockServletRequest.create("GET", "/auth/logout").cookies(new Cookie[]{ new Cookie(rp.cookieName(), cookie) });
+		var req = MockServletRequest.create("POST", "/auth/logout").cookies(new Cookie[]{ new Cookie(rp.cookieName(), cookie) });
 		var res = MockServletResponse.create();
 		rp.logout(req, res);
 		assertTrue(res.getHeader("Set-Cookie").contains("Max-Age=0"), "logout must clear the cookie");
@@ -371,7 +435,7 @@ class OidcRelyingParty_Test extends TestBase {
 	/** No session cookie present — line 673 false branch (idTokenHint stays null, cookie cleared anyway). */
 	@Test void g01_logout_noCookie_clearsAndRedirects() throws IOException {
 		var rp = rp(InMemorySessionStore.create());
-		var req = MockServletRequest.create("GET", "/auth/logout");  // no cookies
+		var req = MockServletRequest.create("POST", "/auth/logout");  // no cookies
 		var res = MockServletResponse.create();
 		rp.logout(req, res);
 		assertTrue(res.getHeader("Set-Cookie").contains("Max-Age=0"), "cookie must be cleared even without a session");
@@ -386,7 +450,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var store = InMemorySessionStore.create();
 		var rp = rp(store);
 		// Use a cookie value that doesn't correspond to any live session.
-		var req = MockServletRequest.create("GET", "/auth/logout")
+		var req = MockServletRequest.create("POST", "/auth/logout")
 			.cookies(new Cookie[]{ new Cookie(rp.cookieName(), "stale-value") });
 		var res = MockServletResponse.create();
 		rp.logout(req, res);
@@ -401,7 +465,7 @@ class OidcRelyingParty_Test extends TestBase {
 	@Test void g01c_logout_sessionNoToken_clearsAndRedirects() throws Exception {
 		var rp = rp(SignedCookieSessionStore.create().signingKey("0123456789abcdef0123456789abcdef").build());
 		var cookie = login(rp, "alice", "sess-1", null);
-		var req = MockServletRequest.create("GET", "/auth/logout")
+		var req = MockServletRequest.create("POST", "/auth/logout")
 			.cookies(new Cookie[]{ new Cookie(rp.cookieName(), cookie) });
 		var res = MockServletResponse.create();
 		rp.logout(req, res);
@@ -416,7 +480,7 @@ class OidcRelyingParty_Test extends TestBase {
 	@Test void g01d_logout_sessionWithIdToken_hintIncludedInRedirect() throws Exception {
 		var rp = rp(InMemorySessionStore.create());
 		var cookie = login(rp, "alice", "sess-1", null);
-		var req = MockServletRequest.create("GET", "/auth/logout")
+		var req = MockServletRequest.create("POST", "/auth/logout")
 			.cookies(new Cookie[]{ new Cookie(rp.cookieName(), cookie) });
 		var res = MockServletResponse.create();
 		rp.logout(req, res);
@@ -446,7 +510,7 @@ class OidcRelyingParty_Test extends TestBase {
 			.sessionStore(InMemorySessionStore.create())
 			.jwkSet(publicJwks(key))
 			.build();
-		var req = MockServletRequest.create("GET", "/auth/logout");
+		var req = MockServletRequest.create("POST", "/auth/logout");
 		var res = MockServletResponse.create();
 		rp.logout(req, res);
 		assertEquals(postLogout.toString(), res.getHeader("Location"));
@@ -471,7 +535,7 @@ class OidcRelyingParty_Test extends TestBase {
 			.sessionStore(InMemorySessionStore.create())
 			.jwkSet(publicJwks(key))
 			.build();
-		var req = MockServletRequest.create("GET", "/auth/logout");
+		var req = MockServletRequest.create("POST", "/auth/logout");
 		var res = MockServletResponse.create();
 		rp.logout(req, res);
 		assertEquals("/", res.getHeader("Location"), "must fall back to postLoginRedirect default '/'");
@@ -580,7 +644,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
 			Map.of("email", "alice@example.com", "scope", "openid profile"));
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		var auth = authn(rp, cookieValue(res2.getHeader("Set-Cookie")));
@@ -628,6 +692,49 @@ class OidcRelyingParty_Test extends TestBase {
 		var auth = authn(rp, cookie);
 		assertEquals("alice@example.com",
 			((ClaimsPrincipal) auth.get().getPrincipal()).getClaim("email", String.class).orElse(null));
+	}
+
+	/** A UserInfo response whose subject differs from the ID-token subject is not merged. */
+	@Test void i03b_backfill_subjectMismatch_notMerged() throws Exception {
+		idp.userInfo = new LinkedHashMap<>(Map.of("email", "alice@example.com"));
+		var rp = OidcRelyingParty.create()
+			.metadata(idp.metadata(AUTHZ, END_SESSION))
+			.clientId(CID)
+			.clientSecret("client-secret")
+			.redirectUri(REDIRECT_URI)
+			.scope("openid", "profile")
+			.sessionStore(InMemorySessionStore.create())
+			.jwkSet(publicJwks(key))
+			.userInfoClaims("email")
+			.build();
+		var cookie = login(rp, "bob", "sess-1", null);
+		var auth = authn(rp, cookie);
+		assertTrue(((ClaimsPrincipal) auth.get().getPrincipal()).getClaim("email", String.class).isEmpty());
+	}
+
+	@Test void a01c_metadataWithPlaintextAuthorizationEndpoint_rejected() {
+		var badMetadata = new OidcMetadata(
+			URI.create("https://stub-idp.example.com"),
+			URI.create("https://stub-idp.example.com/token"),
+			URI.create("http://idp.example.com/authorize"),
+			null,
+			URI.create("https://stub-idp.example.com/jwks"),
+			URI.create("http://idp.example.com/userinfo"),
+			END_SESSION,
+			Set.of("openid"),
+			Map.of());
+		var rp = OidcRelyingParty.create()
+			.metadata(badMetadata)
+			.clientId(CID)
+			.clientSecret("client-secret")
+			.redirectUri(REDIRECT_URI)
+			.scope("openid")
+			.sessionStore(InMemorySessionStore.create())
+			.jwkSet(publicJwks(key))
+			.build();
+		var req = MockServletRequest.create("GET", "/auth/login");
+		var res = MockServletResponse.create();
+		assertThrows(IllegalArgumentException.class, () -> rp.startLogin(req, res));
 	}
 
 	/** userInfoClaims non-empty, endpoint null — line 962 true branch. */
@@ -704,7 +811,7 @@ class OidcRelyingParty_Test extends TestBase {
 		// scope as a JSON array — Nimbus deserialises it to List<String> in the claims set.
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
 			Map.of("scope", List.of("read", "write")));
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		// Use the cookie produced by this completeLogin directly — don't call login() again which would
@@ -726,7 +833,7 @@ class OidcRelyingParty_Test extends TestBase {
 		// Scope string with extra whitespace that produces blank split pieces.
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
 			Map.of("scope", "  read   write  "));
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		var cookie = cookieValue(res2.getHeader("Set-Cookie"));
@@ -754,7 +861,7 @@ class OidcRelyingParty_Test extends TestBase {
 		// Integer claim: serialised as JSON number, round-tripped back as Long — neither String nor Collection.
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
 			Map.of("scope", 42L));
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		var cookie = cookieValue(res2.getHeader("Set-Cookie"));
@@ -785,7 +892,7 @@ class OidcRelyingParty_Test extends TestBase {
 		scopeList.add(99L);
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
 			Map.of("scope", scopeList));
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		var cookie = cookieValue(res2.getHeader("Set-Cookie"));
@@ -816,7 +923,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		assertFalse(res2.getHeader("Set-Cookie").contains("HttpOnly"));
@@ -840,7 +947,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		assertFalse(res2.getHeader("Set-Cookie").contains("Secure"));
@@ -864,7 +971,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		assertTrue(res2.getHeader("Set-Cookie").contains("SameSite=Strict"));
@@ -883,7 +990,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		assertEquals("/", res2.getHeader("Location"));
@@ -898,7 +1005,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		assertEquals("/", res2.getHeader("Location"));
@@ -913,7 +1020,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		assertEquals("/", res2.getHeader("Location"));
@@ -928,7 +1035,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		assertEquals("/", res2.getHeader("Location"));
@@ -943,7 +1050,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
-		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		assertEquals("/", res2.getHeader("Location"));

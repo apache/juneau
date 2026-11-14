@@ -18,9 +18,11 @@ package org.apache.juneau.rest.server.management;
 
 import java.util.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.servlet.*;
 
 /**
@@ -32,14 +34,12 @@ import org.apache.juneau.rest.server.servlet.*;
  * worker so the mixin and {@link LoggersResource resource} flavors cannot drift.
  *
  * <p>
- * The {@code GET} endpoints (list all / read one) are read-only, but &mdash; unlike the {@code PUT}/{@code POST}
- * set-level endpoint, which <b>mutates runtime logging</b> and is deny-by-default (returns {@code 403} unless a
- * {@link LoggersSettings} bean with writes enabled is registered) &mdash; they carry <b>no built-in guard of their
- * own</b>: once a resource composes this mixin, {@code GET /loggers} and {@code GET /loggers/{name}} are reachable
- * by anyone who can reach the resource, exposing the set of registered logger names and their configured levels
- * (topology information, not credentials or request data). Compose this mixin only into a resource, or a subpath
- * of one, that's already covered by whatever authentication/authorization the app applies to its management
- * endpoints generally; this mixin does not add any of its own for the read side.
+ * The mixin is annotated with {@link Rest#guards() @Rest(guards=DenyAllGuard.class)}, so every logger path returns
+ * {@code 403 Forbidden} until the importer registers a {@link Bean @Bean}
+ * {@link RestGuardList} factory on the host; that list <b>replaces</b> the annotation-derived deny-all, so pair the
+ * mixin with whatever authentication/authorization the app applies to its management endpoints. Changing a level
+ * through the {@code PUT}/{@code POST} set-level endpoint additionally requires a {@link LoggersSettings} bean with
+ * writes enabled.
  *
  * <h2 class='section'>Backend:</h2><ul>
  * 	<li>Drives {@link JulLogBackend java.util.logging} by default; declare a Logback / Log4j2 backend
@@ -54,7 +54,9 @@ import org.apache.juneau.rest.server.servlet.*;
  *
  * @since 10.0.0
  */
-@Rest
+@Rest(
+	guards=DenyAllGuard.class
+)
 public class LoggersMixin extends RestMixin {
 
 	private final LoggersManager manager = new LoggersManager();

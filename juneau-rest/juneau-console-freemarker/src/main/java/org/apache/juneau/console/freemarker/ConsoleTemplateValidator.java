@@ -398,30 +398,38 @@ public final class ConsoleTemplateValidator {
 		return out;
 	}
 
+	// The literal entries of one init=/css= match, or null when the value holds an expression (a call or ${...}).
+	private static List<String> literalPageAssetEntries(Matcher m) {
+		var entries = new ArrayList<String>();
+		if (nn(m.group(2))) {
+			var body = m.group(2);
+			if (body.contains("(") || body.contains("${"))
+				return null;
+			var q = QUOTED.matcher(body);
+			while (q.find())
+				entries.add(q.group(nn(q.group(1)) ? 1 : 2));
+			return entries;
+		}
+		var v = m.group(nn(m.group(3)) ? 3 : 4);
+		if (v.contains("${"))
+			return null;
+		for (var part : v.split(",")) {
+			var t = part.trim();
+			if (! t.isEmpty())
+				entries.add(t);
+		}
+		return entries;
+	}
+
 	// Flags a literal init=/css= entry that is neither absolute nor a context:/servlet: URI.  Lists holding an
 	// expression (a call or ${...}) are skipped: their entries are not literals.
 	private static void checkPageAssets(List<Finding> out, String name, int[] lines, int at, String attrText) {
 		var m = PAGE_ASSET.matcher(attrText);
 		while (m.find()) {
 			var attr = m.group(1);
-			var entries = new ArrayList<String>();
-			if (nn(m.group(2))) {
-				var body = m.group(2);
-				if (body.contains("(") || body.contains("${"))
-					continue;
-				var q = QUOTED.matcher(body);
-				while (q.find())
-					entries.add(nn(q.group(1)) ? q.group(1) : q.group(2));
-			} else {
-				var v = nn(m.group(3)) ? m.group(3) : m.group(4);
-				if (v.contains("${"))
-					continue;
-				for (var part : v.split(",")) {
-					var t = part.trim();
-					if (! t.isEmpty())
-						entries.add(t);
-				}
-			}
+			var entries = literalPageAssetEntries(m);
+			if (entries == null)
+				continue;
 			for (var e : entries)
 				if (! FtlAttrLists.isAbsoluteAsset(e))
 					add(out, name, lines, at, "relative-page-asset", f(

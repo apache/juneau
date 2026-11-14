@@ -164,7 +164,7 @@ class McpTypedHandlers_Test {
 			.setMethod(McpMethods.PROMPTS_GET)
 			.setParams(JsonMap.of("name", "p", "arguments", JsonMap.of("repeat", "not-a-number"))), config);
 		assertBean(resp.getError(), "code", "-32602");
-		assertContains("Failed to bind arguments to ", resp.getError().getMessage());
+		assertEquals("Invalid prompt arguments.", resp.getError().getMessage());
 	}
 
 	@Test

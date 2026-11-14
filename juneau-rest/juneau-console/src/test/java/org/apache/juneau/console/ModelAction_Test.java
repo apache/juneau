@@ -40,7 +40,8 @@ class ModelAction_Test extends TestBase {
 	@Test void id_grammar() {
 		assertThrows(IllegalArgumentException.class, () -> ModelAction.of("1 bad"));
 		assertThrows(IllegalArgumentException.class, () -> ModelAction.of(""));
-		assertThrows(IllegalArgumentException.class, () -> ModelAction.of("x".repeat(129)));
+		var tooLong = "x".repeat(129);
+		assertThrows(IllegalArgumentException.class, () -> ModelAction.of(tooLong));
 		assertEquals("a.b_c-1", ModelAction.of("a.b_c-1").id());
 	}
 	@Test void handler_badName() {

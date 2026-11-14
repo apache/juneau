@@ -702,7 +702,7 @@ def push_to_upstream(git, repo_dir, step_num, label, step_prefix, row_labels):
     return True
 
 
-def commit_and_push(
+def commit_and_push(  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
     repo_dir,
     message,
     step_num,
@@ -713,7 +713,7 @@ def commit_and_push(
     pre_commit_hook=None,
     step_prefix="",
     row_labels=("Commit", "Push"),
-):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
+):
     """
     Commit whatever is already staged and push, treating "nothing staged" and "nothing to push"
     as two different things (the bug this replaces reported success without ever pushing).

@@ -81,14 +81,18 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 		var ctx = new RestContext(argsOf(Fix_Bare.class, Fix_Bare::new));
 		var target = new IllegalStateException("boom");
 		var ite = new InvocationTargetException(target);
-		assertSame(target, ctx.convertThrowable(ite));
+		var result = ctx.convertThrowable(ite);
+		assertInstanceOf(InternalServerError.class, result);
+		assertSame(target, result.getCause());
 	}
 
 	@Test void a02_convertThrowable_executableException_unwraps() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_Bare.class, Fix_Bare::new));
 		var target = new ExecutableExceptionTarget("boom");
 		var ee = new org.apache.juneau.commons.reflect.ExecutableException(target);
-		assertSame(target, ctx.convertThrowable(ee));
+		var result = ctx.convertThrowable(ee);
+		assertInstanceOf(InternalServerError.class, result);
+		assertSame(target, result.getCause());
 	}
 
 	@Test void a03_convertThrowable_basicHttpException_returnedAsIs() throws Exception {
@@ -155,10 +159,14 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 		assertInstanceOf(NotFound.class, result);
 	}
 
-	@Test void a10_convertThrowable_unrecognizedType_returnedAsIs() throws Exception {
+	@Test void a10_convertThrowable_unrecognizedType_becomesGenericInternalServerError() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_Bare.class, Fix_Bare::new));
 		var e = new ArithmeticException("boom");
-		assertSame(e, ctx.convertThrowable(e));
+		var result = ctx.convertThrowable(e);
+		assertInstanceOf(InternalServerError.class, result);
+		assertSame(e, result.getCause());
+		assertFalse(result.getMessage().contains("boom"));
+		assertFalse(result.getMessage().contains("Arithmetic"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------

@@ -83,7 +83,8 @@ class TemplateResolver_Render_Test extends TestBase {
 	}
 
 	@Test void a10_classAccessBlocked() {
-		assertThrows(ExprException.class, () -> r(TemplateResolver.DEFAULT, "#{a.class}", Map.of("a", "x")));
+		var data = Map.<String,Object>of("a", "x");
+		assertThrows(ExprException.class, () -> r(TemplateResolver.DEFAULT, "#{a.class}", data));
 	}
 
 	@Test void a11_maxCollectionSizeLenientTruncates() {
@@ -147,7 +148,8 @@ class TemplateResolver_Render_Test extends TestBase {
 
 	@Test void a22_ulStrictThrows() {
 		var tr = TemplateResolver.create().maxCollectionSize(2).strict(true).build();
-		assertThrows(RuntimeException.class, () -> r(tr, "#{ul(xs)}", Map.of("xs", List.of(1, 2, 3))));
+		var data = Map.<String,Object>of("xs", List.of(1, 2, 3));
+		assertThrows(RuntimeException.class, () -> r(tr, "#{ul(xs)}", data));
 	}
 
 	@Test void a23_olTableTakeJoinCapped() {

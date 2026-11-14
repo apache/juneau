@@ -687,19 +687,22 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		new RestOpInvoker(method(), restContext().findRestOperationArgs(method(), opBeanStore()), restContext().getMethodExecStats(method()), this::resource)
 	);
 
+	private static final long DEFAULT_MAX_INPUT = 1_000_000L;
+
 	/** The effective max-input byte limit for this operation. */
 	private final Memoizer<Long> maxInput = memoizer(() -> {
+		long n;
 		var v = findOpString("maxInput");
+		var rv = isInherited("maxInput") ? restContext().mergeReplacedStringAttribute("maxInput", null) : null;
 		if (v.isPresent())
-			return parseLongWithSuffix(v.get());
-		if (isInherited("maxInput")) {
-			var rv = restContext().mergeReplacedStringAttribute("maxInput", null);
-			if (ine(rv))
-				return parseLongWithSuffix(rv);
-		}
-		return parseLongWithSuffix(defaultMaxInputString);
+			n = parseLongWithSuffix(v.get());
+		else if (ine(rv))
+			n = parseLongWithSuffix(rv);
+		else
+			n = parseLongWithSuffix(defaultMaxInputString);
+		// A zero or negative value means "use the default" rather than "unlimited".
+		return n > 0 ? n : DEFAULT_MAX_INPUT;
 	});
-
 	/**
 	 * Whether this operation emits RFC 7807 {@code application/problem+json} responses.
 	 *

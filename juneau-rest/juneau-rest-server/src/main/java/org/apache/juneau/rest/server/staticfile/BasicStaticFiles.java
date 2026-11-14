@@ -61,6 +61,9 @@ public class BasicStaticFiles implements StaticFiles {
 		return new StaticFiles.Builder(beanStore);
 	}
 
+	// Class files, dotfiles, and common configuration/credential/backup file types are never served.
+	static final String EXCLUDE_PATTERN = "(?i)(.*/)?\\.[^/]*|.*\\.(class|properties|ya?ml|xml|jks|p12|pfx|pem|key|env|cfg|conf|bak)";
+
 	private final HttpHeader[] headers;
 	private final MimeTypeDetector mimeTypes;
 	private final int hashCode;
@@ -81,7 +84,7 @@ public class BasicStaticFiles implements StaticFiles {
 			.cp(beanStore.getBean(ResourceSupplier.class).orElseThrow(() -> new IllegalStateException("ResourceSupplier not found")).getResourceClass(), "htdocs", true)
 			.cp(beanStore.getBean(ResourceSupplier.class).orElseThrow(() -> new IllegalStateException("ResourceSupplier not found")).getResourceClass(), "/htdocs", true)
 			.caching(1_000_000)
-			.exclude("(?i).*\\.(class|properties)")
+			.exclude(EXCLUDE_PATTERN)
 			.headers(CacheControl.of("max-age=86400, public"))
 		);
 		// @formatter:on

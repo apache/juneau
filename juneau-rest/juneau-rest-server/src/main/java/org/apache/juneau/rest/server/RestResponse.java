@@ -131,6 +131,9 @@ import jakarta.servlet.http.*;
 public class RestResponse extends HttpServletResponseWrapper {
 
 	private static final String HEADER_ContentType = "Content-Type";
+
+	/** Headers a client can never ask the server to set through the <c>x-response-headers</c> request header. */
+	private static final Set<String> NEVER_PASS_THROUGH_HEADERS = Set.of("set-cookie", "location", "content-security-policy", "content-type");
 	private static final Pattern ENCODING_DISABLED_PATTERN = Pattern.compile("(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0)");
 
 	private final HttpServletResponse inner;
@@ -169,8 +172,10 @@ public class RestResponse extends HttpServletResponseWrapper {
 			var passThroughHeaders = request.getHeaderParam("x-response-headers").orElse(null);
 			if (nn(passThroughHeaders)) {
 				var m = context.getPartParser().getPartSession().read(HEADER, null, passThroughHeaders, MarshallingContext.DEFAULT.getClassMeta(JsonMap.class));
+				var allowed = context.getAllowedResponseHeaders();
 				for (var e : m.entrySet())
-					addHeader(e.getKey(), resolveUris(e.getValue()));
+					if (allowed.contains(e.getKey()) && ! NEVER_PASS_THROUGH_HEADERS.contains(e.getKey().toLowerCase(Locale.ROOT)))
+						addHeader(e.getKey(), resolveUris(e.getValue()));
 			}
 		} catch (Exception e1) {
 			throw new BadRequest(e1, "Invalid format for header 'x-response-headers'.  Must be in URL-encoded format.");
@@ -614,6 +619,11 @@ public class RestResponse extends HttpServletResponseWrapper {
 	static boolean isSafeRedirectUri(String uri, String...allowedHosts) {
 		if (ie(uri))
 			return true;
+		for (var i = 0; i < uri.length(); i++) {
+			var c = uri.charAt(i);
+			if (c == '\\' || c <= 0x20 || c == 0x7f)
+				return false;
+		}
 		if (uri.charAt(0) == '/' && ! uri.startsWith("//"))
 			return true;
 		if (uri.indexOf("://") == -1 && ! uri.startsWith("//"))

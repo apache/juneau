@@ -68,7 +68,7 @@ class SamlAssertionValidator_EncryptedAssertion_Test extends TestBase {
 
 	@Test void a01_missingDecryptionCredential_rejected() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
-		var validator = SamlAssertionValidator.create()
+		var validator = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
@@ -77,14 +77,14 @@ class SamlAssertionValidator_EncryptedAssertion_Test extends TestBase {
 		var hdr = ex.getHeaders().stream()
 			.filter(h -> eqic("WWW-Authenticate", h.getName()))
 			.findFirst().orElseThrow();
-		assertTrue(hdr.getValue().contains("decryption_required"),
-			"Expected WWW-Authenticate to contain 'decryption_required', got: " + hdr.getValue());
+		assertTrue(hdr.getValue().contains("decryption_failed"),
+			"Expected WWW-Authenticate to contain 'decryption_failed', got: " + hdr.getValue());
 	}
 
 	@Test void a02_wrongDecryptionCredential_rejected() throws Exception {
 		var signing = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
 		var decryption = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
-		var validator = SamlAssertionValidator.create()
+		var validator = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(signing)

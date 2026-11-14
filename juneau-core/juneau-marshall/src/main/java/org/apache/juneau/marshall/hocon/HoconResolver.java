@@ -41,6 +41,11 @@ public class HoconResolver {
 	private final HoconValue.HoconObject root;
 	private final Set<String> inProgress = new HashSet<>();
 
+	/** Maximum total number of characters produced by all concatenations during one resolution. */
+	private static final long MAX_CONCAT_OUTPUT = 10_000_000L;
+
+	private long concatOutput;
+
 	/**
 	 * Constructor.
 	 *
@@ -122,6 +127,13 @@ public class HoconResolver {
 			if (resolved != null)
 				sb.append(resolveConcatPart(resolved));
 		}
+		return concatResult(sb);
+	}
+
+	private HoconValue concatResult(StringBuilder sb) {
+		concatOutput += sb.length();
+		if (concatOutput > MAX_CONCAT_OUTPUT)
+			throw rex("Resolved output is too large.");
 		return new HoconValue.HoconString(sb.toString());
 	}
 
@@ -170,7 +182,7 @@ public class HoconResolver {
 			if (resolved != null)
 				sb.append(resolveConcatPart(resolved));
 		}
-		return new HoconValue.HoconString(sb.toString());
+		return concatResult(sb);
 	}
 
 	private HoconValue resolveValueWithLookup(HoconValue val, Function<String,HoconValue> lookup) {

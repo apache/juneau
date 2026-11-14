@@ -23,6 +23,7 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.auth.oauth.oidc.*;
 
 import com.nimbusds.oauth2.sdk.*;
@@ -48,11 +49,13 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * argument of {@link #fetch(URI, URI)} / {@link #parse(String, URI, URI)}), the PRM document's {@code resource} field is
  * validated against it per RFC 9728 &sect;3.3 (exact string match, mirroring the issuer-identity posture) and a mismatch
  * is rejected &mdash; this defends against a malicious server pointing the client at a PRM document minted for a
- * different resource.  When no expected resource is supplied the identity check is skipped.
+ * different resource.  An expected resource is required unless {@link Builder#skipResourceValidation(boolean)} is set.
  *
  * <p>
- * By default the PRM URL and any discovered authorization-server URI must use {@code https} (loopback hosts are always
- * permitted for local/testing use); {@link Builder#allowInsecureHttp(boolean)} disables the scheme check entirely.
+ * By default the PRM URL and any discovered authorization-server URI must use {@code https} and must not point at a
+ * loopback, private, link-local or metadata host; {@link Builder#allowPrivateUrls(boolean)} lifts the host restriction
+ * (and permits plain {@code http} for loopback hosts), and {@link Builder#allowInsecureHttp(boolean)} disables the
+ * scheme check.
  *
  * @since 10.0.0
  */
@@ -80,6 +83,8 @@ public class McpProtectedResourceMetadataClient {
 		private URI expectedResource;
 		private Duration httpTimeout = DEFAULT_HTTP_TIMEOUT;
 		private boolean allowInsecureHttp;
+		private boolean allowPrivateUrls;
+		private boolean skipResourceValidation;
 		private Consumer<HTTPRequest> httpRequestConfigurator;
 
 		/** Constructor. */
@@ -115,7 +120,35 @@ public class McpProtectedResourceMetadataClient {
 		}
 
 		/**
-		 * Allows plain {@code http} PRM / authorization-server URLs (loopback hosts are always allowed regardless).
+		 * Allows PRM / authorization-server URLs that point at loopback, private, link-local or metadata hosts.
+		 *
+		 * <p>
+		 * Intended for local development and testing.  Also permits plain {@code http} for loopback hosts.
+		 *
+		 * @param value <jk>true</jk> to skip the host deny-list.
+		 * @return This object.
+		 */
+		public Builder allowPrivateUrls(boolean value) {
+			allowPrivateUrls = value;
+			return this;
+		}
+
+		/**
+		 * Skips the check of the PRM {@code resource} field against an expected resource identifier.
+		 *
+		 * <p>
+		 * By default an expected resource is required.
+		 *
+		 * @param value <jk>true</jk> to skip the resource identity check.
+		 * @return This object.
+		 */
+		public Builder skipResourceValidation(boolean value) {
+			skipResourceValidation = value;
+			return this;
+		}
+
+		/**
+		 * Allows plain {@code http} PRM / authorization-server URLs for non-loopback hosts.
 		 *
 		 * @param value <jk>true</jk> to skip the {@code https} scheme check.
 		 * @return This object.
@@ -149,6 +182,8 @@ public class McpProtectedResourceMetadataClient {
 	private final URI expectedResource;
 	private final Duration httpTimeout;
 	private final boolean allowInsecureHttp;
+	private final boolean allowPrivateUrls;
+	private final boolean skipResourceValidation;
 	private final Consumer<HTTPRequest> httpRequestConfigurator;
 
 	/**
@@ -160,6 +195,8 @@ public class McpProtectedResourceMetadataClient {
 		this.expectedResource = b.expectedResource;
 		this.httpTimeout = b.httpTimeout;
 		this.allowInsecureHttp = b.allowInsecureHttp;
+		this.allowPrivateUrls = b.allowPrivateUrls;
+		this.skipResourceValidation = b.skipResourceValidation;
 		this.httpRequestConfigurator = b.httpRequestConfigurator;
 	}
 
@@ -181,8 +218,8 @@ public class McpProtectedResourceMetadataClient {
 	 * supplied expected resource identifier (RFC 9728 &sect;3.3).
 	 *
 	 * @param prmUrl The PRM document URL.  Must not be <jk>null</jk>.
-	 * @param expectedResource The resource identifier the client was actually talking to.  May be <jk>null</jk> to
-	 * 	skip the identity check.
+	 * @param expectedResource The resource identifier the client was actually talking to.  May be <jk>null</jk> only
+	 * 	when {@link Builder#skipResourceValidation(boolean)} is set.
 	 * @return The parsed metadata.
 	 * @throws McpAuthException If the fetch fails, the document cannot be parsed, or the resource identity check fails.
 	 */
@@ -194,6 +231,7 @@ public class McpProtectedResourceMetadataClient {
 			var req = new HTTPRequest(HTTPRequest.Method.GET, prmUrl.toURL());
 			req.setConnectTimeout((int) httpTimeout.toMillis());
 			req.setReadTimeout((int) httpTimeout.toMillis());
+			req.setFollowRedirects(false);
 			req.setAccept("application/json");
 			if (httpRequestConfigurator != null)
 				httpRequestConfigurator.accept(req);
@@ -226,8 +264,8 @@ public class McpProtectedResourceMetadataClient {
 	 *
 	 * @param json The JSON document body.  Must not be <jk>null</jk>.
 	 * @param source The source URI, used only for error messages.  May be <jk>null</jk>.
-	 * @param expectedResource The resource identifier the client was actually talking to.  May be <jk>null</jk> to
-	 * 	skip the identity check.
+	 * @param expectedResource The resource identifier the client was actually talking to.  May be <jk>null</jk> only
+	 * 	when {@link Builder#skipResourceValidation(boolean)} is set.
 	 * @return The parsed metadata.
 	 * @throws McpAuthException If the document cannot be parsed, is missing the required {@code resource} field, or
 	 * 	fails the resource identity check.
@@ -276,12 +314,18 @@ public class McpProtectedResourceMetadataClient {
 			.orElseThrow(() -> new McpAuthException("Protected-resource-metadata for " + prm.resource() + " advertised no authorization_servers"));
 		requireSecure(as, "Authorization-server URL");
 		try {
-			return OidcDiscoveryClient.create()
+			var md = OidcDiscoveryClient.create()
 				.issuer(as)
 				.httpTimeout(httpTimeout)
 				.httpRequestConfigurator(httpRequestConfigurator == null ? h -> {} : httpRequestConfigurator)
 				.build()
 				.discover();
+			requireSecure(md.tokenEndpoint(), "Token endpoint");
+			requireSecure(md.authorizationEndpoint(), "Authorization endpoint");
+			var reg = md.extras().get("registration_endpoint");
+			if (reg != null)
+				requireSecure(URI.create(reg.toString()), "Registration endpoint");
+			return md;
 		} catch (IOException | OidcDiscoveryException e) {
 			throw new McpAuthException("Authorization-server discovery/issuer validation failed for " + as, e);
 		}
@@ -291,16 +335,26 @@ public class McpProtectedResourceMetadataClient {
 	 * Validates the PRM {@code resource} field against the expected resource identifier (RFC 9728 &sect;3.3), using a
 	 * normalization-free exact string comparison to match the issuer-identity posture.
 	 */
-	private static void validateResourceIdentity(McpProtectedResourceMetadata prm, URI expectedResource) {
-		if (expectedResource == null)
-			return;
+	private void validateResourceIdentity(McpProtectedResourceMetadata prm, URI expectedResource) {
+		if (expectedResource == null) {
+			if (skipResourceValidation)
+				return;
+			throw new McpAuthException("Protected-resource-metadata validation requires an expected resource identifier (RFC 9728 3.3); call expectedResource(...)");
+		}
 		if (!expectedResource.toString().equals(prm.resource().toString()))
 			throw new McpAuthException("Protected-resource-metadata resource identity mismatch (RFC 9728 3.3): expected '"
 				+ expectedResource + "' but document declared '" + prm.resource() + "'");
 	}
 
 	private void requireSecure(URI uri, String what) {
-		if (allowInsecureHttp || eqic("https", uri.getScheme()) || isLoopback(uri))
+		if (uri == null)
+			return;
+		try {
+			RemoteUrlPolicy.requireAllowedUrl(uri.toString(), allowPrivateUrls);
+		} catch (IllegalArgumentException e) {
+			throw new McpAuthException(what + " is not permitted (was '" + uri + "'): " + e.getMessage(), e);
+		}
+		if (allowInsecureHttp || eqic("https", uri.getScheme()) || (allowPrivateUrls && isLoopback(uri)))
 			return;
 		throw new McpAuthException(what + " must use https (was '" + uri + "'); enable allowInsecureHttp for non-loopback http");
 	}

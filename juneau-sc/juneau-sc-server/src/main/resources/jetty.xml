@@ -26,6 +26,8 @@
 					<Arg>
 						<Ref refid="ExampleServer" />
 					</Arg>
+					<!-- Binds to the loopback interface by default; set the juneau.bindAddress system property (e.g. 0.0.0.0) to listen elsewhere. -->
+					<Set name="host">${S:juneau.bindAddress:127.0.0.1}</Set>
 					<Set name="port">${S:availablePort:8080}</Set>
 				</New>
 			</Item>
@@ -80,7 +82,8 @@
 			</Arg>
 			<!-- Param 1: String -->
 			<Arg>
-				<Get class="org.eclipse.jetty.server.CustomRequestLog" name="EXTENDED_NCSA_FORMAT" />
+				<!-- Logs the request path without its query string, and omits the Referer header. -->
+				%{client}a - %u %t "%m %U %H" %s %O "%{User-Agent}i"
 			</Arg>      
 		</New>
 	</Set>

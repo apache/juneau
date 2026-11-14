@@ -269,6 +269,16 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public <T> T readAnything(ClassMeta<?> eType, UonReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+		enterParseDepth();
+		try {
+			return readAnything0(eType, r, outer, isUrlParamValue, pMeta);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	// Workhorse method, wrapped by readAnything() with the recursion-depth guard.
+	private <T> T readAnything0(ClassMeta<?> eType, UonReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();

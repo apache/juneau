@@ -28,6 +28,7 @@ import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.view.*;
 
 import com.github.mustachejava.*;
+import com.github.mustachejava.resolver.*;
 
 /**
  * Flavor-neutral worker bean carrying the Mustache raw-template-dispatch logic shared by the
@@ -57,7 +58,10 @@ import com.github.mustachejava.*;
 public class MustacheDispatcher implements RawTemplateDispatcher {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */
-	public static final String DEFAULT_BASE_PATH = "/";
+	@SuppressWarnings({
+		"java:S1075" // Default for the configurable basePath setting, not a hardcoded location.
+	})
+	public static final String DEFAULT_BASE_PATH = "/templates/";
 
 	/** Default template suffix &mdash; empty (literal template names, no implicit suffix). */
 	public static final String DEFAULT_TEMPLATE_SUFFIX = "";
@@ -122,6 +126,14 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 	 */
 	public boolean isCacheTemplates() {
 		return cacheTemplates;
+	}
+
+	/**
+	 * The extension of the templates this bridge serves: the configured {@link #getTemplateSuffix() templateSuffix}, or
+	 * {@code ".mustache"} when no suffix is configured.
+	 */
+	private String servedExtension() {
+		return isEmpty(templateSuffix) ? ".mustache" : templateSuffix;
 	}
 
 	/**
@@ -192,7 +204,8 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 	 */
 	protected MustacheFactory buildDefaultFactory() {
 		var root = toResourceRoot(basePath);
-		return root.isEmpty() ? new DefaultMustacheFactory() : new DefaultMustacheFactory(root);
+		// Classpath-only resolver: no URI or file-system resolution of template or partial names.
+		return new DefaultMustacheFactory(root.isEmpty() ? new ClasspathResolver() : new ClasspathResolver(root));
 	}
 
 	/**
@@ -252,6 +265,10 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 		// Apply suffix idempotently so /mustache/about resolves to about.mustache (when
 		// templateSuffix is configured), while /mustache/about.mustache stays as-is.
 		safeTemplate = applyTemplateSuffix(safeTemplate);
+
+		// Only template-extension names are served, and names carrying a scheme or backslash never are.
+		if (! ViewTemplateNames.isPlainName(safeTemplate) || ! ViewTemplateNames.hasAllowedExtension(safeTemplate, servedExtension()))
+			throw new NotFound("Template not found.");
 
 		try {
 			var factory = resolveMustacheFactory(req);

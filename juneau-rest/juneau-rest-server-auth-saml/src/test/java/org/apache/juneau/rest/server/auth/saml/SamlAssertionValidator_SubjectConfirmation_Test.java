@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.server.auth.*;
@@ -44,7 +45,7 @@ class SamlAssertionValidator_SubjectConfirmation_Test extends TestBase {
 	private static final Instant NOA = NOW.plusSeconds(300);
 
 	private static SamlAssertionValidator.Builder base(Credential cred) {
-		return SamlAssertionValidator.create()
+		return SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
@@ -202,46 +203,163 @@ class SamlAssertionValidator_SubjectConfirmation_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// validate(xml, recipient) overload — used by SamlAuthFilter to bind the actual per-request ACS URL
+	// Mandatory recipient, request binding, IdP-initiated policy
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void f01_explicitRecipientOverload_matchingRecipient_accepted() throws Exception {
+	@Test void f01_recipientIsRequired() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var b = SamlAssertionValidator.create().spEntityId(AUDIENCE).expectedIssuer(ISSUER).signingCredential(cred);
+		assertThrows(IllegalStateException.class, b::build);
+	}
+
+	@Test void f02_registeredRequestId_acceptedOnce() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var sc = SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-7", null);
+		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", sc));
+		var v = base(cred).build();
+		v.rememberAuthnRequest("_req-7");
+		assertEquals("alice", v.validate(xml).getName());
+	}
+
+	@Test void f03_registeredRequestId_consumedByFirstUse() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var v = base(cred).build();
+		v.rememberAuthnRequest("_req-8");
+		var xml1 = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-8", null)));
+		assertEquals("alice", v.validate(xml1).getName());
+		var xml2 = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-8", null)));
+		assertThrows(AuthenticationException.class, () -> v.validate(xml2));
+	}
+
+	@Test void f04_unregisteredRequestId_rejected() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var sc = SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-unknown", null);
+		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", sc));
+		var v = base(cred).build();
+		assertThrows(AuthenticationException.class, () -> v.validate(xml));
+	}
+
+	@Test void f05_idpInitiated_rejectedByDefault() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
 		var sc = SamlTestSupport.bearerConfirmation(ACS, null, NOA, null, null);
 		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", sc));
-		// No recipient(...) configured on the builder — the two-arg overload must still enforce it.
-		var v = base(cred).build();
-		assertEquals("alice", v.validate(xml, ACS).getName());
+		var v = SamlAssertionValidator.create().recipient(ACS).spEntityId(AUDIENCE).expectedIssuer(ISSUER)
+			.signingCredential(cred).clock(CLOCK).build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
+		assertTrue(ex.getMessage().contains("IdP-initiated"), ex.getMessage());
 	}
 
-	@Test void f02_explicitRecipientOverload_mismatchedRecipient_rejected() throws Exception {
-		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
-		var sc = SamlTestSupport.bearerConfirmation("https://evil.example.com/acs", null, NOA, null, null);
-		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", sc));
-		var v = base(cred).build();
-		assertThrows(AuthenticationException.class, () -> v.validate(xml, ACS));
-	}
-
-	@Test void f03_explicitRecipientOverload_overridesConfiguredBuilderRecipient() throws Exception {
+	@Test void f06_idpInitiated_acceptedWhenAllowed() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
 		var sc = SamlTestSupport.bearerConfirmation(ACS, null, NOA, null, null);
 		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", sc));
-		// Builder was configured with a DIFFERENT recipient; the per-call argument wins.
-		var v = base(cred).recipient("https://other-sp.example.com/saml/acs").build();
-		assertEquals("alice", v.validate(xml, ACS).getName());
+		assertEquals("alice", base(cred).build().validate(xml).getName());
 	}
 
-	@Test void f04_explicitRecipientOverload_nullRecipient_throws() throws Exception {
+	@Test void f07_requestIdExpires() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
-		var xml = SamlTestSupport.buildSignedResponse(cred, ISSUER, AUDIENCE, "alice", NBF, NOA, Map.of());
-		var v = base(cred).build();
-		assertThrows(IllegalArgumentException.class, () -> v.validate(xml, null));
+		var sc = SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-9", null);
+		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", sc));
+		var clock = new AtomicReference<>(NOW);
+		var v = base(cred).authnRequestTtl(Duration.ofSeconds(30)).clock(new Clock() {
+			@Override public ZoneOffset getZone() { return ZoneOffset.UTC; }
+			@Override public Clock withZone(ZoneId z) { return this; }
+			@Override public Instant instant() { return clock.get(); }
+		}).build();
+		v.rememberAuthnRequest("_req-9");
+		clock.set(NOW.plusSeconds(31));
+		assertThrows(AuthenticationException.class, () -> v.validate(xml));
 	}
 
-	@Test void f05_explicitRecipientOverload_blankRecipient_throws() throws Exception {
+	@Test void f08_customAuthnRequestStore_usedAndSingleUse() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
-		var xml = SamlTestSupport.buildSignedResponse(cred, ISSUER, AUDIENCE, "alice", NBF, NOA, Map.of());
+		var remembered = new ArrayList<String>();
+		var consumed = new ArrayList<String>();
+		var ids = new HashSet<String>();
+		AuthnRequestStore store = new AuthnRequestStore() {
+			@Override public void remember(String id, long expiresAtMs, long nowMs) {
+				remembered.add(id);
+				ids.add(id);
+			}
+			@Override public boolean consume(String id, long nowMs) {
+				consumed.add(id);
+				return ids.remove(id);
+			}
+		};
+		var v = base(cred).authnRequestStore(store).build();
+		v.rememberAuthnRequest("_req-10");
+		assertEquals(List.of("_req-10"), remembered);
+		var xml1 = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-10", null)));
+		assertEquals("alice", v.validate(xml1).getName());
+		var xml2 = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-10", null)));
+		assertThrows(AuthenticationException.class, () -> v.validate(xml2));
+		assertEquals(List.of("_req-10", "_req-10"), consumed);
+	}
+
+	@Test void f09_authnRequestStore_nullRejected() {
+		var b = SamlAssertionValidator.create();
+		assertThrows(IllegalArgumentException.class, () -> b.authnRequestStore(null));
+	}
+
+	@Test void f10_inMemoryStore_singleUseExpiryAndCap() {
+		var store = new InMemoryAuthnRequestStore(2);
+		store.remember("a", 1000, 0);
+		store.remember("b", 50, 0);
+		assertThrows(IllegalStateException.class, () -> store.remember("c", 1000, 10));
+		store.remember("c", 1000, 60);
+		assertFalse(store.consume("b", 60));
+		assertTrue(store.consume("a", 60));
+		assertFalse(store.consume("a", 60));
+		assertThrows(IllegalArgumentException.class, () -> new InMemoryAuthnRequestStore(0));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// Destination, subject, attribute handling
+	// -----------------------------------------------------------------------------------------------------------------
+
+	private static String withDestination(String xml, String destination) {
+		return xml.replaceFirst("<(\\w+:)?Response ", "$0Destination=\"" + destination + "\" ");
+	}
+
+	@Test void g01_destinationMismatch_rejected() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var sc = SamlTestSupport.bearerConfirmation(ACS, null, NOA, null, null);
+		var xml = withDestination(signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", sc)), "https://other.example.com/acs");
 		var v = base(cred).build();
-		assertThrows(IllegalArgumentException.class, () -> v.validate(xml, " "));
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
+		assertTrue(ex.getMessage().contains("Destination"), ex.getMessage());
+	}
+
+	@Test void g02_destinationMatch_accepted() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var sc = SamlTestSupport.bearerConfirmation(ACS, null, NOA, null, null);
+		var xml = withDestination(signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", sc)), ACS);
+		assertEquals("alice", base(cred).build().validate(xml).getName());
+	}
+
+	@Test void g03_missingNameId_rejected() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var sc = SamlTestSupport.bearerConfirmation(ACS, null, NOA, null, null);
+		var sub = SamlTestSupport.subjectWithNoNameId();
+		sub.getSubjectConfirmations().add(sc);
+		var xml = signedWithSubject(cred, sub);
+		var v = base(cred).build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
+		assertTrue(ex.getMessage().contains("NameID"), ex.getMessage());
+	}
+
+	@Test void g04_attributesCannotReplaceValidatorClaims() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NBF, NOA);
+		SamlTestSupport.addAttributeStatement(assertion, "iss", "https://evil.example.com");
+		SamlTestSupport.addAttributeStatement(assertion, "aud", "other");
+		SamlTestSupport.addAttributeStatement(assertion, "issuerType", "JWT");
+		SamlTestSupport.addAttributeStatement(assertion, "dept", "eng");
+		var xml = SamlTestSupport.signAndBuildResponse((BasicCredential) cred, ISSUER, assertion);
+		var p = (ClaimsPrincipal) base(cred).build().validate(xml);
+		assertEquals(ISSUER, p.getClaims().get("iss"));
+		assertEquals(AUDIENCE, p.getClaims().get("aud"));
+		assertEquals("SAML", p.getClaims().get("issuerType"));
+		assertEquals("eng", p.getClaims().get("dept"));
 	}
 }

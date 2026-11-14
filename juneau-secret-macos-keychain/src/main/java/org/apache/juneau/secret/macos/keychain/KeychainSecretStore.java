@@ -304,10 +304,10 @@ public class KeychainSecretStore implements SecretStore {
 					throw isex("Timed out invoking '%s' after %s seconds.", binary, timeoutSeconds);
 				}
 				byte[] out;
-				String err;
+				byte[] err;
 				try (var is = p.getInputStream(); var es = p.getErrorStream()) {
 					out = is.readAllBytes();
-					err = new String(es.readAllBytes(), UTF_8);
+					err = es.readAllBytes(); // Kept as bytes: stderr can carry the secret and must stay zeroable.
 				}
 				return new Result(p.exitValue(), out, err);
 			} catch (IOException e) {
@@ -328,7 +328,11 @@ public class KeychainSecretStore implements SecretStore {
 	}
 
 	private static RuntimeException backendFailure(String subcommand, Result r) {
-		return isex("Keychain '%s' failed with exit code %s: %s", subcommand, r.exit(), r.stderrText().strip());
+		try {
+			return isex("Keychain '%s' failed with exit code %s: %s", subcommand, r.exit(), r.stderrText().strip());
+		} finally {
+			Arrays.fill(r.stderr(), (byte) 0);
+		}
 	}
 
 	private static boolean containsNewline(String s) {

@@ -132,7 +132,8 @@ class BusPolicy_Test extends TestBase {
 		assertEquals(20, p.maxUpstreamPerSecond());
 		assertNull(p.boundary());
 		assertEquals(List.of(), p.allowedOrigins());
-		assertTrue(p.authorizer().test(null, "ops.jobs"));
+		assertFalse(p.authorizer().test(null, "ops.jobs"));
+		assertTrue(BusPolicy.create().anyCaller().build().authorizer().test(null, "ops.jobs"));
 		assertEquals(Map.of(), p.sessionAttributes().apply(null));
 	}
 
@@ -205,5 +206,10 @@ class BusPolicy_Test extends TestBase {
 		assertFalse(p.allowsUpstream("ops.cancel"));
 		assertFalse(p.allowsUpstream("ops.cancel:two"));
 		assertSame(NOOP, p.upstreamHandler("ops.cancel:one"));
+	}
+
+	@Test void z01_sameOriginCheckDefaultsOnAndCanBeDisabled() {
+		assertTrue(BusPolicy.create().build().sameOriginCheck());
+		assertFalse(BusPolicy.create().noSameOriginCheck().build().sameOriginCheck());
 	}
 }

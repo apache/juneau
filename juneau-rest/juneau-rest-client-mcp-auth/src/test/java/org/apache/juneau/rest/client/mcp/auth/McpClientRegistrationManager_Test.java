@@ -120,8 +120,8 @@ class McpClientRegistrationManager_Test extends TestBase {
 
 	@Test void c01_registrationEndpointExtractedFromExtras() {
 		assertEquals(URI.create("https://as-a.example.com/register"),
-			McpClientRegistrationManager.registrationEndpoint(as(A, true)).orElseThrow());
-		assertTrue(McpClientRegistrationManager.registrationEndpoint(as(A, false)).isEmpty());
+			McpClientRegistrationManager.registrationEndpoint(as(A, true), false).orElseThrow());
+		assertTrue(McpClientRegistrationManager.registrationEndpoint(as(A, false), false).isEmpty());
 	}
 
 	// LOW: a hostile/misconfigured AS advertising a plaintext (non-loopback) registration_endpoint yields the
@@ -130,7 +130,27 @@ class McpClientRegistrationManager_Test extends TestBase {
 		var as = new OidcMetadata(A, URI.create(A + "/token"), URI.create(A + "/auth"), null, null, null, null, Set.of(),
 			Map.of("registration_endpoint", "http://as-a.example.com/register"));
 		assertThrowsWithMessage(McpAuthException.class, "non-https registration_endpoint",
-			() -> McpClientRegistrationManager.registrationEndpoint(as));
+			() -> McpClientRegistrationManager.registrationEndpoint(as, false));
+	}
+
+	@Test void c04_privateHostRegistrationEndpoint_rejectedUnlessAllowed() {
+		var as = new OidcMetadata(A, URI.create(A + "/token"), URI.create(A + "/auth"), null, null, null, null, Set.of(),
+			Map.of("registration_endpoint", "https://10.0.0.5/register"));
+		assertThrowsWithMessage(McpAuthException.class, "not permitted",
+			() -> McpClientRegistrationManager.registrationEndpoint(as, false));
+		assertEquals(URI.create("https://10.0.0.5/register"),
+			McpClientRegistrationManager.registrationEndpoint(as, true).orElseThrow());
+	}
+
+	@Test void c05_privateHostRegistrationEndpoint_resolveHonorsBuilderOptIn() {
+		var as = new OidcMetadata(A, URI.create(A + "/token"), URI.create(A + "/auth"), null, null, null, null, Set.of(),
+			Map.of("registration_endpoint", "https://169.254.169.254/register"));
+		var strict = McpClientRegistrationManager.create().redirectUris(List.of(URI.create("http://127.0.0.1:3000/callback"))).build();
+		assertThrowsWithMessage(McpAuthException.class, "not permitted", () -> strict.resolve(as));
+		var lax = McpClientRegistrationManager.create().allowPrivateUrls(true)
+			.redirectUris(List.of(URI.create("http://127.0.0.1:3000/callback")))
+			.registrarFunction(m -> new McpClientRegistration("ok", Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), m.issuer(), List.of(), McpApplicationType.NATIVE, Map.of())).build();
+		assertEquals("ok", lax.resolve(as).clientId());
 	}
 
 	// LOW: a malformed registration_endpoint URI yields McpAuthException rather than a raw IllegalArgumentException.
@@ -138,7 +158,7 @@ class McpClientRegistrationManager_Test extends TestBase {
 		var as = new OidcMetadata(A, URI.create(A + "/token"), URI.create(A + "/auth"), null, null, null, null, Set.of(),
 			Map.of("registration_endpoint", "http://  bad uri"));
 		assertThrowsWithMessage(McpAuthException.class, "malformed registration_endpoint",
-			() -> McpClientRegistrationManager.registrationEndpoint(as));
+			() -> McpClientRegistrationManager.registrationEndpoint(as, false));
 	}
 
 	// LOW: a buggy durable store returning an entry keyed under the wrong issuer must NOT cause cross-AS credential
@@ -203,6 +223,7 @@ class McpClientRegistrationManager_Test extends TestBase {
 				.initialAccessToken("init-tok")
 				.httpTimeout(Duration.ofSeconds(5))
 				.httpRequestConfigurator(r -> configured.incrementAndGet())
+				.allowPrivateUrls(true)
 				.build();
 			var result = m.resolve(md);
 			assertEquals("live", result.clientId());
@@ -249,6 +270,7 @@ class McpClientRegistrationManager_Test extends TestBase {
 				null, null, null, null, Set.of(), Map.of("registration_endpoint", endpoint));
 			var m = McpClientRegistrationManager.create()
 				.redirectUris(List.of(URI.create("http://127.0.0.1:3000/callback")))
+				.allowPrivateUrls(true)
 				.build();
 			assertEquals("plain", m.resolve(md).clientId());
 			assertNull(auth.get(), "no initial access token configured");

@@ -51,7 +51,7 @@ class ApiKeyAuthFilter_Test extends TestBase {
 
 	private static HttpServletRequest reqWithQuery(String param, String value) {
 		var r = mock(HttpServletRequest.class);
-		when(r.getParameter(param)).thenReturn(value);
+		when(r.getQueryString()).thenReturn(value == null ? null : param + "=" + value);
 		when(r.getCookies()).thenReturn(null);
 		return r;
 	}
@@ -107,6 +107,16 @@ class ApiKeyAuthFilter_Test extends TestBase {
 		var f = ApiKeyAuthFilter.create().store(STORE).fromQuery("apiKey").build();
 		var result = f.authenticate(reqWithQuery("apiKey", null));
 		assertTrue(result.isEmpty());
+	}
+
+	@Test void a07b_querySource_ignoresFormBodyParameter() throws Exception {
+		// The container's getParameter() also reads form bodies; only the URL query string is honored.
+		var r = mock(HttpServletRequest.class);
+		when(r.getParameter("apiKey")).thenReturn("good-key");
+		when(r.getQueryString()).thenReturn(null);
+		when(r.getCookies()).thenReturn(null);
+		var f = ApiKeyAuthFilter.create().store(STORE).fromQuery("apiKey").build();
+		assertTrue(f.authenticate(r).isEmpty());
 	}
 
 	@Test void a08_cookieSource_goodKey() throws Exception {

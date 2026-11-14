@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.mcp.v20250618;
 
 
 import java.util.*;
+import java.util.logging.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.commons.inject.*;
@@ -33,6 +34,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * Typed tool handling is revision-neutral and lives in the core module; this dated helper adapts prompts only.
  */
 public final class McpTypedHandlers {
+
+	private static final Logger LOG = Logger.getLogger(McpTypedHandlers.class.getName());
 
 	private McpTypedHandlers() {}
 
@@ -70,7 +73,8 @@ public final class McpTypedHandlers {
 			var json = Json.of(arguments);
 			return Json.to(json, type);
 		} catch (Exception e) {
-			throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Failed to bind arguments to " + type.getName() + ": " + e.getMessage());
+			LOG.log(Level.FINE, e, () -> "Failed to bind prompt arguments to " + type.getName());
+			throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Invalid prompt arguments.");
 		}
 	}
 }

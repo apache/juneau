@@ -52,7 +52,7 @@ class BoundedServletInputStream_Test {
 		assertThrows(IOException.class, () -> is.read(b, 0, 32));
 	}
 
-	@Test void a04_bulkRead_overLimit_neverSilentlyTruncatesOrReturnsZero() throws Exception {
+	@Test void a04_bulkRead_overLimit_neverSilentlyTruncatesOrReturnsZero() {
 		var is = stream(100, 10);
 		var b = new byte[4];
 		var total = new int[1];

@@ -1329,7 +1329,7 @@ class RrpcInterface_Test extends TestBase {
 	@MethodSource("input")
 	void g01_throwException1(Input input) {
 		var e = assertThrows(InterfaceProxy.InterfaceProxyException1.class, () -> input.proxy.throwException1());
-		assertEquals("foo",e.getMessage());
+		assertFalse(String.valueOf(e.getMessage()).contains("foo"), "server-side message must not be sent");
 	}
 
 	@ParameterizedTest

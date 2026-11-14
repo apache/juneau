@@ -143,6 +143,16 @@ public class UrlEncodingParserSession extends UonParserSession {
 	}
 
 	private <T> T readAnything(ClassMeta<T> eType, UonReader r, Object outer) throws IOException, ParseException, ExecutableException {
+		enterParseDepth();
+		try {
+			return readAnything0(eType, r, outer);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	// Workhorse method, wrapped by readAnything() with the recursion-depth guard.
+	private <T> T readAnything0(ClassMeta<T> eType, UonReader r, Object outer) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();

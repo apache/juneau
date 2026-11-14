@@ -90,7 +90,7 @@ public final class PostgresDialect implements SqlDialect {
 		builtins.put("$eqic", (d, col, type, args) -> eqicFrag(col, type, args.get(0)));
 		builtins.put("$ne", (d, col, type, args) -> ne(col, type, args));
 		builtins.put("$in", (d, col, type, args) -> in(col, type, args));
-		builtins.put("$contains", (d, col, type, args) -> frag(col + " ILIKE ?", like("%", text(args.get(0)), "%")));
+		builtins.put("$contains", (d, col, type, args) -> frag(col + " ILIKE ? ESCAPE '\\'", like("%", text(args.get(0)), "%")));
 		builtins.put("$prefix", (d, col, type, args) -> prefix(col, type, args.get(0)));
 		builtins.put("$regex", (d, col, type, args) -> regex(col, args));
 		builtins.put("$blank", (d, col, type, args) -> SqlFragment.of(blank(col)));
@@ -138,8 +138,8 @@ public final class PostgresDialect implements SqlDialect {
 			case TEXT, ID: {
 				var token = text(value);
 				if (quoted || ! hasWildcard(token))
-					return frag(columnSql + " ILIKE ?", like("%", token, "%"));
-				return frag(columnSql + " ILIKE ?", glob(token));
+					return frag(columnSql + " ILIKE ? ESCAPE '\\'", like("%", token, "%"));
+				return frag(columnSql + " ILIKE ? ESCAPE '\\'", glob(token));
 			}
 			case ENUM: {
 				// Same rule as the in-memory engine: a wildcard pattern is a case-insensitive whole-string glob over the
@@ -147,7 +147,7 @@ public final class PostgresDialect implements SqlDialect {
 				var token = text(value);
 				if (quoted || ! hasWildcard(token))
 					return eqicFrag(columnSql, type, token);
-				return frag(textOf(columnSql, type) + " ILIKE ?", glob(token));
+				return frag(textOf(columnSql, type) + " ILIKE ? ESCAPE '\\'", glob(token));
 			}
 			case VERSION:
 				return prefix(columnSql, type, value);
@@ -214,7 +214,7 @@ public final class PostgresDialect implements SqlDialect {
 			// Array slice: a stored version with fewer parts than the prefix yields a shorter array, which never equals it.
 			return frag(versionArray(col) + "[1:" + n + "] = " + "string_to_array(?, '.')::int[]", v);
 		}
-		return frag(col + " ILIKE ?", like("", text(arg), "%"));
+		return frag(col + " ILIKE ? ESCAPE '\\'", like("", text(arg), "%"));
 	}
 
 	/**
@@ -264,6 +264,8 @@ public final class PostgresDialect implements SqlDialect {
 			javaFlags |= DOTALL;
 		try {
 			Pattern.compile(pattern, javaFlags);
+			if (! isPortable(pattern))
+				return NEVER;
 		} catch (PatternSyntaxException e) {
 			return NEVER;  // Invalid pattern = no match, like InMemoryMatch/RegexBudget; also keeps it from escaping the \A(?:...)\Z anchors.
 		}
@@ -408,6 +410,48 @@ public final class PostgresDialect implements SqlDialect {
 				sb.append(", ");
 			sb.append('?');
 		}
+	}
+
+	/**
+	 * Returns whether a regex uses only constructs with the same meaning in Java and PostgreSQL (ARE): literals, classes,
+	 * groups, alternation, greedy/lazy quantifiers, anchors, back-references and the {@code \d \w \s} shorthands.
+	 * Anything that differs between the flavors (possessive quantifiers, inline flags, lookbehind, named or atomic groups,
+	 * {@code \p} classes, {@code \b}, {@code \Q...\E}, class intersections and POSIX bracket expressions) makes the
+	 * pattern non-portable, so it matches nothing instead of being interpreted differently by the server.
+	 */
+	@SuppressWarnings({
+		"java:S3776" // Branching is inherent to the regex scanner.
+	})
+	static boolean isPortable(String p) {
+		var inClass = false;
+		var n = p.length();
+		var i = 0;
+		while (i < n) {
+			var c = p.charAt(i);
+			if (c == '\\') {
+				i++;
+				if (i >= n || "pPbBQEhHRXGzZAkNvVuxc0".indexOf(p.charAt(i)) >= 0)
+					return false;
+			} else if (inClass) {
+				if (c == ']')
+					inClass = false;
+				else if (c == '[' || (c == '&' && i + 1 < n && p.charAt(i + 1) == '&'))
+					return false;
+			} else if (c == '[') {
+				inClass = true;
+				if (i + 1 < n && p.charAt(i + 1) == '^')
+					i++;
+				if (i + 1 < n && p.charAt(i + 1) == ']')
+					i++;
+			} else if (c == '(' && i + 1 < n && p.charAt(i + 1) == '?') {
+				if (i + 2 >= n || ":=!".indexOf(p.charAt(i + 2)) < 0)
+					return false;
+			} else if ("*+?}".indexOf(c) >= 0 && i + 1 < n && p.charAt(i + 1) == '+') {
+				return false;
+			}
+			i++;
+		}
+		return ! inClass;
 	}
 
 	/** Escapes LIKE/ILIKE metacharacters (backslash is the default Postgres LIKE escape). */

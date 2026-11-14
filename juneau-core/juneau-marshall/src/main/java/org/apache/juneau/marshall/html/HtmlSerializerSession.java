@@ -284,6 +284,43 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			|| (isDetectLinksInStrings() && o instanceof CharSequence && isHttpUrl(o.toString()));
 	}
 
+	/**
+	 * Returns <jk>true</jk> if the specified URI, after resolution, has an allowed scheme or is relative.
+	 *
+	 * @param uri The URI.  Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the URI can be rendered as a link.
+	 */
+	protected boolean isAllowedUri(Object uri) {
+		if (uri == null)
+			return true;
+		// Juneau's own URI-resolution schemes are same-origin; they resolve to real URLs (or stay relative) at write time.
+		var rawScheme = schemeOf(uri.toString());
+		if (rawScheme != null && RESOLVED_SCHEMES.contains(rawScheme))
+			return true;
+		var resolved = schemeOf(getUriResolver().resolve(uri));
+		return resolved == null || ctx.uriSchemes.contains(resolved);
+	}
+
+	private static final Set<String> RESOLVED_SCHEMES = Set.of("servlet", "context", "request");
+
+	// Returns the lower-cased scheme, or null if the URI is relative.
+	private static String schemeOf(String uri) {
+		// Browsers ignore tabs, CR/LF and leading control characters/spaces when parsing the scheme.
+		var s = uri.replaceAll("^[\\x00-\\x20]+", "").replaceAll("[\\t\\r\\n]", "");
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (c == '/' || c == '?' || c == '#')
+				return null;
+			if (c == ':')
+				return s.substring(0, i).toLowerCase(Locale.ROOT);
+		}
+		return null;
+	}
+
+	private String checkedLink(String link) {
+		return link != null && isAllowedUri(link) ? link : null;
+	}
+
 	// Programmatic equivalent of the full match https?\:\/\/.* (Pattern.matcher(s).matches()).
 	// The trailing .* does not cross a line terminator under matches(), so the remainder must contain none.
 	private static boolean isHttpUrl(String s) {
@@ -461,7 +498,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			String link = null;
 			String anchorText = null;
 			if (! cMeta.isCollectionOrArray()) {
-				link = m.resolveVars(getLink(pMeta));
+				link = checkedLink(m.resolveVars(getLink(pMeta)));
 				anchorText = m.resolveVars(getAnchorText(pMeta));
 			}
 
@@ -595,7 +632,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 							String link = null;
 							String anchorText = null;
 							if (! pMeta.getBeanInfo().isCollectionOrArray()) {
-								link = m2.resolveVars(getLink(pMeta));
+								link = checkedLink(m2.resolveVars(getLink(pMeta)));
 								anchorText = m2.resolveVars(getAnchorText(pMeta));
 							}
 
@@ -634,13 +671,13 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				if (! isDc)
 					out.oTag(i + 1, "li");
 				String style = getStyle(this, ppMeta, o);
-				String link = getLink(ppMeta);
+				String link = checkedLink(getLink(ppMeta) == null ? null : getLink(ppMeta).replace("{#}", s(o)));
 				if (nn(style) && ! isDc)
 					out.attr("style", style);
 				if (! isDc)
 					out.cTag();
 				if (nn(link))
-					out.oTag(i + 2, "a").attrUri("href", link.replace("{#}", s(o))).cTag();
+					out.oTag(i + 2, "a").attrUri("href", link).cTag();
 				ContentResult cr = writeAnything(out, o, eType.getElementType(), name, null, 1, false, true);
 				if (nn(link))
 					out.eTag("a");
@@ -695,6 +732,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		}
 
 		String link = getLink(ppMeta);
+		link = link == null ? null : checkedLink(link.replace("{#}", s(value)));
 		String style = getStyle(this, ppMeta, value);
 
 		out.sTag(i + 1, "tr").nl(i + 2);
@@ -703,7 +741,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.attr("style", style);
 		out.cTag();
 		if (nn(link))
-			out.oTag(i + 3, "a").attrUri("href", link.replace("{#}", s(value))).cTag();
+			out.oTag(i + 3, "a").attrUri("href", link).cTag();
 		ContentResult cr = writeAnything(out, key, keyType, null, null, 2, false, false);
 		if (nn(link))
 			out.eTag("a");
@@ -948,7 +986,10 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					Object urlProp = m.get(uriProperty.orElse(""));
 					Object nameProp = m.get(nameProperty.orElse(""));
 
-					out.oTag("a").attrUri("href", urlProp).w('>').text(nameProp).eTag("a");
+					if (isAllowedUri(urlProp))
+						out.oTag("a").attrUri("href", urlProp).w('>').text(nameProp).eTag("a");
+					else
+						out.text(nameProp);
 					cr = CR_MIXED;
 				} else {
 					out.nlIf(! isRoot, xIndent + 2);
@@ -988,9 +1029,13 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			} else if (isUri(sType, pMeta, o)) {
 				String label = getAnchorText(pMeta, o);
-				out.oTag("a").attrUri("href", o).w('>');
-				out.text(label);
-				out.eTag("a");
+				if (isAllowedUri(o)) {
+					out.oTag("a").attrUri("href", o).w('>');
+					out.text(label);
+					out.eTag("a");
+				} else {
+					out.text(label);
+				}
 				cr = CR_MIXED;
 
 			} else if (sType.isDate()) {

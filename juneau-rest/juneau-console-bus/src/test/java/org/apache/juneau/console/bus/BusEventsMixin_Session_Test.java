@@ -42,7 +42,7 @@ import org.junit.jupiter.api.*;
 })
 class BusEventsMixin_Session_Test extends TestBase {
 
-	@Rest
+	@Rest(allowCrossSite="true")
 	public static class R extends BasicRestServlet implements BusEventsMixin {
 		private static final long serialVersionUID = 1L;
 		static volatile ServerBus bus;
@@ -57,7 +57,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 	private static final SynchronizerToken TOKEN = SynchronizerToken.of("the-real-token");
 
 	private static BusPolicy.Builder policy() {
-		return BusPolicy.create().downstream("ops.jobs", true).downstream("ops.alert:*", false);
+		return BusPolicy.create().anyCaller().downstream("ops.jobs", true).downstream("ops.alert:*", false);
 	}
 
 	private static void use(BusPolicy p) {
@@ -370,5 +370,40 @@ class BusEventsMixin_Session_Test extends TestBase {
 		// A read claiming a write gets the write checks.
 		C.get(stream + "?method=DELETE").userPrincipal(JB).header("Accept", "text/event-stream").header("Host", APP_HOST)
 			.header("Origin", "http://evil.example").run().assertStatus(403);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// d) default same-origin check when the policy has no boundary
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static org.apache.juneau.rest.client.classic.RestResponse openWith(String host, String origin, int status) throws Exception {
+		var req = C.post(BusEventsMixin.SESSION_PATH).userPrincipal(JB).contentString(body("sse", "ops.jobs"))
+			.contentType("application/json").header("Accept", "application/json").header("Host", host);
+		if (origin != null)
+			req = req.header("Origin", origin);
+		return req.run().assertStatus(status);
+	}
+
+	@Test void d01_noBoundaryRefusesAMismatchedOriginOnPostAndStream() throws Exception {
+		var text = openWith("app.example", "http://other.example", 403).getContent().asString();
+		assertTrue(text.contains("bus:refused"), text);
+		assertTrue(R.bus.sessions().isEmpty());
+		var stream = BusEventsMixin.STREAM_PATH.replace("{sessionId}", "0".repeat(64));
+		C.get(stream).userPrincipal(JB).header("Accept", "text/event-stream").header("Host", "app.example")
+			.header("Origin", "http://other.example").run().assertStatus(403);
+	}
+
+	@Test void d02_noBoundaryAllowsMatchingOrAbsentOrigin() throws Exception {
+		openWith("app.example", "http://app.example", 200);
+		openWith("app.example", null, 200);
+		var stream = BusEventsMixin.STREAM_PATH.replace("{sessionId}", "0".repeat(64));
+		C.get(stream).userPrincipal(JB).header("Accept", "text/event-stream").header("Host", "app.example")
+			.header("Origin", "http://app.example").run().assertStatus(404);
+	}
+
+	@Test void d03_noSameOriginCheckOptsOut() throws Exception {
+		R.bus.close();
+		use(policy().noSameOriginCheck().build());
+		openWith("app.example", "http://other.example", 200);
 	}
 }

@@ -20,6 +20,7 @@ package org.apache.juneau.rest.server.mcp;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.logging.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.commons.inject.*;
@@ -49,6 +50,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * </ul>
  */
 public final class McpTypedHandlers {
+
+	private static final Logger LOG = Logger.getLogger(McpTypedHandlers.class.getName());
 
 	private static final JsonSerializer CANONICAL =
 		JsonSerializer.create().addBeanTypes(false).uriResolution(UriResolution.NONE).build();
@@ -156,7 +159,7 @@ public final class McpTypedHandlers {
 				raw.append("$defs", session.getBeanDefs());
 			return raw == null ? null : McpSchema.of(raw);
 		} catch (Exception e) {
-			throw new McpException(-32603, "Failed to derive tool schema for " + type.getTypeName() + ": " + e.getMessage());
+			throw new McpException(-32603, "Failed to derive tool schema for " + type.getTypeName());
 		}
 	}
 
@@ -167,7 +170,8 @@ public final class McpTypedHandlers {
 		try {
 			return (A)JsonParser.DEFAULT.read(Json.of(arguments), type);
 		} catch (Exception e) {
-			throw new McpException(-32602, "Failed to bind tool arguments to " + type.getTypeName() + ": " + e.getMessage());
+			LOG.log(Level.FINE, e, () -> "Failed to bind tool arguments to " + type.getTypeName());
+			throw new McpException(-32602, "Invalid tool arguments.");
 		}
 	}
 
@@ -176,7 +180,7 @@ public final class McpTypedHandlers {
 			var json = CANONICAL.write(result);
 			return JsonParser.DEFAULT.read(json, Object.class);
 		} catch (Exception e) {
-			throw new McpException(-32603, "Failed to canonicalize tool result: " + e.getMessage());
+			throw new McpException(-32603, "Failed to canonicalize tool result");
 		}
 	}
 
@@ -184,7 +188,7 @@ public final class McpTypedHandlers {
 		try {
 			return CANONICAL.write(tree);
 		} catch (Exception e) {
-			throw new McpException(-32603, "Failed to mirror tool structuredContent: " + e.getMessage());
+			throw new McpException(-32603, "Failed to mirror tool structuredContent");
 		}
 	}
 }

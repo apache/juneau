@@ -60,6 +60,25 @@ class LoopbackRedirectReceiver_Test extends TestBase {
 		}
 	}
 
+	@Test void d01_wrongStateIgnoredAndListeningContinues() throws Exception {
+		try (var r = LoopbackRedirectReceiver.open().expectState("good")) {
+			assertEquals(400, status("GET", URI.create(r.redirectUri() + "?code=x&state=bad")));
+			assertEquals(400, status("GET", URI.create(r.redirectUri() + "?code=x")));
+			assertEquals(400, status("POST", URI.create(r.redirectUri() + "?code=x&state=good")));
+			assertEquals(400, status("GET", URI.create("http://127.0.0.1:" + r.port() + "/callback/other?state=good")));
+			var shortWait = Duration.ofMillis(50);
+			assertThrows(McpAuthException.class, () -> r.awaitCallback(shortWait));
+			assertEquals(200, status("GET", URI.create(r.redirectUri() + "?code=x&state=good")));
+			assertTrue(r.awaitCallback(Duration.ofSeconds(2)).toString().contains("state=good"));
+		}
+	}
+
+	private static int status(String method, URI u) throws IOException {
+		var c = (HttpURLConnection)u.toURL().openConnection();
+		c.setRequestMethod(method);
+		return c.getResponseCode();
+	}
+
 	// The fixed-port (bind-first) constructor binds exactly the requested port so it matches a forPort registration.
 	@Test void c01_fixedPortBindsRequestedPort() throws IOException {
 		var port = freePort();

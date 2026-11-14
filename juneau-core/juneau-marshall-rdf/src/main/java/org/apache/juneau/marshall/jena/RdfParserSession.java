@@ -27,6 +27,8 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
+import org.apache.jena.riot.lang.*;
+import org.apache.jena.sparql.util.Context;
 import org.apache.jena.util.iterator.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
@@ -35,6 +37,8 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.swap.spi.*;
 import org.apache.juneau.marshall.xml.*;
+
+import com.apicatalog.jsonld.JsonLdOptions;
 
 /**
  * Session object that lives for the duration of a single use of {@link RdfParser}.
@@ -124,6 +128,19 @@ public class RdfParserSession extends ReaderParserSession {
 		lang = toLang(langName);
 		if (lang == null)
 			throw isex("Unknown RDF language: %s", langName);
+	}
+
+	/**
+	 * Creates the RIOT context used for parsing, restricting JSON-LD to local documents unless remote contexts are allowed.
+	 */
+	static Context parserContext(boolean allowRemoteContexts) {
+		var c = Context.create();
+		if (! allowRemoteContexts) {
+			var o = new JsonLdOptions();
+			o.setDocumentLoader(RdfNoNetworkDocumentLoader.INSTANCE);
+			c.set(LangJSONLD11.JSONLD_OPTIONS, o);
+		}
+		return c;
 	}
 
 	// Package-private (not private) for white-box testing.
@@ -491,6 +508,7 @@ public class RdfParserSession extends ReaderParserSession {
 		var content = pipe.asString();
 		RDFParser.fromString(content, lang)
 			.base("http://unknown/")
+			.context(parserContext(ctx.allowRemoteContexts))
 			.parse(model);
 
 		var roots = getRoots(model);

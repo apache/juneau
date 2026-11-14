@@ -87,12 +87,12 @@ class PageAssetsAbsolute_Test extends TestBase {
 	@Test void b01_validator_relativeInit_isFlagged() {
 		var f = ConsoleTemplateValidator.create().validateSource("t.ftlh", "<@page init=\"one.js\"></@page>");
 		assertTrue(f.stream().anyMatch(x -> x.rule().equals("relative-page-asset") && x.message().equals(
-			"<@page> init= entry 'one.js' must be absolute (start with '/') or a context: / servlet: URI.")), () -> f.toString());
+			"<@page> init= entry 'one.js' must be absolute (start with '/') or a context: / servlet: URI.")), f::toString);
 	}
 
 	@Test void b02_validator_relativeCssInList_isFlagged() {
 		var f = ConsoleTemplateValidator.create().validateSource("t.ftlh", "<@page css=[\"/ok.css\", \"rel.css\", \"//cdn/x.css\"]></@page>");
-		assertEquals(2, f.stream().filter(x -> x.rule().equals("relative-page-asset")).count(), () -> f.toString());
+		assertEquals(2, f.stream().filter(x -> x.rule().equals("relative-page-asset")).count(), f::toString);
 	}
 
 	@Test void b03_validator_absoluteAndUriForms_areClean() {

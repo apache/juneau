@@ -520,6 +520,31 @@ class RestResponse_Test extends TestBase {
 		CG.get("/x").header("x-response-headers", "(X-Custom=hi)").run().assertStatus(200);
 	}
 
+	@Test void g05b_xResponseHeaders_ignoredByDefault() throws Exception {
+		CG.get("/x").header("x-response-headers", "(X-Custom=hi)").run().assertStatus(200).assertHeader("X-Custom").isNull();
+	}
+
+	@Rest(allowedResponseHeaders = "X-Custom,Set-Cookie,Location,Content-Security-Policy,Content-Type")
+	public static class G2 {
+		@RestGet("/x") public String x() { return "ok"; }
+	}
+
+	private static final MockRestClient CG2 = MockRestClient.buildLax(G2.class);
+
+	@Test void g05c_xResponseHeaders_allowListed() throws Exception {
+		var rr = CG2.get("/x").header("x-response-headers", "X-Custom=hi,X-Other=no").run();
+		rr.assertStatus(200)
+			.assertHeader("X-Custom").isContains("hi")
+			.assertHeader("X-Other").isNull();
+	}
+
+	@Test void g05d_xResponseHeaders_reservedNamesNeverSet() throws Exception {
+		CG2.get("/x").header("x-response-headers", "Set-Cookie=a,Location=/z,Content-Security-Policy=x").run().assertStatus(200)
+			.assertHeader("Set-Cookie").isNull()
+			.assertHeader("Location").isNull()
+			.assertHeader("Content-Security-Policy").isNull();
+	}
+
 	@Test void g06_defaultResponseHeader_emitted() throws Exception {
 		// NB: RestResponse constructor passes the value through resolveUris(), which prefixes a leading "/".
 		// We assert only that the header is present (its value is implementation-specific).

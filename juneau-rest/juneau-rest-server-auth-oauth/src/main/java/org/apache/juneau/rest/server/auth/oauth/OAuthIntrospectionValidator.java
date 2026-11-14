@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.*;
 import java.security.*;
 import java.time.*;
 import java.util.*;
@@ -52,14 +53,19 @@ import com.nimbusds.oauth2.sdk.token.*;
  * 		.introspectionEndpoint(URI.<jsm>create</jsm>(<js>"https://idp.example.com/oauth2/introspect"</js>))
  * 		.clientId(<js>"api-server"</js>)
  * 		.clientSecret(<js>"..."</js>)
+ * 		.audience(<js>"https://api.example.com"</js>)
  * 		.requiredScopes(<js>"read:orders"</js>)
  * 		.build();
  * </p>
  *
  * <h2 class='topic'>Defaults</h2>
  * <ul>
+ * 	<li>Audience: required.  {@link Builder#build()} fails unless {@link Builder#audience(String...)} (or
+ * 		{@link Builder#resource(String...)}) or an explicit {@link Builder#anyAudience()} is set.
+ * 	<li>HTTP timeouts: 5 seconds connect and read.
  * 	<li>Cache TTL: 5 minutes, capped at 1 hour.
  * 	<li>Cache size: 1000 entries.
+ * 	<li>Negative cache: inactive or rejected tokens are remembered for 30 seconds.
  * 	<li>Required scopes: none (scope enforcement lives on the validator, not the filter).
  * </ul>
  *
@@ -83,6 +89,14 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 	/** Maximum cache TTL. */
 	public static final Duration MAX_CACHE_TTL = Duration.ofHours(1);
 
+	/** Default connect/read timeout for the introspection call. */
+	public static final Duration DEFAULT_HTTP_TIMEOUT = Duration.ofSeconds(5);
+
+	/** Default time an inactive or rejected token is remembered. */
+	public static final Duration DEFAULT_NEGATIVE_CACHE_TTL = Duration.ofSeconds(30);
+
+	private static final int MAX_NEGATIVE_ENTRIES = 1000;
+
 	/**
 	 * Static creator.
 	 *
@@ -105,6 +119,10 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		private final Set<String> expectedAudiences = st();
 		private Clock clock = Clock.systemUTC();
 		private Consumer<HTTPRequest> httpRequestConfigurator;
+		private String issuer;
+		private boolean anyAudience;
+		private Duration httpTimeout = DEFAULT_HTTP_TIMEOUT;
+		private Duration negativeCacheTtl = DEFAULT_NEGATIVE_CACHE_TTL;
 
 		/** Constructor. */
 		protected Builder() {}
@@ -221,8 +239,8 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 * different API cannot be replayed against this one.
 		 *
 		 * <p>
-		 * When left unset (the default), no audience/resource check is performed: today's
-		 * {@code active} + optional-required-scopes behavior is preserved unchanged.
+		 * An audience is required: {@link #build()} fails unless at least one value is configured here or
+		 * {@link #anyAudience()} is called.
 		 *
 		 * @param values The expected audience values.  Must contain at least one non-blank entry.
 		 * @return This object.
@@ -233,6 +251,66 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 				reqnb("audience", v);
 				expectedAudiences.add(v);
 			}
+			return this;
+		}
+
+		/**
+		 * Explicitly disables the audience check.
+		 *
+		 * <p>
+		 * Use only for authorization servers that cannot emit an {@code aud} claim.  Without this call (or an
+		 * {@link #audience(String...)} value), {@link #build()} fails.
+		 *
+		 * @return This object.
+		 */
+		public Builder anyAudience() {
+			anyAudience = true;
+			return this;
+		}
+
+		/**
+		 * Sets the expected token issuer.
+		 *
+		 * <p>
+		 * When set, the introspection response's {@code iss} claim must equal this value or the token is rejected.
+		 *
+		 * @param value The expected issuer.  Must not be <jk>null</jk> or blank.
+		 * @return This object.
+		 */
+		public Builder issuer(String value) {
+			issuer = reqnb("value", value);
+			return this;
+		}
+
+		/**
+		 * Sets the connect/read timeout of the introspection call.  Defaults to {@link #DEFAULT_HTTP_TIMEOUT 5 seconds}.
+		 *
+		 * <p>
+		 * Applied before {@link #httpRequestConfigurator(Consumer)} runs, so the configurator can override it.
+		 *
+		 * @param value The timeout.  Must be positive.
+		 * @return This object.
+		 */
+		public Builder httpTimeout(Duration value) {
+			reqnn("value", value);
+			if (value.isZero() || value.isNegative())
+				throw iaex("httpTimeout must be positive");
+			httpTimeout = value;
+			return this;
+		}
+
+		/**
+		 * Sets how long an inactive or rejected token is remembered so repeated presentations do not each trigger
+		 * an introspection call.  Defaults to {@link #DEFAULT_NEGATIVE_CACHE_TTL 30 seconds}; {@link Duration#ZERO} disables it.
+		 *
+		 * @param value The TTL.  Must not be negative.
+		 * @return This object.
+		 */
+		public Builder negativeCacheTtl(Duration value) {
+			reqnn("value", value);
+			if (value.isNegative())
+				throw iaex("negativeCacheTtl must not be negative");
+			negativeCacheTtl = value;
 			return this;
 		}
 
@@ -267,7 +345,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 *
 		 * <p>
 		 * This is the escape hatch for custom HTTP behavior (proxies, TLS overrides,
-		 * timeouts).  The callback is invoked on every introspection call.
+		 * timeout overrides).  The callback is invoked on every introspection call.
 		 *
 		 * @param value The configurator callback.  Must not be <jk>null</jk>.
 		 * @return This object.
@@ -289,6 +367,8 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 				throw new IllegalStateException("OAuthIntrospectionValidator requires clientId(...)");
 			if (clientSecretSupplier == null)
 				throw new IllegalStateException("OAuthIntrospectionValidator requires clientSecret(...) or clientSecretSupplier(...)");
+			if (expectedAudiences.isEmpty() && ! anyAudience)
+				throw new IllegalStateException("OAuthIntrospectionValidator requires audience(...) or an explicit anyAudience()");
 			if (tokenCache == null)
 				tokenCache = BoundedLruTokenCache.create();
 			return new OAuthIntrospectionValidator(this);
@@ -304,6 +384,38 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 	private final Set<String> expectedAudiences;
 	private final Clock clock;
 	private final Consumer<HTTPRequest> httpRequestConfigurator;
+	private final String issuer;
+	private final Duration httpTimeout;
+	private final Duration negativeCacheTtl;
+	private final Map<String,NegativeEntry> negativeCache = new LinkedHashMap<>(16, 0.75f, true) {
+		private static final long serialVersionUID = 1L;
+		@Override
+		protected boolean removeEldestEntry(Map.Entry<String,NegativeEntry> eldest) {
+			return size() > MAX_NEGATIVE_ENTRIES;
+		}
+	};
+
+	/** Raw introspection result as stored in the token cache; carries no per-validator decisions. */
+	private record RawIntrospection(TokenIntrospectionSuccessResponse response) implements Principal {
+		@Override /* Overridden from Principal */
+		public String getName() {
+			return response.getSubject() == null ? "" : response.getSubject().getValue();
+		}
+	}
+
+	private record NegativeEntry(String message, String wwwAuthenticate, Instant expires) {}
+
+	private static final class Rejection extends Exception {
+		private static final long serialVersionUID = 1L;
+		private final String challenge;
+		Rejection(String message, String challenge) {
+			super(message);
+			this.challenge = challenge;
+		}
+		AuthenticationException toException() {
+			return new AuthenticationException(getMessage()).wwwAuthenticate(challenge);
+		}
+	}
 
 	/**
 	 * Constructor.
@@ -320,6 +432,9 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		this.expectedAudiences = u(cp(b.expectedAudiences));
 		this.clock = b.clock;
 		this.httpRequestConfigurator = b.httpRequestConfigurator;
+		this.issuer = b.issuer;
+		this.httpTimeout = b.httpTimeout;
+		this.negativeCacheTtl = b.negativeCacheTtl;
 	}
 
 	/**
@@ -361,7 +476,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 	/**
 	 * Returns the configured expected audience / resource-indicator set.
 	 *
-	 * @return An unmodifiable view.  Empty when no audience/resource binding is configured (default).
+	 * @return An unmodifiable view.  Empty only when {@link Builder#anyAudience()} was used.
 	 */
 	public Set<String> getExpectedAudiences() {
 		return expectedAudiences;
@@ -380,9 +495,51 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 	public Principal validate(String token) throws AuthenticationException {
 		reqnb("token", token);
 		var cached = tokenCache.getPrincipal(token);
-		if (cached.isPresent())
-			return cached.get();
+		if (cached.isPresent() && cached.get() instanceof RawIntrospection raw) {
+			// The cache holds only the raw introspection result, so a cache shared with a differently
+			// configured validator can never skip this validator's own checks.
+			try {
+				enforceNotExpired(raw.response());
+				return toPrincipal(raw.response());
+			} catch (Rejection e) {
+				throw e.toException();
+			}
+		}
+		checkNegativeCache(token);
 		return introspect(token);
+	}
+
+	private static String negativeKey(String token) {
+		try {
+			return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(token.getBytes(StandardCharsets.UTF_8)));
+		} catch (NoSuchAlgorithmException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
+	private void checkNegativeCache(String token) throws AuthenticationException {
+		if (negativeCacheTtl.isZero())
+			return;
+		NegativeEntry e;
+		synchronized (negativeCache) {
+			var key = negativeKey(token);
+			e = negativeCache.get(key);
+			if (e != null && ! e.expires().isAfter(clock.instant())) {
+				negativeCache.remove(key);
+				e = null;
+			}
+		}
+		if (e != null)
+			throw new AuthenticationException(e.message()).wwwAuthenticate(e.wwwAuthenticate());
+	}
+
+	private AuthenticationException remember(String token, Rejection r) {
+		if (! negativeCacheTtl.isZero()) {
+			synchronized (negativeCache) {
+				negativeCache.put(negativeKey(token), new NegativeEntry(r.getMessage(), r.challenge, clock.instant().plus(negativeCacheTtl)));
+			}
+		}
+		return r.toException();
 	}
 
 	private Principal introspect(String token) throws AuthenticationException {
@@ -391,6 +548,10 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		AccessToken accessToken = new BearerAccessToken(token);
 		var req = new TokenIntrospectionRequest(introspectionEndpoint, clientAuth, accessToken);
 		var http = req.toHTTPRequest();
+		var timeoutMs = (int)Math.min(httpTimeout.toMillis(), Integer.MAX_VALUE);
+		http.setConnectTimeout(timeoutMs);
+		http.setReadTimeout(timeoutMs);
+		http.setFollowRedirects(false);
 		if (httpRequestConfigurator != null)
 			httpRequestConfigurator.accept(http);
 
@@ -409,21 +570,45 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 				.wwwAuthenticate(bearerError("invalid_token", "introspection parse failed"));
 		}
 		if (!resp.indicatesSuccess())
-			throw new AuthenticationException("OAuth introspection error: " + resp.toErrorResponse().getErrorObject().getCode())
-				.wwwAuthenticate(bearerError("invalid_token", resp.toErrorResponse().getErrorObject().getCode()));
+			throw remember(token, new Rejection("OAuth introspection error: " + safeErrorCode(resp.toErrorResponse().getErrorObject().getCode()),
+				bearerError("invalid_token", safeErrorCode(resp.toErrorResponse().getErrorObject().getCode()))));
 		var success = resp.toSuccessResponse();
 		if (!success.isActive())
-			throw new AuthenticationException("OAuth token inactive")
-				.wwwAuthenticate(bearerError("invalid_token", "token inactive"));
+			throw remember(token, new Rejection("OAuth token inactive", bearerError("invalid_token", "token inactive")));
+		Principal principal;
+		try {
+			principal = toPrincipal(success);
+		} catch (Rejection e) {
+			throw remember(token, e);
+		}
+		tokenCache.putPrincipal(token, new RawIntrospection(success), resolveTtl(success));
+		return principal;
+	}
+
+	private Principal toPrincipal(TokenIntrospectionSuccessResponse success) throws Rejection {
+		enforceIssuer(success);
 		enforceAudience(success);
 		var scopes = extractScopes(success);
 		enforceRequiredScopes(scopes);
 		var claims = buildClaims(success, scopes);
-		var subject = success.getSubject() != null ? success.getSubject().getValue() : "<no-sub>";
-		var principal = new ClaimsPrincipal(subject, claims);
-		var ttl = resolveTtl(success);
-		tokenCache.putPrincipal(token, principal, ttl);
-		return principal;
+		if (success.getSubject() == null || success.getSubject().getValue().isBlank())
+			throw new Rejection("OAuth token has no subject", bearerError("invalid_token", "subject missing"));
+		var subject = success.getSubject().getValue();
+		return new ClaimsPrincipal(subject, claims);
+	}
+
+	private void enforceNotExpired(TokenIntrospectionSuccessResponse success) throws Rejection {
+		var exp = success.getExpirationTime();
+		if (exp != null && ! exp.toInstant().isAfter(clock.instant()))
+			throw new Rejection("OAuth token expired", bearerError("invalid_token", "token expired"));
+	}
+
+	private void enforceIssuer(TokenIntrospectionSuccessResponse success) throws Rejection {
+		if (issuer == null)
+			return;
+		var iss = success.getIssuer();
+		if (iss == null || ! issuer.equals(iss.getValue()))
+			throw new Rejection("OAuth token issuer mismatch", bearerError("invalid_token", "issuer mismatch"));
 	}
 
 	private Set<String> extractScopes(TokenIntrospectionSuccessResponse success) {
@@ -438,9 +623,9 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 	/**
 	 * Rejects the token when an expected audience/resource set is configured and the introspection
 	 * response's {@code aud} claim contains none of the expected values.  No-op when
-	 * {@link #expectedAudiences} is empty (no bind configured).
+	 * {@link #expectedAudiences} is empty (explicit {@code anyAudience()}).
 	 */
-	private void enforceAudience(TokenIntrospectionSuccessResponse success) throws AuthenticationException {
+	private void enforceAudience(TokenIntrospectionSuccessResponse success) throws Rejection {
 		if (expectedAudiences.isEmpty())
 			return;
 		var tokenAudiences = success.getAudience();
@@ -448,15 +633,13 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 			.map(Audience::getValue)
 			.anyMatch(expectedAudiences::contains);
 		if (!matched)
-			throw new AuthenticationException("OAuth token audience/resource mismatch")
-				.wwwAuthenticate(bearerError("invalid_token", "audience mismatch"));
+			throw new Rejection("OAuth token audience/resource mismatch", bearerError("invalid_token", "audience mismatch"));
 	}
 
-	private void enforceRequiredScopes(Set<String> tokenScopes) throws AuthenticationException {
+	private void enforceRequiredScopes(Set<String> tokenScopes) throws Rejection {
 		for (var req : requiredScopes) {
 			if (!tokenScopes.contains(req))
-				throw new AuthenticationException("Required scope missing: " + req)
-					.wwwAuthenticate(bearerError("insufficient_scope", "scope " + req + " missing"));
+				throw new Rejection("Required scope missing: " + req, bearerError("insufficient_scope", "scope " + req + " missing"));
 		}
 	}
 
@@ -482,5 +665,11 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 
 	private static String bearerError(String code, String description) {
 		return "Bearer error=\"" + code + "\", error_description=\"" + description.replace('"', ' ') + "\"";
+	}
+
+	private static String safeErrorCode(String code) {
+		if (code == null || code.isEmpty() || ! code.matches("[\\x20\\x21\\x23-\\x5B\\x5D-\\x7E]+"))
+			return "invalid_token";
+		return code;
 	}
 }

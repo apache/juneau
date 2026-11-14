@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
-import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -24,6 +23,7 @@ import java.time.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.junit.jupiter.api.*;
+import org.opensaml.xmlsec.encryption.support.*;
 
 /**
  * Round-trip tests for {@link SamlAssertionValidator}: a signed assertion encrypted to the SP's key is decrypted,
@@ -45,7 +45,7 @@ class SamlAssertionValidator_EncryptedRoundTrip_Test extends TestBase {
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NOW.minusSeconds(60), NOW.plusSeconds(300));
 		SamlTestSupport.addAttributeStatement(assertion, "dept", "eng");
 		var xml = SamlTestSupport.signEncryptAndBuildResponse(idp, sp, ISSUER, assertion);
-		var v = SamlAssertionValidator.create()
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(idp)
@@ -64,7 +64,7 @@ class SamlAssertionValidator_EncryptedRoundTrip_Test extends TestBase {
 		var sp = SamlTestKeys.credential();
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "mallory", NOW.minusSeconds(60), NOW.plusSeconds(300));
 		var xml = SamlTestSupport.signEncryptAndBuildResponse(attacker, sp, ISSUER, assertion);
-		var v = SamlAssertionValidator.create()
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(idp)
@@ -73,9 +73,22 @@ class SamlAssertionValidator_EncryptedRoundTrip_Test extends TestBase {
 			.build();
 		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertEquals("SAML signature verification failed", ex.getMessage());
-		var hdr = ex.getHeaders().stream()
-			.filter(h -> eqic("WWW-Authenticate", h.getName()))
-			.findFirst().orElseThrow();
-		assertTrue(hdr.getValue().contains("signature_invalid"), hdr.getValue());
+	}
+
+	@Test void a03_nonAllowlistedContentEncryption_rejectedWithGenericError() throws Exception {
+		var idp = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var sp = SamlTestKeys.credential();
+		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NOW.minusSeconds(60), NOW.plusSeconds(300));
+		var xml = SamlTestSupport.signEncryptAndBuildResponse(idp, sp, ISSUER, assertion,
+			EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128);
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
+			.spEntityId(AUDIENCE)
+			.expectedIssuer(ISSUER)
+			.signingCredential(idp)
+			.decryptionCredential(sp)
+			.clock(CLOCK)
+			.build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
+		assertEquals("SAML response could not be decrypted", ex.getMessage());
 	}
 }

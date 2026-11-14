@@ -178,7 +178,7 @@ class OkHttpTransport_RedirectCredentials_Test {
 	//====================================================================================================
 
 	private static final String ALL = "auth=Bearer secret-token|cookie=session=abc123|key=k1|proxy=Basic cHJveHk6cHc=|trace=t1";
-	private static final String NONE = "auth=null|cookie=null|key=null|proxy=null|trace=t1";
+	private static final String NONE = "auth=null|cookie=null|key=null|proxy=null|trace=null";
 
 	private static void assertChain(OkHttpTransport transport) throws Exception {
 		HOPS.clear();

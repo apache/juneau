@@ -67,6 +67,7 @@ public final class RestRequest {
 	private Duration execTime;
 	private boolean policyEnforced;
 	private boolean allowPrivateUrls;
+	private final List<String> redirectForwardHeaders = l();
 	// The X-Request-Id correlation id sent on this request, captured at onInit (minted or caller-supplied).  Read at
 	// debug-emit time as a stored field — never via a live LogContext scope that may not survive to emission.
 	private String requestId;
@@ -347,6 +348,23 @@ public final class RestRequest {
 	// --------------------------------------------------
 	// Timeout / interceptors
 	// --------------------------------------------------
+
+	/**
+	 * Adds header names that may be replayed against another origin by a redirect of this request.
+	 *
+	 * <p>
+	 * Merged with the names set on {@link RestClient.Builder#redirectForwardHeaders(String...)}.  A redirect to another
+	 * origin keeps only the built-in forward list plus these names; every other caller-set header is removed.  Calls
+	 * accumulate.  Matching is case-insensitive.
+	 *
+	 * @param value The header names. <jk>null</jk> or empty adds nothing.
+	 * @return This object.
+	 */
+	public RestRequest redirectForwardHeaders(String...value) {
+		if (value != null)
+			redirectForwardHeaders.addAll(Arrays.asList(value));
+		return this;
+	}
 
 	/**
 	 * Sets a per-call response timeout for this request.
@@ -723,7 +741,8 @@ public final class RestRequest {
 			.timeout(timeout)
 			.remoteUrlPolicy(policyEnforced, allowPrivateUrls)
 			.allowedAddressRanges(client.allowedAddressRanges)
-			.redirectStripHeaders(client.redirectStripHeaders);
+			.redirectForwardHeaders(client.redirectForwardHeaders)
+			.redirectForwardHeaders(redirectForwardHeaders);
 
 		// Headers
 		for (var h : headers) {
@@ -809,7 +828,7 @@ public final class RestRequest {
 			.timeout(request.getTimeout())
 			.remoteUrlPolicy(request.isPolicyEnforced(), request.isAllowPrivateUrls())
 			.allowedAddressRanges(request.getAllowedAddressRanges())
-			.redirectStripHeaders(request.getRedirectStripHeaders());
+			.redirectForwardHeaders(request.getRedirectForwardHeaders());
 		return builder.build();
 	}
 

@@ -41,7 +41,7 @@ import jakarta.servlet.http.*;
  *     .downstream(<js>"ops.jobs"</js>, <jk>true</jk>)                       <jc>// retained state</jc>
  *     .downstream(<js>"ops.alert:*"</js>, <jk>false</jk>)                  <jc>// events, any key</jc>
  *     .upstream(<js>"ops.cancel-all"</js>, (<jv>session</jv>, <jv>topic</jv>, <jv>payload</jv>) -&gt; <jv>jobs</jv>.cancelAll())
- *     .authorizer((<jv>req</jv>, <jv>topic</jv>) -&gt; <jv>req</jv>.isUserInRole(<js>"ops"</js>))  <jc>// per-user, both directions</jc>
+ *     .authorizer((<jv>req</jv>, <jv>topic</jv>) -&gt; <jv>req</jv>.isUserInRole(<js>"ops"</js>))  <jc>// per-user, both directions; denied until set (or anyCaller())</jc>
  *     .boundary(<jv>boundary</jv>)                                           <jc>// LoopbackBoundary or CsrfBoundary</jc>
  *     .build();
  *
@@ -72,6 +72,7 @@ public final class BusPolicy {
 	private final BiPredicate<HttpServletRequest,String> authorizer;
 	private final RequestBoundary boundary;
 	private final List<String> allowedOrigins;
+	private final boolean sameOriginCheck;
 	private final Duration sessionGrace;
 	private final Duration maxSessionAge;
 	private final Duration heartbeat;
@@ -87,6 +88,7 @@ public final class BusPolicy {
 		authorizer = b.authorizer;
 		boundary = b.boundary;
 		allowedOrigins = b.allowedOrigins;
+		sameOriginCheck = b.sameOriginCheck;
 		sessionGrace = b.sessionGrace;
 		maxSessionAge = b.maxSessionAge;
 		heartbeat = b.heartbeat;
@@ -185,11 +187,19 @@ public final class BusPolicy {
 		return o instanceof Collection<?> c ? c.stream().map(String::valueOf).toList() : List.of();
 	}
 
-	/** @return The per-request, per-topic authorizer applied at session open.  Defaults to allow-all. */
+	/** @return The per-request, per-topic authorizer applied at session open.  Defaults to deny-all until {@link Builder#authorizer(BiPredicate)} or {@link Builder#anyCaller()} is called. */
 	public BiPredicate<HttpServletRequest,String> authorizer() { return authorizer; }
 
 	/** @return The request boundary, or <jk>null</jk> when the application has its own guard. */
 	public RequestBoundary boundary() { return boundary; }
+
+	/**
+	 * Whether the session POST and SSE stream refuse a request whose {@code Origin} does not match its {@code Host}
+	 * when no {@link #boundary()} is set.  Default <jk>true</jk>.
+	 *
+	 * @return <jk>true</jk> if the default same-origin check applies.
+	 */
+	public boolean sameOriginCheck() { return sameOriginCheck; }
 
 	/** @return The exact origins allowed on a WebSocket handshake when no {@link #boundary()} is set. */
 	public List<String> allowedOrigins() { return allowedOrigins; }
@@ -234,9 +244,10 @@ public final class BusPolicy {
 
 		final Map<String,Boolean> downstream = new LinkedHashMap<>();
 		final Map<String,UpstreamHandler> upstream = new LinkedHashMap<>();
-		BiPredicate<HttpServletRequest,String> authorizer = (req, topic) -> true;
+		BiPredicate<HttpServletRequest,String> authorizer = (req, topic) -> false;
 		RequestBoundary boundary;
 		List<String> allowedOrigins = List.of();
+		boolean sameOriginCheck = true;
 		Duration sessionGrace = Duration.ofSeconds(60);
 		Duration maxSessionAge = Duration.ofHours(12);
 		Duration heartbeat = Duration.ofSeconds(15);
@@ -294,6 +305,20 @@ public final class BusPolicy {
 		}
 
 		/**
+		 * Grants every declared topic to any caller that can reach the bus endpoints.
+		 *
+		 * <p>
+		 * Without this or {@link #authorizer(BiPredicate)}, no topic is granted.  Use it only when the endpoints are
+		 * already protected by the application (a filter, a boundary, or a private network).
+		 *
+		 * @return This object.
+		 */
+		public Builder anyCaller() {
+			authorizer = (req, topic) -> true;
+			return this;
+		}
+
+		/**
 		 * Sets the request boundary.  The session POST and SSE stream apply its {@code check}.
 		 *
 		 * <p>
@@ -307,6 +332,22 @@ public final class BusPolicy {
 		 */
 		public Builder boundary(RequestBoundary value) {
 			boundary = value;
+			return this;
+		}
+
+		/**
+		 * Turns off the default same-origin check applied when no boundary is set.
+		 *
+		 * <p>
+		 * With no {@link #boundary(RequestBoundary)}, the session POST and SSE stream refuse a request that carries an
+		 * {@code Origin} header whose authority differs from its {@code Host} header; a request with no {@code Origin}
+		 * passes.  Call this only when the application guards the endpoints itself, for example when they are served
+		 * to pages on another origin behind its own CORS and authentication rules.
+		 *
+		 * @return This object.
+		 */
+		public Builder noSameOriginCheck() {
+			sameOriginCheck = false;
 			return this;
 		}
 

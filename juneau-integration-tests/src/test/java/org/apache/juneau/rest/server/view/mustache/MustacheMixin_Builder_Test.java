@@ -41,10 +41,10 @@ class MustacheMixin_Builder_Test extends TestBase {
 	 * Section A: builder surface
 	 * ---------------------------------------------------------------------------------------- */
 
-	@Test void a01_defaultBasePathIsRoot() {
+	@Test void a01_defaultBasePathIsTemplates() {
 		var r = MustacheMixin.create().build();
 		assertEquals(MustacheMixin.DEFAULT_BASE_PATH, r.getBasePath());
-		assertEquals("/", r.getBasePath());
+		assertEquals("/templates/", r.getBasePath());
 	}
 
 	@Test void a02_basePathSetterRoundTrips() {

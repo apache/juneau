@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.ops.*;
  *
  * <p>
  * The residual cross-cutting endpoints are supplied by single-responsibility op-mixins ({@link ErrorMixin},
- * {@link HtdocMixin}, {@link StatsMixin}, and {@link FaviconMixin}).
+ * {@link HtdocMixin}, and {@link FaviconMixin}).
  *
  * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringboot">juneau-rest-server-springboot</a>
@@ -45,13 +45,12 @@ import org.apache.juneau.rest.server.ops.*;
  * @serial exclude
  */
 // @formatter:off
-@Rest(mixins={ErrorMixin.class, HtdocMixin.class, StatsMixin.class, FaviconMixin.class})
+@Rest(mixins={ErrorMixin.class, HtdocMixin.class, FaviconMixin.class})
 @HtmlDocConfig(
 	// Basic page navigation links.
 	navlinks={
 		"up: request:/..",
-		"api: servlet:/api",
-		"stats: servlet:/stats"
+		"api: servlet:/api"
 	}
 )
 @JsonSchemaConfig(

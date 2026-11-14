@@ -17,9 +17,11 @@
 package org.apache.juneau.rest.server.view.jsp;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.concurrent.atomic.*;
 
 import jakarta.servlet.*;
 
@@ -66,6 +68,18 @@ class JspViewRenderer_ForwardPaths_Test extends TestBase {
 			// Not user input (see the class-level javadoc on JspViewRenderer.joinPath): a caller-assembled
 			// template name that itself escapes the configured base path via ".." segments.
 			return JspView.of("../../etc/passwd");
+		}
+		@RestGet(path="/protected")
+		public View protectedDir() {
+			return JspView.of("WEB-INF/secret.jsp");
+		}
+		@RestGet(path="/scheme")
+		public View scheme() {
+			return JspView.of("file:hello.jsp");
+		}
+		@RestGet(path="/notjsp")
+		public View notJsp() {
+			return JspView.of("hello.txt");
 		}
 		@RestGet(path="/plain")
 		public String plain() {
@@ -207,6 +221,14 @@ class JspViewRenderer_ForwardPaths_Test extends TestBase {
 		var res = c.get("/escape").run();
 		res.assertStatus(500);
 		res.assertContent().asString().isContains("escapes configured base path");
+	}
+
+	@Test void a0c_protectedDirectoryNotForwarded() throws Exception {
+		var forwarded = new AtomicInteger();
+		var ctx = fakeServletContext(new FakeDispatcher(forwarded::incrementAndGet));
+		for (var path : new String[]{"/protected", "/scheme", "/notjsp"})
+			c.get(path).servletContext(ctx).run().assertStatus(500);
+		assertEquals(0, forwarded.get());
 	}
 
 	@Test void a00_contextPresentButDispatcherNull_reportsNoEngineDiagnostic() throws Exception {

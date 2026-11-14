@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 
 class ExternalizeConfig_Test extends TestBase {
 
-	@Test void a01_runOutputMatchesGuide() throws Exception {
+	@Test void a01_runOutputMatchesGuide() {
 		assertEquals(GuideRegion.read("ExternalizeConfig/run-output.txt", "output"), GuideRegion.normalize(ConfigDemo.run()));
 	}
 

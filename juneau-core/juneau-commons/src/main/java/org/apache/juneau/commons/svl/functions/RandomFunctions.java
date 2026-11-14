@@ -105,6 +105,7 @@ public final class RandomFunctions {
 		public String invoke(int length) { return invoke(length, ALPHA_NUM); }
 		public String invoke(int length, String charset) {
 			if (length < 0) throw iaex("randString: length must be >= 0");
+			if (length > StringFunctions.MAX_RESULT_LENGTH) throw iaex("randString: length must be <= %s", StringFunctions.MAX_RESULT_LENGTH);
 			if (ie(charset)) charset = ALPHA_NUM;
 			var rnd = ThreadLocalRandom.current();
 			var sb = new StringBuilder(length);

@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.response.*;
@@ -71,7 +70,7 @@ import org.apache.juneau.rest.server.*;
  *
  * <p>
  * Bucket state is held by a pluggable {@link Storage} SPI.  The default {@link Storage#inMemory()} implementation
- * uses a {@link ConcurrentHashMap} with an LRU-style eviction policy (capped at 100 000 keys by default), suitable
+ * uses an access-ordered map with LRU eviction policy (capped at 100 000 keys by default), suitable
  * for single-pod deployments.  Distributed deployments should provide a substrate-backed implementation
  * (e.g. Redis) so per-pod buckets do not split the shared rate envelope.
  *
@@ -570,12 +569,13 @@ public class RateLimitGuard extends RestGuard {
 	 * Default in-memory {@link Storage} implementation.
 	 *
 	 * <p>
-	 * Backed by a {@link ConcurrentHashMap} keyed by the per-request key.  Each bucket tracks token count and last
-	 * touch time.  When the map exceeds {@code maxKeys} entries the least-recently-touched bucket is removed.
+	 * Backed by an access-ordered {@link LinkedHashMap} keyed by the per-request key.  Each bucket tracks token count
+	 * and last touch time.  When the map exceeds {@code maxKeys} entries the least-recently-used bucket is removed
+	 * in constant time.
 	 */
 	static final class InMemoryStorage implements Storage {
 
-		private final ConcurrentHashMap<String,Bucket> buckets = new ConcurrentHashMap<>();
+		private final LinkedHashMap<String,Bucket> buckets;
 		private final int maxKeys;
 		private final LongSupplier nanoClock;
 		private final Clock clock;
@@ -617,29 +617,42 @@ public class RateLimitGuard extends RestGuard {
 			if (maxKeys <= 0)
 				throw new IllegalArgumentException("Argument 'maxKeys' must be > 0.");
 			this.maxKeys = maxKeys;
+			this.buckets = new LinkedHashMap<>(16, 0.75f, true) {
+				private static final long serialVersionUID = 1L;
+				@Override /* Overridden from LinkedHashMap */
+				protected boolean removeEldestEntry(Map.Entry<String,Bucket> eldest) {
+					return size() > InMemoryStorage.this.maxKeys;
+				}
+			};
 			this.nanoClock = nanoClock;
 			this.clock = clock;
 		}
 
 		@Override
 		public AcquireResult tryAcquire(String key, int capacity, double permitsPerSecond) {
-			var bucket = buckets.computeIfAbsent(key, k -> new Bucket(capacity, nanoClock, clock));
-			var result = bucket.tryAcquire(capacity, permitsPerSecond);
-			if (buckets.size() > maxKeys)
-				evictOldest();
-			return result;
+			Bucket bucket;
+			synchronized (buckets) {
+				bucket = buckets.computeIfAbsent(key, k -> new Bucket(capacity, nanoClock, clock));
+			}
+			return bucket.tryAcquire(capacity, permitsPerSecond);
 		}
 
 		@Override
 		public void evict(Duration ttl) {
 			var threshold = nanoClock.getAsLong() - ttl.toNanos();
-			buckets.entrySet().removeIf(e -> e.getValue().lastTouchedNanos() < threshold);
+			synchronized (buckets) {
+				buckets.entrySet().removeIf(e -> e.getValue().lastTouchedNanos() < threshold);
+			}
 		}
 
 		@Override
 		public Map<String,BucketState> snapshot() {
 			var out = new LinkedHashMap<String,BucketState>();
-			for (var e : buckets.entrySet()) {
+			Map<String,Bucket> copy;
+			synchronized (buckets) {
+				copy = new LinkedHashMap<>(buckets);
+			}
+			for (var e : copy.entrySet()) {
 				var b = e.getValue();
 				var tokens = b.tokens();
 				out.put(e.getKey(), new BucketState(
@@ -654,14 +667,9 @@ public class RateLimitGuard extends RestGuard {
 		}
 
 		int size() {
-			return buckets.size();
-		}
-
-		private void evictOldest() {
-			buckets.entrySet().stream()
-				.min(Comparator.comparingLong(e -> e.getValue().lastTouchedNanos()))
-				.map(Map.Entry::getKey)
-				.ifPresent(buckets::remove);
+			synchronized (buckets) {
+				return buckets.size();
+			}
 		}
 	}
 

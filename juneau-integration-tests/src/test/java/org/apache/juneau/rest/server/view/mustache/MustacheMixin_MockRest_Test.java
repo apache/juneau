@@ -71,7 +71,7 @@ class MustacheMixin_MockRest_Test extends TestBase {
 	@Test void a02_mustacheMountInstalled_rendersTemplate() throws Exception {
 		// Default basePath="/" + no templateSuffix → request path is taken as-is, mustache.java's
 		// no-prefix factory resolves it directly from classpath.
-		ca.get("/mustache/mustache-templates/about.mustache")
+		ca.get("/mustache/about.mustache")
 			.run()
 			.assertStatus(200)
 			.assertContent().asString().isContains("About Juneau");

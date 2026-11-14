@@ -37,7 +37,7 @@ class Rest_AllowedHeaderParams_Test extends TestBase {
 		}
 	}
 
-	@Rest() /* Default is allowedHeaderParams="Accept, Content-Type" */
+	@Rest() /* Default is allowedHeaderParams="Accept" */
 	public static class A1 extends A {}
 
 	@Rest(allowedHeaderParams="Accept, Content-Type")
@@ -64,8 +64,8 @@ class Rest_AllowedHeaderParams_Test extends TestBase {
 	@Test void a01_basic() throws Exception {
 		var a1 = MockRestClient.build(A1.class);
 		a1.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent("Accept=text/plain+foo1; Content-Type=text/plain+foo2; Custom=foo3");
-		a1.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent("Accept=text/plain+foo1, text/plain+bar1; Content-Type=text/plain+foo2, text/plain+bar2; Custom=foo3");
-		a1.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent("Accept=text/plain+foo1, text/plain+bar1; Content-Type=text/plain+foo2, text/plain+bar2; Custom=foo3");
+		a1.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent("Accept=text/plain+foo1, text/plain+bar1; Content-Type=text/plain+foo2; Custom=foo3");
+		a1.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent("Accept=text/plain+foo1, text/plain+bar1; Content-Type=text/plain+foo2; Custom=foo3");
 
 		var a2 = MockRestClient.build(A2.class);
 		a2.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent("Accept=text/plain+foo1; Content-Type=text/plain+foo2; Custom=foo3");

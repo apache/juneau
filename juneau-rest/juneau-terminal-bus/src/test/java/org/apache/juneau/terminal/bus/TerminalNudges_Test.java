@@ -147,7 +147,7 @@ class TerminalNudges_Test extends TestBase {
 	}
 
 	private static BusPolicy.Builder policy() {
-		return BusPolicy.create().downstream("term.nudge:*", false);
+		return BusPolicy.create().anyCaller().downstream("term.nudge:*", false);
 	}
 
 	private static ServerBus bus(BusPolicy p) {
@@ -200,8 +200,8 @@ class TerminalNudges_Test extends TestBase {
 	}
 
 	@Test void a03_bindPolicy() {
-		var none = bus(BusPolicy.create().downstream("other.topic", false).build());
-		var retained = bus(BusPolicy.create().downstream("term.nudge:*", true).build());
+		var none = bus(BusPolicy.create().anyCaller().downstream("other.topic", false).build());
+		var retained = bus(BusPolicy.create().anyCaller().downstream("term.nudge:*", true).build());
 		try {
 			try (var n1 = new TerminalNudges(access, new Manual(), () -> 0L); var n2 = new TerminalNudges(access, new Manual(), () -> 0L)) {
 				assertThrows(IllegalStateException.class, () -> n1.bind(none));

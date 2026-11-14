@@ -153,7 +153,7 @@ class TerminalInput_Test extends TestBase {
 	}
 
 	private BusPolicy.Builder policy() {
-		return BusPolicy.create().upstream(TerminalInput.TOPIC, input).downstream(TerminalInput.STATUS_TOPIC, false);
+		return BusPolicy.create().anyCaller().upstream(TerminalInput.TOPIC, input).downstream(TerminalInput.STATUS_TOPIC, false);
 	}
 
 	/** A bus with the WebSocket transport enabled (copied from {@code ServerBus_Test}). */
@@ -390,7 +390,7 @@ class TerminalInput_Test extends TestBase {
 
 	@Test void a15_beforeBind() throws Exception {
 		var unbound = TerminalInput.create(access);
-		try (var b2 = bus(BusPolicy.create().upstream(TerminalInput.TOPIC, unbound).downstream(TerminalInput.STATUS_TOPIC, false).build())) {
+		try (var b2 = bus(BusPolicy.create().anyCaller().upstream(TerminalInput.TOPIC, unbound).downstream(TerminalInput.STATUS_TOPIC, false).build())) {
 			var s = open(b2, "alice");
 			var ws = connect(b2, s);
 			var records = LogRecordCapture.quietly(ServerBus.class, () -> b2.receive(s, frame("t1", "")));
@@ -427,7 +427,7 @@ class TerminalInput_Test extends TestBase {
 
 	@Test void a18_callerAttributes() throws Exception {
 		var in2 = TerminalInput.create(access);
-		try (var b2 = bus(BusPolicy.create().upstream(TerminalInput.TOPIC, in2).downstream(TerminalInput.STATUS_TOPIC, false)
+		try (var b2 = bus(BusPolicy.create().anyCaller().upstream(TerminalInput.TOPIC, in2).downstream(TerminalInput.STATUS_TOPIC, false)
 				.sessionAttributes(r -> Map.of("role", "typist")).build())) {
 			in2.bind(b2);
 			var s = open(b2, "dave");

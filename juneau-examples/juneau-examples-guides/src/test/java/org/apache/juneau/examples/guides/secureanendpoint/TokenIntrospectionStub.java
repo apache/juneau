@@ -36,7 +36,7 @@ public class TokenIntrospectionStub implements Closeable {
 		server.createContext("/introspect", exchange -> {
 			var form = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
 			var body = form.contains("token=opaque-good")
-				? "{\"active\":true,\"sub\":\"reporting-job\",\"scope\":\"orders:read\"}"
+				? "{\"active\":true,\"sub\":\"reporting-job\",\"scope\":\"orders:read\",\"aud\":\"https://api.example.com\"}"
 				: "{\"active\":false}";
 			var bytes = body.getBytes(StandardCharsets.UTF_8);
 			exchange.getResponseHeaders().add("Content-Type", "application/json");

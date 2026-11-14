@@ -68,13 +68,13 @@ class MockHttpTransport_RedirectCredentials_Test {
 		assertBean(t.execute(request("http://a.example.com/cross")), "statusCode", "200");
 		var hops = t.getRecordedRequests();
 		assertList(hops.stream().map(TransportRequest::getUri).toList(), "http://a.example.com/cross", "http://b.example.com/echo");
-		assertList(headerNames(hops.get(1)), "X-Trace");
+		Assertions.assertTrue(headerNames(hops.get(1)).isEmpty());
 	}
 
 	@Test void a02_httpsToHttpDowngrade_dropsCredentialHeaders() throws Exception {
 		var t = transport();
 		t.execute(request("https://a.example.com/downgrade"));
-		assertList(headerNames(t.getRecordedRequests().get(1)), "X-Trace");
+		Assertions.assertTrue(headerNames(t.getRecordedRequests().get(1)).isEmpty());
 	}
 
 	@Test void a03_sameOriginRedirect_keepsCredentialHeaders() throws Exception {

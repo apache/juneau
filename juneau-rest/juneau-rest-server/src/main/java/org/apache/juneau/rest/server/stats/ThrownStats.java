@@ -23,11 +23,16 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.*;
 
 /**
  * Represents an entry in {@link ThrownStore}.
+ *
+ * <p>
+ * The first message and stack trace are available to Java callers but are not part of the serialized bean, so
+ * statistics output carries only the class name, counts and timestamps.
  *
  * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics">REST method execution statistics</a>
@@ -233,6 +238,7 @@ public class ThrownStats {
 	 *
 	 * @return The message of the first exception at a specific location in code, or <jk>null</jk> if the exception had no message.
 	 */
+	@BeanIgnore
 	public String getFirstMessage() { return firstMessage; }
 
 	/**
@@ -273,6 +279,7 @@ public class ThrownStats {
 	 *
 	 * @return The stack trace of the first exception at a specific location in code.
 	 */
+	@BeanIgnore
 	public List<String> getStackTrace() { return stackTrace; }
 
 	/**

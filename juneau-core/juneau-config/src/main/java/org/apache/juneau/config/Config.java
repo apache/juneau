@@ -37,7 +37,6 @@ import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.format.*;
 import org.apache.juneau.config.internal.*;
-import org.apache.juneau.config.mod.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.marshall.*;
@@ -74,7 +73,6 @@ public class Config extends Context implements ConfigEventListener {
 		private boolean readOnly;
 		private ConfigStore store;
 		private int binaryLineLength;
-		private final Map<Character,Mod> mods;
 		private ReaderParser parser;
 		private String name;
 		private ConfigFormat format;
@@ -88,8 +86,6 @@ public class Config extends Context implements ConfigEventListener {
 		protected Builder() {
 			binaryFormat = env("Config.binaryFormat", BinaryFormat.BASE64);
 			binaryLineLength = env("Config.binaryLineLength", -1);
-			mods = map();
-			mods(XorEncodeMod.INSTANCE);
 			multiLineValuesOnSeparateLines = env("Config.multiLineValuesOnSeparateLines", false);
 			name = env("Config.name", "Configuration.cfg");
 			parser = Json5Parser.DEFAULT;
@@ -122,7 +118,6 @@ public class Config extends Context implements ConfigEventListener {
 			super(copyFrom);
 			binaryFormat = copyFrom.binaryFormat;
 			binaryLineLength = copyFrom.binaryLineLength;
-			mods = cp(copyFrom.mods);
 			multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
 			name = copyFrom.name;
 			format = copyFrom.format;
@@ -144,7 +139,6 @@ public class Config extends Context implements ConfigEventListener {
 			super(copyFrom);
 			binaryFormat = copyFrom.binaryFormat;
 			binaryLineLength = copyFrom.binaryLineLength;
-			mods = cp(copyFrom.mods);
 			multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
 			name = copyFrom.name;
 			format = copyFrom.format;
@@ -225,24 +219,6 @@ public class Config extends Context implements ConfigEventListener {
 		 */
 		public Builder memStore() {
 			store = MemoryStore.DEFAULT;
-			return this;
-		}
-
-		/**
-		 * Adds a value modifier.
-		 *
-		 * <p>
-		 * Modifiers are used to modify entry value before being persisted.
-		 *
-		 * @param values
-		 * 	The mods to apply to this config.
-		 * 	<br>Cannot contain <jk>null</jk> values.
-		 * @return This object.
-		 */
-		public Builder mods(Mod...values) {
-			reqnns("values", values);
-			for (var value : values)
-				mods.put(value.getId(), value);
 			return this;
 		}
 
@@ -439,9 +415,6 @@ public class Config extends Context implements ConfigEventListener {
 	}
 
 	// Use set(T)/reset() for testing.
-	static final Memoizer<Boolean> DISABLE_AUTO_SYSTEM_PROPS = memoizer(() -> env("juneau.disableAutoSystemProps", false));
-
-	// Use set(T)/reset() for testing.
 	static final Memoizer<Config> SYSTEM_DEFAULT = memoizer(Config::findSystemDefault);
 
 	/**
@@ -473,7 +446,6 @@ public class Config extends Context implements ConfigEventListener {
 	 * <br>Otherwise, returns a list consisting of the following values:
 	 * <ol>
 	 * 	<li>File with same name as jar file but with <js>".cfg"</js> extension.  (e.g. <js>"myjar.cfg"</js>)
-	 * 	<li>Any file ending in <js>".cfg"</js> in the home directory (names ordered alphabetically).
 	 * 	<li><js>"juneau.cfg"</js>
 	 * 	<li><js>"default.cfg"</js>
 	 * 	<li><js>"application.cfg"</js>
@@ -502,11 +474,6 @@ public class Config extends Context implements ConfigEventListener {
 			l.add(cmd + ".cfg");
 			cmd = stripVersion(cmd);  // Try also without version in jar name.
 			l.add(cmd + ".cfg");
-		}
-
-		var fileArray = new File(".").listFiles();
-		if (fileArray != null) { // HTT - listFiles() always returns non-null in test environment
-			Arrays.stream(fileArray).map(File::getName).filter(n -> n.endsWith(".cfg")).forEach(l::add);
 		}
 
 		l.add("juneau.cfg");
@@ -547,11 +514,8 @@ public class Config extends Context implements ConfigEventListener {
 
 		for (var n : getCandidateSystemDefaultConfigNames()) {
 			var config = find(n);
-			if (nn(config)) { // HTT - find() always returns null in test environment
-				if (! isTrue(DISABLE_AUTO_SYSTEM_PROPS.get())) // HTT - unreachable block
-					config.setSystemProperties();
+			if (nn(config)) // HTT - find() always returns null in test environment
 				return config; // HTT
-			}
 		}
 
 		return null;
@@ -610,7 +574,6 @@ public class Config extends Context implements ConfigEventListener {
 	protected final BinaryFormat binaryFormat;
 	protected final MarshallingSession marshallingSession;
 	protected final ConfigStore store;
-	protected final Map<Character,Mod> mods;
 	protected final ReaderParser parser;
 	protected final String name;
 	protected final ConfigFormat format;
@@ -633,7 +596,6 @@ public class Config extends Context implements ConfigEventListener {
 
 		binaryFormat = builder.binaryFormat;
 		binaryLineLength = builder.binaryLineLength;
-		mods = u(cp(builder.mods));
 		multiLineValuesOnSeparateLines = builder.multiLineValuesOnSeparateLines;
 		name = builder.name;
 		format = builder.format == null ? detectFormat(name) : builder.format;
@@ -660,7 +622,6 @@ public class Config extends Context implements ConfigEventListener {
 		binaryLineLength = copyFrom.binaryLineLength;
 		configMap = copyFrom.configMap;
 		configMap.register(this);
-		mods = copyFrom.mods;
 		multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
 		name = copyFrom.name;
 		format = copyFrom.format;
@@ -683,37 +644,6 @@ public class Config extends Context implements ConfigEventListener {
 	 */
 	public synchronized Config addListener(ConfigEventListener listener) {
 		listeners.add(listener);
-		return this;
-	}
-
-	/**
-	 * Encodes and unencoded entries in this config.
-	 *
-	 * <p>
-	 * If any entries in the config are marked as encoded but not actually encoded,
-	 * this will encode them.
-	 *
-	 * @return This object.
-	 * @throws UnsupportedOperationException If configuration is read only.
-	 */
-	public Config applyMods() {
-		checkWrite();
-		for (var section : configMap.getSections()) {
-			for (var key : configMap.getKeys(section)) {
-				var ce = configMap.getEntry(section, key);
-				if (nn(ce.getModifiers())) {
-					var mods2 = ce.getModifiers();
-					var value = ce.getValue();
-					for (var i = 0; i < mods2.length(); i++) {
-						var mod = getMod(mods2.charAt(i));
-						if (! mod.isApplied(value)) {
-							configMap.setEntry(section, key, mod.apply(value), null, null, null);
-						}
-					}
-				}
-			}
-		}
-
 		return this;
 	}
 
@@ -991,12 +921,12 @@ public class Config extends Context implements ConfigEventListener {
 	 *
 	 * <p>
 	 * This is an ergonomic, self-documenting alternative to the
-	 * {@link #set(String, Object, Serializer, String, String, List)} overload.  Rather than overloading a single call
+	 * {@link #set(String, Object, Serializer, String, List)} overload.  Rather than overloading a single call
 	 * with several "leave-unchanged versus clear" sentinel conventions, each facet is expressed explicitly:
 	 * <ul>
 	 * 	<li><b>Not calling</b> a facet method leaves that facet untouched.
 	 * 	<li>An explicit setter ({@link EntryBuilder#comment(String)}, {@link EntryBuilder#preLines(List)},
-	 * 		{@link EntryBuilder#serializer(Serializer)}, {@link EntryBuilder#modifiers(String)}) sets that facet.
+	 * 		{@link EntryBuilder#serializer(Serializer)}) sets that facet.
 	 * 	<li>An explicit clear ({@link EntryBuilder#clearComment()}, {@link EntryBuilder#clearPreLines()}) clears that facet.
 	 * </ul>
 	 *
@@ -1067,9 +997,6 @@ public class Config extends Context implements ConfigEventListener {
 	 * @param serializer
 	 * 	The serializer to use for serializing the object.
 	 * 	If <jk>null</jk>, then uses the predefined serializer on the config file.
-	 * @param modifiers
-	 * 	Optional modifiers to apply to the value.
-	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
 	 * @param comment
 	 * 	Optional same-line comment to add to this value.
 	 * 	<br>If <jk>null</jk>, then previous value will not be replaced.
@@ -1081,16 +1008,13 @@ public class Config extends Context implements ConfigEventListener {
 	 * 	If serializer could not serialize the value or if a serializer is not registered with this config file.
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
-	public Config set(String key, Object value, Serializer serializer, String modifiers, String comment, List<String> preLines) throws SerializeException {
+	public Config set(String key, Object value, Serializer serializer, String comment, List<String> preLines) throws SerializeException {
 		checkWrite();
 		reqnn("key", key);
 		var sname = sname(key);
 		var skey = skey(key);
-		modifiers = nie(modifiers);
 
-		var s = applyMods(modifiers, serialize(value, serializer));
-
-		configMap.setEntry(sname, skey, s, modifiers, comment, preLines);
+		configMap.setEntry(sname, skey, serialize(value, serializer), comment, preLines);
 		return this;
 	}
 
@@ -1116,9 +1040,7 @@ public class Config extends Context implements ConfigEventListener {
 		if (ce == null && value == null)
 			return this;
 
-		var s = applyMods(ce == null ? null : ce.getModifiers(), s(value));
-
-		configMap.setEntry(sname, skey, s, null, null, null);
+		configMap.setEntry(sname, skey, s(value), null, null);
 		return this;
 	}
 
@@ -1199,6 +1121,10 @@ public class Config extends Context implements ConfigEventListener {
 	/**
 	 * Takes the settings defined in this configuration and sets them as system properties.
 	 *
+	 * <p>
+	 * This is never called automatically; applications that want their config entries published as JVM-wide
+	 * system properties must call it explicitly.
+	 *
 	 * @return This object.
 	 */
 	public Config setSystemProperties() {
@@ -1230,7 +1156,6 @@ public class Config extends Context implements ConfigEventListener {
 		return super.properties()
 			.a("binaryFormat", binaryFormat)
 			.a("binaryLineLength", binaryLineLength)
-			.a("mods", mods)
 			.a("multiLineValuesOnSeparateLines", multiLineValuesOnSeparateLines)
 			.a("format", format == null ? null : format.id())
 			.a("name", name)
@@ -1266,17 +1191,22 @@ public class Config extends Context implements ConfigEventListener {
 	 * <p>
 	 * Unlike {@link #getString(String)}, this method doesn't replace SVL variables.
 	 *
+	 * <p>
+	 * Values read through the other getters are resolved against the configured {@link VarResolver}, so a value that
+	 * can be written by an untrusted party can pull in environment variables, system properties and other
+	 * resolver content.  Escape untrusted text before storing it in a config entry, or read it with this method.
+	 *
 	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the section or value doesn't exist.
 	 */
-	private String getRaw(String key) {
+	public String getRaw(String key) {
 
 		var sname = sname(key);
 		var skey = skey(key);
 
 		var ce = configMap.getEntry(sname, skey);
 
-		return removeMods(ce.getModifiers(), ce.getValue());
+		return ce == null ? null : ce.getValue();
 	}
 
 	private String nlIfMl(CharSequence cs) {
@@ -1328,13 +1258,6 @@ public class Config extends Context implements ConfigEventListener {
 		return r;
 	}
 
-	String applyMods(String mods, String x) {
-		if (nn(mods) && nn(x))
-			for (var i = 0; i < mods.length(); i++)
-				x = getMod(mods.charAt(i)).doApply(x);
-		return x;
-	}
-
 	void checkWrite() {
 		if (readOnly)
 			throw uoex("Cannot call this method on a read-only configuration.");
@@ -1344,15 +1267,4 @@ public class Config extends Context implements ConfigEventListener {
 
 	List<ConfigEventListener> getListeners() { return u(listeners); }
 
-	Mod getMod(char id) {
-		var x = mods.get(id);
-		return coalesce(x, Mod.NO_OP);
-	}
-
-	String removeMods(String mods, String x) {
-		if (nn(mods) && nn(x))
-			for (var i = mods.length() - 1; i > -1; i--)
-				x = getMod(mods.charAt(i)).doRemove(x);
-		return x;
-	}
 }

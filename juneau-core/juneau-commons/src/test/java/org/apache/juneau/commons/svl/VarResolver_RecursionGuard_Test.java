@@ -37,6 +37,18 @@ class VarResolver_RecursionGuard_Test extends TestBase {
 		}
 	}
 
+	/** Test var that returns a system property and, like most vars, allows its output to be re-resolved. */
+	public static class PropVar extends SimpleVar {
+		public PropVar() {
+			super("PV");
+		}
+
+		@Override
+		public String resolve(VarResolverSession s, String arg) {
+			return System.getProperty(arg);
+		}
+	}
+
 	@Test void a01_selfReferenceThrowsInsteadOfOverflow() {
 		var r = VarResolver.create().vars(SelfVar.class).maxRecursionDepth(8).build();
 		var e = assertThrows(VarResolverException.class, () -> r.resolve("${SELF:x}"));
@@ -46,11 +58,11 @@ class VarResolver_RecursionGuard_Test extends TestBase {
 	}
 
 	@Test void a02_normalNestingUnaffected() {
-		var r = VarResolver.create().defaultVars().maxRecursionDepth(8).build();
-		System.setProperty("svl.test.a02a", "${S:svl.test.a02b}");
+		var r = VarResolver.create().vars(PropVar.class).maxRecursionDepth(8).build();
+		System.setProperty("svl.test.a02a", "${PV:svl.test.a02b}");
 		System.setProperty("svl.test.a02b", "v");
 		try {
-			assertEquals("v", r.resolve("${S:svl.test.a02a}"));
+			assertEquals("v", r.resolve("${PV:svl.test.a02a}"));
 		} finally {
 			System.clearProperty("svl.test.a02a");
 			System.clearProperty("svl.test.a02b");
@@ -68,15 +80,15 @@ class VarResolver_RecursionGuard_Test extends TestBase {
 	}
 
 	@Test void a05_exactBoundary() {
-		// a -> ${S:b} -> ${S:c} -> v : the output of a and b are each re-resolved, so depth 2.
-		System.setProperty("svl.test.a05a", "${S:svl.test.a05b}");
-		System.setProperty("svl.test.a05b", "${S:svl.test.a05c}");
+		// a -> ${PV:b} -> ${PV:c} -> v : the output of a and b are each re-resolved, so depth 2.
+		System.setProperty("svl.test.a05a", "${PV:svl.test.a05b}");
+		System.setProperty("svl.test.a05b", "${PV:svl.test.a05c}");
 		System.setProperty("svl.test.a05c", "v");
 		try {
-			var ok = VarResolver.create().defaultVars().maxRecursionDepth(2).build();
-			assertEquals("v", ok.resolve("${S:svl.test.a05a}"));
-			var tooSmall = VarResolver.create().defaultVars().maxRecursionDepth(1).build();
-			assertThrows(VarResolverException.class, () -> tooSmall.resolve("${S:svl.test.a05a}"));
+			var ok = VarResolver.create().vars(PropVar.class).maxRecursionDepth(2).build();
+			assertEquals("v", ok.resolve("${PV:svl.test.a05a}"));
+			var tooSmall = VarResolver.create().vars(PropVar.class).maxRecursionDepth(1).build();
+			assertThrows(VarResolverException.class, () -> tooSmall.resolve("${PV:svl.test.a05a}"));
 		} finally {
 			System.clearProperty("svl.test.a05a");
 			System.clearProperty("svl.test.a05b");

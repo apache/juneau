@@ -19,6 +19,8 @@ package org.apache.juneau.rest.server.view.jsp;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.response.*;
+import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -55,5 +57,17 @@ class JspDispatcher_Test extends TestBase {
 		var b = JspDispatcher.create();
 		b.basePath = null; // Bypasses the basePath(...) setter's null-normalization (package-private field).
 		assertThrows(IllegalArgumentException.class, b::build);
+	}
+
+	@Test void b01_render_nonServableTargetsAreNotFound() {
+		var d = JspDispatcher.create().build();
+		// The servability check runs before the request or response is touched.
+		RestRequest req = null;
+		RestResponse res = null;
+		assertThrows(NotFound.class, () -> d.render("WEB-INF/secret.jsp", req, res));
+		assertThrows(Forbidden.class, () -> d.render("../WEB-INF/secret.jsp", req, res));
+		assertThrows(NotFound.class, () -> d.render("META-INF/x.jsp", req, res));
+		assertThrows(NotFound.class, () -> d.render("page.txt", req, res));
+		assertThrows(NotFound.class, () -> d.render("file:page.jsp", req, res));
 	}
 }

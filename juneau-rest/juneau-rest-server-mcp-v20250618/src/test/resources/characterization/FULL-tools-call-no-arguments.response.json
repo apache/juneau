@@ -1,1 +1,1 @@
-{"id":1,"jsonrpc":"2.0","result":{"content":[{"type":"text","text":"null"}]}}
+{"error":{"code":-32602,"message":"Required property 'text' is missing."},"id":1,"jsonrpc":"2.0"}

@@ -99,8 +99,10 @@ public interface LoginStateStore {
 	 * @param redirectTarget The post-login redirect target.  May be {@code null}.  Re-validated by the RP.
 	 * @param createdAt Framework-minted store instant.
 	 * @param expiresAt Framework-minted expiry ceiling ({@code createdAt + stateNonceTtl}).
+	 * @param bindingHash Hash of the per-browser login-binding cookie value.  Persist and return verbatim; the RP
+	 * 	rejects a callback whose cookie does not match it (a {@code null} value never matches).
 	 */
-	record PendingLogin(String nonce, String codeVerifier, String redirectTarget, Instant createdAt, Instant expiresAt) {
+	record PendingLogin(String nonce, String codeVerifier, String redirectTarget, Instant createdAt, Instant expiresAt, String bindingHash) {
 		@Override
 		public String toString() {
 			return "PendingLogin(nonce=<redacted>,codeVerifier=<redacted>,redirectTarget=" + redirectTarget

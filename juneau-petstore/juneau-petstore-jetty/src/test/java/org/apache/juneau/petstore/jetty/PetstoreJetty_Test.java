@@ -19,24 +19,16 @@ package org.apache.juneau.petstore.jetty;
 import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.*;
 import java.net.*;
 import java.net.http.*;
 import java.net.http.HttpResponse.*;
-import java.nio.charset.*;
-import java.nio.file.*;
 import java.time.*;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.microservice.examples.*;
 import org.apache.juneau.petstore.console.*;
-import org.apache.juneau.rest.server.filter.*;
 import org.apache.juneau.testing.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;
@@ -64,28 +56,6 @@ class PetstoreJetty_Test extends TestBase {
 	@RegisterExtension
 	static MicroserviceTestFixture fixture = MicroserviceTestFixture.create()
 		.configurations(App.AppConfig.class);
-
-	/** Every exit the shutdown resource asks for while this class runs; nothing here may stop the test JVM. */
-	private static final BlockingQueue<Integer> EXITS = new LinkedBlockingQueue<>();
-
-	/** Every exit the shutdown resource has asked for, including those drained from {@link #EXITS}. */
-	private static final AtomicInteger EXIT_COUNT = new AtomicInteger();
-
-	/** The shutdown resource mounted in place of the deployment's, so a shutdown is recorded instead of stopping the JVM. */
-	private static final ShutdownResource SHUTDOWN = new ShutdownResource(code -> {
-		EXIT_COUNT.incrementAndGet();
-		EXITS.add(code);
-	});
-
-	/** The exits that were expected, because a request the boundary admits was sent. */
-	private static final AtomicInteger EXPECTED_EXITS = new AtomicInteger();
-
-	/** A refused shutdown request has this long, from the moment it was sent, to show an exit: the resource exits about a second after it answers. */
-	private static final long EXIT_WINDOW_NANOS = TimeUnit.MILLISECONDS.toNanos(1500);
-
-	/** When the latest refused shutdown request was sent, and which requests were refused. */
-	private static volatile long lastRefusedNanos = System.nanoTime();
-	private static final List<String> REFUSED = new CopyOnWriteArrayList<>();
 
 	private static final HttpClient HTTP = HttpClient.newBuilder()
 		.connectTimeout(Duration.ofSeconds(5))
@@ -124,54 +94,10 @@ class PetstoreJetty_Test extends TestBase {
 		throw new IllegalStateException("Petstore Jetty server did not become ready within 30s", last);
 	}
 
-	/**
-	 * Replaces the deployment's shutdown resource with {@link #SHUTDOWN}, and refuses to run any test unless that took.
-	 *
-	 * <p>
-	 * The boundary filters sit in front of the root servlet by path, so they cover the replacement exactly as they cover
-	 * the original.  The {@code GET} answers {@code 405} and does not exit.
-	 */
-	private static void mountTestShutdown() throws Exception {
-		get("/", "text/html");  // Initializes the root servlet before the shutdown resource is mounted.
-		RootResources root = null;
-		for (var h : fixture.getJettyServerComponent().getServletContextHandler().getServletHandler().getServlets())
-			if (h.getServlet() instanceof RootResources r)
-				root = r;
-		assertNotNull(root, "no RootResources mounted");
-		root.getContext().getRestChildren().addChild(SHUTDOWN, true);
-		var mounted = root.getContext().getRestChildren().asMap().values().stream()
-			.filter(c -> c.getResource() instanceof ShutdownResource).toList();
-		assertSize(1, mounted);
-		assertSame(SHUTDOWN, mounted.get(0).getResource(), "The test's shutdown resource must be the mounted one");
-		assertEquals(405, get("/shutdown", "application/json").statusCode());
-	}
-
-	/** Warms the server up, then mounts the test shutdown resource; the order is fixed. */
+	/** Warms the server up before any test runs. */
 	@BeforeAll
 	static void setUpServer() throws Exception {
 		warmUpServer();
-		mountTestShutdown();
-	}
-
-	/**
-	 * Records that a shutdown request which must not exit was just sent.
-	 *
-	 * <p>
-	 * The check that no exit follows is made once, in {@link #assertNoStrayExits()}, after the last of these has had its
-	 * full window; waiting out that window in every test would add it up, one test after another.
-	 */
-	private static void refusedShutdown(String what) {
-		REFUSED.add(what);
-		lastRefusedNanos = System.nanoTime();
-	}
-
-	/** Fails the class if any exit happened that an admitted request did not account for. */
-	@AfterAll
-	static void assertNoStrayExits() throws Exception {
-		var remaining = EXIT_WINDOW_NANOS - (System.nanoTime() - lastRefusedNanos);
-		if (remaining > 0)
-			TimeUnit.NANOSECONDS.sleep(remaining);
-		assertEquals(EXPECTED_EXITS.get(), EXIT_COUNT.get(), "Refused and GET requests must not schedule an exit; refused: " + REFUSED);
 	}
 
 	private static HttpResponse<String> get(String path, String accept) throws Exception {
@@ -543,7 +469,7 @@ class PetstoreJetty_Test extends TestBase {
 
 	// Premise pin, not CSRF evidence: stays green with the API boundary deleted.
 	@ParameterizedTest(name="{0}")
-	@CsvSource({"/petstore,404", "/petstore/pets/1,200", "/petstore/pets,200", "/petstore/api,200", "/petstore/stats,200"})
+	@CsvSource({"/petstore,404", "/petstore/pets/1,200", "/petstore/pets,200", "/petstore/api,200", "/petstore/stats,404"})
 	void g10_apiHtmlPagesRenderNoPostForm(String path, int status) throws Exception {
 		// The bare /petstore path has no HTML page (404 for text/html), so its premise is that the error body has no POST form either.
 		var resp = get(path, "text/html");
@@ -555,177 +481,6 @@ class PetstoreJetty_Test extends TestBase {
 		var resp = send("POST", "/petstore/pets", "application/x-www-form-urlencoded", null, null, "name=Legacy&species=CAT&price=1");
 		assertEquals(403, resp.statusCode(), "body: " + resp.body());
 		assertEquals("SIMPLE_REQUEST_WITHOUT_ORIGIN", boundaryReason(resp));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// g — the admin resources' CSRF boundary guards /config, /logs and /shutdown
-	//-----------------------------------------------------------------------------------------------------------------
-
-	// Refusals only: an admitted write here would persist to the deployment's .cfg file.
-	@Test void g20_configBrowserWritesAreRefused() throws Exception {
-		var cross = send("PUT", "/config/Petstore/appName", "text/plain", "http://evil.example", null, "Evil");
-		assertEquals(403, cross.statusCode(), "body: " + cross.body());
-		assertEquals("ORIGIN_MISMATCH", boundaryReason(cross));
-		var same = send("PUT", "/config/Petstore/appName", "text/plain", self(), null, "Evil");
-		assertEquals(403, same.statusCode(), "body: " + same.body());
-		assertEquals("CSRF_TOKEN_MISSING", boundaryReason(same));
-		var override = get("/config/Petstore/appName?method=PUT", "application/json");
-		assertEquals(403, override.statusCode(), "body: " + override.body());
-		assertEquals("SIMPLE_REQUEST_WITHOUT_ORIGIN", boundaryReason(override));
-		var form = send("POST", "/config", "application/x-www-form-urlencoded", null, null, "contents=x");
-		assertEquals(403, form.statusCode(), "body: " + form.body());
-		assertEquals("SIMPLE_REQUEST_WITHOUT_ORIGIN", boundaryReason(form));
-		var read = get("/config", "application/json");
-		assertEquals(200, read.statusCode(), "body: " + read.body());
-		assertNull(boundaryReason(read));
-		var appName = get("/config/Petstore/appName", "text/plain");
-		assertEquals(200, appName.statusCode(), "body: " + appName.body());
-		assertFalse(appName.body().contains("Evil"), "A refused write must not change the configuration: " + appName.body());
-	}
-
-	@Test void g21_logsMethodParamCannotDelete() throws Exception {
-		var dir = get("/config/Logging/logDir", "text/plain");
-		assertEquals(200, dir.statusCode(), "body: " + dir.body());
-		var logDir = Path.of(dir.body().trim());
-		Files.createDirectories(logDir);
-		var victim = logDir.resolve("g21-victim.log");
-		Files.writeString(victim, "[2024.01.01 10:00:00 INFO] keep\n");
-		try {
-			var override = get("/logs/g21-victim.log?method=DELETE", "application/json");
-			assertEquals(403, override.statusCode(), "body: " + override.body());
-			assertEquals("SIMPLE_REQUEST_WITHOUT_ORIGIN", boundaryReason(override));
-			assertTrue(Files.exists(victim), "GET ?method=DELETE must not delete the file");
-			var cross = send("DELETE", "/logs/g21-victim.log", null, "http://evil.example", null, "");
-			assertEquals(403, cross.statusCode(), "body: " + cross.body());
-			assertEquals("ORIGIN_MISMATCH", boundaryReason(cross));
-			assertTrue(Files.exists(victim), "A cross-site DELETE must not delete the file");
-			var view = get("/logs/view/g21-victim.log", "text/plain");
-			assertEquals(200, view.statusCode(), "body: " + view.body());
-			assertTrue(view.body().contains("keep"), "body: " + view.body());
-			var cli = send("DELETE", "/logs/g21-victim.log", null, null, null, "");
-			assertEquals(303, cli.statusCode(), "body: " + cli.body());
-			assertNull(boundaryReason(cli));
-			assertFalse(Files.exists(victim), "A command-line DELETE is admitted and deletes the file");
-		} finally {
-			Files.deleteIfExists(victim);
-		}
-	}
-
-	@Test void g22_shutdownIsANonBrowserPost() throws Exception {
-		EXITS.clear();
-		var cross = send("POST", "/shutdown", "application/x-www-form-urlencoded", "http://evil.example", null, "");
-		assertEquals(403, cross.statusCode(), "body: " + cross.body());
-		assertEquals("ORIGIN_MISMATCH", boundaryReason(cross));
-		var simple = send("POST", "/shutdown", "text/plain", null, null, "");
-		assertEquals(403, simple.statusCode(), "body: " + simple.body());
-		assertEquals("SIMPLE_REQUEST_WITHOUT_ORIGIN", boundaryReason(simple));
-		var read = get("/shutdown", "application/json");
-		assertEquals(405, read.statusCode(), "body: " + read.body());
-		refusedShutdown("g22 refused and GET requests");
-		assertTrue(EXITS.isEmpty(), "Refused and GET requests must not schedule an exit");
-		EXPECTED_EXITS.incrementAndGet();
-		var cli = send("POST", "/shutdown", "application/json", null, null, "");
-		assertEquals(200, cli.statusCode(), "body: " + cli.body());
-		assertNull(boundaryReason(cli));
-		assertEquals(0, EXITS.poll(10, TimeUnit.SECONDS), "An admitted POST schedules exit(0)");
-	}
-
-	// Spellings of the path that the container normalizes differently from the router must never reach the resource.
-	@ParameterizedTest(name="{0}")
-	@ValueSource(strings={"//shutdown", "/shutdown;jsessionid=x", "/%73hutdown", "/petstore/%2e%2e/shutdown", "/petstore/../shutdown", "/shutdown/"})
-	void g24_oddShutdownPathsDoNotExit(String path) throws Exception {
-		EXITS.clear();
-		var resp = HTTP.send(HttpRequest.newBuilder().uri(URI.create(self() + path)).timeout(Duration.ofSeconds(30))
-			.header("Content-Type", "application/x-www-form-urlencoded").POST(HttpRequest.BodyPublishers.ofString("")).build(), BodyHandlers.ofString());
-		assertTrue(resp.statusCode() >= 400 && resp.statusCode() < 500, path + " answered " + resp.statusCode() + ": " + resp.body());
-		refusedShutdown(path);
-		assertTrue(EXITS.isEmpty(), path + " must not schedule an exit");
-	}
-
-	// Sends a GET with a Host header the HTTP client would not let us set, and returns "<status> <boundary reason>".
-	private static String rawGet(String path, String host) throws Exception {
-		var root = fixture.getRootUrl();
-		try (var s = new Socket(root.getHost(), root.getPort()); var out = s.getOutputStream();
-			var in = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.US_ASCII))) {
-			s.setSoTimeout(30_000);
-			out.write(("GET " + path + " HTTP/1.1\r\nHost: " + host + "\r\nAccept: text/plain\r\nConnection: close\r\n\r\n")
-				.getBytes(StandardCharsets.US_ASCII));
-			out.flush();
-			var status = in.readLine().split(" ")[1];
-			String reason = null;
-			for (var line = in.readLine(); line != null && ! line.isEmpty(); line = in.readLine())
-				if (line.regionMatches(true, 0, RequestBoundaryFilter.REJECTION_HEADER + ":", 0, RequestBoundaryFilter.REJECTION_HEADER.length() + 1))
-					reason = line.substring(line.indexOf(':') + 1).trim();
-			return status + " " + reason;
-		}
-	}
-
-	@Test void g25_adminRefusesARebindingHostByDefault() throws Exception {
-		var port = fixture.getRootUrl().getPort();
-		for (var path : new String[] { "/config", "/logs/", "/shutdown" }) {
-			assertEquals("421 HOST_NOT_ALLOWED", rawGet(path, "rebound.example:" + port), path);
-			assertEquals("421 HOST_NOT_ALLOWED", rawGet(path, "rebound.example"), path);
-		}
-	}
-
-	@Test void g26_adminAnswersLoopbackByDefault() throws Exception {
-		var port = fixture.getRootUrl().getPort();
-		for (var host : new String[] { "localhost:" + port, "127.0.0.1:" + port, "[::1]:" + port, "localhost" })
-			assertEquals("200 null", rawGet("/config", host), host);
-	}
-
-	@Test void g27_apiHostsDoNotApplyToAdmin() throws Exception {
-		// The API answers any Host while petstore.api.allowedHosts is unset; the admin resources still answer loopback only.
-		var port = fixture.getRootUrl().getPort();
-		assertNotEquals("421", rawGet("/petstore/pets", "rebound.example:" + port).split(" ")[0]);
-		assertEquals("421 HOST_NOT_ALLOWED", rawGet("/config", "rebound.example:" + port));
-	}
-
-	private static Set<String> adminHosts() {
-		var f = (RequestBoundaryFilter)new App.AppConfig().adminBoundary().getFilter();
-		return ((CsrfBoundary)f.boundary()).allowedHosts();
-	}
-
-	@Test void g28_adminHostsComeFromTheirOwnSetting() {
-		var settings = Settings.get();
-		try {
-			assertEquals(Set.copyOf(AdminBoundary.LOOPBACK_HOSTS), adminHosts(), "unset: loopback only");
-			settings.setLocal(PetstoreApiBoundary.ALLOWED_HOSTS_PROPERTY, "api.example.com");
-			assertEquals(Set.copyOf(AdminBoundary.LOOPBACK_HOSTS), adminHosts(), "the API's hosts must not apply to admin");
-			settings.setLocal(App.ADMIN_ALLOWED_HOSTS_PROPERTY, " ");
-			assertEquals(Set.copyOf(AdminBoundary.LOOPBACK_HOSTS), adminHosts(), "blank: loopback only");
-			settings.setLocal(App.ADMIN_ALLOWED_HOSTS_PROPERTY, "Ops.Example.com, localhost");
-			assertEquals(Set.of("ops.example.com", "localhost"), adminHosts());
-			settings.setLocal(App.ADMIN_ALLOWED_HOSTS_PROPERTY, "ops.example.com,,localhost");
-			assertThrows(IllegalArgumentException.class, PetstoreJetty_Test::adminHosts, "a blank entry is refused");
-		} finally {
-			settings.unsetLocal(App.ADMIN_ALLOWED_HOSTS_PROPERTY);
-			settings.unsetLocal(PetstoreApiBoundary.ALLOWED_HOSTS_PROPERTY);
-		}
-	}
-
-	@Test void g23_adminBoundaryIsItsOwnRequestOnlyFilter() {
-		var handler = fixture.getJettyServerComponent().getServletContextHandler().getServletHandler();
-		var mappings = handler.getFilterMappings();
-		var api = -1;
-		var admin = -1;
-		for (var i = 0; i < mappings.length; i++) {
-			var filter = handler.getFilter(mappings[i].getFilterName()).getFilter();
-			if (filter instanceof PetstoreApiBoundary) {
-				api = i;
-			} else if (Arrays.asList(mappings[i].getPathSpecs()).contains("/shutdown")) {
-				admin = i;
-				assertInstanceOf(RequestBoundaryFilter.class, filter);
-				assertEquals(Set.of("/config", "/config/*", "/logs", "/logs/*", "/shutdown", "/shutdown/*"), Set.of(mappings[i].getPathSpecs()));
-				assertEquals(EnumSet.of(DispatcherType.REQUEST), mappings[i].getDispatcherTypes());
-			}
-		}
-		assertTrue(admin >= 0, "no admin boundary mapped");
-		assertTrue(api >= 0 && api < admin, "API boundary must be ahead of the admin boundary");
-		var registrations = ServletFilterRegistration.collect(fixture.getMicroservice().getBeanStore()).stream()
-			.filter(r -> r.getUrlPatterns().contains("/shutdown")).toList();
-		assertSize(1, registrations);
-		assertEquals(AdminBoundary.ORDER, registrations.get(0).getOrder());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

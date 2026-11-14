@@ -18,7 +18,9 @@ package org.apache.juneau.microservice.jetty;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.nio.charset.*;
 import java.nio.file.*;
+import java.nio.file.attribute.*;
 import java.util.*;
 import java.util.logging.*;
 
@@ -59,5 +61,38 @@ class JettyServerComponent_CreateLogDir_Test {
 		JettyServerComponent.createLogDir(file.resolve("logs").toString(), logger);
 		assertEquals(1, records.size());
 		assertEquals(Level.WARNING, records.get(0).getLevel());
+	}
+
+	@Test void a04_createdDirectoryIsOwnerOnly() throws Exception {
+		Assumptions.assumeTrue(tmp.getFileSystem().supportedFileAttributeViews().contains("posix"));
+		var dir = tmp.resolve("private-logs");
+		JettyServerComponent.createLogDir(dir.toString(), Logger.getAnonymousLogger());
+		assertEquals(PosixFilePermissions.fromString("rwx------"), Files.getPosixFilePermissions(dir));
+	}
+
+	@Test void a05_existingDirectoryPermissionsAreLeftAlone() throws Exception {
+		Assumptions.assumeTrue(tmp.getFileSystem().supportedFileAttributeViews().contains("posix"));
+		var dir = Files.createDirectory(tmp.resolve("shared-logs"));
+		var perms = PosixFilePermissions.fromString("rwxr-xr-x");
+		Files.setPosixFilePermissions(dir, perms);
+		JettyServerComponent.createLogDir(dir.toString(), Logger.getAnonymousLogger());
+		assertEquals(perms, Files.getPosixFilePermissions(dir));
+	}
+
+	@Test void a06_bundledRequestLogFormatOmitsQueryStringAndReferer() throws Exception {
+		try (var in = JettyServerComponent.class.getResourceAsStream("/jetty.xml")) {
+			var xml = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+			assertFalse(xml.contains("EXTENDED_NCSA_FORMAT"));
+			assertTrue(xml.contains("\"%m %U %H\""));
+			assertFalse(xml.contains("%q"));
+			assertFalse(xml.contains("%{Referer}i"));
+		}
+	}
+
+	@Test void a07_bundledConfigDisablesConsole() throws Exception {
+		try (var in = JettyServerComponent.class.getResourceAsStream("/juneau.cfg")) {
+			var text = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+			assertTrue(text.matches("(?s).*\\[Console\\][^\\[]*\\benabled\\s*=\\s*false.*"));
+		}
 	}
 }

@@ -66,11 +66,11 @@ class TerminalProcess_Test extends TestBase {
 		fakePython("exit 0");
 		var p = TerminalProcess.start("maven", List.of("mvn", "-q", "test"), 100, 30, run, host("/x/juneau_terminal.py", null));
 		assertEquals(0, p.waitFor(30, TimeUnit.SECONDS));
-		var log = run.resolve(TerminalProcess.LOG_NAME).toString();
-		var ev = run.resolve(TerminalProcess.EVENTS_NAME).toString();
+		var log = p.runDir().resolve(TerminalProcess.LOG_NAME).toString();
+		var ev = p.runDir().resolve(TerminalProcess.EVENTS_NAME).toString();
 		assertEquals(List.of("/x/juneau_terminal.py", "--console", "none", "--pty", "--size", "100x30", "--full-log", log,
 			"--events", ev, "maven", "--", "mvn", "-q", "test"), Files.readAllLines(bin.resolve("argv.txt")));
-		assertEquals("{\"cols\":100,\"rows\":30}", Files.readString(run.resolve(TerminalProcess.LOG_NAME + ".size")));
+		assertEquals("{\"cols\":100,\"rows\":30}", Files.readString(p.runDir().resolve(TerminalProcess.LOG_NAME + ".size")));
 	}
 
 	@DisabledOnOs(OS.WINDOWS)
@@ -158,21 +158,18 @@ class TerminalProcess_Test extends TestBase {
 	}
 
 	@DisabledOnOs(OS.WINDOWS)
-	@Test void a07_aUsedRunDirectoryIsRefused() throws Exception {
+	@Test void a07_eachRunGetsItsOwnServerNamedDirectoryUnderTheRoot() throws Exception {
 		fakePython("exit 0");
 		var h = host("/x.py", null);
-		for (var name : List.of(TerminalProcess.LOG_NAME, TerminalProcess.EVENTS_NAME)) {
-			var d = run.resolve(name + ".dir");
-			Files.createDirectories(d);
-			Files.writeString(d.resolve(name), "x");
-			assertThrowsWithMessage(IllegalStateException.class, name + "' is not empty", () -> TerminalProcess.start("generic", List.of("true"), 80, 24, d, h));
-			assertFalse(Files.exists(bin.resolve("argv.txt")), "the runner must not have started");
-		}
-		var empty = run.resolve("empty");
-		Files.createDirectories(empty);
-		Files.writeString(empty.resolve(TerminalProcess.LOG_NAME), "");
-		Files.writeString(empty.resolve(TerminalProcess.EVENTS_NAME), "");
-		assertEquals(0, TerminalProcess.start("generic", List.of("true"), 80, 24, empty, h).waitFor(30, TimeUnit.SECONDS));
+		var p1 = TerminalProcess.start("generic", List.of("true"), 80, 24, run, h);
+		var p2 = TerminalProcess.start("generic", List.of("true"), 80, 24, run, h);
+		p1.waitFor(30, TimeUnit.SECONDS);
+		p2.waitFor(30, TimeUnit.SECONDS);
+		assertNotEquals(p1.runDir(), p2.runDir());
+		assertEquals(run.toRealPath(), p1.runDir().toRealPath().getParent());
+		assertEquals(p1.runDir().getFileName().toString(), p1.id());
+		assertTrue(p1.id().matches("[A-Za-z0-9_-]{1,128}"), p1.id());
+		assertEquals(PosixFilePermissions.fromString("rwx------"), Files.getPosixFilePermissions(p1.runDir()));
 	}
 
 	@DisabledOnOs(OS.WINDOWS)
@@ -318,5 +315,16 @@ class TerminalProcess_Test extends TestBase {
 		assertNull(TerminalProcess.findOnPath("nope", bin.toString()));
 		Files.writeString(bin.resolve("plain"), "not executable");
 		assertNull(TerminalProcess.findOnPath("plain", bin.toString()));
+	}
+
+	@DisabledOnOs(OS.WINDOWS)
+	@Test void z01_toolRunsInAWorkSubdirectoryOwnedByTheServer() throws Exception {
+		fakePython("pwd -P > \"$(dirname \"$0\")/cwd.txt\"\nexit 0");
+		var p = TerminalProcess.start("generic", List.of("true"), 80, 24, run, host("/x.py", null));
+		assertEquals(0, p.waitFor(30, TimeUnit.SECONDS));
+		var cwd = Path.of(Files.readString(bin.resolve("cwd.txt")).trim());
+		assertEquals(p.runDir().toRealPath().resolve(TerminalProcess.WORK_DIR), cwd);
+		assertEquals(PosixFilePermissions.fromString("rwx------"), Files.getPosixFilePermissions(p.runDir()));
+		assertEquals(PosixFilePermissions.fromString("rwx------"), Files.getPosixFilePermissions(p.runDir().resolve(TerminalProcess.WORK_DIR)));
 	}
 }

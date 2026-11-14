@@ -151,10 +151,7 @@ public abstract class Widget implements HtmlWidget {
 	 */
 	protected String loadHtml(RestRequest req, String name) {
 		try {
-			var s = getFileFinder(req).getString(name, null).orElse(null);
-			if (nn(s))
-				s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
-			return s;
+			return getFileFinder(req).getString(name, null).map(s -> s.replaceAll("(?s)<!--(.*?)-->\\s*", "")).orElse(null);
 		} catch (IOException e) {
 			throw toRex(e);
 		}
@@ -190,10 +187,7 @@ public abstract class Widget implements HtmlWidget {
 	 */
 	protected String loadScript(RestRequest req, String name) {
 		try {
-			var s = getFileFinder(req).getString(name, null).orElse(null);
-			if (nn(s))
-				s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
-			return s;
+			return getFileFinder(req).getString(name, null).map(s -> s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "")).orElse(null);
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -229,10 +223,7 @@ public abstract class Widget implements HtmlWidget {
 	 */
 	protected String loadStyle(RestRequest req, String name) {
 		try {
-			var s = getFileFinder(req).getString(name, null).orElse(null);
-			if (nn(s))
-				s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
-			return s;
+			return getFileFinder(req).getString(name, null).map(s -> s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "")).orElse(null);
 		} catch (IOException e) {
 			throw toRex(e);
 		}

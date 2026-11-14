@@ -36,6 +36,31 @@ class VarFunctionDiscovery_Test extends TestBase {
 		public String invoke(String s) { return s.toUpperCase(Locale.ROOT) + "!"; }
 	}
 
+	/** Advertised through {@code META-INF/services}; collides with the built-in {@code upper(...)}. */
+	public static class ServiceUpper extends TypedFunction {
+		@Override public String name() { return "upper"; }
+		public String invoke(String s) { return "svc:" + s; }
+	}
+
+	/** Advertised through {@code META-INF/services}; no built-in of this name. */
+	public static class ServiceExtra extends TypedFunction {
+		@Override public String name() { return "serviceExtra"; }
+		public String invoke(String s) { return "extra:" + s; }
+	}
+
+	@Test void defaultResolverDoesNotLoadServices() {
+		assertEquals("FOO", VarResolver.DEFAULT.resolve("#{upper('foo')}"));
+		assertEquals("#{serviceExtra('x')}", VarResolver.DEFAULT.resolve("#{serviceExtra('x')}"));
+		var vr = VarResolver.create().defaultFunctions().build();
+		assertEquals("#{serviceExtra('x')}", vr.resolve("#{serviceExtra('x')}"));
+	}
+
+	@Test void loadServicesIsOptInAndNeverOverridesBuiltins() {
+		var vr = VarResolver.create().defaultFunctions().loadServices().build();
+		assertEquals("extra:x", vr.resolve("#{serviceExtra('x')}"));
+		assertEquals("FOO", vr.resolve("#{upper('foo')}"));
+	}
+
 	@Test void defaultResolverHasBuiltins() {
 		// Sample one function from each built-in category.
 		assertEquals("FOO", VarResolver.DEFAULT.resolve("#{upper('foo')}"));    // string

@@ -157,6 +157,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends XmlSerializer.Builder<SELF> {
 
+		private static final Set<String> DEFAULT_URI_SCHEMES = Set.of("http", "https", "mailto", "tel");
+
 		private static final Cache<HashKey,HtmlSerializer> CACHE = Cache.of(HashKey.class, HtmlSerializer.class).build();
 
 		private boolean addBeanTypesHtml;
@@ -165,6 +167,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		private boolean disableDetectLinksInStrings;
 		private String labelParameter;
 		private AnchorText uriAnchorText;
+		private Set<String> uriSchemes;
 
 		/**
 		 * Constructor, default settings.
@@ -177,6 +180,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			disableDetectLinksInStrings = env("HtmlSerializer.disableDetectLinksInStrings", false);
 			uriAnchorText = env("HtmlSerializer.uriAnchorText", AnchorText.TO_STRING);
 			labelParameter = env("HtmlSerializer.labelParameter", "label");
+			uriSchemes = DEFAULT_URI_SCHEMES;
 		}
 
 		/**
@@ -193,6 +197,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			disableDetectLinksInStrings = copyFrom.disableDetectLinksInStrings;
 			labelParameter = copyFrom.labelParameter;
 			uriAnchorText = copyFrom.uriAnchorText;
+			uriSchemes = copyFrom.uriSchemes;
 		}
 
 		/**
@@ -209,6 +214,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			disableDetectLinksInStrings = ! copyFrom.detectLinksInStrings;
 			labelParameter = copyFrom.labelParameter;
 			uriAnchorText = copyFrom.uriAnchorText;
+			uriSchemes = copyFrom.uriSchemes;
 		}
 
 		/**
@@ -482,7 +488,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 				disableDetectLabelParameters,
 				disableDetectLinksInStrings,
 				labelParameter,
-				uriAnchorText
+				uriAnchorText,
+				uriSchemes
 			);
 			// @formatter:on
 		}
@@ -668,6 +675,25 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			return self();
 		}
 
+		/**
+		 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Allowed URI schemes for links.
+		 *
+		 * <p>
+		 * Link targets (<c>href</c> attributes) whose scheme is not in this list are rendered as plain text instead of as a link.
+		 * The check is applied after the URI has been resolved.
+		 * Relative URIs, fragments (<js>"#foo"</js>) and query strings (<js>"?foo"</js>) are always allowed.
+		 *
+		 * @param value
+		 * 	The allowed schemes, compared case-insensitively and without the trailing colon.
+		 * 	<br>Cannot be <jk>null</jk>.
+		 * 	<br>The default is <js>"http"</js>, <js>"https"</js>, <js>"mailto"</js> and <js>"tel"</js>.
+		 * @return This object.
+		 */
+		public SELF uriSchemes(String...value) {
+			uriSchemes = Set.copyOf(Arrays.stream(reqnn("value", value)).map(x -> x.toLowerCase(Locale.ROOT)).toList());
+			return self();
+		}
+
 
 	}
 
@@ -747,6 +773,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	protected final boolean detectLinksInStrings;
 	protected final AnchorText uriAnchorText;
 	protected final String labelParameter;
+	protected final Set<String> uriSchemes;
 
 	private final Map<ClassMeta<?>,HtmlClassMeta> htmlClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,HtmlBeanPropertyMeta> htmlBeanPropertyMetas = new ConcurrentHashMap<>();
@@ -766,6 +793,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		detectLinksInStrings = ! builder.disableDetectLinksInStrings;
 		labelParameter = builder.labelParameter;
 		uriAnchorText = builder.uriAnchorText;
+		uriSchemes = builder.uriSchemes;
 	}
 
 	@Override /* Overridden from Context */
@@ -874,6 +902,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			.a("detectLabelParameters", detectLabelParameters)
 			.a("detectLinksInStrings", detectLinksInStrings)
 			.a("labelParameter", labelParameter)
-			.a("uriAnchorText", uriAnchorText);
+			.a("uriAnchorText", uriAnchorText)
+			.a("uriSchemes", uriSchemes);
 	}
 }

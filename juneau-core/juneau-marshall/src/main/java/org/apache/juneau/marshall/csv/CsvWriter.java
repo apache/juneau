@@ -35,6 +35,8 @@ import org.apache.juneau.marshall.serializer.*;
 })
 public class CsvWriter extends SerializerWriter<CsvWriter> {
 
+	private boolean neutralizeFormulas;
+
 	/**
 	 * Constructor.
 	 *
@@ -47,6 +49,22 @@ public class CsvWriter extends SerializerWriter<CsvWriter> {
 	 */
 	protected CsvWriter(Writer out, boolean useWhitespace, int maxIndent, char quoteChar, boolean trimStrings, UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
+	}
+
+	/**
+	 * Enables neutralization of spreadsheet formulas.
+	 *
+	 * <p>
+	 * When enabled, string values that begin with <js>'='</js>, <js>'+'</js>, <js>'-'</js>, <js>'@'</js>, a tab or a carriage return
+	 * are written with a leading single quote so that spreadsheet applications treat them as text.
+	 * Non-string values (numbers, booleans) are never modified.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public CsvWriter neutralizeFormulas(boolean value) {
+		neutralizeFormulas = value;
+		return this;
 	}
 
 	/**
@@ -68,6 +86,8 @@ public class CsvWriter extends SerializerWriter<CsvWriter> {
 			w("null");
 		} else {
 			var s = value.toString();
+			if (neutralizeFormulas && value instanceof CharSequence && ! s.isEmpty() && "=+-@\t\r".indexOf(s.charAt(0)) >= 0)
+				s = "'" + s;
 			var mustQuote = false;
 			for (var i = 0; i < s.length() && !mustQuote; i++) {
 				var c = s.charAt(i);

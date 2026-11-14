@@ -72,7 +72,7 @@ class ThymeleafMixin_MockRest_Test extends TestBase {
 	}
 
 	@Test void a02_thymeleafMountInstalled_rendersTemplate() throws Exception {
-		ca.get("/thymeleaf/templates/about")
+		ca.get("/thymeleaf/about")
 			.run()
 			.assertStatus(200)
 			.assertContent().asString().isContains("About Juneau");
@@ -80,7 +80,7 @@ class ThymeleafMixin_MockRest_Test extends TestBase {
 
 	@Test void a03_thymeleafMountInstalled_rendersDotHtml() throws Exception {
 		// Trailing .html is stripped by the handler; both work.
-		ca.get("/thymeleaf/templates/about.html")
+		ca.get("/thymeleaf/about.html")
 			.run()
 			.assertStatus(200)
 			.assertContent().asString().isContains("About Juneau");

@@ -18,6 +18,7 @@ package org.apache.juneau.console.freemarker;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.function.UnaryOperator;
 
@@ -219,12 +220,33 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	private void spliceConsoleLoaderIfNeeded(Configuration cfg) {
 		if (reservedTemplateResolves(cfg))
 			return;
-		var console = new ClassTemplateLoader(getClass().getClassLoader(), "");
+		var console = new ConsoleTemplateLoader(getClass().getClassLoader());
 		var existing = cfg.getTemplateLoader();
 		if (n(existing))
 			cfg.setTemplateLoader(console);
 		else
 			cfg.setTemplateLoader(new MultiTemplateLoader(new TemplateLoader[]{ existing, console }));
+	}
+
+	/**
+	 * Classpath loader that only resolves names inside the console template package, so splicing it into a
+	 * {@link Configuration} never exposes the rest of the classpath.
+	 */
+	static final class ConsoleTemplateLoader extends ClassTemplateLoader {
+
+		private static final String PREFIX = "org/apache/juneau/console/";
+
+		ConsoleTemplateLoader(ClassLoader loader) {
+			super(loader, "");
+		}
+
+		@Override /* TemplateLoader */
+		public Object findTemplateSource(String name) throws IOException {
+			var n = name.startsWith("/") ? name.substring(1) : name;
+			if (! n.startsWith(PREFIX) || n.contains(".."))
+				return null;
+			return super.findTemplateSource(name);
+		}
 	}
 
 	/**

@@ -174,6 +174,7 @@ public final class SecuredExampleClient {
 	 */
 	private static McpProtectedResourceMetadata discoverProtectedResourceMetadata(String endpoint, URI resourceMetadataUrl) {
 		var prm = McpProtectedResourceMetadataClient.create()
+			.allowPrivateUrls(true)  // The demo server runs on loopback.
 			.expectedResource(URI.create(endpoint))
 			.build()
 			.fetch(resourceMetadataUrl);
@@ -191,7 +192,7 @@ public final class SecuredExampleClient {
 	 * &rarr; RFC 8414 &rarr; {@code token_endpoint} chain a compliant client walks end-to-end.
 	 */
 	private static URI discoverTokenEndpoint(McpProtectedResourceMetadata prm) {
-		var as = McpProtectedResourceMetadataClient.create().build().discoverAuthorizationServer(prm);
+		var as = McpProtectedResourceMetadataClient.create().allowPrivateUrls(true).skipResourceValidation(true).build().discoverAuthorizationServer(prm);
 		System.out.println("   issuer:         " + as.issuer());
 		System.out.println("   token_endpoint: " + as.tokenEndpoint());
 		return as.tokenEndpoint();

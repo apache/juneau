@@ -52,7 +52,7 @@ public final class TransportRequest {
 	private final boolean policyEnforced;
 	private final boolean allowPrivateUrls;
 	private final RemoteUrlPolicy.AllowedRanges allowedAddressRanges;
-	private final Set<String> redirectStripHeaders;
+	private final Set<String> redirectForwardHeaders;
 
 	private TransportRequest(Builder builder) {
 		this.method = reqnn("method", builder.method);
@@ -63,22 +63,21 @@ public final class TransportRequest {
 		this.policyEnforced = builder.policyEnforced;
 		this.allowPrivateUrls = builder.allowPrivateUrls;
 		this.allowedAddressRanges = builder.allowedAddressRanges;
-		var strip = new LinkedHashSet<>(RedirectSecurity.stripOnCrossOrigin());
-		strip.addAll(builder.redirectStripHeaders);
-		this.redirectStripHeaders = Collections.unmodifiableSet(strip);
+		this.redirectForwardHeaders = Set.copyOf(builder.redirectForwardHeaders);
 	}
 
 	/**
-	 * Returns the header names removed from this request before it is replayed against another origin.
+	 * Returns the extra header names that may be replayed against another origin.
 	 *
 	 * <p>
-	 * Always includes {@link RedirectSecurity#stripOnCrossOrigin()}; names added with
-	 * {@link RestClient.Builder#redirectStripHeaders(String...)} are included as well.  Compare names case-insensitively.
+	 * A redirect to another origin keeps only the headers on the {@link RedirectSecurity#forwardOnCrossOrigin() built-in
+	 * forward list} plus these names, set with {@link RestClient.Builder#redirectForwardHeaders(String...)}.  Compare names
+	 * case-insensitively.
 	 *
 	 * @return An unmodifiable set. Never <jk>null</jk>.
 	 */
-	public Set<String> getRedirectStripHeaders() {
-		return redirectStripHeaders;
+	public Set<String> getRedirectForwardHeaders() {
+		return redirectForwardHeaders;
 	}
 
 	/** Returns a new {@link Builder}. */
@@ -240,20 +239,20 @@ public final class TransportRequest {
 		boolean policyEnforced;
 		boolean allowPrivateUrls;
 		RemoteUrlPolicy.AllowedRanges allowedAddressRanges = RemoteUrlPolicy.AllowedRanges.NONE;
-		final Set<String> redirectStripHeaders = new LinkedHashSet<>();
+		final Set<String> redirectForwardHeaders = new LinkedHashSet<>();
 
 		private Builder() {}
 
 		/**
-		 * Adds header names to strip, besides {@link RedirectSecurity#stripOnCrossOrigin()}, when the request is replayed
-		 * against another origin.
+		 * Adds header names that may be replayed against another origin, besides
+		 * {@link RedirectSecurity#forwardOnCrossOrigin()}.
 		 *
 		 * @param value The header names. <jk>null</jk> or empty adds nothing.
 		 * @return This object.
 		 */
-		public Builder redirectStripHeaders(Collection<String> value) {
+		public Builder redirectForwardHeaders(Collection<String> value) {
 			if (value != null)
-				redirectStripHeaders.addAll(value);
+				redirectForwardHeaders.addAll(value);
 			return this;
 		}
 

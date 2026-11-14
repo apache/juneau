@@ -81,7 +81,7 @@ class Hc45RedirectCredentialGuard_Test {
 		var redirected = hop(context, new HttpHost("other_service", 8080, "http"));
 		assertNull(redirected.getFirstHeader("Authorization"));
 		assertNull(redirected.getFirstHeader("Cookie"));
-		assertNotNull(redirected.getFirstHeader("X-Other"));
+		assertNull(redirected.getFirstHeader("X-Other"));
 	}
 
 	@Test

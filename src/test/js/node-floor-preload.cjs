@@ -77,7 +77,7 @@ for (const name of ['isWellFormed', 'toWellFormed']) {
 		[name](...args) {
 			const stack = new Error('caller probe').stack.split('\n')[2] || '';
 			if (!/\(?node:|^\s*at node:|\(?internal\//.test(stack))
-				throw new TypeError(`${String(this)}.${name} is not a function (removed by node-floor-preload)`);
+				throw new TypeError(`${String(this)}.${name} is not a function (removed by node-floor-preload)`);  // NOSONAR javascript:S6551 - this is the receiver of a String.prototype method, so it stringifies as the string
 			return original.apply(this, args);
 		}
 	}[name];

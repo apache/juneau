@@ -27,21 +27,20 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  *
  * <p>
  * This is an ergonomic, self-documenting alternative to the multi-argument
- * {@link Config#set(String, Object, Serializer, String, String, List)} overload.  That overload packs several distinct
+ * {@link Config#set(String, Object, Serializer, String, List)} overload.  That overload packs several distinct
  * "leave-unchanged versus clear" sentinel conventions into one call (a <jk>null</jk> comment leaves the existing comment
  * untouched while a blank comment clears it; a <jk>null</jk> pre-lines list leaves the existing pre-lines untouched while
  * an empty list clears them).  This builder replaces those sentinels with explicit methods:
  * <ul>
  * 	<li><b>Not calling</b> a facet method leaves that facet untouched (no sentinel needed).
- * 	<li>An explicit setter ({@link #comment(String)}, {@link #preLines(List)}, {@link #serializer(Serializer)},
- * 		{@link #modifiers(String)}) sets that facet.
+ * 	<li>An explicit setter ({@link #comment(String)}, {@link #preLines(List)}, {@link #serializer(Serializer)}) sets that facet.
  * 	<li>An explicit clear ({@link #clearComment()}, {@link #clearPreLines()}) intentionally clears that facet rather than
  * 		relying on a magic blank string or empty list.
  * </ul>
  *
  * <p>
  * The write is performed by the terminal {@link #set(Object)} or {@link #set()} method.  The result is identical to the
- * equivalent {@link Config#set(String, Object, Serializer, String, String, List)} call.
+ * equivalent {@link Config#set(String, Object, Serializer, String, List)} call.
  *
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
@@ -77,7 +76,6 @@ public class EntryBuilder {
 
 	private Object value;
 	private Serializer serializer;
-	private String modifiers;
 	private String comment;
 	private List<String> preLines;
 
@@ -122,20 +120,6 @@ public class EntryBuilder {
 	 */
 	public EntryBuilder serializer(Serializer value) {
 		this.serializer = value;
-		return this;
-	}
-
-	/**
-	 * Specifies the modifiers to apply to the value (e.g. <js>"*"</js> for encoded values).
-	 *
-	 * <p>
-	 * If not called, the modifiers on any existing entry are left untouched.
-	 *
-	 * @param value The modifiers to apply to the value.
-	 * @return This object.
-	 */
-	public EntryBuilder modifiers(String value) {
-		this.modifiers = value;
 		return this;
 	}
 
@@ -200,7 +184,7 @@ public class EntryBuilder {
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Config set() throws SerializeException {
-		return config.set(key, value, serializer, modifiers, comment, preLines);
+		return config.set(key, value, serializer, comment, preLines);
 	}
 
 	/**

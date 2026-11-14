@@ -42,7 +42,7 @@ import org.junit.jupiter.api.*;
 })
 class BusEventsMixin_Override_Test extends TestBase {
 
-	static final ServerBus BUS = ServerBus.create(BusPolicy.create().downstream("ops.jobs", true).build());
+	static final ServerBus BUS = ServerBus.create(BusPolicy.create().anyCaller().downstream("ops.jobs", true).build());
 	static final AtomicInteger CALLS = new AtomicInteger();
 	static final String BODY = "{\"v\":1,\"bridge\":\"ops\",\"transport\":\"sse\",\"downstream\":[\"ops.jobs\"]}";
 

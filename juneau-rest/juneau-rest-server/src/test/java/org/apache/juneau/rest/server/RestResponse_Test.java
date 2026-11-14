@@ -65,4 +65,13 @@ class RestResponse_Test {
 	@Test void a09_malformedUri_isUnsafe() {
 		assertFalse(RestResponse.isSafeRedirectUri("https://exa mple.com/foo", "example.com"));
 	}
+
+	@Test void a10_backslashAndControlChars_areUnsafe() {
+		assertFalse(RestResponse.isSafeRedirectUri("/\\example.com/foo", "example.com"));
+		assertFalse(RestResponse.isSafeRedirectUri("/foo\\bar"));
+		assertFalse(RestResponse.isSafeRedirectUri("/foo\tbar"));
+		assertFalse(RestResponse.isSafeRedirectUri("/foo\nbar"));
+		assertFalse(RestResponse.isSafeRedirectUri("/foo bar"));
+		assertFalse(RestResponse.isSafeRedirectUri("/foo\u007fbar"));
+	}
 }

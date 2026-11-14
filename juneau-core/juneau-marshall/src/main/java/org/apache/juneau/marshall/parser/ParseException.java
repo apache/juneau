@@ -75,14 +75,16 @@ public class ParseException extends BasicRuntimeException {
 				lastLocation.forEach((k, v) -> sb.append("\n\t\t").append(k).append(": ").append(v));
 			}
 
-			String lines = session.getInputAsString();
-			if (lines == null)
-				sb.append("\n\tUse BEAN_debug setting to display content.");
-			else {
-				int numLines = session.getDebugOutputLines();
-				int start = p.line - numLines;
-				int end = p.line + numLines;
-				sb.append("\n---start--\n").append(getNumberedLines(lines, start, end)).append("---end---");
+			if (session.isIncludeInputInErrors()) {
+				String lines = session.getInputAsString();
+				if (lines == null)
+					sb.append("\n\tUse BEAN_debug setting to display content.");
+				else {
+					int numLines = session.getDebugOutputLines();
+					int start = p.line - numLines;
+					int end = p.line + numLines;
+					sb.append("\n---start--\n").append(getNumberedLines(lines, start, end)).append("---end---");
+				}
 			}
 
 			msg = sb.toString();

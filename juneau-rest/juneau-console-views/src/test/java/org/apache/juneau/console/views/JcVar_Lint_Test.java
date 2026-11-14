@@ -121,7 +121,7 @@ class JcVar_Lint_Test extends TestBase {
 		var undefined = used.entrySet().stream()
 			.filter(e -> ! defined.contains(e.getKey()) && ! FALLBACK_ONLY.contains(e.getKey()))
 			.map(e -> e.getKey() + " (" + e.getValue() + ")")
-			.collect(Collectors.toList());
+			.toList();
 		assertTrue(undefined.isEmpty(), "Undefined --jc-* custom properties: " + undefined);
 	}
 

@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.math.*;
 import java.time.*;
@@ -98,7 +99,7 @@ public enum DurationFormat {
 	}
 
 	private static Duration parseSeconds(String s) {
-		var bd = new BigDecimal(s);
+		var bd = parseBigDecimal(s);
 		long seconds = bd.longValue();
 		BigDecimal frac = bd.subtract(BigDecimal.valueOf(seconds));
 		int nanos = frac.multiply(NANOS_PER_SECOND).intValue();
@@ -174,7 +175,7 @@ public enum DurationFormat {
 		}
 		BigDecimal nanos = null;
 		if (valid) {
-			var value = new BigDecimal(s.substring(0, i));
+			var value = parseBigDecimal(s.substring(0, i));
 			nanos = switch (s.substring(i).toLowerCase(Locale.ROOT)) {
 				case "d" -> value.multiply(BigDecimal.valueOf(86_400_000_000_000L));
 				case "h" -> value.multiply(BigDecimal.valueOf(3_600_000_000_000L));

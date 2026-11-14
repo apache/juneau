@@ -177,4 +177,51 @@ class FileTerminalSource_Test extends TestBase {
 		FileTerminalSource.create(log).build().copyTo(out);
 		assertArrayEquals(big, out.toByteArray());
 	}
+
+	@Test void z01_symlinkedLogIsRefused() throws Exception {
+		var target = dir.resolve("other.txt");
+		Files.writeString(target, "secret");
+		Files.createSymbolicLink(log, target);
+		var s = FileTerminalSource.create(log).build();
+		assertThrows(IOException.class, () -> s.read(0, 100));
+	}
+
+	@Test void z02_nonRegularLogIsRefused() throws Exception {
+		Files.createDirectory(log);
+		var s = FileTerminalSource.create(log).build();
+		assertThrows(IOException.class, () -> s.read(0, 100));
+	}
+
+	@Test void z03_replacedLogIsRefused() throws Exception {
+		append("abc");
+		var s = FileTerminalSource.create(log).build();
+		assertEquals("abc", text(s.read(0, 100)));
+		var moved = dir.resolve("moved.log");
+		Files.move(log, moved);
+		Files.writeString(log, "xyz");
+		assertThrows(IOException.class, () -> s.read(0, 100));
+	}
+
+	@Test void z04_oversizedSizeSidecarIsIgnored() throws Exception {
+		append("x");
+		size("{\"cols\":80,\"rows\":24}" + " ".repeat(FileTerminalSource.MAX_SIZE_BYTES));
+		assertNull(FileTerminalSource.parseSize(dir.resolve("run.log.size")));
+		size("{\"cols\":80,\"rows\":24}");
+		assertArrayEquals(new int[]{80, 24}, FileTerminalSource.parseSize(dir.resolve("run.log.size")));
+	}
+
+	@Test void z05_symlinkedSizeSidecarIsIgnored() throws Exception {
+		var target = dir.resolve("real.size");
+		Files.writeString(target, "{\"cols\":80,\"rows\":24}");
+		var link = dir.resolve("link.size");
+		Files.createSymbolicLink(link, target);
+		assertNull(FileTerminalSource.parseSize(link));
+	}
+
+	@Test void z06_copyToStopsAtTheCap() throws Exception {
+		append("0123456789");
+		var out = new ByteArrayOutputStream();
+		FileTerminalSource.create(log).build().copyTo(out, 4);
+		assertEquals("0123", out.toString(UTF_8));
+	}
 }

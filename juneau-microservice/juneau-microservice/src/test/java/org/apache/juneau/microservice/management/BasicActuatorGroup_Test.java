@@ -26,6 +26,7 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.runtime.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.management.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
@@ -130,6 +131,7 @@ class BasicActuatorGroup_Test extends TestBase {
 	public static class EnabledChild extends BasicActuatorGroup {
 		private static final long serialVersionUID = 1L;
 		@Bean public ManifestFile manifest() throws IOException { return BasicActuatorGroup_Test.manifest(); }
+		@Bean public RestGuardList guards(BeanStore bs) { return RestGuardList.create(bs).build(); }
 	}
 
 	@Rest(children={EnabledChild.class})

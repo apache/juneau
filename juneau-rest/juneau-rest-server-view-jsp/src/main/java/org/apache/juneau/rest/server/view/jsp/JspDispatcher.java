@@ -48,7 +48,10 @@ import org.apache.juneau.rest.server.view.*;
 public class JspDispatcher implements RawTemplateDispatcher {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */
-	public static final String DEFAULT_BASE_PATH = "/";
+	@SuppressWarnings({
+		"java:S1075" // Default for the configurable basePath setting, not a hardcoded location.
+	})
+	public static final String DEFAULT_BASE_PATH = "/templates/";
 
 	private final String basePath;
 
@@ -95,12 +98,16 @@ public class JspDispatcher implements RawTemplateDispatcher {
 		// resolved target that escapes basePath (../, %2e%2e treated as literal, absolute-path
 		// injection, etc.). Map IAE → 403 (Forbidden); attackers can't distinguish from the
 		// container-layer rejection of malformed paths.
+		if (! ViewTemplateNames.isPlainName(path))
+			throw new NotFound("Template not found.");
 		String target;
 		try {
 			target = JspViewRenderer.joinPath(basePath, path);
 		} catch (IllegalArgumentException ex) {
 			throw new Forbidden("Path escapes configured base path.");
 		}
+		if (! isServable(basePath, target))
+			throw new NotFound("Template not found.");
 		try {
 			var ctx = req.getServletContext();
 			var rd = ctx.getRequestDispatcher(target);
@@ -117,6 +124,21 @@ public class JspDispatcher implements RawTemplateDispatcher {
 		} catch (Exception ex) {
 			throw new InternalServerError(ex, "JSP render failed for '%s'", target);
 		}
+	}
+
+	/**
+	 * Whether a resolved forward target may be served: a plain {@code .jsp} name that does not point into
+	 * {@code WEB-INF} or {@code META-INF} unless the configured base path itself lives there.
+	 */
+	static boolean isServable(String basePath, String target) {
+		if (! ViewTemplateNames.isPlainName(target) || ! ViewTemplateNames.hasAllowedExtension(target, ".jsp"))
+			return false;
+		var lower = target.toLowerCase();
+		var base = basePath.toLowerCase();
+		for (var dir : new String[]{"/web-inf/", "/meta-inf/"})
+			if ((lower + "/").contains(dir) && ! (base + "/").contains(dir))
+				return false;
+		return true;
 	}
 
 	/**

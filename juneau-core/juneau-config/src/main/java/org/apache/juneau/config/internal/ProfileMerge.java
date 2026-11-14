@@ -90,7 +90,7 @@ public final class ProfileMerge {
 			for (var key : overlay.getKeys(section)) {
 				var e = overlay.getEntry(section, key);
 				if (e != null)  // HTT: getKeys() only returns keys with entries, so getEntry is never null here.
-					base.setEntry(section, key, e.getValue(), e.getModifiers(), e.getComment(), e.getPreLines());
+					base.setEntry(section, key, e.getValue(), e.getComment(), e.getPreLines());
 			}
 		}
 	}

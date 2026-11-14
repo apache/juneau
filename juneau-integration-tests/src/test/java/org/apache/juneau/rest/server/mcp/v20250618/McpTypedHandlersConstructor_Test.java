@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.mcp.v20250618;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.*;
 
@@ -34,6 +35,16 @@ import org.junit.jupiter.api.*;
  * coverage.
  */
 class McpTypedHandlersConstructor_Test {
+
+	private static LogRecordCapture.Quiet quietMcp;
+
+	@BeforeAll static void silenceMcpWarnings() {
+		quietMcp = LogRecordCapture.quiet(McpRevision.class);
+	}
+
+	@AfterAll static void restoreMcpLogging() {
+		quietMcp.close();
+	}
 
 	@Test
 	void typedHandlers_constructor_isPrivate() {

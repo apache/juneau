@@ -48,8 +48,8 @@ public class McpSubscriptionsConfig {
 	/** Default heartbeat/keepalive interval in milliseconds. */
 	public static final long DEFAULT_HEARTBEAT_INTERVAL_MS = 15_000L;
 
-	/** Default idle timeout in milliseconds; {@code 0} disables idle-timeout reaping. */
-	public static final long DEFAULT_IDLE_TIMEOUT_MS = 0L;
+	/** Default idle timeout in milliseconds (5 minutes); {@code 0} disables idle-timeout reaping. */
+	public static final long DEFAULT_IDLE_TIMEOUT_MS = 300_000L;
 
 	private int maxConcurrentSubscriptions = DEFAULT_MAX_CONCURRENT_SUBSCRIPTIONS;
 	private int queueSize = DEFAULT_QUEUE_SIZE;

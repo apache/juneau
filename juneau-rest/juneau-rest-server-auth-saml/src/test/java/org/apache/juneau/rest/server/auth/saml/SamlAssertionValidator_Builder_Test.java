@@ -71,6 +71,7 @@ class SamlAssertionValidator_Builder_Test extends TestBase {
 			.spEntityId("https://sp.example.com")
 			.expectedIssuer("https://idp.example.com")
 			.signingCredential(dummyCredential())
+			.recipient("https://sp.example.com/saml/acs")
 			.build();
 		assertEquals("https://sp.example.com", v.getSpEntityId());
 		assertEquals("https://idp.example.com", v.getExpectedIssuer());
@@ -96,6 +97,7 @@ class SamlAssertionValidator_Builder_Test extends TestBase {
 		var v = SamlAssertionValidator.create()
 			.spEntityId("sp").expectedIssuer("idp").signingCredential(dummyCredential())
 			.clockSkew(Duration.ofMinutes(5))
+			.recipient("https://sp.example.com/saml/acs")
 			.build();
 		assertEquals(Duration.ofMinutes(5), v.getClockSkew());
 	}
@@ -116,6 +118,7 @@ class SamlAssertionValidator_Builder_Test extends TestBase {
 		var v = SamlAssertionValidator.create()
 			.spEntityId("sp").expectedIssuer("idp").signingCredential(dummyCredential())
 			.algorithms(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256)
+			.recipient("https://sp.example.com/saml/acs")
 			.build();
 		assertSize(1, v.getAlgorithms());
 	}

@@ -181,4 +181,10 @@ class Column_DisplayProperties_Test extends TestBase {
 		assertEquals("x", Column.create("price").description("x").description());
 		assertNull(Column.create("price").description());
 	}
+
+	@Test void a14_html_emittedOnlyWhenEnabled() {
+		assertFalse(Column.create("note").toCatalogMap().containsKey("html"));
+		assertFalse(Column.create("note").html(false).toCatalogMap().containsKey("html"));
+		assertEquals(true, Column.create("note").html(true).toCatalogMap().get("html"));
+	}
 }

@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
 
 class ClassFormat_Test {
@@ -315,5 +316,13 @@ class ClassFormat_Test {
 		ClassFormat.setClassNameGuard(null);
 		assertEquals(String.class, ClassFormat.parse("java.lang.String", ClassFormat.FQCN, null));
 		assertEquals(Map.Entry.class, ClassFormat.parse("java.util.Map.Entry", ClassFormat.FQCN, null));
+	}
+
+	@Test void h05_classNameGuard_appliesToClassTypedParse() throws Exception {
+		var p = JsonParser.DEFAULT;
+		assertEquals(String.class, p.read("\"java.lang.String\"", Class.class));
+		ClassFormat.setClassNameGuard("java.lang.String"::equals);
+		assertEquals(String.class, p.read("\"java.lang.String\"", Class.class));
+		assertThrows(Exception.class, () -> p.read("\"java.util.Date\"", Class.class));
 	}
 }

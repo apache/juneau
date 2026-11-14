@@ -48,7 +48,8 @@ INK = "#16325c"
 PAPER = "#ffffff"
 TITLE = "Juneau symbols"
 
-SYMBOL_RE = re.compile(r"<symbol\s[^<]*(?:<(?!/symbol>)[^<]*)*</symbol>")
+SYMBOL_OPEN_RE = re.compile(r"<symbol\s")
+SYMBOL_CLOSE = "</symbol>"
 SYMBOL_ID_RE = re.compile(r'<symbol\s+id="([^"]+)"')
 SYMBOL_VIEWBOX_RE = re.compile(r'<symbol\s+[^>]*viewBox="([^"]+)"')
 
@@ -69,7 +70,14 @@ def license_header(sprite_text):
 
 def symbols(sprite_text):
     """Every <symbol>...</symbol> element of the sprite, verbatim and in document order."""
-    found = SYMBOL_RE.findall(sprite_text)
+    found = []
+    pos = 0
+    while (m := SYMBOL_OPEN_RE.search(sprite_text, pos)):
+        end = sprite_text.find(SYMBOL_CLOSE, m.end())
+        if end < 0:
+            break
+        pos = end + len(SYMBOL_CLOSE)
+        found.append(sprite_text[m.start():pos])
     if not found:
         sys.exit(f"no <symbol> elements found in {SPRITE}")
     return found

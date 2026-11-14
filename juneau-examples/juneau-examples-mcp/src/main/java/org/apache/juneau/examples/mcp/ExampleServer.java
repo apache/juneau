@@ -83,7 +83,7 @@ public final class ExampleServer implements AutoCloseable {
 			.build();
 		microservice.start();
 
-		return new ExampleServer(microservice, URI.create("http://localhost:" + boundPort(jetty) + "/"));
+		return new ExampleServer(microservice, URI.create("http://127.0.0.1:" + boundPort(jetty) + "/"));
 	}
 
 	/**
@@ -121,6 +121,8 @@ public final class ExampleServer implements AutoCloseable {
 	private static Server buildServer(int port) {
 		var server = new Server();
 		var connector = new ServerConnector(server);
+		// Listens on the loopback interface unless the juneau.bindAddress system property names another address.
+		connector.setHost(System.getProperty("juneau.bindAddress", "127.0.0.1"));
 		connector.setPort(port);
 		server.addConnector(connector);
 		var handler = new ServletContextHandler();

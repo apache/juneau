@@ -58,7 +58,10 @@ import freemarker.template.*;
 public class FreemarkerDispatcher implements RawTemplateDispatcher {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */
-	public static final String DEFAULT_BASE_PATH = "/";
+	@SuppressWarnings({
+		"java:S1075" // Default for the configurable basePath setting, not a hardcoded location.
+	})
+	public static final String DEFAULT_BASE_PATH = "/templates/";
 
 	/** Default template suffix &mdash; empty (literal template names, no implicit suffix). */
 	public static final String DEFAULT_TEMPLATE_SUFFIX = "";
@@ -205,7 +208,7 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 	 *
 	 * <p>
 	 * Anchored on a classpath resource root derived from {@link #getBasePath() basePath} (leading +
-	 * trailing slashes trimmed; a {@code "/"} base yields a root-of-classpath resolver). The default
+	 * trailing slashes trimmed). The default
 	 * pins {@code IncompatibleImprovements} to {@link Configuration#VERSION_2_3_34} so behavior is
 	 * stable across consumer upgrades of {@code org.freemarker:freemarker}; sets
 	 * {@code DefaultEncoding} to {@code UTF-8} and {@code OutputFormat} to
@@ -238,6 +241,8 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 		cfg.setLogTemplateExceptions(false);
 		cfg.setOutputFormat(HTMLOutputFormat.INSTANCE);
 		cfg.setTemplateUpdateDelayMilliseconds(cacheTemplates ? Long.MAX_VALUE : 0L);
+		cfg.setNewBuiltinClassResolver(TemplateClassResolver.ALLOWS_NOTHING_RESOLVER);
+		cfg.setAPIBuiltinEnabled(false);
 		cfg.setObjectWrapper(objectWrapper != null ? objectWrapper : buildDefaultObjectWrapper());
 		return cfg;
 	}
@@ -315,6 +320,10 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 		// Apply suffix idempotently so /freemarker/about resolves to about.ftlh (when
 		// templateSuffix is configured), while /freemarker/about.ftlh stays as-is.
 		safeTemplate = applyTemplateSuffix(safeTemplate);
+
+		// Only template-extension names are served, and names carrying a scheme or backslash never are.
+		if (! ViewTemplateNames.isPlainName(safeTemplate) || ! ViewTemplateNames.hasAllowedExtension(safeTemplate, ".ftlh", ".ftl"))
+			throw new NotFound("Template not found.");
 
 		try {
 			var cfg = resolveConfiguration(req);

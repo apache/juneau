@@ -410,7 +410,7 @@ public class FreemarkerMixin {
 		 * Sets the classpath base path under which template resources are resolved.
 		 *
 		 * <p>
-		 * Defaults to {@link FreemarkerMixin#DEFAULT_BASE_PATH "/"}. A typical configured
+		 * Defaults to {@link FreemarkerMixin#DEFAULT_BASE_PATH "/templates/"}. A typical configured
 		 * value is {@code "/templates/"} &mdash; the same Spring-Boot-compatible layout
 		 * convention the sibling JSP / Thymeleaf / Mustache bridges use.
 		 *

@@ -31,6 +31,7 @@ import org.opensaml.core.xml.io.*;
 import org.opensaml.saml.common.*;
 import org.opensaml.saml.saml2.core.*;
 import org.opensaml.security.credential.*;
+import org.opensaml.xmlsec.encryption.support.*;
 import org.opensaml.xmlsec.signature.impl.*;
 import org.opensaml.xmlsec.signature.support.*;
 import org.opensaml.xmlsec.signature.support.Signer;
@@ -58,6 +59,9 @@ final class SamlTestSupport {
 	// Fixed issue-instant: the response/assertion IssueInstant is informational (the validator checks
 	// only the explicit NotBefore/NotOnOrAfter window), so a constant replaces the system clock (java:S8692).
 	private static final Instant ISSUE_INSTANT = Instant.parse("2026-01-01T00:00:00Z");
+
+	/** The ACS URL every test validator is configured with. */
+	static final String ACS = "https://sp.example.com/saml/acs";
 
 	private SamlTestSupport() {}
 
@@ -200,6 +204,12 @@ final class SamlTestSupport {
 	 * and serializes.
 	 */
 	static String signEncryptAndBuildResponse(BasicCredential signingCred, Credential encryptionCred, String responseIssuer, Assertion assertion) throws Exception {
+		return signEncryptAndBuildResponse(signingCred, encryptionCred, responseIssuer, assertion,
+			EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128_GCM);
+	}
+
+	/** As above, with an explicit content-encryption algorithm. */
+	static String signEncryptAndBuildResponse(BasicCredential signingCred, Credential encryptionCred, String responseIssuer, Assertion assertion, String dataAlgorithm) throws Exception {
 		var sig = new SignatureBuilder().buildObject();
 		sig.setSigningCredential(signingCred);
 		sig.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256);
@@ -210,10 +220,10 @@ final class SamlTestSupport {
 		Signer.signObject(sig);
 
 		var dataParams = new org.opensaml.xmlsec.encryption.support.DataEncryptionParameters();
-		dataParams.setAlgorithm(org.opensaml.xmlsec.encryption.support.EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128_GCM);
+		dataParams.setAlgorithm(dataAlgorithm);
 		var keyParams = new org.opensaml.xmlsec.encryption.support.KeyEncryptionParameters();
 		keyParams.setEncryptionCredential(encryptionCred);
-		keyParams.setAlgorithm(org.opensaml.xmlsec.encryption.support.EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP);
+		keyParams.setAlgorithm(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP);
 		var encrypter = new org.opensaml.saml.saml2.encryption.Encrypter(dataParams, keyParams);
 		encrypter.setKeyPlacement(org.opensaml.saml.saml2.encryption.Encrypter.KeyPlacement.INLINE);
 		var encrypted = encrypter.encrypt(assertion);
@@ -264,6 +274,8 @@ final class SamlTestSupport {
 		assertion.setVersion(org.opensaml.saml.common.SAMLVersion.VERSION_20);
 		assertion.setIssuer(buildIssuer(bf, issuer));
 		assertion.setSubject(subject(subjectName));
+		if (subjectName != null && notOnOrAfter != null)
+			assertion.getSubject().getSubjectConfirmations().add(bearerConfirmation(ACS, null, notOnOrAfter, null, null));
 		assertion.setConditions(conditions(audience, notBefore, notOnOrAfter));
 		return assertion;
 	}
@@ -432,6 +444,8 @@ final class SamlTestSupport {
 		nid.setValue(subjectName);
 		nid.setFormat(NameIDType.UNSPECIFIED);
 		sub.setNameID(nid);
+		if (notOnOrAfter != null)
+			sub.getSubjectConfirmations().add(bearerConfirmation(ACS, null, notOnOrAfter, null, null));
 		assertion.setSubject(sub);
 
 		var condBuilder = (SAMLObjectBuilder<Conditions>) bf.getBuilder(Conditions.DEFAULT_ELEMENT_NAME);

@@ -29,6 +29,7 @@ import java.nio.*;
 import java.nio.channels.*;
 import java.nio.charset.*;
 import java.nio.file.*;
+import java.nio.file.attribute.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.commons.collections.*;
@@ -59,6 +60,7 @@ public class FileStore extends ConfigStore {
 	public static class Builder extends ConfigStore.Builder<Builder> {
 
 		private Charset charset;
+		private boolean allowAbsoluteNames;
 		private boolean enableWatcher;
 		private boolean updateOnWrite;
 		private String directory;
@@ -71,6 +73,7 @@ public class FileStore extends ConfigStore {
 		protected Builder() {
 			charset = env("ConfigFileStore.charset").map(Charset::forName).orElse(Charset.defaultCharset());
 			directory = env("ConfigFileStore.directory", ".");
+			allowAbsoluteNames = env("ConfigFileStore.allowAbsoluteNames", false);
 			enableWatcher = env("ConfigFileStore.enableWatcher", false);
 			extensions = env("ConfigFileStore.extensions", "cfg,yml,yaml");
 			updateOnWrite = env("ConfigFileStore.updateOnWrite", false);
@@ -87,6 +90,7 @@ public class FileStore extends ConfigStore {
 			super(reqnn("copyFrom", copyFrom));
 			charset = copyFrom.charset;
 			directory = copyFrom.directory;
+			allowAbsoluteNames = copyFrom.allowAbsoluteNames;
 			enableWatcher = copyFrom.enableWatcher;
 			extensions = copyFrom.extensions;
 			updateOnWrite = copyFrom.updateOnWrite;
@@ -104,6 +108,7 @@ public class FileStore extends ConfigStore {
 			type(copyFrom.getClass());
 			charset = copyFrom.charset;
 			directory = copyFrom.directory;
+			allowAbsoluteNames = copyFrom.allowAbsoluteNames;
 			enableWatcher = copyFrom.enableWatcher;
 			extensions = copyFrom.extensions;
 			updateOnWrite = copyFrom.updateOnWrite;
@@ -212,6 +217,19 @@ public class FileStore extends ConfigStore {
 		}
 
 		/**
+		 * Allows absolute file names (e.g. <js>"/etc/app/app.cfg"</js>) to be read and written outside the store directory.
+		 *
+		 * <p>
+		 * By default, every name must resolve inside the configured directory.
+		 *
+		 * @return This object.
+		 */
+		public Builder allowAbsoluteNames() {
+			allowAbsoluteNames = true;
+			return this;
+		}
+
+		/**
 		 * File extensions.
 		 *
 		 * <p>
@@ -309,6 +327,15 @@ public class FileStore extends ConfigStore {
 			}
 		}
 
+		private void handleEvent(WatchEvent<Path> event) {
+			try {
+				FileStore.this.onFileEvent(event);
+			} catch (@SuppressWarnings("unused") IOException | IllegalArgumentException e) {
+				// The file or directory vanished (or became unreadable) between the event and its handling,
+				// e.g. while the watched directory is being deleted.  Skip the event; don't kill the watcher.
+			}
+		}
+
 		@SuppressWarnings({
 			"unchecked" // Type erasure requires unchecked casts
 		})
@@ -319,14 +346,8 @@ public class FileStore extends ConfigStore {
 				while (nn(key = watchService.take())) {
 					for (var event : key.pollEvents()) {
 						var kind = event.kind();
-						if (kind != OVERFLOW) { // HTT - OVERFLOW events are rare in tests
-							try {
-								FileStore.this.onFileEvent(((WatchEvent<Path>)event));
-							} catch (@SuppressWarnings("unused") IOException | IllegalArgumentException e) {
-								// The file or directory vanished (or became unreadable) between the event and its handling,
-								// e.g. while the watched directory is being deleted.  Skip the event; don't kill the watcher.
-							}
-						}
+						if (kind != OVERFLOW) // HTT - OVERFLOW events are rare in tests
+							handleEvent((WatchEvent<Path>)event);
 					}
 					if (! key.reset()) // HTT - key always resets in test environment
 						break;
@@ -369,6 +390,7 @@ public class FileStore extends ConfigStore {
 		return new Builder();
 	}
 
+	protected final boolean allowAbsoluteNames;
 	protected final boolean enableWatcher;
 	protected final boolean updateOnWrite;
 	protected final Charset charset;
@@ -393,6 +415,7 @@ public class FileStore extends ConfigStore {
 		directory = builder.directory;
 		extensions = builder.extensions;
 		charset = builder.charset;
+		allowAbsoluteNames = builder.allowAbsoluteNames;
 		enableWatcher = builder.enableWatcher;
 		updateOnWrite = builder.updateOnWrite;
 		watcherSensitivity = builder.watcherSensitivity;
@@ -437,8 +460,9 @@ public class FileStore extends ConfigStore {
 		if (n(pName))
 			throw ioex("Could not resolve a file name from path '%s'.", p); // Real NPE guard: getFileName() can return null when p resolves to a root path (e.g. a caller-supplied absolute name).
 		name = pName.toString();
+		var key = p.toAbsolutePath().normalize().toString();
 
-		var s = cache.get(name);
+		var s = cache.get(key);
 		if (nn(s))
 			return s;
 
@@ -459,16 +483,16 @@ public class FileStore extends ConfigStore {
 					buf.clear();
 				}
 				s = sb.toString();
-				cache.put(name, s);
+				cache.put(key, s);
 			}
 		}
 
-		return cache.get(name);
+		return cache.get(key);
 	}
 
 	@Override /* Overridden from ConfigStore */
 	public synchronized FileStore update(String name, String newContents) {
-		cache.put(name, newContents);
+		cache.put(cacheKey(name), newContents);
 		super.update(name, newContents);
 		return this;
 	}
@@ -488,6 +512,7 @@ public class FileStore extends ConfigStore {
 		if (n(pName))
 			throw ioex("Could not resolve a file name from path '%s'.", p); // Real NPE guard: getFileName() can return null when p resolves to a root path (e.g. a caller-supplied absolute name).
 		name = pName.toString();
+		var key = p.toAbsolutePath().normalize().toString();
 
 		var exists = Files.exists(p);
 
@@ -513,9 +538,9 @@ public class FileStore extends ConfigStore {
 						}
 						if (nn(expectedContents) && neq(currentContents, expectedContents)) {
 							if (currentContents == null)
-								cache.remove(name);
+								cache.remove(key);
 							else
-								cache.put(name, currentContents);
+								cache.put(key, currentContents);
 							return currentContents;
 						}
 						fc.position(0);
@@ -529,16 +554,30 @@ public class FileStore extends ConfigStore {
 		if (updateOnWrite)
 			update(name, newContents);
 		else
-			cache.remove(name);  // Invalidate the cache.
+			cache.remove(key);  // Invalidate the cache.
 
 		return null;
+	}
+
+	/*
+	 * Creates a new empty file readable and writable by its owner only, where the file system supports POSIX permissions.
+	 */
+	private static boolean createOwnerOnly(Path p) throws IOException {
+		try {
+			Files.createFile(p, PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")));
+			return true;
+		} catch (@SuppressWarnings("unused") UnsupportedOperationException e) {
+			return p.toFile().createNewFile(); // Non-POSIX file system.
+		} catch (@SuppressWarnings("unused") FileAlreadyExistsException e) {
+			return true;
+		}
 	}
 
 	private synchronized boolean isWritable(Path p) {
 		try {
 			if (! Files.exists(p)) {
 				Files.createDirectories(p.getParent());
-				if (! Files.exists(p) && ! p.toFile().createNewFile()) { // HTT - createNewFile() failure requires OS-level file system restrictions
+				if (! Files.exists(p) && ! createOwnerOnly(p)) { // HTT - createNewFile() failure requires OS-level file system restrictions
 					throw ioex("Could not create file: %s", p);
 				}
 			}
@@ -550,13 +589,16 @@ public class FileStore extends ConfigStore {
 
 	/*
 	 * Rejects relative names that resolve (lexically) outside the configured directory, e.g. "../x".
-	 * Absolute names are trusted configuration (e.g. @Rest(config="/abs/path.cfg")) and are allowed.
+	 * Absolute names are rejected unless the builder opted in with allowAbsoluteNames().
 	 * Done before any file-system probe so escaping names are never even tested for existence.
 	 */
 	private void checkContained(String name) {
 		try {
-			if (Path.of(name).isAbsolute())
-				return;
+			if (Path.of(name).isAbsolute()) {
+				if (allowAbsoluteNames)
+					return;
+				throw new IllegalArgumentException(MSG_PATH_ESCAPE);
+			}
 			var root = dir.toPath().toAbsolutePath().normalize();
 			var target = root.resolve(name).normalize();
 			if (! target.startsWith(root))
@@ -575,6 +617,10 @@ public class FileStore extends ConfigStore {
 		}
 	}
 
+	private String cacheKey(String name) {
+		return resolveFile(name).toAbsolutePath().normalize().toString();
+	}
+
 	private Path resolveFile(String name) {
 		return dir.toPath().resolve(resolveName(name));
 	}
@@ -588,8 +634,9 @@ public class FileStore extends ConfigStore {
 	protected synchronized void onFileEvent(WatchEvent<Path> e) throws IOException {
 		var fn = e.context().getFileName().toString();
 
-		var oldContents = cache.get(fn);
-		cache.remove(fn);
+		var key = cacheKey(fn);
+		var oldContents = cache.get(key);
+		cache.remove(key);
 		var newContents = read(fn);
 
 		if (neq(oldContents, newContents)) { // HTT - requires actual file system watcher event with content change

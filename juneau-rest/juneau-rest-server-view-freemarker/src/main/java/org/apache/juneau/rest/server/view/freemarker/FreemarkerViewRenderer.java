@@ -206,6 +206,7 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 	// mount applies, returning the configuration-relative template name.  Delegates to the shared
 	// FileUtils.resolveVirtualPathSafely + FreemarkerDispatcher.stripBasePath used by the raw render path.
 	static String gateTemplateName(String basePath, String templateName) {
+		ViewTemplateNames.requirePlainName(templateName);
 		var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);
 		return FreemarkerDispatcher.stripBasePath(basePath, resolved);
 	}

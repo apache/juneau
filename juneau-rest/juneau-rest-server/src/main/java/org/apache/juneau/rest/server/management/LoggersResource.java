@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.servlet.*;
 
 /**
@@ -34,9 +35,8 @@ import org.apache.juneau.rest.server.servlet.*;
  * (mirrors {@code HealthResource}).
  *
  * <p>
- * As with the mixin flavor, the {@code GET} endpoints carry no built-in guard of their own &mdash; mount this
- * resource only under a subtree that's already covered by whatever authentication/authorization the app applies
- * to its management endpoints generally. See {@link LoggersMixin} for details.
+ * As with the mixin flavor, every endpoint is denied (403) until the importer registers a
+ * {@link RestGuardList} bean. See {@link LoggersMixin} for details.
  *
  * <h2 class='section'>Backend:</h2><ul>
  * 	<li>Drives {@link JulLogBackend java.util.logging} by default; declare a Logback / Log4j2 backend
@@ -51,7 +51,7 @@ import org.apache.juneau.rest.server.servlet.*;
  *
  * @since 10.0.0
  */
-@Rest(path="/loggers")
+@Rest(path="/loggers", guards=DenyAllGuard.class)
 public class LoggersResource extends BasicRestResource {
 
 	private final LoggersManager manager = new LoggersManager();

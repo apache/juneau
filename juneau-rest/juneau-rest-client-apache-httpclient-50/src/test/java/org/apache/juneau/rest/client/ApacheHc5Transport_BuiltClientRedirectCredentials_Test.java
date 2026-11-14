@@ -189,7 +189,7 @@ class ApacheHc5Transport_BuiltClientRedirectCredentials_Test {
 	}
 
 	private static final String[] CREDENTIALS = { "Authorization", "Bearer secret-token", "Cookie", "session=abc123", "X-API-Key", "k-1", "X-Trace", "t-1", "Proxy-Authorization", "Basic cHg6cHc=" };
-	private static final String STRIPPED = "200 GET auth=none|cookie=none|key=none|trace=t-1|proxy=none";
+	private static final String STRIPPED = "200 GET auth=none|cookie=none|key=none|trace=none|proxy=none";
 	private static final String KEPT = "200 GET auth=Bearer secret-token|cookie=session=abc123|key=k-1|trace=t-1|proxy=Basic cHg6cHc=";
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -245,7 +245,7 @@ class ApacheHc5Transport_BuiltClientRedirectCredentials_Test {
 
 	@Test
 	void b02_post307_crossOrigin_keepsMethodAndBody_withoutCredentials() throws Exception {
-		assertEquals("200 POST auth=none|cookie=none|key=none|trace=t-1|proxy=none|body=payload", send("POST", "/redirect-cross-307", "payload", null, CREDENTIALS));
+		assertEquals("200 POST auth=none|cookie=none|key=none|trace=none|proxy=none|body=payload", send("POST", "/redirect-cross-307", "payload", null, CREDENTIALS));
 	}
 
 	@Test
@@ -281,7 +281,7 @@ class ApacheHc5Transport_BuiltClientRedirectCredentials_Test {
 		// The other origin answers 503 with Retry-After: 0 once; the client's retry strategy resends the hop as a fresh copy
 		// of the unstripped redirect request, and that resend must be stripped too.  (The built client has no
 		// CredentialsProvider, so the auth-challenge resend is not reachable here; the caller-client tests cover it.)
-		var stripped = "auth=none|cookie=none|key=none|trace=t-1|proxy=none";
+		var stripped = "auth=none|cookie=none|key=none|trace=none|proxy=none";
 		assertEquals("200 GET " + stripped, get("/redirect-flaky", CREDENTIALS));
 		assertEquals(List.of(stripped, stripped), seenByB);
 	}

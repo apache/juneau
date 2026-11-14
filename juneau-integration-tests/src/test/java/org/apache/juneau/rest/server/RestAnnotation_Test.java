@@ -47,7 +47,7 @@ class RestAnnotation_Test extends TestBase {
 		.allowedParserOptions("e1")
 		.allowedSerializerOptions("e2")
 		.noInherit("e3")
-		.disableContentParam("a")
+		.allowContentParam("a")
 		.allowedHeaderParams("b")
 		.allowedMethodHeaders("c")
 		.allowedMethodParams("d")
@@ -93,7 +93,7 @@ class RestAnnotation_Test extends TestBase {
 		.allowedParserOptions("e1")
 		.allowedSerializerOptions("e2")
 		.noInherit("e3")
-		.disableContentParam("a")
+		.allowContentParam("a")
 		.allowedHeaderParams("b")
 		.allowedMethodHeaders("c")
 		.allowedMethodParams("d")
@@ -137,7 +137,7 @@ class RestAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"allowedHeaderParams,allowedMethodHeaders,allowedMethodParams,allowedParserOptions,allowedSerializerOptions,children,clientVersionHeader,config,consumes,converters,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestHeaders,defaultResponseHeaders,description,disableContentParam,encoders,guards,maxInput,messages,noInherit,parsers,partParser,partSerializer,path,produces,renderResponseStackTraces,responseProcessors,restOpArgs,roleGuard,rolesDeclared,serializers,siteName,staticFiles,swagger{contact{description,email,name,url},description,externalDocs{description,url},license{description,name,url},tags,termsOfService,title,value,version},swaggerProvider,title,uriAuthority,uriContext,uriRelativity,uriResolution",
+			"allowedHeaderParams,allowedMethodHeaders,allowedMethodParams,allowedParserOptions,allowedSerializerOptions,children,clientVersionHeader,config,consumes,converters,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestHeaders,defaultResponseHeaders,description,allowContentParam,encoders,guards,maxInput,messages,noInherit,parsers,partParser,partSerializer,path,produces,renderResponseStackTraces,responseProcessors,restOpArgs,roleGuard,rolesDeclared,serializers,siteName,staticFiles,swagger{contact{description,email,name,url},description,externalDocs{description,url},license{description,name,url},tags,termsOfService,title,value,version},swaggerProvider,title,uriAuthority,uriContext,uriRelativity,uriResolution",
 			"b,c,d,[e1],[e2],[RestAnnotation_Test],e,f,[g],[RestConverter],j,k,l,[m],[n],[o],[p],a,[Encoder],[RestGuard],q,r,[e3],[Parser],HttpPartParser,HttpPartSerializer,t,[u],v,[ResponseProcessor],[RestOpArg],w,x,[Serializer],y,StaticFiles,{{[],,,},[],{[],},{[],,},[],[],[],[],},BasicSwaggerProvider,[z],aa,bb,cc,dd");
 	}
 
@@ -165,7 +165,7 @@ class RestAnnotation_Test extends TestBase {
 		allowedParserOptions="e1",
 		allowedSerializerOptions="e2",
 		noInherit="e3",
-		disableContentParam="a",
+		allowContentParam="a",
 		allowedHeaderParams="b",
 		allowedMethodHeaders="c",
 		allowedMethodParams="d",
@@ -213,7 +213,7 @@ class RestAnnotation_Test extends TestBase {
 		allowedParserOptions="e1",
 		allowedSerializerOptions="e2",
 		noInherit="e3",
-		disableContentParam="a",
+		allowContentParam="a",
 		allowedHeaderParams="b",
 		allowedMethodHeaders="c",
 		allowedMethodParams="d",

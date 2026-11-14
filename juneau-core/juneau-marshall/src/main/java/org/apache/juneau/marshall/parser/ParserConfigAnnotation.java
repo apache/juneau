@@ -84,6 +84,7 @@ public class ParserConfigAnnotation {
 			integer(a.debugOutputLines(), "debugOutputLines").ifPresent(b::debugOutputLines);
 			type(a.listener()).ifPresent(b::listener);
 			bool(a.trimStrings()).ifPresent(b::trimStrings);
+			bool(a.includeInputInErrors()).ifPresent(b::includeInputInErrors);
 			bool(a.unbuffered()).ifPresent(b::unbuffered);
 			string(a.nulls()).map(Nulls::valueOf).ifPresent(b::nulls);
 		}

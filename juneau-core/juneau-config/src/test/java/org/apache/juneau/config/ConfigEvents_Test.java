@@ -26,19 +26,19 @@ class ConfigEvents_Test extends TestBase {
 
 	@Test void a01_isKeyModified_true() {
 		var events = new ConfigEvents();
-		events.add(ConfigEvent.setEntry("test.cfg", "S", "key1", "val", null, null, null));
+		events.add(ConfigEvent.setEntry("test.cfg", "S", "key1", "val", null, null));
 		assertTrue(events.isKeyModified("S", "key1"));
 	}
 
 	@Test void a02_isKeyModified_wrongKey() {
 		var events = new ConfigEvents();
-		events.add(ConfigEvent.setEntry("test.cfg", "S", "key1", "val", null, null, null));
+		events.add(ConfigEvent.setEntry("test.cfg", "S", "key1", "val", null, null));
 		assertFalse(events.isKeyModified("S", "key2"));
 	}
 
 	@Test void a03_isKeyModified_wrongSection() {
 		var events = new ConfigEvents();
-		events.add(ConfigEvent.setEntry("test.cfg", "S", "key1", "val", null, null, null));
+		events.add(ConfigEvent.setEntry("test.cfg", "S", "key1", "val", null, null));
 		assertFalse(events.isKeyModified("T", "key1"));
 	}
 
@@ -73,7 +73,7 @@ class ConfigEvents_Test extends TestBase {
 
 	@Test void a09_isSectionModified_multipleEvents() {
 		var events = new ConfigEvents();
-		events.add(ConfigEvent.setEntry("test.cfg", "A", "k", "v", null, null, null));
+		events.add(ConfigEvent.setEntry("test.cfg", "A", "k", "v", null, null));
 		events.add(ConfigEvent.removeSection("test.cfg", "B"));
 		assertTrue(events.isSectionModified("A"));
 		assertTrue(events.isSectionModified("B"));

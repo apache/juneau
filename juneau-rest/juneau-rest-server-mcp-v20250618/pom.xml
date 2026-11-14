@@ -45,6 +45,11 @@
 			<artifactId>juneau-bean-mcp-v20250618</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-jsonschema</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!--
 			Optional: backs the SpringMcpRestServlet convenience class. Marked optional so plain
 			(non-Spring) consumers of this module are not forced to pull Spring Boot transitively.

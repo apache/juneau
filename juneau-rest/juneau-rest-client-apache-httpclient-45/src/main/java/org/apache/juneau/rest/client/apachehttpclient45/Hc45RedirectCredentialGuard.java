@@ -79,8 +79,9 @@ final class Hc45RedirectCredentialGuard implements HttpRequestInterceptor {
 			context.setAttribute(ATTR_LEFT, Boolean.TRUE);
 		}
 		context.setAttribute(ATTR_STRIPPED, Boolean.TRUE);
-		for (var name : RedirectSecurity.stripOnCrossOrigin())
-			request.removeHeaders(name);
+		for (var h : request.getAllHeaders())
+			if (RedirectSecurity.mustStrip(h.getName(), null))
+				request.removeHeader(h);
 	}
 
 	/**
@@ -152,9 +153,9 @@ final class Hc45RedirectCredentialGuard implements HttpRequestInterceptor {
 					// Proxy-Authorization is addressed to the proxy, except inside a tunnel, where the proxy never sees this request.
 					var route = getHttpRoute();
 					var keepProxyAuth = route == null || ! route.isTunnelled();
-					for (var name : RedirectSecurity.stripOnCrossOrigin())
-						if (! (keepProxyAuth && "proxy-authorization".equalsIgnoreCase(name)))
-							request.removeHeaders(name);
+					for (var h : request.getAllHeaders())
+						if (RedirectSecurity.mustStrip(h.getName(), null) && ! (keepProxyAuth && "proxy-authorization".equalsIgnoreCase(h.getName())))
+							request.removeHeader(h);
 				}
 			}
 		}

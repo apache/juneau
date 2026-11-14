@@ -242,4 +242,51 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		});
 		assertEquals(Set.of("write"), acc.current(RES, ISS));
 	}
+
+	@Test void z01_allowListRefusesUnlistedScope() {
+		var reauthCalls = new AtomicInteger();
+		var authorizer = McpStepUpAuthorizer.create()
+			.resource(RES).issuer(ISS)
+			.previouslyRequestedScopes("read")
+			.allowedScopes("read", "write")
+			.reauthorizer(u -> reauthCalls.incrementAndGet())
+			.build();
+		assertThrowsWithMessage(McpAuthException.class, "allow-list", () -> authorizer.execute("op", () -> raise("admin")));
+		assertEquals(0, reauthCalls.get());
+	}
+
+	@Test void z02_allowListPermitsListedScope() {
+		var authorizer = McpStepUpAuthorizer.create()
+			.resource(RES).issuer(ISS)
+			.allowedScopes("write")
+			.reauthorizer(u -> {})
+			.build();
+		var calls = new AtomicInteger();
+		assertEquals("ok", authorizer.execute("op", () -> {
+			if (calls.incrementAndGet() == 1)
+				throw challenge("write");
+			return "ok";
+		}));
+	}
+
+	@Test void z03_scopeCountCapRefusesLargeUnion() {
+		var authorizer = McpStepUpAuthorizer.create()
+			.resource(RES).issuer(ISS)
+			.maxScopes(2)
+			.reauthorizer(u -> {})
+			.build();
+		assertThrowsWithMessage(McpAuthException.class, "maximum of 2", () -> authorizer.execute("op", () -> raise("a b c")));
+	}
+
+	@Test void z04_refusedChallengeDoesNotGrowStoredScopes() {
+		var accumulator = new McpScopeAccumulator();
+		var authorizer = McpStepUpAuthorizer.create()
+			.resource(RES).issuer(ISS)
+			.accumulator(accumulator)
+			.maxScopes(2)
+			.reauthorizer(u -> {})
+			.build();
+		assertThrows(McpAuthException.class, () -> authorizer.execute("op", () -> raise("a b c")));
+		assertTrue(accumulator.current(RES, ISS).isEmpty());
+	}
 }

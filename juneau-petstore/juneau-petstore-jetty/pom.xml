@@ -45,12 +45,6 @@
 			<artifactId>juneau-microservice-jetty</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- Provides the ConfigResource/LogsResource/ShutdownResource admin trio mounted by RootResources. -->
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-microservice-examples</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 
 		<!-- Test dependencies -->
 		<dependency>

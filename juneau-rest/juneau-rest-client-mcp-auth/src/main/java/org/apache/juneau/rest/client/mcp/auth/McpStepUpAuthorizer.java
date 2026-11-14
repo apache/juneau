@@ -57,6 +57,9 @@ import java.util.concurrent.*;
 })
 public class McpStepUpAuthorizer {
 
+	/** Default cap on the number of scopes in the accumulated step-up union. */
+	public static final int DEFAULT_MAX_SCOPES = 32;
+
 	/** A caller-supplied MCP call that throws {@link McpInsufficientScopeException} on a step-up challenge. */
 	@FunctionalInterface
 	public interface ScopedCall<T> {
@@ -99,6 +102,8 @@ public class McpStepUpAuthorizer {
 		Reauthorizer reauthorizer;
 		int maxAttempts = 3;
 		boolean attemptStepUp = true;
+		int maxScopes = DEFAULT_MAX_SCOPES;
+		Set<String> allowedScopes;
 		final Set<String> previouslyRequestedScopes = st();
 
 		/** Constructor. */
@@ -174,6 +179,38 @@ public class McpStepUpAuthorizer {
 		}
 
 		/**
+		 * Restricts the scopes a server challenge may add to the step-up union.
+		 *
+		 * <p>
+		 * When set, a challenge naming any scope outside this set (and outside the previously-requested scopes) aborts
+		 * the step-up with an {@link McpAuthException} instead of re-authorizing.  When unset, only the
+		 * {@link #maxScopes(int) scope-count cap} applies.
+		 *
+		 * @param values The permitted scopes.  Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder allowedScopes(String... values) {
+			reqnn("values", values);
+			var set = new LinkedHashSet<String>();
+			for (var v : values)
+				set.add(reqnb("scope", v));
+			allowedScopes = set;
+			return this;
+		}
+
+		/**
+		 * Caps the number of scopes the accumulated step-up union may contain.
+		 *
+		 * @param value The cap.  Must be &gt;= 1.  Defaults to {@value McpStepUpAuthorizer#DEFAULT_MAX_SCOPES}.
+		 * @return This object.
+		 */
+		public Builder maxScopes(int value) {
+			req(value >= 1, "maxScopes must be >= 1 (was %s)", value);
+			maxScopes = value;
+			return this;
+		}
+
+		/**
 		 * Seeds the scope accumulator with the client's previously-requested scopes so the first union preserves them.
 		 *
 		 * @param values The previously-requested scopes.
@@ -214,6 +251,8 @@ public class McpStepUpAuthorizer {
 	private final Reauthorizer reauthorizer;
 	private final int maxAttempts;
 	private final boolean attemptStepUp;
+	private final int maxScopes;
+	private final Set<String> allowedScopes;
 	private final ConcurrentMap<String,Integer> attemptsByOperation = new ConcurrentHashMap<>();
 
 	/**
@@ -228,6 +267,8 @@ public class McpStepUpAuthorizer {
 		this.reauthorizer = b.reauthorizer;
 		this.maxAttempts = b.maxAttempts;
 		this.attemptStepUp = b.attemptStepUp;
+		this.maxScopes = b.maxScopes;
+		this.allowedScopes = b.allowedScopes == null ? null : Set.copyOf(b.allowedScopes);
 	}
 
 	/**
@@ -242,6 +283,9 @@ public class McpStepUpAuthorizer {
 	 * @return The successful call result.
 	 * @throws McpAuthException If step-up is disabled, or the attempt cap is exceeded (permanent authorization failure).
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Branching is inherent to the step-up retry loop.
+	})
 	public <T> T execute(String operation, ScopedCall<T> call) {
 		reqnb("operation", operation);
 		reqnn("call", call);
@@ -261,7 +305,19 @@ public class McpStepUpAuthorizer {
 					throw new McpAuthException("Step-up authorization exhausted after " + maxAttempts
 						+ " attempt(s) for resource '" + resource + "' operation '" + operation
 						+ "'; treating as a permanent authorization failure", e);
-				var union = accumulator.accumulate(resource, issuer, e.challenge().scopes());
+				var requested = e.challenge().scopes();
+				if (allowedScopes != null && requested != null) {
+					var known = accumulator.current(resource, issuer);
+					for (var sc : requested)
+						if (! allowedScopes.contains(sc) && ! known.contains(sc))
+							throw new McpAuthException("Step-up authorization refused for operation '" + operation
+								+ "': the server requested a scope outside the configured allow-list", e);
+				}
+				// Check the cap before accumulating so a refused challenge leaves the stored scope set untouched.
+				if (McpScopeAccumulator.union(accumulator.current(resource, issuer), requested).size() > maxScopes)
+					throw new McpAuthException("Step-up authorization refused for operation '" + operation
+						+ "': the requested scope set exceeds the maximum of " + maxScopes, e);
+				var union = accumulator.accumulate(resource, issuer, requested);
 				reauthorizer.reauthorize(union);
 			}
 		}

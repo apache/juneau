@@ -30,6 +30,9 @@ import org.apache.juneau.rest.server.servlet.*;
  * Microservice debug utilities.
  *
  * <p>
+ * This resource has no authentication of its own.  Do not mount it where an untrusted caller can reach it without adding your own authentication.
+ *
+ * <p>
  * The {@code jetty-thread-dump} navlink is a plain {@code GET /jetty/dump}, which shows the dump.  Writing the dump to
  * <l>jetty-thread-dump.log</l> needs a real {@code POST /jetty/dump}; a link can't reach it, because the router refuses
  * any override of a {@code GET} to {@code POST}.  Put the resource behind a CSRF boundary before mounting it anywhere a

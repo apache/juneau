@@ -40,10 +40,10 @@ class RestContextProperties_Test extends TestBase {
 	@Test void a01_defaultsMatchOriginalValueAnnotationLiterals() {
 		var settings = Settings.create().build();
 		var p = ConfigPropertiesBinder.of(new RestContextProperties(), "RestContext").settings(settings).run();
-		assertEquals("Accept,Content-Type", p.getAllowedHeaderParams());
+		assertEquals("Accept", p.getAllowedHeaderParams());
 		assertEquals("", p.getAllowedMethodHeaders());
 		assertEquals("HEAD,OPTIONS", p.getAllowedMethodParams());
-		assertEquals("false", p.getDisableContentParamRaw());
+		assertEquals("false", p.getAllowContentParamRaw());
 		assertEquals("false", p.getRenderResponseStackTracesRaw());
 		assertEquals("false", p.getProblemDetailsRaw());
 		assertEquals("false", p.getDebugMarshallingRaw());

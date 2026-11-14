@@ -65,7 +65,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 
 	private static final Set<String> KNOWN_COLUMN_KEYS = Set.of(
 		"key", "data", "label", "title", "description", "search", "render", "href", "className",
-		"orderable", "searchable", "defaultVisible", "pinned", "formats",
+		"orderable", "searchable", "defaultVisible", "html", "pinned", "formats",
 		"searchType", "searchOperators", "customOperators");
 
 	/** Public no-arg constructor, required by {@link java.util.ServiceLoader}. */

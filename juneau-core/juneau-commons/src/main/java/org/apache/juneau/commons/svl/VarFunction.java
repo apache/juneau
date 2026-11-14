@@ -38,10 +38,11 @@ import java.util.*;
  *
  * <p>
  * Implementations can register through any of four discovery channels (later wins on name
- * collision):
+ * collision, except that {@code ServiceLoader} entries never replace an existing function):
  * <ol>
  * 	<li>The built-in catalog auto-registered by {@link VarResolver#DEFAULT}.
- * 	<li>{@code META-INF/services/org.apache.juneau.commons.svl.VarFunction} (Java {@link java.util.ServiceLoader}).
+ * 	<li>{@code META-INF/services/org.apache.juneau.commons.svl.VarFunction} (Java {@link ServiceLoader}),
+ * 		only when the resolver is built with {@code VarResolver.Builder.loadServices()}.
  * 	<li>{@code BeanStore.getBeans(VarFunction.class)} on the resolver's bean store.
  * 	<li>Explicit registrations via {@code VarResolver.Builder.functions(...)}.
  * </ol>

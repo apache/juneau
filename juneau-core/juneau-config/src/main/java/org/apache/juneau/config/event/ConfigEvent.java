@@ -42,7 +42,7 @@ public class ConfigEvent {
 	 * 	A new {@link ConfigEvent} object.
 	 */
 	public static ConfigEvent removeEntry(String config, String section, String key) {
-		return new ConfigEvent(REMOVE_ENTRY, config, section, key, null, null, null, null);
+		return new ConfigEvent(REMOVE_ENTRY, config, section, key, null, null, null);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class ConfigEvent {
 	 * 	A new {@link ConfigEvent} object.
 	 */
 	public static ConfigEvent removeSection(String config, String section) {
-		return new ConfigEvent(REMOVE_SECTION, config, section, null, null, null, null, null);
+		return new ConfigEvent(REMOVE_SECTION, config, section, null, null, null, null);
 	}
 
 	/**
@@ -75,16 +75,14 @@ public class ConfigEvent {
 	 * 	<br>Can be <jk>null</jk> to remove an entry.
 	 * @param comment
 	 * 	Optional comment string to add on the same line as the entry.
-	 * @param modifiers
-	 * 	Optional entry modifiers.
 	 * @param prelines
 	 * 	Comment lines that occur before this entry.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return
 	 * 	A new {@link ConfigEvent} object.
 	 */
-	public static ConfigEvent setEntry(String config, String section, String key, String value, String modifiers, String comment, List<String> prelines) {
-		return new ConfigEvent(SET_ENTRY, config, section, key, value, modifiers, comment, prelines);
+	public static ConfigEvent setEntry(String config, String section, String key, String value, String comment, List<String> prelines) {
+		return new ConfigEvent(SET_ENTRY, config, section, key, value, comment, prelines);
 	}
 
 	/**
@@ -101,7 +99,7 @@ public class ConfigEvent {
 	 * 	A new {@link ConfigEvent} object.
 	 */
 	public static ConfigEvent setSection(String config, String section, List<String> prelines) {
-		return new ConfigEvent(SET_SECTION, config, section, null, null, null, null, prelines);
+		return new ConfigEvent(SET_SECTION, config, section, null, null, null, prelines);
 	}
 
 	private final ConfigEventType type;
@@ -113,8 +111,6 @@ public class ConfigEvent {
 
 	private final List<String> preLines;
 
-	private final String modifiers;
-
 	/**
 	 * Constructor.
 	 * @param type - The event type.
@@ -122,14 +118,13 @@ public class ConfigEvent {
 	 * @param section - The section name.
 	 * @param key - The entry name.
 	 * @param value - The entry value.
-	 * @param modifiers - The entry modifiers.
 	 * @param comment - Optional comment string to add on the same line as the entry.
 	 * @param preLines - Optional comment lines that occur before this entry.
 	 */
 	@SuppressWarnings({
-		"java:S107" // Constructor requires 8 parameters for configuration event
+		"java:S107" // Constructor requires 7 parameters for configuration event
 	})
-	protected ConfigEvent(ConfigEventType type, String config, String section, String key, String value, String modifiers, String comment, List<String> preLines) {
+	protected ConfigEvent(ConfigEventType type, String config, String section, String key, String value, String comment, List<String> preLines) {
 		this.type = type;
 		this.config = config;
 		this.section = section;
@@ -137,7 +132,6 @@ public class ConfigEvent {
 		this.value = value;
 		this.comment = comment;
 		this.preLines = u(cp(preLines));
-		this.modifiers = modifiers;
 	}
 
 	/**
@@ -160,15 +154,6 @@ public class ConfigEvent {
 	 * @return The entry name.
 	 */
 	public String getKey() { return key; }
-
-	/**
-	 * Returns the modifiers on this entry.
-	 *
-	 * @return
-	 * 	The modifier characters.
-	 * 	<br>Can be <jk>null</jk> if the event has no modifiers (e.g. remove/section events, or entries set without modifiers).
-	 */
-	public String getModifiers() { return modifiers; }
 
 	/**
 	 * Returns the section or entry lines.
@@ -207,8 +192,6 @@ public class ConfigEvent {
 			case SET_ENTRY -> {
 				var out = new StringBuilder("SET(");
 				out.append(section + (section.isEmpty() ? "" : "/") + key);
-				if (nn(modifiers))
-					out.append(modifiers);
 				out.append(" = ");
 				var val = value == null ? "null" : value;
 				if (val.indexOf('\n') != -1)

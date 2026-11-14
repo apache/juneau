@@ -59,9 +59,7 @@ import org.junit.jupiter.api.parallel.*;
 @ResourceLock(Resources.SYSTEM_PROPERTIES)
 class RestContext_ConfigPropertiesOverride_Test extends TestBase {
 
-	// Intentionally NOT a ".cfg" extension: Config.getCandidateSystemDefaultConfigNames() treats any "*.cfg" file in
-	// the current directory as a system-default candidate, which would let this fixture permanently poison the
-	// process-lifetime Config.SYSTEM_DEFAULT memoizer for every no-config RestContext built later in the same fork.
+	// Intentionally NOT a ".cfg" extension, so the fixture can never be picked up as a default configuration file.
 	private static final String CFG = "rcpo-restcontext.ini";
 
 	@BeforeAll

@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.nio.file.*;
+import java.nio.file.attribute.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
@@ -313,8 +314,17 @@ class ConfigFileStoreTest extends TestBase {
 		assertFalse(new File(DIR, "../x.cfg").exists());
 	}
 
-	@Test void c02_absolutePath_allowed() throws Exception {
+	@Test void c02_absolutePath_rejectedByDefault() throws Exception {
 		var fs = FileStore.create().directory(DIR).build();
+		var abs = new File(DIR, "../abs.cfg").getCanonicalPath();
+		assertFalse(fs.exists(abs));
+		assertThrows(IllegalArgumentException.class, () -> fs.read(abs));
+		assertThrows(IllegalArgumentException.class, () -> fs.write(abs, null, "foo"));
+		assertFalse(new File(abs).exists());
+	}
+
+	@Test void c02b_absolutePath_allowedWhenOptedIn() throws Exception {
+		var fs = FileStore.create().directory(DIR).allowAbsoluteNames().build();
 		var abs = new File(DIR, "../abs.cfg").getCanonicalPath();
 		try {
 			assertFalse(fs.exists(abs));
@@ -324,6 +334,22 @@ class ConfigFileStoreTest extends TestBase {
 		} finally {
 			new File(abs).delete();
 		}
+	}
+
+	@Test void c02c_sameBasenameInDifferentDirectories_notAliased() throws Exception {
+		var fs = FileStore.create().directory(DIR).build();
+		assertNull(fs.write("d1/Same.cfg", null, "one"));
+		assertNull(fs.write("d2/Same.cfg", null, "two"));
+		assertEquals("one", fs.read("d1/Same.cfg"));
+		assertEquals("two", fs.read("d2/Same.cfg"));
+	}
+
+	@Test void c02d_newFilesAreOwnerOnly() throws Exception {
+		var fs = FileStore.create().directory(DIR).build();
+		assertNull(fs.write("Perm.cfg", null, "x"));
+		var p = new File(DIR, "Perm.cfg").toPath();
+		if (Files.getFileStore(p).supportsFileAttributeView("posix"))
+			assertEquals("rw-------", PosixFilePermissions.toString(Files.getPosixFilePermissions(p)));
 	}
 
 	@Test void c03_nestedName_allowed() throws Exception {
@@ -336,22 +362,22 @@ class ConfigFileStoreTest extends TestBase {
 	}
 
 	@Test void c04_symlinkEscape_rejected() throws Exception {
-		var outside = java.nio.file.Files.createTempDirectory("fs-outside");
+		var outside = Files.createTempDirectory("fs-outside");
 		try {
 			var fs = FileStore.create().directory(DIR).build();
 			DIR.mkdirs();
 			var link = DIR.toPath().resolve("lnk");
 			try {
-				java.nio.file.Files.createSymbolicLink(link, outside);
+				Files.createSymbolicLink(link, outside);
 			} catch (UnsupportedOperationException | IOException e) {
 				org.junit.jupiter.api.Assumptions.assumeTrue(false, "No symlink support");
 				return;
 			}
-			java.nio.file.Files.writeString(outside.resolve("S.cfg"), "secret");
+			Files.writeString(outside.resolve("S.cfg"), "secret");
 			assertThrows(IllegalArgumentException.class, () -> fs.read("lnk/S.cfg"));
 			assertThrows(IllegalArgumentException.class, () -> fs.write("lnk/New.cfg", null, "foo"));
 			assertFalse(fs.exists("lnk/S.cfg"));
-			assertFalse(java.nio.file.Files.exists(outside.resolve("New.cfg")));
+			assertFalse(Files.exists(outside.resolve("New.cfg")));
 		} finally {
 			deleteFile(outside.toFile());
 		}
@@ -369,7 +395,7 @@ class ConfigFileStoreTest extends TestBase {
 		assertDoesNotThrow(() -> fs.onFileEvent(e));
 	}
 
-	@Test void c06_pathTraversal_stillRejectedAfterRootDeleted() throws Exception {
+	@Test void c06_pathTraversal_stillRejectedAfterRootDeleted() {
 		var fs = FileStore.create().directory(DIR).build();
 		deleteFile(DIR);
 		assertThrows(IllegalArgumentException.class, () -> fs.read("../x.cfg"));

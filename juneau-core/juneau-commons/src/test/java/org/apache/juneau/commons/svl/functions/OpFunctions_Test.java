@@ -125,7 +125,9 @@ class OpFunctions_Test extends TestBase {
 		assertEquals(false, op("lt", 2L, 1L));
 		var le = assertThrows(VarResolverException.class, () -> op("lt", "a", 1L));
 		assertEquals("Operator '<' cannot compare String with Long", le.getMessage());
-		assertThrows(VarResolverException.class, () -> op("gt", new Object(), new Object()));
+		var o1 = new Object();
+		var o2 = new Object();
+		assertThrows(VarResolverException.class, () -> op("gt", o1, o2));
 	}
 
 	@Test void b03_nullStrictVsLenient() {

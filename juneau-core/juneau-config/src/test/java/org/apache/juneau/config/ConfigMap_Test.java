@@ -34,9 +34,6 @@ import org.junit.jupiter.api.*;
 })
 class ConfigMap_Test extends TestBase {
 
-	static final String ENCODED = "*";
-	static final String BASE64 = "^";
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Should be able to read non-existent files without errors.
 	//-----------------------------------------------------------------------------------------------------------------
@@ -417,17 +414,17 @@ class ConfigMap_Test extends TestBase {
 		assertEquals("foo", cm.getEntry("S1", "k1").getValue());
 		assertEquals("comment", cm.getEntry("S1", "k1").getComment());
 
-		cm.setEntry("S1", "k1", null, null, "newcomment", null);
+		cm.setEntry("S1", "k1", null, "newcomment", null);
 		assertEquals("[S1]|k1 = foo # newcomment|", pipedLines(cm));
 		assertEquals("foo", cm.getEntry("S1", "k1").getValue());
 		assertEquals("newcomment", cm.getEntry("S1", "k1").getComment());
 
-		cm.setEntry("S1", "k1", null, null, "", null);
+		cm.setEntry("S1", "k1", null, "", null);
 		assertEquals("[S1]|k1 = foo|", pipedLines(cm));
 		assertEquals("foo", cm.getEntry("S1", "k1").getValue());
 		assertEquals("", cm.getEntry("S1", "k1").getComment());
 
-		cm.setEntry("S1", "k1", null, null, null, null);
+		cm.setEntry("S1", "k1", null, null, null);
 		assertEquals("[S1]|k1 = foo|", pipedLines(cm));
 		assertEquals("foo", cm.getEntry("S1", "k1").getValue());
 		assertEquals("", cm.getEntry("S1", "k1").getComment());
@@ -471,9 +468,9 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", "v1b", null, null, null);
-		cm.setEntry("S1", "k2", null, null, null, null);
-		cm.setEntry("S1", "k3", "v3b", null, null, null);
+		cm.setEntry("S1", "k1", "v1b", null, null);
+		cm.setEntry("S1", "k2", null, null, null);
+		cm.setEntry("S1", "k3", "v3b", null, null);
 
 		assertEquals("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|", pipedLines(cm));
 
@@ -502,10 +499,10 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", "v1b", null, null, null);
-		cm.setEntry("S1", "k2", null, null, null, null);
-		cm.setEntry("S1", "k3", "v3b", null, null, null);
-		cm.setEntry("S1", "k4", "v4b", null, null, l("","#k4",""));
+		cm.setEntry("S1", "k1", "v1b", null, null);
+		cm.setEntry("S1", "k2", null, null, null);
+		cm.setEntry("S1", "k3", "v3b", null, null);
+		cm.setEntry("S1", "k4", "v4b", null, l("","#k4",""));
 
 		assertEquals("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|", pipedLines(cm));
 
@@ -521,8 +518,8 @@ class ConfigMap_Test extends TestBase {
 		var s = initStore("A.cfg");
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("", "k", "v1\nv2\nv3", null, null, null);
-		cm.setEntry("S1", "k1", "v1\nv2\nv3", null, null, null);
+		cm.setEntry("", "k", "v1\nv2\nv3", null, null);
+		cm.setEntry("S1", "k1", "v1\nv2\nv3", null, null);
 
 		assertEquals("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|", pipedLines(cm));
 
@@ -540,8 +537,8 @@ class ConfigMap_Test extends TestBase {
 		var s = initStore("A.cfg");
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("", "k", "v1 \n v2 \n v3", null, null, null);
-		cm.setEntry("S1", "k1", "v1\t\n\tv2\t\n\tv3", null, null, null);
+		cm.setEntry("", "k", "v1 \n v2 \n v3", null, null);
+		cm.setEntry("S1", "k1", "v1\t\n\tv2\t\n\tv3", null, null);
 
 		assertEquals("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|", pipedLines(cm));
 
@@ -715,11 +712,11 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", null, null, null, l("#k1"));
+		cm.setEntry("S1", "k1", null, null, l("#k1"));
 		assertEquals("[S1]|#k1|k1 = v1|", pipedLines(cm));
-		cm.setEntry("S1", "k1", null, null, null, Collections.<String>emptyList());
+		cm.setEntry("S1", "k1", null, null, Collections.<String>emptyList());
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
-		cm.setEntry("S1", "k1", null, null, null, null);
+		cm.setEntry("S1", "k1", null, null, null);
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
 	}
 
@@ -731,7 +728,7 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", null, null, null, l("#k1b"));
+		cm.setEntry("S1", "k1", null, null, l("#k1b"));
 		assertEquals("[S1]|#k1b|k1 = v1 # comment|", pipedLines(cm));
 	}
 
@@ -742,18 +739,18 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k2", null, null, null, l("#k2"));
+		cm.setEntry("S1", "k2", null, null, l("#k2"));
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
-		cm.setEntry("S1", "k2", null, null, null, Collections.<String>emptyList());
+		cm.setEntry("S1", "k2", null, null, Collections.<String>emptyList());
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
-		cm.setEntry("S1", "k2", null, null, null, null);
+		cm.setEntry("S1", "k2", null, null, null);
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
 
-		cm.setEntry("S2", "k2", null, null, null, l("#k2"));
+		cm.setEntry("S2", "k2", null, null, l("#k2"));
 		assertEquals("[S1]|k1 = v1|[S2]|", pipedLines(cm));
-		cm.setEntry("S2", "k2", null, null, null, Collections.<String>emptyList());
+		cm.setEntry("S2", "k2", null, null, Collections.<String>emptyList());
 		assertEquals("[S1]|k1 = v1|[S2]|", pipedLines(cm));
-		cm.setEntry("S2", "k2", null, null, null, null);
+		cm.setEntry("S2", "k2", null, null, null);
 		assertEquals("[S1]|k1 = v1|[S2]|", pipedLines(cm));
 	}
 
@@ -767,7 +764,7 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", "v2", null, null, null);
+		cm.setEntry("S1", "k1", "v2", null, null);
 		assertEquals("[S1]|k1 = v2|", pipedLines(cm));
 	}
 
@@ -779,7 +776,7 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", "v2", null, null, null);
+		cm.setEntry("S1", "k1", "v2", null, null);
 		assertEquals("[S1]|#k1|k1 = v2 # comment|", pipedLines(cm));
 	}
 
@@ -790,7 +787,7 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", null, null, null, null);
+		cm.setEntry("S1", "k1", null, null, null);
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
 	}
 
@@ -801,11 +798,11 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k2", "v2", null, null, null);
+		cm.setEntry("S1", "k2", "v2", null, null);
 		assertEquals("[S1]|k1 = v1|k2 = v2|", pipedLines(cm));
-		cm.setEntry("S1", "k2", null, null, null, null);
+		cm.setEntry("S1", "k2", null, null, null);
 		assertEquals("[S1]|k1 = v1|k2 = v2|", pipedLines(cm));
-		cm.setEntry("S1", "k2", null, null, null, null);
+		cm.setEntry("S1", "k2", null, null, null);
 		assertEquals("[S1]|k1 = v1|k2 = v2|", pipedLines(cm));
 	}
 
@@ -816,7 +813,7 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S2", "k2", "v2", null, null, null);
+		cm.setEntry("S2", "k2", "v2", null, null);
 		assertEquals("[S1]|k1 = v1|[S2]|k2 = v2|", pipedLines(cm));
 	}
 
@@ -832,7 +829,7 @@ class ConfigMap_Test extends TestBase {
 		);
 
 		for (var t : test) {
-			assertThrowsWithMessage(Exception.class, "Invalid section name:", ()->cm.setEntry(t, "k1", "foo", null, null, null));
+			assertThrowsWithMessage(Exception.class, "Invalid section name:", ()->cm.setEntry(t, "k1", "foo", null, null));
 		}
 	}
 
@@ -852,7 +849,7 @@ class ConfigMap_Test extends TestBase {
 		);
 
 		for (var t : test) {
-			assertThrowsWithMessage(Exception.class, "Invalid key name", ()->cm.setEntry("S1", t, "foo", null, null, null));
+			assertThrowsWithMessage(Exception.class, "Invalid key name", ()->cm.setEntry("S1", t, "foo", null, null));
 		}
 	}
 
@@ -864,7 +861,7 @@ class ConfigMap_Test extends TestBase {
 		var cm = s.getMap("A.cfg");
 
 		// If value has # in it, it should get escaped.
-		cm.setEntry("S1", "k1", "v1 # foo", null, null, null);
+		cm.setEntry("S1", "k1", "v1 # foo", null, null);
 		assertEquals("[S1]|k1 = v1 \\u0023 foo|", pipedLines(cm));
 	}
 
@@ -878,15 +875,15 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", null, null, "c1", null);
+		cm.setEntry("S1", "k1", null, "c1", null);
 		assertEquals("[S1]|k1 = v1 # c1|", pipedLines(cm));
 
-		cm.setEntry("S1", "k1", null, null, "", null);
+		cm.setEntry("S1", "k1", null, "", null);
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
 		cm.commit();
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
 
-		cm.setEntry("S1", "k1", null, null, null, null);
+		cm.setEntry("S1", "k1", null, null, null);
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
 	}
 
@@ -898,7 +895,7 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", null, null, "c2", null);
+		cm.setEntry("S1", "k1", null, "c2", null);
 		assertEquals("[S1]|#k1a|k1 = v1 # c2|", pipedLines(cm));
 	}
 
@@ -909,14 +906,14 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k2", null, null, "foo", null);
+		cm.setEntry("S1", "k2", null, "foo", null);
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
-		cm.setEntry("S1", "k2", null, null, null, null);
+		cm.setEntry("S1", "k2", null, null, null);
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
 
-		cm.setEntry("S2", "k2", null, null, "foo", null);
+		cm.setEntry("S2", "k2", null, "foo", null);
 		assertEquals("[S1]|k1 = v1|[S2]|", pipedLines(cm));
-		cm.setEntry("S2", "k2", null, null, null, null);
+		cm.setEntry("S2", "k2", null, null, null);
 		assertEquals("[S1]|k1 = v1|[S2]|", pipedLines(cm));
 	}
 
@@ -930,14 +927,14 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", "v2", null, null, null);
+		cm.setEntry("S1", "k1", "v2", null, null);
 		assertEquals("[S1]|k1 = v2|", pipedLines(cm));
 
-		cm.setEntry("S1", "k1", "v3", ENCODED, "c3", l("#k1a"));
-		assertEquals("[S1]|#k1a|k1<*> = v3 # c3|", pipedLines(cm));
+		cm.setEntry("S1", "k1", "v3", "c3", l("#k1a"));
+		assertEquals("[S1]|#k1a|k1 = v3 # c3|", pipedLines(cm));
 
-		cm.setEntry("S1", "k1", "v4", BASE64, "c4", l("#k1b"));
-		assertEquals("[S1]|#k1b|k1<^> = v4 # c4|", pipedLines(cm));
+		cm.setEntry("S1", "k1", "v4", "c4", l("#k1b"));
+		assertEquals("[S1]|#k1b|k1 = v4 # c4|", pipedLines(cm));
 	}
 
 	@Test void a38_setEntryOnExistingEntryWithAttributes() throws Exception {
@@ -948,14 +945,14 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", "v2", null, null, null);
+		cm.setEntry("S1", "k1", "v2", null, null);
 		assertEquals("[S1]|#k1|k1 = v2 # comment|", pipedLines(cm));
 
-		cm.setEntry("S1", "k1", "v3", ENCODED, "c3", l("#k1a"));
-		assertEquals("[S1]|#k1a|k1<*> = v3 # c3|", pipedLines(cm));
+		cm.setEntry("S1", "k1", "v3", "c3", l("#k1a"));
+		assertEquals("[S1]|#k1a|k1 = v3 # c3|", pipedLines(cm));
 
-		cm.setEntry("S1", "k1", "v4", BASE64, "c4", l("#k1b"));
-		assertEquals("[S1]|#k1b|k1<^> = v4 # c4|", pipedLines(cm));
+		cm.setEntry("S1", "k1", "v4", "c4", l("#k1b"));
+		assertEquals("[S1]|#k1b|k1 = v4 # c4|", pipedLines(cm));
 	}
 
 	@Test void a39_setEntryToNullOnExistingEntry() throws Exception {
@@ -965,7 +962,7 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", null, null, null, null);
+		cm.setEntry("S1", "k1", null, null, null);
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
 	}
 
@@ -976,11 +973,11 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k2", "v2", null, null, null);
+		cm.setEntry("S1", "k2", "v2", null, null);
 		assertEquals("[S1]|k1 = v1|k2 = v2|", pipedLines(cm));
-		cm.setEntry("S1", "k2", null, null, null, null);
+		cm.setEntry("S1", "k2", null, null, null);
 		assertEquals("[S1]|k1 = v1|k2 = v2|", pipedLines(cm));
-		cm.setEntry("S1", "k2", "", null, null, null);
+		cm.setEntry("S1", "k2", "", null, null);
 		assertEquals("[S1]|k1 = v1|k2 = |", pipedLines(cm));
 	}
 
@@ -991,7 +988,7 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S2", "k2", "v2", null, null, null);
+		cm.setEntry("S2", "k2", "v2", null, null);
 		assertEquals("[S1]|k1 = v1|[S2]|k2 = v2|", pipedLines(cm));
 	}
 
@@ -1007,7 +1004,7 @@ class ConfigMap_Test extends TestBase {
 		);
 
 		for (var t : test) {
-			assertThrowsWithMessage(Exception.class, "Invalid section name", ()->cm.setEntry(t, "k1", "foo", null, null, null));
+			assertThrowsWithMessage(Exception.class, "Invalid section name", ()->cm.setEntry(t, "k1", "foo", null, null));
 		}
 	}
 
@@ -1027,7 +1024,7 @@ class ConfigMap_Test extends TestBase {
 		);
 
 		for (var t : test) {
-			assertThrowsWithMessage(Exception.class, "Invalid key name", ()->cm.setEntry("S1", t, "foo", null, null, null));
+			assertThrowsWithMessage(Exception.class, "Invalid key name", ()->cm.setEntry("S1", t, "foo", null, null));
 		}
 	}
 
@@ -1039,42 +1036,30 @@ class ConfigMap_Test extends TestBase {
 		var cm = s.getMap("A.cfg");
 
 		// If value has # in it, it should get escaped.
-		cm.setEntry("S1", "k1", "v1 # foo", null, null, null);
+		cm.setEntry("S1", "k1", "v1 # foo", null, null);
 		assertEquals("[S1]|k1 = v1 \\u0023 foo|", pipedLines(cm));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Modifiers
+	// Entry modifiers are no longer supported
 	//-----------------------------------------------------------------------------------------------------------------
-	@Test void a45_modifiers() throws Exception {
+	@Test void a45_modifiersRejected() {
 		var s = initStore("A.cfg",
 			"[S1]",
 			"k1<^> = v1",
-			"k2<*> = v2",
-			"k3<*^> = v3"
+			"k2<*> = v2"
 		);
-		var cm = s.getMap("A.cfg");
-
-		assertEquals("[S1]|k1<^> = v1|k2<*> = v2|k3<*^> = v3|", pipedLines(cm));
-		assertEquals("^", cm.getEntry("S1", "k1").getModifiers());
-		assertEquals("*", cm.getEntry("S1", "k2").getModifiers());
-		assertEquals("*^", cm.getEntry("S1", "k3").getModifiers());
-
-		cm.setEntry("S1", "k1", "v1", "#$%&*+^@~", null, null);
-		assertEquals("[S1]|k1<#$%&*+^@~> = v1|k2<*> = v2|k3<*^> = v3|", pipedLines(cm));
+		assertThrowsWithMessage(Exception.class, "Entry modifiers were removed in 10.0", () -> s.getMap("A.cfg"));
 	}
 
-	@Test void a46_invalidModifier() throws Exception {
+	@Test void a46_starSuffixIsPartOfKey() throws Exception {
 		var s = initStore("A.cfg",
 			"[S1]",
 			"k1^ = v1",
-			"k2* = v2",
-			"k3*^ = v3"
+			"k2* = v2"
 		);
 		var cm = s.getMap("A.cfg");
-
-		// This is okay.
-		assertDoesNotThrow(()->cm.setEntry("S1", "k1", "v1", "", null, null));
+		assertEquals("v2", cm.getEntry("S1", "k2*").getValue());
 	}
 
 	@Test void a47_pathSectionName() throws Exception {

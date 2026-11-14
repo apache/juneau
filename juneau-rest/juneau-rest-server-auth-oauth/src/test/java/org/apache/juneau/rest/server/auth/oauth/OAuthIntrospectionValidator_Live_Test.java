@@ -72,7 +72,8 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 		return OAuthIntrospectionValidator.create()
 			.introspectionEndpoint(endpoint())
 			.clientId("client")
-			.clientSecret("secret");
+			.clientSecret("secret")
+			.anyAudience();
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -121,14 +122,13 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// D: null subject → "<no-sub>" (line 361)
+	// D: missing subject is rejected
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_nullSubject_noSubPlaceholder() throws Exception {
+	@Test void d01_nullSubject_rejected() {
 		nextResponse = "{\"active\":true,\"scope\":\"read\"}";
 		var v = validatorBuilder().build();
-		var p = v.validate("tok-nosub");
-		assertEquals("<no-sub>", p.getName());
+		assertThrows(AuthenticationException.class, () -> v.validate("tok-nosub"));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

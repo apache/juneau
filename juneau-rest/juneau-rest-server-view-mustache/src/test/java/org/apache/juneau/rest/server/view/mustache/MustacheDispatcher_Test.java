@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.io.*;
+import java.nio.file.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
@@ -125,16 +126,26 @@ class MustacheDispatcher_Test extends TestBase {
 	 * Section B: render
 	 * ---------------------------------------------------------------------------------------- */
 
-	@Test void b01_render_nullPathTreatedAsEmpty() throws Exception {
+	@Test void b01_render_nullPathIsNotFound() throws Exception {
 		var dispatcher = MustacheDispatcher.create().build();
 		var beanStore = new BasicBeanStore();
-		var mustache = noopMustache();
-		beanStore.addBean(MustacheFactory.class, mockFactory(mustache));
+		beanStore.addBean(MustacheFactory.class, mockFactory(noopMustache()));
+		var req = mockRequest(beanStore);
 		var res = mockResponse();
 
-		dispatcher.render(null, mockRequest(beanStore), res);
+		assertThrows(NotFound.class, () -> dispatcher.render(null, req, res));
+	}
 
-		verify(res).setHeader("Content-Type", MustacheViewRenderer.DEFAULT_CONTENT_TYPE);
+	@Test void b07_render_nonTemplateNamesAreNotFound() throws Exception {
+		var dispatcher = MustacheDispatcher.create().build();
+		var beanStore = new BasicBeanStore();
+		beanStore.addBean(MustacheFactory.class, mockFactory(noopMustache()));
+		var req = mockRequest(beanStore);
+		var res = mockResponse();
+
+		assertThrows(NotFound.class, () -> dispatcher.render("file:hello.mustache", req, res));
+		assertThrows(NotFound.class, () -> dispatcher.render("hello.txt", req, res));
+		assertThrows(NotFound.class, () -> dispatcher.render("a\\b.mustache", req, res));
 	}
 
 	@Test void b02_render_explicitContentTypeNotOverridden() throws Exception {
@@ -144,7 +155,7 @@ class MustacheDispatcher_Test extends TestBase {
 		var res = mockResponse();
 		when(res.containsHeader("Content-Type")).thenReturn(true);
 
-		dispatcher.render("hello", mockRequest(beanStore), res);
+		dispatcher.render("hello.mustache", mockRequest(beanStore), res);
 
 		verify(res, never()).setHeader(eq("Content-Type"), any());
 	}
@@ -157,7 +168,7 @@ class MustacheDispatcher_Test extends TestBase {
 		when(res.getWriter()).thenThrow(new IOException("broken pipe"));
 
 		var req = mockRequest(beanStore);
-		var ex = assertThrows(IOException.class, () -> dispatcher.render("hello", req, res));
+		var ex = assertThrows(IOException.class, () -> dispatcher.render("hello.mustache", req, res));
 		assertEquals("broken pipe", ex.getMessage());
 	}
 
@@ -170,7 +181,7 @@ class MustacheDispatcher_Test extends TestBase {
 
 		var req = mockRequest(beanStore);
 		var res = mockResponse();
-		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello", req, res));
+		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello.mustache", req, res));
 		assertTrue(ex.getMessage().contains("Mustache engine"));
 	}
 
@@ -183,7 +194,7 @@ class MustacheDispatcher_Test extends TestBase {
 
 		var req = mockRequest(beanStore);
 		var res = mockResponse();
-		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello", req, res));
+		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello.mustache", req, res));
 		assertTrue(ex.getMessage().contains("Mustache render failed"));
 	}
 
@@ -194,5 +205,38 @@ class MustacheDispatcher_Test extends TestBase {
 		var req = mockRequest(beanStore);
 		var res = mockResponse();
 		assertThrows(Forbidden.class, () -> dispatcher.render("../../../etc/passwd", req, res));
+	}
+
+	@Test void b08_render_customSuffixDefinesTheServedExtension() throws Exception {
+		var dispatcher = MustacheDispatcher.create().templateSuffix(".mst").build();
+		var mustache = noopMustache();
+		var factory = mockFactory(mustache);
+		var beanStore = new BasicBeanStore();
+		beanStore.addBean(MustacheFactory.class, factory);
+
+		dispatcher.render("hello", mockRequest(beanStore), mockResponse());
+		verify(factory).compile("hello.mst");
+
+		// Without a configured suffix only ".mustache" names are served.
+		var plain = MustacheDispatcher.create().build();
+		var plainReq = mockRequest(beanStore);
+		var plainRes = mockResponse();
+		assertThrows(NotFound.class, () -> plain.render("hello.mst", plainReq, plainRes));
+		plain.render("hello.mustache", mockRequest(beanStore), mockResponse());
+		verify(factory).compile("hello.mustache");
+	}
+
+	@Test void z01_defaultFactory_doesNotResolveFileSystemNames() throws Exception {
+		var f = File.createTempFile("tpl", ".mustache");
+		try {
+			Files.writeString(f.toPath(), "hello");
+			var factory = MustacheDispatcher.create().build().buildDefaultFactory();
+			var absolute = f.getAbsolutePath();
+			var fileUri = "file:" + absolute;
+			assertThrows(MustacheNotFoundException.class, () -> factory.compile(absolute));
+			assertThrows(MustacheNotFoundException.class, () -> factory.compile(fileUri));
+		} finally {
+			f.delete();
+		}
 	}
 }

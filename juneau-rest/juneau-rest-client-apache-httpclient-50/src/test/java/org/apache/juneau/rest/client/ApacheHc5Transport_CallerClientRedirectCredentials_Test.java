@@ -247,7 +247,7 @@ class ApacheHc5Transport_CallerClientRedirectCredentials_Test {
 	}
 
 	private static final String[] CREDENTIALS = { "Authorization", "Bearer secret-token", "Cookie", "session=abc123", "X-API-Key", "k-1", "X-Trace", "t-1" };
-	private static final String STRIPPED = "200 auth=none|cookie=none|key=none|trace=t-1";
+	private static final String STRIPPED = "200 auth=none|cookie=none|key=none|trace=none";
 	private static final String KEPT = "200 auth=Bearer secret-token|cookie=session=abc123|key=k-1|trace=t-1";
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -327,7 +327,7 @@ class ApacheHc5Transport_CallerClientRedirectCredentials_Test {
 			.setDefaultCredentialsProvider(CredentialsProviderBuilder.create().add(new HttpHost("http", "127.0.0.1", portB), "u", "p".toCharArray()).build())
 			.build();
 		assertEquals(STRIPPED, get(client, "/redirect-challenge", CREDENTIALS));
-		assertEquals(List.of("auth=none|cookie=none|key=none|trace=t-1", "auth=none|cookie=none|key=none|trace=t-1"), seenByB);
+		assertEquals(List.of("auth=none|cookie=none|key=none|trace=none", "auth=none|cookie=none|key=none|trace=none"), seenByB);
 	}
 
 	@Test
@@ -350,7 +350,7 @@ class ApacheHc5Transport_CallerClientRedirectCredentials_Test {
 		// The other origin answers 503 with Retry-After: 0 once; the client's retry strategy resends the hop as a fresh copy
 		// of the unstripped redirect request, and that resend must be stripped too.
 		assertEquals(STRIPPED, get(lax(), "/redirect-flaky", CREDENTIALS));
-		assertEquals(List.of("auth=none|cookie=none|key=none|trace=t-1", "auth=none|cookie=none|key=none|trace=t-1"), seenByB);
+		assertEquals(List.of("auth=none|cookie=none|key=none|trace=none", "auth=none|cookie=none|key=none|trace=none"), seenByB);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

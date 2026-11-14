@@ -260,8 +260,15 @@ public final class SqlBeanQuerySession<T> extends BeanQuerySession<T> {
 	}
 
 	private BeanQueryExecutionException failed(SqlStatement stmt, Throwable e) {
-		LOG.log(Level.WARNING, e, () -> "Bean query failed: " + stmt.sql());  // SQL text with placeholders; the driver's message may include values.
+		// Only the exception class and SQLState are logged: the driver's message and stack may include bound values.
+		LOG.log(Level.INFO, () -> "Bean query failed (" + describe(e) + "): " + stmt.sql());
 		return new BeanQueryExecutionException(e, "Query execution failed for table '%s'.", context.table);
+	}
+
+	static String describe(Throwable e) {
+		var state = e instanceof SQLException se ? se.getSQLState() : null;
+		var text = e.getClass().getName() + (state == null ? "" : ", SQLState " + state);
+		return text.replaceAll("\\p{Cntrl}", "?");
 	}
 
 	private <R> Stream<R> stream(Cursor<R> cursor) {  // Not static: Cursor is an inner class.

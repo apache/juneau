@@ -363,29 +363,41 @@ public class VarResolver {
 		}
 
 		/**
-		 * Registers the built-in {@link VarFunction} catalog plus any third-party functions
-		 * discovered via {@link ServiceLoader#load(Class)} on {@link VarFunction}.
+		 * Registers the built-in {@link VarFunction} catalog.
 		 *
 		 * <p>
-		 * Registration order is:
-		 * <ol>
-		 * 	<li>Built-in catalog — string, type-conversion, arithmetic, boolean, conditional,
-		 * 		regex, encoding, date, random/UUID, and JSON-navigation functions.
-		 * 	<li>Third-party functions from {@code META-INF/services/org.apache.juneau.commons.svl.VarFunction}.
-		 * </ol>
-		 *
-		 * <p>
-		 * Later registrations win on name collision — third-party {@code ServiceLoader} entries
-		 * override built-ins, and explicit {@link #functions(VarFunction...)} /
-		 * {@link #functions(Class...)} calls override both.
+		 * Functions on the classpath that are advertised through {@link ServiceLoader} are <i>not</i> registered
+		 * by this method; call {@link #loadServices()} to opt in.
+		 * Explicit {@link #functions(VarFunction...)} / {@link #functions(Class...)} calls made after this one
+		 * override built-ins on name collision.
 		 *
 		 * @return This builder.
 		 */
 		public Builder defaultFunctions() {
 			for (var c : BUILTIN_FUNCTION_CLASSES)
 				functions.add(BeanInstantiator.of(VarFunction.class, beanStore).type(c).run());
-			for (var f : ServiceLoader.load(VarFunction.class, VarResolver.class.getClassLoader()))
-				functions.add(f);
+			return this;
+		}
+
+		/**
+		 * Registers third-party {@link VarFunction} implementations discovered through {@link ServiceLoader}
+		 * ({@code META-INF/services/org.apache.juneau.commons.svl.VarFunction}).
+		 *
+		 * <p>
+		 * This is opt-in.  A discovered function never replaces a function that is already registered
+		 * under the same name (including the built-ins registered by {@link #defaultFunctions()}), so call
+		 * this method after {@link #defaultFunctions()}.
+		 *
+		 * @return This builder.
+		 */
+		public Builder loadServices() {
+			var existing = new HashSet<String>();
+			for (var f : functions)
+				existing.add(f.name());
+			for (var f : ServiceLoader.load(VarFunction.class, VarResolver.class.getClassLoader())) {
+				if (existing.add(f.name()))
+					functions.add(f);
+			}
 			return this;
 		}
 
@@ -404,8 +416,7 @@ public class VarResolver {
 	 *
 	 * <p>
 	 * Order matters only for collisions inside the built-in catalog itself (and there should be
-	 * none). Third-party functions discovered via {@link ServiceLoader} register <i>after</i>
-	 * this list, so they override built-ins on name collision.
+	 * none).
 	 */
 	private static final Class<? extends VarFunction>[] BUILTIN_FUNCTION_CLASSES = (Class<? extends VarFunction>[]) concat(
 		StringFunctions.ALL,

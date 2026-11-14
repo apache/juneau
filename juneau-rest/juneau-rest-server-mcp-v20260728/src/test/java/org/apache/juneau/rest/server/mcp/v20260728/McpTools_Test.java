@@ -26,6 +26,7 @@ import java.util.function.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.mcp.McpContentBlock;
@@ -44,6 +45,16 @@ import org.junit.jupiter.api.*;
  * operations, including bounded input-schema validation and the v2 {@code -32602} tool errors.
  */
 class McpTools_Test {
+
+	private static LogRecordCapture.Quiet quietMcp;
+
+	@BeforeAll static void silenceMcpWarnings() {
+		quietMcp = LogRecordCapture.quiet(McpRevision.class);
+	}
+
+	@AfterAll static void restoreMcpLogging() {
+		quietMcp.close();
+	}
 
 	private final BeanStore ctx = new BasicBeanStore();
 
@@ -184,7 +195,7 @@ class McpTools_Test {
 		var config = new McpServerConfig().addTool(tool("boom", args -> { throw new RuntimeException("kaboom"); }));
 		var resp = send(config, req(1, "tools/call", JsonMap.of("name", "boom")), hdrs("tools/call", "boom"));
 		assertEquals(-32603, resp.getError().getCode());
-		assertEquals("kaboom", resp.getError().getMessage());
+		assertEquals("Internal error", resp.getError().getMessage());
 	}
 
 	// -------- input-schema validation runs before the handler ---------

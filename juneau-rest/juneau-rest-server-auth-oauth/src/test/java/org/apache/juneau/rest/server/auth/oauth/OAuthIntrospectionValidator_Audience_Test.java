@@ -68,7 +68,8 @@ class OAuthIntrospectionValidator_Audience_Test extends TestBase {
 		return OAuthIntrospectionValidator.create()
 			.introspectionEndpoint(endpoint())
 			.clientId("client")
-			.clientSecret("secret");
+			.clientSecret("secret")
+			.anyAudience();
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

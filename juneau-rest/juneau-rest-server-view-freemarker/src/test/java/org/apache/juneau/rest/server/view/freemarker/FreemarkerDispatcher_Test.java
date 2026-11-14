@@ -31,6 +31,8 @@ import org.junit.jupiter.api.*;
 import freemarker.cache.*;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapperBuilder;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 /**
  * Unit tests for {@link FreemarkerDispatcher#render(String, RestRequest, RestResponse) render(...)} and
@@ -78,7 +80,7 @@ class FreemarkerDispatcher_Test extends TestBase {
 	@Test void a01_resolveConfiguration_prefersRegisteredBean() {
 		var dispatcher = FreemarkerDispatcher.create().build();
 		var beanStore = new BasicBeanStore();
-		var registered = stringLoaderConfig("hello", "Hi!");
+		var registered = stringLoaderConfig("hello.ftlh", "Hi!");
 		beanStore.addBean(Configuration.class, registered);
 
 		assertSame(registered, dispatcher.resolveConfiguration(mockRequest(beanStore)));
@@ -100,25 +102,36 @@ class FreemarkerDispatcher_Test extends TestBase {
 	 * Section B: render
 	 * ---------------------------------------------------------------------------------------- */
 
-	@Test void b01_render_nullPathTreatedAsEmpty() throws Exception {
+	@Test void b01_render_nullPathIsNotFound() throws Exception {
 		var dispatcher = FreemarkerDispatcher.create().build();
 		var beanStore = new BasicBeanStore();
 		beanStore.addBean(Configuration.class, stringLoaderConfig("", "root template"));
+		var req = mockRequest(beanStore);
 		var res = mockResponse();
 
-		dispatcher.render(null, mockRequest(beanStore), res);
+		assertThrows(NotFound.class, () -> dispatcher.render(null, req, res));
+	}
 
-		verify(res).setHeader("Content-Type", FreemarkerViewRenderer.DEFAULT_CONTENT_TYPE);
+	@Test void b06_render_nonTemplateNamesAreNotFound() throws Exception {
+		var dispatcher = FreemarkerDispatcher.create().build();
+		var beanStore = new BasicBeanStore();
+		beanStore.addBean(Configuration.class, stringLoaderConfig("hello.ftlh", "Hi!"));
+		var req = mockRequest(beanStore);
+		var res = mockResponse();
+
+		assertThrows(NotFound.class, () -> dispatcher.render("file:hello.ftlh", req, res));
+		assertThrows(NotFound.class, () -> dispatcher.render("hello.txt", req, res));
+		assertThrows(NotFound.class, () -> dispatcher.render("a\\b.ftlh", req, res));
 	}
 
 	@Test void b02_render_explicitContentTypeNotOverridden() throws Exception {
 		var dispatcher = FreemarkerDispatcher.create().build();
 		var beanStore = new BasicBeanStore();
-		beanStore.addBean(Configuration.class, stringLoaderConfig("hello", "Hi!"));
+		beanStore.addBean(Configuration.class, stringLoaderConfig("hello.ftlh", "Hi!"));
 		var res = mockResponse();
 		when(res.containsHeader("Content-Type")).thenReturn(true);
 
-		dispatcher.render("hello", mockRequest(beanStore), res);
+		dispatcher.render("hello.ftlh", mockRequest(beanStore), res);
 
 		verify(res, never()).setHeader(eq("Content-Type"), any());
 	}
@@ -126,25 +139,25 @@ class FreemarkerDispatcher_Test extends TestBase {
 	@Test void b03_render_missingTemplate_propagatesIOException() throws Exception {
 		var dispatcher = FreemarkerDispatcher.create().build();
 		var beanStore = new BasicBeanStore();
-		// Empty StringTemplateLoader -> getTemplate("does-not-exist") throws TemplateNotFoundException,
+		// Empty StringTemplateLoader -> getTemplate("does-not-exist.ftlh") throws TemplateNotFoundException,
 		// an IOException subclass, which render()'s "catch (IOException | BasicHttpException ex)" rethrows as-is.
-		beanStore.addBean(Configuration.class, stringLoaderConfig("hello", "Hi!"));
+		beanStore.addBean(Configuration.class, stringLoaderConfig("hello.ftlh", "Hi!"));
 
 		var req = mockRequest(beanStore);
 		var res = mockResponse();
-		assertThrows(IOException.class, () -> dispatcher.render("does-not-exist", req, res));
+		assertThrows(IOException.class, () -> dispatcher.render("does-not-exist.ftlh", req, res));
 	}
 
 	@Test void b04_render_linkageErrorFromEngine_wrapsWithNoEngineDiagnostic() throws Exception {
 		var dispatcher = FreemarkerDispatcher.create().build();
 		var beanStore = new BasicBeanStore();
 		var cfg = mock(Configuration.class);
-		when(cfg.getTemplate("hello")).thenThrow(new NoClassDefFoundError("freemarker.core.Environment"));
+		when(cfg.getTemplate("hello.ftlh")).thenThrow(new NoClassDefFoundError("freemarker.core.Environment"));
 		beanStore.addBean(Configuration.class, cfg);
 
 		var req = mockRequest(beanStore);
 		var res = mockResponse();
-		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello", req, res));
+		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello.ftlh", req, res));
 		assertTrue(ex.getMessage().contains("FreeMarker engine"));
 	}
 
@@ -152,12 +165,12 @@ class FreemarkerDispatcher_Test extends TestBase {
 		var dispatcher = FreemarkerDispatcher.create().build();
 		var beanStore = new BasicBeanStore();
 		var cfg = mock(Configuration.class);
-		when(cfg.getTemplate("hello")).thenThrow(new RuntimeException("boom"));
+		when(cfg.getTemplate("hello.ftlh")).thenThrow(new RuntimeException("boom"));
 		beanStore.addBean(Configuration.class, cfg);
 
 		var req = mockRequest(beanStore);
 		var res = mockResponse();
-		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello", req, res));
+		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello.ftlh", req, res));
 		assertTrue(ex.getMessage().contains("FreeMarker render failed"));
 	}
 
@@ -184,6 +197,21 @@ class FreemarkerDispatcher_Test extends TestBase {
 		var dispatcher = FreemarkerDispatcher.create().cacheTemplates(true).build();
 		var cfg = dispatcher.buildDefaultConfiguration();
 		assertEquals(Long.MAX_VALUE, cfg.getTemplateUpdateDelayMilliseconds());
+	}
+
+	@Test void c03_buildDefaultConfiguration_restrictsClassInstantiation() throws Exception {
+		var cfg = FreemarkerDispatcher.create().build().buildDefaultConfiguration();
+		var t = new Template("t", new StringReader("${\"java.lang.Object\"?new()}"), cfg);
+		assertThrows(TemplateException.class, () -> t.process(new HashMap<String,Object>(), new StringWriter()));
+	}
+
+	@Test void c04_buildDefaultConfiguration_disablesApiBuiltin() throws Exception {
+		var cfg = FreemarkerDispatcher.create().build().buildDefaultConfiguration();
+		assertFalse(cfg.isAPIBuiltinEnabled());
+		var t = new Template("t", new StringReader("${m?api.size()}"), cfg);
+		var model = new HashMap<String,Object>();
+		model.put("m", new HashMap<String,Object>());
+		assertThrows(TemplateException.class, () -> t.process(model, new StringWriter()));
 	}
 
 	/* ---------------------------------------------------------------------------------------- *

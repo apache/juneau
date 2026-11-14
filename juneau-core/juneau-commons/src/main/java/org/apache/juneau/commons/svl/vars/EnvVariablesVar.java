@@ -56,6 +56,16 @@ public class EnvVariablesVar extends DefaultingVar {
 		super(NAME);
 	}
 
+	/**
+	 * Values from this source are never re-resolved: a value containing <c>${...}</c> is returned literally.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* Overridden from Var */
+	protected boolean allowRecurse() {
+		return false;
+	}
+
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String varVal) {
 		var v = source.get(varVal);

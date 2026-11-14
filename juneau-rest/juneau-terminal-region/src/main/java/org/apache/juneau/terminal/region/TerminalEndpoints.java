@@ -53,6 +53,9 @@ public final class TerminalEndpoints {
 	/** Classpath location of the terminal stylesheet. */
 	static final String CSS_RESOURCE = "/org/apache/juneau/terminal/juneau-terminal.css";
 
+	/** The most bytes the raw download streams (64 MiB). */
+	public static final long RAW_MAX_BYTES = 64L * 1024 * 1024;
+
 	private static final String JS_CONTENT_TYPE = "text/javascript;charset=utf-8";
 	private static final String CSS_CONTENT_TYPE = "text/css;charset=utf-8";
 	private static final String CACHE_CONTROL = "max-age=86400, public";
@@ -123,6 +126,24 @@ public final class TerminalEndpoints {
 	}
 
 	/**
+	 * Adapts a request to the transport-neutral caller handed to {@link TerminalAccess}.
+	 *
+	 * @param req The request.
+	 * @return The caller.
+	 */
+	public static TerminalCaller caller(RestRequest req) {
+		return new TerminalCaller() {
+			@Override public String principalName() {
+				var p = req.getUserPrincipal();
+				return p == null ? null : p.getName();
+			}
+			@Override public Object attribute(String name) {
+				return req.getAttribute(name).orElse(null);
+			}
+		};
+	}
+
+	/**
 	 * Serves every byte still held as an attachment named {@code <id>.log}.
 	 *
 	 * <p>
@@ -130,7 +151,7 @@ public final class TerminalEndpoints {
 	 * does.
 	 *
 	 * <p>
-	 * The download is not capped and takes no range: it streams the whole log, {@link TerminalSource#MAX_READ_BYTES}
+	 * The download takes no range and is capped at {@link #RAW_MAX_BYTES}: it streams the log, {@link TerminalSource#MAX_READ_BYTES}
 	 * at a time, up to the end at the time of the request.  The id is checked here as well as by
 	 * {@link TerminalMixin}, because it becomes the file name.
 	 *
@@ -149,7 +170,7 @@ public final class TerminalEndpoints {
 		res.setHeader("Content-Disposition", "attachment; filename=\"" + id + ".log\"");
 		res.setContentType(OCTETS);
 		var out = res.getOutputStream();
-		src.copyTo(out);
+		src.copyTo(out, RAW_MAX_BYTES);
 		out.flush();
 	}
 

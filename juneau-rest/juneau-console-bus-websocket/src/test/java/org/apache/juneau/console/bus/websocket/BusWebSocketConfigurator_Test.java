@@ -48,7 +48,7 @@ import jakarta.websocket.server.*;
 })
 class BusWebSocketConfigurator_Test extends TestBase {
 
-	@Rest
+	@Rest(allowCrossSite="true")
 	public static class R extends BasicRestServlet implements BusEventsMixin {
 		private static final long serialVersionUID = 1L;
 		static volatile ServerBus bus;
@@ -67,7 +67,7 @@ class BusWebSocketConfigurator_Test extends TestBase {
 	private ServerBus bus;
 
 	private static BusPolicy.Builder policy() {
-		return BusPolicy.create().downstream("ops.jobs", true).upstream("ops.cancel-all", (s, t, p) -> {});
+		return BusPolicy.create().anyCaller().downstream("ops.jobs", true).upstream("ops.cancel-all", (s, t, p) -> {});
 	}
 
 	private void use(BusPolicy p) {

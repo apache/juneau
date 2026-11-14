@@ -136,6 +136,82 @@ public @interface Rest {
 	String allowedMethodHeaders() default "";
 
 	/**
+	 * Allowed response headers.
+	 *
+	 * <p>
+	 * A comma-delimited list of response header names that a client may ask the server to add to its own response by
+	 * passing them in an <c>x-response-headers</c> request header (or query parameter, when allowed) in URL-encoded
+	 * object notation.
+	 * <br>
+	 * For example:
+	 * <p class='bcode'>
+	 * 	x-response-headers: X-Custom=hi
+	 * </p>
+	 *
+	 * <p>
+	 * This feature is off by default (empty list); when the request carries an <c>x-response-headers</c> value, it is
+	 * ignored unless the header name appears in this list.
+	 * <br>The headers <c>Set-Cookie</c>, <c>Location</c>, <c>Content-Security-Policy</c> and <c>Content-Type</c> can
+	 * never be set this way, regardless of this list.
+	 *
+	 * <h4 class='section'>Notes:</h4><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Header names are case-insensitive.
+	 * 	<li class='note'>
+	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String allowedResponseHeaders() default "";
+
+	/**
+	 * Allow cross-site requests for unsafe methods.
+	 *
+	 * <p>
+	 * By default, requests using a method other than <c>GET</c>, <c>HEAD</c>, <c>OPTIONS</c> or <c>TRACE</c> are
+	 * rejected with a <c>403</c> when the <c>Sec-Fetch-Site</c> header is <c>cross-site</c>, or when an <c>Origin</c>
+	 * header is present and does not match the <c>Host</c> header.
+	 * <br>Requests carrying neither header (for example, non-browser clients) are not affected.
+	 * <br>This check is on by default; no other authentication or CSRF filter is registered unless the application adds one.
+	 *
+	 * <h4 class='section'>Notes:</h4><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String allowCrossSite() default "";
+
+	/**
+	 * Trusted origins for cross-site checks.
+	 *
+	 * <p>
+	 * A comma-delimited list of origins (e.g. <js>"https://app.example.com"</js>).
+	 * A request using an unsafe method whose <c>Origin</c> header does not match the <c>Host</c> header is still accepted
+	 * when the origin is in this list.
+	 * <br>The <c>X-Forwarded-Host</c> header is only honoured in place of <c>Host</c> when its value is the authority
+	 * (host and optional port) of one of the listed origins.
+	 * <br>The default is an empty list.  Use {@link #allowCrossSite()} to turn the check off entirely.
+	 *
+	 * <h4 class='section'>Notes:</h4><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Origins are compared case-insensitively.
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String allowedOrigins() default "";
+
+	/**
 	 * Allowed method parameters.
 	 *
 	 * <p>
@@ -565,7 +641,7 @@ public @interface Rest {
 	 * <p>
 	 * Accepted values include {@code "allowedParserOptions"}, {@code "allowedSerializerOptions"},
 	 * {@code "allowedHeaderParams"}, {@code "allowedMethodHeaders"}, {@code "allowedMethodParams"},
-	 * {@code "disableContentParam"}, {@code "renderResponseStackTraces"}, {@code "problemDetails"},
+	 * {@code "allowContentParam"}, {@code "renderResponseStackTraces"}, {@code "problemDetails"},
 	 * {@code "debugMarshalling"},
 	 * {@code "eagerInit"}, {@code "lazyChildren"}, {@code "clientVersionHeader"},
 	 * {@code "uriAuthority"}, {@code "uriContext"}, {@code "uriRelativity"}, and {@code "uriResolution"}.
@@ -771,13 +847,12 @@ public @interface Rest {
 	String[] description() default {};
 
 	/**
-	 * Disable content URL parameter.
+	 * Allow content URL parameter.
 	 *
 	 * <p>
-	 * When enabled (the default &mdash; this attribute is <jk>false</jk> unless explicitly set), the HTTP request
-	 * content on PUT and POST requests can be passed in as text using the <js>"content"</js> URL parameter, letting
-	 * a caller exercise an endpoint's body-consuming logic straight from a URL (handy for a quick manual test or a
-	 * bookmarked link) without an actual PUT/POST body.
+	 * When enabled, the HTTP request content on PUT and POST requests can be passed in as text using the
+	 * <js>"content"</js> URL parameter, letting a caller exercise an endpoint's body-consuming logic straight from a
+	 * URL (handy for a quick manual test or a bookmarked link) without an actual PUT/POST body.
 	 * <br>
 	 * For example:
 	 * <p class='burlenc'>
@@ -785,16 +860,10 @@ public @interface Rest {
 	 * </p>
 	 *
 	 * <p>
-	 * Because the override is on by default, treat it the same way as any other feature that lets untrusted URL
-	 * content reach parsing/business logic: a link to a PUT/POST endpoint with a crafted <js>"content"</js>
-	 * parameter is just as reproducible by a third party (e.g. embedded in a page that an authenticated user
-	 * happens to load) as the equivalent real request body would be. The override is deliberately restricted to
-	 * <c>PUT</c>/<c>POST</c> methods so that a simple cross-origin <c>GET</c> (the kind a browser issues with no
-	 * preflight and no caller-controlled header for something as ordinary as an <code>&lt;img src=...&gt;</code>
-	 * tag) can never trigger it this way, but resources that don't already validate that PUT/POST submissions are
-	 * same-site in origin (e.g. with a token check, a custom-header check, or <c>SameSite</c> cookies) gain no
-	 * additional protection here. Set this to <jk>true</jk> to disable the override entirely on any resource
-	 * where it isn't a deliberate feature.
+	 * This attribute is <jk>false</jk> unless explicitly set, so the override is off by default.
+	 * Because the body is supplied through the URL, it bypasses any check an application makes on the request
+	 * <c>Content-Type</c> or on custom request headers; only enable it on resources where that is acceptable.
+	 * The override is restricted to <c>PUT</c>/<c>POST</c> methods.
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
@@ -804,7 +873,7 @@ public @interface Rest {
 	 *
 	 * @return The annotation value.
 	 */
-	String disableContentParam() default "";
+	String allowContentParam() default "";
 
 	/**
 	 * Opt the resource into <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807">RFC 7807</a> /
@@ -1176,6 +1245,8 @@ public @interface Rest {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		A value of zero or less is treated as the default (1,000,000 bytes), not as unlimited.
 	 * 	<li class='note'>
 	 * 		For {@code multipart/form-data} requests the per-part and per-request size limits, and the in-memory threshold
 	 * 		before parts spill to disk, come from the servlet container's {@code MultipartConfigElement} (for example

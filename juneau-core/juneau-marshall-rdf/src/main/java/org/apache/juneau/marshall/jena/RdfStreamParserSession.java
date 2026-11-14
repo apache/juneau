@@ -496,7 +496,10 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 	@Override /* Overridden from InputStreamParserSession */
 	protected <T> T doRead(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 
-		RDFDataMgr.read(model, pipe.getInputStream(), lang);
+		RDFParser.source(pipe.getInputStream())
+			.lang(lang)
+			.context(RdfParserSession.parserContext(false))
+			.parse(model);
 
 		var roots = getRoots(model);
 

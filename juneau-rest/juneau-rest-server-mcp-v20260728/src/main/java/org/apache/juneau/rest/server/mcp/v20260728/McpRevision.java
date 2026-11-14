@@ -210,6 +210,8 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	private static final String META_KEY = "_meta";
 	private static final String PARAM_ARGUMENTS = "arguments";
 
+	private static final String INTERNAL_ERROR_MESSAGE = "Internal error";
+
 	private static final Logger LOG = Logger.getLogger(McpRevision.class.getName());
 
 	// 16 random bytes -> 22 base64url chars (unpadded): matches EphemeralKeyProvider's keyId minting pattern,
@@ -307,10 +309,10 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		} catch (Exception e) {
 			if (JsonRpcResponse.notification(id))
 				return null;
-			var message = e.getMessage() == null ? cns(e) : e.getMessage();
+			LOG.log(Level.WARNING, e, () -> "MCP request failed with an internal error.");
 			var code = errorCode(McpErrorKind.INTERNAL_ERROR);
-			recordRpcError(ctx, code, message);
-			return new McpResponseResult(JsonRpcResponse.errorResponse(id, code, message, JsonMap.of("type", cn(e))));
+			recordRpcError(ctx, code, INTERNAL_ERROR_MESSAGE);
+			return new McpResponseResult(JsonRpcResponse.errorResponse(id, code, INTERNAL_ERROR_MESSAGE));
 		}
 	}
 

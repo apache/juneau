@@ -43,7 +43,7 @@ class BusWebSockets_Test extends TestBase {
 	private ServerContainer container;
 
 	private static BusPolicy.Builder policy() {
-		return BusPolicy.create().downstream("ops.jobs", true);
+		return BusPolicy.create().anyCaller().downstream("ops.jobs", true);
 	}
 
 	private void use(BusPolicy p) {

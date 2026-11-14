@@ -73,10 +73,9 @@ class BasicApiDocs_ParentChain_Test extends TestBase {
 		// Residual op-mixins contributed by the BasicRestServlet base of the parent chain.
 		assertNotNull(contexts.get(ErrorMixin.class));
 		assertNotNull(contexts.get(HtdocMixin.class));
-		assertNotNull(contexts.get(StatsMixin.class));
 		assertNotNull(contexts.get(FaviconMixin.class));
 
-		assertSize(() -> "Expected exactly eight mixin contexts; got: " + contexts.keySet(), 8, contexts);
+		assertSize(() -> "Expected exactly seven mixin contexts; got: " + contexts.keySet(), 7, contexts);
 	}
 
 	@Test void a02_apiFromParentChain() throws Exception {
