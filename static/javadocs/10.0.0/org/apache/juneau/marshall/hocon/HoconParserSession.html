@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../commons/bean/BeanSession.html" title="interface in org.apache.juneau.commons.bean">BeanSession</a></code>, <code><a href="../../commons/conversion/ConverterSession.html" title="interface in org.apache.juneau.commons.conversion">ConverterSession</a></code>, <code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconParserSession.html#line-35">HoconParserSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconParserSession.html#line-36">HoconParserSession</a></span>
 <span class="extends-implements">extends <a href="../parser/ReaderParserSession.html" title="class in org.apache.juneau.marshall.parser">ReaderParserSession</a>
 implements <a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></span></div>
 <div class="block">Session for parsing HOCON format into POJOs.</div>
@@ -211,7 +211,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.hocon.HoconParserSession.Builder)">
 <h3>HoconParserSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconParserSession.html#line-79">HoconParserSession</a></span><wbr><span class="parameters">(<a href="HoconParserSession.Builder.html" title="class in org.apache.juneau.marshall.hocon">HoconParserSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconParserSession.html#line-80">HoconParserSession</a></span><wbr><span class="parameters">(<a href="HoconParserSession.Builder.html" title="class in org.apache.juneau.marshall.hocon">HoconParserSession.Builder</a>&nbsp;builder)</span></div>
 </section>
 </li>
 </ul>
@@ -225,7 +225,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="create(org.apache.juneau.marshall.hocon.HoconParser)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HoconParserSession.Builder.html" title="class in org.apache.juneau.marshall.hocon">HoconParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconParserSession.html#line-73">create</a></span><wbr><span class="parameters">(<a href="HoconParser.html" title="class in org.apache.juneau.marshall.hocon">HoconParser</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HoconParserSession.Builder.html" title="class in org.apache.juneau.marshall.hocon">HoconParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconParserSession.html#line-74">create</a></span><wbr><span class="parameters">(<a href="HoconParser.html" title="class in org.apache.juneau.marshall.hocon">HoconParser</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a session builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -239,7 +239,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="readRecords(java.lang.Object)">
 <h3>readRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconParserSession.html#line-84">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconParserSession.html#line-85">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/RecordReadable.html#readRecords(java.lang.Object)">RecordReadable</a></code></span></div>
 <div class="block">Opens a low-level <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> cursor over the specified input.
@@ -268,7 +268,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconParserSession.html#line-89">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconParserSession.html#line-90">isRecordStreaming</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/RecordReadable.html#isRecordStreaming()">RecordReadable</a></code></span></div>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 <dl class="notes">
@@ -284,7 +284,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">
 <h3>doRead</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconParserSession.html#line-94">doRead</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconParserSession.html#line-95">doRead</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,

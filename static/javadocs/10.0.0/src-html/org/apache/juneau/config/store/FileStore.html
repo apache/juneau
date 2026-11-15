@@ -86,7 +86,7 @@
 <span class="source-line-no">073</span><span id="line-73">      protected Builder() {</span>
 <span class="source-line-no">074</span><span id="line-74">         charset = env("ConfigFileStore.charset").map(Charset::forName).orElse(Charset.defaultCharset());</span>
 <span class="source-line-no">075</span><span id="line-75">         directory = env("ConfigFileStore.directory", ".");</span>
-<span class="source-line-no">076</span><span id="line-76">         allowAbsoluteNames = env("ConfigFileStore.allowAbsoluteNames", false);</span>
+<span class="source-line-no">076</span><span id="line-76">         allowAbsoluteNames = false; // Only settable through the builder method, never from the environment or settings.</span>
 <span class="source-line-no">077</span><span id="line-77">         enableWatcher = env("ConfigFileStore.enableWatcher", false);</span>
 <span class="source-line-no">078</span><span id="line-78">         extensions = env("ConfigFileStore.extensions", "cfg,yml,yaml");</span>
 <span class="source-line-no">079</span><span id="line-79">         updateOnWrite = env("ConfigFileStore.updateOnWrite", false);</span>
@@ -486,7 +486,7 @@
 <span class="source-line-no">473</span><span id="line-473">         return "";</span>
 <span class="source-line-no">474</span><span id="line-474"></span>
 <span class="source-line-no">475</span><span id="line-475">      var isWritable = isWritable(p);</span>
-<span class="source-line-no">476</span><span id="line-476">      var oo = isWritable ? a(READ, WRITE, CREATE) : a(READ); // HTT - read-only files require special OS setup</span>
+<span class="source-line-no">476</span><span id="line-476">      var oo = isWritable ? new OpenOption[]{READ, WRITE, CREATE, LinkOption.NOFOLLOW_LINKS} : new OpenOption[]{READ, LinkOption.NOFOLLOW_LINKS}; // HTT - read-only files require special OS setup</span>
 <span class="source-line-no">477</span><span id="line-477">      try (var fc = FileChannel.open(p, oo)) {</span>
 <span class="source-line-no">478</span><span id="line-478">         try (var lock = isWritable ? fc.lock() : null) { // HTT - null lock path requires read-only file</span>
 <span class="source-line-no">479</span><span id="line-479">            var buf = ByteBuffer.allocate(1024);</span>
@@ -537,7 +537,7 @@
 <span class="source-line-no">524</span><span id="line-524">         if (newContents == null)</span>
 <span class="source-line-no">525</span><span id="line-525">            Files.delete(p);</span>
 <span class="source-line-no">526</span><span id="line-526">         else {</span>
-<span class="source-line-no">527</span><span id="line-527">            try (var fc = FileChannel.open(p, READ, WRITE, CREATE)) {</span>
+<span class="source-line-no">527</span><span id="line-527">            try (var fc = FileChannel.open(p, READ, WRITE, CREATE, LinkOption.NOFOLLOW_LINKS)) {</span>
 <span class="source-line-no">528</span><span id="line-528">               try (var lock = fc.lock()) {</span>
 <span class="source-line-no">529</span><span id="line-529">                  var currentContents = "";</span>
 <span class="source-line-no">530</span><span id="line-530">                  if (exists) {</span>
@@ -699,11 +699,12 @@
 <span class="source-line-no">686</span><span id="line-686">         if (n == null)</span>
 <span class="source-line-no">687</span><span id="line-687">            n = exts.length == 0 ? name : (name + "." + exts[0]);</span>
 <span class="source-line-no">688</span><span id="line-688"></span>
-<span class="source-line-no">689</span><span id="line-689">         nameCache.put(name, n);</span>
-<span class="source-line-no">690</span><span id="line-690">      }</span>
-<span class="source-line-no">691</span><span id="line-691">      return nameCache.get(name);</span>
-<span class="source-line-no">692</span><span id="line-692">   }</span>
-<span class="source-line-no">693</span><span id="line-693">}</span>
+<span class="source-line-no">689</span><span id="line-689">         checkContained(n); // Re-check the final name: the extension step can land on a different file (e.g. a symlink).</span>
+<span class="source-line-no">690</span><span id="line-690">         nameCache.put(name, n);</span>
+<span class="source-line-no">691</span><span id="line-691">      }</span>
+<span class="source-line-no">692</span><span id="line-692">      return nameCache.get(name);</span>
+<span class="source-line-no">693</span><span id="line-693">   }</span>
+<span class="source-line-no">694</span><span id="line-694">}</span>
 
 
 

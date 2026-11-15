@@ -236,77 +236,87 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Whether an endpoint with no authentication serves callers that are not on a loopback address.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpCompleter.html" title="interface in org.apache.juneau.rest.server.mcp">McpCompleter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#promptCompleter(java.lang.String,java.lang.String)" class="member-name-link">promptCompleter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;promptName,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;argumentName)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isTrustProxy()" class="member-name-link">isTrustProxy</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Whether loopback callers are admitted when the request carries forwarding headers.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpCompleter.html" title="interface in org.apache.juneau.rest.server.mcp">McpCompleter</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#promptCompleter(java.lang.String,java.lang.String)" class="member-name-link">promptCompleter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;promptName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;argumentName)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Resolves the completer registered for one declared argument of a registered prompt, by exact prompt name
  and exact argument name.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.ResourceTemplateMatch.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig.ResourceTemplateMatch</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resolveResourceTemplate(java.lang.String)" class="member-name-link">resolveResourceTemplate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.ResourceTemplateMatch.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig.ResourceTemplateMatch</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resolveResourceTemplate(java.lang.String)" class="member-name-link">resolveResourceTemplate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Resolves the concrete <code>resources/read</code> request URI <code>uri</code> against the registered
  resource-template registry, selecting the single winning template handler using the deterministic
  specificity ranking shared identically by both dated adapters.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCursor(org.apache.juneau.rest.server.mcp.McpCursor)" class="member-name-link">setCursor</a><wbr>(<a href="McpCursor.html" title="interface in org.apache.juneau.rest.server.mcp">McpCursor</a>&nbsp;cursor)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCursor(org.apache.juneau.rest.server.mcp.McpCursor)" class="member-name-link">setCursor</a><wbr>(<a href="McpCursor.html" title="interface in org.apache.juneau.rest.server.mcp">McpCursor</a>&nbsp;cursor)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the pagination strategy.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setInstructions(java.lang.String)" class="member-name-link">setInstructions</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instructions)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setInstructions(java.lang.String)" class="member-name-link">setInstructions</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instructions)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets initialize instructions.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setName(java.lang.String)" class="member-name-link">setName</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setName(java.lang.String)" class="member-name-link">setName</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the server name.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPrompts(java.util.List)" class="member-name-link">setPrompts</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a>&gt;&nbsp;prompts)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPrompts(java.util.List)" class="member-name-link">setPrompts</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a>&gt;&nbsp;prompts)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the prompt handler list.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setResources(java.util.List)" class="member-name-link">setResources</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a>&gt;&nbsp;resources)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setResources(java.util.List)" class="member-name-link">setResources</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a>&gt;&nbsp;resources)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the resource handler list.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setResourceTemplates(java.util.List)" class="member-name-link">setResourceTemplates</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceTemplateHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceTemplateHandler</a>&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setResourceTemplates(java.util.List)" class="member-name-link">setResourceTemplates</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceTemplateHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceTemplateHandler</a>&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the resource-template handler list.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setResourceTemplateSpecs(java.util.List)" class="member-name-link">setResourceTemplateSpecs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceTemplateSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceTemplateSpec</a>&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setResourceTemplateSpecs(java.util.List)" class="member-name-link">setResourceTemplateSpecs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceTemplateSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceTemplateSpec</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the resource-template registry from bare descriptors, replacing each with a built-in listing-only
  handler equivalent to what <a href="#addResourceTemplate(org.apache.juneau.rest.server.mcp.McpResourceTemplateSpec...)"><code>addResourceTemplate(McpResourceTemplateSpec...)</code></a> wraps.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTokenValidator(org.apache.juneau.rest.server.auth.TokenValidator)" class="member-name-link">setTokenValidator</a><wbr>(<a href="../auth/TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTokenValidator(org.apache.juneau.rest.server.auth.TokenValidator)" class="member-name-link">setTokenValidator</a><wbr>(<a href="../auth/TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Requires a valid bearer token on MCP POST requests, verified by the given validator.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTools(java.util.List)" class="member-name-link">setTools</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a>&gt;&nbsp;tools)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTools(java.util.List)" class="member-name-link">setTools</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a>&gt;&nbsp;tools)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the tool handler list.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setVersion(java.lang.String)" class="member-name-link">setVersion</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setVersion(java.lang.String)" class="member-name-link">setVersion</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the server version.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpCompleter.html" title="interface in org.apache.juneau.rest.server.mcp">McpCompleter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#templateCompleter(java.lang.String,java.lang.String)" class="member-name-link">templateCompleter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uriTemplate,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpCompleter.html" title="interface in org.apache.juneau.rest.server.mcp">McpCompleter</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#templateCompleter(java.lang.String,java.lang.String)" class="member-name-link">templateCompleter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uriTemplate,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;variableName)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Resolves the completer registered for one declared variable of a registered resource-template, by exact
  registered <code>uriTemplate</code> string and exact variable name.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#trustProxy(boolean)" class="member-name-link">trustProxy</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Admits loopback callers even when the request carries <c>Forwarded</c>, <c>X-Forwarded-For</c> or <c>X-Forwarded-Host</c> headers.</div>
 </div>
 </div>
 </div>
@@ -342,7 +352,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getName()">
 <h3>getName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-70">getName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-71">getName</a></span>()</div>
 <div class="block">Server name reported in <code>initialize</code>.
 
  <p>
@@ -357,7 +367,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setName(java.lang.String)">
 <h3>setName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-80">setName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-81">setName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the server name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -370,7 +380,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getVersion()">
 <h3>getVersion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-90">getVersion</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-91">getVersion</a></span>()</div>
 <div class="block">Server version reported in <code>initialize</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -381,7 +391,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setVersion(java.lang.String)">
 <h3>setVersion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-100">setVersion</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-101">setVersion</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the server version.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -394,7 +404,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getInstructions()">
 <h3>getInstructions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-110">getInstructions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-111">getInstructions</a></span>()</div>
 <div class="block">Optional instructions surfaced via <code>initialize</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -405,7 +415,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setInstructions(java.lang.String)">
 <h3>setInstructions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-120">setInstructions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instructions)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-121">setInstructions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instructions)</span></div>
 <div class="block">Sets initialize instructions.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -418,7 +428,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTools()">
 <h3>getTools</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-130">getTools</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-131">getTools</a></span>()</div>
 <div class="block">Registered tool handlers.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -429,7 +439,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setTools(java.util.List)">
 <h3>setTools</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-140">setTools</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a>&gt;&nbsp;tools)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-141">setTools</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a>&gt;&nbsp;tools)</span></div>
 <div class="block">Sets the tool handler list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -442,7 +452,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addTool(org.apache.juneau.rest.server.mcp.McpToolHandler...)">
 <h3>addTool</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-151">addTool</a></span><wbr><span class="parameters">(<a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a>...&nbsp;handlers)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-152">addTool</a></span><wbr><span class="parameters">(<a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a>...&nbsp;handlers)</span></div>
 <div class="block">Convenience: append one or more tool handlers.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -455,7 +465,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addTool(org.apache.juneau.rest.server.mcp.McpTypedToolHandler)">
 <h3>addTool</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-170">addTool</a></span><wbr><span class="parameters">(<a href="McpTypedToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpTypedToolHandler</a>&lt;?,<wbr>?&gt;&nbsp;handler)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-171">addTool</a></span><wbr><span class="parameters">(<a href="McpTypedToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpTypedToolHandler</a>&lt;?,<wbr>?&gt;&nbsp;handler)</span></div>
 <div class="block">Convenience: adapt and append a single typed tool handler.
 
  <p>
@@ -476,7 +486,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPrompts()">
 <h3>getPrompts</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-180">getPrompts</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-181">getPrompts</a></span>()</div>
 <div class="block">Registered prompt handlers.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -487,7 +497,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setPrompts(java.util.List)">
 <h3>setPrompts</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-195">setPrompts</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a>&gt;&nbsp;prompts)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-196">setPrompts</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a>&gt;&nbsp;prompts)</span></div>
 <div class="block">Sets the prompt handler list.
 
  <p>
@@ -506,7 +516,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addPrompt(org.apache.juneau.rest.server.mcp.McpPromptHandler...)">
 <h3>addPrompt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-219">addPrompt</a></span><wbr><span class="parameters">(<a href="McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a>...&nbsp;handlers)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-220">addPrompt</a></span><wbr><span class="parameters">(<a href="McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a>...&nbsp;handlers)</span></div>
 <div class="block">Convenience: append one or more prompt handlers.
 
  <p>
@@ -531,7 +541,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getResources()">
 <h3>getResources</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-271">getResources</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-272">getResources</a></span>()</div>
 <div class="block">Registered resource handlers.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -542,7 +552,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setResources(java.util.List)">
 <h3>setResources</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-281">setResources</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a>&gt;&nbsp;resources)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-282">setResources</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a>&gt;&nbsp;resources)</span></div>
 <div class="block">Sets the resource handler list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -555,7 +565,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addResource(org.apache.juneau.rest.server.mcp.McpResourceHandler...)">
 <h3>addResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-292">addResource</a></span><wbr><span class="parameters">(<a href="McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a>...&nbsp;handlers)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-293">addResource</a></span><wbr><span class="parameters">(<a href="McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a>...&nbsp;handlers)</span></div>
 <div class="block">Convenience: append one or more resource handlers.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -568,7 +578,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getResourceTemplates()">
 <h3>getResourceTemplates</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceTemplateHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceTemplateHandler</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-312">getResourceTemplates</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceTemplateHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceTemplateHandler</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-313">getResourceTemplates</a></span>()</div>
 <div class="block">Registered resource-template handlers.
 
  <p>
@@ -590,7 +600,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setResourceTemplates(java.util.List)">
 <h3>setResourceTemplates</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-329">setResourceTemplates</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceTemplateHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceTemplateHandler</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-330">setResourceTemplates</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceTemplateHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceTemplateHandler</a>&gt;&nbsp;value)</span></div>
 <div class="block">Sets the resource-template handler list.
 
  <p>
@@ -610,7 +620,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setResourceTemplateSpecs(java.util.List)">
 <h3>setResourceTemplateSpecs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-347">setResourceTemplateSpecs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceTemplateSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceTemplateSpec</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-348">setResourceTemplateSpecs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="McpResourceTemplateSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceTemplateSpec</a>&gt;&nbsp;value)</span></div>
 <div class="block">Sets the resource-template registry from bare descriptors, replacing each with a built-in listing-only
  handler equivalent to what <a href="#addResourceTemplate(org.apache.juneau.rest.server.mcp.McpResourceTemplateSpec...)"><code>addResourceTemplate(McpResourceTemplateSpec...)</code></a> wraps.
 
@@ -630,7 +640,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addResourceTemplate(org.apache.juneau.rest.server.mcp.McpResourceTemplateHandler...)">
 <h3>addResourceTemplate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-372">addResourceTemplate</a></span><wbr><span class="parameters">(<a href="McpResourceTemplateHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceTemplateHandler</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-373">addResourceTemplate</a></span><wbr><span class="parameters">(<a href="McpResourceTemplateHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceTemplateHandler</a>...&nbsp;values)</span></div>
 <div class="block">Convenience: append one or more resource-template handlers.
 
  <p>
@@ -659,7 +669,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addResourceTemplate(org.apache.juneau.rest.server.mcp.McpResourceTemplateSpec...)">
 <h3>addResourceTemplate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-393">addResourceTemplate</a></span><wbr><span class="parameters">(<a href="McpResourceTemplateSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceTemplateSpec</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-394">addResourceTemplate</a></span><wbr><span class="parameters">(<a href="McpResourceTemplateSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceTemplateSpec</a>...&nbsp;values)</span></div>
 <div class="block">Convenience: append one or more resource-template descriptors as built-in listing-only handlers.
 
  <p>
@@ -681,7 +691,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolveResourceTemplate(java.lang.String)">
 <h3>resolveResourceTemplate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.ResourceTemplateMatch.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig.ResourceTemplateMatch</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-530">resolveResourceTemplate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.ResourceTemplateMatch.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig.ResourceTemplateMatch</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-531">resolveResourceTemplate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</span></div>
 <div class="block">Resolves the concrete <code>resources/read</code> request URI <code>uri</code> against the registered
  resource-template registry, selecting the single winning template handler using the deterministic
  specificity ranking shared identically by both dated adapters.
@@ -718,7 +728,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="promptCompleter(java.lang.String,java.lang.String)">
 <h3>promptCompleter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpCompleter.html" title="interface in org.apache.juneau.rest.server.mcp">McpCompleter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-590">promptCompleter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;promptName,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpCompleter.html" title="interface in org.apache.juneau.rest.server.mcp">McpCompleter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-591">promptCompleter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;promptName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;argumentName)</span></div>
 <div class="block">Resolves the completer registered for one declared argument of a registered prompt, by exact prompt name
  and exact argument name.
@@ -742,7 +752,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="templateCompleter(java.lang.String,java.lang.String)">
 <h3>templateCompleter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpCompleter.html" title="interface in org.apache.juneau.rest.server.mcp">McpCompleter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-637">templateCompleter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uriTemplate,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpCompleter.html" title="interface in org.apache.juneau.rest.server.mcp">McpCompleter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-638">templateCompleter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uriTemplate,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;variableName)</span></div>
 <div class="block">Resolves the completer registered for one declared variable of a registered resource-template, by exact
  registered <code>uriTemplate</code> string and exact variable name.
@@ -770,7 +780,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="completer(org.apache.juneau.rest.server.mcp.McpCompletionRef,java.lang.String)">
 <h3>completer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpCompleter.html" title="interface in org.apache.juneau.rest.server.mcp">McpCompleter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-671">completer</a></span><wbr><span class="parameters">(<a href="McpCompletionRef.html" title="class in org.apache.juneau.rest.server.mcp">McpCompletionRef</a>&nbsp;ref,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpCompleter.html" title="interface in org.apache.juneau.rest.server.mcp">McpCompleter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-672">completer</a></span><wbr><span class="parameters">(<a href="McpCompletionRef.html" title="class in org.apache.juneau.rest.server.mcp">McpCompletionRef</a>&nbsp;ref,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;argumentName)</span></div>
 <div class="block">Unified neutral completion lookup: resolves the completer for a <code>completion/complete</code> target,
  dispatching by <a href="McpCompletionRef.Kind.html" title="enum class in org.apache.juneau.rest.server.mcp"><code>McpCompletionRef.Kind</code></a> to <a href="#promptCompleter(java.lang.String,java.lang.String)"><code>promptCompleter(String, String)</code></a> or
@@ -794,7 +804,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasAnyCompleter()">
 <h3>hasAnyCompleter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-690">hasAnyCompleter</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-691">hasAnyCompleter</a></span>()</div>
 <div class="block">Reports whether <code>completions</code> capability should be advertised: whether at least one registered
  prompt argument or resource-template variable currently declares a non-<code>null</code> completer.
 
@@ -811,7 +821,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getCursor()">
 <h3>getCursor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpCursor.html" title="interface in org.apache.juneau.rest.server.mcp">McpCursor</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-725">getCursor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpCursor.html" title="interface in org.apache.juneau.rest.server.mcp">McpCursor</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-726">getCursor</a></span>()</div>
 <div class="block">Pagination strategy for <code>list</code> dispatchers (tools / prompts / resources / resource templates).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -822,7 +832,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setCursor(org.apache.juneau.rest.server.mcp.McpCursor)">
 <h3>setCursor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-735">setCursor</a></span><wbr><span class="parameters">(<a href="McpCursor.html" title="interface in org.apache.juneau.rest.server.mcp">McpCursor</a>&nbsp;cursor)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-736">setCursor</a></span><wbr><span class="parameters">(<a href="McpCursor.html" title="interface in org.apache.juneau.rest.server.mcp">McpCursor</a>&nbsp;cursor)</span></div>
 <div class="block">Sets the pagination strategy.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -835,7 +845,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTokenValidator()">
 <h3>getTokenValidator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../auth/TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-745">getTokenValidator</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../auth/TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-746">getTokenValidator</a></span>()</div>
 <div class="block">The validator used to authenticate <code>Authorization: Bearer</code> tokens on MCP POST requests.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -846,7 +856,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setTokenValidator(org.apache.juneau.rest.server.auth.TokenValidator)">
 <h3>setTokenValidator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-755">setTokenValidator</a></span><wbr><span class="parameters">(<a href="../auth/TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-756">setTokenValidator</a></span><wbr><span class="parameters">(<a href="../auth/TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a>&nbsp;value)</span></div>
 <div class="block">Requires a valid bearer token on MCP POST requests, verified by the given validator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -859,7 +869,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isAllowUnauthenticated()">
 <h3>isAllowUnauthenticated</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-765">isAllowUnauthenticated</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-766">isAllowUnauthenticated</a></span>()</div>
 <div class="block">Whether an endpoint with no authentication serves callers that are not on a loopback address.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -870,12 +880,39 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="allowUnauthenticated(boolean)">
 <h3>allowUnauthenticated</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-779">allowUnauthenticated</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-780">allowUnauthenticated</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Allows an endpoint with no authentication to serve callers that are not on a loopback address.
 
  <p>
  Without this, an MCP endpoint that has neither a <a href="#setTokenValidator(org.apache.juneau.rest.server.auth.TokenValidator)"><code>token validator</code></a> nor
  another authentication layer answers <code>403</code> to non-loopback callers.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new value.</dd>
+<dt>Returns:</dt>
+<dd>This object (for method chaining).</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isTrustProxy()">
+<h3>isTrustProxy</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-790">isTrustProxy</a></span>()</div>
+<div class="block">Whether loopback callers are admitted when the request carries forwarding headers.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><code>true</code> if forwarding headers do not prevent loopback admission.  Defaults to <code>false</code>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="trustProxy(boolean)">
+<h3>trustProxy</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpServerConfig.html#line-803">trustProxy</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="block">Admits loopback callers even when the request carries <c>Forwarded</c>, <c>X-Forwarded-For</c> or <c>X-Forwarded-Host</c> headers.
+
+ <p>
+ Set this only when a reverse proxy on the same host fronts the endpoint and is trusted to authenticate or restrict its callers.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new value.</dd>

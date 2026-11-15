@@ -43,17 +43,17 @@
 <span class="source-line-no">030</span><span id="line-30"> * An {@code html} card in a page contract may instead name a {@code src} endpoint. The {@code src} must be a</span>
 <span class="source-line-no">031</span><span id="line-31"> * same-origin path (checked at page build, by {@code PageCapture.addCard} for FreeMarker and {@code PageSpec} cards</span>
 <span class="source-line-no">032</span><span id="line-32"> * and by {@code CardTypeRegistry.toCard} for lifted ones; the shell checks it again before the fetch). The shell</span>
-<span class="source-line-no">033</span><span id="line-33"> * fetches it and inserts the returned HTML as-is, &lt;b&gt;unsanitized&lt;/b&gt;, the same trust level as</span>
-<span class="source-line-no">034</span><span id="line-34"> * {@code footer.text}. The endpoint must therefore be a trusted first-party route, must never be derived from request</span>
-<span class="source-line-no">035</span><span id="line-35"> * data, and must escape any data it embeds in the fragment.</span>
-<span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
-<span class="source-line-no">038</span><span id="line-38"> * A card that cannot guarantee that can opt in with {@code "sanitize": true} (or {@code sanitize=true} on</span>
-<span class="source-line-no">039</span><span id="line-39"> * {@code &lt;@card&gt;}, or {@code CardSpec.sanitize(true)}). The shell then rebuilds the fetched fragment through the views</span>
-<span class="source-line-no">040</span><span id="line-40"> * attribute-allowlist sanitizer, the one behind the {@code SANITIZED_HTML} detail format, so script, {@code on*}</span>
-<span class="source-line-no">041</span><span id="line-41"> * handlers, unsafe URLs and unlisted attributes are dropped. The page must load the views toolkit; without it the</span>
-<span class="source-line-no">042</span><span id="line-42"> * card fails closed with E-JS-8 and paints nothing. The flag only affects {@code src} cards, and the default is</span>
-<span class="source-line-no">043</span><span id="line-43"> * unchanged (unsanitized).</span>
+<span class="source-line-no">033</span><span id="line-33"> * fetches it and, by default, rebuilds the returned fragment through the views attribute-allowlist</span>
+<span class="source-line-no">034</span><span id="line-34"> * sanitizer, the one behind the {@code SANITIZED_HTML} detail format, so script, {@code on*} handlers, unsafe URLs and</span>
+<span class="source-line-no">035</span><span id="line-35"> * unlisted attributes are dropped. The page must load the views toolkit; without it the card fails closed with E-JS-8</span>
+<span class="source-line-no">036</span><span id="line-36"> * and paints nothing. A response that redirected to another origin is refused.</span>
+<span class="source-line-no">037</span><span id="line-37"> *</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * A card whose fragment needs markup the allowlist drops can opt out with {@code "sanitize": false} (or</span>
+<span class="source-line-no">040</span><span id="line-40"> * {@code sanitize=false} on {@code &lt;@card&gt;}, or {@code CardSpec.sanitize(false)}). The shell then inserts the</span>
+<span class="source-line-no">041</span><span id="line-41"> * returned HTML as-is, &lt;b&gt;unsanitized&lt;/b&gt;, the same trust level as {@code footer.text}: the endpoint must be a trusted</span>
+<span class="source-line-no">042</span><span id="line-42"> * first-party route, must never be derived from request data, and must escape any data it embeds in the fragment.</span>
+<span class="source-line-no">043</span><span id="line-43"> * The flag only affects {@code src} cards.</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;p class='bjava'&gt;</span>

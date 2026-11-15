@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/FunctionalInterface.html" title="class or interface in java.lang" class="external-link">@FunctionalInterface</a>
-</span><span class="modifiers">public static interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-91">RemoteUrlPolicy.AddressResolver</a></span></div>
+</span><span class="modifiers">public static interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-92">RemoteUrlPolicy.AddressResolver</a></span></div>
 <div class="block">Resolves the <code>InetAddress</code> candidates for a hostname.  Injectable so pin-on-connect tests can simulate
  DNS rebinding / mixed A+AAAA / blocked-address resolution without depending on live (and flaky) DNS.</div>
 </section>
@@ -140,7 +140,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="RemoteUrlPolicy.AddressResolver.html" title="interface in org.apache.juneau.http.remote">RemoteUrlPolicy.AddressResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.AddressResolver.html#line-104">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="RemoteUrlPolicy.AddressResolver.html" title="interface in org.apache.juneau.http.remote">RemoteUrlPolicy.AddressResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.AddressResolver.html#line-105">DEFAULT</a></span></div>
 <div class="block">The production resolver: real DNS resolution via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/InetAddress.html#getAllByName(java.lang.String)" title="class or interface in java.net" class="external-link"><code>InetAddress.getAllByName(String)</code></a>.</div>
 </section>
 </li>
@@ -155,7 +155,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolve(java.lang.String)">
 <h3>resolve</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/InetAddress.html" title="class or interface in java.net" class="external-link">InetAddress</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.AddressResolver.html#line-101">resolve</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host)</span>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/InetAddress.html" title="class or interface in java.net" class="external-link">InetAddress</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.AddressResolver.html#line-102">resolve</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host)</span>
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/UnknownHostException.html" title="class or interface in java.net" class="external-link">UnknownHostException</a></span></div>
 <div class="block">Resolves <code>host</code> to its candidate addresses.</div>
 <dl class="notes">

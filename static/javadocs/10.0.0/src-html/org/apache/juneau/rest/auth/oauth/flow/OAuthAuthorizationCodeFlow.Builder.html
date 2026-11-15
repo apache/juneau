@@ -277,7 +277,7 @@
 <span class="source-line-no">264</span><span id="line-264">   /**</span>
 <span class="source-line-no">265</span><span id="line-265">    * Builds the {@code authorize?...} URL the user-agent should be redirected to.</span>
 <span class="source-line-no">266</span><span id="line-266">    *</span>
-<span class="source-line-no">267</span><span id="line-267">    * @param state The opaque {@code state} parameter (CSRF protection).  Must not be &lt;jk&gt;null&lt;/jk&gt; or</span>
+<span class="source-line-no">267</span><span id="line-267">    * @param state The opaque {@code state} parameter (cross-site request protection).  Must not be &lt;jk&gt;null&lt;/jk&gt; or</span>
 <span class="source-line-no">268</span><span id="line-268">    *    blank.</span>
 <span class="source-line-no">269</span><span id="line-269">    * @param codeChallenge The PKCE code challenge.  Must not be &lt;jk&gt;null&lt;/jk&gt;.  Always uses S256.</span>
 <span class="source-line-no">270</span><span id="line-270">    * @return The authorization URL.</span>
@@ -313,7 +313,7 @@
 <span class="source-line-no">300</span><span id="line-300">    * callers can set OIDC-specific parameters (e.g. {@code prompt}, {@code max_age}, {@code acr_values})</span>
 <span class="source-line-no">301</span><span id="line-301">    * without this module needing to surface each one.</span>
 <span class="source-line-no">302</span><span id="line-302">    *</span>
-<span class="source-line-no">303</span><span id="line-303">    * @param state The opaque {@code state} parameter (CSRF protection).  Must not be &lt;jk&gt;null&lt;/jk&gt; or</span>
+<span class="source-line-no">303</span><span id="line-303">    * @param state The opaque {@code state} parameter (cross-site request protection).  Must not be &lt;jk&gt;null&lt;/jk&gt; or</span>
 <span class="source-line-no">304</span><span id="line-304">    *    blank.</span>
 <span class="source-line-no">305</span><span id="line-305">    * @param codeChallenge The PKCE code challenge.  Must not be &lt;jk&gt;null&lt;/jk&gt;.  Always uses S256.</span>
 <span class="source-line-no">306</span><span id="line-306">    * @param nonce The OIDC {@code nonce} value.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
@@ -331,81 +331,83 @@
 <span class="source-line-no">318</span><span id="line-318">         .state(new State(state))</span>
 <span class="source-line-no">319</span><span id="line-319">         .nonce(new Nonce(nonce))</span>
 <span class="source-line-no">320</span><span id="line-320">         .codeChallenge(codeChallenge, CodeChallengeMethod.S256);</span>
-<span class="source-line-no">321</span><span id="line-321">      if (customizer != null)</span>
-<span class="source-line-no">322</span><span id="line-322">         customizer.accept(builder);</span>
-<span class="source-line-no">323</span><span id="line-323">      return builder.build().toURI();</span>
-<span class="source-line-no">324</span><span id="line-324">   }</span>
-<span class="source-line-no">325</span><span id="line-325"></span>
-<span class="source-line-no">326</span><span id="line-326">   /**</span>
-<span class="source-line-no">327</span><span id="line-327">    * Exchanges the authorization code returned by the IdP for an access token.</span>
-<span class="source-line-no">328</span><span id="line-328">    *</span>
-<span class="source-line-no">329</span><span id="line-329">    * @param code The {@code code} query parameter from the IdP redirect.  Must not be &lt;jk&gt;null&lt;/jk&gt; or</span>
-<span class="source-line-no">330</span><span id="line-330">    *    blank.</span>
-<span class="source-line-no">331</span><span id="line-331">    * @param codeVerifier The PKCE verifier matching the challenge passed to</span>
-<span class="source-line-no">332</span><span id="line-332">    *    {@link #buildAuthorizationUrl(String, CodeChallenge)}.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">333</span><span id="line-333">    * @return The acquired token.</span>
-<span class="source-line-no">334</span><span id="line-334">    */</span>
-<span class="source-line-no">335</span><span id="line-335">   public OAuthToken exchange(String code, CodeVerifier codeVerifier) {</span>
-<span class="source-line-no">336</span><span id="line-336">      reqnb("code", code);</span>
-<span class="source-line-no">337</span><span id="line-337">      reqnn("codeVerifier", codeVerifier);</span>
-<span class="source-line-no">338</span><span id="line-338">      var grant = new AuthorizationCodeGrant(new AuthorizationCode(code), redirectUri, codeVerifier);</span>
-<span class="source-line-no">339</span><span id="line-339">      TokenRequest.Builder reqBuilder;</span>
-<span class="source-line-no">340</span><span id="line-340">      if (clientSecretSupplier != null) {</span>
-<span class="source-line-no">341</span><span id="line-341">         var clientAuth = new ClientSecretBasic(new ClientID(clientId), new Secret(clientSecretSupplier.get()));</span>
-<span class="source-line-no">342</span><span id="line-342">         reqBuilder = new TokenRequest.Builder(tokenEndpoint, clientAuth, grant);</span>
-<span class="source-line-no">343</span><span id="line-343">      } else {</span>
-<span class="source-line-no">344</span><span id="line-344">         reqBuilder = new TokenRequest.Builder(tokenEndpoint, new ClientID(clientId), grant);</span>
-<span class="source-line-no">345</span><span id="line-345">      }</span>
-<span class="source-line-no">346</span><span id="line-346">      if (resource != null)</span>
-<span class="source-line-no">347</span><span id="line-347">         reqBuilder.resource(resource);</span>
-<span class="source-line-no">348</span><span id="line-348">      return Flows.send(reqBuilder.build(), httpTimeout, httpRequestConfigurator);</span>
-<span class="source-line-no">349</span><span id="line-349">   }</span>
-<span class="source-line-no">350</span><span id="line-350"></span>
-<span class="source-line-no">351</span><span id="line-351">   /**</span>
-<span class="source-line-no">352</span><span id="line-352">    * Returns the authorization endpoint URL.</span>
-<span class="source-line-no">353</span><span id="line-353">    *</span>
-<span class="source-line-no">354</span><span id="line-354">    * @return The endpoint.</span>
-<span class="source-line-no">355</span><span id="line-355">    */</span>
-<span class="source-line-no">356</span><span id="line-356">   public URI getAuthorizationEndpoint() {</span>
-<span class="source-line-no">357</span><span id="line-357">      return authorizationEndpoint;</span>
-<span class="source-line-no">358</span><span id="line-358">   }</span>
-<span class="source-line-no">359</span><span id="line-359"></span>
-<span class="source-line-no">360</span><span id="line-360">   /**</span>
-<span class="source-line-no">361</span><span id="line-361">    * Returns the token endpoint URL.</span>
-<span class="source-line-no">362</span><span id="line-362">    *</span>
-<span class="source-line-no">363</span><span id="line-363">    * @return The endpoint.</span>
-<span class="source-line-no">364</span><span id="line-364">    */</span>
-<span class="source-line-no">365</span><span id="line-365">   public URI getTokenEndpoint() {</span>
-<span class="source-line-no">366</span><span id="line-366">      return tokenEndpoint;</span>
-<span class="source-line-no">367</span><span id="line-367">   }</span>
-<span class="source-line-no">368</span><span id="line-368"></span>
-<span class="source-line-no">369</span><span id="line-369">   /**</span>
-<span class="source-line-no">370</span><span id="line-370">    * Returns the client ID.</span>
-<span class="source-line-no">371</span><span id="line-371">    *</span>
-<span class="source-line-no">372</span><span id="line-372">    * @return The client ID.</span>
-<span class="source-line-no">373</span><span id="line-373">    */</span>
-<span class="source-line-no">374</span><span id="line-374">   public String getClientId() {</span>
-<span class="source-line-no">375</span><span id="line-375">      return clientId;</span>
-<span class="source-line-no">376</span><span id="line-376">   }</span>
-<span class="source-line-no">377</span><span id="line-377"></span>
-<span class="source-line-no">378</span><span id="line-378">   /**</span>
-<span class="source-line-no">379</span><span id="line-379">    * Returns the redirect URI.</span>
-<span class="source-line-no">380</span><span id="line-380">    *</span>
-<span class="source-line-no">381</span><span id="line-381">    * @return The redirect URI.</span>
-<span class="source-line-no">382</span><span id="line-382">    */</span>
-<span class="source-line-no">383</span><span id="line-383">   public URI getRedirectUri() {</span>
-<span class="source-line-no">384</span><span id="line-384">      return redirectUri;</span>
-<span class="source-line-no">385</span><span id="line-385">   }</span>
-<span class="source-line-no">386</span><span id="line-386"></span>
-<span class="source-line-no">387</span><span id="line-387">   /**</span>
-<span class="source-line-no">388</span><span id="line-388">    * Returns the requested scopes.</span>
-<span class="source-line-no">389</span><span id="line-389">    *</span>
-<span class="source-line-no">390</span><span id="line-390">    * @return An unmodifiable view.</span>
-<span class="source-line-no">391</span><span id="line-391">    */</span>
-<span class="source-line-no">392</span><span id="line-392">   public Set&lt;String&gt; getScopes() {</span>
-<span class="source-line-no">393</span><span id="line-393">      return scopes;</span>
-<span class="source-line-no">394</span><span id="line-394">   }</span>
-<span class="source-line-no">395</span><span id="line-395">}</span>
+<span class="source-line-no">321</span><span id="line-321">      if (resource != null)</span>
+<span class="source-line-no">322</span><span id="line-322">         builder.resource(resource);</span>
+<span class="source-line-no">323</span><span id="line-323">      if (customizer != null)</span>
+<span class="source-line-no">324</span><span id="line-324">         customizer.accept(builder);</span>
+<span class="source-line-no">325</span><span id="line-325">      return builder.build().toURI();</span>
+<span class="source-line-no">326</span><span id="line-326">   }</span>
+<span class="source-line-no">327</span><span id="line-327"></span>
+<span class="source-line-no">328</span><span id="line-328">   /**</span>
+<span class="source-line-no">329</span><span id="line-329">    * Exchanges the authorization code returned by the IdP for an access token.</span>
+<span class="source-line-no">330</span><span id="line-330">    *</span>
+<span class="source-line-no">331</span><span id="line-331">    * @param code The {@code code} query parameter from the IdP redirect.  Must not be &lt;jk&gt;null&lt;/jk&gt; or</span>
+<span class="source-line-no">332</span><span id="line-332">    *    blank.</span>
+<span class="source-line-no">333</span><span id="line-333">    * @param codeVerifier The PKCE verifier matching the challenge passed to</span>
+<span class="source-line-no">334</span><span id="line-334">    *    {@link #buildAuthorizationUrl(String, CodeChallenge)}.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">335</span><span id="line-335">    * @return The acquired token.</span>
+<span class="source-line-no">336</span><span id="line-336">    */</span>
+<span class="source-line-no">337</span><span id="line-337">   public OAuthToken exchange(String code, CodeVerifier codeVerifier) {</span>
+<span class="source-line-no">338</span><span id="line-338">      reqnb("code", code);</span>
+<span class="source-line-no">339</span><span id="line-339">      reqnn("codeVerifier", codeVerifier);</span>
+<span class="source-line-no">340</span><span id="line-340">      var grant = new AuthorizationCodeGrant(new AuthorizationCode(code), redirectUri, codeVerifier);</span>
+<span class="source-line-no">341</span><span id="line-341">      TokenRequest.Builder reqBuilder;</span>
+<span class="source-line-no">342</span><span id="line-342">      if (clientSecretSupplier != null) {</span>
+<span class="source-line-no">343</span><span id="line-343">         var clientAuth = new ClientSecretBasic(new ClientID(clientId), new Secret(clientSecretSupplier.get()));</span>
+<span class="source-line-no">344</span><span id="line-344">         reqBuilder = new TokenRequest.Builder(tokenEndpoint, clientAuth, grant);</span>
+<span class="source-line-no">345</span><span id="line-345">      } else {</span>
+<span class="source-line-no">346</span><span id="line-346">         reqBuilder = new TokenRequest.Builder(tokenEndpoint, new ClientID(clientId), grant);</span>
+<span class="source-line-no">347</span><span id="line-347">      }</span>
+<span class="source-line-no">348</span><span id="line-348">      if (resource != null)</span>
+<span class="source-line-no">349</span><span id="line-349">         reqBuilder.resource(resource);</span>
+<span class="source-line-no">350</span><span id="line-350">      return Flows.send(reqBuilder.build(), httpTimeout, httpRequestConfigurator);</span>
+<span class="source-line-no">351</span><span id="line-351">   }</span>
+<span class="source-line-no">352</span><span id="line-352"></span>
+<span class="source-line-no">353</span><span id="line-353">   /**</span>
+<span class="source-line-no">354</span><span id="line-354">    * Returns the authorization endpoint URL.</span>
+<span class="source-line-no">355</span><span id="line-355">    *</span>
+<span class="source-line-no">356</span><span id="line-356">    * @return The endpoint.</span>
+<span class="source-line-no">357</span><span id="line-357">    */</span>
+<span class="source-line-no">358</span><span id="line-358">   public URI getAuthorizationEndpoint() {</span>
+<span class="source-line-no">359</span><span id="line-359">      return authorizationEndpoint;</span>
+<span class="source-line-no">360</span><span id="line-360">   }</span>
+<span class="source-line-no">361</span><span id="line-361"></span>
+<span class="source-line-no">362</span><span id="line-362">   /**</span>
+<span class="source-line-no">363</span><span id="line-363">    * Returns the token endpoint URL.</span>
+<span class="source-line-no">364</span><span id="line-364">    *</span>
+<span class="source-line-no">365</span><span id="line-365">    * @return The endpoint.</span>
+<span class="source-line-no">366</span><span id="line-366">    */</span>
+<span class="source-line-no">367</span><span id="line-367">   public URI getTokenEndpoint() {</span>
+<span class="source-line-no">368</span><span id="line-368">      return tokenEndpoint;</span>
+<span class="source-line-no">369</span><span id="line-369">   }</span>
+<span class="source-line-no">370</span><span id="line-370"></span>
+<span class="source-line-no">371</span><span id="line-371">   /**</span>
+<span class="source-line-no">372</span><span id="line-372">    * Returns the client ID.</span>
+<span class="source-line-no">373</span><span id="line-373">    *</span>
+<span class="source-line-no">374</span><span id="line-374">    * @return The client ID.</span>
+<span class="source-line-no">375</span><span id="line-375">    */</span>
+<span class="source-line-no">376</span><span id="line-376">   public String getClientId() {</span>
+<span class="source-line-no">377</span><span id="line-377">      return clientId;</span>
+<span class="source-line-no">378</span><span id="line-378">   }</span>
+<span class="source-line-no">379</span><span id="line-379"></span>
+<span class="source-line-no">380</span><span id="line-380">   /**</span>
+<span class="source-line-no">381</span><span id="line-381">    * Returns the redirect URI.</span>
+<span class="source-line-no">382</span><span id="line-382">    *</span>
+<span class="source-line-no">383</span><span id="line-383">    * @return The redirect URI.</span>
+<span class="source-line-no">384</span><span id="line-384">    */</span>
+<span class="source-line-no">385</span><span id="line-385">   public URI getRedirectUri() {</span>
+<span class="source-line-no">386</span><span id="line-386">      return redirectUri;</span>
+<span class="source-line-no">387</span><span id="line-387">   }</span>
+<span class="source-line-no">388</span><span id="line-388"></span>
+<span class="source-line-no">389</span><span id="line-389">   /**</span>
+<span class="source-line-no">390</span><span id="line-390">    * Returns the requested scopes.</span>
+<span class="source-line-no">391</span><span id="line-391">    *</span>
+<span class="source-line-no">392</span><span id="line-392">    * @return An unmodifiable view.</span>
+<span class="source-line-no">393</span><span id="line-393">    */</span>
+<span class="source-line-no">394</span><span id="line-394">   public Set&lt;String&gt; getScopes() {</span>
+<span class="source-line-no">395</span><span id="line-395">      return scopes;</span>
+<span class="source-line-no">396</span><span id="line-396">   }</span>
+<span class="source-line-no">397</span><span id="line-397">}</span>
 
 
 

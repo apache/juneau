@@ -661,7 +661,7 @@
 <span class="source-line-no">648</span><span id="line-648">      } else {</span>
 <span class="source-line-no">649</span><span id="line-649">         var cm = js.getClassMeta(type);</span>
 <span class="source-line-no">650</span><span id="line-650">         if (cm.hasStringMutater()) {</span>
-<span class="source-line-no">651</span><span id="line-651">            example = BasicConverter.INSTANCE.to(sex, cm.inner());</span>
+<span class="source-line-no">651</span><span id="line-651">            example = cm.basicConverter().to(sex, cm.inner());</span>
 <span class="source-line-no">652</span><span id="line-652">         }</span>
 <span class="source-line-no">653</span><span id="line-653">      }</span>
 <span class="source-line-no">654</span><span id="line-654"></span>

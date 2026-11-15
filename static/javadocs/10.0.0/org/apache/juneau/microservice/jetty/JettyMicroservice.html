@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroservice.html#line-58">JettyMicroservice</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroservice.html#line-59">JettyMicroservice</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Zero-config convenience launcher for a Jetty-backed Juneau microservice.
 
@@ -100,8 +100,9 @@ loadScripts(document, 'script');</script>
    <li>Interactive console enabled (use <a href="#run(java.lang.String%5B%5D,jakarta.servlet.Servlet,boolean)"><code>run(String[], Servlet, boolean)</code></a> with
       <code>startConsole=false</code> to suppress).
    <li>Classpath defaults for <c>jetty.xml</c> and <c>juneau.cfg</c> &mdash; a consumer-supplied
-      copy on the working-directory or classpath wins via the existing
-      <a href="../Microservice.html" title="class in org.apache.juneau.microservice"><code>Microservice</code></a> resolution chain.
+      <c>juneau.cfg</c> on the working-directory or classpath wins via the existing
+      <a href="../Microservice.html" title="class in org.apache.juneau.microservice"><code>Microservice</code></a> resolution chain; <c>jetty.xml</c> is read from the classpath, or from the
+      file system only when named by <c>Jetty/config</c>.
  </ul>
 
  <p>
@@ -171,7 +172,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="run(java.lang.String[],jakarta.servlet.Servlet)">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroservice.html#line-79">run</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroservice.html#line-80">run</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args,
  jakarta.servlet.Servlet&nbsp;rootServlet)</span>
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Boots a Jetty microservice with the supplied root servlet and the bundled defaults,
@@ -194,7 +195,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="run(java.lang.String[],jakarta.servlet.Servlet,boolean)">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroservice.html#line-101">run</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroservice.html#line-102">run</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args,
  jakarta.servlet.Servlet&nbsp;rootServlet,
  boolean&nbsp;startConsole)</span>
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -223,7 +224,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="run(java.lang.String[],org.apache.juneau.commons.inject.WritableBeanStore,boolean,java.lang.Class...)">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroservice.html#line-127">run</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/jetty/JettyMicroservice.html#line-128">run</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args,
  <a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&nbsp;beanStore,
  boolean&nbsp;startConsole,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;configurations)</span>

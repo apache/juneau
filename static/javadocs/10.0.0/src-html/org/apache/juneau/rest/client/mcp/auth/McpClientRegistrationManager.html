@@ -252,7 +252,7 @@
 <span class="source-line-no">239</span><span id="line-239">       * Allows an AS-advertised registration endpoint that points at a loopback, private, link-local or metadata host.</span>
 <span class="source-line-no">240</span><span id="line-240">       *</span>
 <span class="source-line-no">241</span><span id="line-241">       * &lt;p&gt;</span>
-<span class="source-line-no">242</span><span id="line-242">       * By default such endpoints are rejected (the endpoint comes from AS metadata, so a hostile document could</span>
+<span class="source-line-no">242</span><span id="line-242">       * By default such endpoints are rejected (the endpoint comes from AS metadata, so an untrusted document could</span>
 <span class="source-line-no">243</span><span id="line-243">       * otherwise aim the registration request at an internal service).  Intended for local development and</span>
 <span class="source-line-no">244</span><span id="line-244">       * testing; plain {@code http} is still limited to loopback hosts.</span>
 <span class="source-line-no">245</span><span id="line-245">       *</span>
@@ -323,7 +323,7 @@
 <span class="source-line-no">310</span><span id="line-310">      // Pre-registered credentials: use only if bound to this exact AS; a mismatch means the AS migrated (SEP-2352</span>
 <span class="source-line-no">311</span><span id="line-311">      // MUST NOT reuse cross-AS creds — SHOULD surface an error rather than silently reuse).</span>
 <span class="source-line-no">312</span><span id="line-312">      if (preRegistered != null) {</span>
-<span class="source-line-no">313</span><span id="line-313">         if (! preRegistered.issuer().equals(issuer))</span>
+<span class="source-line-no">313</span><span id="line-313">         if (neq(preRegistered.issuer(), issuer))</span>
 <span class="source-line-no">314</span><span id="line-314">            throw new McpAuthException("Pre-registered client credentials are bound to issuer '" + preRegistered.issuer()</span>
 <span class="source-line-no">315</span><span id="line-315">               + "' but the resource now indicates a different authorization server '" + issuer</span>
 <span class="source-line-no">316</span><span id="line-316">               + "' (SEP-2352): refusing to reuse credentials across authorization servers");</span>
@@ -339,7 +339,7 @@
 <span class="source-line-no">326</span><span id="line-326">         if (hit.isPresent()) {</span>
 <span class="source-line-no">327</span><span id="line-327">            // Defensive: a buggy durable store that returns an entry keyed under the wrong issuer would otherwise</span>
 <span class="source-line-no">328</span><span id="line-328">            // cause exactly the cross-AS credential reuse SEP-2352 forbids.  Never trust the returned entry's key.</span>
-<span class="source-line-no">329</span><span id="line-329">            if (! hit.get().issuer().equals(issuer))</span>
+<span class="source-line-no">329</span><span id="line-329">            if (neq(hit.get().issuer(), issuer))</span>
 <span class="source-line-no">330</span><span id="line-330">               throw new McpAuthException("Client-registration store returned an entry bound to issuer '" + hit.get().issuer()</span>
 <span class="source-line-no">331</span><span id="line-331">                  + "' for a lookup of issuer '" + issuer + "' (SEP-2352): refusing to reuse credentials across authorization servers");</span>
 <span class="source-line-no">332</span><span id="line-332">            return hit.get();</span>
@@ -367,46 +367,47 @@
 <span class="source-line-no">354</span><span id="line-354">         .applicationType(applicationType)</span>
 <span class="source-line-no">355</span><span id="line-355">         .addRedirectUris(redirectUrisSupplier.get())</span>
 <span class="source-line-no">356</span><span id="line-356">         .confidential(confidential)</span>
-<span class="source-line-no">357</span><span id="line-357">         .httpTimeout(httpTimeout);</span>
-<span class="source-line-no">358</span><span id="line-358">      scopes.forEach(b::scope);</span>
-<span class="source-line-no">359</span><span id="line-359">      if (clientName != null)</span>
-<span class="source-line-no">360</span><span id="line-360">         b.clientName(clientName);</span>
-<span class="source-line-no">361</span><span id="line-361">      if (initialAccessTokenSupplier != null)</span>
-<span class="source-line-no">362</span><span id="line-362">         b.initialAccessToken(initialAccessTokenSupplier.get());</span>
-<span class="source-line-no">363</span><span id="line-363">      if (httpRequestConfigurator != null)</span>
-<span class="source-line-no">364</span><span id="line-364">         b.httpRequestConfigurator(httpRequestConfigurator);</span>
-<span class="source-line-no">365</span><span id="line-365">      return b.build().register();</span>
-<span class="source-line-no">366</span><span id="line-366">   }</span>
-<span class="source-line-no">367</span><span id="line-367"></span>
-<span class="source-line-no">368</span><span id="line-368">   /**</span>
-<span class="source-line-no">369</span><span id="line-369">    * Extracts the RFC 7591 {@code registration_endpoint} from the discovered AS metadata's extras, if present.</span>
-<span class="source-line-no">370</span><span id="line-370">    *</span>
-<span class="source-line-no">371</span><span id="line-371">    * &lt;p&gt;</span>
-<span class="source-line-no">372</span><span id="line-372">    * The value is AS-supplied, so a hostile/misconfigured AS document is defended against here: a malformed URI or a</span>
-<span class="source-line-no">373</span><span id="line-373">    * plaintext {@code http://} (non-loopback) endpoint yields the documented {@link McpAuthException} rather than a raw</span>
-<span class="source-line-no">374</span><span id="line-374">    * {@link IllegalArgumentException} (from {@code URI.create}) or a downstream {@link IllegalStateException} (from the</span>
-<span class="source-line-no">375</span><span id="line-375">    * registrar's https gate).</span>
-<span class="source-line-no">376</span><span id="line-376">    */</span>
-<span class="source-line-no">377</span><span id="line-377">   static Optional&lt;URI&gt; registrationEndpoint(OidcMetadata as, boolean allowPrivateUrls) {</span>
-<span class="source-line-no">378</span><span id="line-378">      var v = as.extras().get("registration_endpoint");</span>
-<span class="source-line-no">379</span><span id="line-379">      if (v == null)</span>
-<span class="source-line-no">380</span><span id="line-380">         return oe();</span>
-<span class="source-line-no">381</span><span id="line-381">      URI uri;</span>
-<span class="source-line-no">382</span><span id="line-382">      try {</span>
-<span class="source-line-no">383</span><span id="line-383">         uri = URI.create(v.toString());</span>
-<span class="source-line-no">384</span><span id="line-384">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">385</span><span id="line-385">         throw new McpAuthException("Authorization server advertised a malformed registration_endpoint: '" + v + "'", e);</span>
-<span class="source-line-no">386</span><span id="line-386">      }</span>
-<span class="source-line-no">387</span><span id="line-387">      try {</span>
-<span class="source-line-no">388</span><span id="line-388">         RemoteUrlPolicy.requireAllowedUrl(uri.toString(), allowPrivateUrls);</span>
-<span class="source-line-no">389</span><span id="line-389">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">390</span><span id="line-390">         throw new McpAuthException("Authorization server advertised a registration_endpoint that is not permitted: '" + uri + "': " + e.getMessage(), e);</span>
-<span class="source-line-no">391</span><span id="line-391">      }</span>
-<span class="source-line-no">392</span><span id="line-392">      if (! McpDynamicClientRegistrar.isSecureOrLoopback(uri))</span>
-<span class="source-line-no">393</span><span id="line-393">         throw new McpAuthException("Authorization server advertised a non-https registration_endpoint (loopback exempt): '" + uri + "'");</span>
-<span class="source-line-no">394</span><span id="line-394">      return o(uri);</span>
-<span class="source-line-no">395</span><span id="line-395">   }</span>
-<span class="source-line-no">396</span><span id="line-396">}</span>
+<span class="source-line-no">357</span><span id="line-357">         .httpTimeout(httpTimeout)</span>
+<span class="source-line-no">358</span><span id="line-358">         .allowPrivateUrls(allowPrivateUrls);</span>
+<span class="source-line-no">359</span><span id="line-359">      scopes.forEach(b::scope);</span>
+<span class="source-line-no">360</span><span id="line-360">      if (clientName != null)</span>
+<span class="source-line-no">361</span><span id="line-361">         b.clientName(clientName);</span>
+<span class="source-line-no">362</span><span id="line-362">      if (initialAccessTokenSupplier != null)</span>
+<span class="source-line-no">363</span><span id="line-363">         b.initialAccessToken(initialAccessTokenSupplier.get());</span>
+<span class="source-line-no">364</span><span id="line-364">      if (httpRequestConfigurator != null)</span>
+<span class="source-line-no">365</span><span id="line-365">         b.httpRequestConfigurator(httpRequestConfigurator);</span>
+<span class="source-line-no">366</span><span id="line-366">      return b.build().register();</span>
+<span class="source-line-no">367</span><span id="line-367">   }</span>
+<span class="source-line-no">368</span><span id="line-368"></span>
+<span class="source-line-no">369</span><span id="line-369">   /**</span>
+<span class="source-line-no">370</span><span id="line-370">    * Extracts the RFC 7591 {@code registration_endpoint} from the discovered AS metadata's extras, if present.</span>
+<span class="source-line-no">371</span><span id="line-371">    *</span>
+<span class="source-line-no">372</span><span id="line-372">    * &lt;p&gt;</span>
+<span class="source-line-no">373</span><span id="line-373">    * The value is AS-supplied, so an untrusted/misconfigured AS document is defended against here: a malformed URI or a</span>
+<span class="source-line-no">374</span><span id="line-374">    * plaintext {@code http://} (non-loopback) endpoint yields the documented {@link McpAuthException} rather than a raw</span>
+<span class="source-line-no">375</span><span id="line-375">    * {@link IllegalArgumentException} (from {@code URI.create}) or a downstream {@link IllegalStateException} (from the</span>
+<span class="source-line-no">376</span><span id="line-376">    * registrar's https gate).</span>
+<span class="source-line-no">377</span><span id="line-377">    */</span>
+<span class="source-line-no">378</span><span id="line-378">   static Optional&lt;URI&gt; registrationEndpoint(OidcMetadata as, boolean allowPrivateUrls) {</span>
+<span class="source-line-no">379</span><span id="line-379">      var v = as.extras().get("registration_endpoint");</span>
+<span class="source-line-no">380</span><span id="line-380">      if (v == null)</span>
+<span class="source-line-no">381</span><span id="line-381">         return oe();</span>
+<span class="source-line-no">382</span><span id="line-382">      URI uri;</span>
+<span class="source-line-no">383</span><span id="line-383">      try {</span>
+<span class="source-line-no">384</span><span id="line-384">         uri = URI.create(v.toString());</span>
+<span class="source-line-no">385</span><span id="line-385">      } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">386</span><span id="line-386">         throw new McpAuthException("Authorization server advertised a malformed registration_endpoint: '" + v + "'", e);</span>
+<span class="source-line-no">387</span><span id="line-387">      }</span>
+<span class="source-line-no">388</span><span id="line-388">      try {</span>
+<span class="source-line-no">389</span><span id="line-389">         RemoteUrlPolicy.requireAllowedUrl(uri.toString(), allowPrivateUrls);</span>
+<span class="source-line-no">390</span><span id="line-390">      } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">391</span><span id="line-391">         throw new McpAuthException("Authorization server advertised a registration_endpoint that is not permitted: '" + uri + "': " + e.getMessage(), e);</span>
+<span class="source-line-no">392</span><span id="line-392">      }</span>
+<span class="source-line-no">393</span><span id="line-393">      if (! McpDynamicClientRegistrar.isSecureOrLoopback(uri))</span>
+<span class="source-line-no">394</span><span id="line-394">         throw new McpAuthException("Authorization server advertised a non-https registration_endpoint (loopback exempt): '" + uri + "'");</span>
+<span class="source-line-no">395</span><span id="line-395">      return o(uri);</span>
+<span class="source-line-no">396</span><span id="line-396">   }</span>
+<span class="source-line-no">397</span><span id="line-397">}</span>
 
 
 

@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-128">SamlAssertionValidator</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-138">SamlAssertionValidator</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Validates a SAML 2.0 <code>&lt;samlp:Response&gt;</code> document and produces a <a href="../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a> marked
  with <code>issuerType=SAML</code>.
@@ -238,29 +238,40 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the configured signature algorithm allowlist.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getClockSkew()" class="member-name-link">getClockSkew</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getAuthnRequestTtl()" class="member-name-link">getAuthnRequestTtl</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns how long a request ID registered with <a href="#rememberAuthnRequest(java.lang.String)"><code>rememberAuthnRequest(String)</code></a> stays valid.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getClockSkew()" class="member-name-link">getClockSkew</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the configured clock-skew tolerance.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getExpectedIssuer()" class="member-name-link">getExpectedIssuer</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getExpectedIssuer()" class="member-name-link">getExpectedIssuer</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the expected IdP <code>&lt;Issuer&gt;</code> value.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSpEntityId()" class="member-name-link">getSpEntityId</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSpEntityId()" class="member-name-link">getSpEntityId</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the SP entity ID this validator enforces in <code>&lt;AudienceRestriction&gt;</code>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rememberAuthnRequest(java.lang.String)" class="member-name-link">rememberAuthnRequest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rememberAuthnRequest(java.lang.String)" class="member-name-link">rememberAuthnRequest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Registers the ID of an authentication request this SP sent, so a response answering it can be accepted.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validate(java.lang.String)" class="member-name-link">validate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;xml)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validate(java.lang.String)" class="member-name-link">validate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;xml)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Validates the supplied SAML 2.0 <code>&lt;samlp:Response&gt;</code> XML and returns the resolved principal.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validate(java.lang.String,java.lang.String)" class="member-name-link">validate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;xml,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;browserBinding)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Validates the supplied SAML 2.0 <code>&lt;samlp:Response&gt;</code> XML for a response that arrived from a specific browser.</div>
 </div>
 </div>
 </div>
@@ -282,7 +293,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ISSUER_TYPE_CLAIM">
 <h3>ISSUER_TYPE_CLAIM</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-137">ISSUER_TYPE_CLAIM</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-148">ISSUER_TYPE_CLAIM</a></span></div>
 <div class="block">Marker claim name on the returned <a href="../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a>.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -297,7 +308,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ISSUER_TYPE_SAML">
 <h3>ISSUER_TYPE_SAML</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-140">ISSUER_TYPE_SAML</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-151">ISSUER_TYPE_SAML</a></span></div>
 <div class="block">Marker claim value identifying the principal as SAML-issued.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -320,7 +331,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.auth.saml.SamlAssertionValidator.Builder)">
 <h3>SamlAssertionValidator</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-525">SamlAssertionValidator</a></span><wbr><span class="parameters">(<a href="SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-558">SamlAssertionValidator</a></span><wbr><span class="parameters">(<a href="SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -339,7 +350,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-184">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-195">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -350,7 +361,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSpEntityId()">
 <h3>getSpEntityId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-550">getSpEntityId</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-584">getSpEntityId</a></span>()</div>
 <div class="block">Returns the SP entity ID this validator enforces in <code>&lt;AudienceRestriction&gt;</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -361,7 +372,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getExpectedIssuer()">
 <h3>getExpectedIssuer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-559">getExpectedIssuer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-593">getExpectedIssuer</a></span>()</div>
 <div class="block">Returns the expected IdP <code>&lt;Issuer&gt;</code> value.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -372,7 +383,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAlgorithms()">
 <h3>getAlgorithms</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-568">getAlgorithms</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-602">getAlgorithms</a></span>()</div>
 <div class="block">Returns the configured signature algorithm allowlist.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -383,7 +394,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getClockSkew()">
 <h3>getClockSkew</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-577">getClockSkew</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-611">getClockSkew</a></span>()</div>
 <div class="block">Returns the configured clock-skew tolerance.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -392,17 +403,36 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="getAuthnRequestTtl()">
+<h3>getAuthnRequestTtl</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-620">getAuthnRequestTtl</a></span>()</div>
+<div class="block">Returns how long a request ID registered with <a href="#rememberAuthnRequest(java.lang.String)"><code>rememberAuthnRequest(String)</code></a> stays valid.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The request lifetime.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="rememberAuthnRequest(java.lang.String)">
 <h3>rememberAuthnRequest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-591">rememberAuthnRequest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-641">rememberAuthnRequest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
 <div class="block">Registers the ID of an authentication request this SP sent, so a response answering it can be accepted.
 
  <p>
  Each registered ID is accepted once and expires after the configured request lifetime.  The registry is the
- <a href="AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml"><code>AuthnRequestStore</code></a> supplied to <a href="SamlAssertionValidator.Builder.html#authnRequestStore(org.apache.juneau.rest.server.auth.saml.AuthnRequestStore)"><code>SamlAssertionValidator.Builder.authnRequestStore(AuthnRequestStore)</code></a> (in-memory by default).</div>
+ <a href="AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml"><code>AuthnRequestStore</code></a> supplied to <a href="SamlAssertionValidator.Builder.html#authnRequestStore(org.apache.juneau.rest.server.auth.saml.AuthnRequestStore)"><code>SamlAssertionValidator.Builder.authnRequestStore(AuthnRequestStore)</code></a> (in-memory by default).
+
+ <p>
+ The ID is tied to the browser that starts the login.  This method generates a random secret, stores only its
+ digest next to the ID, and returns the secret.  The caller must hand the returned value to the same browser
+ (see <a href="SamlAuthFilter.html#startLogin(jakarta.servlet.http.HttpServletResponse,java.lang.String)"><code>SamlAuthFilter.startLogin(HttpServletResponse, String)</code></a>) and the response must come back
+ with that value, see <a href="#validate(java.lang.String,java.lang.String)"><code>validate(String, String)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>id</code> - The <code>ID</code> attribute of the outgoing <code>&lt;AuthnRequest&gt;</code>.  Must not be <jk>null</jk> or blank.</dd>
+<dt>Returns:</dt>
+<dd>The browser-binding secret to give to the browser that will receive the response.  Never <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - If the store cannot accept more outstanding requests.</dd>
 </dl>
@@ -411,7 +441,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="validate(java.lang.String)">
 <h3>validate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-610">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;xml)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-672">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;xml)</span>
                    throws <span class="exceptions"><a href="../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></span></div>
 <div class="block">Validates the supplied SAML 2.0 <code>&lt;samlp:Response&gt;</code> XML and returns the resolved principal.</div>
 <dl class="notes">
@@ -421,6 +451,28 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>A <a href="../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a> carrying the IdP-supplied claims plus the <code>issuerType=SAML</code>
    marker.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></code> - If the response cannot be parsed or validation fails.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="validate(java.lang.String,java.lang.String)">
+<h3>validate</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-688">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;xml,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;browserBinding)</span>
+                   throws <span class="exceptions"><a href="../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></span></div>
+<div class="block">Validates the supplied SAML 2.0 <code>&lt;samlp:Response&gt;</code> XML for a response that arrived from a specific browser.
+
+ <p>
+ A response that answers a request registered with <a href="#rememberAuthnRequest(java.lang.String)"><code>rememberAuthnRequest(String)</code></a> is accepted only when
+ <c>browserBinding</c> is the secret that method returned for that request.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>xml</code> - The full XML payload.  Must be a <code>&lt;samlp:Response&gt;</code> envelope.</dd>
+<dd><code>browserBinding</code> - The binding secret presented by the browser, or <jk>null</jk> if it presented none.</dd>
+<dt>Returns:</dt>
+<dd>A <a href="../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a> carrying the IdP-supplied claims plus the <code>issuerType=SAML</code> marker.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></code> - If the response cannot be parsed or validation fails.</dd>
 </dl>

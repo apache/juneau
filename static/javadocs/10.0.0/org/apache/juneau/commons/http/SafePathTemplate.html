@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-39">SafePathTemplate</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-44">SafePathTemplate</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Shared, dependency-free predicates for validating <b>same-origin</b> request paths declared by higher layers, plus
  the single <a href="#MIN_POLL_INTERVAL_MS"><code>polling floor</code></a> those layers clamp declared poll intervals to.
@@ -146,15 +146,22 @@ loadScripts(document, 'script');</script>
 <div class="block">Whether <code>url</code> is a same-origin <b>document</b> URL (query and fragment allowed).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isSafeTemplate(java.lang.String,java.lang.String...)" class="member-name-link">isSafeTemplate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;requiredTokens)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isSafeRedirect(java.lang.String,java.lang.String...)" class="member-name-link">isSafeRedirect</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;allowedHosts)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Whether <code>uri</code> is safe to send as a redirect target: either a relative reference, or an absolute or
+ protocol-relative URI whose host is in <code>allowedHosts</code>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isSafeTemplate(java.lang.String,java.lang.String...)" class="member-name-link">isSafeTemplate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;requiredTokens)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Whether <code>template</code> is a same-origin path template (per <a href="#isSameOriginPath(java.lang.String)"><code>isSameOriginPath(String)</code></a>) that also
  contains every required substitution token.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isSameOriginPath(java.lang.String)" class="member-name-link">isSameOriginPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isSameOriginPath(java.lang.String)" class="member-name-link">isSameOriginPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Whether <code>path</code> is a same-origin path: not blank, no <code>://</code>, no <code>//</code> prefix, no scheme
  (colon before the first slash), and no <code>..</code> path segments.</div>
 </div>
@@ -178,7 +185,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="MIN_POLL_INTERVAL_MS">
 <h3>MIN_POLL_INTERVAL_MS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-51">MIN_POLL_INTERVAL_MS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-56">MIN_POLL_INTERVAL_MS</a></span></div>
 <div class="block">The minimum honored polling interval, in milliseconds.
 
  <p>
@@ -208,7 +215,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isSameOriginPath(java.lang.String)">
 <h3>isSameOriginPath</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-74">isSameOriginPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-79">isSameOriginPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Whether <code>path</code> is a same-origin path: not blank, no <code>://</code>, no <code>//</code> prefix, no scheme
  (colon before the first slash), and no <code>..</code> path segments.
 
@@ -234,7 +241,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isNonTemplatedPath(java.lang.String)">
 <h3>isNonTemplatedPath</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-113">isNonTemplatedPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-118">isNonTemplatedPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Whether <code>path</code> is a same-origin path (per <a href="#isSameOriginPath(java.lang.String)"><code>isSameOriginPath(String)</code></a>) that also carries <b>no</b>
  <code>{…}</code> template placeholder.
 
@@ -252,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clampPollInterval(long)">
 <h3>clampPollInterval</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-123">clampPollInterval</a></span><wbr><span class="parameters">(long&nbsp;intervalMs)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-128">clampPollInterval</a></span><wbr><span class="parameters">(long&nbsp;intervalMs)</span></div>
 <div class="block">Clamps a declared poll interval up to <a href="#MIN_POLL_INTERVAL_MS"><code>MIN_POLL_INTERVAL_MS</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -265,7 +272,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isSafeTemplate(java.lang.String,java.lang.String...)">
 <h3>isSafeTemplate</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-141">isSafeTemplate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-146">isSafeTemplate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;requiredTokens)</span></div>
 <div class="block">Whether <code>template</code> is a same-origin path template (per <a href="#isSameOriginPath(java.lang.String)"><code>isSameOriginPath(String)</code></a>) that also
  contains every required substitution token.
@@ -287,7 +294,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isSafeDocumentUrl(java.lang.String)">
 <h3>isSafeDocumentUrl</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-161">isSafeDocumentUrl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-166">isSafeDocumentUrl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url)</span></div>
 <div class="block">Whether <code>url</code> is a same-origin <b>document</b> URL (query and fragment allowed).
 
  <p>
@@ -298,6 +305,28 @@ loadScripts(document, 'script');</script>
 <dd><code>url</code> - The candidate document URL.  Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the URL is a safe same-origin document link.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isSafeRedirect(java.lang.String,java.lang.String...)">
+<h3>isSafeRedirect</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/SafePathTemplate.html#line-184">isSafeRedirect</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;allowedHosts)</span></div>
+<div class="block">Whether <code>uri</code> is safe to send as a redirect target: either a relative reference, or an absolute or
+ protocol-relative URI whose host is in <code>allowedHosts</code>.
+
+ <p>
+ A <jk>null</jk> or empty value is accepted.  A backslash, any character at or below U+0020, and DEL are
+ rejected anywhere in the value.  A relative reference that carries a scheme (for example
+ <code>"mailto:x"</code> or <code>"http:host"</code>) is rejected; see <a href="../utils/StringUtils.html#hasUriScheme(java.lang.String)"><code>StringUtils.hasUriScheme(String)</code></a>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>uri</code> - The candidate redirect target.  Can be <jk>null</jk>.</dd>
+<dd><code>allowedHosts</code> - The hosts (case-insensitive) an absolute or protocol-relative <code>uri</code> may target.
+   Can be <jk>null</jk> or empty (no absolute target is accepted).</dd>
+<dt>Returns:</dt>
+<dd><jk>true</jk> if the URI is safe to redirect to.</dd>
 </dl>
 </section>
 </li>

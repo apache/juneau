@@ -123,14 +123,25 @@ loadScripts(document, 'script');</script>
 <div class="block">Enables or disables the eager JWKS refresh that fires on a fresh-cache <code>kid</code> miss.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JwtTokenValidator.Builder.</span><code><a href="../JwtTokenValidator.Builder.html#jwkSource(com.nimbusds.jose.jwk.source.JWKSource)" class="member-name-link">jwkSource</a><wbr>(com.nimbusds.jose.jwk.source.JWKSource&lt;com.nimbusds.jose.proc.SecurityContext&gt;&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JwtTokenValidator.Builder.</span><code><a href="../JwtTokenValidator.Builder.html#jwksMaxStale(java.time.Duration)" class="member-name-link">jwksMaxStale</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Sets a custom <code>JWKSource</code> the validator fetches keys from.</div>
+<div class="block">Sets how long the JWKS cache may keep serving the last-known-good key set after its TTL has
+ expired while the JWKS endpoint is unreachable.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JwtTokenValidator.Builder.</span><code><a href="../JwtTokenValidator.Builder.html#jwksUrl(java.net.URI)" class="member-name-link">jwksUrl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JwtTokenValidator.Builder.</span><code><a href="../JwtTokenValidator.Builder.html#jwkSource(com.nimbusds.jose.jwk.source.JWKSource)" class="member-name-link">jwkSource</a><wbr>(com.nimbusds.jose.jwk.source.JWKSource&lt;com.nimbusds.jose.proc.SecurityContext&gt;&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Sets a custom <code>JWKSource</code> the validator fetches keys from.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JwtTokenValidator.Builder.</span><code><a href="../JwtTokenValidator.Builder.html#jwksUrl(java.net.URI)" class="member-name-link">jwksUrl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the JWKS endpoint URL the validator fetches keys from.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JwtTokenValidator.Builder.</span><code><a href="../JwtTokenValidator.Builder.html#requireAccessTokenType(boolean)" class="member-name-link">requireAccessTokenType</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Requires tokens to be explicitly typed as JWT access tokens (RFC 9068).</div>
 </div>
 </div>
 <div class="caption"><span>Constructors in <a href="../package-summary.html">org.apache.juneau.rest.server.auth.jwt</a> with parameters of type <a href="../JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span></div>

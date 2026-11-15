@@ -60,6 +60,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Remote REST API</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.auth.oauth.flow">org.apache.juneau.rest.auth.oauth.flow</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Role-neutral OAuth 2.0 grant-flow helpers.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -98,6 +102,22 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Same as <a href="../RemoteUrlPolicy.html#selectAllowedAddress(java.lang.String,boolean,org.apache.juneau.http.remote.RemoteUrlPolicy.AddressResolver)"><code>RemoteUrlPolicy.selectAllowedAddress(String, boolean, AddressResolver)</code></a>, additionally re-permitting candidates
  inside the per-client <code>allowedRanges</code> (unioned with the <a href="../RemoteUrlPolicy.html#ALLOW_ADDRESS_RANGES_PROPERTY">"RestClient.allowAddressRanges"</a> system property).</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.auth.oauth.flow">
+<h2>Uses of <a href="../RemoteUrlPolicy.AddressResolver.html" title="interface in org.apache.juneau.http.remote">RemoteUrlPolicy.AddressResolver</a> in <a href="../../../rest/auth/oauth/flow/package-summary.html">org.apache.juneau.rest.auth.oauth.flow</a></h2>
+<div class="caption"><span>Methods in <a href="../../../rest/auth/oauth/flow/package-summary.html">org.apache.juneau.rest.auth.oauth.flow</a> with parameters of type <a href="../RemoteUrlPolicy.AddressResolver.html" title="interface in org.apache.juneau.http.remote">RemoteUrlPolicy.AddressResolver</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../rest/auth/oauth/flow/OAuthHttpPolicy.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthHttpPolicy</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OAuthHttpPolicy.</span><code><a href="../../../rest/auth/oauth/flow/OAuthHttpPolicy.html#withResolver(org.apache.juneau.http.remote.RemoteUrlPolicy.AddressResolver)" class="member-name-link">withResolver</a><wbr>(<a href="../RemoteUrlPolicy.AddressResolver.html" title="interface in org.apache.juneau.http.remote">RemoteUrlPolicy.AddressResolver</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns a copy of this policy that resolves host names with the given resolver.</div>
 </div>
 </div>
 </section>

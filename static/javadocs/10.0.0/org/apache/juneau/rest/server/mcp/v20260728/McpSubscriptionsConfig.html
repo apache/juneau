@@ -127,8 +127,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Default cap on concurrently open <code>subscriptions/listen</code> streams per broker.</div>
 </div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#DEFAULT_QUEUE_SIZE" class="member-name-link">DEFAULT_QUEUE_SIZE</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL" class="member-name-link">DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Default cap on concurrently open <code>subscriptions/listen</code> streams per authenticated caller.</div>
+</div>
+<div class="col-first even-row-color"><code>static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#DEFAULT_QUEUE_SIZE" class="member-name-link">DEFAULT_QUEUE_SIZE</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Default per-subscription drop-oldest queue bound; matches <code>SseBroadcaster.DEFAULT_QUEUE_SIZE</code>.</div>
 </div>
 </div>
@@ -174,24 +179,34 @@ loadScripts(document, 'script');</script>
 <div class="block">The cap on concurrently open <code>subscriptions/listen</code> streams per broker.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getQueueSize()" class="member-name-link">getQueueSize</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMaxSubscriptionsPerPrincipal()" class="member-name-link">getMaxSubscriptionsPerPrincipal</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">The cap on concurrently open <code>subscriptions/listen</code> streams per authenticated caller.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getQueueSize()" class="member-name-link">getQueueSize</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The per-subscription drop-oldest queue bound.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeartbeatIntervalMs(long)" class="member-name-link">setHeartbeatIntervalMs</a><wbr>(long&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeartbeatIntervalMs(long)" class="member-name-link">setHeartbeatIntervalMs</a><wbr>(long&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the heartbeat/keepalive interval.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setIdleTimeoutMs(long)" class="member-name-link">setIdleTimeoutMs</a><wbr>(long&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setIdleTimeoutMs(long)" class="member-name-link">setIdleTimeoutMs</a><wbr>(long&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the idle timeout.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMaxConcurrentSubscriptions(int)" class="member-name-link">setMaxConcurrentSubscriptions</a><wbr>(int&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMaxConcurrentSubscriptions(int)" class="member-name-link">setMaxConcurrentSubscriptions</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the cap on concurrently open <code>subscriptions/listen</code> streams per broker.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMaxSubscriptionsPerPrincipal(int)" class="member-name-link">setMaxSubscriptionsPerPrincipal</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the cap on concurrently open <code>subscriptions/listen</code> streams per authenticated caller.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setQueueSize(int)" class="member-name-link">setQueueSize</a><wbr>(int&nbsp;value)</code></div>
@@ -231,9 +246,24 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL">
+<h3>DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-46">DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL</a></span></div>
+<div class="block">Default cap on concurrently open <code>subscriptions/listen</code> streams per authenticated caller.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../../../constant-values.html#org.apache.juneau.rest.server.mcp.v20260728.McpSubscriptionsConfig.DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="DEFAULT_QUEUE_SIZE">
 <h3>DEFAULT_QUEUE_SIZE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-46">DEFAULT_QUEUE_SIZE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-49">DEFAULT_QUEUE_SIZE</a></span></div>
 <div class="block">Default per-subscription drop-oldest queue bound; matches <code>SseBroadcaster.DEFAULT_QUEUE_SIZE</code>.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -248,7 +278,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_HEARTBEAT_INTERVAL_MS">
 <h3>DEFAULT_HEARTBEAT_INTERVAL_MS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-49">DEFAULT_HEARTBEAT_INTERVAL_MS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-52">DEFAULT_HEARTBEAT_INTERVAL_MS</a></span></div>
 <div class="block">Default heartbeat/keepalive interval in milliseconds.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -263,7 +293,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_IDLE_TIMEOUT_MS">
 <h3>DEFAULT_IDLE_TIMEOUT_MS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-52">DEFAULT_IDLE_TIMEOUT_MS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-55">DEFAULT_IDLE_TIMEOUT_MS</a></span></div>
 <div class="block">Default idle timeout in milliseconds (5 minutes); <code>0</code> disables idle-timeout reaping.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -300,7 +330,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMaxConcurrentSubscriptions()">
 <h3>getMaxConcurrentSubscriptions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-64">getMaxConcurrentSubscriptions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-68">getMaxConcurrentSubscriptions</a></span>()</div>
 <div class="block">The cap on concurrently open <code>subscriptions/listen</code> streams per broker.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -311,8 +341,34 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setMaxConcurrentSubscriptions(int)">
 <h3>setMaxConcurrentSubscriptions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-75">setMaxConcurrentSubscriptions</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-79">setMaxConcurrentSubscriptions</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
 <div class="block">Sets the cap on concurrently open <code>subscriptions/listen</code> streams per broker.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new value. Must be <code>&gt; 0</code>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If <code>value</code> is not <code>&gt; 0</code>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getMaxSubscriptionsPerPrincipal()">
+<h3>getMaxSubscriptionsPerPrincipal</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-91">getMaxSubscriptionsPerPrincipal</a></span>()</div>
+<div class="block">The cap on concurrently open <code>subscriptions/listen</code> streams per authenticated caller.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The cap. Always <code>&gt; 0</code>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setMaxSubscriptionsPerPrincipal(int)">
+<h3>setMaxSubscriptionsPerPrincipal</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-102">setMaxSubscriptionsPerPrincipal</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="block">Sets the cap on concurrently open <code>subscriptions/listen</code> streams per authenticated caller.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new value. Must be <code>&gt; 0</code>.</dd>
@@ -326,7 +382,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getQueueSize()">
 <h3>getQueueSize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-87">getQueueSize</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-114">getQueueSize</a></span>()</div>
 <div class="block">The per-subscription drop-oldest queue bound.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -337,7 +393,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setQueueSize(int)">
 <h3>setQueueSize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-98">setQueueSize</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-125">setQueueSize</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
 <div class="block">Sets the per-subscription drop-oldest queue bound.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -352,7 +408,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getHeartbeatIntervalMs()">
 <h3>getHeartbeatIntervalMs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-110">getHeartbeatIntervalMs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-137">getHeartbeatIntervalMs</a></span>()</div>
 <div class="block">The heartbeat/keepalive interval in milliseconds.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -363,7 +419,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setHeartbeatIntervalMs(long)">
 <h3>setHeartbeatIntervalMs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-121">setHeartbeatIntervalMs</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-148">setHeartbeatIntervalMs</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
 <div class="block">Sets the heartbeat/keepalive interval.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -378,7 +434,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getIdleTimeoutMs()">
 <h3>getIdleTimeoutMs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-133">getIdleTimeoutMs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-160">getIdleTimeoutMs</a></span>()</div>
 <div class="block">The idle timeout in milliseconds.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -389,7 +445,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setIdleTimeoutMs(long)">
 <h3>setIdleTimeoutMs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-153">setIdleTimeoutMs</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#line-180">setIdleTimeoutMs</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
 <div class="block">Sets the idle timeout.
 
  <p>

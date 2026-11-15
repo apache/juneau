@@ -210,18 +210,24 @@ loadScripts(document, 'script');</script>
  response headers when a tracer is active.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUriRelativityRaw()" class="member-name-link">getUriRelativityRaw</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getShowCauseMessagesRaw()" class="member-name-link">getShowCauseMessagesRaw</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">The raw (unresolved) <code>@Rest(uriRelativity)</code> default value.</div>
+<div class="block">The raw (unresolved) <code>@Rest(showCauseMessages)</code> default &mdash; whether messages taken from an exception's
+ cause are written to error responses.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUriResolutionRaw()" class="member-name-link">getUriResolutionRaw</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUriRelativityRaw()" class="member-name-link">getUriRelativityRaw</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">The raw (unresolved) <code>@Rest(uriResolution)</code> default value.</div>
+<div class="block">The raw (unresolved) <code>@Rest(uriRelativity)</code> default value.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getVirtualThreadsRaw()" class="member-name-link">getVirtualThreadsRaw</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUriResolutionRaw()" class="member-name-link">getUriResolutionRaw</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">The raw (unresolved) <code>@Rest(uriResolution)</code> default value.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getVirtualThreadsRaw()" class="member-name-link">getVirtualThreadsRaw</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The raw (unresolved) <code>@Rest(virtualThreads)</code> default &mdash; whether per-request virtual-thread dispatch is
  opted into on Java 21+.</div>
 </div>
@@ -259,7 +265,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAllowedHeaderParams()">
 <h3>getAllowedHeaderParams</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-84">getAllowedHeaderParams</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-85">getAllowedHeaderParams</a></span>()</div>
 <div class="block">The default set of header names that may be passed via URL query parameter (<code>@Rest(allowedHeaderParams)</code>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -270,7 +276,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAllowedMethodHeaders()">
 <h3>getAllowedMethodHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-93">getAllowedMethodHeaders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-94">getAllowedMethodHeaders</a></span>()</div>
 <div class="block">The default set of HTTP method names that may be specified via a request header (<code>@Rest(allowedMethodHeaders)</code>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -281,7 +287,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAllowedMethodParams()">
 <h3>getAllowedMethodParams</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-102">getAllowedMethodParams</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-103">getAllowedMethodParams</a></span>()</div>
 <div class="block">The default set of HTTP method names that may be specified via URL query parameter (<code>@Rest(allowedMethodParams)</code>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -292,7 +298,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAllowContentParamRaw()">
 <h3>getAllowContentParamRaw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-117">getAllowContentParamRaw</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-118">getAllowContentParamRaw</a></span>()</div>
 <div class="block">The raw (unresolved) <code>@Rest(allowContentParam)</code> default &mdash; whether the <code>&amp;content=</code> URL
  parameter is allowed.
 
@@ -309,7 +315,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRenderResponseStackTracesRaw()">
 <h3>getRenderResponseStackTracesRaw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-130">getRenderResponseStackTracesRaw</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-131">getRenderResponseStackTracesRaw</a></span>()</div>
 <div class="block">The raw (unresolved) <code>@Rest(renderResponseStackTraces)</code> default &mdash; whether stack traces are rendered
  in error responses.
 
@@ -324,7 +330,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getProblemDetailsRaw()">
 <h3>getProblemDetailsRaw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-143">getProblemDetailsRaw</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-144">getProblemDetailsRaw</a></span>()</div>
 <div class="block">The raw (unresolved) <code>@Rest(problemDetails)</code> default &mdash; whether RFC 7807
  <code>application/problem+json</code> responses are emitted.
 
@@ -337,9 +343,24 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="getShowCauseMessagesRaw()">
+<h3>getShowCauseMessagesRaw</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-157">getShowCauseMessagesRaw</a></span>()</div>
+<div class="block">The raw (unresolved) <code>@Rest(showCauseMessages)</code> default &mdash; whether messages taken from an exception's
+ cause are written to error responses.
+
+ <p>
+ Stored verbatim; <a href="RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> owns SVL resolution and boolean parsing (see <a href="#getAllowContentParamRaw()"><code>getAllowContentParamRaw()</code></a>).</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The raw value. Never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getDebugMarshallingRaw()">
 <h3>getDebugMarshallingRaw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-156">getDebugMarshallingRaw</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-170">getDebugMarshallingRaw</a></span>()</div>
 <div class="block">The raw (unresolved) <code>@Rest(debugMarshalling)</code> default &mdash; whether REST-driven serializer/parser debug
  behavior is enabled.
 
@@ -354,7 +375,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getVirtualThreadsRaw()">
 <h3>getVirtualThreadsRaw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-169">getVirtualThreadsRaw</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-183">getVirtualThreadsRaw</a></span>()</div>
 <div class="block">The raw (unresolved) <code>@Rest(virtualThreads)</code> default &mdash; whether per-request virtual-thread dispatch is
  opted into on Java 21+.
 
@@ -369,7 +390,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getResponseTraceparentRaw()">
 <h3>getResponseTraceparentRaw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-182">getResponseTraceparentRaw</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-196">getResponseTraceparentRaw</a></span>()</div>
 <div class="block">The raw (unresolved) default controlling whether the server writes W3C <code>traceparent</code> / <code>tracestate</code>
  response headers when a tracer is active. Defaults to <code>"true"</code>.
 
@@ -384,7 +405,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMdcAsyncPropagationRaw()">
 <h3>getMdcAsyncPropagationRaw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-195">getMdcAsyncPropagationRaw</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-209">getMdcAsyncPropagationRaw</a></span>()</div>
 <div class="block">The raw (unresolved) default controlling whether the request thread's SLF4J MDC map is propagated to
  asynchronous completion threads. Defaults to <code>"true"</code>.
 
@@ -399,7 +420,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getEagerInitRaw()">
 <h3>getEagerInitRaw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-208">getEagerInitRaw</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-222">getEagerInitRaw</a></span>()</div>
 <div class="block">The raw (unresolved) <code>@Rest(eagerInit)</code> default &mdash; whether framework beans are force-initialized
  during construction.
 
@@ -414,7 +435,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLazyChildrenRaw()">
 <h3>getLazyChildrenRaw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-220">getLazyChildrenRaw</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-234">getLazyChildrenRaw</a></span>()</div>
 <div class="block">The raw (unresolved) <code>@Rest(lazyChildren)</code> default &mdash; whether child-context construction is deferred.
 
  <p>
@@ -428,7 +449,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getClientVersionHeader()">
 <h3>getClientVersionHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-229">getClientVersionHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-243">getClientVersionHeader</a></span>()</div>
 <div class="block">The default request header used for client-version matching (<code>@Rest(clientVersionHeader)</code>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -439,7 +460,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getUriRelativityRaw()">
 <h3>getUriRelativityRaw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-243">getUriRelativityRaw</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-257">getUriRelativityRaw</a></span>()</div>
 <div class="block">The raw (unresolved) <code>@Rest(uriRelativity)</code> default value. Blank means unset.
 
  <p>
@@ -455,7 +476,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getUriResolutionRaw()">
 <h3>getUriResolutionRaw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-257">getUriResolutionRaw</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContextProperties.html#line-271">getUriResolutionRaw</a></span>()</div>
 <div class="block">The raw (unresolved) <code>@Rest(uriResolution)</code> default value. Blank means unset.
 
  <p>
