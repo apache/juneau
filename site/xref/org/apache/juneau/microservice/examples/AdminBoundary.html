@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * The CSRF boundary for the admin resources {@link ConfigResource}, {@link LogsResource} and {@link ShutdownResource}.</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * The cross-site request boundary for the admin resources {@link ConfigResource}, {@link DebugResource}, {@link LogsResource} and {@link ShutdownResource}.</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * This boundary is not authentication.  It checks the {@code Host} and {@code Origin} headers a browser sends; it does</em>
@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * of their own, so an application that mounts them must add its own, and must not expose them on an untrusted network.</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * {@link #registration(String, String...)} returns a {@link ServletFilterRegistration} that puts the three resources</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * {@link #registration(String, String...)} returns a {@link ServletFilterRegistration} that puts the four resources</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * behind their own {@link CsrfBoundary}.  A write from another site's page is refused with {@code 403} and an</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * {@value RequestBoundaryFilter#REJECTION_HEADER} header naming the reason.  So is a write that a browser could</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * have sent cross-site without a CORS preflight and that carries no {@code Origin}: a urlencoded, multipart or</em>
@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * list that name.</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * The boundary answers only CSRF and DNS rebinding.  It does not authenticate anyone, and a direct network caller</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * The boundary answers only cross-site requests and DNS rebinding.  It does not authenticate anyone, and a direct network caller</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * passes it.  The admin resources have no authentication of their own, so do not expose them on an untrusted network.</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
@@ -79,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * In a Juneau microservice whose root resource mounts the three resources as children, contribute the registration</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * In a Juneau microservice whose root resource mounts the four resources as children, contribute the registration</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * as a &lt;c&gt;@Bean&lt;/c&gt;:</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * 	&lt;ja&gt;@Bean&lt;/ja&gt;(name=&lt;js&gt;"adminBoundary"&lt;/js&gt;)</em>
@@ -103,7 +103,7 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<em class="jxr_javadoccomment">/** The order the registration runs at: ahead of authentication, behind anything registered at the very front. */</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> ORDER = ServletFilterRegistration.HIGHEST_PRECEDENCE + 20;
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String[] PATHS = { <span class="jxr_string">"/config"</span>, <span class="jxr_string">"/logs"</span>, <span class="jxr_string">"/shutdown"</span> };
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String[] PATHS = { <span class="jxr_string">"/config"</span>, <span class="jxr_string">"/debug"</span>, <span class="jxr_string">"/logs"</span>, <span class="jxr_string">"/shutdown"</span> };
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<em class="jxr_comment">// One or more "/segment" parts of unreserved characters, so every pattern built on it is one the container matches.</em>
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern PREFIX = Pattern.compile(<span class="jxr_string">"(?:/[A-Za-z0-9_~-][A-Za-z0-9._~-]*+)*+"</span>);
@@ -111,15 +111,15 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">private</strong> <a name="AdminBoundary" href="../../../../../org/apache/juneau/microservice/examples/AdminBoundary.html#AdminBoundary">AdminBoundary</a>() {}
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * A registration of a new CSRF boundary over the three admin resources.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * A registration of a new cross-site request boundary over the four admin resources.</em>
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * The registration maps each resource's path both exactly and as a prefix ({@code /config} and</em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * {@code /config/*}, and so on: six patterns), for {@code REQUEST} dispatches only, at {@link #ORDER}.  Each call</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * {@code /config/*}, and so on: eight patterns), for {@code REQUEST} dispatches only, at {@link #ORDER}.  Each call</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 * builds its own filter, so the registration never shares an instance with another boundary.  The boundary's token</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 * is per process; no admin page carries one.</em>
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 * @param prefix The path the three resources are mounted under: &lt;js&gt;""&lt;/js&gt; when they are children of the root</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 * @param prefix The path the four resources are mounted under: &lt;js&gt;""&lt;/js&gt; when they are children of the root</em>
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">	 * 	resource, otherwise a path such as &lt;js&gt;"/admin"&lt;/js&gt;: one or more {@code /}-separated segments of letters,</em>
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 * 	digits, {@code .}, {@code _}, {@code ~} or {@code -}, none starting with {@code .}, and no trailing {@code /}.</em>
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment">	 * 	A prefix the container would not match as written is refused, so the resources are never left uncovered.</em>

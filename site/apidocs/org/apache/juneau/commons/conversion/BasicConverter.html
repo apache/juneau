@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="ConfigurableConverter.html" title="class in org.apache.juneau.commons.conversion">ConfigurableConverter</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-153">BasicConverter</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-160">BasicConverter</a></span>
 <span class="extends-implements">extends <a href="CachingConverter.html" title="class in org.apache.juneau.commons.conversion">CachingConverter</a></span></div>
 <div class="block">A concrete <a href="CachingConverter.html" title="class in org.apache.juneau.commons.conversion"><code>CachingConverter</code></a> that supports common type conversions without
  requiring a <code>MarshallingContext</code> or <code>MarshallingSession</code>.
@@ -207,6 +207,12 @@ loadScripts(document, 'script');</script>
    </tr>
  </table>
 
+ <h2 class='section'>Class-name guard:</h2>
+ <p>
+ <c>String</c>-to-<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> conversion resolves the class without running its static initializer.  A converter
+ created with <a href="#%3Cinit%3E(java.util.function.Predicate)"><code>BasicConverter(Predicate)</code></a> additionally vets each class name with the specified guard and
+ rejects names the guard does not permit.  <a href="#INSTANCE"><code>INSTANCE</code></a> has no guard.
+
  <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is thread-safe. The singleton instance can be safely shared across multiple threads.</div>
@@ -244,6 +250,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>
 </div>
+<div class="col-first odd-row-color"><code>&nbsp;</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.util.function.Predicate)" class="member-name-link">BasicConverter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;classNameGuard)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Constructor.</div>
+</div>
 </div>
 </section>
 </li>
@@ -264,6 +275,11 @@ O&gt;&nbsp;<a href="Conversion.html" title="interface in org.apache.juneau.commo
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;O&gt;&nbsp;outType)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Finds a conversion function from the specified input type to the specified output type.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getClassNameGuard()" class="member-name-link">getClassNameGuard</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the class-name guard of this converter.</div>
 </div>
 </div>
 </div>
@@ -288,7 +304,7 @@ O&gt;&nbsp;<a href="Conversion.html" title="interface in org.apache.juneau.commo
 <li>
 <section class="detail" id="INSTANCE">
 <h3>INSTANCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BasicConverter.html" title="class in org.apache.juneau.commons.conversion">BasicConverter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-165">INSTANCE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BasicConverter.html" title="class in org.apache.juneau.commons.conversion">BasicConverter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-172">INSTANCE</a></span></div>
 <div class="block">Singleton instance.</div>
 </section>
 </li>
@@ -303,8 +319,24 @@ O&gt;&nbsp;<a href="Conversion.html" title="interface in org.apache.juneau.commo
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>BasicConverter</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-185">BasicConverter</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-198">BasicConverter</a></span>()</div>
+<div class="block">Constructor.
+
+ <p>
+ Creates a converter with no class-name guard.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.util.function.Predicate)">
+<h3>BasicConverter</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-210">BasicConverter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;classNameGuard)</span></div>
 <div class="block">Constructor.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>classNameGuard</code> - Vets class names before a <c>String</c> is converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>.
+   Names the guard rejects fail with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>.
+   <br>Can be <jk>null</jk> (all names allowed).</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -316,10 +348,21 @@ O&gt;&nbsp;<a href="Conversion.html" title="interface in org.apache.juneau.commo
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="getClassNameGuard()">
+<h3>getClassNameGuard</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-219">getClassNameGuard</a></span>()</div>
+<div class="block">Returns the class-name guard of this converter.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The class-name guard, or <jk>null</jk> if all names are allowed.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="findConversion(java.lang.Class,java.lang.Class)">
 <h3>findConversion</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;I,<wbr>
-O&gt;</span>&nbsp;<span class="return-type"><a href="Conversion.html" title="interface in org.apache.juneau.commons.conversion">Conversion</a>&lt;I,<wbr>O&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-187">findConversion</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;I&gt;&nbsp;inType,
+O&gt;</span>&nbsp;<span class="return-type"><a href="Conversion.html" title="interface in org.apache.juneau.commons.conversion">Conversion</a>&lt;I,<wbr>O&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-223">findConversion</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;I&gt;&nbsp;inType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;O&gt;&nbsp;outType)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CachingConverter.html#findConversion(java.lang.Class,java.lang.Class)">CachingConverter</a></code></span></div>
 <div class="block">Finds a conversion function from the specified input type to the specified output type.

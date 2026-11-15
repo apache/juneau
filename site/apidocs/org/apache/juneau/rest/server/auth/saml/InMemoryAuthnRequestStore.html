@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml">AuthnRequestStore</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#line-32">InMemoryAuthnRequestStore</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#line-33">InMemoryAuthnRequestStore</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml">AuthnRequestStore</a></span></div>
 <div class="block">Per-process, in-memory implementation of <a href="AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml"><code>AuthnRequestStore</code></a>.
@@ -145,13 +145,15 @@ implements <a href="AuthnRequestStore.html" title="interface in org.apache.junea
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#consume(java.lang.String,long)" class="member-name-link">consume</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#consume(java.lang.String,byte%5B%5D,long)" class="member-name-link">consume</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ byte[]&nbsp;bindingDigest,
  long&nbsp;nowMs)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Atomically removes a request ID and reports whether it was outstanding.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remember(java.lang.String,long,long)" class="member-name-link">remember</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remember(java.lang.String,byte%5B%5D,long,long)" class="member-name-link">remember</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ byte[]&nbsp;bindingDigest,
  long&nbsp;expiresAtMs,
  long&nbsp;nowMs)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -177,7 +179,7 @@ implements <a href="AuthnRequestStore.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="DEFAULT_MAX_ENTRIES">
 <h3>DEFAULT_MAX_ENTRIES</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#line-35">DEFAULT_MAX_ENTRIES</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#line-36">DEFAULT_MAX_ENTRIES</a></span></div>
 <div class="block">Default upper bound on outstanding request IDs.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -200,14 +202,14 @@ implements <a href="AuthnRequestStore.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>InMemoryAuthnRequestStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#line-41">InMemoryAuthnRequestStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#line-44">InMemoryAuthnRequestStore</a></span>()</div>
 <div class="block">Constructor using <a href="#DEFAULT_MAX_ENTRIES"><code>DEFAULT_MAX_ENTRIES</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(int)">
 <h3>InMemoryAuthnRequestStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#line-50">InMemoryAuthnRequestStore</a></span><wbr><span class="parameters">(int&nbsp;maxEntries)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#line-53">InMemoryAuthnRequestStore</a></span><wbr><span class="parameters">(int&nbsp;maxEntries)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -224,38 +226,43 @@ implements <a href="AuthnRequestStore.html" title="interface in org.apache.junea
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="remember(java.lang.String,long,long)">
+<section class="detail" id="remember(java.lang.String,byte[],long,long)">
 <h3>remember</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#line-56">remember</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#line-59">remember</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ byte[]&nbsp;bindingDigest,
  long&nbsp;expiresAtMs,
  long&nbsp;nowMs)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="AuthnRequestStore.html#remember(java.lang.String,long,long)">AuthnRequestStore</a></code></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="AuthnRequestStore.html#remember(java.lang.String,byte%5B%5D,long,long)">AuthnRequestStore</a></code></span></div>
 <div class="block">Records an outstanding request ID.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="AuthnRequestStore.html#remember(java.lang.String,long,long)">remember</a></code>&nbsp;in interface&nbsp;<code><a href="AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml">AuthnRequestStore</a></code></dd>
+<dd><code><a href="AuthnRequestStore.html#remember(java.lang.String,byte%5B%5D,long,long)">remember</a></code>&nbsp;in interface&nbsp;<code><a href="AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml">AuthnRequestStore</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>id</code> - The <code>ID</code> attribute of the outgoing request.  Never <jk>null</jk> or blank.</dd>
+<dd><code>bindingDigest</code> - Digest of the browser-binding secret issued with the request.  Never <jk>null</jk>.</dd>
 <dd><code>expiresAtMs</code> - The epoch-millisecond instant after which the ID is no longer accepted.</dd>
 <dd><code>nowMs</code> - The current epoch-millisecond instant according to the validator's clock.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="consume(java.lang.String,long)">
+<section class="detail" id="consume(java.lang.String,byte[],long)">
 <h3>consume</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#line-68">consume</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#line-72">consume</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ byte[]&nbsp;bindingDigest,
  long&nbsp;nowMs)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="AuthnRequestStore.html#consume(java.lang.String,long)">AuthnRequestStore</a></code></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="AuthnRequestStore.html#consume(java.lang.String,byte%5B%5D,long)">AuthnRequestStore</a></code></span></div>
 <div class="block">Atomically removes a request ID and reports whether it was outstanding.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="AuthnRequestStore.html#consume(java.lang.String,long)">consume</a></code>&nbsp;in interface&nbsp;<code><a href="AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml">AuthnRequestStore</a></code></dd>
+<dd><code><a href="AuthnRequestStore.html#consume(java.lang.String,byte%5B%5D,long)">consume</a></code>&nbsp;in interface&nbsp;<code><a href="AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml">AuthnRequestStore</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>id</code> - The <code>InResponseTo</code> value from the response.  Never <jk>null</jk> or blank.</dd>
+<dd><code>bindingDigest</code> - Digest of the binding secret the browser presented, or <jk>null</jk> if it presented none.</dd>
 <dd><code>nowMs</code> - The current epoch-millisecond instant according to the validator's clock.</dd>
 <dt>Returns:</dt>
-<dd><jk>true</jk> if the ID was registered, unexpired and not yet consumed.</dd>
+<dd><jk>true</jk> if the ID was registered, unexpired, not yet consumed and the digest matches the one
+   stored with it.</dd>
 </dl>
 </section>
 </li>

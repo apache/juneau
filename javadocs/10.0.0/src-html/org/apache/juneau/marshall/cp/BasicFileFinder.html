@@ -73,243 +73,273 @@
 <span class="source-line-no">060</span><span id="line-60"></span>
 <span class="source-line-no">061</span><span id="line-61">   private final Map&lt;String,LocalFile&gt; files = new ConcurrentHashMap&lt;&gt;();</span>
 <span class="source-line-no">062</span><span id="line-62">   private final Map&lt;Locale,Map&lt;String,LocalFile&gt;&gt; localizedFiles = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">063</span><span id="line-63"></span>
-<span class="source-line-no">064</span><span id="line-64">   private final LocalDir[] roots;</span>
-<span class="source-line-no">065</span><span id="line-65">   private final long cachingLimit;</span>
-<span class="source-line-no">066</span><span id="line-66">   private final Pattern[] include;</span>
-<span class="source-line-no">067</span><span id="line-67">   private final Pattern[] exclude;</span>
-<span class="source-line-no">068</span><span id="line-68">   private final String[] includePatterns;</span>
-<span class="source-line-no">069</span><span id="line-69">   private final String[] excludePatterns;</span>
-<span class="source-line-no">070</span><span id="line-70">   private final int hashCode;</span>
-<span class="source-line-no">071</span><span id="line-71"></span>
-<span class="source-line-no">072</span><span id="line-72">   /**</span>
-<span class="source-line-no">073</span><span id="line-73">    * Builder-based constructor.</span>
-<span class="source-line-no">074</span><span id="line-74">    *</span>
-<span class="source-line-no">075</span><span id="line-75">    * @param builder The builder object.</span>
-<span class="source-line-no">076</span><span id="line-76">    */</span>
-<span class="source-line-no">077</span><span id="line-77">   public BasicFileFinder(FileFinder.Builder builder) {</span>
-<span class="source-line-no">078</span><span id="line-78">      this.roots = builder.roots.toArray(new LocalDir[builder.roots.size()]);</span>
-<span class="source-line-no">079</span><span id="line-79">      this.cachingLimit = builder.cachingLimit;</span>
-<span class="source-line-no">080</span><span id="line-80">      this.include = builder.include;</span>
-<span class="source-line-no">081</span><span id="line-81">      this.exclude = builder.exclude;</span>
-<span class="source-line-no">082</span><span id="line-82">      this.includePatterns = l(include).stream().map(Pattern::pattern).toArray(String[]::new);</span>
-<span class="source-line-no">083</span><span id="line-83">      this.excludePatterns = l(exclude).stream().map(Pattern::pattern).toArray(String[]::new);</span>
-<span class="source-line-no">084</span><span id="line-84">      this.hashCode = h(getClass(), roots, cachingLimit, includePatterns, excludePatterns);</span>
-<span class="source-line-no">085</span><span id="line-85">   }</span>
-<span class="source-line-no">086</span><span id="line-86"></span>
-<span class="source-line-no">087</span><span id="line-87">   /**</span>
-<span class="source-line-no">088</span><span id="line-88">    * Default constructor.</span>
-<span class="source-line-no">089</span><span id="line-89">    *</span>
-<span class="source-line-no">090</span><span id="line-90">    * &lt;p&gt;</span>
-<span class="source-line-no">091</span><span id="line-91">    * Can be used when providing a subclass that overrides the {@link #find(String, Locale)} method.</span>
-<span class="source-line-no">092</span><span id="line-92">    */</span>
-<span class="source-line-no">093</span><span id="line-93">   protected BasicFileFinder() {</span>
-<span class="source-line-no">094</span><span id="line-94">      this.roots = new LocalDir[0];</span>
-<span class="source-line-no">095</span><span id="line-95">      this.cachingLimit = -1;</span>
-<span class="source-line-no">096</span><span id="line-96">      this.include = new Pattern[0];</span>
-<span class="source-line-no">097</span><span id="line-97">      this.exclude = new Pattern[0];</span>
-<span class="source-line-no">098</span><span id="line-98">      this.includePatterns = new String[0];</span>
-<span class="source-line-no">099</span><span id="line-99">      this.excludePatterns = new String[0];</span>
-<span class="source-line-no">100</span><span id="line-100">      this.hashCode = h(getClass(), roots, cachingLimit, includePatterns, excludePatterns);</span>
-<span class="source-line-no">101</span><span id="line-101">   }</span>
-<span class="source-line-no">102</span><span id="line-102"></span>
-<span class="source-line-no">103</span><span id="line-103">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">104</span><span id="line-104">   public boolean equals(Object o) {</span>
-<span class="source-line-no">105</span><span id="line-105">      return o instanceof BasicFileFinder o2 &amp;&amp; eq(this, o2, (x, y) -&gt; eq(x.hashCode, y.hashCode) &amp;&amp; eq(x.getClass(), y.getClass()) &amp;&amp; eq(x.roots, y.roots) &amp;&amp; eq(x.cachingLimit, y.cachingLimit)</span>
-<span class="source-line-no">106</span><span id="line-106">         &amp;&amp; eq(x.includePatterns, y.includePatterns) &amp;&amp; eq(x.excludePatterns, y.excludePatterns));</span>
-<span class="source-line-no">107</span><span id="line-107">   }</span>
-<span class="source-line-no">108</span><span id="line-108"></span>
-<span class="source-line-no">109</span><span id="line-109">   @Override /* Overridden from FileFinder */</span>
-<span class="source-line-no">110</span><span id="line-110">   public final Optional&lt;InputStream&gt; getStream(String name, Locale locale) throws IOException {</span>
-<span class="source-line-no">111</span><span id="line-111">      return find(name, locale);</span>
-<span class="source-line-no">112</span><span id="line-112">   }</span>
-<span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114">   @Override /* Overridden from FileFinder */</span>
-<span class="source-line-no">115</span><span id="line-115">   public Optional&lt;String&gt; getString(String name, Locale locale) throws IOException {</span>
-<span class="source-line-no">116</span><span id="line-116">      return o(read(find(name, locale).orElse(null)));</span>
-<span class="source-line-no">117</span><span id="line-117">   }</span>
-<span class="source-line-no">118</span><span id="line-118"></span>
-<span class="source-line-no">119</span><span id="line-119">   @Override</span>
-<span class="source-line-no">120</span><span id="line-120">   public int hashCode() {</span>
-<span class="source-line-no">121</span><span id="line-121">      return hashCode;</span>
-<span class="source-line-no">122</span><span id="line-122">   }</span>
-<span class="source-line-no">123</span><span id="line-123"></span>
-<span class="source-line-no">124</span><span id="line-124">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">125</span><span id="line-125">      // @formatter:off</span>
-<span class="source-line-no">126</span><span id="line-126">      return filteredBeanPropertyMap()</span>
-<span class="source-line-no">127</span><span id="line-127">         .a("cachingLimit", cachingLimit)</span>
-<span class="source-line-no">128</span><span id="line-128">         .a("class", cns(getClass()))</span>
-<span class="source-line-no">129</span><span id="line-129">         .a("exclude", excludePatterns)</span>
-<span class="source-line-no">130</span><span id="line-130">         .a("include", includePatterns)</span>
-<span class="source-line-no">131</span><span id="line-131">         .a("roots", roots)</span>
-<span class="source-line-no">132</span><span id="line-132">         .a("hashCode", hashCode);</span>
-<span class="source-line-no">133</span><span id="line-133">      // @formatter:on</span>
-<span class="source-line-no">134</span><span id="line-134">   }</span>
-<span class="source-line-no">135</span><span id="line-135"></span>
-<span class="source-line-no">136</span><span id="line-136">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">137</span><span id="line-137">   public String toString() {</span>
-<span class="source-line-no">138</span><span id="line-138">      return r(properties());</span>
-<span class="source-line-no">139</span><span id="line-139">   }</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   /**</span>
-<span class="source-line-no">142</span><span id="line-142">    * The main implementation method for finding files.</span>
-<span class="source-line-no">143</span><span id="line-143">    *</span>
-<span class="source-line-no">144</span><span id="line-144">    * &lt;p&gt;</span>
-<span class="source-line-no">145</span><span id="line-145">    * Subclasses can override this method to provide their own handling.</span>
-<span class="source-line-no">146</span><span id="line-146">    *</span>
-<span class="source-line-no">147</span><span id="line-147">    * @param name The resource name.</span>
-<span class="source-line-no">148</span><span id="line-148">    *    See {@link Class#getResource(String)} for format.</span>
-<span class="source-line-no">149</span><span id="line-149">    * @param locale</span>
-<span class="source-line-no">150</span><span id="line-150">    *    The locale of the resource to retrieve.</span>
-<span class="source-line-no">151</span><span id="line-151">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, won't look for localized file names.</span>
-<span class="source-line-no">152</span><span id="line-152">    * @return The resolved resource contents, or an empty {@link Optional} if the resource was not found.</span>
-<span class="source-line-no">153</span><span id="line-153">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">154</span><span id="line-154">    */</span>
-<span class="source-line-no">155</span><span id="line-155">   @SuppressWarnings({</span>
-<span class="source-line-no">156</span><span id="line-156">      "java:S135", // Nested root/candidate search needs both a skip and an early exit per level.</span>
-<span class="source-line-no">157</span><span id="line-157">      "java:S3776", // Cognitive complexity acceptable for this specific logic</span>
-<span class="source-line-no">158</span><span id="line-158">      "null" // Null handling verified by context or framework</span>
-<span class="source-line-no">159</span><span id="line-159">   })</span>
-<span class="source-line-no">160</span><span id="line-160">   protected Optional&lt;InputStream&gt; find(String name, Locale locale) throws IOException {</span>
-<span class="source-line-no">161</span><span id="line-161">      name = trimSlashesAndSpaces(name);</span>
-<span class="source-line-no">162</span><span id="line-162"></span>
-<span class="source-line-no">163</span><span id="line-163">      if (isInvalidPath(name))</span>
-<span class="source-line-no">164</span><span id="line-164">         return oe();</span>
-<span class="source-line-no">165</span><span id="line-165"></span>
-<span class="source-line-no">166</span><span id="line-166">      if (nn(locale))</span>
-<span class="source-line-no">167</span><span id="line-167">         localizedFiles.putIfAbsent(locale, new ConcurrentHashMap&lt;&gt;());</span>
-<span class="source-line-no">168</span><span id="line-168"></span>
-<span class="source-line-no">169</span><span id="line-169">      Map&lt;String,LocalFile&gt; fileCache = locale == null ? files : localizedFiles.get(locale);</span>
-<span class="source-line-no">170</span><span id="line-170"></span>
-<span class="source-line-no">171</span><span id="line-171">      LocalFile lf = fileCache.get(name);</span>
-<span class="source-line-no">172</span><span id="line-172"></span>
-<span class="source-line-no">173</span><span id="line-173">      if (lf == null) {</span>
-<span class="source-line-no">174</span><span id="line-174">         List&lt;String&gt; candidateFileNames = getCandidateFileNames(name, locale);</span>
-<span class="source-line-no">175</span><span id="line-175">         for (LocalDir root : roots) {</span>
-<span class="source-line-no">176</span><span id="line-176">            for (var cfn : candidateFileNames) {</span>
-<span class="source-line-no">177</span><span id="line-177">               // Locale-derived candidates are screened too; a hostile locale (e.g. "..", "..") must yield not-found.</span>
-<span class="source-line-no">178</span><span id="line-178">               if (isInvalidPath(cfn))</span>
-<span class="source-line-no">179</span><span id="line-179">                  continue;</span>
-<span class="source-line-no">180</span><span id="line-180">               lf = root.resolve(cfn);</span>
-<span class="source-line-no">181</span><span id="line-181">               if (nn(lf))</span>
-<span class="source-line-no">182</span><span id="line-182">                  break;</span>
-<span class="source-line-no">183</span><span id="line-183">            }</span>
-<span class="source-line-no">184</span><span id="line-184">            if (nn(lf))</span>
-<span class="source-line-no">185</span><span id="line-185">               break;</span>
-<span class="source-line-no">186</span><span id="line-186">         }</span>
-<span class="source-line-no">187</span><span id="line-187"></span>
-<span class="source-line-no">188</span><span id="line-188">         if (nn(lf) &amp;&amp; isIgnoredFile(lf.getName()))</span>
-<span class="source-line-no">189</span><span id="line-189">            lf = null;</span>
-<span class="source-line-no">190</span><span id="line-190"></span>
-<span class="source-line-no">191</span><span id="line-191">         if (nn(lf)) {</span>
-<span class="source-line-no">192</span><span id="line-192">            fileCache.put(name, lf);</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">            if (cachingLimit &gt;= 0) {</span>
-<span class="source-line-no">195</span><span id="line-195">               long size = lf.size();</span>
-<span class="source-line-no">196</span><span id="line-196">               if (size &gt; 0 &amp;&amp; size &lt;= cachingLimit)</span>
-<span class="source-line-no">197</span><span id="line-197">                  lf.cache();</span>
-<span class="source-line-no">198</span><span id="line-198">            }</span>
-<span class="source-line-no">199</span><span id="line-199">         }</span>
-<span class="source-line-no">200</span><span id="line-200">      }</span>
-<span class="source-line-no">201</span><span id="line-201"></span>
-<span class="source-line-no">202</span><span id="line-202">      return o(lf == null ? null : lf.read());</span>
-<span class="source-line-no">203</span><span id="line-203">   }</span>
-<span class="source-line-no">204</span><span id="line-204"></span>
-<span class="source-line-no">205</span><span id="line-205">   /**</span>
-<span class="source-line-no">206</span><span id="line-206">    * Returns the candidate file names for the specified file name in the specified locale.</span>
-<span class="source-line-no">207</span><span id="line-207">    *</span>
-<span class="source-line-no">208</span><span id="line-208">    * &lt;p&gt;</span>
-<span class="source-line-no">209</span><span id="line-209">    * For example, if looking for the &lt;js&gt;"MyResource.txt"&lt;/js&gt; file in the Japanese locale, the iterator will return</span>
-<span class="source-line-no">210</span><span id="line-210">    * names in the following order:</span>
-<span class="source-line-no">211</span><span id="line-211">    * &lt;ol&gt;</span>
-<span class="source-line-no">212</span><span id="line-212">    *    &lt;li&gt;&lt;js&gt;"MyResource_ja_JP.txt"&lt;/js&gt;</span>
-<span class="source-line-no">213</span><span id="line-213">    *    &lt;li&gt;&lt;js&gt;"MyResource_ja.txt"&lt;/js&gt;</span>
-<span class="source-line-no">214</span><span id="line-214">    *    &lt;li&gt;&lt;js&gt;"MyResource.txt"&lt;/js&gt;</span>
-<span class="source-line-no">215</span><span id="line-215">    * &lt;/ol&gt;</span>
-<span class="source-line-no">216</span><span id="line-216">    *</span>
-<span class="source-line-no">217</span><span id="line-217">    * &lt;p&gt;</span>
-<span class="source-line-no">218</span><span id="line-218">    * If the locale is &lt;jk&gt;null&lt;/jk&gt;, then it will only return &lt;js&gt;"MyResource.txt"&lt;/js&gt;.</span>
-<span class="source-line-no">219</span><span id="line-219">    *</span>
-<span class="source-line-no">220</span><span id="line-220">    * @param fileName The name of the file to get candidate file names on.</span>
-<span class="source-line-no">221</span><span id="line-221">    * @param locale</span>
-<span class="source-line-no">222</span><span id="line-222">    *    The locale.</span>
-<span class="source-line-no">223</span><span id="line-223">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, won't look for localized file names.</span>
-<span class="source-line-no">224</span><span id="line-224">    * @return An iterator of file names to look at.</span>
-<span class="source-line-no">225</span><span id="line-225">    */</span>
-<span class="source-line-no">226</span><span id="line-226">   protected List&lt;String&gt; getCandidateFileNames(String fileName, Locale locale) {</span>
-<span class="source-line-no">227</span><span id="line-227"></span>
-<span class="source-line-no">228</span><span id="line-228">      if (locale == null)</span>
-<span class="source-line-no">229</span><span id="line-229">         return Collections.singletonList(fileName);</span>
-<span class="source-line-no">230</span><span id="line-230"></span>
-<span class="source-line-no">231</span><span id="line-231">      var list = new ArrayList&lt;String&gt;();</span>
-<span class="source-line-no">232</span><span id="line-232">      var baseName = getBaseName(fileName);</span>
-<span class="source-line-no">233</span><span id="line-233">      var ext = getFileExtension(fileName);</span>
-<span class="source-line-no">234</span><span id="line-234"></span>
-<span class="source-line-no">235</span><span id="line-235">      getCandidateLocales(locale).forEach(x -&gt; {</span>
-<span class="source-line-no">236</span><span id="line-236">         var ls = x.toString();</span>
-<span class="source-line-no">237</span><span id="line-237">         if (ls.isEmpty())</span>
-<span class="source-line-no">238</span><span id="line-238">            list.add(fileName);</span>
-<span class="source-line-no">239</span><span id="line-239">         else {</span>
-<span class="source-line-no">240</span><span id="line-240">            list.add(baseName + "_" + ls + (ext.isEmpty() ? "" : ('.' + ext)));</span>
-<span class="source-line-no">241</span><span id="line-241">            list.add(ls.replace('_', '/') + '/' + fileName);</span>
-<span class="source-line-no">242</span><span id="line-242">         }</span>
-<span class="source-line-no">243</span><span id="line-243">      });</span>
-<span class="source-line-no">244</span><span id="line-244"></span>
-<span class="source-line-no">245</span><span id="line-245">      return list;</span>
-<span class="source-line-no">246</span><span id="line-246">   }</span>
-<span class="source-line-no">247</span><span id="line-247"></span>
-<span class="source-line-no">248</span><span id="line-248">   /**</span>
-<span class="source-line-no">249</span><span id="line-249">    * Returns the candidate locales for the specified locale.</span>
-<span class="source-line-no">250</span><span id="line-250">    *</span>
-<span class="source-line-no">251</span><span id="line-251">    * &lt;p&gt;</span>
-<span class="source-line-no">252</span><span id="line-252">    * For example, if &lt;c&gt;locale&lt;/c&gt; is &lt;js&gt;"ja_JP"&lt;/js&gt;, then this method will return:</span>
-<span class="source-line-no">253</span><span id="line-253">    * &lt;ol&gt;</span>
-<span class="source-line-no">254</span><span id="line-254">    *    &lt;li&gt;&lt;js&gt;"ja_JP"&lt;/js&gt;</span>
-<span class="source-line-no">255</span><span id="line-255">    *    &lt;li&gt;&lt;js&gt;"ja"&lt;/js&gt;</span>
-<span class="source-line-no">256</span><span id="line-256">    *    &lt;li&gt;&lt;js&gt;""&lt;/js&gt;</span>
-<span class="source-line-no">257</span><span id="line-257">    * &lt;/ol&gt;</span>
-<span class="source-line-no">258</span><span id="line-258">    *</span>
-<span class="source-line-no">259</span><span id="line-259">    * @param locale The locale to get the list of candidate locales for.</span>
-<span class="source-line-no">260</span><span id="line-260">    * @return The list of candidate locales.</span>
-<span class="source-line-no">261</span><span id="line-261">    */</span>
-<span class="source-line-no">262</span><span id="line-262">   protected List&lt;Locale&gt; getCandidateLocales(Locale locale) {</span>
-<span class="source-line-no">263</span><span id="line-263">      return RB_CONTROL.getCandidateLocales("", locale);</span>
-<span class="source-line-no">264</span><span id="line-264">   }</span>
-<span class="source-line-no">265</span><span id="line-265"></span>
-<span class="source-line-no">266</span><span id="line-266">   /**</span>
-<span class="source-line-no">267</span><span id="line-267">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the file should be ignored based on file name.</span>
-<span class="source-line-no">268</span><span id="line-268">    *</span>
-<span class="source-line-no">269</span><span id="line-269">    * @param name The name to check.</span>
-<span class="source-line-no">270</span><span id="line-270">    * @return &lt;jk&gt;true&lt;/jk&gt; if the file should be ignored.</span>
-<span class="source-line-no">271</span><span id="line-271">    */</span>
-<span class="source-line-no">272</span><span id="line-272">   protected boolean isIgnoredFile(String name) {</span>
-<span class="source-line-no">273</span><span id="line-273">      for (var p : exclude)</span>
-<span class="source-line-no">274</span><span id="line-274">         if (p.matcher(name).matches())</span>
-<span class="source-line-no">275</span><span id="line-275">            return true;</span>
-<span class="source-line-no">276</span><span id="line-276">      for (var p : include)</span>
-<span class="source-line-no">277</span><span id="line-277">         if (p.matcher(name).matches())</span>
-<span class="source-line-no">278</span><span id="line-278">            return false;</span>
-<span class="source-line-no">279</span><span id="line-279">      return true;</span>
-<span class="source-line-no">280</span><span id="line-280">   }</span>
-<span class="source-line-no">281</span><span id="line-281"></span>
-<span class="source-line-no">282</span><span id="line-282">   /**</span>
-<span class="source-line-no">283</span><span id="line-283">    * Checks for path malformations such as use of &lt;js&gt;".."&lt;/js&gt; which can be used to open up security holes.</span>
-<span class="source-line-no">284</span><span id="line-284">    *</span>
-<span class="source-line-no">285</span><span id="line-285">    * &lt;p&gt;</span>
-<span class="source-line-no">286</span><span id="line-286">    * Default implementation returns &lt;jk&gt;true&lt;/jk&gt; if the path is any of the following:</span>
-<span class="source-line-no">287</span><span id="line-287">    * &lt;ul&gt;</span>
-<span class="source-line-no">288</span><span id="line-288">    *    &lt;li&gt;Is blank or &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">289</span><span id="line-289">    *    &lt;li&gt;Contains &lt;js&gt;".."&lt;/js&gt; (to prevent traversing out of working directory).</span>
-<span class="source-line-no">290</span><span id="line-290">    *    &lt;li&gt;Contains &lt;js&gt;"%"&lt;/js&gt; (to prevent URI trickery).</span>
-<span class="source-line-no">291</span><span id="line-291">    * &lt;/ul&gt;</span>
-<span class="source-line-no">292</span><span id="line-292">    *</span>
-<span class="source-line-no">293</span><span id="line-293">    * @param path The path to check.</span>
-<span class="source-line-no">294</span><span id="line-294">    * @return &lt;jk&gt;true&lt;/jk&gt; if the path is invalid.</span>
-<span class="source-line-no">295</span><span id="line-295">    */</span>
-<span class="source-line-no">296</span><span id="line-296">   protected boolean isInvalidPath(String path) {</span>
-<span class="source-line-no">297</span><span id="line-297">      return isEmpty(path) || path.contains("..") || path.contains("%");</span>
-<span class="source-line-no">298</span><span id="line-298">   }</span>
-<span class="source-line-no">299</span><span id="line-299">}</span>
+<span class="source-line-no">063</span><span id="line-63">   private final Map&lt;String,LocalFile&gt; resolvedFiles = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">064</span><span id="line-64"></span>
+<span class="source-line-no">065</span><span id="line-65">   private final LocalDir[] roots;</span>
+<span class="source-line-no">066</span><span id="line-66">   private final long cachingLimit;</span>
+<span class="source-line-no">067</span><span id="line-67">   private final int maxCachedLocales;</span>
+<span class="source-line-no">068</span><span id="line-68">   private final Pattern[] include;</span>
+<span class="source-line-no">069</span><span id="line-69">   private final Pattern[] exclude;</span>
+<span class="source-line-no">070</span><span id="line-70">   private final String[] includePatterns;</span>
+<span class="source-line-no">071</span><span id="line-71">   private final String[] excludePatterns;</span>
+<span class="source-line-no">072</span><span id="line-72">   private final int hashCode;</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">   /**</span>
+<span class="source-line-no">075</span><span id="line-75">    * Builder-based constructor.</span>
+<span class="source-line-no">076</span><span id="line-76">    *</span>
+<span class="source-line-no">077</span><span id="line-77">    * @param builder The builder object.</span>
+<span class="source-line-no">078</span><span id="line-78">    */</span>
+<span class="source-line-no">079</span><span id="line-79">   public BasicFileFinder(FileFinder.Builder builder) {</span>
+<span class="source-line-no">080</span><span id="line-80">      this.roots = builder.roots.toArray(new LocalDir[builder.roots.size()]);</span>
+<span class="source-line-no">081</span><span id="line-81">      this.cachingLimit = builder.cachingLimit;</span>
+<span class="source-line-no">082</span><span id="line-82">      this.maxCachedLocales = builder.maxCachedLocales;</span>
+<span class="source-line-no">083</span><span id="line-83">      this.include = builder.include;</span>
+<span class="source-line-no">084</span><span id="line-84">      this.exclude = builder.exclude;</span>
+<span class="source-line-no">085</span><span id="line-85">      this.includePatterns = l(include).stream().map(Pattern::pattern).toArray(String[]::new);</span>
+<span class="source-line-no">086</span><span id="line-86">      this.excludePatterns = l(exclude).stream().map(Pattern::pattern).toArray(String[]::new);</span>
+<span class="source-line-no">087</span><span id="line-87">      this.hashCode = h(getClass(), roots, cachingLimit, maxCachedLocales, includePatterns, excludePatterns);</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   /**</span>
+<span class="source-line-no">091</span><span id="line-91">    * Default constructor.</span>
+<span class="source-line-no">092</span><span id="line-92">    *</span>
+<span class="source-line-no">093</span><span id="line-93">    * &lt;p&gt;</span>
+<span class="source-line-no">094</span><span id="line-94">    * Can be used when providing a subclass that overrides the {@link #find(String, Locale)} method.</span>
+<span class="source-line-no">095</span><span id="line-95">    */</span>
+<span class="source-line-no">096</span><span id="line-96">   protected BasicFileFinder() {</span>
+<span class="source-line-no">097</span><span id="line-97">      this.roots = new LocalDir[0];</span>
+<span class="source-line-no">098</span><span id="line-98">      this.cachingLimit = -1;</span>
+<span class="source-line-no">099</span><span id="line-99">      this.maxCachedLocales = 32;</span>
+<span class="source-line-no">100</span><span id="line-100">      this.include = new Pattern[0];</span>
+<span class="source-line-no">101</span><span id="line-101">      this.exclude = new Pattern[0];</span>
+<span class="source-line-no">102</span><span id="line-102">      this.includePatterns = new String[0];</span>
+<span class="source-line-no">103</span><span id="line-103">      this.excludePatterns = new String[0];</span>
+<span class="source-line-no">104</span><span id="line-104">      this.hashCode = h(getClass(), roots, cachingLimit, maxCachedLocales, includePatterns, excludePatterns);</span>
+<span class="source-line-no">105</span><span id="line-105">   }</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">108</span><span id="line-108">   public boolean equals(Object o) {</span>
+<span class="source-line-no">109</span><span id="line-109">      return o instanceof BasicFileFinder o2 &amp;&amp; eq(this, o2, (x, y) -&gt; eq(x.hashCode, y.hashCode) &amp;&amp; eq(x.getClass(), y.getClass()) &amp;&amp; eq(x.roots, y.roots) &amp;&amp; eq(x.cachingLimit, y.cachingLimit) &amp;&amp; eq(x.maxCachedLocales, y.maxCachedLocales)</span>
+<span class="source-line-no">110</span><span id="line-110">         &amp;&amp; eq(x.includePatterns, y.includePatterns) &amp;&amp; eq(x.excludePatterns, y.excludePatterns));</span>
+<span class="source-line-no">111</span><span id="line-111">   }</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">   /** Returns the number of locales that currently have a name cache.  Package-private for tests. */</span>
+<span class="source-line-no">114</span><span id="line-114">   int localeCacheSize() {</span>
+<span class="source-line-no">115</span><span id="line-115">      return localizedFiles.size();</span>
+<span class="source-line-no">116</span><span id="line-116">   }</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">   @Override /* Overridden from FileFinder */</span>
+<span class="source-line-no">119</span><span id="line-119">   public final Optional&lt;InputStream&gt; getStream(String name, Locale locale) throws IOException {</span>
+<span class="source-line-no">120</span><span id="line-120">      return find(name, locale);</span>
+<span class="source-line-no">121</span><span id="line-121">   }</span>
+<span class="source-line-no">122</span><span id="line-122"></span>
+<span class="source-line-no">123</span><span id="line-123">   @Override /* Overridden from FileFinder */</span>
+<span class="source-line-no">124</span><span id="line-124">   public Optional&lt;String&gt; getString(String name, Locale locale) throws IOException {</span>
+<span class="source-line-no">125</span><span id="line-125">      return o(read(find(name, locale).orElse(null)));</span>
+<span class="source-line-no">126</span><span id="line-126">   }</span>
+<span class="source-line-no">127</span><span id="line-127"></span>
+<span class="source-line-no">128</span><span id="line-128">   @Override</span>
+<span class="source-line-no">129</span><span id="line-129">   public int hashCode() {</span>
+<span class="source-line-no">130</span><span id="line-130">      return hashCode;</span>
+<span class="source-line-no">131</span><span id="line-131">   }</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">134</span><span id="line-134">      // @formatter:off</span>
+<span class="source-line-no">135</span><span id="line-135">      return filteredBeanPropertyMap()</span>
+<span class="source-line-no">136</span><span id="line-136">         .a("cachingLimit", cachingLimit)</span>
+<span class="source-line-no">137</span><span id="line-137">         .a("class", cns(getClass()))</span>
+<span class="source-line-no">138</span><span id="line-138">         .a("exclude", excludePatterns)</span>
+<span class="source-line-no">139</span><span id="line-139">         .a("include", includePatterns)</span>
+<span class="source-line-no">140</span><span id="line-140">         .a("roots", roots)</span>
+<span class="source-line-no">141</span><span id="line-141">         .a("hashCode", hashCode);</span>
+<span class="source-line-no">142</span><span id="line-142">      // @formatter:on</span>
+<span class="source-line-no">143</span><span id="line-143">   }</span>
+<span class="source-line-no">144</span><span id="line-144"></span>
+<span class="source-line-no">145</span><span id="line-145">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">146</span><span id="line-146">   public String toString() {</span>
+<span class="source-line-no">147</span><span id="line-147">      return r(properties());</span>
+<span class="source-line-no">148</span><span id="line-148">   }</span>
+<span class="source-line-no">149</span><span id="line-149"></span>
+<span class="source-line-no">150</span><span id="line-150">   /**</span>
+<span class="source-line-no">151</span><span id="line-151">    * The main implementation method for finding files.</span>
+<span class="source-line-no">152</span><span id="line-152">    *</span>
+<span class="source-line-no">153</span><span id="line-153">    * &lt;p&gt;</span>
+<span class="source-line-no">154</span><span id="line-154">    * Subclasses can override this method to provide their own handling.</span>
+<span class="source-line-no">155</span><span id="line-155">    *</span>
+<span class="source-line-no">156</span><span id="line-156">    * @param name The resource name.</span>
+<span class="source-line-no">157</span><span id="line-157">    *    See {@link Class#getResource(String)} for format.</span>
+<span class="source-line-no">158</span><span id="line-158">    * @param locale</span>
+<span class="source-line-no">159</span><span id="line-159">    *    The locale of the resource to retrieve.</span>
+<span class="source-line-no">160</span><span id="line-160">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, won't look for localized file names.</span>
+<span class="source-line-no">161</span><span id="line-161">    * @return The resolved resource contents, or an empty {@link Optional} if the resource was not found.</span>
+<span class="source-line-no">162</span><span id="line-162">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">163</span><span id="line-163">    */</span>
+<span class="source-line-no">164</span><span id="line-164">   @SuppressWarnings({</span>
+<span class="source-line-no">165</span><span id="line-165">      "java:S135", // Nested root/candidate search needs both a skip and an early exit per level.</span>
+<span class="source-line-no">166</span><span id="line-166">      "java:S3776", // Cognitive complexity acceptable for this specific logic</span>
+<span class="source-line-no">167</span><span id="line-167">      "null" // Null handling verified by context or framework</span>
+<span class="source-line-no">168</span><span id="line-168">   })</span>
+<span class="source-line-no">169</span><span id="line-169">   protected Optional&lt;InputStream&gt; find(String name, Locale locale) throws IOException {</span>
+<span class="source-line-no">170</span><span id="line-170">      name = trimSlashesAndSpaces(name);</span>
+<span class="source-line-no">171</span><span id="line-171"></span>
+<span class="source-line-no">172</span><span id="line-172">      if (isInvalidPath(name))</span>
+<span class="source-line-no">173</span><span id="line-173">         return oe();</span>
+<span class="source-line-no">174</span><span id="line-174"></span>
+<span class="source-line-no">175</span><span id="line-175">      // Per-locale caches are only kept for a bounded number of locales; other locales resolve without a name cache.</span>
+<span class="source-line-no">176</span><span id="line-176">      Map&lt;String,LocalFile&gt; fileCache = null;</span>
+<span class="source-line-no">177</span><span id="line-177">      if (locale == null)</span>
+<span class="source-line-no">178</span><span id="line-178">         fileCache = files;</span>
+<span class="source-line-no">179</span><span id="line-179">      else if (localizedFiles.size() &lt; maxCachedLocales || localizedFiles.containsKey(locale))</span>
+<span class="source-line-no">180</span><span id="line-180">         fileCache = localizedFiles.computeIfAbsent(locale, x -&gt; new ConcurrentHashMap&lt;&gt;());</span>
+<span class="source-line-no">181</span><span id="line-181"></span>
+<span class="source-line-no">182</span><span id="line-182">      LocalFile lf = fileCache == null ? null : fileCache.get(name);</span>
+<span class="source-line-no">183</span><span id="line-183"></span>
+<span class="source-line-no">184</span><span id="line-184">      if (lf == null) {</span>
+<span class="source-line-no">185</span><span id="line-185">         List&lt;String&gt; candidateFileNames = getCandidateFileNames(name, locale);</span>
+<span class="source-line-no">186</span><span id="line-186">         String found = null;</span>
+<span class="source-line-no">187</span><span id="line-187">         var foundRoot = -1;</span>
+<span class="source-line-no">188</span><span id="line-188">         var rootIndex = -1;</span>
+<span class="source-line-no">189</span><span id="line-189">         for (LocalDir root : roots) {</span>
+<span class="source-line-no">190</span><span id="line-190">            rootIndex++;</span>
+<span class="source-line-no">191</span><span id="line-191">            for (var cfn : candidateFileNames) {</span>
+<span class="source-line-no">192</span><span id="line-192">               // Locale-derived candidates are screened too; a traversal locale (e.g. "..", "..") must yield not-found.</span>
+<span class="source-line-no">193</span><span id="line-193">               if (isInvalidPath(cfn))</span>
+<span class="source-line-no">194</span><span id="line-194">                  continue;</span>
+<span class="source-line-no">195</span><span id="line-195">               lf = root.resolve(cfn);</span>
+<span class="source-line-no">196</span><span id="line-196">               if (nn(lf)) {</span>
+<span class="source-line-no">197</span><span id="line-197">                  found = cfn;</span>
+<span class="source-line-no">198</span><span id="line-198">                  foundRoot = rootIndex;</span>
+<span class="source-line-no">199</span><span id="line-199">                  break;</span>
+<span class="source-line-no">200</span><span id="line-200">               }</span>
+<span class="source-line-no">201</span><span id="line-201">            }</span>
+<span class="source-line-no">202</span><span id="line-202">            if (nn(lf))</span>
+<span class="source-line-no">203</span><span id="line-203">               break;</span>
+<span class="source-line-no">204</span><span id="line-204">         }</span>
+<span class="source-line-no">205</span><span id="line-205"></span>
+<span class="source-line-no">206</span><span id="line-206">         if (nn(lf) &amp;&amp; (isExcludedPath(found) || isIgnoredFile(lf.getName())))</span>
+<span class="source-line-no">207</span><span id="line-207">            lf = null;</span>
+<span class="source-line-no">208</span><span id="line-208"></span>
+<span class="source-line-no">209</span><span id="line-209">         if (nn(lf)) {</span>
+<span class="source-line-no">210</span><span id="line-210">            // Share one cached copy per resolved path regardless of how many locales resolve to it.</span>
+<span class="source-line-no">211</span><span id="line-211">            var shared = resolvedFiles.putIfAbsent(foundRoot + ":" + found, lf);</span>
+<span class="source-line-no">212</span><span id="line-212">            if (nn(shared))</span>
+<span class="source-line-no">213</span><span id="line-213">               lf = shared;</span>
+<span class="source-line-no">214</span><span id="line-214">            else if (cachingLimit &gt;= 0) {</span>
+<span class="source-line-no">215</span><span id="line-215">               long size = lf.size();</span>
+<span class="source-line-no">216</span><span id="line-216">               if (size &gt; 0 &amp;&amp; size &lt;= cachingLimit)</span>
+<span class="source-line-no">217</span><span id="line-217">                  lf.cache();</span>
+<span class="source-line-no">218</span><span id="line-218">            }</span>
+<span class="source-line-no">219</span><span id="line-219">            if (nn(fileCache))</span>
+<span class="source-line-no">220</span><span id="line-220">               fileCache.put(name, lf);</span>
+<span class="source-line-no">221</span><span id="line-221">         }</span>
+<span class="source-line-no">222</span><span id="line-222">      }</span>
+<span class="source-line-no">223</span><span id="line-223"></span>
+<span class="source-line-no">224</span><span id="line-224">      return o(lf == null ? null : lf.read());</span>
+<span class="source-line-no">225</span><span id="line-225">   }</span>
+<span class="source-line-no">226</span><span id="line-226"></span>
+<span class="source-line-no">227</span><span id="line-227">   /**</span>
+<span class="source-line-no">228</span><span id="line-228">    * Returns the candidate file names for the specified file name in the specified locale.</span>
+<span class="source-line-no">229</span><span id="line-229">    *</span>
+<span class="source-line-no">230</span><span id="line-230">    * &lt;p&gt;</span>
+<span class="source-line-no">231</span><span id="line-231">    * For example, if looking for the &lt;js&gt;"MyResource.txt"&lt;/js&gt; file in the Japanese locale, the iterator will return</span>
+<span class="source-line-no">232</span><span id="line-232">    * names in the following order:</span>
+<span class="source-line-no">233</span><span id="line-233">    * &lt;ol&gt;</span>
+<span class="source-line-no">234</span><span id="line-234">    *    &lt;li&gt;&lt;js&gt;"MyResource_ja_JP.txt"&lt;/js&gt;</span>
+<span class="source-line-no">235</span><span id="line-235">    *    &lt;li&gt;&lt;js&gt;"MyResource_ja.txt"&lt;/js&gt;</span>
+<span class="source-line-no">236</span><span id="line-236">    *    &lt;li&gt;&lt;js&gt;"MyResource.txt"&lt;/js&gt;</span>
+<span class="source-line-no">237</span><span id="line-237">    * &lt;/ol&gt;</span>
+<span class="source-line-no">238</span><span id="line-238">    *</span>
+<span class="source-line-no">239</span><span id="line-239">    * &lt;p&gt;</span>
+<span class="source-line-no">240</span><span id="line-240">    * If the locale is &lt;jk&gt;null&lt;/jk&gt;, then it will only return &lt;js&gt;"MyResource.txt"&lt;/js&gt;.</span>
+<span class="source-line-no">241</span><span id="line-241">    *</span>
+<span class="source-line-no">242</span><span id="line-242">    * @param fileName The name of the file to get candidate file names on.</span>
+<span class="source-line-no">243</span><span id="line-243">    * @param locale</span>
+<span class="source-line-no">244</span><span id="line-244">    *    The locale.</span>
+<span class="source-line-no">245</span><span id="line-245">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, won't look for localized file names.</span>
+<span class="source-line-no">246</span><span id="line-246">    * @return An iterator of file names to look at.</span>
+<span class="source-line-no">247</span><span id="line-247">    */</span>
+<span class="source-line-no">248</span><span id="line-248">   protected List&lt;String&gt; getCandidateFileNames(String fileName, Locale locale) {</span>
+<span class="source-line-no">249</span><span id="line-249"></span>
+<span class="source-line-no">250</span><span id="line-250">      if (locale == null)</span>
+<span class="source-line-no">251</span><span id="line-251">         return Collections.singletonList(fileName);</span>
+<span class="source-line-no">252</span><span id="line-252"></span>
+<span class="source-line-no">253</span><span id="line-253">      var list = new ArrayList&lt;String&gt;();</span>
+<span class="source-line-no">254</span><span id="line-254">      var baseName = getBaseName(fileName);</span>
+<span class="source-line-no">255</span><span id="line-255">      var ext = getFileExtension(fileName);</span>
+<span class="source-line-no">256</span><span id="line-256"></span>
+<span class="source-line-no">257</span><span id="line-257">      getCandidateLocales(locale).forEach(x -&gt; {</span>
+<span class="source-line-no">258</span><span id="line-258">         var ls = x.toString();</span>
+<span class="source-line-no">259</span><span id="line-259">         if (ls.isEmpty())</span>
+<span class="source-line-no">260</span><span id="line-260">            list.add(fileName);</span>
+<span class="source-line-no">261</span><span id="line-261">         else {</span>
+<span class="source-line-no">262</span><span id="line-262">            list.add(baseName + "_" + ls + (ext.isEmpty() ? "" : ('.' + ext)));</span>
+<span class="source-line-no">263</span><span id="line-263">            list.add(ls.replace('_', '/') + '/' + fileName);</span>
+<span class="source-line-no">264</span><span id="line-264">         }</span>
+<span class="source-line-no">265</span><span id="line-265">      });</span>
+<span class="source-line-no">266</span><span id="line-266"></span>
+<span class="source-line-no">267</span><span id="line-267">      return list;</span>
+<span class="source-line-no">268</span><span id="line-268">   }</span>
+<span class="source-line-no">269</span><span id="line-269"></span>
+<span class="source-line-no">270</span><span id="line-270">   /**</span>
+<span class="source-line-no">271</span><span id="line-271">    * Returns the candidate locales for the specified locale.</span>
+<span class="source-line-no">272</span><span id="line-272">    *</span>
+<span class="source-line-no">273</span><span id="line-273">    * &lt;p&gt;</span>
+<span class="source-line-no">274</span><span id="line-274">    * For example, if &lt;c&gt;locale&lt;/c&gt; is &lt;js&gt;"ja_JP"&lt;/js&gt;, then this method will return:</span>
+<span class="source-line-no">275</span><span id="line-275">    * &lt;ol&gt;</span>
+<span class="source-line-no">276</span><span id="line-276">    *    &lt;li&gt;&lt;js&gt;"ja_JP"&lt;/js&gt;</span>
+<span class="source-line-no">277</span><span id="line-277">    *    &lt;li&gt;&lt;js&gt;"ja"&lt;/js&gt;</span>
+<span class="source-line-no">278</span><span id="line-278">    *    &lt;li&gt;&lt;js&gt;""&lt;/js&gt;</span>
+<span class="source-line-no">279</span><span id="line-279">    * &lt;/ol&gt;</span>
+<span class="source-line-no">280</span><span id="line-280">    *</span>
+<span class="source-line-no">281</span><span id="line-281">    * @param locale The locale to get the list of candidate locales for.</span>
+<span class="source-line-no">282</span><span id="line-282">    * @return The list of candidate locales.</span>
+<span class="source-line-no">283</span><span id="line-283">    */</span>
+<span class="source-line-no">284</span><span id="line-284">   protected List&lt;Locale&gt; getCandidateLocales(Locale locale) {</span>
+<span class="source-line-no">285</span><span id="line-285">      return RB_CONTROL.getCandidateLocales("", locale);</span>
+<span class="source-line-no">286</span><span id="line-286">   }</span>
+<span class="source-line-no">287</span><span id="line-287"></span>
+<span class="source-line-no">288</span><span id="line-288">   /**</span>
+<span class="source-line-no">289</span><span id="line-289">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the file should be ignored based on file name.</span>
+<span class="source-line-no">290</span><span id="line-290">    *</span>
+<span class="source-line-no">291</span><span id="line-291">    * @param name The name to check.</span>
+<span class="source-line-no">292</span><span id="line-292">    * @return &lt;jk&gt;true&lt;/jk&gt; if the file should be ignored.</span>
+<span class="source-line-no">293</span><span id="line-293">    */</span>
+<span class="source-line-no">294</span><span id="line-294">   protected boolean isIgnoredFile(String name) {</span>
+<span class="source-line-no">295</span><span id="line-295">      for (var p : exclude)</span>
+<span class="source-line-no">296</span><span id="line-296">         if (p.matcher(name).matches())</span>
+<span class="source-line-no">297</span><span id="line-297">            return true;</span>
+<span class="source-line-no">298</span><span id="line-298">      for (var p : include)</span>
+<span class="source-line-no">299</span><span id="line-299">         if (p.matcher(name).matches())</span>
+<span class="source-line-no">300</span><span id="line-300">            return false;</span>
+<span class="source-line-no">301</span><span id="line-301">      return true;</span>
+<span class="source-line-no">302</span><span id="line-302">   }</span>
+<span class="source-line-no">303</span><span id="line-303"></span>
+<span class="source-line-no">304</span><span id="line-304">   /** Returns &lt;jk&gt;true&lt;/jk&gt; if an exclude pattern matches the full relative path. */</span>
+<span class="source-line-no">305</span><span id="line-305">   private boolean isExcludedPath(String path) {</span>
+<span class="source-line-no">306</span><span id="line-306">      for (var p : exclude)</span>
+<span class="source-line-no">307</span><span id="line-307">         if (p.matcher(path).matches())</span>
+<span class="source-line-no">308</span><span id="line-308">            return true;</span>
+<span class="source-line-no">309</span><span id="line-309">      return false;</span>
+<span class="source-line-no">310</span><span id="line-310">   }</span>
+<span class="source-line-no">311</span><span id="line-311"></span>
+<span class="source-line-no">312</span><span id="line-312">   /**</span>
+<span class="source-line-no">313</span><span id="line-313">    * Checks for path malformations such as use of &lt;js&gt;".."&lt;/js&gt; which can be used to open up security holes.</span>
+<span class="source-line-no">314</span><span id="line-314">    *</span>
+<span class="source-line-no">315</span><span id="line-315">    * &lt;p&gt;</span>
+<span class="source-line-no">316</span><span id="line-316">    * Default implementation returns &lt;jk&gt;true&lt;/jk&gt; if the path is any of the following:</span>
+<span class="source-line-no">317</span><span id="line-317">    * &lt;ul&gt;</span>
+<span class="source-line-no">318</span><span id="line-318">    *    &lt;li&gt;Is blank or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">319</span><span id="line-319">    *    &lt;li&gt;Contains &lt;js&gt;".."&lt;/js&gt; (to prevent traversing out of working directory).</span>
+<span class="source-line-no">320</span><span id="line-320">    *    &lt;li&gt;Contains &lt;js&gt;"%"&lt;/js&gt; (to prevent URI trickery).</span>
+<span class="source-line-no">321</span><span id="line-321">    * &lt;/ul&gt;</span>
+<span class="source-line-no">322</span><span id="line-322">    *</span>
+<span class="source-line-no">323</span><span id="line-323">    * @param path The path to check.</span>
+<span class="source-line-no">324</span><span id="line-324">    * @return &lt;jk&gt;true&lt;/jk&gt; if the path is invalid.</span>
+<span class="source-line-no">325</span><span id="line-325">    */</span>
+<span class="source-line-no">326</span><span id="line-326">   protected boolean isInvalidPath(String path) {</span>
+<span class="source-line-no">327</span><span id="line-327">      return isEmpty(path) || path.contains("..") || path.contains("%");</span>
+<span class="source-line-no">328</span><span id="line-328">   }</span>
+<span class="source-line-no">329</span><span id="line-329">}</span>
 
 
 

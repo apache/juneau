@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
  <a href="../../rest/server/filter/SynchronizerToken.html" title="class in org.apache.juneau.rest.server.filter"><code>SynchronizerToken</code></a>'s bar.  Because a browser <code>EventSource</code>
  constructor cannot set an <code>X-Csrf-Token</code> header and cookies are unsound on a loopback port, the SSE GET that
  streams a job's progress is Host-checked at the boundary and <b>capability-gated by the unguessability of the
- id</b> &mdash; there is no session cookie and no CSRF-on-GET.  Consequently the id is a secret:
+ id</b> &mdash; there is no session cookie and no token-on-GET.  Consequently the id is a secret:
  <a href="#toString()"><code>toString()</code></a> never renders it.
 
  <h2 class='section'>Server-side hard limits (a data-egress disclosure bound)</h2>
@@ -234,6 +234,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#outputBytes()" class="member-name-link">outputBytes</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#owner()" class="member-name-link">owner</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AsyncJob.html" title="class in org.apache.juneau.console.views">AsyncJob</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#owner(java.lang.String)" class="member-name-link">owner</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;principalName)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Binds the job to the principal that started it.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#progress(java.lang.String)" class="member-name-link">progress</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -275,7 +283,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="id()">
 <h3>id</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-129">id</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-130">id</a></span>()</div>
 <div class="block">The unguessable capability id &mdash; the whole of the job's access control (see the class javadoc).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -284,9 +292,36 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="owner(java.lang.String)">
+<h3>owner</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AsyncJob.html" title="class in org.apache.juneau.console.views">AsyncJob</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-142">owner</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;principalName)</span></div>
+<div class="block">Binds the job to the principal that started it.
+
+ <p>
+ Once bound, <a href="AsyncJobsMixin.html" title="interface in org.apache.juneau.console.views"><code>AsyncJobsMixin</code></a> serves the stream and the cancel endpoint only to the same principal; any other
+ caller is answered <code>404</code>, the same as an unknown id.  A job with no owner stays reachable by its id alone.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>principalName</code> - The principal name.  <jk>null</jk> leaves the job unbound.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="owner()">
+<h3>owner</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-148">owner</a></span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The principal name this job is bound to, or <jk>null</jk> when it is not bound to a caller.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="createdAt()">
 <h3>createdAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-132">createdAt</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-151">createdAt</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The instant this job was created.</dd>
@@ -296,7 +331,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="deadline()">
 <h3>deadline</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-135">deadline</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-154">deadline</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The instant past which this job self-terminates on the next timeout check.</dd>
@@ -306,7 +341,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="outputBytes()">
 <h3>outputBytes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-138">outputBytes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-157">outputBytes</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The total number of streamed output bytes so far.</dd>
@@ -316,7 +351,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxOutputBytes()">
 <h3>maxOutputBytes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-141">maxOutputBytes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-160">maxOutputBytes</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The maximum streamed output bytes before self-termination.</dd>
@@ -326,7 +361,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxSubscribers()">
 <h3>maxSubscribers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-144">maxSubscribers</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-163">maxSubscribers</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The maximum number of concurrent subscribers.</dd>
@@ -336,7 +371,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="progress(java.lang.String)">
 <h3>progress</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-164">progress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-183">progress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block">Appends a progress event.
 
  <p>
@@ -361,7 +396,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="markEffectStarted()">
 <h3>markEffectStarted</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-196">markEffectStarted</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-215">markEffectStarted</a></span>()</div>
 <div class="block">Marks that this job's outbound effect has begun, so a subsequent <a href="#cancel()"><code>cancel()</code></a> settles to
  <a href="ActionResult.Outcome.html#CANCELLED_AFTER_EFFECT"><code>cancelled-after-effect</code></a> rather than <a href="ActionResult.Outcome.html#CANCELLED"><code>cancelled</code></a>
  (the two are different outcomes and must not be collapsed).  A no-op once terminal.
@@ -380,7 +415,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="effectStarted()">
 <h3>effectStarted</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-206">effectStarted</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-225">effectStarted</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Whether the outbound effect has begun (see <a href="#markEffectStarted()"><code>markEffectStarted()</code></a>).</dd>
@@ -390,7 +425,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="complete(org.apache.juneau.console.views.ActionResult)">
 <h3>complete</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-215">complete</a></span><wbr><span class="parameters">(<a href="ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-234">complete</a></span><wbr><span class="parameters">(<a href="ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a>&nbsp;value)</span></div>
 <div class="block">Settles the job to a producer-supplied terminal result (success/failure/refusal/unknown).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -404,7 +439,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cancel()">
 <h3>cancel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-232">cancel</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-251">cancel</a></span>()</div>
 <div class="block">Cancels the job, settling it to <a href="ActionResult.Outcome.html#CANCELLED"><code>cancelled</code></a> &mdash; or
  <a href="ActionResult.Outcome.html#CANCELLED_AFTER_EFFECT"><code>cancelled-after-effect</code></a> when <a href="#markEffectStarted()"><code>markEffectStarted()</code></a> was called
  first.  Enforced server-side; a client cannot be trusted to stop the work itself.</div>
@@ -417,7 +452,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="enforceTimeout(java.time.Instant)">
 <h3>enforceTimeout</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-251">enforceTimeout</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-270">enforceTimeout</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</span></div>
 <div class="block">Terminates the job if it is past its <a href="#deadline()"><code>hard-timeout deadline</code></a>, settling it to a non-optimistic
  <a href="ActionResult.Outcome.html#UNKNOWN"><code>unknown</code></a> &mdash; the effect may or may not have completed in the time cut off.  This is
  the server-side timeout enforcement: it bounds both heap and, as a data-egress disclosure bound, how
@@ -434,7 +469,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isTerminal()">
 <h3>isTerminal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-262">isTerminal</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-281">isTerminal</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Whether the job has settled to a terminal result.</dd>
@@ -444,7 +479,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="result()">
 <h3>result</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-265">result</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-284">result</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The terminal result, or <jk>null</jk> if the job is still running.</dd>
@@ -454,7 +489,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eventCount()">
 <h3>eventCount</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-268">eventCount</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-287">eventCount</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The number of progress events buffered so far.</dd>
@@ -464,7 +499,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eventsFrom(int)">
 <h3>eventsFrom</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-280">eventsFrom</a></span><wbr><span class="parameters">(int&nbsp;fromIndex)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-299">eventsFrom</a></span><wbr><span class="parameters">(int&nbsp;fromIndex)</span></div>
 <div class="block">Snapshots the progress events at or after <code>fromIndex</code>.
 
  <p>
@@ -481,7 +516,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="awaitUpdate(int,java.time.Duration)">
 <h3>awaitUpdate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AsyncJob.Update.html" title="class in org.apache.juneau.console.views">AsyncJob.Update</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-348">awaitUpdate</a></span><wbr><span class="parameters">(int&nbsp;fromIndex,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AsyncJob.Update.html" title="class in org.apache.juneau.console.views">AsyncJob.Update</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-367">awaitUpdate</a></span><wbr><span class="parameters">(int&nbsp;fromIndex,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;timeout)</span></div>
 <div class="block">Blocks until there is a progress event at or after <code>fromIndex</code>, or the job is terminal, or <code>timeout</code>
  elapses &mdash; then returns whichever is available.
@@ -501,7 +536,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="acquireSubscriber()">
 <h3>acquireSubscriber</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-377">acquireSubscriber</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-396">acquireSubscriber</a></span>()</div>
 <div class="block">Attempts to register a subscriber, enforcing the <code>maxSubscribers</code> cap.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -512,14 +547,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="releaseSubscriber()">
 <h3>releaseSubscriber</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-387">releaseSubscriber</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-406">releaseSubscriber</a></span>()</div>
 <div class="block">Releases a subscriber slot previously acquired via <a href="#acquireSubscriber()"><code>acquireSubscriber()</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="subscriberCount()">
 <h3>subscriberCount</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-395">subscriberCount</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-414">subscriberCount</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The current number of registered subscribers.</dd>
@@ -529,7 +564,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-421">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJob.html#line-440">toString</a></span>()</div>
 <div class="block">Returns a description that does <b>not</b> include the capability id.
 
  <p>

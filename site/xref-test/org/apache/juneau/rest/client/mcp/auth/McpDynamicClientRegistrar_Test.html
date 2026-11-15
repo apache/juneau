@@ -330,7 +330,51 @@
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 			.addRedirectUri(URI.create(<span class="jxr_string">"http://127.0.0.1:3000/callback"</span>)).build();
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 		assertThrowsWithMessage(McpAuthException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"HTTP call failed"</span>, registrar::register);
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 	}
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> }
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	@Test <strong class="jxr_keyword">void</strong> h01_privateOrNonCanonicalEndpointRejectedByDefault() {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"10.0.0.5"</span>, <span class="jxr_string">"169.254.169.254"</span>, <span class="jxr_string">"127.1"</span>, <span class="jxr_string">"2130706433"</span>, <span class="jxr_string">"foo.localhost"</span>}) {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">var</strong> b = McpDynamicClientRegistrar.create().registrationEndpoint(URI.create(<span class="jxr_string">"https://"</span> + h + <span class="jxr_string">"/register"</span>))
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 				.issuer(ISSUER).applicationType(McpApplicationType.NATIVE)
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 				.addRedirectUri(URI.create(<span class="jxr_string">"http://127.0.0.1/callback"</span>));
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, b::build, h);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		}
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	}
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	@Test <strong class="jxr_keyword">void</strong> h02_privateEndpointAllowedWithOptIn() {
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		assertDoesNotThrow(() -&gt; McpDynamicClientRegistrar.create()
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			.registrationEndpoint(URI.create(<span class="jxr_string">"https://10.0.0.5/register"</span>))
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			.allowPrivateUrls(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			.issuer(ISSUER).applicationType(McpApplicationType.NATIVE)
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			.addRedirectUri(URI.create(<span class="jxr_string">"http://127.0.0.1/callback"</span>)).build());
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	}
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	@Test <strong class="jxr_keyword">void</strong> h03_redirectResponseIsNotFollowed() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> server = com.sun.net.httpserver.HttpServer.create(<strong class="jxr_keyword">new</strong> InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">var</strong> hits = <strong class="jxr_keyword">new</strong> AtomicInteger();
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		server.createContext(<span class="jxr_string">"/register"</span>, ex -&gt; {
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = ex.getRequestBody()) { in.readAllBytes(); }
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			ex.getResponseHeaders().add(<span class="jxr_string">"Location"</span>, <span class="jxr_string">"http://127.0.0.1:"</span> + ex.getLocalAddress().getPort() + <span class="jxr_string">"/other"</span>);
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			ex.sendResponseHeaders(307, -1);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			ex.close();
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		});
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		server.createContext(<span class="jxr_string">"/other"</span>, ex -&gt; {
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			hits.incrementAndGet();
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			ex.sendResponseHeaders(200, -1);
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			ex.close();
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		});
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		server.start();
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			<strong class="jxr_keyword">var</strong> registrar = McpDynamicClientRegistrar.create()
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 				.registrationEndpoint(URI.create(<span class="jxr_string">"http://127.0.0.1:"</span> + server.getAddress().getPort() + <span class="jxr_string">"/register"</span>))
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 				.issuer(ISSUER).applicationType(McpApplicationType.NATIVE)
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 				.addRedirectUri(URI.create(<span class="jxr_string">"http://127.0.0.1:3000/callback"</span>)).build();
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			assertThrows(McpAuthException.<strong class="jxr_keyword">class</strong>, registrar::register);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			assertEquals(0, hits.get());
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			server.stop(0);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		}
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

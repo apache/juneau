@@ -546,158 +546,159 @@
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 			<strong class="jxr_keyword">var</strong> resp = capGet(<span class="jxr_string">"/asyncCap/finestError"</span>);
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 			assertEquals(500, resp.statusCode(), resp.body());
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 			<strong class="jxr_keyword">var</strong> recs = handler.forLogger(opLogger.getName());
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 			assertSize(() -&gt; <span class="jxr_string">"error path must still emit exactly one completion-path record"</span>, 1, recs);
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			<strong class="jxr_keyword">var</strong> rec = recs.get(0);
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 			assertEquals(Level.INFO, rec.getLevel());
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 			assertNotNull(rec.getThrown(), <span class="jxr_string">"error record must carry the terminal cause as thrown"</span>);
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			assertTrue(rec.getMessage().contains(<span class="jxr_string">"[500]"</span>), rec.getMessage());
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 			reset();
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 			state.restore();
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		}
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	}
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 	@Test <strong class="jxr_keyword">void</strong> h04_timeout_finest_emitsOnceWithThrown() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">var</strong> opLogger = Logger.getLogger(AsyncCaptureServlet.<strong class="jxr_keyword">class</strong>.getName() + <span class="jxr_string">".neverCompletes"</span>);
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">var</strong> state = <strong class="jxr_keyword">new</strong> LoggerState(opLogger);
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			forceOn();
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 			<strong class="jxr_keyword">var</strong> handler = attach(opLogger, Level.FINEST);
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 			<strong class="jxr_keyword">var</strong> resp = capGet(<span class="jxr_string">"/asyncCap/neverCompletes"</span>);
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			assertEquals(504, resp.statusCode(), resp.body());
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			<em class="jxr_comment">// The timeout path emits on the container's async-timeout dispatch thread, AFTER the 504 has already been</em>
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			<em class="jxr_comment">// flushed to this client — poll instead of asserting immediately (see awaitRecords javadoc).</em>
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 			<strong class="jxr_keyword">var</strong> recs = awaitRecords(handler, opLogger.getName(), 1);
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			assertSize(() -&gt; <span class="jxr_string">"timeout path must still emit exactly one completion-path record"</span>, 1, recs);
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			<strong class="jxr_keyword">var</strong> rec = recs.get(0);
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			assertEquals(Level.INFO, rec.getLevel());
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			assertNotNull(rec.getThrown(), <span class="jxr_string">"timeout record must carry the GatewayTimeout as thrown"</span>);
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			assertTrue(rec.getMessage().contains(<span class="jxr_string">"[504]"</span>), rec.getMessage());
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 			reset();
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 			state.restore();
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		}
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	}
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	<em class="jxr_comment">// H05/H06 (async-carry): the async-completion debug record carries the request-thread's LogContext across the</em>
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	<em class="jxr_comment">// async hop (RestDebugSnapshot carry + emit pre-seed), while ad-hoc app logging on the completion thread does NOT</em>
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	<em class="jxr_comment">// (the documented v1 thread-confined boundary).</em>
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 	<em class="jxr_comment">// Async-carry v1 does NOT open any framework LogContext scope itself (request-id / scope ownership is deferred to a</em>
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	<em class="jxr_comment">// future RequestIdFilter, opened after @RestStartCall). These tests therefore establish their own request-thread scope</em>
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 	<em class="jxr_comment">// in the handler (carrying a generic "corrId"), left open across the async hand-off and closed in @RestEndCall — which</em>
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	<em class="jxr_comment">// is exactly the shape that future filter will produce — to exercise the async-carry mechanism in isolation.</em>
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 	@Test <strong class="jxr_keyword">void</strong> h05_asyncCompletionRecord_carriesRequestThreadContextField() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		<strong class="jxr_keyword">var</strong> opLogger = Logger.getLogger(AsyncCaptureServlet.<strong class="jxr_keyword">class</strong>.getName() + <span class="jxr_string">".delayed"</span>);
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">var</strong> state = <strong class="jxr_keyword">new</strong> LoggerState(opLogger);
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			<strong class="jxr_keyword">var</strong> handler = attach(opLogger, Level.FINE);
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 			AsyncCaptureServlet.gate = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 			AsyncCaptureServlet.carryValue = <span class="jxr_string">"async-corr-1"</span>;  <em class="jxr_comment">// handler opens a request-thread LogContext scope from this</em>
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 			AsyncCaptureServlet.finishLatch = <strong class="jxr_keyword">new</strong> CountDownLatch(1);
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 			<strong class="jxr_keyword">var</strong> respFuture = HTTP.sendAsync(
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 				HttpRequest.newBuilder()
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 					.uri(URI.create(capFixture.getRootUrl() + <span class="jxr_string">"/asyncCap/delayed"</span>))
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 					.timeout(Duration.ofSeconds(15))
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 					.GET()
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 					.build(),
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 				BodyHandlers.ofString());
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 			<em class="jxr_comment">// The request thread has returned from finish() and @RestEndCall closed the carry scope — so the completion</em>
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 			<em class="jxr_comment">// record can only carry corrId if it was snapshotted on the request thread and re-established at emit (carry).</em>
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 			assertTrue(AsyncCaptureServlet.finishLatch.await(10, TimeUnit.SECONDS),
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 				<span class="jxr_string">"request thread did not reach @RestEndCall"</span>);
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 			assertNotNull(AsyncCaptureServlet.gate, <span class="jxr_string">"gate future should have been published by the handler"</span>);
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 			AsyncCaptureServlet.gate.complete(<span class="jxr_string">"delayed-body-value"</span>);
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 			<strong class="jxr_keyword">var</strong> resp = respFuture.get(15, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 			assertEquals(200, resp.statusCode(), <span class="jxr_string">"body: "</span> + resp.body());
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 			<strong class="jxr_keyword">var</strong> recs = handler.forLogger(opLogger.getName());
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			assertSize(() -&gt; <span class="jxr_string">"exactly one completion-path record expected"</span>, 1, recs);
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 			<strong class="jxr_keyword">var</strong> rec = recs.get(0);
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 			assertEquals(<span class="jxr_string">"async-corr-1"</span>, LogRecordContext.of(rec).get(<span class="jxr_string">"corrId"</span>),
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 				<span class="jxr_string">"the async completion record must carry the LogContext captured on the request thread (design §8.2 carry)"</span>);
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 			<em class="jxr_comment">// Deferred (Phase 10) async gate: the always-on requestId scope (opened in RestSession's constructor) is</em>
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			<em class="jxr_comment">// carried across the async hop via the same 364 snapshot, AND the completion-thread rendered message</em>
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 			<em class="jxr_comment">// carries the [requestId=&lt;id&gt;] prefix (statusLine reading session.getRequestId()) — proving 364's carry</em>
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			<em class="jxr_comment">// and 402's statusLine read compose on the completion thread, where the live LogContext is empty.</em>
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 			<strong class="jxr_keyword">var</strong> rid = LogRecordContext.of(rec).get(<span class="jxr_string">"requestId"</span>);
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 			assertNotNull(rid, <span class="jxr_string">"the async completion record must also carry the always-on framework requestId"</span>);
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			assertTrue(rec.getMessage().contains(<span class="jxr_string">"[requestId="</span> + rid + <span class="jxr_string">"] "</span>),
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 				<span class="jxr_string">"the async completion rendered message must carry the requestId prefix: "</span> + rec.getMessage());
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 			AsyncCaptureServlet.carryValue = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 			AsyncCaptureServlet.finishLatch = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 			<strong class="jxr_keyword">var</strong> g = AsyncCaptureServlet.gate;
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 			<strong class="jxr_keyword">if</strong> (g != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 				g.complete(<span class="jxr_string">"cleanup"</span>);
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 			AsyncCaptureServlet.gate = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 			state.restore();
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		}
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 	}
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 	@Test <strong class="jxr_keyword">void</strong> h06_adHocCompletionThreadLog_doesNotCarryContext_documentedV1Edge() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		<strong class="jxr_keyword">var</strong> opLogger = Logger.getLogger(AsyncCaptureServlet.<strong class="jxr_keyword">class</strong>.getName() + <span class="jxr_string">".adhoc"</span>);
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<strong class="jxr_keyword">var</strong> state = <strong class="jxr_keyword">new</strong> LoggerState(opLogger);
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 			<strong class="jxr_keyword">var</strong> handler = attach(opLogger, Level.FINE);
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 			handler.setLevel(Level.ALL);  <em class="jxr_comment">// also collect the FINE ad-hoc record, not just the INFO debug record</em>
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			AsyncCaptureServlet.adhocGate = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 			AsyncCaptureServlet.carryValue = <span class="jxr_string">"async-corr-adhoc"</span>;  <em class="jxr_comment">// handler opens a request-thread LogContext scope</em>
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			AsyncCaptureServlet.finishLatch = <strong class="jxr_keyword">new</strong> CountDownLatch(1);
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 			<strong class="jxr_keyword">var</strong> respFuture = HTTP.sendAsync(
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 				HttpRequest.newBuilder()
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 					.uri(URI.create(capFixture.getRootUrl() + <span class="jxr_string">"/asyncCap/adhoc"</span>))
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 					.timeout(Duration.ofSeconds(15))
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 					.GET()
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 					.build(),
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 				BodyHandlers.ofString());
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			assertTrue(AsyncCaptureServlet.finishLatch.await(10, TimeUnit.SECONDS),
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 				<span class="jxr_string">"request thread did not reach @RestEndCall"</span>);
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 			assertNotNull(AsyncCaptureServlet.adhocGate, <span class="jxr_string">"adhoc gate future should have been published by the handler"</span>);
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			AsyncCaptureServlet.adhocGate.complete(<span class="jxr_string">"adhoc-body"</span>);
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			<strong class="jxr_keyword">var</strong> resp = respFuture.get(15, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			assertEquals(200, resp.statusCode(), <span class="jxr_string">"body: "</span> + resp.body());
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			<em class="jxr_comment">// The documented v1 edge: ad-hoc req.fine(...) run on the completion thread does NOT carry the context (the</em>
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			<em class="jxr_comment">// request-thread scope is closed and nothing re-opens a general scope there). Update this test AND the docs</em>
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 			<em class="jxr_comment">// scope line if general async LogContext propagation is ever added.</em>
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 			<strong class="jxr_keyword">var</strong> adhocRec = handler.forLogger(opLogger.getName()).stream()
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 				.filter(r -&gt; eq(r.getMessage(), <span class="jxr_string">"adhoc-completion-log"</span>))
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 				.findFirst().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 			assertNotNull(adhocRec, <span class="jxr_string">"expected the ad-hoc FINE record emitted on the completion thread"</span>);
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 			assertNull(LogRecordContext.of(adhocRec).get(<span class="jxr_string">"corrId"</span>),
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 				<span class="jxr_string">"documented v1 edge: ad-hoc completion-thread logging must NOT carry the request-thread context"</span>);
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 			<em class="jxr_comment">// Contrast: the debug-pipeline completion record on the SAME logger DOES carry it (the async carry).</em>
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 			<strong class="jxr_keyword">var</strong> debugRec = handler.forLogger(opLogger.getName()).stream()
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 				.filter(r -&gt; r.getLevel() == Level.INFO)
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 				.findFirst().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 			assertNotNull(debugRec, <span class="jxr_string">"expected the INFO debug completion record"</span>);
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 			assertEquals(<span class="jxr_string">"async-corr-adhoc"</span>, LogRecordContext.of(debugRec).get(<span class="jxr_string">"corrId"</span>),
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 				<span class="jxr_string">"the debug-pipeline completion record must still carry the context via the async carry"</span>);
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 			AsyncCaptureServlet.carryValue = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 			AsyncCaptureServlet.finishLatch = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 			<strong class="jxr_keyword">var</strong> g = AsyncCaptureServlet.adhocGate;
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 			<strong class="jxr_keyword">if</strong> (g != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 				g.complete(<span class="jxr_string">"cleanup"</span>);
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 			AsyncCaptureServlet.adhocGate = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 			state.restore();
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		}
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 	}
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> }
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 			<em class="jxr_comment">// The error path can emit just after the 500 is flushed to this client — poll (see awaitRecords javadoc).</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 			<strong class="jxr_keyword">var</strong> recs = awaitRecords(handler, opLogger.getName(), 1);
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			assertSize(() -&gt; <span class="jxr_string">"error path must still emit exactly one completion-path record"</span>, 1, recs);
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 			<strong class="jxr_keyword">var</strong> rec = recs.get(0);
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 			assertEquals(Level.INFO, rec.getLevel());
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			assertNotNull(rec.getThrown(), <span class="jxr_string">"error record must carry the terminal cause as thrown"</span>);
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 			assertTrue(rec.getMessage().contains(<span class="jxr_string">"[500]"</span>), rec.getMessage());
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 			reset();
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 			state.restore();
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		}
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 	}
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 	@Test <strong class="jxr_keyword">void</strong> h04_timeout_finest_emitsOnceWithThrown() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">var</strong> opLogger = Logger.getLogger(AsyncCaptureServlet.<strong class="jxr_keyword">class</strong>.getName() + <span class="jxr_string">".neverCompletes"</span>);
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		<strong class="jxr_keyword">var</strong> state = <strong class="jxr_keyword">new</strong> LoggerState(opLogger);
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 			forceOn();
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 			<strong class="jxr_keyword">var</strong> handler = attach(opLogger, Level.FINEST);
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			<strong class="jxr_keyword">var</strong> resp = capGet(<span class="jxr_string">"/asyncCap/neverCompletes"</span>);
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 			assertEquals(504, resp.statusCode(), resp.body());
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			<em class="jxr_comment">// The timeout path emits on the container's async-timeout dispatch thread, AFTER the 504 has already been</em>
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 			<em class="jxr_comment">// flushed to this client — poll instead of asserting immediately (see awaitRecords javadoc).</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			<strong class="jxr_keyword">var</strong> recs = awaitRecords(handler, opLogger.getName(), 1);
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			assertSize(() -&gt; <span class="jxr_string">"timeout path must still emit exactly one completion-path record"</span>, 1, recs);
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			<strong class="jxr_keyword">var</strong> rec = recs.get(0);
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			assertEquals(Level.INFO, rec.getLevel());
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			assertNotNull(rec.getThrown(), <span class="jxr_string">"timeout record must carry the GatewayTimeout as thrown"</span>);
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 			assertTrue(rec.getMessage().contains(<span class="jxr_string">"[504]"</span>), rec.getMessage());
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 			reset();
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 			state.restore();
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		}
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	}
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	<em class="jxr_comment">// H05/H06 (async-carry): the async-completion debug record carries the request-thread's LogContext across the</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	<em class="jxr_comment">// async hop (RestDebugSnapshot carry + emit pre-seed), while ad-hoc app logging on the completion thread does NOT</em>
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	<em class="jxr_comment">// (the documented v1 thread-confined boundary).</em>
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 	<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	<em class="jxr_comment">// Async-carry v1 does NOT open any framework LogContext scope itself (request-id / scope ownership is deferred to a</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 	<em class="jxr_comment">// future RequestIdFilter, opened after @RestStartCall). These tests therefore establish their own request-thread scope</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	<em class="jxr_comment">// in the handler (carrying a generic "corrId"), left open across the async hand-off and closed in @RestEndCall — which</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	<em class="jxr_comment">// is exactly the shape that future filter will produce — to exercise the async-carry mechanism in isolation.</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	@Test <strong class="jxr_keyword">void</strong> h05_asyncCompletionRecord_carriesRequestThreadContextField() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">var</strong> opLogger = Logger.getLogger(AsyncCaptureServlet.<strong class="jxr_keyword">class</strong>.getName() + <span class="jxr_string">".delayed"</span>);
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">var</strong> state = <strong class="jxr_keyword">new</strong> LoggerState(opLogger);
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 			<strong class="jxr_keyword">var</strong> handler = attach(opLogger, Level.FINE);
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 			AsyncCaptureServlet.gate = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 			AsyncCaptureServlet.carryValue = <span class="jxr_string">"async-corr-1"</span>;  <em class="jxr_comment">// handler opens a request-thread LogContext scope from this</em>
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 			AsyncCaptureServlet.finishLatch = <strong class="jxr_keyword">new</strong> CountDownLatch(1);
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 			<strong class="jxr_keyword">var</strong> respFuture = HTTP.sendAsync(
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 				HttpRequest.newBuilder()
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 					.uri(URI.create(capFixture.getRootUrl() + <span class="jxr_string">"/asyncCap/delayed"</span>))
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 					.timeout(Duration.ofSeconds(15))
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 					.GET()
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 					.build(),
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 				BodyHandlers.ofString());
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 			<em class="jxr_comment">// The request thread has returned from finish() and @RestEndCall closed the carry scope — so the completion</em>
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 			<em class="jxr_comment">// record can only carry corrId if it was snapshotted on the request thread and re-established at emit (carry).</em>
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 			assertTrue(AsyncCaptureServlet.finishLatch.await(10, TimeUnit.SECONDS),
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 				<span class="jxr_string">"request thread did not reach @RestEndCall"</span>);
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 			assertNotNull(AsyncCaptureServlet.gate, <span class="jxr_string">"gate future should have been published by the handler"</span>);
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 			AsyncCaptureServlet.gate.complete(<span class="jxr_string">"delayed-body-value"</span>);
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 			<strong class="jxr_keyword">var</strong> resp = respFuture.get(15, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			assertEquals(200, resp.statusCode(), <span class="jxr_string">"body: "</span> + resp.body());
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			<strong class="jxr_keyword">var</strong> recs = handler.forLogger(opLogger.getName());
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 			assertSize(() -&gt; <span class="jxr_string">"exactly one completion-path record expected"</span>, 1, recs);
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 			<strong class="jxr_keyword">var</strong> rec = recs.get(0);
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 			assertEquals(<span class="jxr_string">"async-corr-1"</span>, LogRecordContext.of(rec).get(<span class="jxr_string">"corrId"</span>),
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 				<span class="jxr_string">"the async completion record must carry the LogContext captured on the request thread (design §8.2 carry)"</span>);
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			<em class="jxr_comment">// Deferred (Phase 10) async gate: the always-on requestId scope (opened in RestSession's constructor) is</em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 			<em class="jxr_comment">// carried across the async hop via the same 364 snapshot, AND the completion-thread rendered message</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			<em class="jxr_comment">// carries the [requestId=&lt;id&gt;] prefix (statusLine reading session.getRequestId()) — proving 364's carry</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 			<em class="jxr_comment">// and 402's statusLine read compose on the completion thread, where the live LogContext is empty.</em>
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 			<strong class="jxr_keyword">var</strong> rid = LogRecordContext.of(rec).get(<span class="jxr_string">"requestId"</span>);
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			assertNotNull(rid, <span class="jxr_string">"the async completion record must also carry the always-on framework requestId"</span>);
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			assertTrue(rec.getMessage().contains(<span class="jxr_string">"[requestId="</span> + rid + <span class="jxr_string">"] "</span>),
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 				<span class="jxr_string">"the async completion rendered message must carry the requestId prefix: "</span> + rec.getMessage());
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 			AsyncCaptureServlet.carryValue = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 			AsyncCaptureServlet.finishLatch = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 			<strong class="jxr_keyword">var</strong> g = AsyncCaptureServlet.gate;
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 			<strong class="jxr_keyword">if</strong> (g != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 				g.complete(<span class="jxr_string">"cleanup"</span>);
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 			AsyncCaptureServlet.gate = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 			state.restore();
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		}
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 	}
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	@Test <strong class="jxr_keyword">void</strong> h06_adHocCompletionThreadLog_doesNotCarryContext_documentedV1Edge() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<strong class="jxr_keyword">var</strong> opLogger = Logger.getLogger(AsyncCaptureServlet.<strong class="jxr_keyword">class</strong>.getName() + <span class="jxr_string">".adhoc"</span>);
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">var</strong> state = <strong class="jxr_keyword">new</strong> LoggerState(opLogger);
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 			<strong class="jxr_keyword">var</strong> handler = attach(opLogger, Level.FINE);
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			handler.setLevel(Level.ALL);  <em class="jxr_comment">// also collect the FINE ad-hoc record, not just the INFO debug record</em>
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 			AsyncCaptureServlet.adhocGate = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			AsyncCaptureServlet.carryValue = <span class="jxr_string">"async-corr-adhoc"</span>;  <em class="jxr_comment">// handler opens a request-thread LogContext scope</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 			AsyncCaptureServlet.finishLatch = <strong class="jxr_keyword">new</strong> CountDownLatch(1);
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 			<strong class="jxr_keyword">var</strong> respFuture = HTTP.sendAsync(
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 				HttpRequest.newBuilder()
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 					.uri(URI.create(capFixture.getRootUrl() + <span class="jxr_string">"/asyncCap/adhoc"</span>))
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 					.timeout(Duration.ofSeconds(15))
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 					.GET()
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 					.build(),
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 				BodyHandlers.ofString());
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			assertTrue(AsyncCaptureServlet.finishLatch.await(10, TimeUnit.SECONDS),
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 				<span class="jxr_string">"request thread did not reach @RestEndCall"</span>);
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			assertNotNull(AsyncCaptureServlet.adhocGate, <span class="jxr_string">"adhoc gate future should have been published by the handler"</span>);
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 			AsyncCaptureServlet.adhocGate.complete(<span class="jxr_string">"adhoc-body"</span>);
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			<strong class="jxr_keyword">var</strong> resp = respFuture.get(15, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 			assertEquals(200, resp.statusCode(), <span class="jxr_string">"body: "</span> + resp.body());
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			<em class="jxr_comment">// The documented v1 edge: ad-hoc req.fine(...) run on the completion thread does NOT carry the context (the</em>
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 			<em class="jxr_comment">// request-thread scope is closed and nothing re-opens a general scope there). Update this test AND the docs</em>
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 			<em class="jxr_comment">// scope line if general async LogContext propagation is ever added.</em>
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 			<strong class="jxr_keyword">var</strong> adhocRec = handler.forLogger(opLogger.getName()).stream()
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 				.filter(r -&gt; eq(r.getMessage(), <span class="jxr_string">"adhoc-completion-log"</span>))
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 				.findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 			assertNotNull(adhocRec, <span class="jxr_string">"expected the ad-hoc FINE record emitted on the completion thread"</span>);
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 			assertNull(LogRecordContext.of(adhocRec).get(<span class="jxr_string">"corrId"</span>),
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 				<span class="jxr_string">"documented v1 edge: ad-hoc completion-thread logging must NOT carry the request-thread context"</span>);
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 			<em class="jxr_comment">// Contrast: the debug-pipeline completion record on the SAME logger DOES carry it (the async carry).</em>
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 			<strong class="jxr_keyword">var</strong> debugRec = handler.forLogger(opLogger.getName()).stream()
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 				.filter(r -&gt; r.getLevel() == Level.INFO)
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 				.findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 			assertNotNull(debugRec, <span class="jxr_string">"expected the INFO debug completion record"</span>);
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 			assertEquals(<span class="jxr_string">"async-corr-adhoc"</span>, LogRecordContext.of(debugRec).get(<span class="jxr_string">"corrId"</span>),
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 				<span class="jxr_string">"the debug-pipeline completion record must still carry the context via the async carry"</span>);
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 			AsyncCaptureServlet.carryValue = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 			AsyncCaptureServlet.finishLatch = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 			<strong class="jxr_keyword">var</strong> g = AsyncCaptureServlet.adhocGate;
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 			<strong class="jxr_keyword">if</strong> (g != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 				g.complete(<span class="jxr_string">"cleanup"</span>);
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 			AsyncCaptureServlet.adhocGate = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 			state.restore();
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		}
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 	}
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

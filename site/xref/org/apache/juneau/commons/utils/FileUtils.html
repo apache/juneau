@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> FileUtils() {}
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<em class="jxr_comment">// Shared message text — kept identical across the two boundary-check sites so attackers</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<em class="jxr_comment">// Shared message text — kept identical across the two boundary-check sites so callers</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<em class="jxr_comment">// cannot distinguish "rejected by pre-existence check" from "rejected by symlink check".</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MSG_pathEscape = <span class="jxr_string">"Path escapes configured root directory."</span>;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
@@ -218,220 +218,256 @@
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * Same as {@link File#mkdirs()} except throws a RuntimeExeption if directory could not be created.</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified name is a single plain file name.</em>
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * @param f The directory to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * @param clean If &lt;jk&gt;true&lt;/jk&gt;, deletes the contents of the directory if it already exists.</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * @return The same file.</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException if directory could not be created.</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> File mkdirs(File f, <strong class="jxr_keyword">boolean</strong> clean) {
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		reqnn(<span class="jxr_string">"f"</span>, f);
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">if</strong> (f.exists()) {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">if</strong> (clean) {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 				optional(deleteFile(f)).filter(x -&gt; x).orElseThrow(() -&gt; rex(<span class="jxr_string">"Could not clean directory '%s'"</span>, f.getAbsolutePath()));
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 				<strong class="jxr_keyword">return</strong> f;
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			}
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		}
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		optional(f.mkdirs()).filter(x -&gt; x).orElseThrow(() -&gt; rex(<span class="jxr_string">"Could not create directory '%s'"</span>, f.getAbsolutePath()));
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">return</strong> f;
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	}
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 * Same as {@link #mkdirs(String, boolean)} but uses String path.</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * A plain file name is non-empty, contains no {@code /}, {@code \} or NUL characters, and is not</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * {@code "."} or {@code ".."}.</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * @param name The name to check.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;false&lt;/jk&gt;).</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified name is a single plain file name.</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSafeFileName(String name) {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(name) || eq(name, <span class="jxr_string">"."</span>) || eq(name, <span class="jxr_string">".."</span>))
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">return</strong> name.indexOf('/') == -1 &amp;&amp; name.indexOf('&#92;&#92;') == -1 &amp;&amp; name.indexOf('\0') == -1;
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	}
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified forward-slash separated path stays relative to its base.</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 * The path is rejected when it starts with {@code /}, contains a {@code \} or NUL character, or has a</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 * {@code ".."} segment.  Empty paths and {@code "."} segments are accepted.  No URL decoding is done, so</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 * callers that take input from URLs should decode first.</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * @param path The path of the directory to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * @param clean If &lt;jk&gt;true&lt;/jk&gt;, deletes the contents of the directory if it already exists.</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * @return The directory.</em>
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> File mkdirs(String path, <strong class="jxr_keyword">boolean</strong> clean) {
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		reqnn(<span class="jxr_string">"path"</span>, path);
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">return</strong> mkdirs(<strong class="jxr_keyword">new</strong> File(path), clean);
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	}
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 * Resolves a user-supplied path string against a root directory with a strict</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * filesystem-boundary check &amp;mdash; rejects any path that escapes the root (via</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * {@code ../}, absolute-path injection, symlinks pointing outside, etc.).</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * Resolves both {@code rootDir} and the resolved target via</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 * {@link Path#toRealPath Path.toRealPath()} + {@link Path#normalize Path.normalize()}</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 * to handle symlinks deterministically, then asserts {@code target.startsWith(root)}</em>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * before returning the resolved {@link File}.</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 * Symlinks &lt;i&gt;inside&lt;/i&gt; {@code rootDir} that resolve &lt;i&gt;inside&lt;/i&gt; {@code rootDir} are</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 * followed silently. Symlinks that resolve &lt;i&gt;outside&lt;/i&gt; {@code rootDir} are rejected with</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * {@link IllegalArgumentException} (callers should map to a {@code 403 Forbidden}).</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 * Pre-existence semantics: when the resolved target does not exist on the filesystem, the</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * helper returns {@link Optional#empty()} so the caller can map to a {@code 404 Not Found}.</em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * Boundary violation always wins over pre-existence &amp;mdash; even a non-existent path that</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * escapes {@code rootDir} (after {@code ../} normalization) is rejected with</em>
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 * {@link IllegalArgumentException} rather than {@code Optional.empty()}.</em>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * Used by {@code DirectoryResource}, {@code LogsResource}, and any other resource that</em>
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * resolves an HTTP-supplied path under a configured root directory.</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * @param path The path to check.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;false&lt;/jk&gt;).</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified path stays relative to its base.</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSafeRelativePath(String path) {
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">if</strong> (path == <strong class="jxr_keyword">null</strong> || path.startsWith(<span class="jxr_string">"/"</span>) || path.indexOf('&#92;&#92;') != -1 || path.indexOf('\0') != -1)
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> seg : path.split(<span class="jxr_string">"/"</span>))
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			<strong class="jxr_keyword">if</strong> (eq(seg, <span class="jxr_string">".."</span>))
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 * Same as {@link File#mkdirs()} except throws a RuntimeExeption if directory could not be created.</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * @param f The directory to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 * @param clean If &lt;jk&gt;true&lt;/jk&gt;, deletes the contents of the directory if it already exists.</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 * @return The same file.</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException if directory could not be created.</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> File mkdirs(File f, <strong class="jxr_keyword">boolean</strong> clean) {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		reqnn(<span class="jxr_string">"f"</span>, f);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">if</strong> (f.exists()) {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">if</strong> (clean) {
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 				optional(deleteFile(f)).filter(x -&gt; x).orElseThrow(() -&gt; rex(<span class="jxr_string">"Could not clean directory '%s'"</span>, f.getAbsolutePath()));
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 				<strong class="jxr_keyword">return</strong> f;
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			}
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		}
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		optional(f.mkdirs()).filter(x -&gt; x).orElseThrow(() -&gt; rex(<span class="jxr_string">"Could not create directory '%s'"</span>, f.getAbsolutePath()));
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">return</strong> f;
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	}
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * Same as {@link #mkdirs(String, boolean)} but uses String path.</em>
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 * @param rootDir The configured root directory. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * @param userPath The user-supplied path, relative to {@code rootDir}. May be</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;null&lt;/jk&gt; or empty &amp;mdash; in which case the helper returns the resolved root</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 * 	itself.</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 * @return An {@link Optional} containing the resolved {@link File} if it exists inside</em>
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 * 	{@code rootDir}, or {@link Optional#empty()} if the target does not exist.</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the resolved target escapes {@code rootDir}, or if</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * 	the supplied {@code userPath} is not a valid path string. Callers should map to</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 * 	{@code 403 Forbidden}.</em>
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Optional&lt;File&gt; resolveSafely(File rootDir, String userPath) {
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		reqnn(<span class="jxr_string">"rootDir"</span>, rootDir);
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">var</strong> root = canonicalizeRoot(rootDir.toPath());
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(userPath))
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">return</strong> optional(root.toFile());
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		Path target;
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			target = root.resolve(userPath).normalize();
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) InvalidPathException e) {
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<strong class="jxr_keyword">throw</strong> iaex(MSG_pathEscape);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		}
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">if</strong> (! target.startsWith(root))
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">throw</strong> iaex(MSG_pathEscape);
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">var</strong> f = target.toFile();
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">if</strong> (! f.exists())
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			<strong class="jxr_keyword">return</strong> emptyOptional();
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			<strong class="jxr_keyword">if</strong> (! target.toRealPath().startsWith(root))
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 				<strong class="jxr_keyword">throw</strong> iaex(MSG_pathEscape);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NoSuchFileException e) {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">return</strong> emptyOptional();
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 			<strong class="jxr_keyword">throw</strong> rex(e, <span class="jxr_string">"Could not canonicalize '%s'"</span>, target);
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		}
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">return</strong> optional(f);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	}
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 * Virtual-path variant of {@link #resolveSafely(File, String)} for use with servlet-context</em>
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 * paths, classpath resource lookups, or other virtual-path resolvers where no filesystem</em>
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * operation is desired.</em>
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 * Operates purely on the virtual path string &amp;mdash; no {@code toRealPath()} call, no</em>
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 * filesystem touch, no symlink resolution. Safe to use against base paths whose resources</em>
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">	 * do not exist on the local filesystem at all (e.g. {@code /WEB-INF/views/} inside a</em>
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">	 * Spring Boot fat jar, or a classpath URL).</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * Normalizes the combined path by walking segments and applying {@code ./} (drop) and</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * {@code ../} (pop) semantics, then asserts the result stays under the normalized</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * {@code basePath}. {@code ../} segments that would pop above {@code basePath} are</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 * rejected.</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">	 * URL-encoding is the caller's responsibility &amp;mdash; this helper treats the literal</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * {@code %2e%2e} as a normal path segment (not as {@code ..}). Callers that receive</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 * user input from URLs should URL-decode before calling.</em>
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 * @param basePath The configured base path (virtual; e.g. {@code "/WEB-INF/views/"}).</em>
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">	 * 	Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">	 * @param userPath The user-supplied path, relative to {@code basePath}. May be</em>
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;null&lt;/jk&gt; or empty &amp;mdash; in which case the helper returns the normalized</em>
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 * 	{@code basePath}.</em>
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 * @return The resolved virtual path string (always starting with {@code basePath}).</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the resolved target escapes {@code basePath}, or if</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * 	{@code basePath} is &lt;jk&gt;null&lt;/jk&gt; or blank. Callers should map to</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * 	{@code 403 Forbidden}.</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String resolveVirtualPathSafely(String basePath, String userPath) {
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		reqnn(<span class="jxr_string">"basePath"</span>, basePath);
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">if</strong> (basePath.isBlank())
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"basePath must not be blank."</span>);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">var</strong> bp = normalizeVirtualPath(basePath);
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">if</strong> (bp == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"basePath escapes its own root."</span>);
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<strong class="jxr_keyword">if</strong> (! bp.endsWith(<span class="jxr_string">"/"</span>))
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			bp = bp + <span class="jxr_string">"/"</span>;
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(userPath))
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			<strong class="jxr_keyword">return</strong> bp;
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> up = userPath.startsWith(<span class="jxr_string">"/"</span>) ? userPath.substring(1) : userPath;
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">var</strong> combined = normalizeVirtualPath(bp + up);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">if</strong> (combined == <strong class="jxr_keyword">null</strong> || ! combined.startsWith(bp))
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			<strong class="jxr_keyword">throw</strong> iaex(MSG_pathEscape);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">return</strong> combined;
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	}
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 * Resolves {@code rootDir} via {@link Path#toRealPath()} so symlinks at the root itself</em>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * are normalized once per call. Falls back to {@link Path#toAbsolutePath()} +</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * {@link Path#normalize()} when the directory does not exist at the moment of the call</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 * (rare; legacy contract tolerated this).</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Path canonicalizeRoot(Path rootDir) {
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<strong class="jxr_keyword">return</strong> rootDir.toRealPath();
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IOException e) {
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			<strong class="jxr_keyword">return</strong> rootDir.toAbsolutePath().normalize();
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		}
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	}
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 * String-level path normalization for forward-slash separated virtual paths.</em>
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 * Returns {@code null} if a {@code ..} segment would pop above the root.</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 * @param path The path of the directory to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * @param clean If &lt;jk&gt;true&lt;/jk&gt;, deletes the contents of the directory if it already exists.</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * @return The directory.</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> File mkdirs(String path, <strong class="jxr_keyword">boolean</strong> clean) {
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		reqnn(<span class="jxr_string">"path"</span>, path);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		<strong class="jxr_keyword">return</strong> mkdirs(<strong class="jxr_keyword">new</strong> File(path), clean);
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 * Resolves a user-supplied path string against a root directory with a strict</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 * filesystem-boundary check &amp;mdash; rejects any path that escapes the root (via</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 * {@code ../}, absolute-path injection, symlinks pointing outside, etc.).</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 * Resolves both {@code rootDir} and the resolved target via</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 * {@link Path#toRealPath Path.toRealPath()} + {@link Path#normalize Path.normalize()}</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * to handle symlinks deterministically, then asserts {@code target.startsWith(root)}</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * before returning the resolved {@link File}.</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * Symlinks &lt;i&gt;inside&lt;/i&gt; {@code rootDir} that resolve &lt;i&gt;inside&lt;/i&gt; {@code rootDir} are</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * followed silently. Symlinks that resolve &lt;i&gt;outside&lt;/i&gt; {@code rootDir} are rejected with</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * {@link IllegalArgumentException} (callers should map to a {@code 403 Forbidden}).</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 * Pre-existence semantics: when the resolved target does not exist on the filesystem, the</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 * helper returns {@link Optional#empty()} so the caller can map to a {@code 404 Not Found}.</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 * Boundary violation always wins over pre-existence &amp;mdash; even a non-existent path that</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">	 * escapes {@code rootDir} (after {@code ../} normalization) is rejected with</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">	 * {@link IllegalArgumentException} rather than {@code Optional.empty()}.</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">	 * Used by {@code DirectoryResource}, {@code LogsResource}, and any other resource that</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * resolves an HTTP-supplied path under a configured root directory.</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * @param rootDir The configured root directory. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 * @param userPath The user-supplied path, relative to {@code rootDir}. May be</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;null&lt;/jk&gt; or empty &amp;mdash; in which case the helper returns the resolved root</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 * 	itself.</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * @return An {@link Optional} containing the resolved {@link File} if it exists inside</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * 	{@code rootDir}, or {@link Optional#empty()} if the target does not exist.</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the resolved target escapes {@code rootDir}, or if</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 * 	the supplied {@code userPath} is not a valid path string. Callers should map to</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 * 	{@code 403 Forbidden}.</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Optional&lt;File&gt; resolveSafely(File rootDir, String userPath) {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		reqnn(<span class="jxr_string">"rootDir"</span>, rootDir);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">var</strong> root = canonicalizeRoot(rootDir.toPath());
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(userPath))
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			<strong class="jxr_keyword">return</strong> optional(root.toFile());
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		Path target;
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			target = root.resolve(userPath).normalize();
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) InvalidPathException e) {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">throw</strong> iaex(MSG_pathEscape);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		}
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">if</strong> (! target.startsWith(root))
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<strong class="jxr_keyword">throw</strong> iaex(MSG_pathEscape);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">var</strong> f = target.toFile();
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">if</strong> (! f.exists())
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">return</strong> emptyOptional();
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<strong class="jxr_keyword">if</strong> (! target.toRealPath().startsWith(root))
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 				<strong class="jxr_keyword">throw</strong> iaex(MSG_pathEscape);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NoSuchFileException e) {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			<strong class="jxr_keyword">return</strong> emptyOptional();
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			<strong class="jxr_keyword">throw</strong> rex(e, <span class="jxr_string">"Could not canonicalize '%s'"</span>, target);
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		}
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">return</strong> optional(f);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	}
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 * Virtual-path variant of {@link #resolveSafely(File, String)} for use with servlet-context</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 * paths, classpath resource lookups, or other virtual-path resolvers where no filesystem</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * operation is desired.</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * Operates purely on the virtual path string &amp;mdash; no {@code toRealPath()} call, no</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 * filesystem touch, no symlink resolution. Safe to use against base paths whose resources</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * do not exist on the local filesystem at all (e.g. {@code /WEB-INF/views/} inside a</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 * Spring Boot fat jar, or a classpath URL).</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * Normalizes the combined path by walking segments and applying {@code ./} (drop) and</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 * {@code ../} (pop) semantics, then asserts the result stays under the normalized</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 * {@code basePath}. {@code ../} segments that would pop above {@code basePath} are</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 * rejected.</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 * URL-encoding is the caller's responsibility &amp;mdash; this helper treats the literal</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * {@code %2e%2e} as a normal path segment (not as {@code ..}). Callers that receive</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 * user input from URLs should URL-decode before calling.</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * @param basePath The configured base path (virtual; e.g. {@code "/WEB-INF/views/"}).</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 * 	Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * @param userPath The user-supplied path, relative to {@code basePath}. May be</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;null&lt;/jk&gt; or empty &amp;mdash; in which case the helper returns the normalized</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 * 	{@code basePath}.</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 * @return The resolved virtual path string (always starting with {@code basePath}).</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the resolved target escapes {@code basePath}, or if</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 * 	{@code basePath} is &lt;jk&gt;null&lt;/jk&gt; or blank. Callers should map to</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 * 	{@code 403 Forbidden}.</em>
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<span class="jxr_string">"java:S135"</span>, <em class="jxr_comment">// Multiple continue statements are intrinsic to this path-segment scan/normalization loop.</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<span class="jxr_string">"java:S3776"</span> <em class="jxr_comment">// Cognitive complexity: small loop with three early-exit cases; splitting hurts readability.</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	})
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String normalizeVirtualPath(String path) {
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">if</strong> (path == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">var</strong> startsWithSlash = path.startsWith(<span class="jxr_string">"/"</span>);
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">var</strong> endsWithSlash = path.length() &gt; 1 &amp;&amp; path.endsWith(<span class="jxr_string">"/"</span>);
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">var</strong> segments = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : path.split(<span class="jxr_string">"/"</span>)) {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			<strong class="jxr_keyword">if</strong> (s.isEmpty() || eq(s, <span class="jxr_string">"."</span>))
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 				<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 			<strong class="jxr_keyword">if</strong> (eq(s, <span class="jxr_string">".."</span>)) {
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 				<strong class="jxr_keyword">if</strong> (segments.isEmpty())
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 				segments.remove(segments.size() - 1);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 				<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			}
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			segments.add(s);
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		}
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">if</strong> (startsWithSlash)
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			sb.append('/');
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		sb.append(String.join(<span class="jxr_string">"/"</span>, segments));
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">if</strong> (endsWithSlash &amp;&amp; (sb.isEmpty() || sb.charAt(sb.length() - 1) != '/'))
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			sb.append('/');
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	}
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 * Updates the modified timestamp on the specified file.</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 * Method ensures that the timestamp changes even if it's been modified within the past millisecond.</em>
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 * @param f The file to modify the modified timestamp on.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> modifyTimestamp(File f) {
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> lm = f.lastModified();
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">var</strong> l = System.currentTimeMillis();
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">if</strong> (lm == l)
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			l++;
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		optional(f.setLastModified(l)).filter(x -&gt; x).orElseThrow(() -&gt; rex(<span class="jxr_string">"Could not modify timestamp on file '%s'"</span>, f.getAbsolutePath()));
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<em class="jxr_comment">// Linux only gives 1s precision, so set the date 1s into the future.</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">if</strong> (lm == f.lastModified())
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			optional(f.setLastModified(l + 1000)).filter(x -&gt; x).orElseThrow(() -&gt; rex(<span class="jxr_string">"Could not modify timestamp on file '%s'"</span>, f.getAbsolutePath()));
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	}
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> }
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String resolveVirtualPathSafely(String basePath, String userPath) {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		reqnn(<span class="jxr_string">"basePath"</span>, basePath);
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">if</strong> (basePath.isBlank())
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"basePath must not be blank."</span>);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">var</strong> bp = normalizeVirtualPath(basePath);
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">if</strong> (bp == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"basePath escapes its own root."</span>);
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">if</strong> (! bp.endsWith(<span class="jxr_string">"/"</span>))
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			bp = bp + <span class="jxr_string">"/"</span>;
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(userPath))
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			<strong class="jxr_keyword">return</strong> bp;
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">var</strong> up = userPath.startsWith(<span class="jxr_string">"/"</span>) ? userPath.substring(1) : userPath;
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">var</strong> combined = normalizeVirtualPath(bp + up);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">if</strong> (combined == <strong class="jxr_keyword">null</strong> || ! combined.startsWith(bp))
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			<strong class="jxr_keyword">throw</strong> iaex(MSG_pathEscape);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">return</strong> combined;
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	}
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 * Resolves {@code rootDir} via {@link Path#toRealPath()} so symlinks at the root itself</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">	 * are normalized once per call. Falls back to {@link Path#toAbsolutePath()} +</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * {@link Path#normalize()} when the directory does not exist at the moment of the call</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * (rare; legacy contract tolerated this).</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Path canonicalizeRoot(Path rootDir) {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			<strong class="jxr_keyword">return</strong> rootDir.toRealPath();
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IOException e) {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			<strong class="jxr_keyword">return</strong> rootDir.toAbsolutePath().normalize();
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		}
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	}
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 * String-level path normalization for forward-slash separated virtual paths.</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 * Returns {@code null} if a {@code ..} segment would pop above the root.</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<span class="jxr_string">"java:S135"</span>, <em class="jxr_comment">// Multiple continue statements are intrinsic to this path-segment scan/normalization loop.</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<span class="jxr_string">"java:S3776"</span> <em class="jxr_comment">// Cognitive complexity: small loop with three early-exit cases; splitting hurts readability.</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	})
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String normalizeVirtualPath(String path) {
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">if</strong> (path == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">var</strong> startsWithSlash = path.startsWith(<span class="jxr_string">"/"</span>);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">var</strong> endsWithSlash = path.length() &gt; 1 &amp;&amp; path.endsWith(<span class="jxr_string">"/"</span>);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">var</strong> segments = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : path.split(<span class="jxr_string">"/"</span>)) {
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">if</strong> (s.isEmpty() || eq(s, <span class="jxr_string">"."</span>))
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">if</strong> (eq(s, <span class="jxr_string">".."</span>)) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 				<strong class="jxr_keyword">if</strong> (segments.isEmpty())
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 				segments.remove(segments.size() - 1);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			}
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			segments.add(s);
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		}
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">if</strong> (startsWithSlash)
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			sb.append('/');
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		sb.append(String.join(<span class="jxr_string">"/"</span>, segments));
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<strong class="jxr_keyword">if</strong> (endsWithSlash &amp;&amp; (sb.isEmpty() || sb.charAt(sb.length() - 1) != '/'))
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			sb.append('/');
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	}
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * Updates the modified timestamp on the specified file.</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * Method ensures that the timestamp changes even if it's been modified within the past millisecond.</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * @param f The file to modify the modified timestamp on.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> modifyTimestamp(File f) {
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">var</strong> lm = f.lastModified();
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">var</strong> l = System.currentTimeMillis();
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<strong class="jxr_keyword">if</strong> (lm == l)
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			l++;
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		optional(f.setLastModified(l)).filter(x -&gt; x).orElseThrow(() -&gt; rex(<span class="jxr_string">"Could not modify timestamp on file '%s'"</span>, f.getAbsolutePath()));
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<em class="jxr_comment">// Linux only gives 1s precision, so set the date 1s into the future.</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<strong class="jxr_keyword">if</strong> (lm == f.lastModified())
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 			optional(f.setLastModified(l + 1000)).filter(x -&gt; x).orElseThrow(() -&gt; rex(<span class="jxr_string">"Could not modify timestamp on file '%s'"</span>, f.getAbsolutePath()));
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

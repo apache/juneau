@@ -78,9 +78,9 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-48">RemoteUrlPolicy</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-49">RemoteUrlPolicy</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Shared SSRF-hardening policy for the <a href="Remote.html" title="annotation interface in org.apache.juneau.http.remote"><code>@Remote</code></a>/<a href="RemoteOp.html" title="annotation interface in org.apache.juneau.http.remote"><code>@RemoteOp</code></a> proxy engines.
+<div class="block">Shared outbound-URL hardening policy for the <a href="Remote.html" title="annotation interface in org.apache.juneau.http.remote"><code>@Remote</code></a>/<a href="RemoteOp.html" title="annotation interface in org.apache.juneau.http.remote"><code>@RemoteOp</code></a> proxy engines.
 
  <p>
  Replaces the earlier scheme-only guard (<c>requireHttpScheme</c>) with a <b>deny-private</b> default policy:
@@ -198,7 +198,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#requireAllowedUrl(java.lang.String,boolean)" class="member-name-link">requireAllowedUrl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url,
  boolean&nbsp;allowPrivateUrls)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Enforces the SSRF guardrail on an effective <code>@Remote</code> URL: when <code>url</code> carries a URI scheme, it
+<div class="block">Enforces the outbound-URL guardrail on an effective <code>@Remote</code> URL: when <code>url</code> carries a URI scheme, it
  must be a canonical absolute <code>http</code>/<code>https</code> URL with a nonempty host, and &mdash; unless
  <code>allowPrivateUrls</code> is set &mdash; the literal host must not match the deny-list (see class javadoc).</div>
 </div>
@@ -261,7 +261,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="MAX_REDIRECT_HOPS">
 <h3>MAX_REDIRECT_HOPS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-57">MAX_REDIRECT_HOPS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-58">MAX_REDIRECT_HOPS</a></span></div>
 <div class="block">The maximum number of redirect hops a policy-covered <code>@Remote</code> call will follow before failing.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -276,7 +276,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ALLOW_PRIVATE_URLS_PROPERTY">
 <h3>ALLOW_PRIVATE_URLS_PROPERTY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-60">ALLOW_PRIVATE_URLS_PROPERTY</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-61">ALLOW_PRIVATE_URLS_PROPERTY</a></span></div>
 <div class="block">The <code>RestClient</code> builder/settings key for the <code>allowPrivateUrls</code> opt-in (system property fallback).</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -291,7 +291,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ALLOW_ADDRESS_RANGES_PROPERTY">
 <h3>ALLOW_ADDRESS_RANGES_PROPERTY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-76">ALLOW_ADDRESS_RANGES_PROPERTY</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-77">ALLOW_ADDRESS_RANGES_PROPERTY</a></span></div>
 <div class="block">The system property holding the narrow lab allow-list: a comma- or whitespace-separated list of CIDR ranges
  (e.g. <code>198.18.0.0/15,192.0.0.8</code>) that re-permit addresses denied only because they fall in one of the
  special-purpose ranges <c>192.0.0.0/24</c>, <c>198.18.0.0/15</c>, <c>224.0.0.0/4</c>, <c>240.0.0.0/4</c> or
@@ -325,9 +325,9 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="requireAllowedUrl(java.lang.String,boolean)">
 <h3>requireAllowedUrl</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-125">requireAllowedUrl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-126">requireAllowedUrl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url,
  boolean&nbsp;allowPrivateUrls)</span></div>
-<div class="block">Enforces the SSRF guardrail on an effective <code>@Remote</code> URL: when <code>url</code> carries a URI scheme, it
+<div class="block">Enforces the outbound-URL guardrail on an effective <code>@Remote</code> URL: when <code>url</code> carries a URI scheme, it
  must be a canonical absolute <code>http</code>/<code>https</code> URL with a nonempty host, and &mdash; unless
  <code>allowPrivateUrls</code> is set &mdash; the literal host must not match the deny-list (see class javadoc).
  Scheme-less (relative) values pass through unchanged (they resolve against the client root, which is not
@@ -352,7 +352,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="requireAllowedUrl(java.lang.String,boolean,org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges)">
 <h3>requireAllowedUrl</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-139">requireAllowedUrl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-140">requireAllowedUrl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url,
  boolean&nbsp;allowPrivateUrls,
  <a href="RemoteUrlPolicy.AllowedRanges.html" title="class in org.apache.juneau.http.remote">RemoteUrlPolicy.AllowedRanges</a>&nbsp;allowedRanges)</span></div>
 <div class="block">Same as <a href="#requireAllowedUrl(java.lang.String,boolean)"><code>requireAllowedUrl(String, boolean)</code></a>, additionally re-permitting literal hosts that fall inside
@@ -372,7 +372,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isDeniedHost(java.lang.String)">
 <h3>isDeniedHost</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-189">isDeniedHost</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-190">isDeniedHost</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host)</span></div>
 <div class="block">Returns <jk>true</jk> if the literal <code>host</code> string is denied by the default policy: a dotted-decimal
  IPv4/bracketed-IPv6 literal classified as denied by <a href="#isDeniedAddress(java.net.InetAddress)"><code>isDeniedAddress(InetAddress)</code></a> (an IPv6 zone id is
  ignored, and an unparseable literal containing a <code>:</code> is denied),
@@ -394,7 +394,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isDeniedHost(java.lang.String,org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges)">
 <h3>isDeniedHost</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-200">isDeniedHost</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-201">isDeniedHost</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host,
  <a href="RemoteUrlPolicy.AllowedRanges.html" title="class in org.apache.juneau.http.remote">RemoteUrlPolicy.AllowedRanges</a>&nbsp;allowedRanges)</span></div>
 <div class="block">Same as <a href="#isDeniedHost(java.lang.String)"><code>isDeniedHost(String)</code></a>, taking the per-client <code>allowedRanges</code> into account.</div>
 <dl class="notes">
@@ -409,7 +409,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isDeniedAddress(java.net.InetAddress)">
 <h3>isDeniedAddress</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-271">isDeniedAddress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/InetAddress.html" title="class or interface in java.net" class="external-link">InetAddress</a>&nbsp;addr)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-272">isDeniedAddress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/InetAddress.html" title="class or interface in java.net" class="external-link">InetAddress</a>&nbsp;addr)</span></div>
 <div class="block">Returns <jk>true</jk> if <code>addr</code> is denied by the default policy -- the deny-list applied both to
  literal-IP hosts (pre-check) and to resolved addresses (pin-on-connect).
 
@@ -453,7 +453,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isDeniedAddress(java.net.InetAddress,org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges)">
 <h3>isDeniedAddress</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-286">isDeniedAddress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/InetAddress.html" title="class or interface in java.net" class="external-link">InetAddress</a>&nbsp;addr,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-287">isDeniedAddress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/InetAddress.html" title="class or interface in java.net" class="external-link">InetAddress</a>&nbsp;addr,
  <a href="RemoteUrlPolicy.AllowedRanges.html" title="class in org.apache.juneau.http.remote">RemoteUrlPolicy.AllowedRanges</a>&nbsp;allowedRanges)</span></div>
 <div class="block">Same as <a href="#isDeniedAddress(java.net.InetAddress)"><code>isDeniedAddress(InetAddress)</code></a>, additionally re-permitting special-purpose addresses inside the
  per-client <code>allowedRanges</code>.  The effective allow-list is the <b>union</b> of those ranges and the
@@ -473,7 +473,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="selectAllowedAddress(java.lang.String,boolean,org.apache.juneau.http.remote.RemoteUrlPolicy.AddressResolver)">
 <h3>selectAllowedAddress</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/InetAddress.html" title="class or interface in java.net" class="external-link">InetAddress</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-617">selectAllowedAddress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/InetAddress.html" title="class or interface in java.net" class="external-link">InetAddress</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-597">selectAllowedAddress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host,
  boolean&nbsp;allowPrivateUrls,
  <a href="RemoteUrlPolicy.AddressResolver.html" title="interface in org.apache.juneau.http.remote">RemoteUrlPolicy.AddressResolver</a>&nbsp;resolver)</span>
                                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/UnknownHostException.html" title="class or interface in java.net" class="external-link">UnknownHostException</a></span></div>
@@ -500,7 +500,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="selectAllowedAddress(java.lang.String,boolean,org.apache.juneau.http.remote.RemoteUrlPolicy.AddressResolver,org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges)">
 <h3>selectAllowedAddress</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/InetAddress.html" title="class or interface in java.net" class="external-link">InetAddress</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-633">selectAllowedAddress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/InetAddress.html" title="class or interface in java.net" class="external-link">InetAddress</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-613">selectAllowedAddress</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host,
  boolean&nbsp;allowPrivateUrls,
  <a href="RemoteUrlPolicy.AddressResolver.html" title="interface in org.apache.juneau.http.remote">RemoteUrlPolicy.AddressResolver</a>&nbsp;resolver,
  <a href="RemoteUrlPolicy.AllowedRanges.html" title="class in org.apache.juneau.http.remote">RemoteUrlPolicy.AllowedRanges</a>&nbsp;allowedRanges)</span>
@@ -524,7 +524,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolveRedirectLocation(java.net.URI,java.lang.String)">
 <h3>resolveRedirectLocation</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-652">resolveRedirectLocation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;from,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-632">resolveRedirectLocation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;from,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location)</span></div>
 <div class="block">Resolves a redirect <code>Location</code> header value against the current request URI, per RFC 7231 §7.1.2
  (relative locations are resolved against the request URI).</div>
@@ -542,7 +542,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="schemeOf(java.lang.String)">
 <h3>schemeOf</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-674">schemeOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RemoteUrlPolicy.html#line-654">schemeOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url)</span></div>
 <div class="block">Returns the URI scheme of a URL (the token before the first <code>:</code> when it precedes any <code>/</code>,
  <code>?</code> or <code>#</code>), or <jk>null</jk> if the value has no scheme (e.g. a relative path or a value
  beginning with a <code>{var}</code> token).</div>

@@ -135,8 +135,8 @@
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 * Sets the {@code state} value a callback must carry to be accepted.</em>
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * Requests that are not {@code GET}, do not target the exact callback path, or (once this is set) carry a different</em>
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * {@code state} are answered with {@code 400} and ignored; the receiver keeps listening until a valid callback</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * Requests that are not {@code GET}, do not target the exact callback path, or do not carry the expected</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * {@code state}, or whose {@code Host} header does not name the loopback address and port, are answered with {@code 400} and ignored; the receiver keeps listening until a valid callback</em>
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 * arrives or the wait times out.</em>
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 * @param state The expected state.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
@@ -148,75 +148,89 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	}
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> acceptable(HttpExchange ex) {
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"GET"</span>.equals(ex.getRequestMethod()))
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">if</strong> (neq(<span class="jxr_string">"GET"</span>, ex.getRequestMethod()))
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">var</strong> uri = ex.getRequestURI();
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">if</strong> (! path.equals(uri.getPath()))
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">if</strong> (neq(path, uri.getPath()))
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> want = expectedState.get();
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">if</strong> (want == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> q = uri.getRawQuery();
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">if</strong> (q == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> kv : q.split(<span class="jxr_string">"&amp;"</span>)) {
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">var</strong> i = kv.indexOf('=');
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">if</strong> (i &gt; 0 &amp;&amp; <span class="jxr_string">"state"</span>.equals(kv.substring(0, i)))
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				<strong class="jxr_keyword">return</strong> want.equals(URLDecoder.decode(kv.substring(i + 1), StandardCharsets.UTF_8));
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		}
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<em class="jxr_javadoccomment">/** Formats the bound loopback address as a URI host literal, bracketing IPv6 (e.g. {@code [::1]}). */</em>
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String hostLiteral(InetAddress addr) {
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">var</strong> ip = addr.getHostAddress();
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">return</strong> addr instanceof Inet6Address ? <span class="jxr_string">"["</span> + ip + <span class="jxr_string">"]"</span> : ip;  <em class="jxr_comment">// HTT: IPv6 bracketing; reachable only when the JVM is started with -Djava.net.preferIPv6Addresses=true</em>
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 * Returns the loopback redirect URI the IdP should redirect the user-agent back to.</em>
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">	 * @return The redirect URI (e.g. {@code <a href="http://127.0.0.1:PORT/callback" target="alexandria_uri">http://127.0.0.1:PORT/callback</a>}).</em>
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<strong class="jxr_keyword">public</strong> URI redirectUri() {
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">return</strong> URI.create(<span class="jxr_string">"http://"</span> + host + <span class="jxr_string">":"</span> + port + path);
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 * Returns the ephemeral loopback port the receiver is listening on.</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 * @return The port.</em>
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> port() {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">return</strong> port;
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * Blocks until the IdP redirects to the callback path, or the timeout elapses.</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 * @param timeout The maximum time to wait.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * @return The full callback request URI, including query parameters.</em>
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * @throws McpAuthException If the wait times out or is interrupted.</em>
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<strong class="jxr_keyword">public</strong> URI awaitCallback(Duration timeout) {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		reqnn(<span class="jxr_string">"timeout"</span>, timeout);
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">return</strong> callback.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		} <strong class="jxr_keyword">catch</strong> (TimeoutException e) {
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Timed out waiting for the loopback authorization redirect"</span>, e);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		} <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			Thread.currentThread().interrupt();
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Interrupted waiting for the loopback authorization redirect"</span>, e);
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		} <strong class="jxr_keyword">catch</strong> (ExecutionException e) { <em class="jxr_comment">// HTT: callback future is only ever completed normally by the handler</em>
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Loopback authorization redirect failed"</span>, e);  <em class="jxr_comment">// HTT: see catch above</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		}
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	}
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	@Override <em class="jxr_comment">/* Overridden from AutoCloseable */</em>
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() {
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		server.stop(0);
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> }
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">if</strong> (! hostAllowed(ex))
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> want = expectedState.get();
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">if</strong> (want == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> q = uri.getRawQuery();
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">if</strong> (q == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> kv : q.split(<span class="jxr_string">"&amp;"</span>)) {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">var</strong> i = kv.indexOf('=');
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">if</strong> (i &gt; 0 &amp;&amp; eq(<span class="jxr_string">"state"</span>, kv.substring(0, i)))
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				<strong class="jxr_keyword">return</strong> eq(want, URLDecoder.decode(kv.substring(i + 1), StandardCharsets.UTF_8));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		}
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<em class="jxr_javadoccomment">/** Accepts only requests whose {@code Host} header names the bound loopback address and port. */</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> hostAllowed(HttpExchange ex) {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">var</strong> h = ex.getRequestHeaders().getFirst(<span class="jxr_string">"Host"</span>);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">if</strong> (h == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> suffix = <span class="jxr_string">":"</span> + port;
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">if</strong> (! h.endsWith(suffix))
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">var</strong> name = h.substring(0, h.length() - suffix.length());
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">return</strong> eq(name, host) || eq(name, <span class="jxr_string">"localhost"</span>) || eq(name, <span class="jxr_string">"127.0.0.1"</span>) || eq(name, <span class="jxr_string">"[::1]"</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<em class="jxr_javadoccomment">/** Formats the bound loopback address as a URI host literal, bracketing IPv6 (e.g. {@code [::1]}). */</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String hostLiteral(InetAddress addr) {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> ip = addr.getHostAddress();
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">return</strong> addr instanceof Inet6Address ? <span class="jxr_string">"["</span> + ip + <span class="jxr_string">"]"</span> : ip;  <em class="jxr_comment">// HTT: IPv6 bracketing; reachable only when the JVM is started with -Djava.net.preferIPv6Addresses=true</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * Returns the loopback redirect URI the IdP should redirect the user-agent back to.</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * @return The redirect URI (e.g. {@code <a href="http://127.0.0.1:PORT/callback" target="alexandria_uri">http://127.0.0.1:PORT/callback</a>}).</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<strong class="jxr_keyword">public</strong> URI redirectUri() {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">return</strong> URI.create(<span class="jxr_string">"http://"</span> + host + <span class="jxr_string">":"</span> + port + path);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * Returns the ephemeral loopback port the receiver is listening on.</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * @return The port.</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> port() {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">return</strong> port;
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 * Blocks until the IdP redirects to the callback path, or the timeout elapses.</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 * @param timeout The maximum time to wait.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 * @return The full callback request URI, including query parameters.</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 * @throws McpAuthException If the wait times out or is interrupted.</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	<strong class="jxr_keyword">public</strong> URI awaitCallback(Duration timeout) {
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		reqnn(<span class="jxr_string">"timeout"</span>, timeout);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			<strong class="jxr_keyword">return</strong> callback.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		} <strong class="jxr_keyword">catch</strong> (TimeoutException e) {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Timed out waiting for the loopback authorization redirect"</span>, e);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		} <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			Thread.currentThread().interrupt();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Interrupted waiting for the loopback authorization redirect"</span>, e);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		} <strong class="jxr_keyword">catch</strong> (ExecutionException e) { <em class="jxr_comment">// HTT: callback future is only ever completed normally by the handler</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Loopback authorization redirect failed"</span>, e);  <em class="jxr_comment">// HTT: see catch above</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		}
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	}
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	@Override <em class="jxr_comment">/* Overridden from AutoCloseable */</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		server.stop(0);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

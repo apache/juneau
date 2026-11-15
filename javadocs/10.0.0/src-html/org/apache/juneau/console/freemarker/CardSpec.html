@@ -61,7 +61,7 @@
 <span class="source-line-no">048</span><span id="line-48">   private String src;</span>
 <span class="source-line-no">049</span><span id="line-49">   private String template;</span>
 <span class="source-line-no">050</span><span id="line-50">   private boolean bare;</span>
-<span class="source-line-no">051</span><span id="line-51">   private boolean sanitize;</span>
+<span class="source-line-no">051</span><span id="line-51">   private Boolean sanitize;</span>
 <span class="source-line-no">052</span><span id="line-52">   private String cssClass;</span>
 <span class="source-line-no">053</span><span id="line-53">   private final Map&lt;String,Object&gt; body = new LinkedHashMap&lt;&gt;();</span>
 <span class="source-line-no">054</span><span id="line-54">   private final List&lt;Map&lt;String,Object&gt;&gt; publishes = new ArrayList&lt;&gt;();</span>
@@ -123,18 +123,18 @@
 <span class="source-line-no">110</span><span id="line-110">   /** @return Whether this card declares any {@code subscribes} entries. */</span>
 <span class="source-line-no">111</span><span id="line-111">   boolean hasSubscribes() { return ! subscribes.isEmpty(); }</span>
 <span class="source-line-no">112</span><span id="line-112"></span>
-<span class="source-line-no">113</span><span id="line-113">   /** @param v Whether an html card's fetched {@code src} fragment is rebuilt through the views attribute-allowlist sanitizer instead of being inserted as-is. @return This object. */</span>
+<span class="source-line-no">113</span><span id="line-113">   /** @param v Whether an html card's fetched {@code src} fragment is rebuilt through the views attribute-allowlist sanitizer (the default when never set) or inserted as-is ({@code false}). @return This object. */</span>
 <span class="source-line-no">114</span><span id="line-114">   public CardSpec sanitize(boolean v) { sanitize = v; return this; }</span>
 <span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   /** @return Whether this card asks for its {@code src} fragment to be sanitized. */</span>
-<span class="source-line-no">117</span><span id="line-117">   boolean sanitize() { return sanitize; }</span>
+<span class="source-line-no">116</span><span id="line-116">   /** @return Whether this card states a sanitize choice, either way. */</span>
+<span class="source-line-no">117</span><span id="line-117">   boolean sanitizeStated() { return nn(sanitize); }</span>
 <span class="source-line-no">118</span><span id="line-118"></span>
 <span class="source-line-no">119</span><span id="line-119">   /** @param v Space-separated CSS class names stamped on the card wrapper element. @return This object. */</span>
 <span class="source-line-no">120</span><span id="line-120">   public CardSpec cssClass(String v) { cssClass = v; return this; }</span>
 <span class="source-line-no">121</span><span id="line-121"></span>
 <span class="source-line-no">122</span><span id="line-122">   /** @param key A type-specific field. @param value Its value. @return This object. */</span>
 <span class="source-line-no">123</span><span id="line-123">   public CardSpec body(String key, Object value) {</span>
-<span class="source-line-no">124</span><span id="line-124">      if ("publishes".equals(key) || "subscribes".equals(key) || "model".equals(key))</span>
+<span class="source-line-no">124</span><span id="line-124">      if (eq("publishes", key) || eq("subscribes", key) || eq("model", key))</span>
 <span class="source-line-no">125</span><span id="line-125">         throw iaex("card '%s': '%s' is a base key; use %s(...)", id, key, key);</span>
 <span class="source-line-no">126</span><span id="line-126">      body.put(key, value);</span>
 <span class="source-line-no">127</span><span id="line-127">      return this;</span>
@@ -246,10 +246,10 @@
 <span class="source-line-no">233</span><span id="line-233">      if (nn(src)) m.put("src", src);</span>
 <span class="source-line-no">234</span><span id="line-234">      if (nn(template)) m.put("template", template);</span>
 <span class="source-line-no">235</span><span id="line-235">      if (bare) m.put("bare", true);</span>
-<span class="source-line-no">236</span><span id="line-236">      if (sanitize) {</span>
+<span class="source-line-no">236</span><span id="line-236">      if (nn(sanitize)) {</span>
 <span class="source-line-no">237</span><span id="line-237">         if (neq(type, "html") || ! nn(src))</span>
 <span class="source-line-no">238</span><span id="line-238">            throw iaex("card '%s': sanitize applies only to an html card with src.", id);</span>
-<span class="source-line-no">239</span><span id="line-239">         m.put("sanitize", true);</span>
+<span class="source-line-no">239</span><span id="line-239">         m.put("sanitize", sanitize);</span>
 <span class="source-line-no">240</span><span id="line-240">      }</span>
 <span class="source-line-no">241</span><span id="line-241">      if (nn(cssClass)) m.put("class", cssClass);</span>
 <span class="source-line-no">242</span><span id="line-242">      if (! visibleWhen.isEmpty()) m.put("visibleWhen", visibleWhen.stream().map(VisibilityRule::toMap).toList());</span>

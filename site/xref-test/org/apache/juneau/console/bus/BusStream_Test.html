@@ -70,10 +70,10 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertEquals(<span class="jxr_string">"1;2;"</span>, out.toString());
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	@Test <strong class="jxr_keyword">void</strong> b01_readCappedAcceptsTheCapAndRefusesOneByteMore() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	@Test <strong class="jxr_keyword">void</strong> b01_readSessionBodyAcceptsTheCapAndRefusesOneByteMore() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> max = BusStream.MAX_SESSION_BODY_BYTES;
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertEquals(max, BusStream.readCapped(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<strong class="jxr_keyword">new</strong> byte[max])).length());
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(BusRefusal.<strong class="jxr_keyword">class</strong>, () -&gt; BusStream.readCapped(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<strong class="jxr_keyword">new</strong> byte[max + 1])));
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertEquals(max, BusStream.readSessionBody(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<strong class="jxr_keyword">new</strong> byte[max])).length());
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(BusRefusal.<strong class="jxr_keyword">class</strong>, () -&gt; BusStream.readSessionBody(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<strong class="jxr_keyword">new</strong> byte[max + 1])));
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertEquals(400, e.status());
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertEquals(<span class="jxr_string">"bus:bad-request"</span>, e.code());
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}

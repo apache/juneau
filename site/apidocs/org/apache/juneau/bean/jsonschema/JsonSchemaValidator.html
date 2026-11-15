@@ -155,7 +155,7 @@ implements <a href="../../commons/bean/PropertyValidator.html" title="interface 
 
  <h2 class='section'>Interruptible <code>pattern</code> matching:</h2>
  <p>
- A <code>pattern</code> keyword can encode a catastrophically-backtracking regular expression that a hostile input can
+ A <code>pattern</code> keyword can encode a catastrophically-backtracking regular expression that an untrusted input can
  drive into effectively-unbounded work. <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Matcher.html" title="class or interface in java.util.regex" class="external-link"><code>Matcher</code></a> never checks <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Thread.html#isInterrupted()" title="class or interface in java.lang" class="external-link"><code>Thread.isInterrupted()</code></a>,
  so such a match cannot be stopped by interrupting the matching thread - it runs to completion, pinning a core even
  after the caller has given up. To make a runaway match abortable, the string is fed to the matcher through an

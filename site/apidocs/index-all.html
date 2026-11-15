@@ -3049,7 +3049,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/microservice/examples/AdminBoundary.html" class="type-name-link" title="class in org.apache.juneau.microservice.examples">AdminBoundary</a> - Class in <a href="org/apache/juneau/microservice/examples/package-summary.html">org.apache.juneau.microservice.examples</a></dt>
 <dd>
-<div class="block">The CSRF boundary for the admin resources <a href="org/apache/juneau/microservice/examples/ConfigResource.html" title="class in org.apache.juneau.microservice.examples"><code>ConfigResource</code></a>, <a href="org/apache/juneau/microservice/examples/LogsResource.html" title="class in org.apache.juneau.microservice.examples"><code>LogsResource</code></a> and <a href="org/apache/juneau/microservice/examples/ShutdownResource.html" title="class in org.apache.juneau.microservice.examples"><code>ShutdownResource</code></a>.</div>
+<div class="block">The cross-site request boundary for the admin resources <a href="org/apache/juneau/microservice/examples/ConfigResource.html" title="class in org.apache.juneau.microservice.examples"><code>ConfigResource</code></a>, <a href="org/apache/juneau/microservice/examples/DebugResource.html" title="class in org.apache.juneau.microservice.examples"><code>DebugResource</code></a>, <a href="org/apache/juneau/microservice/examples/LogsResource.html" title="class in org.apache.juneau.microservice.examples"><code>LogsResource</code></a> and <a href="org/apache/juneau/microservice/examples/ShutdownResource.html" title="class in org.apache.juneau.microservice.examples"><code>ShutdownResource</code></a>.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/ops/AdminMixin.html" class="type-name-link" title="class in org.apache.juneau.rest.server.ops">AdminMixin</a> - Class in <a href="org/apache/juneau/rest/server/ops/package-summary.html">org.apache.juneau.rest.server.ops</a></dt>
 <dd>
@@ -3460,6 +3460,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Allow-lists any public, non-deprecated method &mdash; the pre-10.0 behavior.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#allowAnyScope()" class="member-name-link">allowAnyScope()</a> - Method in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer.Builder</a></dt>
+<dd>
+<div class="block">Accepts any scope a server challenge names, bounded only by the <a href="org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.Builder.html#maxScopes(int)"><code>scope-count cap</code></a>.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/Rest.html#allowContentParam()" class="member-name-link">allowContentParam()</a> - Element in annotation interface org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/Rest.html" title="annotation interface in org.apache.juneau.rest.server">Rest</a></dt>
 <dd>
 <div class="block">Allow content URL parameter.</div>
@@ -3796,6 +3800,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Allows inline handler references on this page.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/client/mcp/AbstractMcpClient.Builder.html#allowInsecureHttp(boolean)" class="member-name-link">allowInsecureHttp(boolean)</a> - Method in class org.apache.juneau.rest.client.mcp.<a href="org/apache/juneau/rest/client/mcp/AbstractMcpClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp">AbstractMcpClient.Builder</a></dt>
+<dd>
+<div class="block">Allows the endpoint to use plain <code>http</code> for a non-loopback host.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.Builder.html#allowInsecureHttp(boolean)" class="member-name-link">allowInsecureHttp(boolean)</a> - Method in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></dt>
 <dd>
 <div class="block">Allows plain <code>http</code> PRM / authorization-server URLs for non-loopback hosts.</div>
@@ -3948,13 +3956,25 @@ loadScripts(document, 'script');</script>
  guardrail (see <code>org.apache.juneau.http.remote.RemoteUrlPolicy</code>), for local-dev/intranet targets that
  are intentionally private.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#allowPrivateUrls(boolean)" class="member-name-link">allowPrivateUrls(boolean)</a> - Method in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></dt>
+<dd>
+<div class="block">Allows the token endpoint to be a private, link-local or otherwise reserved address.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#allowPrivateUrls(boolean)" class="member-name-link">allowPrivateUrls(boolean)</a> - Method in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></dt>
 <dd>
 <div class="block">Allows an AS-advertised registration endpoint that points at a loopback, private, link-local or metadata host.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.Builder.html#allowPrivateUrls(boolean)" class="member-name-link">allowPrivateUrls(boolean)</a> - Method in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></dt>
+<dd>
+<div class="block">Allows the registration endpoint to be a private, link-local or otherwise reserved address.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.Builder.html#allowPrivateUrls(boolean)" class="member-name-link">allowPrivateUrls(boolean)</a> - Method in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></dt>
 <dd>
 <div class="block">Allows PRM / authorization-server URLs that point at loopback, private, link-local or metadata hosts.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.Builder.html#allowPrivateUrls(boolean)" class="member-name-link">allowPrivateUrls(boolean)</a> - Method in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></dt>
+<dd>
+<div class="block">Allows the token endpoint to be a private, link-local or otherwise reserved address.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/client/RestClient.Builder.html#allowPrivateUrls(boolean)" class="member-name-link">allowPrivateUrls(boolean)</a> - Method in class org.apache.juneau.rest.client.<a href="org/apache/juneau/rest/client/RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></dt>
 <dd>
@@ -5520,6 +5540,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/function/ThrowingFunction5.html#apply(A,B,C,D,E)" class="member-name-link">apply(A, B, C, D, E)</a> - Method in interface org.apache.juneau.commons.function.<a href="org/apache/juneau/commons/function/ThrowingFunction5.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction5</a></dt>
 <dd>
 <div class="block">Applies this function to the given arguments, wrapping any checked exceptions in a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html#apply(com.nimbusds.oauth2.sdk.http.HTTPRequest)" class="member-name-link">apply(HTTPRequest)</a> - Method in class org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthHttpPolicy</a></dt>
+<dd>
+<div class="block">Checks a request's URL against this policy, resolves its host, disables redirects and installs the
+ connection-time address check.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/filter/RequestIdFilter.html#apply(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)" class="member-name-link">apply(HttpServletRequest, HttpServletResponse)</a> - Method in class org.apache.juneau.rest.server.filter.<a href="org/apache/juneau/rest/server/filter/RequestIdFilter.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter</a></dt>
 <dd>
@@ -9900,12 +9925,20 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Constructor.</div>
 </dd>
+<dt><a href="org/apache/juneau/marshall/ClassMeta.html#basicConverter()" class="member-name-link">basicConverter()</a> - Method in class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a></dt>
+<dd>
+<div class="block">Returns the context-independent converter for this class, with the class-name guard of the owning context applied.</div>
+</dd>
 <dt><a href="org/apache/juneau/commons/conversion/BasicConverter.html" class="type-name-link" title="class in org.apache.juneau.commons.conversion">BasicConverter</a> - Class in <a href="org/apache/juneau/commons/conversion/package-summary.html">org.apache.juneau.commons.conversion</a></dt>
 <dd>
 <div class="block">A concrete <a href="org/apache/juneau/commons/conversion/CachingConverter.html" title="class in org.apache.juneau.commons.conversion"><code>CachingConverter</code></a> that supports common type conversions without
  requiring a <code>MarshallingContext</code> or <code>MarshallingSession</code>.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/conversion/BasicConverter.html#%3Cinit%3E()" class="member-name-link">BasicConverter()</a> - Constructor for class org.apache.juneau.commons.conversion.<a href="org/apache/juneau/commons/conversion/BasicConverter.html" title="class in org.apache.juneau.commons.conversion">BasicConverter</a></dt>
+<dd>
+<div class="block">Constructor.</div>
+</dd>
+<dt><a href="org/apache/juneau/commons/conversion/BasicConverter.html#%3Cinit%3E(java.util.function.Predicate)" class="member-name-link">BasicConverter(Predicate&lt;String&gt;)</a> - Constructor for class org.apache.juneau.commons.conversion.<a href="org/apache/juneau/commons/conversion/BasicConverter.html" title="class in org.apache.juneau.commons.conversion">BasicConverter</a></dt>
 <dd>
 <div class="block">Constructor.</div>
 </dd>
@@ -12035,6 +12068,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#binding(org.apache.juneau.rest.server.auth.saml.SamlBinding)" class="member-name-link">binding(SamlBinding)</a> - Method in class org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></dt>
 <dd>
 <div class="block">Sets the SAML binding the filter listens for.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#bindingCookieName(java.lang.String)" class="member-name-link">bindingCookieName(String)</a> - Method in class org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></dt>
+<dd>
+<div class="block">Sets the name of the cookie that carries the browser-binding secret returned by
+ <a href="org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#rememberAuthnRequest(java.lang.String)"><code>SamlAssertionValidator.rememberAuthnRequest(String)</code></a>.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/auth/oidc/rp/LoginStateStore.PendingLogin.html#bindingHash()" class="member-name-link">bindingHash()</a> - Method in record class org.apache.juneau.rest.server.auth.oidc.rp.<a href="org/apache/juneau/rest/server/auth/oidc/rp/LoginStateStore.PendingLogin.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore.PendingLogin</a></dt>
 <dd>
@@ -17296,7 +17334,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The cancel dialog form: a reason and whether to notify the customer.</div>
 </dd>
-<dt><a href="org/apache/juneau/console/views/AsyncJobsMixin.html#cancelJob(java.lang.String,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">cancelJob(String, RestResponse)</a> - Method in interface org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/AsyncJobsMixin.html" title="interface in org.apache.juneau.console.views">AsyncJobsMixin</a></dt>
+<dt><a href="org/apache/juneau/console/views/AsyncJobsMixin.html#cancelJob(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">cancelJob(String, RestRequest, RestResponse)</a> - Method in interface org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/AsyncJobsMixin.html" title="interface in org.apache.juneau.console.views">AsyncJobsMixin</a></dt>
 <dd>
 <div class="block">[POST /juneau-jobs/{jobId}/cancel] &mdash; cancel a job and return its terminal result.</div>
 </dd>
@@ -17518,6 +17556,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Creates a <a href="org/apache/juneau/bean/html5/Canvas.html" title="class in org.apache.juneau.bean.html5"><code>Canvas</code></a> element with the specified <a href="org/apache/juneau/bean/html5/Canvas.html#width(java.lang.Object)"><code>Canvas.width(Object)</code></a> and
  <a href="org/apache/juneau/bean/html5/Canvas.html#height(java.lang.Object)"><code>Canvas.height(Object)</code></a> attributes.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/TerminalViewAccess.html#canView(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">canView(RestRequest, String)</a> - Method in interface org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/TerminalViewAccess.html" title="interface in org.apache.juneau.console.views">TerminalViewAccess</a></dt>
+<dd>
+<div class="block">Whether the caller may read the run's events.</div>
 </dd>
 <dt><a href="org/apache/juneau/terminal/region/TerminalAccess.html#canWatch(org.apache.juneau.terminal.region.TerminalCaller,java.lang.String)" class="member-name-link">canWatch(TerminalCaller, String)</a> - Method in interface org.apache.juneau.terminal.region.<a href="org/apache/juneau/terminal/region/TerminalAccess.html" title="interface in org.apache.juneau.terminal.region">TerminalAccess</a></dt>
 <dd>
@@ -18875,9 +18917,21 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Sets a CSS class applied to this column's cells.</div>
 </dd>
+<dt><a href="org/apache/juneau/marshall/MarshalledConfig.html#classNameAllow()" class="member-name-link">classNameAllow()</a> - Element in annotation interface org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/MarshalledConfig.html" title="annotation interface in org.apache.juneau.marshall">MarshalledConfig</a></dt>
+<dd>
+<div class="block">Class-name allow-list.</div>
+</dd>
 <dt><a href="org/apache/juneau/commons/reflect/ClassNameFormat.html" class="type-name-link" title="enum class in org.apache.juneau.commons.reflect">ClassNameFormat</a> - Enum Class in <a href="org/apache/juneau/commons/reflect/package-summary.html">org.apache.juneau.commons.reflect</a></dt>
 <dd>
 <div class="block">Defines how class names should be formatted when rendered as strings.</div>
+</dd>
+<dt><a href="org/apache/juneau/marshall/MarshallingContext.Builder.html#classNameGuard(java.util.function.Predicate)" class="member-name-link">classNameGuard(Predicate&lt;String&gt;)</a> - Method in class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a></dt>
+<dd>
+<div class="block">Class-name guard.</div>
+</dd>
+<dt><a href="org/apache/juneau/marshall/MarshallingContextable.Builder.html#classNameGuard(java.util.function.Predicate)" class="member-name-link">classNameGuard(Predicate&lt;String&gt;)</a> - Method in class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/MarshallingContextable.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContextable.Builder</a></dt>
+<dd>
+<div class="block">Class-name guard.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/utils/ClassUtils.html#classNameSimple(java.lang.Object)" class="member-name-link">classNameSimple(Object)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/ClassUtils.html" title="class in org.apache.juneau.commons.utils">ClassUtils</a></dt>
 <dd>
@@ -20961,6 +21015,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">A <a href="org/apache/juneau/commons/conversion/BasicConverter.html" title="class in org.apache.juneau.commons.conversion"><code>BasicConverter</code></a> subclass that supports pluggable type conversion discovery via <a href="org/apache/juneau/commons/conversion/ConversionFinder.html" title="interface in org.apache.juneau.commons.conversion"><code>ConversionFinder</code></a>.</div>
 </dd>
+<dt><a href="org/apache/juneau/commons/conversion/ConfigurableConverter.html#%3Cinit%3E(java.util.function.Predicate,org.apache.juneau.commons.conversion.ConversionFinder...)" class="member-name-link">ConfigurableConverter(Predicate&lt;String&gt;, ConversionFinder...)</a> - Constructor for class org.apache.juneau.commons.conversion.<a href="org/apache/juneau/commons/conversion/ConfigurableConverter.html" title="class in org.apache.juneau.commons.conversion">ConfigurableConverter</a></dt>
+<dd>
+<div class="block">Constructor.</div>
+</dd>
 <dt><a href="org/apache/juneau/commons/conversion/ConfigurableConverter.html#%3Cinit%3E(org.apache.juneau.commons.conversion.ConversionFinder...)" class="member-name-link">ConfigurableConverter(ConversionFinder...)</a> - Constructor for class org.apache.juneau.commons.conversion.<a href="org/apache/juneau/commons/conversion/ConfigurableConverter.html" title="class in org.apache.juneau.commons.conversion">ConfigurableConverter</a></dt>
 <dd>
 <div class="block">Constructor.</div>
@@ -21421,11 +21479,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Atomically removes and returns the pending-login association for <code>state</code>, if present.</div>
 </dd>
-<dt><a href="org/apache/juneau/rest/server/auth/saml/AuthnRequestStore.html#consume(java.lang.String,long)" class="member-name-link">consume(String, long)</a> - Method in interface org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml">AuthnRequestStore</a></dt>
+<dt><a href="org/apache/juneau/rest/server/auth/saml/AuthnRequestStore.html#consume(java.lang.String,byte%5B%5D,long)" class="member-name-link">consume(String, byte[], long)</a> - Method in interface org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml">AuthnRequestStore</a></dt>
 <dd>
 <div class="block">Atomically removes a request ID and reports whether it was outstanding.</div>
 </dd>
-<dt><a href="org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#consume(java.lang.String,long)" class="member-name-link">consume(String, long)</a> - Method in class org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html" title="class in org.apache.juneau.rest.server.auth.saml">InMemoryAuthnRequestStore</a></dt>
+<dt><a href="org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#consume(java.lang.String,byte%5B%5D,long)" class="member-name-link">consume(String, byte[], long)</a> - Method in class org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html" title="class in org.apache.juneau.rest.server.auth.saml">InMemoryAuthnRequestStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/http/classic/entity/BasicHttpEntity.html#consumeContent()" class="member-name-link">consumeContent()</a> - Method in class org.apache.juneau.http.classic.entity.<a href="org/apache/juneau/http/classic/entity/BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></dt>
 <dd>&nbsp;</dd>
@@ -27657,7 +27715,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/console/freemarker/PageSpec.html#csrf(java.lang.String,java.lang.String)" class="member-name-link">csrf(String, String)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></dt>
 <dd>
-<div class="block">Sets the CSRF body attributes: <code>data-juneau-csrf</code> and, if <code>headerName</code> is non-blank,
+<div class="block">Sets the request-token body attributes: <code>data-juneau-csrf</code> and, if <code>headerName</code> is non-blank,
  <code>data-juneau-csrf-header</code>.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/ViewTable.html#CSRF_ATTR" class="member-name-link">CSRF_ATTR</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/ViewTable.html" title="class in org.apache.juneau.console.views">ViewTable</a></dt>
@@ -30087,6 +30145,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Default serializer, all default settings.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html#DEFAULT" class="member-name-link">DEFAULT</a> - Static variable in class org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthHttpPolicy</a></dt>
+<dd>
+<div class="block">The default policy: <c>https</c> required except for literal loopback hosts; no other private or reserved targets.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/ChildAnnotation.html#DEFAULT" class="member-name-link">DEFAULT</a> - Static variable in class org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/ChildAnnotation.html" title="class in org.apache.juneau.rest.server">ChildAnnotation</a></dt>
 <dd>
 <div class="block">Default <a href="org/apache/juneau/rest/server/Child.html" title="annotation interface in org.apache.juneau.rest.server"><code>Child</code></a> instance (empty seed slots; <code>type=Object.class</code>).</div>
@@ -30516,6 +30578,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Default upper bound on outstanding request IDs.</div>
 </dd>
+<dt><a href="org/apache/juneau/marshall/sse/SseEventReader.html#DEFAULT_MAX_EVENT_LENGTH" class="member-name-link">DEFAULT_MAX_EVENT_LENGTH</a> - Static variable in class org.apache.juneau.marshall.sse.<a href="org/apache/juneau/marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></dt>
+<dd>
+<div class="block">Default maximum accumulated size, in characters, of the data of a single event.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/TerminalViewLog.html#DEFAULT_MAX_EVENTS" class="member-name-link">DEFAULT_MAX_EVENTS</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/TerminalViewLog.html" title="class in org.apache.juneau.console.views">TerminalViewLog</a></dt>
 <dd>
 <div class="block">The default capacity.</div>
@@ -30533,6 +30599,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Default ceiling on the number of decompressed bytes accepted from a REDIRECT-binding
  <code>SAMLResponse</code> (1 MiB).</div>
+</dd>
+<dt><a href="org/apache/juneau/marshall/sse/SseEventReader.html#DEFAULT_MAX_LINE_LENGTH" class="member-name-link">DEFAULT_MAX_LINE_LENGTH</a> - Static variable in class org.apache.juneau.marshall.sse.<a href="org/apache/juneau/marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></dt>
+<dd>
+<div class="block">Default maximum length, in characters, of a single line.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/parser/ParserSession.html#DEFAULT_MAX_PARSE_DEPTH" class="member-name-link">DEFAULT_MAX_PARSE_DEPTH</a> - Static variable in class org.apache.juneau.marshall.parser.<a href="org/apache/juneau/marshall/parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a></dt>
 <dd>
@@ -30561,6 +30631,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.html#DEFAULT_MAX_SCOPES" class="member-name-link">DEFAULT_MAX_SCOPES</a> - Static variable in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpStepUpAuthorizer.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpStepUpAuthorizer</a></dt>
 <dd>
 <div class="block">Default cap on the number of scopes in the accumulated step-up union.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL" class="member-name-link">DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL</a> - Static variable in class org.apache.juneau.rest.server.mcp.v20260728.<a href="org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></dt>
+<dd>
+<div class="block">Default cap on concurrently open <code>subscriptions/listen</code> streams per authenticated caller.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/logging/RestDebugFormatter.html#DEFAULT_MAX_URI_LENGTH" class="member-name-link">DEFAULT_MAX_URI_LENGTH</a> - Static variable in interface org.apache.juneau.rest.server.logging.<a href="org/apache/juneau/rest/server/logging/RestDebugFormatter.html" title="interface in org.apache.juneau.rest.server.logging">RestDebugFormatter</a></dt>
 <dd>
@@ -34957,7 +35031,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/marshall/parser/ParserSession.html#enterParseDepth()" class="member-name-link">enterParseDepth()</a> - Method in class org.apache.juneau.marshall.parser.<a href="org/apache/juneau/marshall/parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a></dt>
 <dd>
 <div class="block">Enters one level of recursive databind parsing, enforcing the shared <a href="org/apache/juneau/marshall/parser/ParserSession.Builder.html#maxParseDepth(int)"><code>ParserSession.Builder.maxParseDepth(int)</code></a>
- budget (default <a href="org/apache/juneau/marshall/parser/ParserSession.html#DEFAULT_MAX_PARSE_DEPTH">1000</a>).</div>
+ budget (default <a href="org/apache/juneau/marshall/parser/ParserSession.html#DEFAULT_MAX_PARSE_DEPTH">500</a>).</div>
 </dd>
 <dt><a href="org/apache/juneau/http/header/EntityTag.html" class="type-name-link" title="class in org.apache.juneau.http.header">EntityTag</a> - Class in <a href="org/apache/juneau/http/header/package-summary.html">org.apache.juneau.http.header</a></dt>
 <dd>
@@ -35207,6 +35281,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/utils/SystemUtils.html#env(java.lang.String,T)" class="member-name-link">env(String, T)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/SystemUtils.html" title="class in org.apache.juneau.commons.utils">SystemUtils</a></dt>
 <dd>
 <div class="block">Looks up a system property or environment variable, returning a default if not found.</div>
+</dd>
+<dt><a href="org/apache/juneau/http/RestDebugBodyGate.html#ENV_ALLOW_DUMP_BODIES" class="member-name-link">ENV_ALLOW_DUMP_BODIES</a> - Static variable in class org.apache.juneau.http.<a href="org/apache/juneau/http/RestDebugBodyGate.html" title="class in org.apache.juneau.http">RestDebugBodyGate</a></dt>
+<dd>
+<div class="block">The environment variable that gates body dumping.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/svl/vars/EnvFileVar.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.vars">EnvFileVar</a> - Class in <a href="org/apache/juneau/commons/svl/vars/package-summary.html">org.apache.juneau.commons.svl.vars</a></dt>
 <dd>
@@ -37664,6 +37742,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/rest/server/filter/BoundaryReason.html#FETCH_SITE_NOT_SAME_ORIGIN" class="member-name-link">FETCH_SITE_NOT_SAME_ORIGIN</a> - Enum constant in enum class org.apache.juneau.rest.server.filter.<a href="org/apache/juneau/rest/server/filter/BoundaryReason.html" title="enum class in org.apache.juneau.rest.server.filter">BoundaryReason</a></dt>
 <dd>
 <div class="block">A state-changing request's <code>Sec-Fetch-Site</code> was present and was not <code>same-origin</code>.</div>
+</dd>
+<dt><a href="org/apache/juneau/server/config/repository/GitControl.html#fetchFromRepo()" class="member-name-link">fetchFromRepo()</a> - Method in class org.apache.juneau.server.config.repository.<a href="org/apache/juneau/server/config/repository/GitControl.html" title="class in org.apache.juneau.server.config.repository">GitControl</a></dt>
+<dd>
+<div class="block">Fetches the latest changes from the remote repository without touching the working tree or the current branch.</div>
 </dd>
 <dt><a href="org/apache/juneau/beanquery/sql/SqlBeanQueryContext.Builder.html#fetchSize(int)" class="member-name-link">fetchSize(int)</a> - Method in class org.apache.juneau.beanquery.sql.<a href="org/apache/juneau/beanquery/sql/SqlBeanQueryContext.Builder.html" title="class in org.apache.juneau.beanquery.sql">SqlBeanQueryContext.Builder</a></dt>
 <dd>
@@ -42504,6 +42586,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the audit trail.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#getAuthnRequestTtl()" class="member-name-link">getAuthnRequestTtl()</a> - Method in class org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator</a></dt>
+<dd>
+<div class="block">Returns how long a request ID registered with <a href="org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#rememberAuthnRequest(java.lang.String)"><code>SamlAssertionValidator.rememberAuthnRequest(String)</code></a> stays valid.</div>
+</dd>
 <dt><a href="org/apache/juneau/petstore/service/PendingChange.html#getAuthor()" class="member-name-link">getAuthor()</a> - Method in class org.apache.juneau.petstore.service.<a href="org/apache/juneau/petstore/service/PendingChange.html" title="class in org.apache.juneau.petstore.service">PendingChange</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/rest/server/RestRequest.html#getAuthorityPath()" class="member-name-link">getAuthorityPath()</a> - Method in class org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></dt>
@@ -42689,6 +42775,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#getBaseUrl()" class="member-name-link">getBaseUrl()</a> - Method in class org.apache.juneau.rest.client.classic.remote.<a href="org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationMeta</a></dt>
 <dd>
 <div class="block">Returns the method-level base/host override from the <code>baseUrl</code> annotation member.</div>
+</dd>
+<dt><a href="org/apache/juneau/marshall/MarshallingContext.html#getBasicConverter()" class="member-name-link">getBasicConverter()</a> - Method in class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></dt>
+<dd>
+<div class="block">Returns the context-independent converter for this context.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/bean/BeanMap.html#getBean()" class="member-name-link">getBean()</a> - Method in class org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a></dt>
 <dd>
@@ -43709,6 +43799,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/http/classic/header/Thrown.Part.html#getClassName()" class="member-name-link">getClassName()</a> - Method in class org.apache.juneau.http.classic.header.<a href="org/apache/juneau/http/classic/header/Thrown.Part.html" title="class in org.apache.juneau.http.classic.header">Thrown.Part</a></dt>
 <dd>
 <div class="block">Returns the message portion of the header.</div>
+</dd>
+<dt><a href="org/apache/juneau/commons/conversion/BasicConverter.html#getClassNameGuard()" class="member-name-link">getClassNameGuard()</a> - Method in class org.apache.juneau.commons.conversion.<a href="org/apache/juneau/commons/conversion/BasicConverter.html" title="class in org.apache.juneau.commons.conversion">BasicConverter</a></dt>
+<dd>
+<div class="block">Returns the class-name guard of this converter.</div>
+</dd>
+<dt><a href="org/apache/juneau/marshall/MarshallingContext.html#getClassNameGuard()" class="member-name-link">getClassNameGuard()</a> - Method in class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></dt>
+<dd>
+<div class="block">Class-name guard.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/reflect/AnnotationInfo.html#getClassValue(java.lang.String)" class="member-name-link">getClassValue(String)</a> - Method in class org.apache.juneau.commons.reflect.<a href="org/apache/juneau/commons/reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a></dt>
 <dd>
@@ -48330,6 +48428,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the largest number of sort keys a query may use in this session: the context's cap, or this session's
  <a href="org/apache/juneau/commons/beanquery/BeanQuerySession.Builder.html#maxSortKeys(int)"><code>override</code></a>.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#getMaxSubscriptionsPerPrincipal()" class="member-name-link">getMaxSubscriptionsPerPrincipal()</a> - Method in class org.apache.juneau.rest.server.mcp.v20260728.<a href="org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></dt>
+<dd>
+<div class="block">The cap on concurrently open <code>subscriptions/listen</code> streams per authenticated caller.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/stats/MethodExecStats.html#getMaxTime()" class="member-name-link">getMaxTime()</a> - Method in class org.apache.juneau.rest.server.stats.<a href="org/apache/juneau/rest/server/stats/MethodExecStats.html" title="class in org.apache.juneau.rest.server.stats">MethodExecStats</a></dt>
 <dd>
 <div class="block">Returns the max execution time.</div>
@@ -52005,6 +52107,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Shortcut for calling <c>getPaths().get(path).get(operation).getResponse(status);</c></div>
 </dd>
+<dt><a href="org/apache/juneau/http/response/BasicHttpException.html#getResponseMessage()" class="member-name-link">getResponseMessage()</a> - Method in exception org.apache.juneau.http.response.<a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></dt>
+<dd>
+<div class="block">Returns the message intended for the client.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/RestOpContext.html#getResponseMeta()" class="member-name-link">getResponseMeta()</a> - Method in class org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a></dt>
 <dd>
 <div class="block">Returns the response bean meta if this method returns a <a href="org/apache/juneau/http/Response.html" title="annotation interface in org.apache.juneau.http"><code>Response</code></a>-annotated bean.</div>
@@ -52850,6 +52956,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/petstore/dto/Order.html#getShipDate()" class="member-name-link">getShipDate()</a> - Method in class org.apache.juneau.petstore.dto.<a href="org/apache/juneau/petstore/dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a></dt>
 <dd>
 <div class="block">Returns the shipping date as an ISO 8601 string.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/server/RestContextProperties.html#getShowCauseMessagesRaw()" class="member-name-link">getShowCauseMessagesRaw()</a> - Method in class org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/RestContextProperties.html" title="class in org.apache.juneau.rest.server">RestContextProperties</a></dt>
+<dd>
+<div class="block">The raw (unresolved) <code>@Rest(showCauseMessages)</code> default &mdash; whether messages taken from an exception's
+ cause are written to error responses.</div>
 </dd>
 <dt><a href="org/apache/juneau/microservice/jetty/JettySettings.html#getShutdownSettleDelay()" class="member-name-link">getShutdownSettleDelay()</a> - Method in class org.apache.juneau.microservice.jetty.<a href="org/apache/juneau/microservice/jetty/JettySettings.html" title="class in org.apache.juneau.microservice.jetty">JettySettings</a></dt>
 <dd>
@@ -55530,7 +55641,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Sets the number of grid columns.</div>
 </dd>
-<dt><a href="org/apache/juneau/petstore/console/ops/JobsRest.html#groom(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">groom(JsonMap)</a> - Method in class org.apache.juneau.petstore.console.ops.<a href="org/apache/juneau/petstore/console/ops/JobsRest.html" title="class in org.apache.juneau.petstore.console.ops">JobsRest</a></dt>
+<dt><a href="org/apache/juneau/petstore/console/ops/JobsRest.html#groom(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">groom(RestRequest, JsonMap)</a> - Method in class org.apache.juneau.petstore.console.ops.<a href="org/apache/juneau/petstore/console/ops/JobsRest.html" title="class in org.apache.juneau.petstore.console.ops">JobsRest</a></dt>
 <dd>
 <div class="block">Starts a groom run.</div>
 </dd>
@@ -57241,6 +57352,10 @@ loadScripts(document, 'script');</script>
 <div class="block">The <code>jcHasToolkit(name)</code> FreeMarker method: whether the current <code>&lt;@page toolkit=…&gt;</code> lists
  <code>name</code>.</div>
 </dd>
+<dt><a href="org/apache/juneau/commons/utils/StringUtils.html#hasUriScheme(java.lang.String)" class="member-name-link">hasUriScheme(String)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/StringUtils.html" title="class in org.apache.juneau.commons.utils">StringUtils</a></dt>
+<dd>
+<div class="block">Returns <jk>true</jk> if the specified URI reference starts with a scheme.</div>
+</dd>
 <dt><a href="org/apache/juneau/commons/inject/ValueResolver.html#hasValueAnnotation(java.util.List)" class="member-name-link">hasValueAnnotation(List&lt;? extends AnnotationInfo&lt;?&gt;&gt;)</a> - Static method in class org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/ValueResolver.html" title="class in org.apache.juneau.commons.inject">ValueResolver</a></dt>
 <dd>
 <div class="block">Returns <code>true</code> if any annotation in the list is a <code>@Value</code> marker.</div>
@@ -58050,6 +58165,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/beans/Hyperlink.html#hidden(java.lang.Object)" class="member-name-link">hidden(Object)</a> - Method in class org.apache.juneau.rest.server.beans.<a href="org/apache/juneau/rest/server/beans/Hyperlink.html" title="class in org.apache.juneau.rest.server.beans">Hyperlink</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/http/response/BasicHttpException.html#hideCauseMessage()" class="member-name-link">hideCauseMessage()</a> - Method in exception org.apache.juneau.http.response.<a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></dt>
+<dd>
+<div class="block">Marks the message of this exception as not intended for clients when it was taken from the cause.</div>
+</dd>
 <dt><a href="org/apache/juneau/bean/html5/Meter.html#high(java.lang.Object)" class="member-name-link">high(Object)</a> - Method in class org.apache.juneau.bean.html5.<a href="org/apache/juneau/bean/html5/Meter.html" title="class in org.apache.juneau.bean.html5">Meter</a></dt>
 <dd>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-high">high</a> attribute.</div>
@@ -59215,7 +59334,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/console/freemarker/PageSpec.html#htmlSrc(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">htmlSrc(String, String, String)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></dt>
 <dd>
-<div class="block">Adds an <code>html</code> card whose body is fetched from <code>src</code>, with a title, unsanitized.</div>
+<div class="block">Adds an <code>html</code> card whose body is fetched from <code>src</code>, with a title, sanitized.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/freemarker/PageSpec.html#htmlSrc(java.lang.String,java.lang.String,java.lang.String,boolean)" class="member-name-link">htmlSrc(String, String, String, boolean)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></dt>
 <dd>
@@ -59799,7 +59918,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator(Consumer&lt;HTTPRequest&gt;)</a> - Method in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></dt>
 <dd>
-<div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> for the token exchange.</div>
+<div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> before it is sent.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator(Consumer&lt;HTTPRequest&gt;)</a> - Method in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></dt>
 <dd>
@@ -59815,7 +59934,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.Builder.html#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator(Consumer&lt;HTTPRequest&gt;)</a> - Method in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></dt>
 <dd>
-<div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> for each token request.</div>
+<div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> before it is sent.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/auth/oauth/CachingClientCredentialsFlow.Builder.html#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator(Consumer&lt;HTTPRequest&gt;)</a> - Method in class org.apache.juneau.rest.server.auth.oauth.<a href="org/apache/juneau/rest/server/auth/oauth/CachingClientCredentialsFlow.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">CachingClientCredentialsFlow.Builder</a></dt>
 <dd>
@@ -63912,9 +64031,21 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Whether cross-site requests using unsafe methods are allowed.</div>
 </dd>
+<dt><a href="org/apache/juneau/http/RestDebugBodyGate.html#isAllowDumpBodies()" class="member-name-link">isAllowDumpBodies()</a> - Static method in class org.apache.juneau.http.<a href="org/apache/juneau/http/RestDebugBodyGate.html" title="class in org.apache.juneau.http">RestDebugBodyGate</a></dt>
+<dd>
+<div class="block">Returns whether body dumping is enabled by the <code>JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES</code> environment variable.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/filter/BoundaryResult.html#isAllowed()" class="member-name-link">isAllowed()</a> - Method in class org.apache.juneau.rest.server.filter.<a href="org/apache/juneau/rest/server/filter/BoundaryResult.html" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></dt>
 <dd>
 <div class="block">Whether the request passed.</div>
+</dd>
+<dt><a href="org/apache/juneau/marshall/html/HtmlSerializerSession.html#isAllowedAttribute(java.lang.String,java.lang.Object)" class="member-name-link">isAllowedAttribute(String, Object)</a> - Method in class org.apache.juneau.marshall.html.<a href="org/apache/juneau/marshall/html/HtmlSerializerSession.html" title="class in org.apache.juneau.marshall.html">HtmlSerializerSession</a></dt>
+<dd>
+<div class="block">Returns <jk>true</jk> if the specified attribute can be written.</div>
+</dd>
+<dt><a href="org/apache/juneau/marshall/xml/XmlSerializerSession.html#isAllowedAttribute(java.lang.String,java.lang.Object)" class="member-name-link">isAllowedAttribute(String, Object)</a> - Method in class org.apache.juneau.marshall.xml.<a href="org/apache/juneau/marshall/xml/XmlSerializerSession.html" title="class in org.apache.juneau.marshall.xml">XmlSerializerSession</a></dt>
+<dd>
+<div class="block">Returns <jk>true</jk> if the specified attribute can be written.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/html/HtmlSerializerSession.html#isAllowedUri(java.lang.Object)" class="member-name-link">isAllowedUri(Object)</a> - Method in class org.apache.juneau.marshall.html.<a href="org/apache/juneau/marshall/html/HtmlSerializerSession.html" title="class in org.apache.juneau.marshall.html">HtmlSerializerSession</a></dt>
 <dd>
@@ -63952,6 +64083,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns whether the interface opts its absolute <code>@Remote</code>/<code>@Url</code>/<code>baseUrl()</code> targets out of
  the default deny-private SSRF guardrail (<a href="org/apache/juneau/http/remote/Remote.html#allowPrivateUrls()"><code>Remote.allowPrivateUrls()</code></a>).</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html#isAllowPrivateUrls()" class="member-name-link">isAllowPrivateUrls()</a> - Method in class org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthHttpPolicy</a></dt>
+<dd>
+<div class="block">Returns whether this policy allows private and loopback targets.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/client/classic/remote/RemoteMeta.html#isAllowPrivateUrls()" class="member-name-link">isAllowPrivateUrls()</a> - Method in class org.apache.juneau.rest.client.classic.remote.<a href="org/apache/juneau/rest/client/classic/remote/RemoteMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteMeta</a></dt>
 <dd>
@@ -64520,6 +64655,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns <jk>true</jk> if this class is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link"><code>Calendar</code></a>.</div>
 </dd>
+<dt><a href="org/apache/juneau/http/response/BasicHttpException.html#isCauseMessageHidden()" class="member-name-link">isCauseMessageHidden()</a> - Method in exception org.apache.juneau.http.response.<a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></dt>
+<dd>
+<div class="block">Returns whether <a href="org/apache/juneau/http/response/BasicHttpException.html#hideCauseMessage()"><code>BasicHttpException.hideCauseMessage()</code></a> has taken effect on this exception.</div>
+</dd>
 <dt><a href="org/apache/juneau/marshall/ClassMeta.html#isChar()" class="member-name-link">isChar()</a> - Method in class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a></dt>
 <dd>
 <div class="block">Returns <jk>true</jk> if this class is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html" title="class or interface in java.lang" class="external-link"><code>Character</code></a>.</div>
@@ -64557,6 +64696,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/reflect/ClassInfo.html#isClass()" class="member-name-link">isClass()</a> - Method in class org.apache.juneau.commons.reflect.<a href="org/apache/juneau/commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></dt>
 <dd>
 <div class="block">Returns <jk>true</jk> if this class is not an interface.</div>
+</dd>
+<dt><a href="org/apache/juneau/marshall/MarshallingContext.html#isClassNameAllowed(java.lang.String)" class="member-name-link">isClassNameAllowed(String)</a> - Method in class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></dt>
+<dd>
+<div class="block">Returns whether the specified class name may be resolved to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> by this context.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/ClientAborts.html#isClientAbort(java.lang.Throwable)" class="member-name-link">isClientAbort(Throwable)</a> - Static method in class org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/ClientAborts.html" title="class in org.apache.juneau.rest.server">ClientAborts</a></dt>
 <dd>
@@ -64671,6 +64814,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/rest/server/RestResponse.html#isContentOfType(java.lang.Class)" class="member-name-link">isContentOfType(Class&lt;?&gt;)</a> - Method in class org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a></dt>
 <dd>
 <div class="block">Returns <jk>true</jk> if this response object is of the specified type.</div>
+</dd>
+<dt><a href="org/apache/juneau/http/RedactedHeaders.html#isCredentialLike(java.lang.String)" class="member-name-link">isCredentialLike(String)</a> - Static method in class org.apache.juneau.http.<a href="org/apache/juneau/http/RedactedHeaders.html" title="class in org.apache.juneau.http">RedactedHeaders</a></dt>
+<dd>
+<div class="block">Returns <code>true</code> if the given header name is in <a href="org/apache/juneau/http/RedactedHeaders.html#DEFAULT"><code>RedactedHeaders.DEFAULT</code></a> or its name suggests it carries a
+ credential.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/utils/StringUtils.html#isCreditCard(java.lang.String)" class="member-name-link">isCreditCard(String)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/StringUtils.html" title="class in org.apache.juneau.commons.utils">StringUtils</a></dt>
 <dd>
@@ -65565,6 +65713,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns <jk>true</jk> if this class is either <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link"><code>Long</code></a> or <jk>long</jk>.</div>
 </dd>
+<dt><a href="org/apache/juneau/commons/utils/UriUtils.html#isLoopbackHost(java.lang.String)" class="member-name-link">isLoopbackHost(String)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/UriUtils.html" title="class in org.apache.juneau.commons.utils">UriUtils</a></dt>
+<dd>
+<div class="block">Returns <jk>true</jk> if the specified host name is a loopback host.</div>
+</dd>
 <dt><a href="org/apache/juneau/marshall/jena/RdfParser.html#isLooseCollections()" class="member-name-link">isLooseCollections()</a> - Method in class org.apache.juneau.marshall.jena.<a href="org/apache/juneau/marshall/jena/RdfParser.html" title="class in org.apache.juneau.marshall.jena">RdfParser</a></dt>
 <dd>
 <div class="block">Collections should be serialized and parsed as loose collections.</div>
@@ -65629,6 +65781,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/reflect/ClassInfo.html#isMemberClass()" class="member-name-link">isMemberClass()</a> - Method in class org.apache.juneau.commons.reflect.<a href="org/apache/juneau/commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></dt>
 <dd>
 <div class="block">Returns <jk>true</jk> if this class is a member class.</div>
+</dd>
+<dt><a href="org/apache/juneau/http/response/BasicHttpException.html#isMessageFromCause()" class="member-name-link">isMessageFromCause()</a> - Method in exception org.apache.juneau.http.response.<a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></dt>
+<dd>
+<div class="block">Returns whether this exception's message was taken from its cause rather than supplied by the code that created it.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/http/MediaType.html#isMetaSubtype()" class="member-name-link">isMetaSubtype()</a> - Method in class org.apache.juneau.commons.http.<a href="org/apache/juneau/commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a></dt>
 <dd>
@@ -66868,10 +67024,23 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Whether <code>url</code> is a same-origin <b>document</b> URL (query and fragment allowed).</div>
 </dd>
+<dt><a href="org/apache/juneau/commons/utils/FileUtils.html#isSafeFileName(java.lang.String)" class="member-name-link">isSafeFileName(String)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/FileUtils.html" title="class in org.apache.juneau.commons.utils">FileUtils</a></dt>
+<dd>
+<div class="block">Returns <jk>true</jk> if the specified name is a single plain file name.</div>
+</dd>
 <dt><a href="org/apache/juneau/terminal/report/TerminalViewChecks.html#isSafeLineHref(java.lang.String)" class="member-name-link">isSafeLineHref(String)</a> - Static method in class org.apache.juneau.terminal.report.<a href="org/apache/juneau/terminal/report/TerminalViewChecks.html" title="class in org.apache.juneau.terminal.report">TerminalViewChecks</a></dt>
 <dd>
 <div class="block">Whether a line href is safe: a bare fragment, or a same-origin path accepted by
  <a href="org/apache/juneau/terminal/report/TerminalViewChecks.html#isSameOriginPath(java.lang.String)"><code>TerminalViewChecks.isSameOriginPath(String)</code></a>.</div>
+</dd>
+<dt><a href="org/apache/juneau/commons/http/SafePathTemplate.html#isSafeRedirect(java.lang.String,java.lang.String...)" class="member-name-link">isSafeRedirect(String, String...)</a> - Static method in class org.apache.juneau.commons.http.<a href="org/apache/juneau/commons/http/SafePathTemplate.html" title="class in org.apache.juneau.commons.http">SafePathTemplate</a></dt>
+<dd>
+<div class="block">Whether <code>uri</code> is safe to send as a redirect target: either a relative reference, or an absolute or
+ protocol-relative URI whose host is in <code>allowedHosts</code>.</div>
+</dd>
+<dt><a href="org/apache/juneau/commons/utils/FileUtils.html#isSafeRelativePath(java.lang.String)" class="member-name-link">isSafeRelativePath(String)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/FileUtils.html" title="class in org.apache.juneau.commons.utils">FileUtils</a></dt>
+<dd>
+<div class="block">Returns <jk>true</jk> if the specified forward-slash separated path stays relative to its base.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/http/SafePathTemplate.html#isSafeTemplate(java.lang.String,java.lang.String...)" class="member-name-link">isSafeTemplate(String, String...)</a> - Static method in class org.apache.juneau.commons.http.<a href="org/apache/juneau/commons/http/SafePathTemplate.html" title="class in org.apache.juneau.commons.http">SafePathTemplate</a></dt>
 <dd>
@@ -66885,7 +67054,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/views/markdown/CommonmarkMarkdownRenderer.html#isSafeUrl(java.lang.String)" class="member-name-link">isSafeUrl(String)</a> - Static method in class org.apache.juneau.console.views.markdown.<a href="org/apache/juneau/console/views/markdown/CommonmarkMarkdownRenderer.html" title="class in org.apache.juneau.console.views.markdown">CommonmarkMarkdownRenderer</a></dt>
 <dd>
 <div class="block">Whether <code>url</code> is safe to emit as an <code>href</code> or <code>src</code>: <code>http</code>/<code>https</code>/
- <code>mailto</code>, a fragment, a same-origin path, or a scheme-less relative URL.</div>
+ <code>mailto</code>, a fragment, a same-origin path (not protocol-relative), or a scheme-less relative URL.</div>
 </dd>
 <dt><a href="org/apache/juneau/bct/assertions/FluentObjectAssertion.html#isSame(T)" class="member-name-link">isSame(T)</a> - Method in class org.apache.juneau.bct.assertions.<a href="org/apache/juneau/bct/assertions/FluentObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">FluentObjectAssertion</a></dt>
 <dd>
@@ -66972,6 +67141,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/marshall/ClassMeta.html#isShort()" class="member-name-link">isShort()</a> - Method in class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a></dt>
 <dd>
 <div class="block">Returns <jk>true</jk> if this class is either <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Short.html" title="class or interface in java.lang" class="external-link"><code>Short</code></a> or <jk>short</jk>.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/server/RestContext.html#isShowCauseMessages()" class="member-name-link">isShowCauseMessages()</a> - Method in class org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></dt>
+<dd>
+<div class="block">Returns whether messages taken from an exception's cause are written to error responses.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/markdown/MarkdownSerializer.html#isShowHeaders()" class="member-name-link">isShowHeaders()</a> - Method in class org.apache.juneau.marshall.markdown.<a href="org/apache/juneau/marshall/markdown/MarkdownSerializer.html" title="class in org.apache.juneau.marshall.markdown">MarkdownSerializer</a></dt>
 <dd>
@@ -67425,6 +67598,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/utils/ObjectUtils.html#isTrue(java.lang.Object)" class="member-name-link">isTrue(Object)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/ObjectUtils.html" title="class in org.apache.juneau.commons.utils">ObjectUtils</a></dt>
 <dd>
 <div class="block">Null-safe <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html#TRUE" title="class or interface in java.lang" class="external-link"><code>Boolean.TRUE</code></a> check.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/server/mcp/McpServerConfig.html#isTrustProxy()" class="member-name-link">isTrustProxy()</a> - Method in class org.apache.juneau.rest.server.mcp.<a href="org/apache/juneau/rest/server/mcp/McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></dt>
+<dd>
+<div class="block">Whether loopback callers are admitted when the request carries forwarding headers.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/test/PageContractAssert.html#isTwinOf(org.apache.juneau.console.test.PageContractAssert)" class="member-name-link">isTwinOf(PageContractAssert)</a> - Method in class org.apache.juneau.console.test.<a href="org/apache/juneau/console/test/PageContractAssert.html" title="class in org.apache.juneau.console.test">PageContractAssert</a></dt>
 <dd>
@@ -69897,6 +70074,11 @@ loadScripts(document, 'script');</script>
 <div class="block">Injects a fixed JWK set for ID-token / logout-token signature verification, bypassing the
  JWKS endpoint.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#jwksMaxStale(java.time.Duration)" class="member-name-link">jwksMaxStale(Duration)</a> - Method in class org.apache.juneau.rest.server.auth.jwt.<a href="org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></dt>
+<dd>
+<div class="block">Sets how long the JWKS cache may keep serving the last-known-good key set after its TTL has
+ expired while the JWKS endpoint is unreachable.</div>
+</dd>
 <dt><a href="org/apache/juneau/examples/mcp/secured/OfflineAuthorizationServer.html#jwkSource()" class="member-name-link">jwkSource()</a> - Method in class org.apache.juneau.examples.mcp.secured.<a href="org/apache/juneau/examples/mcp/secured/OfflineAuthorizationServer.html" title="class in org.apache.juneau.examples.mcp.secured">OfflineAuthorizationServer</a></dt>
 <dd>
 <div class="block">Returns a <code>JWKSource</code> publishing only the public half of this server's signing key, ready to hand
@@ -69914,6 +70096,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Injects a custom JWK source for ID-token / logout-token signature verification.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/auth/oauth/flow/JwksResourceRetriever.html" class="type-name-link" title="class in org.apache.juneau.rest.auth.oauth.flow">JwksResourceRetriever</a> - Class in <a href="org/apache/juneau/rest/auth/oauth/flow/package-summary.html">org.apache.juneau.rest.auth.oauth.flow</a></dt>
+<dd>
+<div class="block">HTTP retriever for remote JWK sets.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/auth/oauth/flow/JwksResourceRetriever.html#%3Cinit%3E()" class="member-name-link">JwksResourceRetriever()</a> - Constructor for class org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/JwksResourceRetriever.html" title="class in org.apache.juneau.rest.auth.oauth.flow">JwksResourceRetriever</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/rest/auth/oauth/oidc/OidcMetadata.html#jwksUri()" class="member-name-link">jwksUri()</a> - Method in record class org.apache.juneau.rest.auth.oauth.oidc.<a href="org/apache/juneau/rest/auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a></dt>
 <dd>
 <div class="block">Returns the value of the <a href="./org/apache/juneau/rest/auth/oauth/oidc/OidcMetadata.html#param-jwksUri"><code>jwksUri</code></a> record component.</div>
@@ -72377,6 +72565,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The host names answered when none are given: <code>localhost</code>, <code>127.0.0.1</code> and <code>[::1]</code>, on any port.</div>
 </dd>
+<dt><a href="org/apache/juneau/petstore/console/PetstoreApiBoundary.html#LOOPBACK_HOSTS" class="member-name-link">LOOPBACK_HOSTS</a> - Static variable in class org.apache.juneau.petstore.console.<a href="org/apache/juneau/petstore/console/PetstoreApiBoundary.html" title="class in org.apache.juneau.petstore.console">PetstoreApiBoundary</a></dt>
+<dd>
+<div class="block">The host names answered when <a href="org/apache/juneau/petstore/console/PetstoreApiBoundary.html#ALLOWED_HOSTS_PROPERTY">"petstore.api.allowedHosts"</a> is not set: <code>localhost</code>, <code>127.0.0.1</code> and <code>[::1]</code>.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/filter/LoopbackBoundary.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">LoopbackBoundary</a> - Class in <a href="org/apache/juneau/rest/server/filter/package-summary.html">org.apache.juneau.rest.server.filter</a></dt>
 <dd>
 <div class="block">The request-authenticity half of a loopback application's write protection: decides whether a request came from
@@ -74018,6 +74210,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/commons/svl/functions/ArithmeticFunctions.Max.html#%3Cinit%3E()" class="member-name-link">Max()</a> - Constructor for class org.apache.juneau.commons.svl.functions.<a href="org/apache/juneau/commons/svl/functions/ArithmeticFunctions.Max.html" title="class in org.apache.juneau.commons.svl.functions">ArithmeticFunctions.Max</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/rest/auth/oauth/flow/JwksResourceRetriever.html#MAX_BYTES" class="member-name-link">MAX_BYTES</a> - Static variable in class org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/JwksResourceRetriever.html" title="class in org.apache.juneau.rest.auth.oauth.flow">JwksResourceRetriever</a></dt>
+<dd>
+<div class="block">Maximum accepted response body size, in bytes.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#MAX_CACHE_TTL" class="member-name-link">MAX_CACHE_TTL</a> - Static variable in class org.apache.juneau.rest.server.auth.oauth.<a href="org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator</a></dt>
 <dd>
 <div class="block">Maximum cache TTL.</div>
@@ -74029,6 +74225,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/utils/JsonValueSafety.html#MAX_DEPTH" class="member-name-link">MAX_DEPTH</a> - Static variable in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/JsonValueSafety.html" title="class in org.apache.juneau.commons.utils">JsonValueSafety</a></dt>
 <dd>
 <div class="block">Maximum allowed nesting depth of the walked value.</div>
+</dd>
+<dt><a href="org/apache/juneau/petstore/marshall/PetPhotoParser.html#MAX_DIMENSION" class="member-name-link">MAX_DIMENSION</a> - Static variable in class org.apache.juneau.petstore.marshall.<a href="org/apache/juneau/petstore/marshall/PetPhotoParser.html" title="class in org.apache.juneau.petstore.marshall">PetPhotoParser</a></dt>
+<dd>
+<div class="block">The largest accepted photo width or height, in pixels.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/TerminalViewEndpoints.html#MAX_ENDPOINT_PAGE_EVENTS" class="member-name-link">MAX_ENDPOINT_PAGE_EVENTS</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/TerminalViewEndpoints.html" title="class in org.apache.juneau.console.views">TerminalViewEndpoints</a></dt>
 <dd>
@@ -74089,6 +74289,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/views/TerminalViewPage.html#MAX_PAGE_EVENTS" class="member-name-link">MAX_PAGE_EVENTS</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/TerminalViewPage.html" title="class in org.apache.juneau.console.views">TerminalViewPage</a></dt>
 <dd>
 <div class="block">The maximum number of events in one page.</div>
+</dd>
+<dt><a href="org/apache/juneau/petstore/marshall/PetPhotoParser.html#MAX_PIXELS" class="member-name-link">MAX_PIXELS</a> - Static variable in class org.apache.juneau.petstore.marshall.<a href="org/apache/juneau/petstore/marshall/PetPhotoParser.html" title="class in org.apache.juneau.petstore.marshall">PetPhotoParser</a></dt>
+<dd>
+<div class="block">The largest accepted photo, in pixels (width times height).</div>
 </dd>
 <dt><a href="org/apache/juneau/terminal/region/TerminalSource.html#MAX_READ_BYTES" class="member-name-link">MAX_READ_BYTES</a> - Static variable in interface org.apache.juneau.terminal.region.<a href="org/apache/juneau/terminal/region/TerminalSource.html" title="interface in org.apache.juneau.terminal.region">TerminalSource</a></dt>
 <dd>
@@ -74189,6 +74393,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/data/SeriesAggregator.html#maxBuckets(int)" class="member-name-link">maxBuckets(int)</a> - Method in class org.apache.juneau.console.data.<a href="org/apache/juneau/console/data/SeriesAggregator.html" title="class in org.apache.juneau.console.data">SeriesAggregator</a></dt>
 <dd>
 <div class="block">The most result cells (bucket and group combinations).</div>
+</dd>
+<dt><a href="org/apache/juneau/marshall/cp/FileFinder.Builder.html#maxCachedLocales(int)" class="member-name-link">maxCachedLocales(int)</a> - Method in class org.apache.juneau.marshall.cp.<a href="org/apache/juneau/marshall/cp/FileFinder.Builder.html" title="class in org.apache.juneau.marshall.cp">FileFinder.Builder</a></dt>
+<dd>
+<div class="block">Specifies the maximum number of locales that keep their own name cache.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#maxCachedLocales(int)" class="member-name-link">maxCachedLocales(int)</a> - Method in class org.apache.juneau.rest.server.staticfile.<a href="org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></dt>
+<dd>
+<div class="block">Specifies the maximum number of locales that keep their own name cache.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/auth/oidc/rp/IdTokenValidatorAdapter.Builder.html#maxClockSkewSeconds(int)" class="member-name-link">maxClockSkewSeconds(int)</a> - Method in class org.apache.juneau.rest.server.auth.oidc.rp.<a href="org/apache/juneau/rest/server/auth/oidc/rp/IdTokenValidatorAdapter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">IdTokenValidatorAdapter.Builder</a></dt>
 <dd>
@@ -81904,6 +82116,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Copy constructor.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html" class="type-name-link" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthHttpPolicy</a> - Class in <a href="org/apache/juneau/rest/auth/oauth/flow/package-summary.html">org.apache.juneau.rest.auth.oauth.flow</a></dt>
+<dd>
+<div class="block">URL and connection policy for the HTTP calls an OAuth client makes to endpoints it did not choose itself
+ (metadata documents, token endpoints, client-registration endpoints).</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html" class="type-name-link" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator</a> - Class in <a href="org/apache/juneau/rest/server/auth/oauth/package-summary.html">org.apache.juneau.rest.server.auth.oauth</a></dt>
 <dd>
 <div class="block"><a href="org/apache/juneau/rest/server/auth/TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth"><code>TokenValidator</code></a> that validates opaque OAuth 2.0 access tokens via the
@@ -82212,6 +82429,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/http/header/NoTrace.html#of(boolean)" class="member-name-link">of(boolean)</a> - Static method in class org.apache.juneau.http.header.<a href="org/apache/juneau/http/header/NoTrace.html" title="class in org.apache.juneau.http.header">NoTrace</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html#of(boolean,boolean)" class="member-name-link">of(boolean, boolean)</a> - Static method in class org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthHttpPolicy</a></dt>
+<dd>
+<div class="block">Creates a policy.</div>
+</dd>
 <dt><a href="org/apache/juneau/http/entity/ByteArrayBody.html#of(byte%5B%5D)" class="member-name-link">of(byte[])</a> - Static method in class org.apache.juneau.http.entity.<a href="org/apache/juneau/http/entity/ByteArrayBody.html" title="class in org.apache.juneau.http.entity">ByteArrayBody</a></dt>
 <dd>
 <div class="block">Creates a <a href="org/apache/juneau/http/entity/ByteArrayBody.html" title="class in org.apache.juneau.http.entity"><code>ByteArrayBody</code></a> with <code>application/octet-stream</code> content type.</div>
@@ -89966,6 +90187,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the value of the <a href="./org/apache/juneau/rest/server/RestContext.Args.html#param-overridingParent"><code>overridingParent</code></a> record component.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/AsyncJob.html#owner()" class="member-name-link">owner()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/AsyncJob.html" title="class in org.apache.juneau.console.views">AsyncJob</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/AsyncJob.html#owner(java.lang.String)" class="member-name-link">owner(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/AsyncJob.html" title="class in org.apache.juneau.console.views">AsyncJob</a></dt>
+<dd>
+<div class="block">Binds the job to the principal that started it.</div>
+</dd>
 </dl>
 <h2 class="title" id="I:P">P</h2>
 <dl class="index">
@@ -90805,6 +91032,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Parses a wire-format protocol version string.</div>
 </dd>
+<dt><a href="org/apache/juneau/http/RestDebugBodyGate.html#parse(java.lang.String)" class="member-name-link">parse(String)</a> - Static method in class org.apache.juneau.http.<a href="org/apache/juneau/http/RestDebugBodyGate.html" title="class in org.apache.juneau.http">RestDebugBodyGate</a></dt>
+<dd>
+<div class="block">Parses a raw gate value.</div>
+</dd>
 <dt><a href="org/apache/juneau/marshall/BinaryFormat.html#parse(java.lang.String)" class="member-name-link">parse(String)</a> - Method in enum class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/BinaryFormat.html" title="enum class in org.apache.juneau.marshall">BinaryFormat</a></dt>
 <dd>
 <div class="block">Parses the specified wire value using this format.</div>
@@ -90879,6 +91110,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/marshall/ClassFormat.html#parse(java.lang.String,org.apache.juneau.marshall.ClassFormat,java.lang.ClassLoader)" class="member-name-link">parse(String, ClassFormat, ClassLoader)</a> - Static method in enum class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></dt>
 <dd>
 <div class="block">Parses the specified wire value into a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>.</div>
+</dd>
+<dt><a href="org/apache/juneau/marshall/ClassFormat.html#parse(java.lang.String,org.apache.juneau.marshall.ClassFormat,java.lang.ClassLoader,java.util.function.Predicate)" class="member-name-link">parse(String, ClassFormat, ClassLoader, Predicate&lt;String&gt;)</a> - Static method in enum class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></dt>
+<dd>
+<div class="block">Parses the specified wire value into a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>, vetting each candidate name with a guard.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/utils/Iso8601Utils.html#parse(java.lang.String,org.apache.juneau.marshall.ClassMeta,java.util.TimeZone)" class="member-name-link">parse(String, ClassMeta&lt;T&gt;, TimeZone)</a> - Static method in class org.apache.juneau.marshall.utils.<a href="org/apache/juneau/marshall/utils/Iso8601Utils.html" title="class in org.apache.juneau.marshall.utils">Iso8601Utils</a></dt>
 <dd>
@@ -91026,6 +91261,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/utils/StringUtils.html#parseIntWithSuffix(java.lang.String,java.util.function.Supplier)" class="member-name-link">parseIntWithSuffix(String, Supplier&lt;T&gt;)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/StringUtils.html" title="class in org.apache.juneau.commons.utils">StringUtils</a></dt>
 <dd>
 <div class="block">Same as <a href="org/apache/juneau/commons/utils/StringUtils.html#parseIntWithSuffix(java.lang.String)"><code>StringUtils.parseIntWithSuffix(String)</code></a> but converts a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NumberFormatException.html" title="class or interface in java.lang" class="external-link"><code>NumberFormatException</code></a> into a caller-supplied exception.</div>
+</dd>
+<dt><a href="org/apache/juneau/commons/utils/UriUtils.html#parseIpv4(java.lang.String)" class="member-name-link">parseIpv4(String)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/UriUtils.html" title="class in org.apache.juneau.commons.utils">UriUtils</a></dt>
+<dd>
+<div class="block">Parses a strict dotted-quad IPv4 literal.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/utils/StringUtils.html#parseLong(java.lang.String)" class="member-name-link">parseLong(String)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/StringUtils.html" title="class in org.apache.juneau.commons.utils">StringUtils</a></dt>
 <dd>
@@ -91779,6 +92018,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/terminal/report/TerminalEvent.TestStatus.html#PASS" class="member-name-link">PASS</a> - Enum constant in enum class org.apache.juneau.terminal.report.<a href="org/apache/juneau/terminal/report/TerminalEvent.TestStatus.html" title="enum class in org.apache.juneau.terminal.report">TerminalEvent.TestStatus</a></dt>
 <dd>
 <div class="block">Passed.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/server/auth/AuthFilterChain.Builder.html#passThroughUnmatched()" class="member-name-link">passThroughUnmatched()</a> - Method in class org.apache.juneau.rest.server.auth.<a href="org/apache/juneau/rest/server/auth/AuthFilterChain.Builder.html" title="class in org.apache.juneau.rest.server.auth">AuthFilterChain.Builder</a></dt>
+<dd>
+<div class="block">Lets requests whose path matches no entry pass through unauthenticated.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/httppart/HttpPartFormat.html#PASSWORD" class="member-name-link">PASSWORD</a> - Enum constant in enum class org.apache.juneau.commons.httppart.<a href="org/apache/juneau/commons/httppart/HttpPartFormat.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartFormat</a></dt>
 <dd>
@@ -92668,7 +92911,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/petstore/console/PetstoreApiBoundary.html" class="type-name-link" title="class in org.apache.juneau.petstore.console">PetstoreApiBoundary</a> - Class in <a href="org/apache/juneau/petstore/console/package-summary.html">org.apache.juneau.petstore.console</a></dt>
 <dd>
-<div class="block">The <code>/petstore</code> API's CSRF boundary: a <a href="org/apache/juneau/rest/server/filter/RequestBoundaryFilter.html" title="class in org.apache.juneau.rest.server.filter"><code>RequestBoundaryFilter</code></a> over the framework's <a href="org/apache/juneau/rest/server/filter/CsrfBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>CsrfBoundary</code></a>,
+<div class="block">The <code>/petstore</code> API's request-token boundary: a <a href="org/apache/juneau/rest/server/filter/RequestBoundaryFilter.html" title="class in org.apache.juneau.rest.server.filter"><code>RequestBoundaryFilter</code></a> over the framework's <a href="org/apache/juneau/rest/server/filter/CsrfBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>CsrfBoundary</code></a>,
  applied to <code>/petstore</code> and everything under it.</div>
 </dd>
 <dt><a href="org/apache/juneau/petstore/console/PetstoreApiBoundary.html#%3Cinit%3E()" class="member-name-link">PetstoreApiBoundary()</a> - Constructor for class org.apache.juneau.petstore.console.<a href="org/apache/juneau/petstore/console/PetstoreApiBoundary.html" title="class in org.apache.juneau.petstore.console">PetstoreApiBoundary</a></dt>
@@ -93135,7 +93378,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/rest/client/PolicyEnforcedRedirects.html" class="type-name-link" title="class in org.apache.juneau.rest.client">PolicyEnforcedRedirects</a> - Class in <a href="org/apache/juneau/rest/client/package-summary.html">org.apache.juneau.rest.client</a></dt>
 <dd>
-<div class="block">Shared Juneau-controlled redirect loop for SSRF-guard-active (<a href="org/apache/juneau/rest/client/TransportRequest.html#isSsrfGuardActive()"><code>TransportRequest.isSsrfGuardActive()</code></a>)
+<div class="block">Shared Juneau-controlled redirect loop for outbound-URL-guard-active (<a href="org/apache/juneau/rest/client/TransportRequest.html#isSsrfGuardActive()"><code>TransportRequest.isSsrfGuardActive()</code></a>)
  <code>@Remote</code> requests.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/client/PolicyEnforcedRedirects.HopExecutor.html" class="type-name-link" title="interface in org.apache.juneau.rest.client">PolicyEnforcedRedirects.HopExecutor</a> - Interface in <a href="org/apache/juneau/rest/client/package-summary.html">org.apache.juneau.rest.client</a></dt>
@@ -97419,6 +97662,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Reads BSON binary (int32 length + subtype + bytes).</div>
 </dd>
+<dt><a href="org/apache/juneau/server/config/repository/GitControl.html#readBlob(java.lang.String,java.lang.String,long)" class="member-name-link">readBlob(String, String, long)</a> - Method in class org.apache.juneau.server.config.repository.<a href="org/apache/juneau/server/config/repository/GitControl.html" title="class in org.apache.juneau.server.config.repository">GitControl</a></dt>
+<dd>
+<div class="block">Reads a file's content from the object database at the tip of the specified branch.</div>
+</dd>
 <dt><a href="org/apache/juneau/marshall/bson/BsonInputStream.html#readBoolean()" class="member-name-link">readBoolean()</a> - Method in class org.apache.juneau.marshall.bson.<a href="org/apache/juneau/marshall/bson/BsonInputStream.html" title="class in org.apache.juneau.marshall.bson">BsonInputStream</a></dt>
 <dd>
 <div class="block">Reads a boolean (1 byte: 0x00=false, 0x01=true).</div>
@@ -97452,6 +97699,19 @@ loadScripts(document, 'script');</script>
 <div class="block">Parses an ISO 8601 wire value into a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link"><code>Calendar</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/datatype/XMLGregorianCalendar.html" title="class or interface in javax.xml.datatype" class="external-link"><code>XMLGregorianCalendar</code></a>
  target using this session's configured <a href="org/apache/juneau/marshall/parser/ParserSession.html#getCalendarFormat()">calendar format</a> and
  <a href="org/apache/juneau/marshall/MarshallingSession.html#getTimeZone()">time zone</a>.</div>
+</dd>
+<dt><a href="org/apache/juneau/commons/utils/IoUtils.html#readCapped(java.io.InputStream,long,java.nio.charset.Charset)" class="member-name-link">readCapped(InputStream, long, Charset)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/IoUtils.html" title="class in org.apache.juneau.commons.utils">IoUtils</a></dt>
+<dd>
+<div class="block">Reads an input stream into a string, failing when it holds more than the specified number of bytes.</div>
+</dd>
+<dt><a href="org/apache/juneau/commons/utils/IoUtils.html#readCapped(java.io.InputStream,long,java.nio.charset.Charset,java.util.function.Supplier)" class="member-name-link">readCapped(InputStream, long, Charset, Supplier&lt;E&gt;)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/IoUtils.html" title="class in org.apache.juneau.commons.utils">IoUtils</a></dt>
+<dd>
+<div class="block">Same as <a href="org/apache/juneau/commons/utils/IoUtils.html#readCapped(java.io.InputStream,long,java.nio.charset.Charset)"><code>IoUtils.readCapped(InputStream, long, Charset)</code></a>, but throws the supplied exception when the input is
+ over the cap.</div>
+</dd>
+<dt><a href="org/apache/juneau/commons/utils/IoUtils.html#readCapped(java.nio.file.Path,long,java.nio.charset.Charset,java.nio.file.OpenOption...)" class="member-name-link">readCapped(Path, long, Charset, OpenOption...)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/IoUtils.html" title="class in org.apache.juneau.commons.utils">IoUtils</a></dt>
+<dd>
+<div class="block">Reads a file into a string, failing when it holds more than the specified number of bytes.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/markdown/MarkdownParserSession.html#readCellValue(java.lang.String,org.apache.juneau.marshall.ClassMeta,java.lang.Object)" class="member-name-link">readCellValue(String, ClassMeta&lt;T&gt;, Object)</a> - Method in class org.apache.juneau.marshall.markdown.<a href="org/apache/juneau/marshall/markdown/MarkdownParserSession.html" title="class in org.apache.juneau.marshall.markdown">MarkdownParserSession</a></dt>
 <dd>
@@ -97852,6 +98112,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Calls the <a href="org/apache/juneau/commons/bean/BeanInterceptor.html#readProperty(T,java.lang.String,java.lang.Object)"><code>BeanInterceptor.readProperty(Object, String, Object)</code></a> method on the registered property filters.</div>
 </dd>
+<dt><a href="org/apache/juneau/bean/atom/Text.TextInterceptor.html#readProperty(org.apache.juneau.bean.atom.Text,java.lang.String,java.lang.Object)" class="member-name-link">readProperty(Text, String, Object)</a> - Method in class org.apache.juneau.bean.atom.<a href="org/apache/juneau/bean/atom/Text.TextInterceptor.html" title="class in org.apache.juneau.bean.atom">Text.TextInterceptor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/commons/bean/BeanInterceptor.html#readProperty(T,java.lang.String,java.lang.Object)" class="member-name-link">readProperty(T, String, Object)</a> - Method in class org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/BeanInterceptor.html" title="class in org.apache.juneau.commons.bean">BeanInterceptor</a></dt>
 <dd>
 <div class="block">Property read interceptor.</div>
@@ -99345,6 +99607,13 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#registeredSubtypes()" class="member-name-link">registeredSubtypes()</a> - Static method in class org.apache.juneau.rest.server.view.freemarker.<a href="org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#registerIfUnder(int,int,java.lang.String,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)" class="member-name-link">registerIfUnder(int, int, String, String, McpSubscriptionFilter)</a> - Method in class org.apache.juneau.rest.server.mcp.<a href="org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html" title="class in org.apache.juneau.rest.server.mcp">BasicMcpSubscriptionBroker</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/rest/server/mcp/McpSubscriptionBroker.html#registerIfUnder(int,int,java.lang.String,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)" class="member-name-link">registerIfUnder(int, int, String, String, McpSubscriptionFilter)</a> - Method in interface org.apache.juneau.rest.server.mcp.<a href="org/apache/juneau/rest/server/mcp/McpSubscriptionBroker.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscriptionBroker</a></dt>
+<dd>
+<div class="block">Same as <a href="org/apache/juneau/rest/server/mcp/McpSubscriptionBroker.html#registerIfUnder(int,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)"><code>McpSubscriptionBroker.registerIfUnder(int, String, McpSubscriptionFilter)</code></a>, additionally limiting the number of
+ concurrently active subscriptions attributed to one owner.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#registerIfUnder(int,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)" class="member-name-link">registerIfUnder(int, String, McpSubscriptionFilter)</a> - Method in class org.apache.juneau.rest.server.mcp.<a href="org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html" title="class in org.apache.juneau.rest.server.mcp">BasicMcpSubscriptionBroker</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/rest/server/mcp/McpSubscriptionBroker.html#registerIfUnder(int,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)" class="member-name-link">registerIfUnder(int, String, McpSubscriptionFilter)</a> - Method in interface org.apache.juneau.rest.server.mcp.<a href="org/apache/juneau/rest/server/mcp/McpSubscriptionBroker.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscriptionBroker</a></dt>
@@ -99372,7 +99641,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/microservice/examples/AdminBoundary.html#registration(java.lang.String,java.lang.String...)" class="member-name-link">registration(String, String...)</a> - Static method in class org.apache.juneau.microservice.examples.<a href="org/apache/juneau/microservice/examples/AdminBoundary.html" title="class in org.apache.juneau.microservice.examples">AdminBoundary</a></dt>
 <dd>
-<div class="block">A registration of a new CSRF boundary over the three admin resources.</div>
+<div class="block">A registration of a new cross-site request boundary over the four admin resources.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/client/mcp/auth/McpClientRegistration.html#registrationAccessToken()" class="member-name-link">registrationAccessToken()</a> - Method in record class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a></dt>
 <dd>
@@ -99482,11 +99751,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Computes the number of nanoseconds remaining before the specified deadline.</div>
 </dd>
-<dt><a href="org/apache/juneau/rest/server/auth/saml/AuthnRequestStore.html#remember(java.lang.String,long,long)" class="member-name-link">remember(String, long, long)</a> - Method in interface org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml">AuthnRequestStore</a></dt>
+<dt><a href="org/apache/juneau/rest/server/auth/saml/AuthnRequestStore.html#remember(java.lang.String,byte%5B%5D,long,long)" class="member-name-link">remember(String, byte[], long, long)</a> - Method in interface org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/AuthnRequestStore.html" title="interface in org.apache.juneau.rest.server.auth.saml">AuthnRequestStore</a></dt>
 <dd>
 <div class="block">Records an outstanding request ID.</div>
 </dd>
-<dt><a href="org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#remember(java.lang.String,long,long)" class="member-name-link">remember(String, long, long)</a> - Method in class org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html" title="class in org.apache.juneau.rest.server.auth.saml">InMemoryAuthnRequestStore</a></dt>
+<dt><a href="org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html#remember(java.lang.String,byte%5B%5D,long,long)" class="member-name-link">remember(String, byte[], long, long)</a> - Method in class org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/InMemoryAuthnRequestStore.html" title="class in org.apache.juneau.rest.server.auth.saml">InMemoryAuthnRequestStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#rememberAuthnRequest(java.lang.String)" class="member-name-link">rememberAuthnRequest(String)</a> - Method in class org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator</a></dt>
 <dd>
@@ -99626,7 +99895,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/http/remote/RemoteUrlPolicy.html" class="type-name-link" title="class in org.apache.juneau.http.remote">RemoteUrlPolicy</a> - Class in <a href="org/apache/juneau/http/remote/package-summary.html">org.apache.juneau.http.remote</a></dt>
 <dd>
-<div class="block">Shared SSRF-hardening policy for the <a href="org/apache/juneau/http/remote/Remote.html" title="annotation interface in org.apache.juneau.http.remote"><code>@Remote</code></a>/<a href="org/apache/juneau/http/remote/RemoteOp.html" title="annotation interface in org.apache.juneau.http.remote"><code>@RemoteOp</code></a> proxy engines.</div>
+<div class="block">Shared outbound-URL hardening policy for the <a href="org/apache/juneau/http/remote/Remote.html" title="annotation interface in org.apache.juneau.http.remote"><code>@Remote</code></a>/<a href="org/apache/juneau/http/remote/RemoteOp.html" title="annotation interface in org.apache.juneau.http.remote"><code>@RemoteOp</code></a> proxy engines.</div>
 </dd>
 <dt><a href="org/apache/juneau/http/remote/RemoteUrlPolicy.AddressResolver.html" class="type-name-link" title="interface in org.apache.juneau.http.remote">RemoteUrlPolicy.AddressResolver</a> - Interface in <a href="org/apache/juneau/http/remote/package-summary.html">org.apache.juneau.http.remote</a></dt>
 <dd>
@@ -100902,9 +101171,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Admit it only with a valid token, exactly as for a browser request.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#requireAccessTokenType(boolean)" class="member-name-link">requireAccessTokenType(boolean)</a> - Method in class org.apache.juneau.rest.server.auth.jwt.<a href="org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></dt>
+<dd>
+<div class="block">Requires tokens to be explicitly typed as JWT access tokens (RFC 9068).</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html#requireAllowed(java.net.URI)" class="member-name-link">requireAllowed(URI)</a> - Method in class org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthHttpPolicy</a></dt>
+<dd>
+<div class="block">Checks a URL against this policy without resolving its host.</div>
+</dd>
 <dt><a href="org/apache/juneau/http/remote/RemoteUrlPolicy.html#requireAllowedUrl(java.lang.String,boolean)" class="member-name-link">requireAllowedUrl(String, boolean)</a> - Static method in class org.apache.juneau.http.remote.<a href="org/apache/juneau/http/remote/RemoteUrlPolicy.html" title="class in org.apache.juneau.http.remote">RemoteUrlPolicy</a></dt>
 <dd>
-<div class="block">Enforces the SSRF guardrail on an effective <code>@Remote</code> URL: when <code>url</code> carries a URI scheme, it
+<div class="block">Enforces the outbound-URL guardrail on an effective <code>@Remote</code> URL: when <code>url</code> carries a URI scheme, it
  must be a canonical absolute <code>http</code>/<code>https</code> URL with a nonempty host, and &mdash; unless
  <code>allowPrivateUrls</code> is set &mdash; the literal host must not match the deny-list (see class javadoc).</div>
 </dd>
@@ -101005,6 +101282,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Resolves the scopes required to invoke the given operation.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.Builder.html#requireEncryptedAssertions(boolean)" class="member-name-link">requireEncryptedAssertions(boolean)</a> - Method in class org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></dt>
+<dd>
+<div class="block">Sets whether a response must carry an <code>&lt;EncryptedAssertion&gt;</code>; a plaintext <code>&lt;Assertion&gt;</code> is then rejected.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/client/classic/remote/RemoteProxyUtils.html#requireHttpScheme(java.lang.String)" class="member-name-link">requireHttpScheme(String)</a> - Static method in class org.apache.juneau.rest.client.classic.remote.<a href="org/apache/juneau/rest/client/classic/remote/RemoteProxyUtils.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteProxyUtils</a></dt>
 <dd>
 <div class="block">Enforces the SSRF guardrail with the default (deny-private) policy: delegates to
@@ -101053,6 +101334,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/widgets/Op.html#requiresValue()" class="member-name-link">requiresValue()</a> - Method in enum class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/Op.html" title="enum class in org.apache.juneau.console.widgets">Op</a></dt>
 <dd>
 <div class="block">Whether this operator requires a comparison value (<a href="org/apache/juneau/console/widgets/Op.html#EQ"><code>Op.EQ</code></a>/<a href="org/apache/juneau/console/widgets/Op.html#NE"><code>Op.NE</code></a>/<a href="org/apache/juneau/console/widgets/Op.html#IN"><code>Op.IN</code></a>/<a href="org/apache/juneau/console/widgets/Op.html#CONTAINS"><code>Op.CONTAINS</code></a>).</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#requireTokenType(boolean)" class="member-name-link">requireTokenType(boolean)</a> - Method in class org.apache.juneau.rest.server.auth.oauth.<a href="org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></dt>
+<dd>
+<div class="block">Requires the introspection response to carry a <code>token_type</code> of <code>Bearer</code> or
+ <code>access_token</code>.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/RestSession.Builder.html#res()" class="member-name-link">res()</a> - Method in class org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></dt>
 <dd>
@@ -101838,6 +102124,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Sets the RFC 8707 <code>resource</code> indicator (the canonical MCP server URI) sent on every token request.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/server/auth/oauth/CachingClientCredentialsFlow.Builder.html#resource(java.net.URI)" class="member-name-link">resource(URI)</a> - Method in class org.apache.juneau.rest.server.auth.oauth.<a href="org/apache/juneau/rest/server/auth/oauth/CachingClientCredentialsFlow.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">CachingClientCredentialsFlow.Builder</a></dt>
+<dd>
+<div class="block">Sets the RFC 8707 <code>resource</code> indicator sent on the token request.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/mcp/McpContentBlock.html#resource(org.apache.juneau.rest.server.mcp.McpResourceContents)" class="member-name-link">resource(McpResourceContents)</a> - Static method in class org.apache.juneau.rest.server.mcp.<a href="org/apache/juneau/rest/server/mcp/McpContentBlock.html" title="class in org.apache.juneau.rest.server.mcp">McpContentBlock</a></dt>
 <dd>
 <div class="block">Creates an embedded-resource content block.</div>
@@ -102536,6 +102826,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Builder class.</div>
 </dd>
+<dt><a href="org/apache/juneau/http/RestDebugBodyGate.html" class="type-name-link" title="class in org.apache.juneau.http">RestDebugBodyGate</a> - Class in <a href="org/apache/juneau/http/package-summary.html">org.apache.juneau.http</a></dt>
+<dd>
+<div class="block">Resolves the <code>JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES</code> environment-variable master gate for REST client debug
+ body output.</div>
+</dd>
 <dt><a href="org/apache/juneau/http/RestDebugBodyScrubber.html" class="type-name-link" title="interface in org.apache.juneau.http">RestDebugBodyScrubber</a> - Interface in <a href="org/apache/juneau/http/package-summary.html">org.apache.juneau.http</a></dt>
 <dd>
 <div class="block">Optional operator-supplied transform applied to request/response body text before it is written to a REST debug log.</div>
@@ -103159,6 +103454,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the value of the <a href="./org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.Policy.html#param-retries"><code>retries</code></a> record component.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/auth/oauth/flow/JwksResourceRetriever.html#retrieveResource(java.net.URL)" class="member-name-link">retrieveResource(URL)</a> - Method in class org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/JwksResourceRetriever.html" title="class in org.apache.juneau.rest.auth.oauth.flow">JwksResourceRetriever</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/petstore/service/PendingChanges.html#retry(long,java.lang.String)" class="member-name-link">retry(long, String)</a> - Method in class org.apache.juneau.petstore.service.<a href="org/apache/juneau/petstore/service/PendingChanges.html" title="class in org.apache.juneau.petstore.service">PendingChanges</a></dt>
 <dd>
 <div class="block">Re-applies a failed change.</div>
@@ -107414,6 +107711,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Bean property fluent setter:  <property>allOf</property>.</div>
 </dd>
+<dt><a href="org/apache/juneau/http/RestDebugBodyGate.html#setAllowDumpBodiesForTest(java.lang.Boolean)" class="member-name-link">setAllowDumpBodiesForTest(Boolean)</a> - Static method in class org.apache.juneau.http.<a href="org/apache/juneau/http/RestDebugBodyGate.html" title="class in org.apache.juneau.http">RestDebugBodyGate</a></dt>
+<dd>
+<div class="block">Overrides the cached gate state so tests can exercise both states without changing the process environment.</div>
+</dd>
 <dt><a href="org/apache/juneau/bean/openapi3/HeaderInfo.html#setAllowEmptyValue(java.lang.Boolean)" class="member-name-link">setAllowEmptyValue(Boolean)</a> - Method in class org.apache.juneau.bean.openapi3.<a href="org/apache/juneau/bean/openapi3/HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></dt>
 <dd>
 <div class="block">Bean property setter:  <property>allowEmptyValue</property>.</div>
@@ -107771,10 +108072,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/http/classic/resource/BasicResource.html#setChunked(boolean)" class="member-name-link">setChunked(boolean)</a> - Method in class org.apache.juneau.http.classic.resource.<a href="org/apache/juneau/http/classic/resource/BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></dt>
 <dd>
 <div class="block">Sets the 'chunked' flag value.</div>
-</dd>
-<dt><a href="org/apache/juneau/marshall/ClassFormat.html#setClassNameGuard(java.util.function.Predicate)" class="member-name-link">setClassNameGuard(Predicate&lt;String&gt;)</a> - Static method in enum class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></dt>
-<dd>
-<div class="block">Installs a global guard that vets class names before the parser path resolves them to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>.</div>
 </dd>
 <dt><a href="org/apache/juneau/bean/mcp/v20260728/RequestMeta.html#setClientCapabilities(org.apache.juneau.bean.mcp.v20260728.ClientCapabilities)" class="member-name-link">setClientCapabilities(ClientCapabilities)</a> - Method in class org.apache.juneau.bean.mcp.v20260728.<a href="org/apache/juneau/bean/mcp/v20260728/RequestMeta.html" title="class in org.apache.juneau.bean.mcp.v20260728">RequestMeta</a></dt>
 <dd>
@@ -110353,6 +110650,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html#setMaxRounds(int)" class="member-name-link">setMaxRounds(int)</a> - Method in class org.apache.juneau.rest.server.mcp.v20260728.<a href="org/apache/juneau/rest/server/mcp/v20260728/McpMrtrConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpMrtrConfig</a></dt>
 <dd>
 <div class="block">Sets the max-rounds cap.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#setMaxSubscriptionsPerPrincipal(int)" class="member-name-link">setMaxSubscriptionsPerPrincipal(int)</a> - Method in class org.apache.juneau.rest.server.mcp.v20260728.<a href="org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionsConfig</a></dt>
+<dd>
+<div class="block">Sets the cap on concurrently open <code>subscriptions/listen</code> streams per authenticated caller.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/cbor/CborTokenReader.html#setMaxTagNestingDepth(int)" class="member-name-link">setMaxTagNestingDepth(int)</a> - Method in class org.apache.juneau.marshall.cbor.<a href="org/apache/juneau/marshall/cbor/CborTokenReader.html" title="class in org.apache.juneau.marshall.cbor">CborTokenReader</a></dt>
 <dd>
@@ -114024,6 +114325,20 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/server/Rest.html#showCauseMessages()" class="member-name-link">showCauseMessages()</a> - Element in annotation interface org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/Rest.html" title="annotation interface in org.apache.juneau.rest.server">Rest</a></dt>
+<dd>
+<div class="block">Show cause messages in error responses.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/server/AbstractRestBuilder.html#showCauseMessages(java.lang.String)" class="member-name-link">showCauseMessages(String)</a> - Method in class org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/AbstractRestBuilder.html" title="class in org.apache.juneau.rest.server">AbstractRestBuilder</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/rest/server/RestAnnotation.Builder.html#showCauseMessages(java.lang.String)" class="member-name-link">showCauseMessages(String)</a> - Method in class org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/RestAnnotation.Builder.html" title="class in org.apache.juneau.rest.server">RestAnnotation.Builder</a></dt>
+<dd>
+<div class="block">Sets the <a href="org/apache/juneau/rest/server/Rest.html#showCauseMessages()"><code>Rest.showCauseMessages()</code></a> property on this annotation.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/server/RestBuilder.html#showCauseMessages(java.lang.String)" class="member-name-link">showCauseMessages(String)</a> - Method in interface org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/RestBuilder.html" title="interface in org.apache.juneau.rest.server">RestBuilder</a></dt>
+<dd>
+<div class="block">Specifies the <a href="org/apache/juneau/rest/server/Rest.html#showCauseMessages()"><code>showCauseMessages</code></a> flag for this resource.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/remote/RrpcServlet.html#showEntryForm(java.lang.String,java.lang.String)" class="member-name-link">showEntryForm(String, String)</a> - Method in class org.apache.juneau.rest.server.remote.<a href="org/apache/juneau/rest/server/remote/RrpcServlet.html" title="class in org.apache.juneau.rest.server.remote">RrpcServlet</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/marshall/markdown/MarkdownSerializer.Builder.html#showHeaders(boolean)" class="member-name-link">showHeaders(boolean)</a> - Method in class org.apache.juneau.marshall.markdown.<a href="org/apache/juneau/marshall/markdown/MarkdownSerializer.Builder.html" title="class in org.apache.juneau.marshall.markdown">MarkdownSerializer.Builder</a></dt>
@@ -115555,6 +115870,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Constructor.</div>
 </dd>
+<dt><a href="org/apache/juneau/marshall/sse/SseEventReader.html#%3Cinit%3E(java.io.Reader,int,int)" class="member-name-link">SseEventReader(Reader, int, int)</a> - Constructor for class org.apache.juneau.marshall.sse.<a href="org/apache/juneau/marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></dt>
+<dd>
+<div class="block">Constructor with explicit size limits.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/sse/SseHeartbeat.html" class="type-name-link" title="class in org.apache.juneau.rest.server.sse">SseHeartbeat</a> - Class in <a href="org/apache/juneau/rest/server/sse/package-summary.html">org.apache.juneau.rest.server.sse</a></dt>
 <dd>
 <div class="block">Scheduled SSE heartbeat.</div>
@@ -115853,6 +116172,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Begins the login flow: generates <code>state</code> + <code>nonce</code> + PKCE verifier, stores them
  single-use, and redirects the user-agent to the IdP authorization endpoint.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#startLogin(jakarta.servlet.http.HttpServletResponse,java.lang.String)" class="member-name-link">startLogin(HttpServletResponse, String)</a> - Method in class org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter</a></dt>
+<dd>
+<div class="block">Registers an outgoing authentication request and sends the browser-binding cookie that this filter checks on
+ the response.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/cbor/CborTokenWriter.html#startObject()" class="member-name-link">startObject()</a> - Method in class org.apache.juneau.marshall.cbor.<a href="org/apache/juneau/marshall/cbor/CborTokenWriter.html" title="class in org.apache.juneau.marshall.cbor">CborTokenWriter</a></dt>
 <dd>&nbsp;</dd>
@@ -119782,6 +120106,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The URL path prefix of the terminal endpoints (relative to the host mount).</div>
 </dd>
+<dt><a href="org/apache/juneau/petstore/console/ops/JobsRest.html#terminalAccess()" class="member-name-link">terminalAccess()</a> - Method in class org.apache.juneau.petstore.console.ops.<a href="org/apache/juneau/petstore/console/ops/JobsRest.html" title="class in org.apache.juneau.petstore.console.ops">JobsRest</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/terminal/region/TerminalMixin.html#terminalAccess()" class="member-name-link">terminalAccess()</a> - Method in interface org.apache.juneau.terminal.region.<a href="org/apache/juneau/terminal/region/TerminalMixin.html" title="interface in org.apache.juneau.terminal.region">TerminalMixin</a></dt>
 <dd>
 <div class="block">The access rules applied to the bytes and raw endpoints before the source is resolved.</div>
@@ -119911,6 +120237,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/terminal/region/TerminalMixin.html#terminalStylesheet()" class="member-name-link">terminalStylesheet()</a> - Method in interface org.apache.juneau.terminal.region.<a href="org/apache/juneau/terminal/region/TerminalMixin.html" title="interface in org.apache.juneau.terminal.region">TerminalMixin</a></dt>
 <dd>
 <div class="block">[GET /juneau-terminal.css] &mdash; the terminal stylesheet.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/TerminalViewMixin.html#terminalViewAccess()" class="member-name-link">terminalViewAccess()</a> - Method in interface org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/TerminalViewMixin.html" title="interface in org.apache.juneau.console.views">TerminalViewMixin</a></dt>
+<dd>
+<div class="block">The access rules applied to the events endpoint before the source is resolved.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/TerminalViewAccess.html" class="type-name-link" title="interface in org.apache.juneau.console.views">TerminalViewAccess</a> - Interface in <a href="org/apache/juneau/console/views/package-summary.html">org.apache.juneau.console.views</a></dt>
+<dd>
+<div class="block">The app's answer to "who may read this run's events".</div>
 </dd>
 <dt><a href="org/apache/juneau/terminal/report/TerminalViewChecks.html" class="type-name-link" title="class in org.apache.juneau.terminal.report">TerminalViewChecks</a> - Class in <a href="org/apache/juneau/terminal/report/package-summary.html">org.apache.juneau.terminal.report</a></dt>
 <dd>
@@ -120249,6 +120583,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Content-Type for <code>text/yaml</code> (Juneau <code>YamlParser</code> alias).</div>
 </dd>
+<dt><a href="org/apache/juneau/bean/atom/Text.TextInterceptor.html" class="type-name-link" title="class in org.apache.juneau.bean.atom">Text.TextInterceptor</a> - Class in <a href="org/apache/juneau/bean/atom/package-summary.html">org.apache.juneau.bean.atom</a></dt>
+<dd>
+<div class="block">Escapes the text property on output for every type other than <js>"xhtml"</js>.</div>
+</dd>
 <dt><a href="org/apache/juneau/bean/html5/HtmlBuilder.html#textarea()" class="member-name-link">textarea()</a> - Static method in class org.apache.juneau.bean.html5.<a href="org/apache/juneau/bean/html5/HtmlBuilder.html" title="class in org.apache.juneau.bean.html5">HtmlBuilder</a></dt>
 <dd>
 <div class="block">Creates an empty <a href="org/apache/juneau/bean/html5/Textarea.html" title="class in org.apache.juneau.bean.html5"><code>Textarea</code></a> element.</div>
@@ -120283,6 +120621,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/bean/mcp/v20250618/TextContent.html#%3Cinit%3E()" class="member-name-link">TextContent()</a> - Constructor for class org.apache.juneau.bean.mcp.v20250618.<a href="org/apache/juneau/bean/mcp/v20250618/TextContent.html" title="class in org.apache.juneau.bean.mcp.v20250618">TextContent</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/bean/mcp/v20260728/TextContent.html#%3Cinit%3E()" class="member-name-link">TextContent()</a> - Constructor for class org.apache.juneau.bean.mcp.v20260728.<a href="org/apache/juneau/bean/mcp/v20260728/TextContent.html" title="class in org.apache.juneau.bean.mcp.v20260728">TextContent</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/bean/atom/Text.TextInterceptor.html#%3Cinit%3E()" class="member-name-link">TextInterceptor()</a> - Constructor for class org.apache.juneau.bean.atom.<a href="org/apache/juneau/bean/atom/Text.TextInterceptor.html" title="class in org.apache.juneau.bean.atom">Text.TextInterceptor</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/marshall/xml/XmlSerializer.Builder.html#textNodeDelimiter(java.lang.String)" class="member-name-link">textNodeDelimiter(String)</a> - Method in class org.apache.juneau.marshall.xml.<a href="org/apache/juneau/marshall/xml/XmlSerializer.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlSerializer.Builder</a></dt>
 <dd>
@@ -125612,6 +125952,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Believes the forwarded headers only from peers in these address ranges.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/server/mcp/McpServerConfig.html#trustProxy(boolean)" class="member-name-link">trustProxy(boolean)</a> - Method in class org.apache.juneau.rest.server.mcp.<a href="org/apache/juneau/rest/server/mcp/McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></dt>
+<dd>
+<div class="block">Admits loopback callers even when the request carries <c>Forwarded</c>, <c>X-Forwarded-For</c> or <c>X-Forwarded-Host</c> headers.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/guard/RateLimitGuard.Storage.html#tryAcquire(java.lang.String,int,double)" class="member-name-link">tryAcquire(String, int, double)</a> - Method in interface org.apache.juneau.rest.server.guard.<a href="org/apache/juneau/rest/server/guard/RateLimitGuard.Storage.html" title="interface in org.apache.juneau.rest.server.guard">RateLimitGuard.Storage</a></dt>
 <dd>
 <div class="block">Attempts to acquire one token from the bucket associated with the given key.</div>
@@ -129781,6 +130125,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Validates an ID token and projects the verified claims onto a <a href="org/apache/juneau/rest/server/auth/ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a>.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#validate(java.lang.String,java.lang.String)" class="member-name-link">validate(String, String)</a> - Method in class org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator</a></dt>
+<dd>
+<div class="block">Validates the supplied SAML 2.0 <code>&lt;samlp:Response&gt;</code> XML for a response that arrived from a specific browser.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.html#validate(java.lang.String,java.util.Map)" class="member-name-link">validate(String, Map&lt;String, ?&gt;)</a> - Static method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef</a></dt>
 <dd>
 <div class="block">Validates a switcher body: the shape the builder emits and the page-contract JSON carries.</div>
@@ -133414,6 +133762,11 @@ the order they are declared.</div>
 <dd>
 <div class="block">Sets the link of a <c>note</c> event.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html#withLoopbackExempt()" class="member-name-link">withLoopbackExempt()</a> - Method in class org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthHttpPolicy</a></dt>
+<dd>
+<div class="block">Returns a copy of this policy that always accepts literal loopback hosts (<c>localhost</c>, <c>127.0.0.1</c>,
+ <c>[::1]</c>) over either scheme, without resolving them.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/freemarker/Annotations.html#withMax()" class="member-name-link">withMax()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/Annotations.html" title="class in org.apache.juneau.console.freemarker">Annotations</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/freemarker/Annotations.html#withMin()" class="member-name-link">withMin()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/Annotations.html" title="class in org.apache.juneau.console.freemarker">Annotations</a></dt>
@@ -133441,6 +133794,10 @@ the order they are declared.</div>
 <dt><a href="org/apache/juneau/terminal/report/TerminalEvent.html#withRawOffset(long)" class="member-name-link">withRawOffset(long)</a> - Method in class org.apache.juneau.terminal.report.<a href="org/apache/juneau/terminal/report/TerminalEvent.html" title="class in org.apache.juneau.terminal.report">TerminalEvent</a></dt>
 <dd>
 <div class="block">Sets the raw byte offset of a <c>step</c>, <c>suite</c> or <c>test</c> event.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html#withResolver(org.apache.juneau.http.remote.RemoteUrlPolicy.AddressResolver)" class="member-name-link">withResolver(RemoteUrlPolicy.AddressResolver)</a> - Method in class org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthHttpPolicy</a></dt>
+<dd>
+<div class="block">Returns a copy of this policy that resolves host names with the given resolver.</div>
 </dd>
 <dt><a href="org/apache/juneau/terminal/report/TerminalEvent.html#withSeq(long)" class="member-name-link">withSeq(long)</a> - Method in class org.apache.juneau.terminal.report.<a href="org/apache/juneau/terminal/report/TerminalEvent.html" title="class in org.apache.juneau.terminal.report">TerminalEvent</a></dt>
 <dd>
@@ -133550,6 +133907,10 @@ the order they are declared.</div>
 <dt><a href="org/apache/juneau/rest/server/processor/MdcAsyncListener.html#wrap(java.util.function.BiConsumer,java.util.Map)" class="member-name-link">wrap(BiConsumer&lt;T, Throwable&gt;, Map&lt;String, String&gt;)</a> - Static method in class org.apache.juneau.rest.server.processor.<a href="org/apache/juneau/rest/server/processor/MdcAsyncListener.html" title="class in org.apache.juneau.rest.server.processor">MdcAsyncListener</a></dt>
 <dd>
 <div class="block">Wraps a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link"><code>BiConsumer</code></a> (typically a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html#whenComplete(java.util.function.BiConsumer)" title="class or interface in java.util.concurrent" class="external-link"><code>whenComplete</code></a> callback) so the completion thread sees the request thread's MDC context.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html#wrap(java.util.function.Consumer)" class="member-name-link">wrap(Consumer&lt;HTTPRequest&gt;)</a> - Method in class org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/OAuthHttpPolicy.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthHttpPolicy</a></dt>
+<dd>
+<div class="block">Returns a configurator that runs the given one (if any) and then applies this policy to the request.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#wrap(java.util.function.UnaryOperator)" class="member-name-link">wrap(UnaryOperator&lt;T&gt;)</a> - Method in class org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a></dt>
 <dd>

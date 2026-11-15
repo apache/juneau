@@ -76,7 +76,22 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	@Test <strong class="jxr_keyword">void</strong> a32_compose_join_split() {
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertEquals(<span class="jxr_string">"X-Y-Z"</span>, vr.resolve(<span class="jxr_string">"#{join('-', 'X', 'Y', 'Z')}"</span>));
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	@Test <strong class="jxr_keyword">void</strong> z01_pathToken_dropsTraversal() {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertEquals(<span class="jxr_string">"a/b"</span>, vr.resolve(<span class="jxr_string">"#{pathToken('../a/./b')}"</span>));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertEquals(<span class="jxr_string">"WEB-INF/web.xml"</span>, vr.resolve(<span class="jxr_string">"#{pathToken('../WEB-INF/web.xml')}"</span>));
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertEquals(<span class="jxr_string">"a/b"</span>, vr.resolve(<span class="jxr_string">"#{pathToken('a&#92;&#92;&#92;&#92;..&#92;&#92;&#92;&#92;b')}"</span>));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(<span class="jxr_string">""</span>, vr.resolve(<span class="jxr_string">"#{pathToken('..')}"</span>));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Test <strong class="jxr_keyword">void</strong> z02_format_hugeWidthRejected() {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; vr.resolve(<span class="jxr_string">"#{format('%2000000000s', 'x')}"</span>));
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Test <strong class="jxr_keyword">void</strong> z03_format_hugePrecisionRejected() {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; vr.resolve(<span class="jxr_string">"#{format('%.999999999f', 1.5)}"</span>));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

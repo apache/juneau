@@ -244,158 +244,163 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">return</strong> worker.applyTemplateSuffix(name);
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 	}
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 * Resolves the active {@link MustacheFactory} via the shared {@link MustacheDispatcher} worker.</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 * @param req The current REST request.</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * @return The active Mustache factory. Never {@code null}.</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<strong class="jxr_keyword">public</strong> MustacheFactory resolveMustacheFactory(RestRequest req) {
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">return</strong> worker.resolveMustacheFactory(req);
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	}
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 * [GET /mustache/*] &amp;mdash; render a raw template through the Mustache engine.</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 * The {@code @Path("/*") String path} captures the multi-segment trailing remainder (e.g. a</em>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * request for {@code /mustache/about.mustache} matches the mount with</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 * {@code path = "about.mustache"}). Delegates to the shared {@link MustacheDispatcher} worker</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 * (path-traversal hardening, suffix application, factory resolution, and render).</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * Missing template surfaces as the engine's own {@link MustacheNotFoundException}</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 * (HTTP 500 from the renderer's catch-all); missing engine surfaces as</em>
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 * {@link MustacheViewRenderer#NO_ENGINE_DIAGNOSTIC}.</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<em class="jxr_comment">// The extension of the templates served: the configured suffix, or ".mustache" when none is set.</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	String servedExtension() {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">return</strong> worker.servedExtension();
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	}
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * Resolves the active {@link MustacheFactory} via the shared {@link MustacheDispatcher} worker.</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * @param req The current REST request.</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * @return The active Mustache factory. Never {@code null}.</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<strong class="jxr_keyword">public</strong> MustacheFactory resolveMustacheFactory(RestRequest req) {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">return</strong> worker.resolveMustacheFactory(req);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	}
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 * [GET /mustache/*] &amp;mdash; render a raw template through the Mustache engine.</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 * The {@code @Path("/*") String path} captures the multi-segment trailing remainder (e.g. a</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * request for {@code /mustache/about.mustache} matches the mount with</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 * {@code path = "about.mustache"}). Delegates to the shared {@link MustacheDispatcher} worker</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 * (path-traversal hardening, suffix application, factory resolution, and render).</em>
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * @param path The trailing path segment after {@code /mustache/} (the template name relative</em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * 	to the configured {@link #getBasePath() base path}; configured suffix appended if</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * 	missing).</em>
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 * @param req The current REST request.</em>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * @param res The current REST response.</em>
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * @throws IOException If the underlying response writer fails.</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * @throws BasicHttpException On boundary violation (403), missing engine (500), or render</em>
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * 	failure (500).</em>
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	@RestGet(
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		path=<span class="jxr_string">"/${juneau.mustache.path:mustache}/*"</span>,
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		summary=<span class="jxr_string">"Mustache view"</span>,
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		description=<span class="jxr_string">"Render a raw Mustache template under the configured base path."</span>,
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		swagger=@OpSwagger(ignore=<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	)
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> render(@Path(<span class="jxr_string">"/*"</span>) String path, RestRequest req, RestResponse res)
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<strong class="jxr_keyword">throws</strong> IOException, BasicHttpException {
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		worker.render(path, req, res);
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	}
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 * Builder for {@link MustacheMixin}.</em>
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 * Mirrors {@link MustacheDispatcher.Builder}'s configuration methods on its own surface and</em>
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 * forwards each call into a held {@link MustacheDispatcher.Builder} (worker-bean</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * composition). Implements {@link ViewMixinBuilder} so {@link #basePath(String)} and</em>
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * {@link #cacheTemplates(boolean)} are guaranteed to transfer to the sibling JSP / Thymeleaf /</em>
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 * FreeMarker bridge builders.</em>
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">implements</strong> ViewMixinBuilder&lt;Builder&gt; {
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> MustacheDispatcher.Builder worker = MustacheDispatcher.create();
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<em class="jxr_javadoccomment">/** Constructor &amp;mdash; package access for {@link MustacheMixin#create()}. */</em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">protected</strong> Builder() {}
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * Missing template surfaces as the engine's own {@link MustacheNotFoundException}</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * (HTTP 500 from the renderer's catch-all); missing engine surfaces as</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 * {@link MustacheViewRenderer#NO_ENGINE_DIAGNOSTIC}.</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * @param path The trailing path segment after {@code /mustache/} (the template name relative</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * 	to the configured {@link #getBasePath() base path}; configured suffix appended if</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * 	missing).</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 * @param req The current REST request.</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 * @param res The current REST response.</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * @throws IOException If the underlying response writer fails.</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * @throws BasicHttpException On boundary violation (403), missing engine (500), or render</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 * 	failure (500).</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	@RestGet(
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		path=<span class="jxr_string">"/${juneau.mustache.path:mustache}/*"</span>,
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		summary=<span class="jxr_string">"Mustache view"</span>,
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		description=<span class="jxr_string">"Render a raw Mustache template under the configured base path."</span>,
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		swagger=@OpSwagger(ignore=<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	)
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> render(@Path(<span class="jxr_string">"/*"</span>) String path, RestRequest req, RestResponse res)
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			<strong class="jxr_keyword">throws</strong> IOException, BasicHttpException {
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		worker.render(path, req, res);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	}
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * Builder for {@link MustacheMixin}.</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * Mirrors {@link MustacheDispatcher.Builder}'s configuration methods on its own surface and</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * forwards each call into a held {@link MustacheDispatcher.Builder} (worker-bean</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * composition). Implements {@link ViewMixinBuilder} so {@link #basePath(String)} and</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * {@link #cacheTemplates(boolean)} are guaranteed to transfer to the sibling JSP / Thymeleaf /</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * FreeMarker bridge builders.</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">implements</strong> ViewMixinBuilder&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">		 * Sets the classpath base path under which template resources are resolved.</em>
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">		 * Defaults to {@link MustacheMixin#DEFAULT_BASE_PATH "/templates/"}. A typical configured</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">		 * value is {@code "/templates/"} &amp;mdash; the same Spring-Boot-compatible layout</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">		 * convention the sibling JSP / Thymeleaf bridges use.</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> MustacheDispatcher.Builder worker = MustacheDispatcher.create();
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<em class="jxr_javadoccomment">/** Constructor &amp;mdash; package access for {@link MustacheMixin#create()}. */</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">protected</strong> Builder() {}
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">		 * Sets the classpath base path under which template resources are resolved.</em>
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">		 * @param value The base path. {@code null} or blank values reset to the default</em>
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">		 * 	{@link MustacheMixin#DEFAULT_BASE_PATH}.</em>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		@Override <em class="jxr_comment">/* ViewMixinBuilder */</em>
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">public</strong> Builder basePath(String value) {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			worker.basePath(value);
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		}
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">		 * Sets the suffix to append to template names that don't already end with it (idempotent).</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">		 * Defaults to {@link MustacheMixin#DEFAULT_TEMPLATE_SUFFIX ""} (no implicit</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">		 * suffix &amp;mdash; literal template names). Typical configured value is</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">		 * {@code ".mustache"}, the mustache.java convention.</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">		 * Defaults to {@link MustacheMixin#DEFAULT_BASE_PATH "/templates/"}. A typical configured</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">		 * value is {@code "/templates/"} &amp;mdash; the same Spring-Boot-compatible layout</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">		 * convention the sibling JSP / Thymeleaf bridges use.</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">		 * @param value The base path. {@code null} or blank values reset to the default</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">		 * 	{@link MustacheMixin#DEFAULT_BASE_PATH}.</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		@Override <em class="jxr_comment">/* ViewMixinBuilder */</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">public</strong> Builder basePath(String value) {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			worker.basePath(value);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		}
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">		 * Sets the suffix to append to template names that don't already end with it (idempotent).</em>
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">		 * @param value The new suffix. {@code null} resets to</em>
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">		 * 	{@link MustacheMixin#DEFAULT_TEMPLATE_SUFFIX}.</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">public</strong> Builder templateSuffix(String value) {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			worker.templateSuffix(value);
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		}
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">		 * Sets whether the bridge's default factory caches compiled templates.</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">		 * Defaults to {@link MustacheMixin#DEFAULT_CACHE_TEMPLATES true} (cache forever</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">		 * &amp;mdash; production-safe). Set {@code false} to enable dev hot-reload (the bridge rebuilds</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">		 * the factory from a fresh, empty compile-cache on every render). This setting only</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">		 * applies to the bridge's fallback factory; if a {@link MustacheFactory} bean is</em>
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">		 * registered, its own caching behavior is honored.</em>
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">		 * @param value The new value.</em>
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		@Override <em class="jxr_comment">/* ViewMixinBuilder */</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">public</strong> Builder cacheTemplates(<strong class="jxr_keyword">boolean</strong> value) {
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			worker.cacheTemplates(value);
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		}
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">		 * Reads the current base path setting (test/inspection helper).</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">		 * @return The base path. Never {@code null}.</em>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">public</strong> String getBasePath() {
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			<strong class="jxr_keyword">return</strong> worker.getBasePath();
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		}
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">		 * Reads the current template-suffix setting (test/inspection helper).</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">		 * @return The template suffix. Never {@code null}.</em>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">public</strong> String getTemplateSuffix() {
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			<strong class="jxr_keyword">return</strong> worker.getTemplateSuffix();
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		}
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">		 * Reads the current cache-templates setting (test/inspection helper).</em>
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">		 * @return The cache flag.</em>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isCacheTemplates() {
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			<strong class="jxr_keyword">return</strong> worker.isCacheTemplates();
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		}
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">		 * Builds the {@link MustacheMixin}.</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">		 * @return A new {@link MustacheMixin} instance.</em>
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">public</strong> MustacheMixin build() {
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MustacheMixin(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		}
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	}
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> }
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">		 * Defaults to {@link MustacheMixin#DEFAULT_TEMPLATE_SUFFIX ""} (no implicit</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">		 * suffix &amp;mdash; literal template names). Typical configured value is</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">		 * {@code ".mustache"}, the mustache.java convention.</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">		 * @param value The new suffix. {@code null} resets to</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">		 * 	{@link MustacheMixin#DEFAULT_TEMPLATE_SUFFIX}.</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">public</strong> Builder templateSuffix(String value) {
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			worker.templateSuffix(value);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		}
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">		 * Sets whether the bridge's default factory caches compiled templates.</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">		 * Defaults to {@link MustacheMixin#DEFAULT_CACHE_TEMPLATES true} (cache forever</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">		 * &amp;mdash; production-safe). Set {@code false} to enable dev hot-reload (the bridge rebuilds</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">		 * the factory from a fresh, empty compile-cache on every render). This setting only</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">		 * applies to the bridge's fallback factory; if a {@link MustacheFactory} bean is</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">		 * registered, its own caching behavior is honored.</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">		 * @param value The new value.</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		@Override <em class="jxr_comment">/* ViewMixinBuilder */</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">public</strong> Builder cacheTemplates(<strong class="jxr_keyword">boolean</strong> value) {
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			worker.cacheTemplates(value);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		}
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">		 * Reads the current base path setting (test/inspection helper).</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">		 * @return The base path. Never {@code null}.</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">public</strong> String getBasePath() {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			<strong class="jxr_keyword">return</strong> worker.getBasePath();
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		}
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">		 * Reads the current template-suffix setting (test/inspection helper).</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">		 * @return The template suffix. Never {@code null}.</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">public</strong> String getTemplateSuffix() {
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			<strong class="jxr_keyword">return</strong> worker.getTemplateSuffix();
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		}
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">		 * Reads the current cache-templates setting (test/inspection helper).</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">		 * @return The cache flag.</em>
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isCacheTemplates() {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">return</strong> worker.isCacheTemplates();
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		}
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">		 * Builds the {@link MustacheMixin}.</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">		 * @return A new {@link MustacheMixin} instance.</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<strong class="jxr_keyword">public</strong> MustacheMixin build() {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MustacheMixin(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		}
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

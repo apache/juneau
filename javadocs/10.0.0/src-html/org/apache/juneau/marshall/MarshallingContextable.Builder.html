@@ -3065,225 +3065,238 @@
 <span class="source-line-no">3052</span><span id="line-3052">      }</span>
 <span class="source-line-no">3053</span><span id="line-3053"></span>
 <span class="source-line-no">3054</span><span id="line-3054">      /**</span>
-<span class="source-line-no">3055</span><span id="line-3055">       * An identifying name for this class.</span>
+<span class="source-line-no">3055</span><span id="line-3055">       * Class-name guard.</span>
 <span class="source-line-no">3056</span><span id="line-3056">       *</span>
-<span class="source-line-no">3057</span><span id="line-3057">       * &lt;p&gt;</span>
-<span class="source-line-no">3058</span><span id="line-3058">       * The name is used to identify the class type during parsing when it cannot be inferred through reflection.</span>
-<span class="source-line-no">3059</span><span id="line-3059">       * For example, if a bean property is of type &lt;c&gt;Object&lt;/c&gt;, then the serializer will add the name to the</span>
-<span class="source-line-no">3060</span><span id="line-3060">       * output so that the class can be determined during parsing.</span>
-<span class="source-line-no">3061</span><span id="line-3061">       *</span>
-<span class="source-line-no">3062</span><span id="line-3062">       * &lt;p&gt;</span>
-<span class="source-line-no">3063</span><span id="line-3063">       * It is also used to specify element names in XML.</span>
-<span class="source-line-no">3064</span><span id="line-3064">       *</span>
-<span class="source-line-no">3065</span><span id="line-3065">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
-<span class="source-line-no">3066</span><span id="line-3066">       * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">3067</span><span id="line-3067">       *    &lt;jc&gt;// Use _type='mybean' to identify this bean.&lt;/jc&gt;</span>
-<span class="source-line-no">3068</span><span id="line-3068">       *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {...}</span>
+<span class="source-line-no">3057</span><span id="line-3057">       * @see MarshallingContext.Builder#classNameGuard(Predicate)</span>
+<span class="source-line-no">3058</span><span id="line-3058">       * @param value The guard returning &lt;jk&gt;true&lt;/jk&gt; for permitted class names.</span>
+<span class="source-line-no">3059</span><span id="line-3059">       *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (all names allowed, the default).</span>
+<span class="source-line-no">3060</span><span id="line-3060">       * @return This object.</span>
+<span class="source-line-no">3061</span><span id="line-3061">       */</span>
+<span class="source-line-no">3062</span><span id="line-3062">      public SELF classNameGuard(Predicate&lt;String&gt; value) {</span>
+<span class="source-line-no">3063</span><span id="line-3063">         bcBuilder.classNameGuard(value);</span>
+<span class="source-line-no">3064</span><span id="line-3064">         return self();</span>
+<span class="source-line-no">3065</span><span id="line-3065">      }</span>
+<span class="source-line-no">3066</span><span id="line-3066"></span>
+<span class="source-line-no">3067</span><span id="line-3067">      /**</span>
+<span class="source-line-no">3068</span><span id="line-3068">       * An identifying name for this class.</span>
 <span class="source-line-no">3069</span><span id="line-3069">       *</span>
-<span class="source-line-no">3070</span><span id="line-3070">       *    &lt;jc&gt;// Create a serializer and specify the type name..&lt;/jc&gt;</span>
-<span class="source-line-no">3071</span><span id="line-3071">       *    WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</span>
-<span class="source-line-no">3072</span><span id="line-3072">       *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
-<span class="source-line-no">3073</span><span id="line-3073">       *       .typeName(MyBean.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"mybean"&lt;/js&gt;)</span>
-<span class="source-line-no">3074</span><span id="line-3074">       *       .build();</span>
-<span class="source-line-no">3075</span><span id="line-3075">       *</span>
-<span class="source-line-no">3076</span><span id="line-3076">       *    &lt;jc&gt;// Produces:  {"_type":"mybean",...}&lt;/jc&gt;</span>
-<span class="source-line-no">3077</span><span id="line-3077">       *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
-<span class="source-line-no">3078</span><span id="line-3078">       * &lt;/p&gt;</span>
-<span class="source-line-no">3079</span><span id="line-3079">       *</span>
-<span class="source-line-no">3080</span><span id="line-3080">       * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
-<span class="source-line-no">3081</span><span id="line-3081">       *    &lt;li class='note'&gt;Equivalent to the {@link Marshalled#typeName() @Marshalled(typeName)} annotation.</span>
-<span class="source-line-no">3082</span><span id="line-3082">       * &lt;/ul&gt;</span>
-<span class="source-line-no">3083</span><span id="line-3083">       *</span>
-<span class="source-line-no">3084</span><span id="line-3084">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
-<span class="source-line-no">3085</span><span id="line-3085">       *    &lt;li class='jc'&gt;{@link Marshalled#typeName() @Marshalled(typeName)}</span>
-<span class="source-line-no">3086</span><span id="line-3086">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanDictionary(Class...)}</span>
-<span class="source-line-no">3087</span><span id="line-3087">       * &lt;/ul&gt;</span>
+<span class="source-line-no">3070</span><span id="line-3070">       * &lt;p&gt;</span>
+<span class="source-line-no">3071</span><span id="line-3071">       * The name is used to identify the class type during parsing when it cannot be inferred through reflection.</span>
+<span class="source-line-no">3072</span><span id="line-3072">       * For example, if a bean property is of type &lt;c&gt;Object&lt;/c&gt;, then the serializer will add the name to the</span>
+<span class="source-line-no">3073</span><span id="line-3073">       * output so that the class can be determined during parsing.</span>
+<span class="source-line-no">3074</span><span id="line-3074">       *</span>
+<span class="source-line-no">3075</span><span id="line-3075">       * &lt;p&gt;</span>
+<span class="source-line-no">3076</span><span id="line-3076">       * It is also used to specify element names in XML.</span>
+<span class="source-line-no">3077</span><span id="line-3077">       *</span>
+<span class="source-line-no">3078</span><span id="line-3078">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
+<span class="source-line-no">3079</span><span id="line-3079">       * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">3080</span><span id="line-3080">       *    &lt;jc&gt;// Use _type='mybean' to identify this bean.&lt;/jc&gt;</span>
+<span class="source-line-no">3081</span><span id="line-3081">       *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {...}</span>
+<span class="source-line-no">3082</span><span id="line-3082">       *</span>
+<span class="source-line-no">3083</span><span id="line-3083">       *    &lt;jc&gt;// Create a serializer and specify the type name..&lt;/jc&gt;</span>
+<span class="source-line-no">3084</span><span id="line-3084">       *    WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</span>
+<span class="source-line-no">3085</span><span id="line-3085">       *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
+<span class="source-line-no">3086</span><span id="line-3086">       *       .typeName(MyBean.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"mybean"&lt;/js&gt;)</span>
+<span class="source-line-no">3087</span><span id="line-3087">       *       .build();</span>
 <span class="source-line-no">3088</span><span id="line-3088">       *</span>
-<span class="source-line-no">3089</span><span id="line-3089">       * @param on</span>
-<span class="source-line-no">3090</span><span id="line-3090">       *    The class the type name is being defined on.</span>
-<span class="source-line-no">3091</span><span id="line-3091">       * @param value</span>
-<span class="source-line-no">3092</span><span id="line-3092">       *    The new value for this setting.</span>
-<span class="source-line-no">3093</span><span id="line-3093">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">3094</span><span id="line-3094">       * @return This object.</span>
-<span class="source-line-no">3095</span><span id="line-3095">       */</span>
-<span class="source-line-no">3096</span><span id="line-3096">      public SELF typeName(Class&lt;?&gt; on, String value) {</span>
-<span class="source-line-no">3097</span><span id="line-3097">         bcBuilder.typeName(on, reqnn("value", value));</span>
-<span class="source-line-no">3098</span><span id="line-3098">         return self();</span>
-<span class="source-line-no">3099</span><span id="line-3099">      }</span>
-<span class="source-line-no">3100</span><span id="line-3100"></span>
-<span class="source-line-no">3101</span><span id="line-3101">      /**</span>
-<span class="source-line-no">3102</span><span id="line-3102">       * Bean type property name.</span>
-<span class="source-line-no">3103</span><span id="line-3103">       *</span>
-<span class="source-line-no">3104</span><span id="line-3104">       * &lt;p&gt;</span>
-<span class="source-line-no">3105</span><span id="line-3105">       * Same as {@link #typePropertyName(String)} except targets a specific bean class instead of globally.</span>
-<span class="source-line-no">3106</span><span id="line-3106">       *</span>
-<span class="source-line-no">3107</span><span id="line-3107">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
-<span class="source-line-no">3108</span><span id="line-3108">       * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">3109</span><span id="line-3109">       *    &lt;jc&gt;// POJOs with @Marshalled(name) annotations.&lt;/jc&gt;</span>
-<span class="source-line-no">3110</span><span id="line-3110">       *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"foo"&lt;/js&gt;)</span>
-<span class="source-line-no">3111</span><span id="line-3111">       *    &lt;jk&gt;public class&lt;/jk&gt; Foo {...}</span>
-<span class="source-line-no">3112</span><span id="line-3112">       *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"bar"&lt;/js&gt;)</span>
-<span class="source-line-no">3113</span><span id="line-3113">       *    &lt;jk&gt;public class&lt;/jk&gt; Bar {...}</span>
-<span class="source-line-no">3114</span><span id="line-3114">       *</span>
-<span class="source-line-no">3115</span><span id="line-3115">       *    &lt;jc&gt;// A bean with a field with an indeterminate type.&lt;/jc&gt;</span>
-<span class="source-line-no">3116</span><span id="line-3116">       *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {</span>
-<span class="source-line-no">3117</span><span id="line-3117">       *       &lt;jk&gt;public&lt;/jk&gt; Object &lt;jf&gt;mySimpleField&lt;/jf&gt;;</span>
-<span class="source-line-no">3118</span><span id="line-3118">       *    }</span>
+<span class="source-line-no">3089</span><span id="line-3089">       *    &lt;jc&gt;// Produces:  {"_type":"mybean",...}&lt;/jc&gt;</span>
+<span class="source-line-no">3090</span><span id="line-3090">       *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">3091</span><span id="line-3091">       * &lt;/p&gt;</span>
+<span class="source-line-no">3092</span><span id="line-3092">       *</span>
+<span class="source-line-no">3093</span><span id="line-3093">       * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
+<span class="source-line-no">3094</span><span id="line-3094">       *    &lt;li class='note'&gt;Equivalent to the {@link Marshalled#typeName() @Marshalled(typeName)} annotation.</span>
+<span class="source-line-no">3095</span><span id="line-3095">       * &lt;/ul&gt;</span>
+<span class="source-line-no">3096</span><span id="line-3096">       *</span>
+<span class="source-line-no">3097</span><span id="line-3097">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
+<span class="source-line-no">3098</span><span id="line-3098">       *    &lt;li class='jc'&gt;{@link Marshalled#typeName() @Marshalled(typeName)}</span>
+<span class="source-line-no">3099</span><span id="line-3099">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanDictionary(Class...)}</span>
+<span class="source-line-no">3100</span><span id="line-3100">       * &lt;/ul&gt;</span>
+<span class="source-line-no">3101</span><span id="line-3101">       *</span>
+<span class="source-line-no">3102</span><span id="line-3102">       * @param on</span>
+<span class="source-line-no">3103</span><span id="line-3103">       *    The class the type name is being defined on.</span>
+<span class="source-line-no">3104</span><span id="line-3104">       * @param value</span>
+<span class="source-line-no">3105</span><span id="line-3105">       *    The new value for this setting.</span>
+<span class="source-line-no">3106</span><span id="line-3106">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">3107</span><span id="line-3107">       * @return This object.</span>
+<span class="source-line-no">3108</span><span id="line-3108">       */</span>
+<span class="source-line-no">3109</span><span id="line-3109">      public SELF typeName(Class&lt;?&gt; on, String value) {</span>
+<span class="source-line-no">3110</span><span id="line-3110">         bcBuilder.typeName(on, reqnn("value", value));</span>
+<span class="source-line-no">3111</span><span id="line-3111">         return self();</span>
+<span class="source-line-no">3112</span><span id="line-3112">      }</span>
+<span class="source-line-no">3113</span><span id="line-3113"></span>
+<span class="source-line-no">3114</span><span id="line-3114">      /**</span>
+<span class="source-line-no">3115</span><span id="line-3115">       * Bean type property name.</span>
+<span class="source-line-no">3116</span><span id="line-3116">       *</span>
+<span class="source-line-no">3117</span><span id="line-3117">       * &lt;p&gt;</span>
+<span class="source-line-no">3118</span><span id="line-3118">       * Same as {@link #typePropertyName(String)} except targets a specific bean class instead of globally.</span>
 <span class="source-line-no">3119</span><span id="line-3119">       *</span>
-<span class="source-line-no">3120</span><span id="line-3120">       *    &lt;jc&gt;// Create a serializer that uses 't' instead of '_type' for dictionary names.&lt;/jc&gt;</span>
-<span class="source-line-no">3121</span><span id="line-3121">       *    WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</span>
-<span class="source-line-no">3122</span><span id="line-3122">       *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
-<span class="source-line-no">3123</span><span id="line-3123">       *       .typePropertyName(MyBean.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"t"&lt;/js&gt;)</span>
-<span class="source-line-no">3124</span><span id="line-3124">       *       .dictionary(Foo.&lt;jk&gt;class&lt;/jk&gt;, Bar.&lt;jk&gt;class&lt;/jk&gt;)</span>
-<span class="source-line-no">3125</span><span id="line-3125">       *       .build();</span>
-<span class="source-line-no">3126</span><span id="line-3126">       *</span>
-<span class="source-line-no">3127</span><span id="line-3127">       *    &lt;jc&gt;// Produces "{mySimpleField:{t:'foo',...}}".&lt;/jc&gt;</span>
-<span class="source-line-no">3128</span><span id="line-3128">       *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
-<span class="source-line-no">3129</span><span id="line-3129">       * &lt;/p&gt;</span>
-<span class="source-line-no">3130</span><span id="line-3130">       *</span>
-<span class="source-line-no">3131</span><span id="line-3131">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
-<span class="source-line-no">3132</span><span id="line-3132">       *    &lt;li class='ja'&gt;{@link Marshalled#typePropertyName() @Marshalled(typePropertyName)}</span>
-<span class="source-line-no">3133</span><span id="line-3133">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#typePropertyName(String)}</span>
-<span class="source-line-no">3134</span><span id="line-3134">       * &lt;/ul&gt;</span>
-<span class="source-line-no">3135</span><span id="line-3135">       *</span>
-<span class="source-line-no">3136</span><span id="line-3136">       * @param on The class the type property name applies to.</span>
-<span class="source-line-no">3137</span><span id="line-3137">       * @param value</span>
-<span class="source-line-no">3138</span><span id="line-3138">       *    The new value for this setting.</span>
-<span class="source-line-no">3139</span><span id="line-3139">       *    &lt;br&gt;The default is &lt;js&gt;"_type"&lt;/js&gt;.</span>
-<span class="source-line-no">3140</span><span id="line-3140">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">3141</span><span id="line-3141">       * @return This object.</span>
-<span class="source-line-no">3142</span><span id="line-3142">       */</span>
-<span class="source-line-no">3143</span><span id="line-3143">      public SELF typePropertyName(Class&lt;?&gt; on, String value) {</span>
-<span class="source-line-no">3144</span><span id="line-3144">         bcBuilder.typePropertyName(on, reqnn("value", value));</span>
-<span class="source-line-no">3145</span><span id="line-3145">         return self();</span>
-<span class="source-line-no">3146</span><span id="line-3146">      }</span>
-<span class="source-line-no">3147</span><span id="line-3147"></span>
-<span class="source-line-no">3148</span><span id="line-3148">      /**</span>
-<span class="source-line-no">3149</span><span id="line-3149">       * Bean type property name.</span>
-<span class="source-line-no">3150</span><span id="line-3150">       *</span>
-<span class="source-line-no">3151</span><span id="line-3151">       * &lt;p&gt;</span>
-<span class="source-line-no">3152</span><span id="line-3152">       * This specifies the name of the bean property used to store the dictionary name of a bean type so that the</span>
-<span class="source-line-no">3153</span><span id="line-3153">       * parser knows the data type to reconstruct.</span>
-<span class="source-line-no">3154</span><span id="line-3154">       *</span>
-<span class="source-line-no">3155</span><span id="line-3155">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
-<span class="source-line-no">3156</span><span id="line-3156">       * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">3157</span><span id="line-3157">       *    &lt;jc&gt;// POJOs with @Marshalled(name) annotations.&lt;/jc&gt;</span>
-<span class="source-line-no">3158</span><span id="line-3158">       *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"foo"&lt;/js&gt;)</span>
-<span class="source-line-no">3159</span><span id="line-3159">       *    &lt;jk&gt;public class&lt;/jk&gt; Foo {...}</span>
-<span class="source-line-no">3160</span><span id="line-3160">       *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"bar"&lt;/js&gt;)</span>
-<span class="source-line-no">3161</span><span id="line-3161">       *    &lt;jk&gt;public class&lt;/jk&gt; Bar {...}</span>
-<span class="source-line-no">3162</span><span id="line-3162">       *</span>
-<span class="source-line-no">3163</span><span id="line-3163">       *    &lt;jc&gt;// Create a serializer that uses 't' instead of '_type' for dictionary names.&lt;/jc&gt;</span>
-<span class="source-line-no">3164</span><span id="line-3164">       *    WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</span>
-<span class="source-line-no">3165</span><span id="line-3165">       *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
-<span class="source-line-no">3166</span><span id="line-3166">       *       .typePropertyName(&lt;js&gt;"t"&lt;/js&gt;)</span>
-<span class="source-line-no">3167</span><span id="line-3167">       *       .dictionary(Foo.&lt;jk&gt;class&lt;/jk&gt;, Bar.&lt;jk&gt;class&lt;/jk&gt;)</span>
-<span class="source-line-no">3168</span><span id="line-3168">       *       .build();</span>
-<span class="source-line-no">3169</span><span id="line-3169">       *</span>
-<span class="source-line-no">3170</span><span id="line-3170">       *    &lt;jc&gt;// Create a serializer that uses 't' instead of '_type' for dictionary names.&lt;/jc&gt;</span>
-<span class="source-line-no">3171</span><span id="line-3171">       *    ReaderParser &lt;jv&gt;parser&lt;/jv&gt; = JsonParser</span>
-<span class="source-line-no">3172</span><span id="line-3172">       *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
-<span class="source-line-no">3173</span><span id="line-3173">       *       .typePropertyName(&lt;js&gt;"t"&lt;/js&gt;)</span>
-<span class="source-line-no">3174</span><span id="line-3174">       *       .dictionary(Foo.&lt;jk&gt;class&lt;/jk&gt;, Bar.&lt;jk&gt;class&lt;/jk&gt;)</span>
-<span class="source-line-no">3175</span><span id="line-3175">       *       .build();</span>
-<span class="source-line-no">3176</span><span id="line-3176">       *</span>
-<span class="source-line-no">3177</span><span id="line-3177">       *    &lt;jc&gt;// A bean with a field with an indeterminate type.&lt;/jc&gt;</span>
-<span class="source-line-no">3178</span><span id="line-3178">       *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {</span>
-<span class="source-line-no">3179</span><span id="line-3179">       *       &lt;jk&gt;public&lt;/jk&gt; Object &lt;jf&gt;mySimpleField&lt;/jf&gt;;</span>
-<span class="source-line-no">3180</span><span id="line-3180">       *    }</span>
-<span class="source-line-no">3181</span><span id="line-3181">       *</span>
-<span class="source-line-no">3182</span><span id="line-3182">       *    &lt;jc&gt;// Produces "{mySimpleField:{t:'foo',...}}".&lt;/jc&gt;</span>
-<span class="source-line-no">3183</span><span id="line-3183">       *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
-<span class="source-line-no">3184</span><span id="line-3184">       *</span>
-<span class="source-line-no">3185</span><span id="line-3185">       *    &lt;jc&gt;// Parse bean.&lt;/jc&gt;</span>
-<span class="source-line-no">3186</span><span id="line-3186">       *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;jv&gt;json&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">3187</span><span id="line-3187">       * &lt;/p&gt;</span>
-<span class="source-line-no">3188</span><span id="line-3188">       *</span>
-<span class="source-line-no">3189</span><span id="line-3189">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
-<span class="source-line-no">3190</span><span id="line-3190">       *    &lt;li class='ja'&gt;{@link Marshalled#typePropertyName()}</span>
-<span class="source-line-no">3191</span><span id="line-3191">       *    &lt;li class='ja'&gt;{@link MarshalledConfig#typePropertyName()}</span>
-<span class="source-line-no">3192</span><span id="line-3192">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#typePropertyName(String)}</span>
-<span class="source-line-no">3193</span><span id="line-3193">       * &lt;/ul&gt;</span>
+<span class="source-line-no">3120</span><span id="line-3120">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
+<span class="source-line-no">3121</span><span id="line-3121">       * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">3122</span><span id="line-3122">       *    &lt;jc&gt;// POJOs with @Marshalled(name) annotations.&lt;/jc&gt;</span>
+<span class="source-line-no">3123</span><span id="line-3123">       *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"foo"&lt;/js&gt;)</span>
+<span class="source-line-no">3124</span><span id="line-3124">       *    &lt;jk&gt;public class&lt;/jk&gt; Foo {...}</span>
+<span class="source-line-no">3125</span><span id="line-3125">       *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"bar"&lt;/js&gt;)</span>
+<span class="source-line-no">3126</span><span id="line-3126">       *    &lt;jk&gt;public class&lt;/jk&gt; Bar {...}</span>
+<span class="source-line-no">3127</span><span id="line-3127">       *</span>
+<span class="source-line-no">3128</span><span id="line-3128">       *    &lt;jc&gt;// A bean with a field with an indeterminate type.&lt;/jc&gt;</span>
+<span class="source-line-no">3129</span><span id="line-3129">       *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {</span>
+<span class="source-line-no">3130</span><span id="line-3130">       *       &lt;jk&gt;public&lt;/jk&gt; Object &lt;jf&gt;mySimpleField&lt;/jf&gt;;</span>
+<span class="source-line-no">3131</span><span id="line-3131">       *    }</span>
+<span class="source-line-no">3132</span><span id="line-3132">       *</span>
+<span class="source-line-no">3133</span><span id="line-3133">       *    &lt;jc&gt;// Create a serializer that uses 't' instead of '_type' for dictionary names.&lt;/jc&gt;</span>
+<span class="source-line-no">3134</span><span id="line-3134">       *    WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</span>
+<span class="source-line-no">3135</span><span id="line-3135">       *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
+<span class="source-line-no">3136</span><span id="line-3136">       *       .typePropertyName(MyBean.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"t"&lt;/js&gt;)</span>
+<span class="source-line-no">3137</span><span id="line-3137">       *       .dictionary(Foo.&lt;jk&gt;class&lt;/jk&gt;, Bar.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">3138</span><span id="line-3138">       *       .build();</span>
+<span class="source-line-no">3139</span><span id="line-3139">       *</span>
+<span class="source-line-no">3140</span><span id="line-3140">       *    &lt;jc&gt;// Produces "{mySimpleField:{t:'foo',...}}".&lt;/jc&gt;</span>
+<span class="source-line-no">3141</span><span id="line-3141">       *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">3142</span><span id="line-3142">       * &lt;/p&gt;</span>
+<span class="source-line-no">3143</span><span id="line-3143">       *</span>
+<span class="source-line-no">3144</span><span id="line-3144">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
+<span class="source-line-no">3145</span><span id="line-3145">       *    &lt;li class='ja'&gt;{@link Marshalled#typePropertyName() @Marshalled(typePropertyName)}</span>
+<span class="source-line-no">3146</span><span id="line-3146">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#typePropertyName(String)}</span>
+<span class="source-line-no">3147</span><span id="line-3147">       * &lt;/ul&gt;</span>
+<span class="source-line-no">3148</span><span id="line-3148">       *</span>
+<span class="source-line-no">3149</span><span id="line-3149">       * @param on The class the type property name applies to.</span>
+<span class="source-line-no">3150</span><span id="line-3150">       * @param value</span>
+<span class="source-line-no">3151</span><span id="line-3151">       *    The new value for this setting.</span>
+<span class="source-line-no">3152</span><span id="line-3152">       *    &lt;br&gt;The default is &lt;js&gt;"_type"&lt;/js&gt;.</span>
+<span class="source-line-no">3153</span><span id="line-3153">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">3154</span><span id="line-3154">       * @return This object.</span>
+<span class="source-line-no">3155</span><span id="line-3155">       */</span>
+<span class="source-line-no">3156</span><span id="line-3156">      public SELF typePropertyName(Class&lt;?&gt; on, String value) {</span>
+<span class="source-line-no">3157</span><span id="line-3157">         bcBuilder.typePropertyName(on, reqnn("value", value));</span>
+<span class="source-line-no">3158</span><span id="line-3158">         return self();</span>
+<span class="source-line-no">3159</span><span id="line-3159">      }</span>
+<span class="source-line-no">3160</span><span id="line-3160"></span>
+<span class="source-line-no">3161</span><span id="line-3161">      /**</span>
+<span class="source-line-no">3162</span><span id="line-3162">       * Bean type property name.</span>
+<span class="source-line-no">3163</span><span id="line-3163">       *</span>
+<span class="source-line-no">3164</span><span id="line-3164">       * &lt;p&gt;</span>
+<span class="source-line-no">3165</span><span id="line-3165">       * This specifies the name of the bean property used to store the dictionary name of a bean type so that the</span>
+<span class="source-line-no">3166</span><span id="line-3166">       * parser knows the data type to reconstruct.</span>
+<span class="source-line-no">3167</span><span id="line-3167">       *</span>
+<span class="source-line-no">3168</span><span id="line-3168">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
+<span class="source-line-no">3169</span><span id="line-3169">       * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">3170</span><span id="line-3170">       *    &lt;jc&gt;// POJOs with @Marshalled(name) annotations.&lt;/jc&gt;</span>
+<span class="source-line-no">3171</span><span id="line-3171">       *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"foo"&lt;/js&gt;)</span>
+<span class="source-line-no">3172</span><span id="line-3172">       *    &lt;jk&gt;public class&lt;/jk&gt; Foo {...}</span>
+<span class="source-line-no">3173</span><span id="line-3173">       *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"bar"&lt;/js&gt;)</span>
+<span class="source-line-no">3174</span><span id="line-3174">       *    &lt;jk&gt;public class&lt;/jk&gt; Bar {...}</span>
+<span class="source-line-no">3175</span><span id="line-3175">       *</span>
+<span class="source-line-no">3176</span><span id="line-3176">       *    &lt;jc&gt;// Create a serializer that uses 't' instead of '_type' for dictionary names.&lt;/jc&gt;</span>
+<span class="source-line-no">3177</span><span id="line-3177">       *    WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</span>
+<span class="source-line-no">3178</span><span id="line-3178">       *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
+<span class="source-line-no">3179</span><span id="line-3179">       *       .typePropertyName(&lt;js&gt;"t"&lt;/js&gt;)</span>
+<span class="source-line-no">3180</span><span id="line-3180">       *       .dictionary(Foo.&lt;jk&gt;class&lt;/jk&gt;, Bar.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">3181</span><span id="line-3181">       *       .build();</span>
+<span class="source-line-no">3182</span><span id="line-3182">       *</span>
+<span class="source-line-no">3183</span><span id="line-3183">       *    &lt;jc&gt;// Create a serializer that uses 't' instead of '_type' for dictionary names.&lt;/jc&gt;</span>
+<span class="source-line-no">3184</span><span id="line-3184">       *    ReaderParser &lt;jv&gt;parser&lt;/jv&gt; = JsonParser</span>
+<span class="source-line-no">3185</span><span id="line-3185">       *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
+<span class="source-line-no">3186</span><span id="line-3186">       *       .typePropertyName(&lt;js&gt;"t"&lt;/js&gt;)</span>
+<span class="source-line-no">3187</span><span id="line-3187">       *       .dictionary(Foo.&lt;jk&gt;class&lt;/jk&gt;, Bar.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">3188</span><span id="line-3188">       *       .build();</span>
+<span class="source-line-no">3189</span><span id="line-3189">       *</span>
+<span class="source-line-no">3190</span><span id="line-3190">       *    &lt;jc&gt;// A bean with a field with an indeterminate type.&lt;/jc&gt;</span>
+<span class="source-line-no">3191</span><span id="line-3191">       *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {</span>
+<span class="source-line-no">3192</span><span id="line-3192">       *       &lt;jk&gt;public&lt;/jk&gt; Object &lt;jf&gt;mySimpleField&lt;/jf&gt;;</span>
+<span class="source-line-no">3193</span><span id="line-3193">       *    }</span>
 <span class="source-line-no">3194</span><span id="line-3194">       *</span>
-<span class="source-line-no">3195</span><span id="line-3195">       * @param value</span>
-<span class="source-line-no">3196</span><span id="line-3196">       *    The new value for this setting.</span>
-<span class="source-line-no">3197</span><span id="line-3197">       *    &lt;br&gt;The default is &lt;js&gt;"_type"&lt;/js&gt;.</span>
-<span class="source-line-no">3198</span><span id="line-3198">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">3199</span><span id="line-3199">       * @return This object.</span>
-<span class="source-line-no">3200</span><span id="line-3200">       */</span>
-<span class="source-line-no">3201</span><span id="line-3201">      public SELF typePropertyName(String value) {</span>
-<span class="source-line-no">3202</span><span id="line-3202">         bcBuilder.typePropertyName(reqnn("value", value));</span>
-<span class="source-line-no">3203</span><span id="line-3203">         return self();</span>
-<span class="source-line-no">3204</span><span id="line-3204">      }</span>
-<span class="source-line-no">3205</span><span id="line-3205"></span>
-<span class="source-line-no">3206</span><span id="line-3206">      /**</span>
-<span class="source-line-no">3207</span><span id="line-3207">       * Use Java Introspector.</span>
-<span class="source-line-no">3208</span><span id="line-3208">       *</span>
-<span class="source-line-no">3209</span><span id="line-3209">       * &lt;p&gt;</span>
-<span class="source-line-no">3210</span><span id="line-3210">       * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.</span>
-<span class="source-line-no">3211</span><span id="line-3211">       * &lt;br&gt;Most {@link Marshalled @Marshalled} annotations will be ignored.</span>
-<span class="source-line-no">3212</span><span id="line-3212">       *</span>
-<span class="source-line-no">3213</span><span id="line-3213">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
-<span class="source-line-no">3214</span><span id="line-3214">       * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">3215</span><span id="line-3215">       *    &lt;jc&gt;// Create a serializer that only uses the built-in java bean introspector for finding properties.&lt;/jc&gt;</span>
-<span class="source-line-no">3216</span><span id="line-3216">       *    WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</span>
-<span class="source-line-no">3217</span><span id="line-3217">       *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
-<span class="source-line-no">3218</span><span id="line-3218">       *       .useJavaBeanIntrospector()</span>
-<span class="source-line-no">3219</span><span id="line-3219">       *       .build();</span>
-<span class="source-line-no">3220</span><span id="line-3220">       * &lt;/p&gt;</span>
+<span class="source-line-no">3195</span><span id="line-3195">       *    &lt;jc&gt;// Produces "{mySimpleField:{t:'foo',...}}".&lt;/jc&gt;</span>
+<span class="source-line-no">3196</span><span id="line-3196">       *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">3197</span><span id="line-3197">       *</span>
+<span class="source-line-no">3198</span><span id="line-3198">       *    &lt;jc&gt;// Parse bean.&lt;/jc&gt;</span>
+<span class="source-line-no">3199</span><span id="line-3199">       *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;jv&gt;json&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">3200</span><span id="line-3200">       * &lt;/p&gt;</span>
+<span class="source-line-no">3201</span><span id="line-3201">       *</span>
+<span class="source-line-no">3202</span><span id="line-3202">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
+<span class="source-line-no">3203</span><span id="line-3203">       *    &lt;li class='ja'&gt;{@link Marshalled#typePropertyName()}</span>
+<span class="source-line-no">3204</span><span id="line-3204">       *    &lt;li class='ja'&gt;{@link MarshalledConfig#typePropertyName()}</span>
+<span class="source-line-no">3205</span><span id="line-3205">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#typePropertyName(String)}</span>
+<span class="source-line-no">3206</span><span id="line-3206">       * &lt;/ul&gt;</span>
+<span class="source-line-no">3207</span><span id="line-3207">       *</span>
+<span class="source-line-no">3208</span><span id="line-3208">       * @param value</span>
+<span class="source-line-no">3209</span><span id="line-3209">       *    The new value for this setting.</span>
+<span class="source-line-no">3210</span><span id="line-3210">       *    &lt;br&gt;The default is &lt;js&gt;"_type"&lt;/js&gt;.</span>
+<span class="source-line-no">3211</span><span id="line-3211">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">3212</span><span id="line-3212">       * @return This object.</span>
+<span class="source-line-no">3213</span><span id="line-3213">       */</span>
+<span class="source-line-no">3214</span><span id="line-3214">      public SELF typePropertyName(String value) {</span>
+<span class="source-line-no">3215</span><span id="line-3215">         bcBuilder.typePropertyName(reqnn("value", value));</span>
+<span class="source-line-no">3216</span><span id="line-3216">         return self();</span>
+<span class="source-line-no">3217</span><span id="line-3217">      }</span>
+<span class="source-line-no">3218</span><span id="line-3218"></span>
+<span class="source-line-no">3219</span><span id="line-3219">      /**</span>
+<span class="source-line-no">3220</span><span id="line-3220">       * Use Java Introspector.</span>
 <span class="source-line-no">3221</span><span id="line-3221">       *</span>
-<span class="source-line-no">3222</span><span id="line-3222">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
-<span class="source-line-no">3223</span><span id="line-3223">       *    &lt;li class='jmf'&gt;{@link MarshallingContext.Builder#useJavaBeanIntrospector()}</span>
-<span class="source-line-no">3224</span><span id="line-3224">       * &lt;/ul&gt;</span>
+<span class="source-line-no">3222</span><span id="line-3222">       * &lt;p&gt;</span>
+<span class="source-line-no">3223</span><span id="line-3223">       * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.</span>
+<span class="source-line-no">3224</span><span id="line-3224">       * &lt;br&gt;Most {@link Marshalled @Marshalled} annotations will be ignored.</span>
 <span class="source-line-no">3225</span><span id="line-3225">       *</span>
-<span class="source-line-no">3226</span><span id="line-3226">       * @return This object.</span>
-<span class="source-line-no">3227</span><span id="line-3227">       */</span>
-<span class="source-line-no">3228</span><span id="line-3228">      public SELF useJavaBeanIntrospector() {</span>
-<span class="source-line-no">3229</span><span id="line-3229">         bcBuilder.useJavaBeanIntrospector();</span>
-<span class="source-line-no">3230</span><span id="line-3230">         return self();</span>
-<span class="source-line-no">3231</span><span id="line-3231">      }</span>
-<span class="source-line-no">3232</span><span id="line-3232">   }</span>
-<span class="source-line-no">3233</span><span id="line-3233"></span>
-<span class="source-line-no">3234</span><span id="line-3234">   protected final MarshallingContext marshallingContext;</span>
-<span class="source-line-no">3235</span><span id="line-3235"></span>
-<span class="source-line-no">3236</span><span id="line-3236">   /**</span>
-<span class="source-line-no">3237</span><span id="line-3237">    * Constructor.</span>
-<span class="source-line-no">3238</span><span id="line-3238">    *</span>
-<span class="source-line-no">3239</span><span id="line-3239">    * @param b The builder for this object.</span>
-<span class="source-line-no">3240</span><span id="line-3240">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">3241</span><span id="line-3241">    */</span>
-<span class="source-line-no">3242</span><span id="line-3242">   protected MarshallingContextable(Builder b) {</span>
-<span class="source-line-no">3243</span><span id="line-3243">      super(b);</span>
-<span class="source-line-no">3244</span><span id="line-3244">      marshallingContext = nn(b.bc) ? b.bc : b.bcBuilder.build();</span>
+<span class="source-line-no">3226</span><span id="line-3226">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
+<span class="source-line-no">3227</span><span id="line-3227">       * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">3228</span><span id="line-3228">       *    &lt;jc&gt;// Create a serializer that only uses the built-in java bean introspector for finding properties.&lt;/jc&gt;</span>
+<span class="source-line-no">3229</span><span id="line-3229">       *    WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</span>
+<span class="source-line-no">3230</span><span id="line-3230">       *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
+<span class="source-line-no">3231</span><span id="line-3231">       *       .useJavaBeanIntrospector()</span>
+<span class="source-line-no">3232</span><span id="line-3232">       *       .build();</span>
+<span class="source-line-no">3233</span><span id="line-3233">       * &lt;/p&gt;</span>
+<span class="source-line-no">3234</span><span id="line-3234">       *</span>
+<span class="source-line-no">3235</span><span id="line-3235">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
+<span class="source-line-no">3236</span><span id="line-3236">       *    &lt;li class='jmf'&gt;{@link MarshallingContext.Builder#useJavaBeanIntrospector()}</span>
+<span class="source-line-no">3237</span><span id="line-3237">       * &lt;/ul&gt;</span>
+<span class="source-line-no">3238</span><span id="line-3238">       *</span>
+<span class="source-line-no">3239</span><span id="line-3239">       * @return This object.</span>
+<span class="source-line-no">3240</span><span id="line-3240">       */</span>
+<span class="source-line-no">3241</span><span id="line-3241">      public SELF useJavaBeanIntrospector() {</span>
+<span class="source-line-no">3242</span><span id="line-3242">         bcBuilder.useJavaBeanIntrospector();</span>
+<span class="source-line-no">3243</span><span id="line-3243">         return self();</span>
+<span class="source-line-no">3244</span><span id="line-3244">      }</span>
 <span class="source-line-no">3245</span><span id="line-3245">   }</span>
 <span class="source-line-no">3246</span><span id="line-3246"></span>
-<span class="source-line-no">3247</span><span id="line-3247">   /**</span>
-<span class="source-line-no">3248</span><span id="line-3248">    * Returns the bean context for this object.</span>
-<span class="source-line-no">3249</span><span id="line-3249">    *</span>
-<span class="source-line-no">3250</span><span id="line-3250">    * @return The bean context for this object.</span>
-<span class="source-line-no">3251</span><span id="line-3251">    */</span>
-<span class="source-line-no">3252</span><span id="line-3252">   public MarshallingContext getMarshallingContext() { return marshallingContext; }</span>
-<span class="source-line-no">3253</span><span id="line-3253"></span>
-<span class="source-line-no">3254</span><span id="line-3254">   /**</span>
-<span class="source-line-no">3255</span><span id="line-3255">    * Duration wire format.</span>
-<span class="source-line-no">3256</span><span id="line-3256">    *</span>
-<span class="source-line-no">3257</span><span id="line-3257">    * @return The configured duration wire format.</span>
-<span class="source-line-no">3258</span><span id="line-3258">    */</span>
-<span class="source-line-no">3259</span><span id="line-3259">   protected final DurationFormat getDurationFormat() { return marshallingContext.getDurationFormat(); }</span>
-<span class="source-line-no">3260</span><span id="line-3260"></span>
-<span class="source-line-no">3261</span><span id="line-3261">   /**</span>
-<span class="source-line-no">3262</span><span id="line-3262">    * Period wire format.</span>
-<span class="source-line-no">3263</span><span id="line-3263">    *</span>
-<span class="source-line-no">3264</span><span id="line-3264">    * @return The configured period wire format.</span>
-<span class="source-line-no">3265</span><span id="line-3265">    */</span>
-<span class="source-line-no">3266</span><span id="line-3266">   protected final PeriodFormat getPeriodFormat() { return marshallingContext.getPeriodFormat(); }</span>
-<span class="source-line-no">3267</span><span id="line-3267"></span>
-<span class="source-line-no">3268</span><span id="line-3268">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">3269</span><span id="line-3269">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">3270</span><span id="line-3270">      return super.properties()</span>
-<span class="source-line-no">3271</span><span id="line-3271">         .a("marshallingContext", marshallingContext.properties());</span>
-<span class="source-line-no">3272</span><span id="line-3272">   }</span>
-<span class="source-line-no">3273</span><span id="line-3273">}</span>
+<span class="source-line-no">3247</span><span id="line-3247">   protected final MarshallingContext marshallingContext;</span>
+<span class="source-line-no">3248</span><span id="line-3248"></span>
+<span class="source-line-no">3249</span><span id="line-3249">   /**</span>
+<span class="source-line-no">3250</span><span id="line-3250">    * Constructor.</span>
+<span class="source-line-no">3251</span><span id="line-3251">    *</span>
+<span class="source-line-no">3252</span><span id="line-3252">    * @param b The builder for this object.</span>
+<span class="source-line-no">3253</span><span id="line-3253">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">3254</span><span id="line-3254">    */</span>
+<span class="source-line-no">3255</span><span id="line-3255">   protected MarshallingContextable(Builder b) {</span>
+<span class="source-line-no">3256</span><span id="line-3256">      super(b);</span>
+<span class="source-line-no">3257</span><span id="line-3257">      marshallingContext = nn(b.bc) ? b.bc : b.bcBuilder.build();</span>
+<span class="source-line-no">3258</span><span id="line-3258">   }</span>
+<span class="source-line-no">3259</span><span id="line-3259"></span>
+<span class="source-line-no">3260</span><span id="line-3260">   /**</span>
+<span class="source-line-no">3261</span><span id="line-3261">    * Returns the bean context for this object.</span>
+<span class="source-line-no">3262</span><span id="line-3262">    *</span>
+<span class="source-line-no">3263</span><span id="line-3263">    * @return The bean context for this object.</span>
+<span class="source-line-no">3264</span><span id="line-3264">    */</span>
+<span class="source-line-no">3265</span><span id="line-3265">   public MarshallingContext getMarshallingContext() { return marshallingContext; }</span>
+<span class="source-line-no">3266</span><span id="line-3266"></span>
+<span class="source-line-no">3267</span><span id="line-3267">   /**</span>
+<span class="source-line-no">3268</span><span id="line-3268">    * Duration wire format.</span>
+<span class="source-line-no">3269</span><span id="line-3269">    *</span>
+<span class="source-line-no">3270</span><span id="line-3270">    * @return The configured duration wire format.</span>
+<span class="source-line-no">3271</span><span id="line-3271">    */</span>
+<span class="source-line-no">3272</span><span id="line-3272">   protected final DurationFormat getDurationFormat() { return marshallingContext.getDurationFormat(); }</span>
+<span class="source-line-no">3273</span><span id="line-3273"></span>
+<span class="source-line-no">3274</span><span id="line-3274">   /**</span>
+<span class="source-line-no">3275</span><span id="line-3275">    * Period wire format.</span>
+<span class="source-line-no">3276</span><span id="line-3276">    *</span>
+<span class="source-line-no">3277</span><span id="line-3277">    * @return The configured period wire format.</span>
+<span class="source-line-no">3278</span><span id="line-3278">    */</span>
+<span class="source-line-no">3279</span><span id="line-3279">   protected final PeriodFormat getPeriodFormat() { return marshallingContext.getPeriodFormat(); }</span>
+<span class="source-line-no">3280</span><span id="line-3280"></span>
+<span class="source-line-no">3281</span><span id="line-3281">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">3282</span><span id="line-3282">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">3283</span><span id="line-3283">      return super.properties()</span>
+<span class="source-line-no">3284</span><span id="line-3284">         .a("marshallingContext", marshallingContext.properties());</span>
+<span class="source-line-no">3285</span><span id="line-3285">   }</span>
+<span class="source-line-no">3286</span><span id="line-3286">}</span>
 
 
 

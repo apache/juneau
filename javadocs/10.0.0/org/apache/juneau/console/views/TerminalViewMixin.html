@@ -75,18 +75,22 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/TerminalViewMixin.html#line-45">TerminalViewMixin</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/TerminalViewMixin.html#line-49">TerminalViewMixin</a></span></div>
 <div class="block">Mixin interface that serves the terminal-view events endpoint.
 
  <p>
- The one abstract method is the application's resolver, which is where authorization lives: an unknown id and a
- forbidden id both answer <code>404</code>, so ids cannot be enumerated.  Run ids are opaque URL tokens matching
+ The abstract methods are the application's access rules and resolver, which is where authorization lives: an
+ unknown id and a forbidden id both answer <code>404</code>, so ids cannot be enumerated.  Run ids are opaque URL tokens matching
  <code>^[A-Za-z0-9_-]{1,128}$</code>; anything else answers <code>400</code> before the resolver runs.
 
  <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <ja>@Rest</ja>
    <jk>public class</jk> RunsResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> TerminalViewMixin {
+      <ja>@Override</ja>
+      <jk>public</jk> TerminalViewAccess terminalViewAccess() {
+         <jk>return</jk> (<jv>req</jv>, <jv>runId</jv>) -&gt; <jv>req</jv>.getUserPrincipal() != <jk>null</jk>;
+      }
       <ja>@Override</ja>
       <jk>public</jk> Optional&lt;TerminalViewSource&gt; terminalViewSource(String <jv>runId</jv>, RestRequest <jv>req</jv>) {
          <jk>return</jk> <jf>runs</jf>.find(<jv>runId</jv>).map(Run::events);
@@ -129,17 +133,22 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#terminalViewEvents(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">terminalViewEvents</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;runId,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="TerminalViewAccess.html" title="interface in org.apache.juneau.console.views">TerminalViewAccess</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#terminalViewAccess()" class="member-name-link">terminalViewAccess</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">The access rules applied to the events endpoint before the source is resolved.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#terminalViewEvents(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">terminalViewEvents</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;runId,
  <a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">[GET /juneau-terminal-view/{runId}/events] &mdash; one page of events as JSON.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="TerminalViewSource.html" title="interface in org.apache.juneau.console.views">TerminalViewSource</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#terminalViewSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">terminalViewSource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;runId,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="TerminalViewSource.html" title="interface in org.apache.juneau.console.views">TerminalViewSource</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#terminalViewSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">terminalViewSource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;runId,
  <a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Resolves the source for a run id, applying the application's own access rules.</div>
 </div>
 </div>
@@ -159,7 +168,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="RUN_VIEW_PREFIX">
 <h3>RUN_VIEW_PREFIX</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/TerminalViewMixin.html#line-48">RUN_VIEW_PREFIX</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/TerminalViewMixin.html#line-52">RUN_VIEW_PREFIX</a></span></div>
 <div class="block">The URL path prefix for the terminal-view endpoint (relative to the host mount).</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -174,7 +183,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="EVENTS_PATH">
 <h3>EVENTS_PATH</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/TerminalViewMixin.html#line-51">EVENTS_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/TerminalViewMixin.html#line-55">EVENTS_PATH</a></span></div>
 <div class="block">The URL path template of the events endpoint.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -197,7 +206,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="terminalViewSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)">
 <h3>terminalViewSource</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="TerminalViewSource.html" title="interface in org.apache.juneau.console.views">TerminalViewSource</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/TerminalViewMixin.html#line-60">terminalViewSource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;runId,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="TerminalViewSource.html" title="interface in org.apache.juneau.console.views">TerminalViewSource</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/TerminalViewMixin.html#line-64">terminalViewSource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;runId,
  <a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Resolves the source for a run id, applying the application's own access rules.</div>
 <dl class="notes">
@@ -210,9 +219,24 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="terminalViewAccess()">
+<h3>terminalViewAccess</h3>
+<div class="member-signature"><span class="return-type"><a href="TerminalViewAccess.html" title="interface in org.apache.juneau.console.views">TerminalViewAccess</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/TerminalViewMixin.html#line-75">terminalViewAccess</a></span>()</div>
+<div class="block">The access rules applied to the events endpoint before the source is resolved.
+
+ <p>
+ A caller that may not read the run is answered <code>404</code>, the same as an unknown id.  There is no default:
+ every host states who may read.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The access rules.  Never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="terminalViewEvents(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>terminalViewEvents</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/TerminalViewMixin.html#line-70">terminalViewEvents</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("runId")
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/TerminalViewMixin.html#line-85">terminalViewEvents</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("runId")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;runId,
  <a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>

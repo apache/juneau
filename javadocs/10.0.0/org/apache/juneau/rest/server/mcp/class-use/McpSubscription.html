@@ -88,10 +88,27 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BasicMcpSubscriptionBroker.</span><code><a href="../BasicMcpSubscriptionBroker.html#registerIfUnder(int,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)" class="member-name-link">registerIfUnder</a><wbr>(int&nbsp;max,
+<div class="col-second even-row-color"><span class="type-name-label">BasicMcpSubscriptionBroker.</span><code><a href="../BasicMcpSubscriptionBroker.html#registerIfUnder(int,int,java.lang.String,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)" class="member-name-link">registerIfUnder</a><wbr>(int&nbsp;max,
+ int&nbsp;maxPerOwner,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;owner,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId,
  <a href="../McpSubscriptionFilter.html" title="class in org.apache.juneau.rest.server.mcp">McpSubscriptionFilter</a>&nbsp;honoredFilter)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BasicMcpSubscriptionBroker.</span><code><a href="../BasicMcpSubscriptionBroker.html#registerIfUnder(int,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)" class="member-name-link">registerIfUnder</a><wbr>(int&nbsp;max,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId,
+ <a href="../McpSubscriptionFilter.html" title="class in org.apache.juneau.rest.server.mcp">McpSubscriptionFilter</a>&nbsp;honoredFilter)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpSubscriptionBroker.</span><code><a href="../McpSubscriptionBroker.html#registerIfUnder(int,int,java.lang.String,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)" class="member-name-link">registerIfUnder</a><wbr>(int&nbsp;max,
+ int&nbsp;maxPerOwner,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;owner,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId,
+ <a href="../McpSubscriptionFilter.html" title="class in org.apache.juneau.rest.server.mcp">McpSubscriptionFilter</a>&nbsp;honoredFilter)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Same as <a href="../McpSubscriptionBroker.html#registerIfUnder(int,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)"><code>McpSubscriptionBroker.registerIfUnder(int, String, McpSubscriptionFilter)</code></a>, additionally limiting the number of
+ concurrently active subscriptions attributed to one owner.</div>
+</div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a>&gt;</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">McpSubscriptionBroker.</span><code><a href="../McpSubscriptionBroker.html#registerIfUnder(int,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)" class="member-name-link">registerIfUnder</a><wbr>(int&nbsp;max,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId,

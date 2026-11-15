@@ -329,49 +329,52 @@
 <span class="source-line-no">316</span><span id="line-316">   public SELF problemDetails(String value) { anno.problemDetails(value); return self(); }</span>
 <span class="source-line-no">317</span><span id="line-317"></span>
 <span class="source-line-no">318</span><span id="line-318">   @Override /* RestBuilder&lt;?&gt; */</span>
-<span class="source-line-no">319</span><span id="line-319">   public SELF debugMarshalling(String value) { anno.debugMarshalling(value); return self(); }</span>
+<span class="source-line-no">319</span><span id="line-319">   public SELF showCauseMessages(String value) { anno.showCauseMessages(value); return self(); }</span>
 <span class="source-line-no">320</span><span id="line-320"></span>
-<span class="source-line-no">321</span><span id="line-321">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">322</span><span id="line-322">   // Docs / metadata / i18n / static files</span>
-<span class="source-line-no">323</span><span id="line-323">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">324</span><span id="line-324"></span>
-<span class="source-line-no">325</span><span id="line-325">   @Override /* RestBuilder&lt;?&gt; */</span>
-<span class="source-line-no">326</span><span id="line-326">   public SELF title(String... value) { anno.title(value); return self(); }</span>
+<span class="source-line-no">321</span><span id="line-321">   @Override /* RestBuilder&lt;?&gt; */</span>
+<span class="source-line-no">322</span><span id="line-322">   public SELF debugMarshalling(String value) { anno.debugMarshalling(value); return self(); }</span>
+<span class="source-line-no">323</span><span id="line-323"></span>
+<span class="source-line-no">324</span><span id="line-324">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">325</span><span id="line-325">   // Docs / metadata / i18n / static files</span>
+<span class="source-line-no">326</span><span id="line-326">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">327</span><span id="line-327"></span>
 <span class="source-line-no">328</span><span id="line-328">   @Override /* RestBuilder&lt;?&gt; */</span>
-<span class="source-line-no">329</span><span id="line-329">   public SELF description(String... value) { anno.description(value); return self(); }</span>
+<span class="source-line-no">329</span><span id="line-329">   public SELF title(String... value) { anno.title(value); return self(); }</span>
 <span class="source-line-no">330</span><span id="line-330"></span>
 <span class="source-line-no">331</span><span id="line-331">   @Override /* RestBuilder&lt;?&gt; */</span>
-<span class="source-line-no">332</span><span id="line-332">   public SELF siteName(String value) { anno.siteName(value); return self(); }</span>
+<span class="source-line-no">332</span><span id="line-332">   public SELF description(String... value) { anno.description(value); return self(); }</span>
 <span class="source-line-no">333</span><span id="line-333"></span>
 <span class="source-line-no">334</span><span id="line-334">   @Override /* RestBuilder&lt;?&gt; */</span>
-<span class="source-line-no">335</span><span id="line-335">   public SELF swaggerProvider(Class&lt;? extends SwaggerProvider&gt; value) { anno.swaggerProvider(value); return self(); }</span>
+<span class="source-line-no">335</span><span id="line-335">   public SELF siteName(String value) { anno.siteName(value); return self(); }</span>
 <span class="source-line-no">336</span><span id="line-336"></span>
 <span class="source-line-no">337</span><span id="line-337">   @Override /* RestBuilder&lt;?&gt; */</span>
-<span class="source-line-no">338</span><span id="line-338">   public SELF openApiProvider(Class&lt;? extends OpenApiProvider&gt; value) { anno.openApiProvider(value); return self(); }</span>
+<span class="source-line-no">338</span><span id="line-338">   public SELF swaggerProvider(Class&lt;? extends SwaggerProvider&gt; value) { anno.swaggerProvider(value); return self(); }</span>
 <span class="source-line-no">339</span><span id="line-339"></span>
 <span class="source-line-no">340</span><span id="line-340">   @Override /* RestBuilder&lt;?&gt; */</span>
-<span class="source-line-no">341</span><span id="line-341">   public SELF messages(String value) { anno.messages(value); return self(); }</span>
+<span class="source-line-no">341</span><span id="line-341">   public SELF openApiProvider(Class&lt;? extends OpenApiProvider&gt; value) { anno.openApiProvider(value); return self(); }</span>
 <span class="source-line-no">342</span><span id="line-342"></span>
 <span class="source-line-no">343</span><span id="line-343">   @Override /* RestBuilder&lt;?&gt; */</span>
-<span class="source-line-no">344</span><span id="line-344">   public SELF config(String value) { anno.config(value); return self(); }</span>
+<span class="source-line-no">344</span><span id="line-344">   public SELF messages(String value) { anno.messages(value); return self(); }</span>
 <span class="source-line-no">345</span><span id="line-345"></span>
 <span class="source-line-no">346</span><span id="line-346">   @Override /* RestBuilder&lt;?&gt; */</span>
-<span class="source-line-no">347</span><span id="line-347">   public SELF staticFiles(Class&lt;? extends StaticFiles&gt; value) { anno.staticFiles(value); return self(); }</span>
+<span class="source-line-no">347</span><span id="line-347">   public SELF config(String value) { anno.config(value); return self(); }</span>
 <span class="source-line-no">348</span><span id="line-348"></span>
 <span class="source-line-no">349</span><span id="line-349">   @Override /* RestBuilder&lt;?&gt; */</span>
-<span class="source-line-no">350</span><span id="line-350">   public SELF noInherit(String... value) { anno.noInherit(value); return self(); }</span>
+<span class="source-line-no">350</span><span id="line-350">   public SELF staticFiles(Class&lt;? extends StaticFiles&gt; value) { anno.staticFiles(value); return self(); }</span>
 <span class="source-line-no">351</span><span id="line-351"></span>
-<span class="source-line-no">352</span><span id="line-352">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">353</span><span id="line-353">   // Programmatic-only knob &amp; escape hatch</span>
-<span class="source-line-no">354</span><span id="line-354">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">355</span><span id="line-355"></span>
-<span class="source-line-no">356</span><span id="line-356">   @Override /* RestBuilder&lt;?&gt; */</span>
-<span class="source-line-no">357</span><span id="line-357">   public SELF mdcAsyncPropagation(boolean value) { mdcAsyncPropagation = value; return self(); }</span>
+<span class="source-line-no">352</span><span id="line-352">   @Override /* RestBuilder&lt;?&gt; */</span>
+<span class="source-line-no">353</span><span id="line-353">   public SELF noInherit(String... value) { anno.noInherit(value); return self(); }</span>
+<span class="source-line-no">354</span><span id="line-354"></span>
+<span class="source-line-no">355</span><span id="line-355">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">356</span><span id="line-356">   // Programmatic-only knob &amp; escape hatch</span>
+<span class="source-line-no">357</span><span id="line-357">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">358</span><span id="line-358"></span>
 <span class="source-line-no">359</span><span id="line-359">   @Override /* RestBuilder&lt;?&gt; */</span>
-<span class="source-line-no">360</span><span id="line-360">   public SELF set(String key, Object value) { extras.put(reqnn("key", key), value); return self(); }</span>
-<span class="source-line-no">361</span><span id="line-361">}</span>
+<span class="source-line-no">360</span><span id="line-360">   public SELF mdcAsyncPropagation(boolean value) { mdcAsyncPropagation = value; return self(); }</span>
+<span class="source-line-no">361</span><span id="line-361"></span>
+<span class="source-line-no">362</span><span id="line-362">   @Override /* RestBuilder&lt;?&gt; */</span>
+<span class="source-line-no">363</span><span id="line-363">   public SELF set(String key, Object value) { extras.put(reqnn("key", key), value); return self(); }</span>
+<span class="source-line-no">364</span><span id="line-364">}</span>
 
 
 

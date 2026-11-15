@@ -87,32 +87,48 @@
 <span class="source-line-no">074</span><span id="line-74">   Optional&lt;McpSubscription&gt; registerIfUnder(int max, String subscriptionId, McpSubscriptionFilter honoredFilter);</span>
 <span class="source-line-no">075</span><span id="line-75"></span>
 <span class="source-line-no">076</span><span id="line-76">   /**</span>
-<span class="source-line-no">077</span><span id="line-77">    * Deregisters and closes the subscription with the given id, if present.</span>
-<span class="source-line-no">078</span><span id="line-78">    *</span>
-<span class="source-line-no">079</span><span id="line-79">    * @param subscriptionId The subscription identifier. A missing id is a no-op.</span>
-<span class="source-line-no">080</span><span id="line-80">    */</span>
-<span class="source-line-no">081</span><span id="line-81">   void unregister(String subscriptionId);</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">   /**</span>
-<span class="source-line-no">084</span><span id="line-84">    * The number of currently registered (not yet closed) subscriptions.</span>
-<span class="source-line-no">085</span><span id="line-85">    *</span>
-<span class="source-line-no">086</span><span id="line-86">    * @return The active count.</span>
-<span class="source-line-no">087</span><span id="line-87">    */</span>
-<span class="source-line-no">088</span><span id="line-88">   int activeCount();</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">   /**</span>
-<span class="source-line-no">091</span><span id="line-91">    * Closes every currently registered subscription.</span>
-<span class="source-line-no">092</span><span id="line-92">    *</span>
-<span class="source-line-no">093</span><span id="line-93">    * &lt;p&gt;</span>
-<span class="source-line-no">094</span><span id="line-94">    * Called when the server begins shutting down, so open {@code subscriptions/listen} streams complete</span>
-<span class="source-line-no">095</span><span id="line-95">    * promptly instead of holding the graceful drain open until its stop timeout.  The default implementation</span>
-<span class="source-line-no">096</span><span id="line-96">    * does nothing, so custom brokers that predate this method keep working (their streams then end on the</span>
-<span class="source-line-no">097</span><span id="line-97">    * normal heartbeat/idle-timeout paths).</span>
-<span class="source-line-no">098</span><span id="line-98">    */</span>
-<span class="source-line-no">099</span><span id="line-99">   default void closeAll() {</span>
-<span class="source-line-no">100</span><span id="line-100">      // No-op by default.</span>
-<span class="source-line-no">101</span><span id="line-101">   }</span>
-<span class="source-line-no">102</span><span id="line-102">}</span>
+<span class="source-line-no">077</span><span id="line-77">    * Same as {@link #registerIfUnder(int, String, McpSubscriptionFilter)}, additionally limiting the number of</span>
+<span class="source-line-no">078</span><span id="line-78">    * concurrently active subscriptions attributed to one owner.</span>
+<span class="source-line-no">079</span><span id="line-79">    *</span>
+<span class="source-line-no">080</span><span id="line-80">    * &lt;p&gt;</span>
+<span class="source-line-no">081</span><span id="line-81">    * The admission check and the registration must be one atomic step, as for the global-only variant.</span>
+<span class="source-line-no">082</span><span id="line-82">    *</span>
+<span class="source-line-no">083</span><span id="line-83">    * @param max The global cap.</span>
+<span class="source-line-no">084</span><span id="line-84">    * @param maxPerOwner The cap for subscriptions registered with the same non-{@code null} owner.</span>
+<span class="source-line-no">085</span><span id="line-85">    * @param owner The caller identity the subscription is attributed to.  Can be {@code null} (no per-owner limit).</span>
+<span class="source-line-no">086</span><span id="line-86">    * @param subscriptionId The subscription identifier.  Must not be {@code null} or empty.</span>
+<span class="source-line-no">087</span><span id="line-87">    * @param honoredFilter The capability-gated filter this subscription honors.  Must not be {@code null}.</span>
+<span class="source-line-no">088</span><span id="line-88">    * @return The new subscription handle, or {@link Optional#empty()} if a cap was reached and this was not a same-id replacement.</span>
+<span class="source-line-no">089</span><span id="line-89">    */</span>
+<span class="source-line-no">090</span><span id="line-90">   Optional&lt;McpSubscription&gt; registerIfUnder(int max, int maxPerOwner, String owner, String subscriptionId, McpSubscriptionFilter honoredFilter);</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">   /**</span>
+<span class="source-line-no">093</span><span id="line-93">    * Deregisters and closes the subscription with the given id, if present.</span>
+<span class="source-line-no">094</span><span id="line-94">    *</span>
+<span class="source-line-no">095</span><span id="line-95">    * @param subscriptionId The subscription identifier. A missing id is a no-op.</span>
+<span class="source-line-no">096</span><span id="line-96">    */</span>
+<span class="source-line-no">097</span><span id="line-97">   void unregister(String subscriptionId);</span>
+<span class="source-line-no">098</span><span id="line-98"></span>
+<span class="source-line-no">099</span><span id="line-99">   /**</span>
+<span class="source-line-no">100</span><span id="line-100">    * The number of currently registered (not yet closed) subscriptions.</span>
+<span class="source-line-no">101</span><span id="line-101">    *</span>
+<span class="source-line-no">102</span><span id="line-102">    * @return The active count.</span>
+<span class="source-line-no">103</span><span id="line-103">    */</span>
+<span class="source-line-no">104</span><span id="line-104">   int activeCount();</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">   /**</span>
+<span class="source-line-no">107</span><span id="line-107">    * Closes every currently registered subscription.</span>
+<span class="source-line-no">108</span><span id="line-108">    *</span>
+<span class="source-line-no">109</span><span id="line-109">    * &lt;p&gt;</span>
+<span class="source-line-no">110</span><span id="line-110">    * Called when the server begins shutting down, so open {@code subscriptions/listen} streams complete</span>
+<span class="source-line-no">111</span><span id="line-111">    * promptly instead of holding the graceful drain open until its stop timeout.  The default implementation</span>
+<span class="source-line-no">112</span><span id="line-112">    * does nothing, so custom brokers that predate this method keep working (their streams then end on the</span>
+<span class="source-line-no">113</span><span id="line-113">    * normal heartbeat/idle-timeout paths).</span>
+<span class="source-line-no">114</span><span id="line-114">    */</span>
+<span class="source-line-no">115</span><span id="line-115">   default void closeAll() {</span>
+<span class="source-line-no">116</span><span id="line-116">      // No-op by default.</span>
+<span class="source-line-no">117</span><span id="line-117">   }</span>
+<span class="source-line-no">118</span><span id="line-118">}</span>
 
 
 

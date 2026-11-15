@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		};
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">var</strong> interceptor = <strong class="jxr_keyword">new</strong> McpAuthInterceptor(() -&gt; <span class="jxr_string">"abc123"</span>);
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = RestClient.builder().transport(transport).interceptors(interceptor).build()) {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> res = client.get(<span class="jxr_string">"http://x/ping"</span>).run()) {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> res = client.get(<span class="jxr_string">"https://x/ping"</span>).run()) {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  				assertEquals(204, res.getStatusCode());
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			}
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		}
@@ -70,10 +70,10 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		};
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> interceptor = McpAuthInterceptor.ofStaticBearer(<span class="jxr_string">"static-token"</span>);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = RestClient.builder().transport(transport).interceptors(interceptor).build()) {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> res = client.get(<span class="jxr_string">"http://x/ping"</span>).run()) {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> res = client.get(<span class="jxr_string">"https://x/ping"</span>).run()) {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  				assertEquals(204, res.getStatusCode());
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			}
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> res = client.get(<span class="jxr_string">"http://x/ping"</span>).run()) {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> res = client.get(<span class="jxr_string">"https://x/ping"</span>).run()) {
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  				assertEquals(204, res.getStatusCode());
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			}
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		}
@@ -92,7 +92,7 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		};
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> interceptor = <strong class="jxr_keyword">new</strong> McpAuthInterceptor(() -&gt; token);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = RestClient.builder().transport(transport).interceptors(interceptor).build()) {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> res = client.get(<span class="jxr_string">"http://x/ping"</span>).run()) {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> res = client.get(<span class="jxr_string">"https://x/ping"</span>).run()) {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  				assertEquals(204, res.getStatusCode());
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  			}
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		}

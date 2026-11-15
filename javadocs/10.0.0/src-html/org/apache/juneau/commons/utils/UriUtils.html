@@ -59,28 +59,92 @@
 <span class="source-line-no">046</span><span id="line-46">         return false;</span>
 <span class="source-line-no">047</span><span id="line-47">      if (eqic("https", uri.getScheme()))</span>
 <span class="source-line-no">048</span><span id="line-48">         return true;</span>
-<span class="source-line-no">049</span><span id="line-49">      var host = uri.getHost();</span>
-<span class="source-line-no">050</span><span id="line-50">      return host != null &amp;&amp; (eq(host, "127.0.0.1") || eqic(host, "localhost") || eqa(host, "[::1]", "::1"));</span>
-<span class="source-line-no">051</span><span id="line-51">   }</span>
-<span class="source-line-no">052</span><span id="line-52"></span>
-<span class="source-line-no">053</span><span id="line-53">   /**</span>
-<span class="source-line-no">054</span><span id="line-54">    * Throwing variant of {@link #isSecureOrLoopback(URI)}.</span>
-<span class="source-line-no">055</span><span id="line-55">    *</span>
-<span class="source-line-no">056</span><span id="line-56">    * @param uri The URI to validate.  Can be &lt;jk&gt;null&lt;/jk&gt; (rejected).</span>
-<span class="source-line-no">057</span><span id="line-57">    * @return The validated URI (for fluent use).</span>
-<span class="source-line-no">058</span><span id="line-58">    * @throws IllegalArgumentException If the URI is not &lt;js&gt;"https"&lt;/js&gt; and does not target a loopback host.</span>
-<span class="source-line-no">059</span><span id="line-59">    */</span>
-<span class="source-line-no">060</span><span id="line-60">   public static URI assertSecureOrLoopback(URI uri) {</span>
-<span class="source-line-no">061</span><span id="line-61">      if (! isSecureOrLoopback(uri))</span>
-<span class="source-line-no">062</span><span id="line-62">         throw iaex("URI must use https or target a loopback host: %s", uri);</span>
-<span class="source-line-no">063</span><span id="line-63">      return uri;</span>
-<span class="source-line-no">064</span><span id="line-64">   }</span>
-<span class="source-line-no">065</span><span id="line-65"></span>
-<span class="source-line-no">066</span><span id="line-66">   /**</span>
-<span class="source-line-no">067</span><span id="line-67">    * Constructor.</span>
-<span class="source-line-no">068</span><span id="line-68">    */</span>
-<span class="source-line-no">069</span><span id="line-69">   protected UriUtils() {}</span>
-<span class="source-line-no">070</span><span id="line-70">}</span>
+<span class="source-line-no">049</span><span id="line-49">      return isLoopbackHost(uri.getHost());</span>
+<span class="source-line-no">050</span><span id="line-50">   }</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">   /**</span>
+<span class="source-line-no">053</span><span id="line-53">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified host name is a loopback host.</span>
+<span class="source-line-no">054</span><span id="line-54">    *</span>
+<span class="source-line-no">055</span><span id="line-55">    * &lt;p&gt;</span>
+<span class="source-line-no">056</span><span id="line-56">    * A loopback host is one of &lt;js&gt;"localhost"&lt;/js&gt; (case-insensitive), &lt;js&gt;"127.0.0.1"&lt;/js&gt;, &lt;js&gt;"::1"&lt;/js&gt;, or</span>
+<span class="source-line-no">057</span><span id="line-57">    * &lt;js&gt;"[::1]"&lt;/js&gt;.  Other addresses in the &lt;c&gt;127.0.0.0/8&lt;/c&gt; range and other spellings of the same addresses</span>
+<span class="source-line-no">058</span><span id="line-58">    * are not matched.</span>
+<span class="source-line-no">059</span><span id="line-59">    *</span>
+<span class="source-line-no">060</span><span id="line-60">    * @param host The host name.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;false&lt;/jk&gt;).</span>
+<span class="source-line-no">061</span><span id="line-61">    * @return &lt;jk&gt;true&lt;/jk&gt; if the host is a loopback host.</span>
+<span class="source-line-no">062</span><span id="line-62">    */</span>
+<span class="source-line-no">063</span><span id="line-63">   public static boolean isLoopbackHost(String host) {</span>
+<span class="source-line-no">064</span><span id="line-64">      return host != null &amp;&amp; (eqic(host, "localhost") || eqa(host, "127.0.0.1", "[::1]", "::1"));</span>
+<span class="source-line-no">065</span><span id="line-65">   }</span>
+<span class="source-line-no">066</span><span id="line-66"></span>
+<span class="source-line-no">067</span><span id="line-67">   /**</span>
+<span class="source-line-no">068</span><span id="line-68">    * Parses a strict dotted-quad IPv4 literal.</span>
+<span class="source-line-no">069</span><span id="line-69">    *</span>
+<span class="source-line-no">070</span><span id="line-70">    * &lt;p&gt;</span>
+<span class="source-line-no">071</span><span id="line-71">    * The value must be exactly four decimal octets in the range 0-255 separated by dots, with no sign, no leading</span>
+<span class="source-line-no">072</span><span id="line-72">    * zeros and no surrounding whitespace.  No name lookup is done.</span>
+<span class="source-line-no">073</span><span id="line-73">    *</span>
+<span class="source-line-no">074</span><span id="line-74">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
+<span class="source-line-no">075</span><span id="line-75">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">076</span><span id="line-76">    *    parseIpv4(&lt;js&gt;"10.0.0.1"&lt;/js&gt;);  &lt;jc&gt;// {10, 0, 0, 1}&lt;/jc&gt;</span>
+<span class="source-line-no">077</span><span id="line-77">    *    parseIpv4(&lt;js&gt;"10.0.0.01"&lt;/js&gt;); &lt;jc&gt;// null&lt;/jc&gt;</span>
+<span class="source-line-no">078</span><span id="line-78">    * &lt;/p&gt;</span>
+<span class="source-line-no">079</span><span id="line-79">    *</span>
+<span class="source-line-no">080</span><span id="line-80">    * @param s The string to parse.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
+<span class="source-line-no">081</span><span id="line-81">    * @return The four address bytes, or &lt;jk&gt;null&lt;/jk&gt; if the string is not a strict dotted-quad literal.</span>
+<span class="source-line-no">082</span><span id="line-82">    */</span>
+<span class="source-line-no">083</span><span id="line-83">   @SuppressWarnings({</span>
+<span class="source-line-no">084</span><span id="line-84">      "java:S1168" // null signals an unparseable address; callers test for it</span>
+<span class="source-line-no">085</span><span id="line-85">   })</span>
+<span class="source-line-no">086</span><span id="line-86">   public static byte[] parseIpv4(String s) {</span>
+<span class="source-line-no">087</span><span id="line-87">      if (s == null)</span>
+<span class="source-line-no">088</span><span id="line-88">         return null;</span>
+<span class="source-line-no">089</span><span id="line-89">      var parts = s.split("\\.", -1);</span>
+<span class="source-line-no">090</span><span id="line-90">      if (parts.length != 4)</span>
+<span class="source-line-no">091</span><span id="line-91">         return null;</span>
+<span class="source-line-no">092</span><span id="line-92">      var out = new byte[4];</span>
+<span class="source-line-no">093</span><span id="line-93">      for (var i = 0; i &lt; 4; i++) {</span>
+<span class="source-line-no">094</span><span id="line-94">         var v = parseOctet(parts[i]);</span>
+<span class="source-line-no">095</span><span id="line-95">         if (v &lt; 0)</span>
+<span class="source-line-no">096</span><span id="line-96">            return null;</span>
+<span class="source-line-no">097</span><span id="line-97">         out[i] = (byte)v;</span>
+<span class="source-line-no">098</span><span id="line-98">      }</span>
+<span class="source-line-no">099</span><span id="line-99">      return out;</span>
+<span class="source-line-no">100</span><span id="line-100">   }</span>
+<span class="source-line-no">101</span><span id="line-101"></span>
+<span class="source-line-no">102</span><span id="line-102">   // Returns the value of a 1-3 digit decimal octet with no leading zero, or -1 if it isn't one or exceeds 255.</span>
+<span class="source-line-no">103</span><span id="line-103">   private static int parseOctet(String p) {</span>
+<span class="source-line-no">104</span><span id="line-104">      var n = p.length();</span>
+<span class="source-line-no">105</span><span id="line-105">      if (n == 0 || n &gt; 3 || (n &gt; 1 &amp;&amp; p.charAt(0) == '0'))</span>
+<span class="source-line-no">106</span><span id="line-106">         return -1;</span>
+<span class="source-line-no">107</span><span id="line-107">      var v = 0;</span>
+<span class="source-line-no">108</span><span id="line-108">      for (var i = 0; i &lt; n; i++) {</span>
+<span class="source-line-no">109</span><span id="line-109">         var c = p.charAt(i);</span>
+<span class="source-line-no">110</span><span id="line-110">         if (c &lt; '0' || c &gt; '9')</span>
+<span class="source-line-no">111</span><span id="line-111">            return -1;</span>
+<span class="source-line-no">112</span><span id="line-112">         v = v * 10 + (c - '0');</span>
+<span class="source-line-no">113</span><span id="line-113">      }</span>
+<span class="source-line-no">114</span><span id="line-114">      return v &gt; 255 ? -1 : v;</span>
+<span class="source-line-no">115</span><span id="line-115">   }</span>
+<span class="source-line-no">116</span><span id="line-116"></span>
+<span class="source-line-no">117</span><span id="line-117">   /**</span>
+<span class="source-line-no">118</span><span id="line-118">    * Throwing variant of {@link #isSecureOrLoopback(URI)}.</span>
+<span class="source-line-no">119</span><span id="line-119">    *</span>
+<span class="source-line-no">120</span><span id="line-120">    * @param uri The URI to validate.  Can be &lt;jk&gt;null&lt;/jk&gt; (rejected).</span>
+<span class="source-line-no">121</span><span id="line-121">    * @return The validated URI (for fluent use).</span>
+<span class="source-line-no">122</span><span id="line-122">    * @throws IllegalArgumentException If the URI is not &lt;js&gt;"https"&lt;/js&gt; and does not target a loopback host.</span>
+<span class="source-line-no">123</span><span id="line-123">    */</span>
+<span class="source-line-no">124</span><span id="line-124">   public static URI assertSecureOrLoopback(URI uri) {</span>
+<span class="source-line-no">125</span><span id="line-125">      if (! isSecureOrLoopback(uri))</span>
+<span class="source-line-no">126</span><span id="line-126">         throw iaex("URI must use https or target a loopback host: %s", uri);</span>
+<span class="source-line-no">127</span><span id="line-127">      return uri;</span>
+<span class="source-line-no">128</span><span id="line-128">   }</span>
+<span class="source-line-no">129</span><span id="line-129"></span>
+<span class="source-line-no">130</span><span id="line-130">   /**</span>
+<span class="source-line-no">131</span><span id="line-131">    * Constructor.</span>
+<span class="source-line-no">132</span><span id="line-132">    */</span>
+<span class="source-line-no">133</span><span id="line-133">   protected UriUtils() {}</span>
+<span class="source-line-no">134</span><span id="line-134">}</span>
 
 
 

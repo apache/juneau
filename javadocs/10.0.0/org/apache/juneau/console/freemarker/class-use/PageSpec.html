@@ -130,7 +130,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">PageSpec.</span><code><a href="../PageSpec.html#csrf(java.lang.String,java.lang.String)" class="member-name-link">csrf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;headerName)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Sets the CSRF body attributes: <code>data-juneau-csrf</code> and, if <code>headerName</code> is non-blank,
+<div class="block">Sets the request-token body attributes: <code>data-juneau-csrf</code> and, if <code>headerName</code> is non-blank,
  <code>data-juneau-csrf-header</code>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
@@ -195,7 +195,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;src)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Adds an <code>html</code> card whose body is fetched from <code>src</code>, with a title, unsanitized.</div>
+<div class="block">Adds an <code>html</code> card whose body is fetched from <code>src</code>, with a title, sanitized.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">PageSpec.</span><code><a href="../PageSpec.html#htmlSrc(java.lang.String,java.lang.String,java.lang.String,boolean)" class="member-name-link">htmlSrc</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,

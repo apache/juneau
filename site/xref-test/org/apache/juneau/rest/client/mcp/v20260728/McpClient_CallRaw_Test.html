@@ -57,7 +57,7 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpClient client(HttpTransport transport) {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">return</strong> McpClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build();
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">return</strong> McpClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build();
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	}
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	@Test
@@ -123,7 +123,7 @@
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 				.build();
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		};
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = McpClient.builder()
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			.endpoint(<span class="jxr_string">"http://x/mcp"</span>)
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			.endpoint(<span class="jxr_string">"https://x/mcp"</span>)
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 			.transport(transport)
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 			.responseCache(<strong class="jxr_keyword">new</strong> InMemoryMcpResponseCache())
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 			.build()) {

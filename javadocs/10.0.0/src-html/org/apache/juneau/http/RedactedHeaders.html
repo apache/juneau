@@ -66,60 +66,88 @@
 <span class="source-line-no">053</span><span id="line-53">   public static final Set&lt;String&gt; DEFAULT = Set.of(</span>
 <span class="source-line-no">054</span><span id="line-54">      "Authorization", "Cookie", "Set-Cookie", "Proxy-Authorization", "X-API-Key");</span>
 <span class="source-line-no">055</span><span id="line-55"></span>
-<span class="source-line-no">056</span><span id="line-56">   private RedactedHeaders() {}</span>
-<span class="source-line-no">057</span><span id="line-57"></span>
-<span class="source-line-no">058</span><span id="line-58">   /**</span>
-<span class="source-line-no">059</span><span id="line-59">    * Returns {@code true} if the given header name is in {@link #DEFAULT} (case-insensitive).</span>
-<span class="source-line-no">060</span><span id="line-60">    *</span>
-<span class="source-line-no">061</span><span id="line-61">    * @param name The header name to test. Can be {@code null} (returns {@code false}).</span>
-<span class="source-line-no">062</span><span id="line-62">    * @return {@code true} if the name matches one of {@link #DEFAULT}, case-insensitively.</span>
-<span class="source-line-no">063</span><span id="line-63">    */</span>
-<span class="source-line-no">064</span><span id="line-64">   public static boolean isSensitive(String name) {</span>
-<span class="source-line-no">065</span><span id="line-65">      return isSensitive(name, DEFAULT);</span>
-<span class="source-line-no">066</span><span id="line-66">   }</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   /**</span>
-<span class="source-line-no">069</span><span id="line-69">    * Returns {@code true} if the given header name matches one of {@code names}, case-insensitively.</span>
-<span class="source-line-no">070</span><span id="line-70">    *</span>
-<span class="source-line-no">071</span><span id="line-71">    * @param name The header name to test. Can be {@code null} (returns {@code false}).</span>
-<span class="source-line-no">072</span><span id="line-72">    * @param names The candidate header names. Can be {@code null} or empty (returns {@code false}).</span>
-<span class="source-line-no">073</span><span id="line-73">    *    {@code null} elements are ignored.</span>
-<span class="source-line-no">074</span><span id="line-74">    * @return {@code true} if {@code name} matches one of {@code names}, case-insensitively.</span>
-<span class="source-line-no">075</span><span id="line-75">    */</span>
-<span class="source-line-no">076</span><span id="line-76">   public static boolean isSensitive(String name, Collection&lt;String&gt; names) {</span>
-<span class="source-line-no">077</span><span id="line-77">      if (name == null || names == null)</span>
-<span class="source-line-no">078</span><span id="line-78">         return false;</span>
-<span class="source-line-no">079</span><span id="line-79">      for (var n : names)</span>
-<span class="source-line-no">080</span><span id="line-80">         if (n != null &amp;&amp; eqic(name, n))</span>
-<span class="source-line-no">081</span><span id="line-81">            return true;</span>
-<span class="source-line-no">082</span><span id="line-82">      return false;</span>
-<span class="source-line-no">083</span><span id="line-83">   }</span>
-<span class="source-line-no">084</span><span id="line-84"></span>
-<span class="source-line-no">085</span><span id="line-85">   /**</span>
-<span class="source-line-no">086</span><span id="line-86">    * Masks {@code value} with {@link #REDACTED} if {@code name} is in {@link #DEFAULT}</span>
-<span class="source-line-no">087</span><span id="line-87">    * (case-insensitive); otherwise returns {@code value} unchanged.</span>
-<span class="source-line-no">088</span><span id="line-88">    *</span>
-<span class="source-line-no">089</span><span id="line-89">    * @param name The header name. Can be {@code null} (never matches; {@code value} is returned as-is).</span>
-<span class="source-line-no">090</span><span id="line-90">    * @param value The header value to mask. Can be {@code null}.</span>
-<span class="source-line-no">091</span><span id="line-91">    * @return {@link #REDACTED} if {@code name} is sensitive, else {@code value}.</span>
-<span class="source-line-no">092</span><span id="line-92">    */</span>
-<span class="source-line-no">093</span><span id="line-93">   public static String redact(String name, String value) {</span>
-<span class="source-line-no">094</span><span id="line-94">      return isSensitive(name) ? REDACTED : value;</span>
-<span class="source-line-no">095</span><span id="line-95">   }</span>
-<span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">   /**</span>
-<span class="source-line-no">098</span><span id="line-98">    * Masks {@code value} with {@link #REDACTED} if {@code name} matches one of {@code names}</span>
-<span class="source-line-no">099</span><span id="line-99">    * (case-insensitive); otherwise returns {@code value} unchanged.</span>
-<span class="source-line-no">100</span><span id="line-100">    *</span>
-<span class="source-line-no">101</span><span id="line-101">    * @param name The header name. Can be {@code null} (never matches; {@code value} is returned as-is).</span>
-<span class="source-line-no">102</span><span id="line-102">    * @param value The header value to mask. Can be {@code null}.</span>
-<span class="source-line-no">103</span><span id="line-103">    * @param names The candidate header names. Can be {@code null} or empty (nothing is masked).</span>
-<span class="source-line-no">104</span><span id="line-104">    * @return {@link #REDACTED} if {@code name} matches one of {@code names}, else {@code value}.</span>
-<span class="source-line-no">105</span><span id="line-105">    */</span>
-<span class="source-line-no">106</span><span id="line-106">   public static String redact(String name, String value, Collection&lt;String&gt; names) {</span>
-<span class="source-line-no">107</span><span id="line-107">      return isSensitive(name, names) ? REDACTED : value;</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109">}</span>
+<span class="source-line-no">056</span><span id="line-56">   private static final List&lt;String&gt; CREDENTIAL_WORDS = List.of(</span>
+<span class="source-line-no">057</span><span id="line-57">      "auth", "token", "secret", "credential", "session", "cookie", "api-key", "apikey");</span>
+<span class="source-line-no">058</span><span id="line-58"></span>
+<span class="source-line-no">059</span><span id="line-59">   private RedactedHeaders() {}</span>
+<span class="source-line-no">060</span><span id="line-60"></span>
+<span class="source-line-no">061</span><span id="line-61">   /**</span>
+<span class="source-line-no">062</span><span id="line-62">    * Returns {@code true} if the given header name is in {@link #DEFAULT} (case-insensitive).</span>
+<span class="source-line-no">063</span><span id="line-63">    *</span>
+<span class="source-line-no">064</span><span id="line-64">    * @param name The header name to test. Can be {@code null} (returns {@code false}).</span>
+<span class="source-line-no">065</span><span id="line-65">    * @return {@code true} if the name matches one of {@link #DEFAULT}, case-insensitively.</span>
+<span class="source-line-no">066</span><span id="line-66">    */</span>
+<span class="source-line-no">067</span><span id="line-67">   public static boolean isSensitive(String name) {</span>
+<span class="source-line-no">068</span><span id="line-68">      return isSensitive(name, DEFAULT);</span>
+<span class="source-line-no">069</span><span id="line-69">   }</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">   /**</span>
+<span class="source-line-no">072</span><span id="line-72">    * Returns {@code true} if the given header name matches one of {@code names}, case-insensitively.</span>
+<span class="source-line-no">073</span><span id="line-73">    *</span>
+<span class="source-line-no">074</span><span id="line-74">    * @param name The header name to test. Can be {@code null} (returns {@code false}).</span>
+<span class="source-line-no">075</span><span id="line-75">    * @param names The candidate header names. Can be {@code null} or empty (returns {@code false}).</span>
+<span class="source-line-no">076</span><span id="line-76">    *    {@code null} elements are ignored.</span>
+<span class="source-line-no">077</span><span id="line-77">    * @return {@code true} if {@code name} matches one of {@code names}, case-insensitively.</span>
+<span class="source-line-no">078</span><span id="line-78">    */</span>
+<span class="source-line-no">079</span><span id="line-79">   public static boolean isSensitive(String name, Collection&lt;String&gt; names) {</span>
+<span class="source-line-no">080</span><span id="line-80">      if (name == null || names == null)</span>
+<span class="source-line-no">081</span><span id="line-81">         return false;</span>
+<span class="source-line-no">082</span><span id="line-82">      for (var n : names)</span>
+<span class="source-line-no">083</span><span id="line-83">         if (n != null &amp;&amp; eqic(name, n))</span>
+<span class="source-line-no">084</span><span id="line-84">            return true;</span>
+<span class="source-line-no">085</span><span id="line-85">      return false;</span>
+<span class="source-line-no">086</span><span id="line-86">   }</span>
+<span class="source-line-no">087</span><span id="line-87"></span>
+<span class="source-line-no">088</span><span id="line-88">   /**</span>
+<span class="source-line-no">089</span><span id="line-89">    * Returns {@code true} if the given header name is in {@link #DEFAULT} or its name suggests it carries a</span>
+<span class="source-line-no">090</span><span id="line-90">    * credential.</span>
+<span class="source-line-no">091</span><span id="line-91">    *</span>
+<span class="source-line-no">092</span><span id="line-92">    * &lt;p&gt;</span>
+<span class="source-line-no">093</span><span id="line-93">    * A name suggests a credential when, ignoring case, it contains {@code auth}, {@code token}, {@code secret},</span>
+<span class="source-line-no">094</span><span id="line-94">    * {@code credential}, {@code session}, {@code cookie}, {@code api-key} or {@code apikey} (for example</span>
+<span class="source-line-no">095</span><span id="line-95">    * {@code X-Auth-Token}).  This is broader than {@link #isSensitive(String)} and is meant for decisions that</span>
+<span class="source-line-no">096</span><span id="line-96">    * should fail closed, such as refusing to forward a header.</span>
+<span class="source-line-no">097</span><span id="line-97">    *</span>
+<span class="source-line-no">098</span><span id="line-98">    * @param name The header name to test. Can be {@code null} (returns {@code false}).</span>
+<span class="source-line-no">099</span><span id="line-99">    * @return {@code true} if the name is a known or likely credential header.</span>
+<span class="source-line-no">100</span><span id="line-100">    */</span>
+<span class="source-line-no">101</span><span id="line-101">   public static boolean isCredentialLike(String name) {</span>
+<span class="source-line-no">102</span><span id="line-102">      if (name == null)</span>
+<span class="source-line-no">103</span><span id="line-103">         return false;</span>
+<span class="source-line-no">104</span><span id="line-104">      if (isSensitive(name))</span>
+<span class="source-line-no">105</span><span id="line-105">         return true;</span>
+<span class="source-line-no">106</span><span id="line-106">      var n = name.toLowerCase(Locale.ROOT);</span>
+<span class="source-line-no">107</span><span id="line-107">      for (var w : CREDENTIAL_WORDS)</span>
+<span class="source-line-no">108</span><span id="line-108">         if (n.contains(w))</span>
+<span class="source-line-no">109</span><span id="line-109">            return true;</span>
+<span class="source-line-no">110</span><span id="line-110">      return false;</span>
+<span class="source-line-no">111</span><span id="line-111">   }</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">   /**</span>
+<span class="source-line-no">114</span><span id="line-114">    * Masks {@code value} with {@link #REDACTED} if {@code name} is in {@link #DEFAULT}</span>
+<span class="source-line-no">115</span><span id="line-115">    * (case-insensitive); otherwise returns {@code value} unchanged.</span>
+<span class="source-line-no">116</span><span id="line-116">    *</span>
+<span class="source-line-no">117</span><span id="line-117">    * @param name The header name. Can be {@code null} (never matches; {@code value} is returned as-is).</span>
+<span class="source-line-no">118</span><span id="line-118">    * @param value The header value to mask. Can be {@code null}.</span>
+<span class="source-line-no">119</span><span id="line-119">    * @return {@link #REDACTED} if {@code name} is sensitive, else {@code value}.</span>
+<span class="source-line-no">120</span><span id="line-120">    */</span>
+<span class="source-line-no">121</span><span id="line-121">   public static String redact(String name, String value) {</span>
+<span class="source-line-no">122</span><span id="line-122">      return isSensitive(name) ? REDACTED : value;</span>
+<span class="source-line-no">123</span><span id="line-123">   }</span>
+<span class="source-line-no">124</span><span id="line-124"></span>
+<span class="source-line-no">125</span><span id="line-125">   /**</span>
+<span class="source-line-no">126</span><span id="line-126">    * Masks {@code value} with {@link #REDACTED} if {@code name} matches one of {@code names}</span>
+<span class="source-line-no">127</span><span id="line-127">    * (case-insensitive); otherwise returns {@code value} unchanged.</span>
+<span class="source-line-no">128</span><span id="line-128">    *</span>
+<span class="source-line-no">129</span><span id="line-129">    * @param name The header name. Can be {@code null} (never matches; {@code value} is returned as-is).</span>
+<span class="source-line-no">130</span><span id="line-130">    * @param value The header value to mask. Can be {@code null}.</span>
+<span class="source-line-no">131</span><span id="line-131">    * @param names The candidate header names. Can be {@code null} or empty (nothing is masked).</span>
+<span class="source-line-no">132</span><span id="line-132">    * @return {@link #REDACTED} if {@code name} matches one of {@code names}, else {@code value}.</span>
+<span class="source-line-no">133</span><span id="line-133">    */</span>
+<span class="source-line-no">134</span><span id="line-134">   public static String redact(String name, String value, Collection&lt;String&gt; names) {</span>
+<span class="source-line-no">135</span><span id="line-135">      return isSensitive(name, names) ? REDACTED : value;</span>
+<span class="source-line-no">136</span><span id="line-136">   }</span>
+<span class="source-line-no">137</span><span id="line-137">}</span>
 
 
 

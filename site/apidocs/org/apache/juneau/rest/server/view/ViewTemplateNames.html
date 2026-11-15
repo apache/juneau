@@ -78,13 +78,13 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/view/ViewTemplateNames.html#line-29">ViewTemplateNames</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/view/ViewTemplateNames.html#line-31">ViewTemplateNames</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Shared template-name checks applied by the view bridges before a name reaches a templating engine.
 
  <p>
  A template name is a path relative to the bridge's configured base path.  Names that carry a URL scheme
- (or any <code>:</code>) or a backslash are never valid, and raw-served names must end in one of the extensions
+ (or any <code>:</code>), a backslash, or one of <code>; % ? #</code> are never valid, and raw-served names must end in one of the extensions
  registered for the engine.</div>
 <dl class="notes">
 <dt>Since:</dt>
@@ -140,20 +140,20 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isPlainName(java.lang.String)">
 <h3>isPlainName</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/view/ViewTemplateNames.html#line-39">isPlainName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/view/ViewTemplateNames.html#line-41">isPlainName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns <code>true</code> if the name is free of URL-scheme and path-separator tricks.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>name</code> - The template name.  May be <code>null</code>.</dd>
 <dt>Returns:</dt>
-<dd><code>false</code> if the name contains <code>:</code>, a backslash, or a control character.</dd>
+<dd><code>false</code> if the name contains <code>:</code>, <code>;</code>, <code>%</code>, <code>?</code>, <code>#</code>, a backslash, or a control character.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="hasAllowedExtension(java.lang.String,java.lang.String...)">
 <h3>hasAllowedExtension</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/view/ViewTemplateNames.html#line-57">hasAllowedExtension</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/view/ViewTemplateNames.html#line-59">hasAllowedExtension</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;extensions)</span></div>
 <div class="block">Returns <code>true</code> if the name ends with one of the allowed extensions.</div>
 <dl class="notes">
@@ -168,7 +168,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="requirePlainName(java.lang.String)">
 <h3>requirePlainName</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/view/ViewTemplateNames.html#line-71">requirePlainName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/view/ViewTemplateNames.html#line-72">requirePlainName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Validates a template name for the typed-view path, throwing if it is not a plain name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

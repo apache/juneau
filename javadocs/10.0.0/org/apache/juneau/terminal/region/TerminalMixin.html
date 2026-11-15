@@ -79,12 +79,12 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../petstore/console/ops/JobsRest.html" title="class in org.apache.juneau.petstore.console.ops">JobsRest</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-47">TerminalMixin</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-57">TerminalMixin</a></span></div>
 <div class="block">Mixin interface that serves the terminal bytes and raw endpoints, plus this module's own JS and CSS.
 
  <p>
- The one abstract method is the application's resolver, which is where authorization lives: an unknown id and a
- forbidden id both answer <code>404</code>.  Ids match <code>^[A-Za-z0-9_-]{1,128}$</code>; anything else answers <code>400</code>
+ The abstract methods are the application's access rules and resolver, which is where authorization lives: an
+ unknown id and a forbidden id both answer <code>404</code>.  Ids match <code>^[A-Za-z0-9_-]{1,128}$</code>; anything else answers <code>400</code>
  before the resolver runs.  The mixin adds no auth of its own; the host resource's guards apply.
 
  <p>
@@ -94,6 +94,16 @@ loadScripts(document, 'script');</script>
  <p class='bjava'>
    <ja>@Rest</ja>
    <jk>public class</jk> RunsResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> TerminalMixin, TerminalViewMixin {
+      <ja>@Override</ja>
+      <jk>public</jk> TerminalAccess terminalAccess() {
+         <jk>return</jk> (<jv>caller</jv>, <jv>id</jv>) -&gt; <jv>caller</jv>.principalName() != <jk>null</jk>;
+      }
+
+      <ja>@Override</ja>
+      <jk>public</jk> TerminalViewAccess terminalViewAccess() {
+         <jk>return</jk> (<jv>req</jv>, <jv>runId</jv>) -&gt; <jv>req</jv>.getUserPrincipal() != <jk>null</jk>;
+      }
+
       <ja>@Override</ja>
       <jk>public</jk> Optional&lt;TerminalSource&gt; terminalSource(String <jv>id</jv>, RestRequest <jv>req</jv>) {
          <jk>return</jk> <jf>runs</jf>.find(<jv>id</jv>).map(Run::terminal);
@@ -161,9 +171,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="TerminalAccess.html" title="interface in org.apache.juneau.terminal.region">TerminalAccess</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#terminalAccess()" class="member-name-link">terminalAccess</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="TerminalAccess.html" title="interface in org.apache.juneau.terminal.region">TerminalAccess</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#terminalAccess()" class="member-name-link">terminalAccess</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">The access rules applied to the bytes and raw endpoints before the source is resolved.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
@@ -219,7 +229,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="TERMINAL_PREFIX">
 <h3>TERMINAL_PREFIX</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-50">TERMINAL_PREFIX</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-60">TERMINAL_PREFIX</a></span></div>
 <div class="block">The URL path prefix of the terminal endpoints (relative to the host mount).</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -234,7 +244,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="BYTES_PATH">
 <h3>BYTES_PATH</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-53">BYTES_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-63">BYTES_PATH</a></span></div>
 <div class="block">The URL path template of the bytes endpoint.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -249,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="RAW_PATH">
 <h3>RAW_PATH</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-56">RAW_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-66">RAW_PATH</a></span></div>
 <div class="block">The URL path template of the raw download.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -264,7 +274,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="JS_PATH">
 <h3>JS_PATH</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-59">JS_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-69">JS_PATH</a></span></div>
 <div class="block">The URL path of the terminal runtime.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -279,7 +289,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="CSS_PATH">
 <h3>CSS_PATH</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-62">CSS_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-72">CSS_PATH</a></span></div>
 <div class="block">The URL path of the terminal stylesheet.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -294,7 +304,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="XTERM_JS_ASSET">
 <h3>XTERM_JS_ASSET</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-65">XTERM_JS_ASSET</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-75">XTERM_JS_ASSET</a></span></div>
 <div class="block">The <code>WebJarResolver</code> asset id of the xterm.js UMD bundle.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -309,7 +319,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="XTERM_CSS_ASSET">
 <h3>XTERM_CSS_ASSET</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-68">XTERM_CSS_ASSET</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-78">XTERM_CSS_ASSET</a></span></div>
 <div class="block">The <code>WebJarResolver</code> asset id of the xterm.js stylesheet.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -332,7 +342,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="terminalSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)">
 <h3>terminalSource</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="TerminalSource.html" title="interface in org.apache.juneau.terminal.region">TerminalSource</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-77">terminalSource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="TerminalSource.html" title="interface in org.apache.juneau.terminal.region">TerminalSource</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-87">terminalSource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Resolves the source for a terminal id, applying the application's own access rules.</div>
 <dl class="notes">
@@ -347,14 +357,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="terminalAccess()">
 <h3>terminalAccess</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="TerminalAccess.html" title="interface in org.apache.juneau.terminal.region">TerminalAccess</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-90">terminalAccess</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="TerminalAccess.html" title="interface in org.apache.juneau.terminal.region">TerminalAccess</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-99">terminalAccess</a></span>()</div>
 <div class="block">The access rules applied to the bytes and raw endpoints before the source is resolved.
 
  <p>
  A caller that may not watch the id is answered <code>404</code>, the same as an unknown id.  The caller handed to the
- rules is the request's principal and request attributes.  Override to share one <a href="TerminalAccess.html" title="interface in org.apache.juneau.terminal.region"><code>TerminalAccess</code></a> with the
- bus input path; the default admits every caller and leaves the decision to
- <a href="#terminalSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)"><code>terminalSource(String, RestRequest)</code></a>.</div>
+ rules is the request's principal and request attributes.  There is no default: every host states who may watch,
+ and may share one <a href="TerminalAccess.html" title="interface in org.apache.juneau.terminal.region"><code>TerminalAccess</code></a> with the bus input path.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The access rules.  Never <jk>null</jk>.</dd>
@@ -364,7 +373,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="terminalBytes(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>terminalBytes</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-102">terminalBytes</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-109">terminalBytes</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
@@ -383,7 +392,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="terminalRaw(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>terminalRaw</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-115">terminalRaw</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-122">terminalRaw</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
@@ -402,7 +411,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="terminalScript()">
 <h3>terminalScript</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-137">terminalScript</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-144">terminalScript</a></span>()</div>
 <div class="block">[GET /juneau-terminal.js] &mdash; the terminal runtime.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -413,7 +422,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="terminalStylesheet()">
 <h3>terminalStylesheet</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-147">terminalStylesheet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-154">terminalStylesheet</a></span>()</div>
 <div class="block">[GET /juneau-terminal.css] &mdash; the terminal stylesheet.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -424,7 +433,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="terminalAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)">
 <h3>terminalAssetUrl</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-159">terminalAssetUrl</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalMixin.html#line-166">terminalAssetUrl</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">The absolute URL of a terminal asset; the toolkit pack resolver for the <code>terminal</code> pack.</div>
 <dl class="notes">

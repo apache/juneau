@@ -247,7 +247,7 @@
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">		 * Allows an AS-advertised registration endpoint that points at a loopback, private, link-local or metadata host.</em>
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">		 * By default such endpoints are rejected (the endpoint comes from AS metadata, so a hostile document could</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">		 * By default such endpoints are rejected (the endpoint comes from AS metadata, so an untrusted document could</em>
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">		 * otherwise aim the registration request at an internal service).  Intended for local development and</em>
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">		 * testing; plain {@code http} is still limited to loopback hosts.</em>
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">		 *</em>
@@ -318,7 +318,7 @@
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<em class="jxr_comment">// Pre-registered credentials: use only if bound to this exact AS; a mismatch means the AS migrated (SEP-2352</em>
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<em class="jxr_comment">// MUST NOT reuse cross-AS creds — SHOULD surface an error rather than silently reuse).</em>
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">if</strong> (preRegistered != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			<strong class="jxr_keyword">if</strong> (! preRegistered.issuer().equals(issuer))
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			<strong class="jxr_keyword">if</strong> (neq(preRegistered.issuer(), issuer))
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Pre-registered client credentials are bound to issuer '"</span> + preRegistered.issuer()
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 					+ <span class="jxr_string">"' but the resource now indicates a different authorization server '"</span> + issuer
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 					+ <span class="jxr_string">"' (SEP-2352): refusing to reuse credentials across authorization servers"</span>);
@@ -334,7 +334,7 @@
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">if</strong> (hit.isPresent()) {
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 				<em class="jxr_comment">// Defensive: a buggy durable store that returns an entry keyed under the wrong issuer would otherwise</em>
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 				<em class="jxr_comment">// cause exactly the cross-AS credential reuse SEP-2352 forbids.  Never trust the returned entry's key.</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 				<strong class="jxr_keyword">if</strong> (! hit.get().issuer().equals(issuer))
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 				<strong class="jxr_keyword">if</strong> (neq(hit.get().issuer(), issuer))
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Client-registration store returned an entry bound to issuer '"</span> + hit.get().issuer()
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 						+ <span class="jxr_string">"' for a lookup of issuer '"</span> + issuer + <span class="jxr_string">"' (SEP-2352): refusing to reuse credentials across authorization servers"</span>);
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 				<strong class="jxr_keyword">return</strong> hit.get();
@@ -362,46 +362,47 @@
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 			.applicationType(applicationType)
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 			.addRedirectUris(redirectUrisSupplier.get())
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 			.confidential(confidential)
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			.httpTimeout(httpTimeout);
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		scopes.forEach(b::scope);
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">if</strong> (clientName != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			b.clientName(clientName);
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">if</strong> (initialAccessTokenSupplier != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			b.initialAccessToken(initialAccessTokenSupplier.get());
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">if</strong> (httpRequestConfigurator != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			b.httpRequestConfigurator(httpRequestConfigurator);
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">return</strong> b.build().register();
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	}
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * Extracts the RFC 7591 {@code registration_endpoint} from the discovered AS metadata's extras, if present.</em>
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 * The value is AS-supplied, so a hostile/misconfigured AS document is defended against here: a malformed URI or a</em>
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 * plaintext {@code <a href="http://" target="alexandria_uri">http://</a>} (non-loopback) endpoint yields the documented {@link McpAuthException} rather than a raw</em>
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 * {@link IllegalArgumentException} (from {@code URI.create}) or a downstream {@link IllegalStateException} (from the</em>
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 * registrar's https gate).</em>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">static</strong> Optional&lt;URI&gt; registrationEndpoint(<a name="OidcMetadata" href="../../../../../../../org/apache/juneau/rest/auth/oauth/oidc/OidcMetadata.html#OidcMetadata">OidcMetadata</a> as, <strong class="jxr_keyword">boolean</strong> allowPrivateUrls) {
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">var</strong> v = as.extras().get(<span class="jxr_string">"registration_endpoint"</span>);
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">if</strong> (v == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			<strong class="jxr_keyword">return</strong> oe();
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		URI uri;
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			uri = URI.create(v.toString());
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Authorization server advertised a malformed registration_endpoint: '"</span> + v + <span class="jxr_string">"'"</span>, e);
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		}
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			RemoteUrlPolicy.requireAllowedUrl(uri.toString(), allowPrivateUrls);
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Authorization server advertised a registration_endpoint that is not permitted: '"</span> + uri + <span class="jxr_string">"': "</span> + e.getMessage(), e);
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		}
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">if</strong> (! McpDynamicClientRegistrar.isSecureOrLoopback(uri))
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Authorization server advertised a non-https registration_endpoint (loopback exempt): '"</span> + uri + <span class="jxr_string">"'"</span>);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">return</strong> o(uri);
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> }
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			.httpTimeout(httpTimeout)
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			.allowPrivateUrls(allowPrivateUrls);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		scopes.forEach(b::scope);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">if</strong> (clientName != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			b.clientName(clientName);
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">if</strong> (initialAccessTokenSupplier != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			b.initialAccessToken(initialAccessTokenSupplier.get());
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">if</strong> (httpRequestConfigurator != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			b.httpRequestConfigurator(httpRequestConfigurator);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">return</strong> b.build().register();
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	}
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 * Extracts the RFC 7591 {@code registration_endpoint} from the discovered AS metadata's extras, if present.</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 * The value is AS-supplied, so an untrusted/misconfigured AS document is defended against here: a malformed URI or a</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 * plaintext {@code <a href="http://" target="alexandria_uri">http://</a>} (non-loopback) endpoint yields the documented {@link McpAuthException} rather than a raw</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 * {@link IllegalArgumentException} (from {@code URI.create}) or a downstream {@link IllegalStateException} (from the</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 * registrar's https gate).</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	<strong class="jxr_keyword">static</strong> Optional&lt;URI&gt; registrationEndpoint(<a name="OidcMetadata" href="../../../../../../../org/apache/juneau/rest/auth/oauth/oidc/OidcMetadata.html#OidcMetadata">OidcMetadata</a> as, <strong class="jxr_keyword">boolean</strong> allowPrivateUrls) {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">var</strong> v = as.extras().get(<span class="jxr_string">"registration_endpoint"</span>);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">if</strong> (v == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			<strong class="jxr_keyword">return</strong> oe();
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		URI uri;
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			uri = URI.create(v.toString());
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Authorization server advertised a malformed registration_endpoint: '"</span> + v + <span class="jxr_string">"'"</span>, e);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		}
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			RemoteUrlPolicy.requireAllowedUrl(uri.toString(), allowPrivateUrls);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Authorization server advertised a registration_endpoint that is not permitted: '"</span> + uri + <span class="jxr_string">"': "</span> + e.getMessage(), e);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		}
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">if</strong> (! McpDynamicClientRegistrar.isSecureOrLoopback(uri))
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="McpAuthException" href="../../../../../../../org/apache/juneau/rest/client/mcp/auth/McpAuthException.html#McpAuthException">McpAuthException</a>(<span class="jxr_string">"Authorization server advertised a non-https registration_endpoint (loopback exempt): '"</span> + uri + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">return</strong> o(uri);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	}
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -246,7 +246,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#enterParseDepth()" class="member-name-link">enterParseDepth</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Enters one level of recursive databind parsing, enforcing the shared <a href="ParserSession.Builder.html#maxParseDepth(int)"><code>ParserSession.Builder.maxParseDepth(int)</code></a>
- budget (default <a href="#DEFAULT_MAX_PARSE_DEPTH">1000</a>).</div>
+ budget (default <a href="#DEFAULT_MAX_PARSE_DEPTH">500</a>).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exitParseDepth()" class="member-name-link">exitParseDepth</a>()</code></div>
@@ -1796,7 +1796,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.html#line-1383">enterParseDepth</a></span>()
                               throws <span class="exceptions"><a href="ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Enters one level of recursive databind parsing, enforcing the shared <a href="ParserSession.Builder.html#maxParseDepth(int)"><code>ParserSession.Builder.maxParseDepth(int)</code></a>
- budget (default <a href="#DEFAULT_MAX_PARSE_DEPTH">1000</a>).
+ budget (default <a href="#DEFAULT_MAX_PARSE_DEPTH">500</a>).
 
  <p>
  Format parsers (JSON, UON, URL-encoding, XML, HTML, YAML, Markdown, CBOR, Protobuf, MsgPack) call this at their

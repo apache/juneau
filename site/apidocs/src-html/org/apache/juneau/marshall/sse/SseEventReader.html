@@ -77,213 +77,247 @@
 <span class="source-line-no">064</span><span id="line-64">   /** UTF-8 BOM character that must be stripped exactly once from the start of an SSE stream. */</span>
 <span class="source-line-no">065</span><span id="line-65">   private static final int BOM = 0xFEFF;</span>
 <span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">   private final Reader in;</span>
-<span class="source-line-no">068</span><span id="line-68"></span>
-<span class="source-line-no">069</span><span id="line-69">   private boolean bomChecked;</span>
-<span class="source-line-no">070</span><span id="line-70">   private boolean eof;</span>
-<span class="source-line-no">071</span><span id="line-71">   private SseEvent peeked;</span>
+<span class="source-line-no">067</span><span id="line-67">   /** Default maximum length, in characters, of a single line. */</span>
+<span class="source-line-no">068</span><span id="line-68">   public static final int DEFAULT_MAX_LINE_LENGTH = 16 * 1024 * 1024;</span>
+<span class="source-line-no">069</span><span id="line-69"></span>
+<span class="source-line-no">070</span><span id="line-70">   /** Default maximum accumulated size, in characters, of the data of a single event. */</span>
+<span class="source-line-no">071</span><span id="line-71">   public static final int DEFAULT_MAX_EVENT_LENGTH = 16 * 1024 * 1024;</span>
 <span class="source-line-no">072</span><span id="line-72"></span>
-<span class="source-line-no">073</span><span id="line-73">   private final StringBuilder dataBuf = new StringBuilder();</span>
-<span class="source-line-no">074</span><span id="line-74">   private String eventName;</span>
-<span class="source-line-no">075</span><span id="line-75">   private String lastEventId;</span>
-<span class="source-line-no">076</span><span id="line-76">   private Long retryValue;</span>
-<span class="source-line-no">077</span><span id="line-77">   private boolean haveAnyField;</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">   private int pendingChar = -1;</span>
+<span class="source-line-no">073</span><span id="line-73">   private final Reader in;</span>
+<span class="source-line-no">074</span><span id="line-74">   private final int maxLineLength;</span>
+<span class="source-line-no">075</span><span id="line-75">   private final int maxEventLength;</span>
+<span class="source-line-no">076</span><span id="line-76"></span>
+<span class="source-line-no">077</span><span id="line-77">   private boolean bomChecked;</span>
+<span class="source-line-no">078</span><span id="line-78">   private boolean eof;</span>
+<span class="source-line-no">079</span><span id="line-79">   private SseEvent peeked;</span>
 <span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   /**</span>
-<span class="source-line-no">082</span><span id="line-82">    * Constructor.</span>
-<span class="source-line-no">083</span><span id="line-83">    *</span>
-<span class="source-line-no">084</span><span id="line-84">    * @param in The reader to consume events from. Must not be &lt;jk&gt;null&lt;/jk&gt;. Caller retains ownership;</span>
-<span class="source-line-no">085</span><span id="line-85">    *    {@link #close()} closes this reader.</span>
-<span class="source-line-no">086</span><span id="line-86">    */</span>
-<span class="source-line-no">087</span><span id="line-87">   @SuppressWarnings({</span>
-<span class="source-line-no">088</span><span id="line-88">      "java:S2095" // Reader ownership is transferred to this Closeable and released by close().</span>
-<span class="source-line-no">089</span><span id="line-89">   })</span>
-<span class="source-line-no">090</span><span id="line-90">   public SseEventReader(Reader in) {</span>
-<span class="source-line-no">091</span><span id="line-91">      this.in = reqnn("in", in);</span>
-<span class="source-line-no">092</span><span id="line-92">   }</span>
-<span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94">   @Override /* Overridden from Iterator */</span>
-<span class="source-line-no">095</span><span id="line-95">   public boolean hasNext() {</span>
-<span class="source-line-no">096</span><span id="line-96">      if (peeked != null)</span>
-<span class="source-line-no">097</span><span id="line-97">         return true;</span>
-<span class="source-line-no">098</span><span id="line-98">      if (eof)</span>
-<span class="source-line-no">099</span><span id="line-99">         return false;</span>
-<span class="source-line-no">100</span><span id="line-100">      try {</span>
-<span class="source-line-no">101</span><span id="line-101">         peeked = nextEvent();</span>
-<span class="source-line-no">102</span><span id="line-102">      } catch (IOException e) {</span>
-<span class="source-line-no">103</span><span id="line-103">         throw new UncheckedIOException(e);</span>
-<span class="source-line-no">104</span><span id="line-104">      }</span>
-<span class="source-line-no">105</span><span id="line-105">      return peeked != null;</span>
-<span class="source-line-no">106</span><span id="line-106">   }</span>
-<span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108">   @Override /* Overridden from Iterator */</span>
-<span class="source-line-no">109</span><span id="line-109">   public SseEvent next() {</span>
-<span class="source-line-no">110</span><span id="line-110">      if (!hasNext())</span>
-<span class="source-line-no">111</span><span id="line-111">         throw new NoSuchElementException();</span>
-<span class="source-line-no">112</span><span id="line-112">      var out = peeked;</span>
-<span class="source-line-no">113</span><span id="line-113">      peeked = null;</span>
-<span class="source-line-no">114</span><span id="line-114">      return out;</span>
-<span class="source-line-no">115</span><span id="line-115">   }</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   @Override /* Overridden from Closeable */</span>
-<span class="source-line-no">118</span><span id="line-118">   public void close() throws IOException {</span>
-<span class="source-line-no">119</span><span id="line-119">      in.close();</span>
-<span class="source-line-no">120</span><span id="line-120">   }</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">   /**</span>
-<span class="source-line-no">123</span><span id="line-123">    * Drains the remaining events into a list, then closes this reader.</span>
-<span class="source-line-no">124</span><span id="line-124">    *</span>
-<span class="source-line-no">125</span><span id="line-125">    * @return The list of events in order.</span>
-<span class="source-line-no">126</span><span id="line-126">    * @throws IOException If an I/O error occurs while reading.</span>
-<span class="source-line-no">127</span><span id="line-127">    */</span>
-<span class="source-line-no">128</span><span id="line-128">   public List&lt;SseEvent&gt; toList() throws IOException {</span>
-<span class="source-line-no">129</span><span id="line-129">      var out = new ArrayList&lt;SseEvent&gt;();</span>
+<span class="source-line-no">081</span><span id="line-81">   private final StringBuilder dataBuf = new StringBuilder();</span>
+<span class="source-line-no">082</span><span id="line-82">   private String eventName;</span>
+<span class="source-line-no">083</span><span id="line-83">   private String lastEventId;</span>
+<span class="source-line-no">084</span><span id="line-84">   private Long retryValue;</span>
+<span class="source-line-no">085</span><span id="line-85">   private boolean haveAnyField;</span>
+<span class="source-line-no">086</span><span id="line-86"></span>
+<span class="source-line-no">087</span><span id="line-87">   private int pendingChar = -1;</span>
+<span class="source-line-no">088</span><span id="line-88"></span>
+<span class="source-line-no">089</span><span id="line-89">   /**</span>
+<span class="source-line-no">090</span><span id="line-90">    * Constructor.</span>
+<span class="source-line-no">091</span><span id="line-91">    *</span>
+<span class="source-line-no">092</span><span id="line-92">    * @param in The reader to consume events from. Must not be &lt;jk&gt;null&lt;/jk&gt;. Caller retains ownership;</span>
+<span class="source-line-no">093</span><span id="line-93">    *    {@link #close()} closes this reader.</span>
+<span class="source-line-no">094</span><span id="line-94">    */</span>
+<span class="source-line-no">095</span><span id="line-95">   @SuppressWarnings({</span>
+<span class="source-line-no">096</span><span id="line-96">      "java:S2095" // Reader ownership is transferred to this Closeable and released by close().</span>
+<span class="source-line-no">097</span><span id="line-97">   })</span>
+<span class="source-line-no">098</span><span id="line-98">   public SseEventReader(Reader in) {</span>
+<span class="source-line-no">099</span><span id="line-99">      this(in, DEFAULT_MAX_LINE_LENGTH, DEFAULT_MAX_EVENT_LENGTH);</span>
+<span class="source-line-no">100</span><span id="line-100">   }</span>
+<span class="source-line-no">101</span><span id="line-101"></span>
+<span class="source-line-no">102</span><span id="line-102">   /**</span>
+<span class="source-line-no">103</span><span id="line-103">    * Constructor with explicit size limits.</span>
+<span class="source-line-no">104</span><span id="line-104">    *</span>
+<span class="source-line-no">105</span><span id="line-105">    * &lt;p&gt;</span>
+<span class="source-line-no">106</span><span id="line-106">    * A stream that exceeds either limit causes {@link #hasNext()} to fail with an {@link UncheckedIOException}</span>
+<span class="source-line-no">107</span><span id="line-107">    * (or {@link #toList()} to throw an {@link IOException}).</span>
+<span class="source-line-no">108</span><span id="line-108">    *</span>
+<span class="source-line-no">109</span><span id="line-109">    * @param in The reader to consume events from. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">110</span><span id="line-110">    * @param maxLineLength The maximum length, in characters, of one line. Must be positive.</span>
+<span class="source-line-no">111</span><span id="line-111">    * @param maxEventLength The maximum accumulated length, in characters, of one event's data. Must be positive.</span>
+<span class="source-line-no">112</span><span id="line-112">    */</span>
+<span class="source-line-no">113</span><span id="line-113">   @SuppressWarnings({</span>
+<span class="source-line-no">114</span><span id="line-114">      "java:S2095" // Reader ownership is transferred to this Closeable and released by close().</span>
+<span class="source-line-no">115</span><span id="line-115">   })</span>
+<span class="source-line-no">116</span><span id="line-116">   public SseEventReader(Reader in, int maxLineLength, int maxEventLength) {</span>
+<span class="source-line-no">117</span><span id="line-117">      this.in = reqnn("in", in);</span>
+<span class="source-line-no">118</span><span id="line-118">      req(maxLineLength &gt; 0, "maxLineLength must be positive (was %s)", maxLineLength);</span>
+<span class="source-line-no">119</span><span id="line-119">      req(maxEventLength &gt; 0, "maxEventLength must be positive (was %s)", maxEventLength);</span>
+<span class="source-line-no">120</span><span id="line-120">      this.maxLineLength = maxLineLength;</span>
+<span class="source-line-no">121</span><span id="line-121">      this.maxEventLength = maxEventLength;</span>
+<span class="source-line-no">122</span><span id="line-122">   }</span>
+<span class="source-line-no">123</span><span id="line-123"></span>
+<span class="source-line-no">124</span><span id="line-124">   @Override /* Overridden from Iterator */</span>
+<span class="source-line-no">125</span><span id="line-125">   public boolean hasNext() {</span>
+<span class="source-line-no">126</span><span id="line-126">      if (peeked != null)</span>
+<span class="source-line-no">127</span><span id="line-127">         return true;</span>
+<span class="source-line-no">128</span><span id="line-128">      if (eof)</span>
+<span class="source-line-no">129</span><span id="line-129">         return false;</span>
 <span class="source-line-no">130</span><span id="line-130">      try {</span>
-<span class="source-line-no">131</span><span id="line-131">         while (hasNext())</span>
-<span class="source-line-no">132</span><span id="line-132">            out.add(next());</span>
-<span class="source-line-no">133</span><span id="line-133">      } catch (UncheckedIOException e) {</span>
-<span class="source-line-no">134</span><span id="line-134">         throw e.getCause();</span>
-<span class="source-line-no">135</span><span id="line-135">      } finally {</span>
-<span class="source-line-no">136</span><span id="line-136">         close();</span>
-<span class="source-line-no">137</span><span id="line-137">      }</span>
-<span class="source-line-no">138</span><span id="line-138">      return out;</span>
-<span class="source-line-no">139</span><span id="line-139">   }</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   private SseEvent nextEvent() throws IOException {</span>
-<span class="source-line-no">142</span><span id="line-142">      while (true) {</span>
-<span class="source-line-no">143</span><span id="line-143">         var line = readLine();</span>
-<span class="source-line-no">144</span><span id="line-144">         if (line == null) {</span>
-<span class="source-line-no">145</span><span id="line-145">            eof = true;</span>
-<span class="source-line-no">146</span><span id="line-146">            if (haveAnyField)</span>
-<span class="source-line-no">147</span><span id="line-147">               return dispatch();</span>
-<span class="source-line-no">148</span><span id="line-148">            return null;</span>
-<span class="source-line-no">149</span><span id="line-149">         }</span>
-<span class="source-line-no">150</span><span id="line-150">         if (line.isEmpty()) {</span>
-<span class="source-line-no">151</span><span id="line-151">            if (haveAnyField)</span>
-<span class="source-line-no">152</span><span id="line-152">               return dispatch();</span>
-<span class="source-line-no">153</span><span id="line-153">            continue;</span>
-<span class="source-line-no">154</span><span id="line-154">         }</span>
-<span class="source-line-no">155</span><span id="line-155">         processField(line);</span>
-<span class="source-line-no">156</span><span id="line-156">      }</span>
-<span class="source-line-no">157</span><span id="line-157">   }</span>
-<span class="source-line-no">158</span><span id="line-158"></span>
-<span class="source-line-no">159</span><span id="line-159">   private SseEvent dispatch() {</span>
-<span class="source-line-no">160</span><span id="line-160">      var out = new SseEvent();</span>
-<span class="source-line-no">161</span><span id="line-161">      out.setEvent(eventName);</span>
-<span class="source-line-no">162</span><span id="line-162">      if (!dataBuf.isEmpty()) {</span>
-<span class="source-line-no">163</span><span id="line-163">         if (dataBuf.charAt(dataBuf.length() - 1) == '\n')</span>
-<span class="source-line-no">164</span><span id="line-164">            dataBuf.deleteCharAt(dataBuf.length() - 1);</span>
-<span class="source-line-no">165</span><span id="line-165">         out.setData(dataBuf.toString());</span>
-<span class="source-line-no">166</span><span id="line-166">      }</span>
-<span class="source-line-no">167</span><span id="line-167">      out.setId(lastEventId);</span>
-<span class="source-line-no">168</span><span id="line-168">      out.setRetry(retryValue);</span>
-<span class="source-line-no">169</span><span id="line-169">      resetEventBuffers();</span>
-<span class="source-line-no">170</span><span id="line-170">      return out;</span>
-<span class="source-line-no">171</span><span id="line-171">   }</span>
-<span class="source-line-no">172</span><span id="line-172"></span>
-<span class="source-line-no">173</span><span id="line-173">   private void resetEventBuffers() {</span>
-<span class="source-line-no">174</span><span id="line-174">      dataBuf.setLength(0);</span>
-<span class="source-line-no">175</span><span id="line-175">      eventName = null;</span>
-<span class="source-line-no">176</span><span id="line-176">      lastEventId = null;</span>
-<span class="source-line-no">177</span><span id="line-177">      retryValue = null;</span>
-<span class="source-line-no">178</span><span id="line-178">      haveAnyField = false;</span>
-<span class="source-line-no">179</span><span id="line-179">   }</span>
-<span class="source-line-no">180</span><span id="line-180"></span>
-<span class="source-line-no">181</span><span id="line-181">   private void processField(String line) {</span>
-<span class="source-line-no">182</span><span id="line-182">      if (line.charAt(0) == ':') {</span>
-<span class="source-line-no">183</span><span id="line-183">         haveAnyField = true;</span>
-<span class="source-line-no">184</span><span id="line-184">         return;</span>
-<span class="source-line-no">185</span><span id="line-185">      }</span>
-<span class="source-line-no">186</span><span id="line-186">      String fieldName;</span>
-<span class="source-line-no">187</span><span id="line-187">      String fieldValue;</span>
-<span class="source-line-no">188</span><span id="line-188">      var colon = line.indexOf(':');</span>
-<span class="source-line-no">189</span><span id="line-189">      if (colon &lt; 0) {</span>
-<span class="source-line-no">190</span><span id="line-190">         fieldName = line;</span>
-<span class="source-line-no">191</span><span id="line-191">         fieldValue = "";</span>
-<span class="source-line-no">192</span><span id="line-192">      } else {</span>
-<span class="source-line-no">193</span><span id="line-193">         fieldName = line.substring(0, colon);</span>
-<span class="source-line-no">194</span><span id="line-194">         fieldValue = line.substring(colon + 1);</span>
-<span class="source-line-no">195</span><span id="line-195">         if (!fieldValue.isEmpty() &amp;&amp; fieldValue.charAt(0) == ' ')</span>
-<span class="source-line-no">196</span><span id="line-196">            fieldValue = fieldValue.substring(1);</span>
-<span class="source-line-no">197</span><span id="line-197">      }</span>
-<span class="source-line-no">198</span><span id="line-198">      haveAnyField = true;</span>
-<span class="source-line-no">199</span><span id="line-199">      applyField(fieldName, fieldValue);</span>
-<span class="source-line-no">200</span><span id="line-200">   }</span>
-<span class="source-line-no">201</span><span id="line-201"></span>
-<span class="source-line-no">202</span><span id="line-202">   private void applyField(String fieldName, String fieldValue) {</span>
-<span class="source-line-no">203</span><span id="line-203">      switch (fieldName) {</span>
-<span class="source-line-no">204</span><span id="line-204">         case "event":</span>
-<span class="source-line-no">205</span><span id="line-205">            eventName = fieldValue;</span>
-<span class="source-line-no">206</span><span id="line-206">            break;</span>
-<span class="source-line-no">207</span><span id="line-207">         case "data":</span>
-<span class="source-line-no">208</span><span id="line-208">            dataBuf.append(fieldValue).append('\n');</span>
-<span class="source-line-no">209</span><span id="line-209">            break;</span>
-<span class="source-line-no">210</span><span id="line-210">         case "id":</span>
-<span class="source-line-no">211</span><span id="line-211">            if (fieldValue.indexOf('\u0000') &lt; 0)</span>
-<span class="source-line-no">212</span><span id="line-212">               lastEventId = fieldValue;</span>
-<span class="source-line-no">213</span><span id="line-213">            break;</span>
-<span class="source-line-no">214</span><span id="line-214">         case "retry":</span>
-<span class="source-line-no">215</span><span id="line-215">            retryValue = parseRetry(fieldValue);</span>
-<span class="source-line-no">216</span><span id="line-216">            break;</span>
-<span class="source-line-no">217</span><span id="line-217">         default:</span>
-<span class="source-line-no">218</span><span id="line-218">            break;</span>
-<span class="source-line-no">219</span><span id="line-219">      }</span>
-<span class="source-line-no">220</span><span id="line-220">   }</span>
-<span class="source-line-no">221</span><span id="line-221"></span>
-<span class="source-line-no">222</span><span id="line-222">   private static Long parseRetry(String s) {</span>
-<span class="source-line-no">223</span><span id="line-223">      if (s.isEmpty())</span>
-<span class="source-line-no">224</span><span id="line-224">         return null;</span>
-<span class="source-line-no">225</span><span id="line-225">      for (var i = 0; i &lt; s.length(); i++) {</span>
-<span class="source-line-no">226</span><span id="line-226">         var c = s.charAt(i);</span>
-<span class="source-line-no">227</span><span id="line-227">         if (c &lt; '0' || c &gt; '9')</span>
-<span class="source-line-no">228</span><span id="line-228">            return null;</span>
+<span class="source-line-no">131</span><span id="line-131">         peeked = nextEvent();</span>
+<span class="source-line-no">132</span><span id="line-132">      } catch (IOException e) {</span>
+<span class="source-line-no">133</span><span id="line-133">         throw new UncheckedIOException(e);</span>
+<span class="source-line-no">134</span><span id="line-134">      }</span>
+<span class="source-line-no">135</span><span id="line-135">      return peeked != null;</span>
+<span class="source-line-no">136</span><span id="line-136">   }</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">   @Override /* Overridden from Iterator */</span>
+<span class="source-line-no">139</span><span id="line-139">   public SseEvent next() {</span>
+<span class="source-line-no">140</span><span id="line-140">      if (!hasNext())</span>
+<span class="source-line-no">141</span><span id="line-141">         throw new NoSuchElementException();</span>
+<span class="source-line-no">142</span><span id="line-142">      var out = peeked;</span>
+<span class="source-line-no">143</span><span id="line-143">      peeked = null;</span>
+<span class="source-line-no">144</span><span id="line-144">      return out;</span>
+<span class="source-line-no">145</span><span id="line-145">   }</span>
+<span class="source-line-no">146</span><span id="line-146"></span>
+<span class="source-line-no">147</span><span id="line-147">   @Override /* Overridden from Closeable */</span>
+<span class="source-line-no">148</span><span id="line-148">   public void close() throws IOException {</span>
+<span class="source-line-no">149</span><span id="line-149">      in.close();</span>
+<span class="source-line-no">150</span><span id="line-150">   }</span>
+<span class="source-line-no">151</span><span id="line-151"></span>
+<span class="source-line-no">152</span><span id="line-152">   /**</span>
+<span class="source-line-no">153</span><span id="line-153">    * Drains the remaining events into a list, then closes this reader.</span>
+<span class="source-line-no">154</span><span id="line-154">    *</span>
+<span class="source-line-no">155</span><span id="line-155">    * @return The list of events in order.</span>
+<span class="source-line-no">156</span><span id="line-156">    * @throws IOException If an I/O error occurs while reading.</span>
+<span class="source-line-no">157</span><span id="line-157">    */</span>
+<span class="source-line-no">158</span><span id="line-158">   public List&lt;SseEvent&gt; toList() throws IOException {</span>
+<span class="source-line-no">159</span><span id="line-159">      var out = new ArrayList&lt;SseEvent&gt;();</span>
+<span class="source-line-no">160</span><span id="line-160">      try {</span>
+<span class="source-line-no">161</span><span id="line-161">         while (hasNext())</span>
+<span class="source-line-no">162</span><span id="line-162">            out.add(next());</span>
+<span class="source-line-no">163</span><span id="line-163">      } catch (UncheckedIOException e) {</span>
+<span class="source-line-no">164</span><span id="line-164">         throw e.getCause();</span>
+<span class="source-line-no">165</span><span id="line-165">      } finally {</span>
+<span class="source-line-no">166</span><span id="line-166">         close();</span>
+<span class="source-line-no">167</span><span id="line-167">      }</span>
+<span class="source-line-no">168</span><span id="line-168">      return out;</span>
+<span class="source-line-no">169</span><span id="line-169">   }</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
+<span class="source-line-no">171</span><span id="line-171">   private SseEvent nextEvent() throws IOException {</span>
+<span class="source-line-no">172</span><span id="line-172">      while (true) {</span>
+<span class="source-line-no">173</span><span id="line-173">         var line = readLine();</span>
+<span class="source-line-no">174</span><span id="line-174">         if (line == null) {</span>
+<span class="source-line-no">175</span><span id="line-175">            eof = true;</span>
+<span class="source-line-no">176</span><span id="line-176">            if (haveAnyField)</span>
+<span class="source-line-no">177</span><span id="line-177">               return dispatch();</span>
+<span class="source-line-no">178</span><span id="line-178">            return null;</span>
+<span class="source-line-no">179</span><span id="line-179">         }</span>
+<span class="source-line-no">180</span><span id="line-180">         if (line.isEmpty()) {</span>
+<span class="source-line-no">181</span><span id="line-181">            if (haveAnyField)</span>
+<span class="source-line-no">182</span><span id="line-182">               return dispatch();</span>
+<span class="source-line-no">183</span><span id="line-183">            continue;</span>
+<span class="source-line-no">184</span><span id="line-184">         }</span>
+<span class="source-line-no">185</span><span id="line-185">         processField(line);</span>
+<span class="source-line-no">186</span><span id="line-186">         if (dataBuf.length() &gt; maxEventLength)</span>
+<span class="source-line-no">187</span><span id="line-187">            throw new IOException("SSE event data exceeds the maximum of " + maxEventLength + " characters");</span>
+<span class="source-line-no">188</span><span id="line-188">      }</span>
+<span class="source-line-no">189</span><span id="line-189">   }</span>
+<span class="source-line-no">190</span><span id="line-190"></span>
+<span class="source-line-no">191</span><span id="line-191">   private SseEvent dispatch() {</span>
+<span class="source-line-no">192</span><span id="line-192">      var out = new SseEvent();</span>
+<span class="source-line-no">193</span><span id="line-193">      out.setEvent(eventName);</span>
+<span class="source-line-no">194</span><span id="line-194">      if (!dataBuf.isEmpty()) {</span>
+<span class="source-line-no">195</span><span id="line-195">         if (dataBuf.charAt(dataBuf.length() - 1) == '\n')</span>
+<span class="source-line-no">196</span><span id="line-196">            dataBuf.deleteCharAt(dataBuf.length() - 1);</span>
+<span class="source-line-no">197</span><span id="line-197">         out.setData(dataBuf.toString());</span>
+<span class="source-line-no">198</span><span id="line-198">      }</span>
+<span class="source-line-no">199</span><span id="line-199">      out.setId(lastEventId);</span>
+<span class="source-line-no">200</span><span id="line-200">      out.setRetry(retryValue);</span>
+<span class="source-line-no">201</span><span id="line-201">      resetEventBuffers();</span>
+<span class="source-line-no">202</span><span id="line-202">      return out;</span>
+<span class="source-line-no">203</span><span id="line-203">   }</span>
+<span class="source-line-no">204</span><span id="line-204"></span>
+<span class="source-line-no">205</span><span id="line-205">   private void resetEventBuffers() {</span>
+<span class="source-line-no">206</span><span id="line-206">      dataBuf.setLength(0);</span>
+<span class="source-line-no">207</span><span id="line-207">      eventName = null;</span>
+<span class="source-line-no">208</span><span id="line-208">      lastEventId = null;</span>
+<span class="source-line-no">209</span><span id="line-209">      retryValue = null;</span>
+<span class="source-line-no">210</span><span id="line-210">      haveAnyField = false;</span>
+<span class="source-line-no">211</span><span id="line-211">   }</span>
+<span class="source-line-no">212</span><span id="line-212"></span>
+<span class="source-line-no">213</span><span id="line-213">   private void processField(String line) {</span>
+<span class="source-line-no">214</span><span id="line-214">      if (line.charAt(0) == ':') {</span>
+<span class="source-line-no">215</span><span id="line-215">         haveAnyField = true;</span>
+<span class="source-line-no">216</span><span id="line-216">         return;</span>
+<span class="source-line-no">217</span><span id="line-217">      }</span>
+<span class="source-line-no">218</span><span id="line-218">      String fieldName;</span>
+<span class="source-line-no">219</span><span id="line-219">      String fieldValue;</span>
+<span class="source-line-no">220</span><span id="line-220">      var colon = line.indexOf(':');</span>
+<span class="source-line-no">221</span><span id="line-221">      if (colon &lt; 0) {</span>
+<span class="source-line-no">222</span><span id="line-222">         fieldName = line;</span>
+<span class="source-line-no">223</span><span id="line-223">         fieldValue = "";</span>
+<span class="source-line-no">224</span><span id="line-224">      } else {</span>
+<span class="source-line-no">225</span><span id="line-225">         fieldName = line.substring(0, colon);</span>
+<span class="source-line-no">226</span><span id="line-226">         fieldValue = line.substring(colon + 1);</span>
+<span class="source-line-no">227</span><span id="line-227">         if (!fieldValue.isEmpty() &amp;&amp; fieldValue.charAt(0) == ' ')</span>
+<span class="source-line-no">228</span><span id="line-228">            fieldValue = fieldValue.substring(1);</span>
 <span class="source-line-no">229</span><span id="line-229">      }</span>
-<span class="source-line-no">230</span><span id="line-230">      try {</span>
-<span class="source-line-no">231</span><span id="line-231">         return Long.valueOf(s);</span>
-<span class="source-line-no">232</span><span id="line-232">      } catch (@SuppressWarnings("unused") NumberFormatException e) {</span>
-<span class="source-line-no">233</span><span id="line-233">         return null;</span>
-<span class="source-line-no">234</span><span id="line-234">      }</span>
-<span class="source-line-no">235</span><span id="line-235">   }</span>
-<span class="source-line-no">236</span><span id="line-236"></span>
-<span class="source-line-no">237</span><span id="line-237">   @SuppressWarnings({</span>
-<span class="source-line-no">238</span><span id="line-238">      "java:S3776" // SSE line parsing is a deliberate lexical state machine.</span>
-<span class="source-line-no">239</span><span id="line-239">   })</span>
-<span class="source-line-no">240</span><span id="line-240">   private String readLine() throws IOException {</span>
-<span class="source-line-no">241</span><span id="line-241">      var sb = new StringBuilder();</span>
-<span class="source-line-no">242</span><span id="line-242">      int c;</span>
-<span class="source-line-no">243</span><span id="line-243">      var sawAny = false;</span>
-<span class="source-line-no">244</span><span id="line-244">      while (true) {</span>
-<span class="source-line-no">245</span><span id="line-245">         if (pendingChar != -1) {</span>
-<span class="source-line-no">246</span><span id="line-246">            c = pendingChar;</span>
-<span class="source-line-no">247</span><span id="line-247">            pendingChar = -1;</span>
-<span class="source-line-no">248</span><span id="line-248">         } else {</span>
-<span class="source-line-no">249</span><span id="line-249">            c = in.read();</span>
-<span class="source-line-no">250</span><span id="line-250">         }</span>
-<span class="source-line-no">251</span><span id="line-251">         if (c == -1) {</span>
-<span class="source-line-no">252</span><span id="line-252">            if (!sawAny)</span>
-<span class="source-line-no">253</span><span id="line-253">               return null;</span>
-<span class="source-line-no">254</span><span id="line-254">            return sb.toString();</span>
-<span class="source-line-no">255</span><span id="line-255">         }</span>
-<span class="source-line-no">256</span><span id="line-256">         if (!bomChecked) {</span>
-<span class="source-line-no">257</span><span id="line-257">            bomChecked = true;</span>
-<span class="source-line-no">258</span><span id="line-258">            if (c == BOM)</span>
-<span class="source-line-no">259</span><span id="line-259">               continue;</span>
-<span class="source-line-no">260</span><span id="line-260">         }</span>
-<span class="source-line-no">261</span><span id="line-261">         sawAny = true;</span>
-<span class="source-line-no">262</span><span id="line-262">         if (c == '\n')</span>
-<span class="source-line-no">263</span><span id="line-263">            return sb.toString();</span>
-<span class="source-line-no">264</span><span id="line-264">         if (c == '\r') {</span>
-<span class="source-line-no">265</span><span id="line-265">            var next = in.read();</span>
-<span class="source-line-no">266</span><span id="line-266">            if (next != -1 &amp;&amp; next != '\n')</span>
-<span class="source-line-no">267</span><span id="line-267">               pendingChar = next;</span>
-<span class="source-line-no">268</span><span id="line-268">            return sb.toString();</span>
-<span class="source-line-no">269</span><span id="line-269">         }</span>
-<span class="source-line-no">270</span><span id="line-270">         sb.append((char) c);</span>
-<span class="source-line-no">271</span><span id="line-271">      }</span>
-<span class="source-line-no">272</span><span id="line-272">   }</span>
-<span class="source-line-no">273</span><span id="line-273">}</span>
+<span class="source-line-no">230</span><span id="line-230">      haveAnyField = true;</span>
+<span class="source-line-no">231</span><span id="line-231">      applyField(fieldName, fieldValue);</span>
+<span class="source-line-no">232</span><span id="line-232">   }</span>
+<span class="source-line-no">233</span><span id="line-233"></span>
+<span class="source-line-no">234</span><span id="line-234">   private void applyField(String fieldName, String fieldValue) {</span>
+<span class="source-line-no">235</span><span id="line-235">      switch (fieldName) {</span>
+<span class="source-line-no">236</span><span id="line-236">         case "event":</span>
+<span class="source-line-no">237</span><span id="line-237">            eventName = fieldValue;</span>
+<span class="source-line-no">238</span><span id="line-238">            break;</span>
+<span class="source-line-no">239</span><span id="line-239">         case "data":</span>
+<span class="source-line-no">240</span><span id="line-240">            dataBuf.append(fieldValue).append('\n');</span>
+<span class="source-line-no">241</span><span id="line-241">            break;</span>
+<span class="source-line-no">242</span><span id="line-242">         case "id":</span>
+<span class="source-line-no">243</span><span id="line-243">            if (fieldValue.indexOf('\u0000') &lt; 0)</span>
+<span class="source-line-no">244</span><span id="line-244">               lastEventId = fieldValue;</span>
+<span class="source-line-no">245</span><span id="line-245">            break;</span>
+<span class="source-line-no">246</span><span id="line-246">         case "retry":</span>
+<span class="source-line-no">247</span><span id="line-247">            retryValue = parseRetry(fieldValue);</span>
+<span class="source-line-no">248</span><span id="line-248">            break;</span>
+<span class="source-line-no">249</span><span id="line-249">         default:</span>
+<span class="source-line-no">250</span><span id="line-250">            break;</span>
+<span class="source-line-no">251</span><span id="line-251">      }</span>
+<span class="source-line-no">252</span><span id="line-252">   }</span>
+<span class="source-line-no">253</span><span id="line-253"></span>
+<span class="source-line-no">254</span><span id="line-254">   private static Long parseRetry(String s) {</span>
+<span class="source-line-no">255</span><span id="line-255">      if (s.isEmpty())</span>
+<span class="source-line-no">256</span><span id="line-256">         return null;</span>
+<span class="source-line-no">257</span><span id="line-257">      for (var i = 0; i &lt; s.length(); i++) {</span>
+<span class="source-line-no">258</span><span id="line-258">         var c = s.charAt(i);</span>
+<span class="source-line-no">259</span><span id="line-259">         if (c &lt; '0' || c &gt; '9')</span>
+<span class="source-line-no">260</span><span id="line-260">            return null;</span>
+<span class="source-line-no">261</span><span id="line-261">      }</span>
+<span class="source-line-no">262</span><span id="line-262">      try {</span>
+<span class="source-line-no">263</span><span id="line-263">         return Long.valueOf(s);</span>
+<span class="source-line-no">264</span><span id="line-264">      } catch (@SuppressWarnings("unused") NumberFormatException e) {</span>
+<span class="source-line-no">265</span><span id="line-265">         return null;</span>
+<span class="source-line-no">266</span><span id="line-266">      }</span>
+<span class="source-line-no">267</span><span id="line-267">   }</span>
+<span class="source-line-no">268</span><span id="line-268"></span>
+<span class="source-line-no">269</span><span id="line-269">   @SuppressWarnings({</span>
+<span class="source-line-no">270</span><span id="line-270">      "java:S3776" // SSE line parsing is a deliberate lexical state machine.</span>
+<span class="source-line-no">271</span><span id="line-271">   })</span>
+<span class="source-line-no">272</span><span id="line-272">   private String readLine() throws IOException {</span>
+<span class="source-line-no">273</span><span id="line-273">      var sb = new StringBuilder();</span>
+<span class="source-line-no">274</span><span id="line-274">      int c;</span>
+<span class="source-line-no">275</span><span id="line-275">      var sawAny = false;</span>
+<span class="source-line-no">276</span><span id="line-276">      while (true) {</span>
+<span class="source-line-no">277</span><span id="line-277">         if (pendingChar != -1) {</span>
+<span class="source-line-no">278</span><span id="line-278">            c = pendingChar;</span>
+<span class="source-line-no">279</span><span id="line-279">            pendingChar = -1;</span>
+<span class="source-line-no">280</span><span id="line-280">         } else {</span>
+<span class="source-line-no">281</span><span id="line-281">            c = in.read();</span>
+<span class="source-line-no">282</span><span id="line-282">         }</span>
+<span class="source-line-no">283</span><span id="line-283">         if (c == -1) {</span>
+<span class="source-line-no">284</span><span id="line-284">            if (!sawAny)</span>
+<span class="source-line-no">285</span><span id="line-285">               return null;</span>
+<span class="source-line-no">286</span><span id="line-286">            return sb.toString();</span>
+<span class="source-line-no">287</span><span id="line-287">         }</span>
+<span class="source-line-no">288</span><span id="line-288">         if (!bomChecked) {</span>
+<span class="source-line-no">289</span><span id="line-289">            bomChecked = true;</span>
+<span class="source-line-no">290</span><span id="line-290">            if (c == BOM)</span>
+<span class="source-line-no">291</span><span id="line-291">               continue;</span>
+<span class="source-line-no">292</span><span id="line-292">         }</span>
+<span class="source-line-no">293</span><span id="line-293">         sawAny = true;</span>
+<span class="source-line-no">294</span><span id="line-294">         if (c == '\n')</span>
+<span class="source-line-no">295</span><span id="line-295">            return sb.toString();</span>
+<span class="source-line-no">296</span><span id="line-296">         if (c == '\r') {</span>
+<span class="source-line-no">297</span><span id="line-297">            var next = in.read();</span>
+<span class="source-line-no">298</span><span id="line-298">            if (next != -1 &amp;&amp; next != '\n')</span>
+<span class="source-line-no">299</span><span id="line-299">               pendingChar = next;</span>
+<span class="source-line-no">300</span><span id="line-300">            return sb.toString();</span>
+<span class="source-line-no">301</span><span id="line-301">         }</span>
+<span class="source-line-no">302</span><span id="line-302">         if (sb.length() &gt;= maxLineLength)</span>
+<span class="source-line-no">303</span><span id="line-303">            throw new IOException("SSE line exceeds the maximum of " + maxLineLength + " characters");</span>
+<span class="source-line-no">304</span><span id="line-304">         sb.append((char) c);</span>
+<span class="source-line-no">305</span><span id="line-305">      }</span>
+<span class="source-line-no">306</span><span id="line-306">   }</span>
+<span class="source-line-no">307</span><span id="line-307">}</span>
 
 
 

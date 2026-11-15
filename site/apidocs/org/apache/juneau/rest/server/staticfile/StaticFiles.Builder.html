@@ -164,13 +164,18 @@ loadScripts(document, 'script');</script>
 <div class="block">Specifies the regular expression file name patterns to use to include files being retrieved from the file source.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mimeTypes(org.apache.juneau.commons.io.MimeTypeDetector)" class="member-name-link">mimeTypes</a><wbr>(<a href="../../../commons/io/MimeTypeDetector.html" title="class in org.apache.juneau.commons.io">MimeTypeDetector</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxCachedLocales(int)" class="member-name-link">maxCachedLocales</a><wbr>(int&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Replaces the MIME types registry used for determining content types.</div>
+<div class="block">Specifies the maximum number of locales that keep their own name cache.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#path(java.nio.file.Path)" class="member-name-link">path</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mimeTypes(org.apache.juneau.commons.io.MimeTypeDetector)" class="member-name-link">mimeTypes</a><wbr>(<a href="../../../commons/io/MimeTypeDetector.html" title="class in org.apache.juneau.commons.io">MimeTypeDetector</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Replaces the MIME types registry used for determining content types.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#path(java.nio.file.Path)" class="member-name-link">path</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a file system directory to the lookup paths.</div>
 </div>
 </div>
@@ -247,9 +252,31 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="maxCachedLocales(int)">
+<h3>maxCachedLocales</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-104">maxCachedLocales</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="block">Specifies the maximum number of locales that keep their own name cache.
+
+ <p>
+ The default is <c>32</c>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The maximum number of locales.  Must not be negative.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list-long">
+<li><a href="../../../marshall/cp/FileFinder.Builder.html#maxCachedLocales(int)"><code>FileFinder.Builder.maxCachedLocales(int)</code></a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="cp(java.lang.Class,java.lang.String,boolean)">
 <h3>cp</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-102">cp</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-117">cp</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  boolean&nbsp;recursive)</span></div>
 <div class="block">Adds a class subpackage to the lookup paths.</div>
@@ -266,7 +293,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="dir(java.lang.String)">
 <h3>dir</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-113">dir</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-128">dir</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Adds a file system directory to the lookup paths.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -279,7 +306,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="exclude(java.lang.String...)">
 <h3>exclude</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-126">exclude</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;patterns)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-141">exclude</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;patterns)</span></div>
 <div class="block">Specifies the regular expression file name pattern to use to exclude files from being retrieved from the file source.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -293,7 +320,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="headers(org.apache.juneau.http.HttpHeader...)">
 <h3>headers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-140">headers</a></span><wbr><span class="parameters">(<a href="../../../http/HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;headers)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-155">headers</a></span><wbr><span class="parameters">(<a href="../../../http/HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;headers)</span></div>
 <div class="block">Appends headers to add to HTTP responses.
 
  <p>
@@ -309,7 +336,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="include(java.lang.String...)">
 <h3>include</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-154">include</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;patterns)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-169">include</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;patterns)</span></div>
 <div class="block">Specifies the regular expression file name patterns to use to include files being retrieved from the file source.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -323,7 +350,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="mimeTypes(org.apache.juneau.commons.io.MimeTypeDetector)">
 <h3>mimeTypes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-165">mimeTypes</a></span><wbr><span class="parameters">(<a href="../../../commons/io/MimeTypeDetector.html" title="class in org.apache.juneau.commons.io">MimeTypeDetector</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-180">mimeTypes</a></span><wbr><span class="parameters">(<a href="../../../commons/io/MimeTypeDetector.html" title="class in org.apache.juneau.commons.io">MimeTypeDetector</a>&nbsp;value)</span></div>
 <div class="block">Replaces the MIME types registry used for determining content types.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -336,7 +363,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="path(java.nio.file.Path)">
 <h3>path</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-176">path</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.Builder.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFiles.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-191">path</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;value)</span></div>
 <div class="block">Adds a file system directory to the lookup paths.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -349,7 +376,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile">StaticFiles</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-186">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile">StaticFiles</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFiles.Builder.html#line-201">build</a></span>()</div>
 <div class="block">Builds the static files.</div>
 <dl class="notes">
 <dt>Returns:</dt>

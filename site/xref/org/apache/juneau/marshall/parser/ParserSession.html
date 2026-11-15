@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * Default value for {@link Builder#maxParseDepth(int)}.</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> DEFAULT_MAX_PARSE_DEPTH = 1000;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> DEFAULT_MAX_PARSE_DEPTH = 500;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 * Builder class.</em>
@@ -965,7 +965,7 @@
 <a class="jxr_linenumber" name="L957" href="#L957">957</a> 
 <a class="jxr_linenumber" name="L958" href="#L958">958</a> 			<em class="jxr_comment">// Iterate through all the entries in the map and set the individual field values.</em>
 <a class="jxr_linenumber" name="L959" href="#L959">959</a> 			m.forEach((k, v) -&gt; {
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 				<strong class="jxr_keyword">if</strong> (! k.equals(btpn)) {
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 				<strong class="jxr_keyword">if</strong> (neq(k, btpn)) {
 <a class="jxr_linenumber" name="L961" href="#L961">961</a> 					<em class="jxr_comment">// Attempt to recursively cast child maps.</em>
 <a class="jxr_linenumber" name="L962" href="#L962">962</a> 					<strong class="jxr_keyword">if</strong> (v instanceof MarshalledMap v2)
 <a class="jxr_linenumber" name="L963" href="#L963">963</a> 						v = <strong class="jxr_keyword">cast</strong>(v2, pMeta, eType);
@@ -1480,7 +1480,7 @@
 <a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; <strong class="jxr_keyword">void</strong> onUnknownProperty(String propertyName, BeanMap&lt;T&gt; beanMap, Object value) <strong class="jxr_keyword">throws</strong> ParseException {
 <a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> 		<strong class="jxr_keyword">var</strong> bmcm = (ClassMeta&lt;T&gt;) beanMap.getBeanInfo();
-<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> 		<strong class="jxr_keyword">if</strong> (propertyName.equals(getBeanTypePropertyName(bmcm)))
+<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> 		<strong class="jxr_keyword">if</strong> (eq(propertyName, getBeanTypePropertyName(bmcm)))
 <a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 		<strong class="jxr_keyword">if</strong> (! isIgnoreUnknownBeanProperties() &amp;&amp; (nn(value) || ! isIgnoreUnknownNullBeanProperties()))
 <a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ParseException(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Unknown property '%s' encountered while trying to parse into class '%s'"</span>, propertyName, bmcm);

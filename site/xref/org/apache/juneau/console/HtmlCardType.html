@@ -38,17 +38,17 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * An {@code html} card in a page contract may instead name a {@code src} endpoint. The {@code src} must be a</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * same-origin path (checked at page build, by {@code PageCapture.addCard} for FreeMarker and {@code PageSpec} cards</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * and by {@code CardTypeRegistry.toCard} for lifted ones; the shell checks it again before the fetch). The shell</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * fetches it and inserts the returned HTML as-is, &lt;b&gt;unsanitized&lt;/b&gt;, the same trust level as</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * {@code footer.text}. The endpoint must therefore be a trusted first-party route, must never be derived from request</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * data, and must escape any data it embeds in the fragment.</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * A card that cannot guarantee that can opt in with {@code "sanitize": true} (or {@code sanitize=true} on</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * {@code &lt;@card&gt;}, or {@code CardSpec.sanitize(true)}). The shell then rebuilds the fetched fragment through the views</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * attribute-allowlist sanitizer, the one behind the {@code SANITIZED_HTML} detail format, so script, {@code on*}</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * handlers, unsafe URLs and unlisted attributes are dropped. The page must load the views toolkit; without it the</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * card fails closed with E-JS-8 and paints nothing. The flag only affects {@code src} cards, and the default is</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * unchanged (unsanitized).</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * fetches it and, by default, rebuilds the returned fragment through the views attribute-allowlist</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * sanitizer, the one behind the {@code SANITIZED_HTML} detail format, so script, {@code on*} handlers, unsafe URLs and</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * unlisted attributes are dropped. The page must load the views toolkit; without it the card fails closed with E-JS-8</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * and paints nothing. A response that redirected to another origin is refused.</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * A card whose fragment needs markup the allowlist drops can opt out with {@code "sanitize": false} (or</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * {@code sanitize=false} on {@code &lt;@card&gt;}, or {@code CardSpec.sanitize(false)}). The shell then inserts the</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * returned HTML as-is, &lt;b&gt;unsanitized&lt;/b&gt;, the same trust level as {@code footer.text}: the endpoint must be a trusted</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * first-party route, must never be derived from request data, and must escape any data it embeds in the fragment.</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * The flag only affects {@code src} cards.</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>

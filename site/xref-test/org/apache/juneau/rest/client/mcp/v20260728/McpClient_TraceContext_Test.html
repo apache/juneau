@@ -60,7 +60,7 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  				.build();
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		};
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = McpClient.builder()
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			.endpoint(<span class="jxr_string">"http://x/mcp"</span>)
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			.endpoint(<span class="jxr_string">"https://x/mcp"</span>)
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  			.transport(transport)
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  			.traceFieldsSupplier(() -&gt; Map.of(
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  				RequestMeta.KEY_TRACEPARENT, <span class="jxr_string">"00-parent-01"</span>,
@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  				.build();
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		};
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = McpClient.builder()
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.endpoint(<span class="jxr_string">"http://x/mcp"</span>)
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.endpoint(<span class="jxr_string">"https://x/mcp"</span>)
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.transport(transport)
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  			.responseCache(<strong class="jxr_keyword">new</strong> InMemoryMcpResponseCache())
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			.traceFieldsSupplier(() -&gt; Map.of(RequestMeta.KEY_TRACEPARENT, <span class="jxr_string">"00-parent-"</span> + traceparentSeq.incrementAndGet()))

@@ -92,55 +92,60 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds requested <code>response_types</code> (accumulates across calls).</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#applicationType(org.apache.juneau.rest.client.mcp.auth.McpApplicationType)" class="member-name-link">applicationType</a><wbr>(<a href="../McpApplicationType.html" title="enum class in org.apache.juneau.rest.client.mcp.auth">McpApplicationType</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#allowPrivateUrls(boolean)" class="member-name-link">allowPrivateUrls</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Sets the <code>application_type</code> (SEP-837 <b>MUST</b>).</div>
+<div class="block">Allows the registration endpoint to be a private, link-local or otherwise reserved address.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#clientName(java.lang.String)" class="member-name-link">clientName</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#applicationType(org.apache.juneau.rest.client.mcp.auth.McpApplicationType)" class="member-name-link">applicationType</a><wbr>(<a href="../McpApplicationType.html" title="enum class in org.apache.juneau.rest.client.mcp.auth">McpApplicationType</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Sets the human-readable <code>client_name</code>.</div>
+<div class="block">Sets the <code>application_type</code> (SEP-837 <b>MUST</b>).</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#confidential(boolean)" class="member-name-link">confidential</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#clientName(java.lang.String)" class="member-name-link">clientName</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Sets the human-readable <code>client_name</code>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#confidential(boolean)" class="member-name-link">confidential</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Registers a confidential client (<code>token_endpoint_auth_method=client_secret_basic</code>) instead of the
  default public/native client (<code>token_endpoint_auth_method=none</code>).</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpDynamicClientRegistrar.</span><code><a href="../McpDynamicClientRegistrar.html#create()" class="member-name-link">create</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static <a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpDynamicClientRegistrar.</span><code><a href="../McpDynamicClientRegistrar.html#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Static creator.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> for the registration call.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#httpTimeout(java.time.Duration)" class="member-name-link">httpTimeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#httpTimeout(java.time.Duration)" class="member-name-link">httpTimeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the connect/read timeout applied to the registration request.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#initialAccessToken(java.lang.String)" class="member-name-link">initialAccessToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#initialAccessToken(java.lang.String)" class="member-name-link">initialAccessToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the RFC 7591 &sect;3 initial access token used to authorize the call to a protected registration
  endpoint.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#issuer(java.net.URI)" class="member-name-link">issuer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#issuer(java.net.URI)" class="member-name-link">issuer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the AS <code>issuer</code> these credentials are being registered with.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#registrationEndpoint(java.net.URI)" class="member-name-link">registrationEndpoint</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#registrationEndpoint(java.net.URI)" class="member-name-link">registrationEndpoint</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the AS <code>registration_endpoint</code> URL.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#scope(java.lang.String...)" class="member-name-link">scope</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpDynamicClientRegistrar.Builder.</span><code><a href="../McpDynamicClientRegistrar.Builder.html#scope(java.lang.String...)" class="member-name-link">scope</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Adds requested scopes.</div>
 </div>
 </div>

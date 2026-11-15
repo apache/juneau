@@ -299,7 +299,18 @@
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertEquals(1, accepted.get(), <span class="jxr_string">"exactly one racer should have been admitted to fill the last slot"</span>);
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertEquals(threadCount - 1, rejected.get(), <span class="jxr_string">"every other racer must be rejected, not silently over-admitted"</span>);
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> }
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test <strong class="jxr_keyword">void</strong> z01_registerIfUnder_perOwnerCap() {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">var</strong> broker = <strong class="jxr_keyword">new</strong> BasicMcpSubscriptionBroker(8);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> f = <strong class="jxr_keyword">new</strong> McpSubscriptionFilter(<strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">true</strong>, Set.of());
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		assertTrue(broker.registerIfUnder(10, 2, <span class="jxr_string">"alice"</span>, <span class="jxr_string">"s1"</span>, f).isPresent());
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		assertTrue(broker.registerIfUnder(10, 2, <span class="jxr_string">"alice"</span>, <span class="jxr_string">"s2"</span>, f).isPresent());
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		assertTrue(broker.registerIfUnder(10, 2, <span class="jxr_string">"alice"</span>, <span class="jxr_string">"s3"</span>, f).isEmpty());
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		assertTrue(broker.registerIfUnder(10, 2, <span class="jxr_string">"bob"</span>, <span class="jxr_string">"s4"</span>, f).isPresent());
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertTrue(broker.registerIfUnder(10, 2, <span class="jxr_string">"alice"</span>, <span class="jxr_string">"s1"</span>, f).isPresent(), <span class="jxr_string">"same-id replacement is not counted"</span>);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		assertEquals(3, broker.activeCount());
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	}
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

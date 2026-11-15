@@ -71,71 +71,76 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpTokenProvider.</span><code><a href="../McpTokenProvider.html#clientCredentials()" class="member-name-link">clientCredentials</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">Creates a builder for the client-credentials grant.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#clientId(java.lang.String)" class="member-name-link">clientId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Sets the OAuth client ID.</div>
-</div>
 <div class="col-first even-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#clientSecret(java.lang.String)" class="member-name-link">clientSecret</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#allowPrivateUrls(boolean)" class="member-name-link">allowPrivateUrls</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Sets the OAuth client secret as a literal string.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#clientSecretSupplier(java.util.function.Supplier)" class="member-name-link">clientSecretSupplier</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Sets the OAuth client secret via a supplier.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#clock(java.time.Clock)" class="member-name-link">clock</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Sets the clock used for token-expiry comparisons.</div>
+<div class="block">Allows the token endpoint to be a private, link-local or otherwise reserved address.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpClientRegistrations.</span><code><a href="../McpClientRegistrations.html#configure(org.apache.juneau.rest.client.mcp.auth.McpTokenProvider.Builder,org.apache.juneau.rest.client.mcp.auth.McpClientRegistration)" class="member-name-link">configure</a><wbr>(<a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a>&nbsp;builder,
- <a href="../McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&nbsp;registration)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpTokenProvider.</span><code><a href="../McpTokenProvider.html#clientCredentials()" class="member-name-link">clientCredentials</a>()</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Creates a builder for the client-credentials grant.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#clientId(java.lang.String)" class="member-name-link">clientId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets the OAuth client ID.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#clientSecret(java.lang.String)" class="member-name-link">clientSecret</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Sets the OAuth client secret as a literal string.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#clientSecretSupplier(java.util.function.Supplier)" class="member-name-link">clientSecretSupplier</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets the OAuth client secret via a supplier.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#clock(java.time.Clock)" class="member-name-link">clock</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Sets the clock used for token-expiry comparisons.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpClientRegistrations.</span><code><a href="../McpClientRegistrations.html#configure(org.apache.juneau.rest.client.mcp.auth.McpTokenProvider.Builder,org.apache.juneau.rest.client.mcp.auth.McpClientRegistration)" class="member-name-link">configure</a><wbr>(<a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a>&nbsp;builder,
+ <a href="../McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&nbsp;registration)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Applies a DCR-issued registration's <code>client_id</code> and optional <code>client_secret</code> onto an
  <a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpTokenProvider.Builder</code></a> (client-credentials / refresh modes).</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#expirySkew(java.time.Duration)" class="member-name-link">expirySkew</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#expirySkew(java.time.Duration)" class="member-name-link">expirySkew</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the skew subtracted from a cached token's expiry before it is treated as expired.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> for each token request.</div>
-</div>
 <div class="col-first even-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#httpTimeout(java.time.Duration)" class="member-name-link">httpTimeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> before it is sent.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#httpTimeout(java.time.Duration)" class="member-name-link">httpTimeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the connect/read timeout applied to each token request.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpTokenProvider.</span><code><a href="../McpTokenProvider.html#refreshToken(java.lang.String)" class="member-name-link">refreshToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialRefreshToken)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static <a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpTokenProvider.</span><code><a href="../McpTokenProvider.html#refreshToken(java.lang.String)" class="member-name-link">refreshToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialRefreshToken)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Creates a builder for the refresh-token grant, seeded with the initial refresh token.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#resource(java.net.URI)" class="member-name-link">resource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#resource(java.net.URI)" class="member-name-link">resource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the RFC 8707 <code>resource</code> indicator (the canonical MCP server URI) sent on every token request.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#scope(java.lang.String...)" class="member-name-link">scope</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#scope(java.lang.String...)" class="member-name-link">scope</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Adds requested OAuth scopes.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#tokenEndpoint(java.net.URI)" class="member-name-link">tokenEndpoint</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpTokenProvider.Builder.</span><code><a href="../McpTokenProvider.Builder.html#tokenEndpoint(java.net.URI)" class="member-name-link">tokenEndpoint</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the token endpoint URL.</div>
 </div>
 </div>

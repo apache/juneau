@@ -380,62 +380,70 @@
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertEquals(<span class="jxr_string">"1\u0000i\u00001\u0000s"</span>, AeadRequestStateCodec.principalIdentity(p));
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	@Test <strong class="jxr_keyword">void</strong> b03_identity_barePrincipalFallsBackToNameAsSubjectWithEmptyIssuer() {
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	@Test <strong class="jxr_keyword">void</strong> b03_identity_barePrincipalUsesClassNameAsIssuerAndNameAsSubject() {
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 		Principal p = () -&gt; <span class="jxr_string">"alice"</span>;
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<em class="jxr_comment">// iss empty (len 0), sub=name "alice" (len 5)</em>
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertEquals(<span class="jxr_string">"0\u0000\u00005\u0000alice"</span>, AeadRequestStateCodec.principalIdentity(p));
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">var</strong> cn = p.getClass().getName();
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertEquals(cn.length() + <span class="jxr_string">"\u0000"</span> + cn + <span class="jxr_string">"\u00005\u0000alice"</span>, AeadRequestStateCodec.principalIdentity(p));
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 	}
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	@Test <strong class="jxr_keyword">void</strong> b04_identity_claimsPrincipalMissingSubFallsBackToName() {
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<em class="jxr_comment">// No sub claim -&gt; getName() ("alice") is used as the subject; iss claim still honored.</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">var</strong> p = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"alice"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"https://idp"</span>));
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">var</strong> iss = <span class="jxr_string">"https://idp"</span>;
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		assertEquals(iss.length() + <span class="jxr_string">"\u0000"</span> + iss + <span class="jxr_string">"\u0000"</span> + <span class="jxr_string">"5\u0000alice"</span>, AeadRequestStateCodec.principalIdentity(p));
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	}
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	@Test <strong class="jxr_keyword">void</strong> b05_identity_differsByIssuerOnly() {
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"n"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"https://idp-a"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"same"</span>));
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"n"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"https://idp-b"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"same"</span>));
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		assertNotEquals(AeadRequestStateCodec.principalIdentity(a), AeadRequestStateCodec.principalIdentity(b),
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<span class="jxr_string">"two principals differing only in issuer must produce different identities (cross-IdP collision safety)"</span>);
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	}
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	@Test <strong class="jxr_keyword">void</strong> b06_identity_differsBySubjectOnly() {
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"n"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"https://idp"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"user-1"</span>));
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"n"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"https://idp"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"user-2"</span>));
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		assertNotEquals(AeadRequestStateCodec.principalIdentity(a), AeadRequestStateCodec.principalIdentity(b),
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<span class="jxr_string">"two principals differing only in subject must produce different identities"</span>);
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	}
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	@Test <strong class="jxr_keyword">void</strong> b07_identity_lengthPrefixDefeatsDelimiterCollision() {
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<em class="jxr_comment">// Without length-prefixing, (iss="a", sub="\u0000b") and (iss="a\u0000", sub="b") would both join to</em>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<em class="jxr_comment">// "a\u0000\u0000b" and collide.  The length prefixes keep them distinct.</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">var</strong> p1 = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"n"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"\u0000b"</span>));
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">var</strong> p2 = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"n"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"a\u0000"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"b"</span>));
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		assertNotEquals(AeadRequestStateCodec.principalIdentity(p1), AeadRequestStateCodec.principalIdentity(p2),
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<span class="jxr_string">"length-prefixed encoding must not let a NUL-bearing iss/sub collide two distinct identities"</span>);
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	}
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<em class="jxr_comment">// lengthPrefixJoin(...) helper: pins the shared framing seal/unseal use to compose the OUTER</em>
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<em class="jxr_comment">// aad/keyId/identity AAD triple (the same self-delimiting scheme principalIdentity uses for iss|sub, above).</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	@Test <strong class="jxr_keyword">void</strong> b08_lengthPrefixJoin_defeatsFieldBoundaryCollisionAcrossThreeFields() {
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<em class="jxr_comment">// Mirrors b07 one level up, at the outer 3-field (aad, keyId, identity) composition: without</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<em class="jxr_comment">// length-prefixing, ("a", "b", "\u0000c") and ("a", "b\u0000", "c") would both naively join to</em>
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<em class="jxr_comment">// "a\u0000b\u0000\u0000c". The length prefixes keep them distinct.</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">var</strong> t1 = AeadRequestStateCodec.lengthPrefixJoin(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"\u0000c"</span>);
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">var</strong> t2 = AeadRequestStateCodec.lengthPrefixJoin(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b\u0000"</span>, <span class="jxr_string">"c"</span>);
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		assertNotEquals(t1, t2,
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<span class="jxr_string">"length-prefixed outer AAD composition must not let a NUL-bearing aad/keyId/identity field collide two distinct triples"</span>);
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	}
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 	@Test <strong class="jxr_keyword">void</strong> b09_lengthPrefixJoin_matchesExpectedEncodingForThreeFields() {
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<em class="jxr_comment">// Pins the exact wire shape: len(f0) NUL f0 NUL len(f1) NUL f1 NUL len(f2) NUL f2.</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		assertEquals(<span class="jxr_string">"2\u0000ab\u00000\u0000\u00001\u0000c"</span>, AeadRequestStateCodec.lengthPrefixJoin(<span class="jxr_string">"ab"</span>, <span class="jxr_string">""</span>, <span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	}
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> }
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	@Test <strong class="jxr_keyword">void</strong> b03b_identity_barePrincipalsOfDifferentClassesDiffer() {
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		Principal a = () -&gt; <span class="jxr_string">"alice"</span>;
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		Principal b = <strong class="jxr_keyword">new</strong> Principal() {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			@Override <strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"alice"</span>; }
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		};
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		assertNotEquals(AeadRequestStateCodec.principalIdentity(a), AeadRequestStateCodec.principalIdentity(b));
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	}
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	@Test <strong class="jxr_keyword">void</strong> b04_identity_claimsPrincipalMissingSubFallsBackToName() {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<em class="jxr_comment">// No sub claim -&gt; getName() ("alice") is used as the subject; iss claim still honored.</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<strong class="jxr_keyword">var</strong> p = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"alice"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"https://idp"</span>));
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">var</strong> iss = <span class="jxr_string">"https://idp"</span>;
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertEquals(iss.length() + <span class="jxr_string">"\u0000"</span> + iss + <span class="jxr_string">"\u0000"</span> + <span class="jxr_string">"5\u0000alice"</span>, AeadRequestStateCodec.principalIdentity(p));
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	@Test <strong class="jxr_keyword">void</strong> b05_identity_differsByIssuerOnly() {
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"n"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"https://idp-a"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"same"</span>));
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"n"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"https://idp-b"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"same"</span>));
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		assertNotEquals(AeadRequestStateCodec.principalIdentity(a), AeadRequestStateCodec.principalIdentity(b),
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<span class="jxr_string">"two principals differing only in issuer must produce different identities (cross-IdP collision safety)"</span>);
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	}
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	@Test <strong class="jxr_keyword">void</strong> b06_identity_differsBySubjectOnly() {
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"n"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"https://idp"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"user-1"</span>));
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"n"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"https://idp"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"user-2"</span>));
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		assertNotEquals(AeadRequestStateCodec.principalIdentity(a), AeadRequestStateCodec.principalIdentity(b),
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			<span class="jxr_string">"two principals differing only in subject must produce different identities"</span>);
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	}
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	@Test <strong class="jxr_keyword">void</strong> b07_identity_lengthPrefixDefeatsDelimiterCollision() {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<em class="jxr_comment">// Without length-prefixing, (iss="a", sub="\u0000b") and (iss="a\u0000", sub="b") would both join to</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<em class="jxr_comment">// "a\u0000\u0000b" and collide.  The length prefixes keep them distinct.</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">var</strong> p1 = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"n"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"\u0000b"</span>));
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">var</strong> p2 = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"n"</span>, Map.of(<span class="jxr_string">"iss"</span>, <span class="jxr_string">"a\u0000"</span>, <span class="jxr_string">"sub"</span>, <span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		assertNotEquals(AeadRequestStateCodec.principalIdentity(p1), AeadRequestStateCodec.principalIdentity(p2),
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<span class="jxr_string">"length-prefixed encoding must not let a NUL-bearing iss/sub collide two distinct identities"</span>);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	}
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	<em class="jxr_comment">// lengthPrefixJoin(...) helper: pins the shared framing seal/unseal use to compose the OUTER</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	<em class="jxr_comment">// aad/keyId/identity AAD triple (the same self-delimiting scheme principalIdentity uses for iss|sub, above).</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<em class="jxr_comment">// ---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	@Test <strong class="jxr_keyword">void</strong> b08_lengthPrefixJoin_defeatsFieldBoundaryCollisionAcrossThreeFields() {
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<em class="jxr_comment">// Mirrors b07 one level up, at the outer 3-field (aad, keyId, identity) composition: without</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<em class="jxr_comment">// length-prefixing, ("a", "b", "\u0000c") and ("a", "b\u0000", "c") would both naively join to</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<em class="jxr_comment">// "a\u0000b\u0000\u0000c". The length prefixes keep them distinct.</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">var</strong> t1 = AeadRequestStateCodec.lengthPrefixJoin(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"\u0000c"</span>);
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">var</strong> t2 = AeadRequestStateCodec.lengthPrefixJoin(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b\u0000"</span>, <span class="jxr_string">"c"</span>);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		assertNotEquals(t1, t2,
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<span class="jxr_string">"length-prefixed outer AAD composition must not let a NUL-bearing aad/keyId/identity field collide two distinct triples"</span>);
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	}
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	@Test <strong class="jxr_keyword">void</strong> b09_lengthPrefixJoin_matchesExpectedEncodingForThreeFields() {
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<em class="jxr_comment">// Pins the exact wire shape: len(f0) NUL f0 NUL len(f1) NUL f1 NUL len(f2) NUL f2.</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		assertEquals(<span class="jxr_string">"2\u0000ab\u00000\u0000\u00001\u0000c"</span>, AeadRequestStateCodec.lengthPrefixJoin(<span class="jxr_string">"ab"</span>, <span class="jxr_string">""</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	}
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -224,7 +224,49 @@
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		check(<span class="jxr_string">""</span>, bc.getSwaps());
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 		check(<strong class="jxr_keyword">null</strong>, bc.getDefaultTimeZone());
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 	}
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> }
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<em class="jxr_comment">// classNameAllow</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	@MarshalledConfig(classNameAllow=<span class="jxr_string">"java.util.Date, com.example.model."</span>)
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G {}
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	@MarshalledConfig(classNameAllow=<span class="jxr_string">"java.util.Date,java.lang.Thread$"</span>)
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G2 {}
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> MarshallingContext ctxOf(Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(ClassInfo.of(c).getAnnotations()));
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">return</strong> JsonSerializer.create().apply(al).build().getMarshallingContext();
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	}
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	@Test <strong class="jxr_keyword">void</strong> g01_classNameAllow_allowedNameResolves() {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> bc = ctxOf(G.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertTrue(bc.isClassNameAllowed(<span class="jxr_string">"java.util.Date"</span>));
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		assertTrue(bc.isClassNameAllowed(<span class="jxr_string">"java.util.Date.Inner"</span>));
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertTrue(bc.isClassNameAllowed(<span class="jxr_string">"com.example.model.Person"</span>));
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		assertEquals(Date.<strong class="jxr_keyword">class</strong>, bc.getBasicConverter().to(<span class="jxr_string">"java.util.Date"</span>, Class.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	}
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	@Test <strong class="jxr_keyword">void</strong> g02_classNameAllow_disallowedNameRefused() {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">var</strong> bc = ctxOf(G.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertFalse(bc.isClassNameAllowed(<span class="jxr_string">"java.util.DateX"</span>));
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertFalse(bc.isClassNameAllowed(<span class="jxr_string">"java.lang.String"</span>));
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; bc.getBasicConverter().to(<span class="jxr_string">"java.lang.String"</span>, Class.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	}
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	@Test <strong class="jxr_keyword">void</strong> g03_classNameAllow_prefixEntries() {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> bc = ctxOf(G2.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertTrue(bc.isClassNameAllowed(<span class="jxr_string">"java.lang.Thread$State"</span>));
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertFalse(bc.isClassNameAllowed(<span class="jxr_string">"java.lang.Thread"</span>));
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	}
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	@Test <strong class="jxr_keyword">void</strong> g04_classNameAllow_emptyLeavesNoGuard() {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">var</strong> bc = ctxOf(B.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		assertTrue(bc.isClassNameAllowed(<span class="jxr_string">"java.lang.String"</span>));
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		assertNull(bc.getBasicConverter().getClassNameGuard());
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	}
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

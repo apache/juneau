@@ -350,7 +350,35 @@
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 		assertJson(<span class="jxr_string">"{'':{},'foo/bar':{k1:'v1'},foo:{k2:'v2'}}"</span>, c.toMap());
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 	}
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> }
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	@Test <strong class="jxr_keyword">void</strong> z01_valueWithLineBreaksRoundTrips() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">var</strong> s = MemoryStore.create().build();
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<strong class="jxr_keyword">var</strong> c = Config.create().store(s).name(<span class="jxr_string">"Z1.yaml"</span>).build();
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">var</strong> v = <span class="jxr_string">"x\nadmin: true\r\n  z: z\t\&quot;q\&quot; &#92;&#92;"</span>;
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		c.set(<span class="jxr_string">"sec/k"</span>, v);
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		c.commit();
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">var</strong> c2 = Config.create().store(s).name(<span class="jxr_string">"Z1.yaml"</span>).build();
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		assertEquals(v, c2.getString(<span class="jxr_string">"sec/k"</span>));
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertFalse(c2.exists(<span class="jxr_string">"admin"</span>));
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		assertFalse(c2.exists(<span class="jxr_string">"sec/admin"</span>));
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	}
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	@Test <strong class="jxr_keyword">void</strong> z02_keyWithLineBreakRejected() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">var</strong> s = MemoryStore.create().build();
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">var</strong> c = Config.create().store(s).name(<span class="jxr_string">"Z2.yaml"</span>).build();
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.set(<span class="jxr_string">"sec/a\nb"</span>, <span class="jxr_string">"v"</span>));
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.set(<span class="jxr_string">"se\nc/k"</span>, <span class="jxr_string">"v"</span>));
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	}
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	@Test <strong class="jxr_keyword">void</strong> z03_selfReferencingValueFailsCleanly() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">var</strong> s = MemoryStore.create().build();
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		s.update(<span class="jxr_string">"Z3.cfg"</span>, <span class="jxr_string">"[S]"</span>, <span class="jxr_string">"a = ${C:S/a}"</span>, <span class="jxr_string">"b = ${C:S/c}"</span>, <span class="jxr_string">"c = ${C:S/b}"</span>);
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">var</strong> c = Config.create().store(s).name(<span class="jxr_string">"Z3.cfg"</span>).build();
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; c.getString(<span class="jxr_string">"S/a"</span>));
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; c.getString(<span class="jxr_string">"S/b"</span>));
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	}
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

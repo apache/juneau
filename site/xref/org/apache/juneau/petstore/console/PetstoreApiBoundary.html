@@ -36,7 +36,7 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.http.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * The {@code /petstore} API's CSRF boundary: a {@link RequestBoundaryFilter} over the framework's {@link CsrfBoundary},</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * The {@code /petstore} API's request-token boundary: a {@link RequestBoundaryFilter} over the framework's {@link CsrfBoundary},</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * applied to {@code /petstore} and everything under it.</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
@@ -114,70 +114,73 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * Setting (system property, environment, or any registered source) listing the host names the API answers to:</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * comma-separated, no ports.  Unset or blank, any host is answered.</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * comma-separated, no ports.  Unset or blank, only the loopback names {@link #LOOPBACK_HOSTS} are answered.</em>
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ALLOWED_HOSTS_PROPERTY = <span class="jxr_string">"petstore.api.allowedHosts"</span>;
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 * Request attribute under which an allowed console request carries a {@link String}: a freshly masked token for</em>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">	 * this boundary, for a console page to stamp on the form that writes to the API.</em>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TOKEN_ATTRIBUTE = <span class="jxr_string">"org.apache.juneau.petstore.apiCsrfToken"</span>;
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> CsrfBoundary boundary;
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RequestBoundaryFilter" href="../../../../../org/apache/juneau/rest/server/filter/RequestBoundaryFilter.html#RequestBoundaryFilter">RequestBoundaryFilter</a> filter;
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<em class="jxr_javadoccomment">/** The host names answered when {@value #ALLOWED_HOSTS_PROPERTY} is not set: {@code localhost}, {@code 127.0.0.1} and {@code [::1]}. */</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; LOOPBACK_HOSTS = List.of(<span class="jxr_string">"localhost"</span>, <span class="jxr_string">"127.0.0.1"</span>, <span class="jxr_string">"[::1]"</span>);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment">	 * Request attribute under which an allowed console request carries a {@link String}: a freshly masked token for</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">	 * this boundary, for a console page to stamp on the form that writes to the API.</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TOKEN_ATTRIBUTE = <span class="jxr_string">"org.apache.juneau.petstore.apiCsrfToken"</span>;
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * Reads {@value #ALLOWED_HOSTS_PROPERTY} and creates the boundary's per-process token.</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> CsrfBoundary boundary;
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RequestBoundaryFilter" href="../../../../../org/apache/juneau/rest/server/filter/RequestBoundaryFilter.html#RequestBoundaryFilter">RequestBoundaryFilter</a> filter;
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@value #ALLOWED_HOSTS_PROPERTY} holds an entry that is blank or not a bare</em>
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * 	host name.</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">public</strong> <a name="PetstoreApiBoundary" href="../../../../../org/apache/juneau/petstore/console/PetstoreApiBoundary.html#PetstoreApiBoundary">PetstoreApiBoundary</a>() {
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		boundary = CsrfBoundary.create()
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			.tokens(CsrfTokens.perProcess())
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			.allowedHosts(allowedHosts(Settings.get().get(ALLOWED_HOSTS_PROPERTY).orElse(<strong class="jxr_keyword">null</strong>)))
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			.build();
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		filter = <strong class="jxr_keyword">new</strong> <a name="RequestBoundaryFilter" href="../../../../../org/apache/juneau/rest/server/filter/RequestBoundaryFilter.html#RequestBoundaryFilter">RequestBoundaryFilter</a>(boundary);
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 * The host names in an {@value #ALLOWED_HOSTS_PROPERTY} setting.</em>
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * @param setting The setting.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank (not set).</em>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * @return The comma-separated entries, trimmed, blank ones included so the boundary refuses them; empty when the</em>
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * 	setting is not set.</em>
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String[] allowedHosts(String setting) {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">if</strong> (ib(setting))
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[0];
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(setting.split(<span class="jxr_string">","</span>, -1)).map(String::trim).toArray(String[]::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	}
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 * A freshly masked token for a page served to this request to embed.</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 * Never creates a session.  The value is different on every call, and every value verifies on this instance only.</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * Reads {@value #ALLOWED_HOSTS_PROPERTY} and creates the boundary's per-process token.</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@value #ALLOWED_HOSTS_PROPERTY} holds an entry that is blank or not a bare</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 * 	host name.</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<strong class="jxr_keyword">public</strong> <a name="PetstoreApiBoundary" href="../../../../../org/apache/juneau/petstore/console/PetstoreApiBoundary.html#PetstoreApiBoundary">PetstoreApiBoundary</a>() {
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		boundary = CsrfBoundary.create()
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			.tokens(CsrfTokens.perProcess())
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			.allowedHosts(allowedHosts(Settings.get().get(ALLOWED_HOSTS_PROPERTY).orElse(<strong class="jxr_keyword">null</strong>)))
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			.build();
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		filter = <strong class="jxr_keyword">new</strong> <a name="RequestBoundaryFilter" href="../../../../../org/apache/juneau/rest/server/filter/RequestBoundaryFilter.html#RequestBoundaryFilter">RequestBoundaryFilter</a>(boundary);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	}
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * The host names in an {@value #ALLOWED_HOSTS_PROPERTY} setting.</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 * @param setting The setting.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank (not set).</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 * @return The comma-separated entries, trimmed, blank ones included so the boundary refuses them; the loopback</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 * 	names when the setting is not set.</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String[] allowedHosts(String setting) {
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">if</strong> (ib(setting))
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">return</strong> LOOPBACK_HOSTS.toArray(String[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(setting.split(<span class="jxr_string">","</span>, -1)).map(String::trim).toArray(String[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 * A freshly masked token for a page served to this request to embed.</em>
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * @param req The request whose response will embed the token.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * @return 128 lower-case hex characters.</em>
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<strong class="jxr_keyword">public</strong> String tokenFor(HttpServletRequest req) {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">return</strong> boundary.tokenFor(req);
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 * Applies the boundary: a refused request is answered here and never reaches the API.</em>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	@Override <em class="jxr_comment">/* Filter */</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> doFilter(ServletRequest req, ServletResponse res, FilterChain chain) <strong class="jxr_keyword">throws</strong> IOException, ServletException {
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		filter.doFilter(req, res, chain);
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	}
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> }
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * Never creates a session.  The value is different on every call, and every value verifies on this instance only.</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 * @param req The request whose response will embed the token.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * @return 128 lower-case hex characters.</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">public</strong> String tokenFor(HttpServletRequest req) {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">return</strong> boundary.tokenFor(req);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 * Applies the boundary: a refused request is answered here and never reaches the API.</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	@Override <em class="jxr_comment">/* Filter */</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> doFilter(ServletRequest req, ServletResponse res, FilterChain chain) <strong class="jxr_keyword">throws</strong> IOException, ServletException {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		filter.doFilter(req, res, chain);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

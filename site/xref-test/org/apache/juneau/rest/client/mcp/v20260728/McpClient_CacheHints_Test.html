@@ -70,8 +70,8 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">void</strong> a01_privateScope_usesPerInstancePartitionPrefix() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> cache = <strong class="jxr_keyword">new</strong> RecordingCache();
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">try</strong> (
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">var</strong> c1 = McpClient.builder().endpoint(<span class="jxr_string">"http://x"</span>).responseCache(cache).build();
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">var</strong> c2 = McpClient.builder().endpoint(<span class="jxr_string">"http://x"</span>).responseCache(cache).build();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">var</strong> c1 = McpClient.builder().endpoint(<span class="jxr_string">"https://x"</span>).responseCache(cache).build();
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">var</strong> c2 = McpClient.builder().endpoint(<span class="jxr_string">"https://x"</span>).responseCache(cache).build();
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		) {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			assertNotEquals(c1.privateScopePartitionPrefix(), c2.privateScopePartitionPrefix());
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		}
@@ -90,7 +90,7 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  				.build();
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		};
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = McpClient.builder()
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			.endpoint(<span class="jxr_string">"http://x/mcp"</span>)
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			.endpoint(<span class="jxr_string">"https://x/mcp"</span>)
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			.transport(transport)
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			.responseCache(<strong class="jxr_keyword">new</strong> InMemoryMcpResponseCache())
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  			.build()) {

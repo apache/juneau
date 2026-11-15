@@ -98,7 +98,7 @@
 <span class="source-line-no">085</span><span id="line-85"></span>
 <span class="source-line-no">086</span><span id="line-86">   /**</span>
 <span class="source-line-no">087</span><span id="line-87">    * Whether {@code url} is safe to emit as an {@code href} or {@code src}: {@code http}/{@code https}/</span>
-<span class="source-line-no">088</span><span id="line-88">    * {@code mailto}, a fragment, a same-origin path, or a scheme-less relative URL.</span>
+<span class="source-line-no">088</span><span id="line-88">    * {@code mailto}, a fragment, a same-origin path (not protocol-relative), or a scheme-less relative URL.</span>
 <span class="source-line-no">089</span><span id="line-89">    *</span>
 <span class="source-line-no">090</span><span id="line-90">    * @param url The candidate URL.  May be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">091</span><span id="line-91">    * @return &lt;jk&gt;true&lt;/jk&gt; if the URL may be copied onto an element.</span>
@@ -112,21 +112,23 @@
 <span class="source-line-no">099</span><span id="line-99">         return false;</span>
 <span class="source-line-no">100</span><span id="line-100">      if (lower.startsWith("http://") || lower.startsWith("https://") || lower.startsWith("mailto:"))</span>
 <span class="source-line-no">101</span><span id="line-101">         return true;</span>
-<span class="source-line-no">102</span><span id="line-102">      if (t.charAt(0) == '#' || t.charAt(0) == '/')</span>
-<span class="source-line-no">103</span><span id="line-103">         return true;</span>
-<span class="source-line-no">104</span><span id="line-104">      return lower.indexOf(':') &lt; 0;</span>
-<span class="source-line-no">105</span><span id="line-105">   }</span>
-<span class="source-line-no">106</span><span id="line-106"></span>
-<span class="source-line-no">107</span><span id="line-107">   private static final class SafeUrlAttributeProvider implements AttributeProvider {</span>
-<span class="source-line-no">108</span><span id="line-108">      @Override</span>
-<span class="source-line-no">109</span><span id="line-109">      public void setAttributes(Node node, String tagName, Map&lt;String,String&gt; attributes) {</span>
-<span class="source-line-no">110</span><span id="line-110">         if (eq(tagName, "a") &amp;&amp; attributes.containsKey("href") &amp;&amp; ! isSafeUrl(attributes.get("href")))</span>
-<span class="source-line-no">111</span><span id="line-111">            attributes.remove("href");</span>
-<span class="source-line-no">112</span><span id="line-112">         if (eq(tagName, "img") &amp;&amp; attributes.containsKey("src") &amp;&amp; ! isSafeUrl(attributes.get("src")))</span>
-<span class="source-line-no">113</span><span id="line-113">            attributes.remove("src");</span>
-<span class="source-line-no">114</span><span id="line-114">      }</span>
-<span class="source-line-no">115</span><span id="line-115">   }</span>
-<span class="source-line-no">116</span><span id="line-116">}</span>
+<span class="source-line-no">102</span><span id="line-102">      if (t.startsWith("//") || t.startsWith("/\\"))</span>
+<span class="source-line-no">103</span><span id="line-103">         return false;</span>
+<span class="source-line-no">104</span><span id="line-104">      if (t.charAt(0) == '#' || t.charAt(0) == '/')</span>
+<span class="source-line-no">105</span><span id="line-105">         return true;</span>
+<span class="source-line-no">106</span><span id="line-106">      return lower.indexOf(':') &lt; 0;</span>
+<span class="source-line-no">107</span><span id="line-107">   }</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   private static final class SafeUrlAttributeProvider implements AttributeProvider {</span>
+<span class="source-line-no">110</span><span id="line-110">      @Override</span>
+<span class="source-line-no">111</span><span id="line-111">      public void setAttributes(Node node, String tagName, Map&lt;String,String&gt; attributes) {</span>
+<span class="source-line-no">112</span><span id="line-112">         if (eq(tagName, "a") &amp;&amp; attributes.containsKey("href") &amp;&amp; ! isSafeUrl(attributes.get("href")))</span>
+<span class="source-line-no">113</span><span id="line-113">            attributes.remove("href");</span>
+<span class="source-line-no">114</span><span id="line-114">         if (eq(tagName, "img") &amp;&amp; attributes.containsKey("src") &amp;&amp; ! isSafeUrl(attributes.get("src")))</span>
+<span class="source-line-no">115</span><span id="line-115">            attributes.remove("src");</span>
+<span class="source-line-no">116</span><span id="line-116">      }</span>
+<span class="source-line-no">117</span><span id="line-117">   }</span>
+<span class="source-line-no">118</span><span id="line-118">}</span>
 
 
 

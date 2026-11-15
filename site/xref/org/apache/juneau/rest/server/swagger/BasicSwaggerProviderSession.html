@@ -656,7 +656,7 @@
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L649" href="#L649">649</a> 			<strong class="jxr_keyword">var</strong> cm = js.getClassMeta(type);
 <a class="jxr_linenumber" name="L650" href="#L650">650</a> 			<strong class="jxr_keyword">if</strong> (cm.hasStringMutater()) {
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 				example = BasicConverter.INSTANCE.to(sex, cm.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 				example = cm.basicConverter().to(sex, cm.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 			}
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 		}
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 

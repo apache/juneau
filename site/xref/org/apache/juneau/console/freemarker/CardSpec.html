@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">private</strong> String src;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">private</strong> String template;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> bare;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> sanitize;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">private</strong> Boolean sanitize;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">private</strong> String cssClass;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,Object&gt; body = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;Map&lt;String,Object&gt;&gt; publishes = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
@@ -118,18 +118,18 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<em class="jxr_javadoccomment">/** @return Whether this card declares any {@code subscribes} entries. */</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">boolean</strong> hasSubscribes() { <strong class="jxr_keyword">return</strong> ! subscribes.isEmpty(); }
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<em class="jxr_javadoccomment">/** @param v Whether an html card's fetched {@code src} fragment is rebuilt through the views attribute-allowlist sanitizer instead of being inserted as-is. @return This object. */</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<em class="jxr_javadoccomment">/** @param v Whether an html card's fetched {@code src} fragment is rebuilt through the views attribute-allowlist sanitizer (the default when never set) or inserted as-is ({@code false}). @return This object. */</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<strong class="jxr_keyword">public</strong> <a name="CardSpec" href="../../../../../org/apache/juneau/console/freemarker/CardSpec.html#CardSpec">CardSpec</a> sanitize(<strong class="jxr_keyword">boolean</strong> v) { sanitize = v; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<em class="jxr_javadoccomment">/** @return Whether this card asks for its {@code src} fragment to be sanitized. */</em>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">boolean</strong> sanitize() { <strong class="jxr_keyword">return</strong> sanitize; }
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<em class="jxr_javadoccomment">/** @return Whether this card states a sanitize choice, either way. */</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">boolean</strong> sanitizeStated() { <strong class="jxr_keyword">return</strong> nn(sanitize); }
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<em class="jxr_javadoccomment">/** @param v Space-separated CSS class names stamped on the card wrapper element. @return This object. */</em>
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">public</strong> <a name="CardSpec" href="../../../../../org/apache/juneau/console/freemarker/CardSpec.html#CardSpec">CardSpec</a> cssClass(String v) { cssClass = v; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<em class="jxr_javadoccomment">/** @param key A type-specific field. @param value Its value. @return This object. */</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">public</strong> <a name="CardSpec" href="../../../../../org/apache/juneau/console/freemarker/CardSpec.html#CardSpec">CardSpec</a> body(String key, Object value) {
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"publishes"</span>.equals(key) || <span class="jxr_string">"subscribes"</span>.equals(key) || <span class="jxr_string">"model"</span>.equals(key))
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">if</strong> (eq(<span class="jxr_string">"publishes"</span>, key) || eq(<span class="jxr_string">"subscribes"</span>, key) || eq(<span class="jxr_string">"model"</span>, key))
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"card '%s': '%s' is a base key; use %s(...)"</span>, id, key, key);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		body.put(key, value);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -241,10 +241,10 @@
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">if</strong> (nn(src)) m.put(<span class="jxr_string">"src"</span>, src);
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<strong class="jxr_keyword">if</strong> (nn(template)) m.put(<span class="jxr_string">"template"</span>, template);
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">if</strong> (bare) m.put(<span class="jxr_string">"bare"</span>, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">if</strong> (sanitize) {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">if</strong> (nn(sanitize)) {
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">if</strong> (neq(type, <span class="jxr_string">"html"</span>) || ! nn(src))
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"card '%s': sanitize applies only to an html card with src."</span>, id);
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			m.put(<span class="jxr_string">"sanitize"</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			m.put(<span class="jxr_string">"sanitize"</span>, sanitize);
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		}
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">if</strong> (nn(cssClass)) m.put(<span class="jxr_string">"class"</span>, cssClass);
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">if</strong> (! visibleWhen.isEmpty()) m.put(<span class="jxr_string">"visibleWhen"</span>, visibleWhen.stream().map(VisibilityRule::toMap).toList());

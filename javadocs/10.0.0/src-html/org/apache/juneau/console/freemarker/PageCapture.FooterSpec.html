@@ -372,7 +372,7 @@
 <span class="source-line-no">359</span><span id="line-359">   public PageCapture addCard(CardSpec card, String markupOrNull) throws TemplateModelException {</span>
 <span class="source-line-no">360</span><span id="line-360">      checkSrc(card);</span>
 <span class="source-line-no">361</span><span id="line-361">      for (var c : cards)</span>
-<span class="source-line-no">362</span><span id="line-362">         if (c.id().equals(card.id()))</span>
+<span class="source-line-no">362</span><span id="line-362">         if (eq(c.id(), card.id()))</span>
 <span class="source-line-no">363</span><span id="line-363">            throw FtlAttrLists.reject(f("&lt;@card id='%s'&gt; duplicates an existing card id.", card.id()));</span>
 <span class="source-line-no">364</span><span id="line-364">      if (builtCardIds.contains(card.id()))</span>
 <span class="source-line-no">365</span><span id="line-365">         throw FtlAttrLists.reject(f("&lt;@card id='%s'&gt; duplicates an existing card id.", card.id()));</span>
@@ -392,7 +392,7 @@
 <span class="source-line-no">379</span><span id="line-379">      if (nn(src) &amp;&amp; ! SafePathTemplate.isSameOriginPath(src))</span>
 <span class="source-line-no">380</span><span id="line-380">         throw FtlAttrLists.reject(f("&lt;@card id='%s'&gt; type='%s' src must be a same-origin path (no scheme, '//', backslash, control character, edge space or '..' segment); got '%s'.",</span>
 <span class="source-line-no">381</span><span id="line-381">            card.id(), card.type(), src));</span>
-<span class="source-line-no">382</span><span id="line-382">      if (card.sanitize() &amp;&amp; (neq(card.type(), "html") || ! nn(src)))</span>
+<span class="source-line-no">382</span><span id="line-382">      if (card.sanitizeStated() &amp;&amp; (neq(card.type(), "html") || ! nn(src)))</span>
 <span class="source-line-no">383</span><span id="line-383">         throw FtlAttrLists.reject(f("&lt;@card id='%s'&gt; sanitize= applies only to an html card with src=.", card.id()));</span>
 <span class="source-line-no">384</span><span id="line-384">   }</span>
 <span class="source-line-no">385</span><span id="line-385"></span>
@@ -407,7 +407,7 @@
 <span class="source-line-no">394</span><span id="line-394">   void addBuiltCard(CardSpec card, String markupOrNull) throws TemplateModelException {</span>
 <span class="source-line-no">395</span><span id="line-395">      checkSrc(card);</span>
 <span class="source-line-no">396</span><span id="line-396">      for (var c : cards)</span>
-<span class="source-line-no">397</span><span id="line-397">         if (c.id().equals(card.id()))</span>
+<span class="source-line-no">397</span><span id="line-397">         if (eq(c.id(), card.id()))</span>
 <span class="source-line-no">398</span><span id="line-398">            throw FtlAttrLists.reject(f("&lt;@card id='%s'&gt; duplicates an existing card id.", card.id()));</span>
 <span class="source-line-no">399</span><span id="line-399">      if (builtCards.containsKey(card.id()) || builtCardIds.contains(card.id()))</span>
 <span class="source-line-no">400</span><span id="line-400">         throw FtlAttrLists.reject(f("&lt;@card id='%s'&gt; duplicates an existing card id.", card.id()));</span>
@@ -637,7 +637,7 @@
 <span class="source-line-no">624</span><span id="line-624">         for (var card : badgeCardRefs(m))</span>
 <span class="source-line-no">625</span><span id="line-625">            if (! cardIds.contains(card))</span>
 <span class="source-line-no">626</span><span id="line-626">               throw FtlAttrLists.reject(f(BADGE_CARD_MSG, id, card));</span>
-<span class="source-line-no">627</span><span id="line-627">         if (m.get("scope") instanceof Map&lt;?,?&gt; scope &amp;&amp; "nav".equals(scope.get("by")) &amp;&amp; scope.get("values") instanceof Map&lt;?,?&gt; values)</span>
+<span class="source-line-no">627</span><span id="line-627">         if (m.get("scope") instanceof Map&lt;?,?&gt; scope &amp;&amp; eq("nav", scope.get("by")) &amp;&amp; scope.get("values") instanceof Map&lt;?,?&gt; values)</span>
 <span class="source-line-no">628</span><span id="line-628">            for (var key : ((Map&lt;String,Object&gt;)values).keySet())</span>
 <span class="source-line-no">629</span><span id="line-629">               if (! navIds.contains(key))</span>
 <span class="source-line-no">630</span><span id="line-630">                  throw FtlAttrLists.reject(f(BADGE_NAV_MSG, id, key));</span>
@@ -735,7 +735,7 @@
 <span class="source-line-no">722</span><span id="line-722">         themeFromDirective = true;</span>
 <span class="source-line-no">723</span><span id="line-723">         return this;</span>
 <span class="source-line-no">724</span><span id="line-724">      }</span>
-<span class="source-line-no">725</span><span id="line-725">      if (theme.equals(name))</span>
+<span class="source-line-no">725</span><span id="line-725">      if (eq(theme, name))</span>
 <span class="source-line-no">726</span><span id="line-726">         return this;</span>
 <span class="source-line-no">727</span><span id="line-727">      if (themeFromDirective)</span>
 <span class="source-line-no">728</span><span id="line-728">         throw FtlAttrLists.reject(f(</span>
@@ -828,13 +828,13 @@
 <span class="source-line-no">815</span><span id="line-815"></span>
 <span class="source-line-no">816</span><span id="line-816">   /**</span>
 <span class="source-line-no">817</span><span id="line-817">    * Whether the merged body-attribute text already sets {@code name}.  Used so a spec- or {@code &lt;@body&gt;}-authored</span>
-<span class="source-line-no">818</span><span id="line-818">    * CSRF attribute is not emitted a second time by the request-attribute auto-detection.</span>
+<span class="source-line-no">818</span><span id="line-818">    * request-token attribute is not emitted a second time by the request-attribute auto-detection.</span>
 <span class="source-line-no">819</span><span id="line-819">    *</span>
 <span class="source-line-no">820</span><span id="line-820">    * @param name An HTML attribute name.</span>
 <span class="source-line-no">821</span><span id="line-821">    * @return Whether the merged text sets it.</span>
 <span class="source-line-no">822</span><span id="line-822">    */</span>
 <span class="source-line-no">823</span><span id="line-823">   boolean hasBodyAttr(String name) {</span>
-<span class="source-line-no">824</span><span id="line-824">      return bodyAttrs != null &amp;&amp; tokenizeBodyAttrs(bodyAttrs).stream().anyMatch(a -&gt; a.hasValue() &amp;&amp; a.name().equalsIgnoreCase(name));</span>
+<span class="source-line-no">824</span><span id="line-824">      return bodyAttrs != null &amp;&amp; tokenizeBodyAttrs(bodyAttrs).stream().anyMatch(a -&gt; a.hasValue() &amp;&amp; eqic(a.name(), name));</span>
 <span class="source-line-no">825</span><span id="line-825">   }</span>
 <span class="source-line-no">826</span><span id="line-826"></span>
 <span class="source-line-no">827</span><span id="line-827">   /**</span>
@@ -1096,7 +1096,7 @@
 <span class="source-line-no">1083</span><span id="line-1083">         return true;</span>
 <span class="source-line-no">1084</span><span id="line-1084">      if (mp.get("subscribes") instanceof Collection&lt;?&gt; subs &amp;&amp; subs.stream().anyMatch(x -&gt; x instanceof Map&lt;?,?&gt; sm &amp;&amp; sm.get("handler") != null))</span>
 <span class="source-line-no">1085</span><span id="line-1085">         return true;</span>
-<span class="source-line-no">1086</span><span id="line-1086">      if (mp.get("ribbon") instanceof Collection&lt;?&gt; rb &amp;&amp; rb.stream().anyMatch(x -&gt; x instanceof Map&lt;?,?&gt; im &amp;&amp; "handler".equals(im.get("type"))))</span>
+<span class="source-line-no">1086</span><span id="line-1086">      if (mp.get("ribbon") instanceof Collection&lt;?&gt; rb &amp;&amp; rb.stream().anyMatch(x -&gt; x instanceof Map&lt;?,?&gt; im &amp;&amp; eq("handler", im.get("type"))))</span>
 <span class="source-line-no">1087</span><span id="line-1087">         return true;</span>
 <span class="source-line-no">1088</span><span id="line-1088">      for (var k : List.of("table", "detail", "tabs", "ribbon", "region"))</span>
 <span class="source-line-no">1089</span><span id="line-1089">         if (containsModel(mp.get(k)))</span>

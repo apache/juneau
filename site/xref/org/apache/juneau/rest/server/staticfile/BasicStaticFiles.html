@@ -69,8 +69,8 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> StaticFiles.Builder(beanStore);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	}
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<em class="jxr_comment">// Class files, dotfiles, and common configuration/credential/backup file types are never served.</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String EXCLUDE_PATTERN = <span class="jxr_string">"(?i)(.*/)?&#92;&#92;.[^/]*|.*&#92;&#92;.(class|properties|ya?ml|xml|jks|p12|pfx|pem|key|env|cfg|conf|bak)"</span>;
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<em class="jxr_comment">// Class files, dotfiles, anything under a dot-directory, and common configuration/credential/backup file types are never served.</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String EXCLUDE_PATTERN = <span class="jxr_string">"(?i)(.*/)?&#92;&#92;.[^/]*(/.*)?|.*&#92;&#92;.(class|properties|ya?ml|xml|jks|p12|pfx|pem|key|env|cfg|conf|bak)"</span>;
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HttpHeader" href="../../../../../../org/apache/juneau/http/HttpHeader.html#HttpHeader">HttpHeader</a>[] headers;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> MimeTypeDetector mimeTypes;

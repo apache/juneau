@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 
  <p>
  <a href="SamlAssertionValidator.html#rememberAuthnRequest(java.lang.String)"><code>SamlAssertionValidator.rememberAuthnRequest(String)</code></a> records the ID of each request this SP sends, and a
- response whose confirmation carries a matching <code>InResponseTo</code> consumes it.  Each ID is accepted once.
+ response whose confirmation carries a matching <code>InResponseTo</code> consumes it.  Each ID is accepted once, and only together with the browser-binding digest it was registered with.
  Multi-node deployments should supply an implementation backed by a store shared across every node, since the
  response may arrive at a different node than the one that sent the request.
 
@@ -115,13 +115,15 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#consume(java.lang.String,long)" class="member-name-link">consume</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#consume(java.lang.String,byte%5B%5D,long)" class="member-name-link">consume</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ byte[]&nbsp;bindingDigest,
  long&nbsp;nowMs)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Atomically removes a request ID and reports whether it was outstanding.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#remember(java.lang.String,long,long)" class="member-name-link">remember</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#remember(java.lang.String,byte%5B%5D,long,long)" class="member-name-link">remember</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ byte[]&nbsp;bindingDigest,
  long&nbsp;expiresAtMs,
  long&nbsp;nowMs)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
@@ -142,15 +144,17 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="remember(java.lang.String,long,long)">
+<section class="detail" id="remember(java.lang.String,byte[],long,long)">
 <h3>remember</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/AuthnRequestStore.html#line-44">remember</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/AuthnRequestStore.html#line-45">remember</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ byte[]&nbsp;bindingDigest,
  long&nbsp;expiresAtMs,
  long&nbsp;nowMs)</span></div>
 <div class="block">Records an outstanding request ID.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>id</code> - The <code>ID</code> attribute of the outgoing request.  Never <jk>null</jk> or blank.</dd>
+<dd><code>bindingDigest</code> - Digest of the browser-binding secret issued with the request.  Never <jk>null</jk>.</dd>
 <dd><code>expiresAtMs</code> - The epoch-millisecond instant after which the ID is no longer accepted.</dd>
 <dd><code>nowMs</code> - The current epoch-millisecond instant according to the validator's clock.</dd>
 <dt>Throws:</dt>
@@ -159,17 +163,20 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="consume(java.lang.String,long)">
+<section class="detail" id="consume(java.lang.String,byte[],long)">
 <h3>consume</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/AuthnRequestStore.html#line-53">consume</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/AuthnRequestStore.html#line-56">consume</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ byte[]&nbsp;bindingDigest,
  long&nbsp;nowMs)</span></div>
 <div class="block">Atomically removes a request ID and reports whether it was outstanding.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>id</code> - The <code>InResponseTo</code> value from the response.  Never <jk>null</jk> or blank.</dd>
+<dd><code>bindingDigest</code> - Digest of the binding secret the browser presented, or <jk>null</jk> if it presented none.</dd>
 <dd><code>nowMs</code> - The current epoch-millisecond instant according to the validator's clock.</dd>
 <dt>Returns:</dt>
-<dd><jk>true</jk> if the ID was registered, unexpired and not yet consumed.</dd>
+<dd><jk>true</jk> if the ID was registered, unexpired, not yet consumed and the digest matches the one
+   stored with it.</dd>
 </dl>
 </section>
 </li>

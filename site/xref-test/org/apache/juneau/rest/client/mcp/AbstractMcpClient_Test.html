@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(wire.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			.build();
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"1"</span>).setMethod(<span class="jxr_string">"ping"</span>);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">var</strong> res = client.send(req);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  			assertEquals(<span class="jxr_string">"1"</span>, res.getId());
@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(wire.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  			.build();
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"2"</span>).setMethod(<span class="jxr_string">"bogus/method"</span>);
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<strong class="jxr_keyword">var</strong> res = client.send(req);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  			assertNull(res.getResult());
@@ -114,7 +114,7 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 			called.incrementAndGet();
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">return</strong> TransportResponse.builder().statusCode(202).build();
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		};
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setMethod(<span class="jxr_string">"notifications/x"</span>);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">var</strong> res = client.send(req);
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			assertNull(res);
@@ -133,9 +133,9 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 				.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;9\&quot;,\&quot;result\&quot;:{}}"</span>.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 				.build();
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		};
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			client.send(<strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"9"</span>).setMethod(<span class="jxr_string">"ping"</span>));
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			assertEquals(<span class="jxr_string">"http://x/mcp"</span>, seenUri.get());
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			assertEquals(<span class="jxr_string">"https://x/mcp"</span>, seenUri.get());
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		}
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
@@ -159,7 +159,7 @@
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 				.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;1\&quot;,\&quot;result\&quot;:{}}"</span>.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 				.build();
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		};
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			client.send(<strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"1"</span>).setMethod(<span class="jxr_string">"ping"</span>));
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			assertNotNull(seenContentType.get());
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			assertTrue(seenContentType.get().contains(<span class="jxr_string">"json"</span>));
@@ -179,7 +179,7 @@
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;1\&quot;,\&quot;result\&quot;:{}}"</span>.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 			.closeCallback(successClosed::set)
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 			.build();
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(successTransport).build()) {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(successTransport).build()) {
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 			client.send(<strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"1"</span>).setMethod(<span class="jxr_string">"ping"</span>));
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 		}
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertTrue(successClosed.isSet());
@@ -191,7 +191,7 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;2\&quot;,\&quot;error\&quot;:{\&quot;code\&quot;:-32000,\&quot;message\&quot;:\&quot;boom\&quot;}}"</span>.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 			.closeCallback(errorClosed::set)
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 			.build();
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(errorTransport).build()) {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(errorTransport).build()) {
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 			client.send(<strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"2"</span>).setMethod(<span class="jxr_string">"ping"</span>));
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		}
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertTrue(errorClosed.isSet());
@@ -201,7 +201,7 @@
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 			.statusCode(202)
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 			.closeCallback(notificationClosed::set)
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 			.build();
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(notificationTransport).build()) {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(notificationTransport).build()) {
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 			client.send(<strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setMethod(<span class="jxr_string">"notifications/x"</span>));
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		}
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertTrue(notificationClosed.isSet());
@@ -213,7 +213,7 @@
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"{"</span>.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			.closeCallback(parseFailureClosed::set)
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 			.build();
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(parseFailureTransport).build()) {
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(parseFailureTransport).build()) {
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 			assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; client.send(<strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"3"</span>).setMethod(<span class="jxr_string">"ping"</span>)));
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 		}
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		assertTrue(parseFailureClosed.isSet());
@@ -226,7 +226,7 @@
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"text/plain"</span>)
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"server down"</span>.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 			.build();
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 			assertThrowsWithMessage(IOException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"MCP server returned HTTP 500 and the body was not a JSON-RPC envelope."</span>,
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 				() -&gt; client.send(<strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"7"</span>).setMethod(<span class="jxr_string">"ping"</span>)));
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 		}
@@ -239,7 +239,7 @@
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;8\&quot;,\&quot;error\&quot;:{\&quot;code\&quot;:-32603,\&quot;message\&quot;:\&quot;Internal error\&quot;}}"</span>.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 			.build();
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"8"</span>).setMethod(<span class="jxr_string">"ping"</span>);
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 			<strong class="jxr_keyword">var</strong> res = client.send(req);
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 			assertNotNull(res);
@@ -254,7 +254,7 @@
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 			.statusCode(200)
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 			.build();
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"9"</span>).setMethod(<span class="jxr_string">"ping"</span>);
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 			assertThrowsWithMessage(IOException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"No response body received for JSON-RPC request id '9' (HTTP 200)."</span>, () -&gt; client.send(req));
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 		}
@@ -274,7 +274,7 @@
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 				closeCount.incrementAndGet();
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 			}
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 		};
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build();
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build();
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 		client.close();
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 		assertEquals(1, closeCount.get());
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 	}
@@ -286,7 +286,7 @@
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"not json {{{"</span>.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			.build();
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"11"</span>).setMethod(<span class="jxr_string">"ping"</span>);
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 			<strong class="jxr_keyword">var</strong> e = assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; client.send(req));
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 			assertFalse(e.getMessage().contains(<span class="jxr_string">"MCP server returned HTTP"</span>));
@@ -301,7 +301,7 @@
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"not json {{{"</span>.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 			.build();
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"12"</span>).setMethod(<span class="jxr_string">"ping"</span>);
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 			assertThrowsWithMessage(IOException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"MCP server returned HTTP 199"</span>, () -&gt; client.send(req));
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		}
@@ -319,7 +319,7 @@
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 				.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;13\&quot;,\&quot;result\&quot;:{}}"</span>.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 				.build();
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 		};
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"13"</span>).setMethod(<span class="jxr_string">"ping"</span>);
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<strong class="jxr_keyword">var</strong> res = client.send(req, Map.of(<span class="jxr_string">"X-Foo"</span>, <span class="jxr_string">"bar"</span>));
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 			assertNotNull(res);
@@ -334,7 +334,7 @@
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;14\&quot;,\&quot;result\&quot;:{}}"</span>.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 			.build();
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"14"</span>).setMethod(<span class="jxr_string">"ping"</span>);
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">var</strong> res = client.send(req, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			assertNotNull(res);
@@ -356,7 +356,7 @@
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 			<strong class="jxr_keyword">return</strong> TransportResponse.builder().statusCode(200).header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"text/event-stream"</span>)
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 				.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"data: {\&quot;ok\&quot;:true}\n\n"</span>.getBytes(StandardCharsets.UTF_8))).build();
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 		};
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"1"</span>).setMethod(<span class="jxr_string">"subscriptions/listen"</span>);
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> reader = client.openStream(req)) {
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 				assertTrue(reader.hasNext());
@@ -370,7 +370,7 @@
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 	@Test
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 	<strong class="jxr_keyword">void</strong> c02_openEventStream_nullRequest_throwsIllegalArgumentException() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 		HttpTransport transport = tReq -&gt; TransportResponse.builder().statusCode(200).build();
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 			assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'request' cannot be null."</span>, () -&gt; client.openStream(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 		}
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
@@ -387,7 +387,7 @@
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 			<strong class="jxr_keyword">return</strong> TransportResponse.builder().statusCode(200).header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"text/event-stream"</span>)
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 				.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"data: {\&quot;ok\&quot;:true}\n\n"</span>.getBytes(StandardCharsets.UTF_8))).build();
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 		};
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"1"</span>).setMethod(<span class="jxr_string">"subscriptions/listen"</span>);
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> reader = client.openStream(req, Map.of(<span class="jxr_string">"Mcp-Method"</span>, <span class="jxr_string">"subscriptions/listen"</span>, <span class="jxr_string">"Mcp-Name"</span>, <span class="jxr_string">""</span>))) {
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 				assertTrue(reader.hasNext());
@@ -401,7 +401,7 @@
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<strong class="jxr_keyword">void</strong> c04_openEventStream_nullHeaders_behavesLikeNoHeadersOverload() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 		HttpTransport transport = tReq -&gt; TransportResponse.builder().statusCode(200).header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"text/event-stream"</span>)
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"data: {\&quot;ok\&quot;:true}\n\n"</span>.getBytes(StandardCharsets.UTF_8))).build();
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"1"</span>).setMethod(<span class="jxr_string">"subscriptions/listen"</span>);
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> reader = client.openStream(req, <strong class="jxr_keyword">null</strong>)) {
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 				assertTrue(reader.hasNext());
@@ -420,7 +420,7 @@
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"text/event-stream;charset=utf-8"</span>)
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"data: {\&quot;ok\&quot;:true}\n\n"</span>.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 			.build();
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"1"</span>).setMethod(<span class="jxr_string">"subscriptions/listen"</span>);
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> reader = client.openStream(req)) {
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 				assertTrue(reader.hasNext());
@@ -442,7 +442,7 @@
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 				<span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;1\&quot;,\&quot;error\&quot;:{\&quot;code\&quot;:-32600,\&quot;message\&quot;:\&quot;subscriptions/listen requires Accept: text/event-stream\&quot;}}"</span>
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 					.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 			.build();
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"1"</span>).setMethod(<span class="jxr_string">"subscriptions/listen"</span>);
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 			<strong class="jxr_keyword">var</strong> e = assertThrowsWithMessage(McpException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"subscriptions/listen requires Accept: text/event-stream"</span>, () -&gt; client.openStream(req));
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 			assertEquals(-32600, e.getCode());
@@ -460,7 +460,7 @@
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 				<span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;1\&quot;,\&quot;error\&quot;:{\&quot;code\&quot;:-32000,\&quot;message\&quot;:\&quot;Too many concurrent subscriptions\&quot;}}"</span>
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 					.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 			.build();
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"1"</span>).setMethod(<span class="jxr_string">"subscriptions/listen"</span>);
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 			<strong class="jxr_keyword">var</strong> e = assertThrowsWithMessage(McpException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Too many concurrent subscriptions"</span>, () -&gt; client.openStream(req));
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 			assertEquals(-32000, e.getCode());
@@ -476,7 +476,7 @@
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"text/plain"</span>)
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"bad gateway"</span>.getBytes(StandardCharsets.UTF_8)))
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 			.build();
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"1"</span>).setMethod(<span class="jxr_string">"subscriptions/listen"</span>);
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 			<em class="jxr_comment">// assertThrows(IOException.class, ...) itself proves this wasn't McpException (a RuntimeException,</em>
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 			<em class="jxr_comment">// not an IOException) - a wrong-type throw would fail this assertion with "unexpected exception type".</em>
@@ -487,7 +487,7 @@
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 	@Test
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 	<strong class="jxr_keyword">void</strong> c05_openEventStream_headersOverload_nullRequest_throwsIllegalArgumentException() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 		HttpTransport transport = tReq -&gt; TransportResponse.builder().statusCode(200).build();
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 			assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'request' cannot be null."</span>, () -&gt; client.openStream(<strong class="jxr_keyword">null</strong>, Map.of()));
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 		}
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 	}
@@ -532,7 +532,7 @@
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 	<em class="jxr_javadoccomment">/** A syntactically malformed endpoint is rejected at construction with a clear message. */</em>
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 	@Test
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 	<strong class="jxr_keyword">void</strong> b10_build_malformedEndpoint_throwsIllegalArgumentException() {
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">var</strong> builder = TestClient.builder().endpoint(<span class="jxr_string">"http://x y/mcp"</span>);
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">var</strong> builder = TestClient.builder().endpoint(<span class="jxr_string">"https://x y/mcp"</span>);
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid MCP endpoint URL"</span>, builder::build);
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 	}
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 
@@ -545,54 +545,87 @@
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 		}
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 	}
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	@Test
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	<strong class="jxr_keyword">void</strong> b05_send_nullRequest_throwsIllegalArgumentException() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		HttpTransport transport = tReq -&gt; TransportResponse.builder().statusCode(200).build();
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 			assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'request' cannot be null."</span>, () -&gt; client.send(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		}
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 	}
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 	@Test
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 	<strong class="jxr_keyword">void</strong> b06_send_invalidJson_throwsIOException() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		HttpTransport transport = tReq -&gt; TransportResponse.builder()
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 			.statusCode(200)
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"{"</span>.getBytes(StandardCharsets.UTF_8)))
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			.build();
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).build()) {
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"3"</span>).setMethod(<span class="jxr_string">"ping"</span>);
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; client.send(req));
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		}
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 	}
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 	@Test
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	<strong class="jxr_keyword">void</strong> b07_builder_interceptor_allowsFluentChaining() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		<strong class="jxr_keyword">var</strong> called = Flag.create();
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		HttpTransport transport = tReq -&gt; TransportResponse.builder()
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			.statusCode(200)
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;1\&quot;,\&quot;result\&quot;:{}}"</span>.getBytes(StandardCharsets.UTF_8)))
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			.build();
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<strong class="jxr_keyword">var</strong> interceptor = <strong class="jxr_keyword">new</strong> RestCallInterceptor() {
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 			@Override
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onInit(RestRequest req) {
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 				called.set();
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 			}
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		};
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(transport).interceptor(interceptor).build()) {
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 			client.send(<strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"1"</span>).setMethod(<span class="jxr_string">"ping"</span>));
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 			assertTrue(called.isSet());
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	<em class="jxr_javadoccomment">/** A non-loopback http endpoint is refused unless explicitly allowed. */</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	@Test
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 	<strong class="jxr_keyword">void</strong> b12_build_plainHttpRemoteEndpoint_isRefused() {
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">var</strong> builder = TestClient.builder().endpoint(<span class="jxr_string">"http://mcp.example.com/mcp"</span>);
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"https"</span>, builder::build);
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	}
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 	@Test
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 	<strong class="jxr_keyword">void</strong> b13_build_plainHttpRemoteEndpoint_allowedWhenOptedIn() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		HttpTransport transport = tReq -&gt; TransportResponse.builder().statusCode(200).build();
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://mcp.example.com/mcp"</span>).allowInsecureHttp(<strong class="jxr_keyword">true</strong>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 			assertNotNull(client);
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		}
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 	}
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 	@Test
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	<strong class="jxr_keyword">void</strong> b14_build_plainHttpLoopbackEndpoint_isAccepted() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		HttpTransport transport = tReq -&gt; TransportResponse.builder().statusCode(200).build();
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"http://127.0.0.1:8080/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 			assertNotNull(client);
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		}
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 	}
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	<em class="jxr_javadoccomment">/** A redirect response is surfaced as a failure rather than followed. */</em>
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 	@Test
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 	<strong class="jxr_keyword">void</strong> b15_send_redirectResponse_isRefused() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		HttpTransport transport = tReq -&gt; TransportResponse.builder().statusCode(302).header(<span class="jxr_string">"Location"</span>, <span class="jxr_string">"https://other.example.com/mcp"</span>).build();
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setMethod(<span class="jxr_string">"ping"</span>).setId(<span class="jxr_string">"1"</span>);
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; client.send(req));
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		}
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	}
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	@Test
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	<strong class="jxr_keyword">void</strong> b05_send_nullRequest_throwsIllegalArgumentException() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		HttpTransport transport = tReq -&gt; TransportResponse.builder().statusCode(200).build();
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 			assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'request' cannot be null."</span>, () -&gt; client.send(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 		}
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> 	}
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 	@Test
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	<strong class="jxr_keyword">void</strong> b08_builder_interceptor_<strong class="jxr_keyword">null</strong>_throwsIllegalArgumentException() {
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		<strong class="jxr_keyword">var</strong> builder = TestClient.builder();
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'interceptor' cannot be null."</span>, () -&gt; builder.interceptor(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	}
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> }
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	<strong class="jxr_keyword">void</strong> b06_send_invalidJson_throwsIOException() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		HttpTransport transport = tReq -&gt; TransportResponse.builder()
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 			.statusCode(200)
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"{"</span>.getBytes(StandardCharsets.UTF_8)))
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 			.build();
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).build()) {
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 			<strong class="jxr_keyword">var</strong> req = <strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"3"</span>).setMethod(<span class="jxr_string">"ping"</span>);
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 			assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; client.send(req));
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		}
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 	}
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 	@Test
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 	<strong class="jxr_keyword">void</strong> b07_builder_interceptor_allowsFluentChaining() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		<strong class="jxr_keyword">var</strong> called = Flag.create();
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		HttpTransport transport = tReq -&gt; TransportResponse.builder()
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 			.statusCode(200)
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 			.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"{\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;1\&quot;,\&quot;result\&quot;:{}}"</span>.getBytes(StandardCharsets.UTF_8)))
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 			.build();
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">var</strong> interceptor = <strong class="jxr_keyword">new</strong> RestCallInterceptor() {
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 			@Override
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onInit(RestRequest req) {
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 				called.set();
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 			}
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		};
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = TestClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(transport).interceptor(interceptor).build()) {
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 			client.send(<strong class="jxr_keyword">new</strong> JsonRpcRequest().setJsonrpc(<span class="jxr_string">"2.0"</span>).setId(<span class="jxr_string">"1"</span>).setMethod(<span class="jxr_string">"ping"</span>));
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 			assertTrue(called.isSet());
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		}
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 	}
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 	@Test
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 	<strong class="jxr_keyword">void</strong> b08_builder_interceptor_<strong class="jxr_keyword">null</strong>_throwsIllegalArgumentException() {
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">var</strong> builder = TestClient.builder();
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'interceptor' cannot be null."</span>, () -&gt; builder.interceptor(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	}
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

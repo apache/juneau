@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">protected</strong> Builder() {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			charset = env(<span class="jxr_string">"ConfigFileStore.charset"</span>).map(Charset::forName).orElse(Charset.defaultCharset());
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			directory = env(<span class="jxr_string">"ConfigFileStore.directory"</span>, <span class="jxr_string">"."</span>);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			allowAbsoluteNames = env(<span class="jxr_string">"ConfigFileStore.allowAbsoluteNames"</span>, false);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			allowAbsoluteNames = false; <em class="jxr_comment">// Only settable through the builder method, never from the environment or settings.</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			enableWatcher = env(<span class="jxr_string">"ConfigFileStore.enableWatcher"</span>, false);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  			extensions = env(<span class="jxr_string">"ConfigFileStore.extensions"</span>, <span class="jxr_string">"cfg,yml,yaml"</span>);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  			updateOnWrite = env(<span class="jxr_string">"ConfigFileStore.updateOnWrite"</span>, false);
@@ -481,7 +481,7 @@
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<strong class="jxr_keyword">var</strong> isWritable = isWritable(p);
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">var</strong> oo = isWritable ? a(READ, WRITE, CREATE) : a(READ); <em class="jxr_comment">// HTT - read-only files require special OS setup</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">var</strong> oo = isWritable ? <strong class="jxr_keyword">new</strong> OpenOption[]{READ, WRITE, CREATE, LinkOption.NOFOLLOW_LINKS} : <strong class="jxr_keyword">new</strong> OpenOption[]{READ, LinkOption.NOFOLLOW_LINKS}; <em class="jxr_comment">// HTT - read-only files require special OS setup</em>
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> fc = FileChannel.open(p, oo)) {
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> lock = isWritable ? fc.lock() : <strong class="jxr_keyword">null</strong>) { <em class="jxr_comment">// HTT - null lock path requires read-only file</em>
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 				<strong class="jxr_keyword">var</strong> buf = ByteBuffer.allocate(1024);
@@ -532,7 +532,7 @@
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 			<strong class="jxr_keyword">if</strong> (newContents == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 				Files.delete(p);
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 			<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 				<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> fc = FileChannel.open(p, READ, WRITE, CREATE)) {
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 				<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> fc = FileChannel.open(p, READ, WRITE, CREATE, LinkOption.NOFOLLOW_LINKS)) {
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 					<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> lock = fc.lock()) {
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 						<strong class="jxr_keyword">var</strong> currentContents = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 						<strong class="jxr_keyword">if</strong> (exists) {
@@ -694,11 +694,12 @@
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> 			<strong class="jxr_keyword">if</strong> (n == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> 				n = exts.length == 0 ? name : (name + <span class="jxr_string">"."</span> + exts[0]);
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 			nameCache.put(name, n);
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		}
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">return</strong> nameCache.get(name);
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 	}
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> }
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 			checkContained(n); <em class="jxr_comment">// Re-check the final name: the extension step can land on a different file (e.g. a symlink).</em>
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 			nameCache.put(name, n);
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		}
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		<strong class="jxr_keyword">return</strong> nameCache.get(name);
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 	}
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

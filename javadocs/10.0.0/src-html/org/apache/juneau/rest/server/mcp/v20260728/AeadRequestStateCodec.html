@@ -96,7 +96,7 @@
 <span class="source-line-no">083</span><span id="line-83"> * &lt;p&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> * {@link #unseal} is wired to untrusted, client-supplied {@code requestState} strings, so it applies defensive</span>
 <span class="source-line-no">085</span><span id="line-85"> * length guards (a plausibly-sized token, and a bounded {@code keyId} segment) before any base64 decode; an</span>
-<span class="source-line-no">086</span><span id="line-86"> * out-of-bounds input returns {@link Optional#empty()} rather than allocating from an attacker-controlled</span>
+<span class="source-line-no">086</span><span id="line-86"> * out-of-bounds input returns {@link Optional#empty()} rather than allocating from an untrusted</span>
 <span class="source-line-no">087</span><span id="line-87"> * length.</span>
 <span class="source-line-no">088</span><span id="line-88"> */</span>
 <span class="source-line-no">089</span><span id="line-89">public class AeadRequestStateCodec implements RequestStateCodec {</span>
@@ -117,7 +117,7 @@
 <span class="source-line-no">104</span><span id="line-104">   // Derived from KeyedSecret's MAX_KEY_ID_CHARS=128 producer limit (measured in UTF-16 code units, no</span>
 <span class="source-line-no">105</span><span id="line-105">   // charset restriction) at the worst case of 3 UTF-8 bytes/char: 128*3=384 bytes, whose unpadded base64url</span>
 <span class="source-line-no">106</span><span id="line-106">   // encoding is ceil(384/3)*4=512 chars. Set to that worst case so it dominates any legitimately-issued</span>
-<span class="source-line-no">107</span><span id="line-107">   // keyId while still capping an attacker-inflated segment before base64 decode.</span>
+<span class="source-line-no">107</span><span id="line-107">   // keyId while still capping an oversized segment before base64 decode.</span>
 <span class="source-line-no">108</span><span id="line-108">   private static final int MAX_KEY_ID_B64_CHARS = 512;</span>
 <span class="source-line-no">109</span><span id="line-109"></span>
 <span class="source-line-no">110</span><span id="line-110">   // Defensive floor on the untrusted, client-supplied token string as a whole (see unseal). The real floor of</span>
@@ -257,7 +257,7 @@
 <span class="source-line-no">244</span><span id="line-244">         if (sub.isEmpty())</span>
 <span class="source-line-no">245</span><span id="line-245">            sub = ein(cp.getName());</span>
 <span class="source-line-no">246</span><span id="line-246">      } else {</span>
-<span class="source-line-no">247</span><span id="line-247">         iss = "";</span>
+<span class="source-line-no">247</span><span id="line-247">         iss = principal.getClass().getName();</span>
 <span class="source-line-no">248</span><span id="line-248">         sub = ein(principal.getName());</span>
 <span class="source-line-no">249</span><span id="line-249">      }</span>
 <span class="source-line-no">250</span><span id="line-250">      return lengthPrefixJoin(iss, sub);</span>

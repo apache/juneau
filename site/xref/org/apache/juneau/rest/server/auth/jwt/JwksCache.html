@@ -93,122 +93,132 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> IN_FLIGHT_TIMEOUT_SECONDS = 10;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> JWKSource&lt;SecurityContext&gt; delegate;
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Duration ttl;
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Clock clock;
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> eagerRefreshOnKidMiss;
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Duration eagerRefreshCooldown;
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;Entry&gt; slot = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;();
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<em class="jxr_javadoccomment">/** Epoch of the most recent eager-refresh attempt; {@link Instant#MIN} initially (first attempt always allowed). */</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;Instant&gt; lastEagerAttempt = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;(Instant.MIN);
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * In-flight eager-refresh future; {@code null} when idle.  Set via CAS to deduplicate concurrent</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * miss requests: the CAS winner does the single network fetch; losers await this future.</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;CompletableFuture&lt;JWKSet&gt;&gt; inFlight = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;();
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	JwksCache(JWKSource&lt;SecurityContext&gt; delegate, Duration ttl, Clock clock,
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			<strong class="jxr_keyword">boolean</strong> eagerRefreshOnKidMiss, Duration eagerRefreshCooldown) {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">this</strong>.delegate = delegate;
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">this</strong>.ttl = ttl;
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">this</strong>.clock = clock;
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">this</strong>.eagerRefreshOnKidMiss = eagerRefreshOnKidMiss;
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">this</strong>.eagerRefreshCooldown = eagerRefreshCooldown;
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<em class="jxr_javadoccomment">/** Default maximum time past the TTL that the last-known-good key set is served while the source is failing. */</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Duration DEFAULT_MAX_STALE = Duration.ofMinutes(15);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> JWKSource&lt;SecurityContext&gt; delegate;
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Duration maxStale;
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Duration ttl;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Clock clock;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> eagerRefreshOnKidMiss;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Duration eagerRefreshCooldown;
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;Entry&gt; slot = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;();
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<em class="jxr_javadoccomment">/** Epoch of the most recent eager-refresh attempt; {@link Instant#MIN} initially (first attempt always allowed). */</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;Instant&gt; lastEagerAttempt = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;(Instant.MIN);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * In-flight eager-refresh future; {@code null} when idle.  Set via CAS to deduplicate concurrent</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * miss requests: the CAS winner does the single network fetch; losers await this future.</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;CompletableFuture&lt;JWKSet&gt;&gt; inFlight = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;();
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	JwksCache(JWKSource&lt;SecurityContext&gt; delegate, Duration ttl, Clock clock,
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">boolean</strong> eagerRefreshOnKidMiss, Duration eagerRefreshCooldown) {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">this</strong>(delegate, ttl, clock, eagerRefreshOnKidMiss, eagerRefreshCooldown, DEFAULT_MAX_STALE);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	@Override <em class="jxr_comment">/* Overridden from JWKSource */</em>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<strong class="jxr_keyword">public</strong> List&lt;JWK&gt; get(JWKSelector selector, SecurityContext ctx) <strong class="jxr_keyword">throws</strong> KeySourceException {
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">var</strong> now = clock.instant();
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">var</strong> current = slot.get();
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">if</strong> (current != <strong class="jxr_keyword">null</strong> &amp;&amp; current.fetchedAt.plus(ttl).isAfter(now)) {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			<em class="jxr_comment">// Fresh-cache path: serve from cache unless we get an empty selection and eager is on.</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			<strong class="jxr_keyword">var</strong> hits = selector.select(current.jwkSet);
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			<strong class="jxr_keyword">if</strong> (!hits.isEmpty() || !eagerRefreshOnKidMiss)
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 				<strong class="jxr_keyword">return</strong> hits;
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<strong class="jxr_keyword">return</strong> tryEagerRefresh(selector, ctx, now);
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		}
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<em class="jxr_comment">// Expired / cold path — unchanged from pre-10.0.0 behavior.</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			<strong class="jxr_keyword">var</strong> refreshed = fetchFromDelegate(ctx);
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			slot.set(<strong class="jxr_keyword">new</strong> Entry(refreshed, now));
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">return</strong> selector.select(refreshed);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		} <strong class="jxr_keyword">catch</strong> (KeySourceException | RuntimeException e) {
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">if</strong> (current != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 				LOG.log(Level.WARNING, e,
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 					() -&gt; <span class="jxr_string">"JWKS refresh failed; serving cached keys past TTL.  Underlying error: "</span> + e.getMessage());
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 				<strong class="jxr_keyword">return</strong> selector.select(current.jwkSet);
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			}
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		}
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 * Attempts a single eager refresh when the fresh cache produced no keys for the selector.</em>
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Cooldown gate: returns empty immediately if a prior attempt was within the cooldown window.</em>
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;CAS winner: runs the one network fetch, updates the slot, completes the shared future.</em>
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;CAS losers: wait for the winner's future (bounded timeout), then select from its result.</em>
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;On outage: retains the last-known-good slot, logs WARNING, returns empty (→ 401).</em>
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@code lastEagerAttempt} is always advanced in the {@code finally} block so a burst of</em>
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * 		distinct unknown kids cannot bypass the cooldown.</em>
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">private</strong> List&lt;JWK&gt; tryEagerRefresh(JWKSelector selector, SecurityContext ctx, Instant now) {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">if</strong> (now.isBefore(lastEagerAttempt.get().plus(eagerRefreshCooldown))) {
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			LOG.fine(() -&gt; <span class="jxr_string">"JWKS eager refresh skipped (within cooldown)"</span>);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList();
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		}
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">var</strong> myFuture = <strong class="jxr_keyword">new</strong> CompletableFuture&lt;JWKSet&gt;();
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> prior = inFlight.compareAndExchange(<strong class="jxr_keyword">null</strong>, myFuture);
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">if</strong> (prior != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">return</strong> awaitAndSelect(selector, prior);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<em class="jxr_comment">// CAS winner: run the single eager fetch.</em>
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			LOG.fine(() -&gt; <span class="jxr_string">"JWKS eager refresh triggered by kid miss"</span>);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">var</strong> refreshed = fetchFromDelegate(ctx);
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			slot.set(<strong class="jxr_keyword">new</strong> Entry(refreshed, now));
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			myFuture.complete(refreshed);
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">return</strong> selector.select(refreshed);
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		} <strong class="jxr_keyword">catch</strong> (KeySourceException | RuntimeException e) {
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			myFuture.completeExceptionally(e);
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<em class="jxr_comment">// slot is guaranteed non-null here: tryEagerRefresh() is only entered from get()'s fresh-cache</em>
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<em class="jxr_comment">// branch, which already required a non-null slot, and slot is never reset to null afterward.</em>
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			LOG.log(Level.WARNING, e,
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 				() -&gt; <span class="jxr_string">"JWKS eager refresh failed; retaining last-known-good set.  Underlying error: "</span> + e.getMessage());
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList();
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<em class="jxr_comment">// Advance cooldown on every attempt (success, still-missing, or outage) so a burst of</em>
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<em class="jxr_comment">// unknown kids cannot hammer the endpoint within one cooldown window.</em>
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			lastEagerAttempt.set(now);
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			inFlight.compareAndSet(myFuture, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		}
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<em class="jxr_javadoccomment">/** Loser path: wait for the in-flight future and select from its result. */</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;JWK&gt; awaitAndSelect(JWKSelector selector, CompletableFuture&lt;JWKSet&gt; future) {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">return</strong> selector.select(future.get(IN_FLIGHT_TIMEOUT_SECONDS, TimeUnit.SECONDS));
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		} <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			Thread.currentThread().interrupt();
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList();
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		} <strong class="jxr_keyword">catch</strong> (ExecutionException | TimeoutException e) {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<em class="jxr_comment">// Fail closed: the in-flight refresh errored or timed out, so this loser thread selects nothing</em>
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<em class="jxr_comment">// (the winner logs the underlying cause at WARNING).  A key miss surfaces as an auth failure upstream.</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			LOG.log(Level.FINE, e, () -&gt; <span class="jxr_string">"JWKS in-flight refresh did not complete for this waiter: "</span> + e.getMessage());
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList();
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		}
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	}
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<strong class="jxr_keyword">private</strong> JWKSet fetchFromDelegate(SecurityContext ctx) <strong class="jxr_keyword">throws</strong> KeySourceException {
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JWKSet(delegate.get(SELECT_ALL, ctx));
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<strong class="jxr_keyword">private</strong> record Entry(JWKSet jwkSet, Instant fetchedAt) {}
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> }
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	JwksCache(JWKSource&lt;SecurityContext&gt; delegate, Duration ttl, Clock clock,
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			<strong class="jxr_keyword">boolean</strong> eagerRefreshOnKidMiss, Duration eagerRefreshCooldown, Duration maxStale) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">this</strong>.maxStale = maxStale;
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">this</strong>.delegate = delegate;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">this</strong>.ttl = ttl;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">this</strong>.clock = clock;
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">this</strong>.eagerRefreshOnKidMiss = eagerRefreshOnKidMiss;
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">this</strong>.eagerRefreshCooldown = eagerRefreshCooldown;
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	@Override <em class="jxr_comment">/* Overridden from JWKSource */</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<strong class="jxr_keyword">public</strong> List&lt;JWK&gt; get(JWKSelector selector, SecurityContext ctx) <strong class="jxr_keyword">throws</strong> KeySourceException {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">var</strong> now = clock.instant();
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> current = slot.get();
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">if</strong> (current != <strong class="jxr_keyword">null</strong> &amp;&amp; current.fetchedAt.plus(ttl).isAfter(now)) {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<em class="jxr_comment">// Fresh-cache path: serve from cache unless we get an empty selection and eager is on.</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">var</strong> hits = selector.select(current.jwkSet);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">if</strong> (!hits.isEmpty() || !eagerRefreshOnKidMiss)
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 				<strong class="jxr_keyword">return</strong> hits;
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">return</strong> tryEagerRefresh(selector, ctx, now);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		}
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<em class="jxr_comment">// Expired / cold path — unchanged from pre-10.0.0 behavior.</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">var</strong> refreshed = fetchFromDelegate(ctx);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			slot.set(<strong class="jxr_keyword">new</strong> Entry(refreshed, now));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			<strong class="jxr_keyword">return</strong> selector.select(refreshed);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		} <strong class="jxr_keyword">catch</strong> (KeySourceException | RuntimeException e) {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">if</strong> (current != <strong class="jxr_keyword">null</strong> &amp;&amp; current.fetchedAt.plus(ttl).plus(maxStale).isAfter(now)) {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 				LOG.log(Level.WARNING, e,
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 					() -&gt; <span class="jxr_string">"JWKS refresh failed; serving cached keys past TTL.  Underlying error: "</span> + e.getMessage());
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 				<strong class="jxr_keyword">return</strong> selector.select(current.jwkSet);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			}
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 * Attempts a single eager refresh when the fresh cache produced no keys for the selector.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Cooldown gate: returns empty immediately if a prior attempt was within the cooldown window.</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;CAS winner: runs the one network fetch, updates the slot, completes the shared future.</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;CAS losers: wait for the winner's future (bounded timeout), then select from its result.</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;On outage: retains the last-known-good slot, logs WARNING, returns empty (→ 401).</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@code lastEagerAttempt} is always advanced in the {@code finally} block so a burst of</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * 		distinct unknown kids cannot bypass the cooldown.</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<strong class="jxr_keyword">private</strong> List&lt;JWK&gt; tryEagerRefresh(JWKSelector selector, SecurityContext ctx, Instant now) {
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">if</strong> (now.isBefore(lastEagerAttempt.get().plus(eagerRefreshCooldown))) {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			LOG.fine(() -&gt; <span class="jxr_string">"JWKS eager refresh skipped (within cooldown)"</span>);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList();
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">var</strong> myFuture = <strong class="jxr_keyword">new</strong> CompletableFuture&lt;JWKSet&gt;();
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> prior = inFlight.compareAndExchange(<strong class="jxr_keyword">null</strong>, myFuture);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">if</strong> (prior != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">return</strong> awaitAndSelect(selector, prior);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<em class="jxr_comment">// CAS winner: run the single eager fetch.</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			LOG.fine(() -&gt; <span class="jxr_string">"JWKS eager refresh triggered by kid miss"</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			<strong class="jxr_keyword">var</strong> refreshed = fetchFromDelegate(ctx);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			slot.set(<strong class="jxr_keyword">new</strong> Entry(refreshed, now));
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			myFuture.complete(refreshed);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">return</strong> selector.select(refreshed);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		} <strong class="jxr_keyword">catch</strong> (KeySourceException | RuntimeException e) {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			myFuture.completeExceptionally(e);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<em class="jxr_comment">// slot is guaranteed non-null here: tryEagerRefresh() is only entered from get()'s fresh-cache</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<em class="jxr_comment">// branch, which already required a non-null slot, and slot is never reset to null afterward.</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			LOG.log(Level.WARNING, e,
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 				() -&gt; <span class="jxr_string">"JWKS eager refresh failed; retaining last-known-good set.  Underlying error: "</span> + e.getMessage());
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList();
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<em class="jxr_comment">// Advance cooldown on every attempt (success, still-missing, or outage) so a burst of</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<em class="jxr_comment">// unknown kids cannot hammer the endpoint within one cooldown window.</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			lastEagerAttempt.set(now);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			inFlight.compareAndSet(myFuture, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		}
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<em class="jxr_javadoccomment">/** Loser path: wait for the in-flight future and select from its result. */</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;JWK&gt; awaitAndSelect(JWKSelector selector, CompletableFuture&lt;JWKSet&gt; future) {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">return</strong> selector.select(future.get(IN_FLIGHT_TIMEOUT_SECONDS, TimeUnit.SECONDS));
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		} <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			Thread.currentThread().interrupt();
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList();
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		} <strong class="jxr_keyword">catch</strong> (ExecutionException | TimeoutException e) {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<em class="jxr_comment">// Fail closed: the in-flight refresh errored or timed out, so this loser thread selects nothing</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<em class="jxr_comment">// (the winner logs the underlying cause at WARNING).  A key miss surfaces as an auth failure upstream.</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			LOG.log(Level.FINE, e, () -&gt; <span class="jxr_string">"JWKS in-flight refresh did not complete for this waiter: "</span> + e.getMessage());
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList();
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		}
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	}
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<strong class="jxr_keyword">private</strong> JWKSet fetchFromDelegate(SecurityContext ctx) <strong class="jxr_keyword">throws</strong> KeySourceException {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JWKSet(delegate.get(SELECT_ALL, ctx));
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<strong class="jxr_keyword">private</strong> record Entry(JWKSet jwkSet, Instant fetchedAt) {}
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

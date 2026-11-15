@@ -96,7 +96,47 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> b04_assertNullThrows() {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; assertSecureOrLoopback(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  }
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Test <strong class="jxr_keyword">void</strong> c01_isLoopbackHost() {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertTrue(isLoopbackHost(<span class="jxr_string">"localhost"</span>));
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertTrue(isLoopbackHost(<span class="jxr_string">"LocalHost"</span>));
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertTrue(isLoopbackHost(<span class="jxr_string">"127.0.0.1"</span>));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertTrue(isLoopbackHost(<span class="jxr_string">"::1"</span>));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertTrue(isLoopbackHost(<span class="jxr_string">"[::1]"</span>));
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertFalse(isLoopbackHost(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertFalse(isLoopbackHost(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertFalse(isLoopbackHost(<span class="jxr_string">"127.0.0.2"</span>));
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertFalse(isLoopbackHost(<span class="jxr_string">"127.000.000.001"</span>));
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		assertFalse(isLoopbackHost(<span class="jxr_string">"example.com"</span>));
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	}
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@Test <strong class="jxr_keyword">void</strong> d01_parseIpv4_valid() {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> byte[]{10, 0, 0, 1}, parseIpv4(<span class="jxr_string">"10.0.0.1"</span>));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> byte[]{0, 0, 0, 0}, parseIpv4(<span class="jxr_string">"0.0.0.0"</span>));
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> byte[]{(byte)255, (byte)255, (byte)255, (byte)255}, parseIpv4(<span class="jxr_string">"255.255.255.255"</span>));
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> byte[]{(byte)192, (byte)168, 1, 100}, parseIpv4(<span class="jxr_string">"192.168.1.100"</span>));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	@Test <strong class="jxr_keyword">void</strong> d02_parseIpv4_invalid() {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertNull(parseIpv4(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertNull(parseIpv4(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertNull(parseIpv4(<span class="jxr_string">"1.2.3"</span>));
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertNull(parseIpv4(<span class="jxr_string">"1.2.3.4.5"</span>));
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertNull(parseIpv4(<span class="jxr_string">"1.2.3."</span>));
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertNull(parseIpv4(<span class="jxr_string">".1.2.3"</span>));
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertNull(parseIpv4(<span class="jxr_string">"1..2.3"</span>));
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertNull(parseIpv4(<span class="jxr_string">"256.0.0.1"</span>));
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertNull(parseIpv4(<span class="jxr_string">"1.2.3.01"</span>));
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertNull(parseIpv4(<span class="jxr_string">"1.2.3.00"</span>));
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertNull(parseIpv4(<span class="jxr_string">"1.2.3.+4"</span>));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertNull(parseIpv4(<span class="jxr_string">"1.2.3.-4"</span>));
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertNull(parseIpv4(<span class="jxr_string">"1.2.3.1000"</span>));
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertNull(parseIpv4(<span class="jxr_string">"1.2.3.a"</span>));
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertNull(parseIpv4(<span class="jxr_string">" 1.2.3.4"</span>));
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertNull(parseIpv4(<span class="jxr_string">"0x1.2.3.4"</span>));
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertNull(parseIpv4(<span class="jxr_string">"1.2.3.\u0664"</span>));
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

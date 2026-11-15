@@ -53,7 +53,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/marshall/PetPhotoParser.html#line-39">PetPhotoParser</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/marshall/PetPhotoParser.html#line-40">PetPhotoParser</a></span>
 <span class="extends-implements">extends <a href="../../marshall/parser/InputStreamParser.html" title="class in org.apache.juneau.marshall.parser">InputStreamParser</a></span></div>
 <div class="block">Parses <code>image/png</code>/<code>image/jpeg</code>/<code>image/jpg</code> byte streams into <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/awt/image/BufferedImage.html" title="class or interface in java.awt.image" class="external-link"><code>BufferedImage</code></a> pet photos.
 
@@ -117,6 +117,22 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="field-summary" id="field-summary">
 <h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#MAX_DIMENSION" class="member-name-link">MAX_DIMENSION</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">The largest accepted photo width or height, in pixels.</div>
+</div>
+<div class="col-first odd-row-color"><code>static final long</code></div>
+<div class="col-second odd-row-color"><code><a href="#MAX_PIXELS" class="member-name-link">MAX_PIXELS</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">The largest accepted photo, in pixels (width times height).</div>
+</div>
+</div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-org.apache.juneau.marshall.parser.Parser">Fields inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a></h3>
 <code><a href="../../marshall/parser/Parser.html#autoCloseStreams">autoCloseStreams</a>, <a href="../../marshall/parser/Parser.html#consumes">consumes</a>, <a href="../../marshall/parser/Parser.html#debugOutputLines">debugOutputLines</a>, <a href="../../marshall/parser/Parser.html#includeInputInErrors">includeInputInErrors</a>, <a href="../../marshall/parser/Parser.html#listener">listener</a>, <a href="../../marshall/parser/Parser.html#nulls">nulls</a>, <a href="../../marshall/parser/Parser.html#trimStrings">trimStrings</a>, <a href="../../marshall/parser/Parser.html#unbuffered">unbuffered</a></code></div>
@@ -185,6 +201,44 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="MAX_PIXELS">
+<h3>MAX_PIXELS</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/marshall/PetPhotoParser.html#line-43">MAX_PIXELS</a></span></div>
+<div class="block">The largest accepted photo, in pixels (width times height).</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../constant-values.html#org.apache.juneau.petstore.marshall.PetPhotoParser.MAX_PIXELS">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="MAX_DIMENSION">
+<h3>MAX_DIMENSION</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/marshall/PetPhotoParser.html#line-46">MAX_DIMENSION</a></span></div>
+<div class="block">The largest accepted photo width or height, in pixels.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../constant-values.html#org.apache.juneau.petstore.marshall.PetPhotoParser.MAX_DIMENSION">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -193,7 +247,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>PetPhotoParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/marshall/PetPhotoParser.html#line-44">PetPhotoParser</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/marshall/PetPhotoParser.html#line-51">PetPhotoParser</a></span>()</div>
 <div class="block">Constructor with default settings (consumes image/png, image/jpeg and image/jpg).</div>
 </section>
 </li>
@@ -208,7 +262,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">
 <h3>doRead</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/marshall/PetPhotoParser.html#line-51">doRead</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/marshall/PetPhotoParser.html#line-58">doRead</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
  <a href="../../marshall/parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,

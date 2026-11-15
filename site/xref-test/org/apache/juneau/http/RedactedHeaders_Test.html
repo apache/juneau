@@ -108,7 +108,21 @@
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertEquals(<span class="jxr_string">"[REDACTED]"</span>, RedactedHeaders.redact(<span class="jxr_string">"X-INTERNAL-TRACE"</span>, <span class="jxr_string">"abc-trace-id"</span>, names));
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertEquals(<span class="jxr_string">"Bearer abc123"</span>, RedactedHeaders.redact(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer abc123"</span>, names));
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> }
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Test <strong class="jxr_keyword">void</strong> d01_isCredentialLike_defaultSetAndNameHeuristic() {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertTrue(RedactedHeaders.isCredentialLike(<span class="jxr_string">"Authorization"</span>));
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertTrue(RedactedHeaders.isCredentialLike(<span class="jxr_string">"set-cookie"</span>));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertTrue(RedactedHeaders.isCredentialLike(<span class="jxr_string">"X-Auth-Token"</span>));
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertTrue(RedactedHeaders.isCredentialLike(<span class="jxr_string">"X-Client-Secret"</span>));
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertTrue(RedactedHeaders.isCredentialLike(<span class="jxr_string">"X-SESSION-ID"</span>));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertTrue(RedactedHeaders.isCredentialLike(<span class="jxr_string">"X-Credential"</span>));
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertTrue(RedactedHeaders.isCredentialLike(<span class="jxr_string">"My-Api-Key"</span>));
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertTrue(RedactedHeaders.isCredentialLike(<span class="jxr_string">"apikey"</span>));
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertFalse(RedactedHeaders.isCredentialLike(<span class="jxr_string">"User-Agent"</span>));
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertFalse(RedactedHeaders.isCredentialLike(<span class="jxr_string">"Accept"</span>));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertFalse(RedactedHeaders.isCredentialLike(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

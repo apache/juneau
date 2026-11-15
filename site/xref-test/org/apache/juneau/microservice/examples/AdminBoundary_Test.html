@@ -38,7 +38,7 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.http.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * {@link AdminBoundary}: the registration's mapping, and the CSRF decisions its filter makes for the admin resources.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * {@link AdminBoundary}: the registration's mapping, and the request-token decisions its filter makes for the admin resources.</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * The decision tests drive the filter itself with mock servlet objects and a counting chain.  A mock REST client would</em>
@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String HOST = <span class="jxr_string">"localhost:10000"</span>;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SELF = <span class="jxr_string">"http://localhost:10000"</span>;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String EVIL = <span class="jxr_string">"http://evil.example"</span>;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String OTHER_ORIGIN = <span class="jxr_string">"http://other.example"</span>;
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JSON = <span class="jxr_string">"application/json"</span>;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String FORM = <span class="jxr_string">"application/x-www-form-urlencoded"</span>;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String REASON = RequestBoundaryFilter.REJECTION_HEADER;
@@ -95,14 +95,14 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<em class="jxr_comment">// a - the registration's mapping</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	@Test <strong class="jxr_keyword">void</strong> a01_rootPrefixMapsSixPatterns() {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	@Test <strong class="jxr_keyword">void</strong> a01_rootPrefixMapsEightPatterns() {
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> r = AdminBoundary.registration(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(List.of(<span class="jxr_string">"/config"</span>, <span class="jxr_string">"/config/*"</span>, <span class="jxr_string">"/logs"</span>, <span class="jxr_string">"/logs/*"</span>, <span class="jxr_string">"/shutdown"</span>, <span class="jxr_string">"/shutdown/*"</span>), r.getUrlPatterns());
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(List.of(<span class="jxr_string">"/config"</span>, <span class="jxr_string">"/config/*"</span>, <span class="jxr_string">"/debug"</span>, <span class="jxr_string">"/debug/*"</span>, <span class="jxr_string">"/logs"</span>, <span class="jxr_string">"/logs/*"</span>, <span class="jxr_string">"/shutdown"</span>, <span class="jxr_string">"/shutdown/*"</span>), r.getUrlPatterns());
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Test <strong class="jxr_keyword">void</strong> a02_prefixIsPrepended() {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> r = AdminBoundary.registration(<span class="jxr_string">"/admin"</span>);
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertEquals(List.of(<span class="jxr_string">"/admin/config"</span>, <span class="jxr_string">"/admin/config/*"</span>, <span class="jxr_string">"/admin/logs"</span>, <span class="jxr_string">"/admin/logs/*"</span>, <span class="jxr_string">"/admin/shutdown"</span>, <span class="jxr_string">"/admin/shutdown/*"</span>), r.getUrlPatterns());
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertEquals(List.of(<span class="jxr_string">"/admin/config"</span>, <span class="jxr_string">"/admin/config/*"</span>, <span class="jxr_string">"/admin/debug"</span>, <span class="jxr_string">"/admin/debug/*"</span>, <span class="jxr_string">"/admin/logs"</span>, <span class="jxr_string">"/admin/logs/*"</span>, <span class="jxr_string">"/admin/shutdown"</span>, <span class="jxr_string">"/admin/shutdown/*"</span>), r.getUrlPatterns());
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	@Test <strong class="jxr_keyword">void</strong> a03_requestDispatchOnlyAtItsOrder() {
@@ -142,7 +142,7 @@
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@Test <strong class="jxr_keyword">void</strong> b01_crossSiteShutdownIsRefused() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		assertRefused(filter(), req(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"/shutdown"</span>).header(<span class="jxr_string">"Origin"</span>, EVIL).header(<span class="jxr_string">"Content-Type"</span>, FORM), 403, BoundaryReason.ORIGIN_MISMATCH);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		assertRefused(filter(), req(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"/shutdown"</span>).header(<span class="jxr_string">"Origin"</span>, OTHER_ORIGIN).header(<span class="jxr_string">"Content-Type"</span>, FORM), 403, BoundaryReason.ORIGIN_MISMATCH);
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 	}
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	@Test <strong class="jxr_keyword">void</strong> b02_sameOriginBrowserWriteHasNoTokenAndIsRefused() <strong class="jxr_keyword">throws</strong> Exception {
@@ -174,7 +174,7 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	@Test <strong class="jxr_keyword">void</strong> b09_readsPass() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertPasses(filter(), req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/logs/view/app.log"</span>).header(<span class="jxr_string">"Origin"</span>, EVIL));
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertPasses(filter(), req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/logs/view/app.log"</span>).header(<span class="jxr_string">"Origin"</span>, OTHER_ORIGIN));
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertPasses(filter(), req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/config"</span>));
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 	}
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 

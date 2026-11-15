@@ -74,8 +74,8 @@
 <span class="source-line-no">061</span><span id="line-61">      return new StaticFiles.Builder(beanStore);</span>
 <span class="source-line-no">062</span><span id="line-62">   }</span>
 <span class="source-line-no">063</span><span id="line-63"></span>
-<span class="source-line-no">064</span><span id="line-64">   // Class files, dotfiles, and common configuration/credential/backup file types are never served.</span>
-<span class="source-line-no">065</span><span id="line-65">   static final String EXCLUDE_PATTERN = "(?i)(.*/)?\\.[^/]*|.*\\.(class|properties|ya?ml|xml|jks|p12|pfx|pem|key|env|cfg|conf|bak)";</span>
+<span class="source-line-no">064</span><span id="line-64">   // Class files, dotfiles, anything under a dot-directory, and common configuration/credential/backup file types are never served.</span>
+<span class="source-line-no">065</span><span id="line-65">   static final String EXCLUDE_PATTERN = "(?i)(.*/)?\\.[^/]*(/.*)?|.*\\.(class|properties|ya?ml|xml|jks|p12|pfx|pem|key|env|cfg|conf|bak)";</span>
 <span class="source-line-no">066</span><span id="line-66"></span>
 <span class="source-line-no">067</span><span id="line-67">   private final HttpHeader[] headers;</span>
 <span class="source-line-no">068</span><span id="line-68">   private final MimeTypeDetector mimeTypes;</span>

@@ -55,121 +55,148 @@
 <span class="source-line-no">042</span><span id="line-42">   /** Default cap on concurrently open {@code subscriptions/listen} streams per broker. */</span>
 <span class="source-line-no">043</span><span id="line-43">   public static final int DEFAULT_MAX_CONCURRENT_SUBSCRIPTIONS = 256;</span>
 <span class="source-line-no">044</span><span id="line-44"></span>
-<span class="source-line-no">045</span><span id="line-45">   /** Default per-subscription drop-oldest queue bound; matches {@code SseBroadcaster.DEFAULT_QUEUE_SIZE}. */</span>
-<span class="source-line-no">046</span><span id="line-46">   public static final int DEFAULT_QUEUE_SIZE = 1024;</span>
+<span class="source-line-no">045</span><span id="line-45">   /** Default cap on concurrently open {@code subscriptions/listen} streams per authenticated caller. */</span>
+<span class="source-line-no">046</span><span id="line-46">   public static final int DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL = 16;</span>
 <span class="source-line-no">047</span><span id="line-47"></span>
-<span class="source-line-no">048</span><span id="line-48">   /** Default heartbeat/keepalive interval in milliseconds. */</span>
-<span class="source-line-no">049</span><span id="line-49">   public static final long DEFAULT_HEARTBEAT_INTERVAL_MS = 15_000L;</span>
+<span class="source-line-no">048</span><span id="line-48">   /** Default per-subscription drop-oldest queue bound; matches {@code SseBroadcaster.DEFAULT_QUEUE_SIZE}. */</span>
+<span class="source-line-no">049</span><span id="line-49">   public static final int DEFAULT_QUEUE_SIZE = 1024;</span>
 <span class="source-line-no">050</span><span id="line-50"></span>
-<span class="source-line-no">051</span><span id="line-51">   /** Default idle timeout in milliseconds (5 minutes); {@code 0} disables idle-timeout reaping. */</span>
-<span class="source-line-no">052</span><span id="line-52">   public static final long DEFAULT_IDLE_TIMEOUT_MS = 300_000L;</span>
+<span class="source-line-no">051</span><span id="line-51">   /** Default heartbeat/keepalive interval in milliseconds. */</span>
+<span class="source-line-no">052</span><span id="line-52">   public static final long DEFAULT_HEARTBEAT_INTERVAL_MS = 15_000L;</span>
 <span class="source-line-no">053</span><span id="line-53"></span>
-<span class="source-line-no">054</span><span id="line-54">   private int maxConcurrentSubscriptions = DEFAULT_MAX_CONCURRENT_SUBSCRIPTIONS;</span>
-<span class="source-line-no">055</span><span id="line-55">   private int queueSize = DEFAULT_QUEUE_SIZE;</span>
-<span class="source-line-no">056</span><span id="line-56">   private long heartbeatIntervalMs = DEFAULT_HEARTBEAT_INTERVAL_MS;</span>
-<span class="source-line-no">057</span><span id="line-57">   private long idleTimeoutMs = DEFAULT_IDLE_TIMEOUT_MS;</span>
-<span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">   /**</span>
-<span class="source-line-no">060</span><span id="line-60">    * The cap on concurrently open {@code subscriptions/listen} streams per broker.</span>
-<span class="source-line-no">061</span><span id="line-61">    *</span>
-<span class="source-line-no">062</span><span id="line-62">    * @return The cap. Always {@code &gt; 0}.</span>
-<span class="source-line-no">063</span><span id="line-63">    */</span>
-<span class="source-line-no">064</span><span id="line-64">   public int getMaxConcurrentSubscriptions() {</span>
-<span class="source-line-no">065</span><span id="line-65">      return maxConcurrentSubscriptions;</span>
-<span class="source-line-no">066</span><span id="line-66">   }</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   /**</span>
-<span class="source-line-no">069</span><span id="line-69">    * Sets the cap on concurrently open {@code subscriptions/listen} streams per broker.</span>
-<span class="source-line-no">070</span><span id="line-70">    *</span>
-<span class="source-line-no">071</span><span id="line-71">    * @param value The new value. Must be {@code &gt; 0}.</span>
-<span class="source-line-no">072</span><span id="line-72">    * @return This object.</span>
-<span class="source-line-no">073</span><span id="line-73">    * @throws IllegalArgumentException If {@code value} is not {@code &gt; 0}.</span>
-<span class="source-line-no">074</span><span id="line-74">    */</span>
-<span class="source-line-no">075</span><span id="line-75">   public McpSubscriptionsConfig setMaxConcurrentSubscriptions(int value) {</span>
-<span class="source-line-no">076</span><span id="line-76">      if (value &lt;= 0)</span>
-<span class="source-line-no">077</span><span id="line-77">         throw new IllegalArgumentException("maxConcurrentSubscriptions " + value + " must be &gt; 0");</span>
-<span class="source-line-no">078</span><span id="line-78">      maxConcurrentSubscriptions = value;</span>
-<span class="source-line-no">079</span><span id="line-79">      return this;</span>
-<span class="source-line-no">080</span><span id="line-80">   }</span>
-<span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82">   /**</span>
-<span class="source-line-no">083</span><span id="line-83">    * The per-subscription drop-oldest queue bound.</span>
-<span class="source-line-no">084</span><span id="line-84">    *</span>
-<span class="source-line-no">085</span><span id="line-85">    * @return The bound. Always {@code &gt; 0}.</span>
-<span class="source-line-no">086</span><span id="line-86">    */</span>
-<span class="source-line-no">087</span><span id="line-87">   public int getQueueSize() {</span>
-<span class="source-line-no">088</span><span id="line-88">      return queueSize;</span>
-<span class="source-line-no">089</span><span id="line-89">   }</span>
-<span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">   /**</span>
-<span class="source-line-no">092</span><span id="line-92">    * Sets the per-subscription drop-oldest queue bound.</span>
-<span class="source-line-no">093</span><span id="line-93">    *</span>
-<span class="source-line-no">094</span><span id="line-94">    * @param value The new value. Must be {@code &gt; 0}.</span>
-<span class="source-line-no">095</span><span id="line-95">    * @return This object.</span>
-<span class="source-line-no">096</span><span id="line-96">    * @throws IllegalArgumentException If {@code value} is not {@code &gt; 0}.</span>
-<span class="source-line-no">097</span><span id="line-97">    */</span>
-<span class="source-line-no">098</span><span id="line-98">   public McpSubscriptionsConfig setQueueSize(int value) {</span>
-<span class="source-line-no">099</span><span id="line-99">      if (value &lt;= 0)</span>
-<span class="source-line-no">100</span><span id="line-100">         throw new IllegalArgumentException("queueSize " + value + " must be &gt; 0");</span>
-<span class="source-line-no">101</span><span id="line-101">      queueSize = value;</span>
-<span class="source-line-no">102</span><span id="line-102">      return this;</span>
-<span class="source-line-no">103</span><span id="line-103">   }</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   /**</span>
-<span class="source-line-no">106</span><span id="line-106">    * The heartbeat/keepalive interval in milliseconds.</span>
-<span class="source-line-no">107</span><span id="line-107">    *</span>
-<span class="source-line-no">108</span><span id="line-108">    * @return The interval. Always {@code &gt; 0}.</span>
-<span class="source-line-no">109</span><span id="line-109">    */</span>
-<span class="source-line-no">110</span><span id="line-110">   public long getHeartbeatIntervalMs() {</span>
-<span class="source-line-no">111</span><span id="line-111">      return heartbeatIntervalMs;</span>
-<span class="source-line-no">112</span><span id="line-112">   }</span>
-<span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114">   /**</span>
-<span class="source-line-no">115</span><span id="line-115">    * Sets the heartbeat/keepalive interval.</span>
-<span class="source-line-no">116</span><span id="line-116">    *</span>
-<span class="source-line-no">117</span><span id="line-117">    * @param value The new value. Must be {@code &gt; 0}.</span>
-<span class="source-line-no">118</span><span id="line-118">    * @return This object.</span>
-<span class="source-line-no">119</span><span id="line-119">    * @throws IllegalArgumentException If {@code value} is not {@code &gt; 0}.</span>
-<span class="source-line-no">120</span><span id="line-120">    */</span>
-<span class="source-line-no">121</span><span id="line-121">   public McpSubscriptionsConfig setHeartbeatIntervalMs(long value) {</span>
-<span class="source-line-no">122</span><span id="line-122">      if (value &lt;= 0)</span>
-<span class="source-line-no">123</span><span id="line-123">         throw new IllegalArgumentException("heartbeatIntervalMs " + value + " must be &gt; 0");</span>
-<span class="source-line-no">124</span><span id="line-124">      heartbeatIntervalMs = value;</span>
-<span class="source-line-no">125</span><span id="line-125">      return this;</span>
-<span class="source-line-no">126</span><span id="line-126">   }</span>
-<span class="source-line-no">127</span><span id="line-127"></span>
-<span class="source-line-no">128</span><span id="line-128">   /**</span>
-<span class="source-line-no">129</span><span id="line-129">    * The idle timeout in milliseconds.</span>
-<span class="source-line-no">130</span><span id="line-130">    *</span>
-<span class="source-line-no">131</span><span id="line-131">    * @return The timeout. Always {@code &gt;= 0} ({@code 0} means disabled).</span>
-<span class="source-line-no">132</span><span id="line-132">    */</span>
-<span class="source-line-no">133</span><span id="line-133">   public long getIdleTimeoutMs() {</span>
-<span class="source-line-no">134</span><span id="line-134">      return idleTimeoutMs;</span>
-<span class="source-line-no">135</span><span id="line-135">   }</span>
-<span class="source-line-no">136</span><span id="line-136"></span>
-<span class="source-line-no">137</span><span id="line-137">   /**</span>
-<span class="source-line-no">138</span><span id="line-138">    * Sets the idle timeout.</span>
-<span class="source-line-no">139</span><span id="line-139">    *</span>
-<span class="source-line-no">140</span><span id="line-140">    * &lt;p&gt;</span>
-<span class="source-line-no">141</span><span id="line-141">    * &lt;b&gt;Keep this greater than {@link #getHeartbeatIntervalMs() heartbeatIntervalMs}.&lt;/b&gt; A heartbeat</span>
-<span class="source-line-no">142</span><span id="line-142">    * counts as activity, so as long as {@code heartbeatIntervalMs &lt; idleTimeoutMs}, heartbeats alone keep</span>
-<span class="source-line-no">143</span><span id="line-143">    * an otherwise-quiet stream alive indefinitely. Configuring {@code idleTimeoutMs} at or below</span>
-<span class="source-line-no">144</span><span id="line-144">    * {@code heartbeatIntervalMs} defeats that: the watchdog can fire between two heartbeats and silently</span>
-<span class="source-line-no">145</span><span id="line-145">    * reap a perfectly healthy connection. This setter accepts any non-negative value without checking</span>
-<span class="source-line-no">146</span><span id="line-146">    * against the currently-configured heartbeat interval (the two may be set in either order), so this is</span>
-<span class="source-line-no">147</span><span id="line-147">    * a configuration contract, not one this class enforces for you.</span>
-<span class="source-line-no">148</span><span id="line-148">    *</span>
-<span class="source-line-no">149</span><span id="line-149">    * @param value The new value. Must be {@code &gt;= 0} ({@code 0} disables idle-timeout reaping).</span>
-<span class="source-line-no">150</span><span id="line-150">    * @return This object.</span>
-<span class="source-line-no">151</span><span id="line-151">    * @throws IllegalArgumentException If {@code value} is negative.</span>
-<span class="source-line-no">152</span><span id="line-152">    */</span>
-<span class="source-line-no">153</span><span id="line-153">   public McpSubscriptionsConfig setIdleTimeoutMs(long value) {</span>
-<span class="source-line-no">154</span><span id="line-154">      if (value &lt; 0)</span>
-<span class="source-line-no">155</span><span id="line-155">         throw new IllegalArgumentException("idleTimeoutMs " + value + " must be &gt;= 0");</span>
-<span class="source-line-no">156</span><span id="line-156">      idleTimeoutMs = value;</span>
-<span class="source-line-no">157</span><span id="line-157">      return this;</span>
-<span class="source-line-no">158</span><span id="line-158">   }</span>
-<span class="source-line-no">159</span><span id="line-159">}</span>
+<span class="source-line-no">054</span><span id="line-54">   /** Default idle timeout in milliseconds (5 minutes); {@code 0} disables idle-timeout reaping. */</span>
+<span class="source-line-no">055</span><span id="line-55">   public static final long DEFAULT_IDLE_TIMEOUT_MS = 300_000L;</span>
+<span class="source-line-no">056</span><span id="line-56"></span>
+<span class="source-line-no">057</span><span id="line-57">   private int maxConcurrentSubscriptions = DEFAULT_MAX_CONCURRENT_SUBSCRIPTIONS;</span>
+<span class="source-line-no">058</span><span id="line-58">   private int maxSubscriptionsPerPrincipal = DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL;</span>
+<span class="source-line-no">059</span><span id="line-59">   private int queueSize = DEFAULT_QUEUE_SIZE;</span>
+<span class="source-line-no">060</span><span id="line-60">   private long heartbeatIntervalMs = DEFAULT_HEARTBEAT_INTERVAL_MS;</span>
+<span class="source-line-no">061</span><span id="line-61">   private long idleTimeoutMs = DEFAULT_IDLE_TIMEOUT_MS;</span>
+<span class="source-line-no">062</span><span id="line-62"></span>
+<span class="source-line-no">063</span><span id="line-63">   /**</span>
+<span class="source-line-no">064</span><span id="line-64">    * The cap on concurrently open {@code subscriptions/listen} streams per broker.</span>
+<span class="source-line-no">065</span><span id="line-65">    *</span>
+<span class="source-line-no">066</span><span id="line-66">    * @return The cap. Always {@code &gt; 0}.</span>
+<span class="source-line-no">067</span><span id="line-67">    */</span>
+<span class="source-line-no">068</span><span id="line-68">   public int getMaxConcurrentSubscriptions() {</span>
+<span class="source-line-no">069</span><span id="line-69">      return maxConcurrentSubscriptions;</span>
+<span class="source-line-no">070</span><span id="line-70">   }</span>
+<span class="source-line-no">071</span><span id="line-71"></span>
+<span class="source-line-no">072</span><span id="line-72">   /**</span>
+<span class="source-line-no">073</span><span id="line-73">    * Sets the cap on concurrently open {@code subscriptions/listen} streams per broker.</span>
+<span class="source-line-no">074</span><span id="line-74">    *</span>
+<span class="source-line-no">075</span><span id="line-75">    * @param value The new value. Must be {@code &gt; 0}.</span>
+<span class="source-line-no">076</span><span id="line-76">    * @return This object.</span>
+<span class="source-line-no">077</span><span id="line-77">    * @throws IllegalArgumentException If {@code value} is not {@code &gt; 0}.</span>
+<span class="source-line-no">078</span><span id="line-78">    */</span>
+<span class="source-line-no">079</span><span id="line-79">   public McpSubscriptionsConfig setMaxConcurrentSubscriptions(int value) {</span>
+<span class="source-line-no">080</span><span id="line-80">      if (value &lt;= 0)</span>
+<span class="source-line-no">081</span><span id="line-81">         throw new IllegalArgumentException("maxConcurrentSubscriptions " + value + " must be &gt; 0");</span>
+<span class="source-line-no">082</span><span id="line-82">      maxConcurrentSubscriptions = value;</span>
+<span class="source-line-no">083</span><span id="line-83">      return this;</span>
+<span class="source-line-no">084</span><span id="line-84">   }</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">   /**</span>
+<span class="source-line-no">087</span><span id="line-87">    * The cap on concurrently open {@code subscriptions/listen} streams per authenticated caller.</span>
+<span class="source-line-no">088</span><span id="line-88">    *</span>
+<span class="source-line-no">089</span><span id="line-89">    * @return The cap. Always {@code &gt; 0}.</span>
+<span class="source-line-no">090</span><span id="line-90">    */</span>
+<span class="source-line-no">091</span><span id="line-91">   public int getMaxSubscriptionsPerPrincipal() {</span>
+<span class="source-line-no">092</span><span id="line-92">      return maxSubscriptionsPerPrincipal;</span>
+<span class="source-line-no">093</span><span id="line-93">   }</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">   /**</span>
+<span class="source-line-no">096</span><span id="line-96">    * Sets the cap on concurrently open {@code subscriptions/listen} streams per authenticated caller.</span>
+<span class="source-line-no">097</span><span id="line-97">    *</span>
+<span class="source-line-no">098</span><span id="line-98">    * @param value The new value. Must be {@code &gt; 0}.</span>
+<span class="source-line-no">099</span><span id="line-99">    * @return This object.</span>
+<span class="source-line-no">100</span><span id="line-100">    * @throws IllegalArgumentException If {@code value} is not {@code &gt; 0}.</span>
+<span class="source-line-no">101</span><span id="line-101">    */</span>
+<span class="source-line-no">102</span><span id="line-102">   public McpSubscriptionsConfig setMaxSubscriptionsPerPrincipal(int value) {</span>
+<span class="source-line-no">103</span><span id="line-103">      if (value &lt;= 0)</span>
+<span class="source-line-no">104</span><span id="line-104">         throw new IllegalArgumentException("maxSubscriptionsPerPrincipal " + value + " must be &gt; 0");</span>
+<span class="source-line-no">105</span><span id="line-105">      maxSubscriptionsPerPrincipal = value;</span>
+<span class="source-line-no">106</span><span id="line-106">      return this;</span>
+<span class="source-line-no">107</span><span id="line-107">   }</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   /**</span>
+<span class="source-line-no">110</span><span id="line-110">    * The per-subscription drop-oldest queue bound.</span>
+<span class="source-line-no">111</span><span id="line-111">    *</span>
+<span class="source-line-no">112</span><span id="line-112">    * @return The bound. Always {@code &gt; 0}.</span>
+<span class="source-line-no">113</span><span id="line-113">    */</span>
+<span class="source-line-no">114</span><span id="line-114">   public int getQueueSize() {</span>
+<span class="source-line-no">115</span><span id="line-115">      return queueSize;</span>
+<span class="source-line-no">116</span><span id="line-116">   }</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">   /**</span>
+<span class="source-line-no">119</span><span id="line-119">    * Sets the per-subscription drop-oldest queue bound.</span>
+<span class="source-line-no">120</span><span id="line-120">    *</span>
+<span class="source-line-no">121</span><span id="line-121">    * @param value The new value. Must be {@code &gt; 0}.</span>
+<span class="source-line-no">122</span><span id="line-122">    * @return This object.</span>
+<span class="source-line-no">123</span><span id="line-123">    * @throws IllegalArgumentException If {@code value} is not {@code &gt; 0}.</span>
+<span class="source-line-no">124</span><span id="line-124">    */</span>
+<span class="source-line-no">125</span><span id="line-125">   public McpSubscriptionsConfig setQueueSize(int value) {</span>
+<span class="source-line-no">126</span><span id="line-126">      if (value &lt;= 0)</span>
+<span class="source-line-no">127</span><span id="line-127">         throw new IllegalArgumentException("queueSize " + value + " must be &gt; 0");</span>
+<span class="source-line-no">128</span><span id="line-128">      queueSize = value;</span>
+<span class="source-line-no">129</span><span id="line-129">      return this;</span>
+<span class="source-line-no">130</span><span id="line-130">   }</span>
+<span class="source-line-no">131</span><span id="line-131"></span>
+<span class="source-line-no">132</span><span id="line-132">   /**</span>
+<span class="source-line-no">133</span><span id="line-133">    * The heartbeat/keepalive interval in milliseconds.</span>
+<span class="source-line-no">134</span><span id="line-134">    *</span>
+<span class="source-line-no">135</span><span id="line-135">    * @return The interval. Always {@code &gt; 0}.</span>
+<span class="source-line-no">136</span><span id="line-136">    */</span>
+<span class="source-line-no">137</span><span id="line-137">   public long getHeartbeatIntervalMs() {</span>
+<span class="source-line-no">138</span><span id="line-138">      return heartbeatIntervalMs;</span>
+<span class="source-line-no">139</span><span id="line-139">   }</span>
+<span class="source-line-no">140</span><span id="line-140"></span>
+<span class="source-line-no">141</span><span id="line-141">   /**</span>
+<span class="source-line-no">142</span><span id="line-142">    * Sets the heartbeat/keepalive interval.</span>
+<span class="source-line-no">143</span><span id="line-143">    *</span>
+<span class="source-line-no">144</span><span id="line-144">    * @param value The new value. Must be {@code &gt; 0}.</span>
+<span class="source-line-no">145</span><span id="line-145">    * @return This object.</span>
+<span class="source-line-no">146</span><span id="line-146">    * @throws IllegalArgumentException If {@code value} is not {@code &gt; 0}.</span>
+<span class="source-line-no">147</span><span id="line-147">    */</span>
+<span class="source-line-no">148</span><span id="line-148">   public McpSubscriptionsConfig setHeartbeatIntervalMs(long value) {</span>
+<span class="source-line-no">149</span><span id="line-149">      if (value &lt;= 0)</span>
+<span class="source-line-no">150</span><span id="line-150">         throw new IllegalArgumentException("heartbeatIntervalMs " + value + " must be &gt; 0");</span>
+<span class="source-line-no">151</span><span id="line-151">      heartbeatIntervalMs = value;</span>
+<span class="source-line-no">152</span><span id="line-152">      return this;</span>
+<span class="source-line-no">153</span><span id="line-153">   }</span>
+<span class="source-line-no">154</span><span id="line-154"></span>
+<span class="source-line-no">155</span><span id="line-155">   /**</span>
+<span class="source-line-no">156</span><span id="line-156">    * The idle timeout in milliseconds.</span>
+<span class="source-line-no">157</span><span id="line-157">    *</span>
+<span class="source-line-no">158</span><span id="line-158">    * @return The timeout. Always {@code &gt;= 0} ({@code 0} means disabled).</span>
+<span class="source-line-no">159</span><span id="line-159">    */</span>
+<span class="source-line-no">160</span><span id="line-160">   public long getIdleTimeoutMs() {</span>
+<span class="source-line-no">161</span><span id="line-161">      return idleTimeoutMs;</span>
+<span class="source-line-no">162</span><span id="line-162">   }</span>
+<span class="source-line-no">163</span><span id="line-163"></span>
+<span class="source-line-no">164</span><span id="line-164">   /**</span>
+<span class="source-line-no">165</span><span id="line-165">    * Sets the idle timeout.</span>
+<span class="source-line-no">166</span><span id="line-166">    *</span>
+<span class="source-line-no">167</span><span id="line-167">    * &lt;p&gt;</span>
+<span class="source-line-no">168</span><span id="line-168">    * &lt;b&gt;Keep this greater than {@link #getHeartbeatIntervalMs() heartbeatIntervalMs}.&lt;/b&gt; A heartbeat</span>
+<span class="source-line-no">169</span><span id="line-169">    * counts as activity, so as long as {@code heartbeatIntervalMs &lt; idleTimeoutMs}, heartbeats alone keep</span>
+<span class="source-line-no">170</span><span id="line-170">    * an otherwise-quiet stream alive indefinitely. Configuring {@code idleTimeoutMs} at or below</span>
+<span class="source-line-no">171</span><span id="line-171">    * {@code heartbeatIntervalMs} defeats that: the watchdog can fire between two heartbeats and silently</span>
+<span class="source-line-no">172</span><span id="line-172">    * reap a perfectly healthy connection. This setter accepts any non-negative value without checking</span>
+<span class="source-line-no">173</span><span id="line-173">    * against the currently-configured heartbeat interval (the two may be set in either order), so this is</span>
+<span class="source-line-no">174</span><span id="line-174">    * a configuration contract, not one this class enforces for you.</span>
+<span class="source-line-no">175</span><span id="line-175">    *</span>
+<span class="source-line-no">176</span><span id="line-176">    * @param value The new value. Must be {@code &gt;= 0} ({@code 0} disables idle-timeout reaping).</span>
+<span class="source-line-no">177</span><span id="line-177">    * @return This object.</span>
+<span class="source-line-no">178</span><span id="line-178">    * @throws IllegalArgumentException If {@code value} is negative.</span>
+<span class="source-line-no">179</span><span id="line-179">    */</span>
+<span class="source-line-no">180</span><span id="line-180">   public McpSubscriptionsConfig setIdleTimeoutMs(long value) {</span>
+<span class="source-line-no">181</span><span id="line-181">      if (value &lt; 0)</span>
+<span class="source-line-no">182</span><span id="line-182">         throw new IllegalArgumentException("idleTimeoutMs " + value + " must be &gt;= 0");</span>
+<span class="source-line-no">183</span><span id="line-183">      idleTimeoutMs = value;</span>
+<span class="source-line-no">184</span><span id="line-184">      return this;</span>
+<span class="source-line-no">185</span><span id="line-185">   }</span>
+<span class="source-line-no">186</span><span id="line-186">}</span>
 
 
 

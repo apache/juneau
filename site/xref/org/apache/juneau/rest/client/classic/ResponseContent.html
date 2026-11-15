@@ -28,17 +28,17 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ObjectUtils.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.io.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.http.conn.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.conversion.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.StringUtils.abbreviate;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.http.conn.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.http.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.ConstructorInfo;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.reflect.ExecutableException;
@@ -282,16 +282,16 @@
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<strong class="jxr_keyword">var</strong> mt = MediaType.of(ct);
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">if</strong> ((parser == <strong class="jxr_keyword">null</strong> || (mt.toString().contains(CONTENT_TYPE_TEXT_PLAIN) &amp;&amp; ! parser.canHandle(ct))) &amp;&amp; type.hasStringMutater())
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				<strong class="jxr_keyword">return</strong> BasicConverter.INSTANCE.to(asString(), type.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				<strong class="jxr_keyword">return</strong> type.basicConverter().to(asString(), type.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<strong class="jxr_keyword">if</strong> (nn(parser))
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 				<strong class="jxr_keyword">return</strong> parse(type, mt);
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<strong class="jxr_keyword">if</strong> (type.hasReaderMutater())
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				<strong class="jxr_keyword">return</strong> BasicConverter.INSTANCE.to(asReader(), type.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				<strong class="jxr_keyword">return</strong> type.basicConverter().to(asReader(), type.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 			<strong class="jxr_keyword">if</strong> (type.hasInputStreamMutater())
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 				<strong class="jxr_keyword">return</strong> BasicConverter.INSTANCE.to(asInputStream(), type.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 				<strong class="jxr_keyword">return</strong> type.basicConverter().to(asInputStream(), type.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 			ct = response.getStringHeader(HEADER_ContentType).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 
@@ -506,7 +506,7 @@
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 * @throws RestCallException If a problem occurred trying to read from the reader.</em>
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 	<strong class="jxr_keyword">public</strong> String asAbbreviatedString(<strong class="jxr_keyword">int</strong> length) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../../org/apache/juneau/rest/client/classic/RestCallException.html#RestCallException">RestCallException</a> {
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">return</strong> StringUtils.abbreviate(asString(), length);
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">return</strong> abbreviate(asString(), length);
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 	}
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 	<em class="jxr_javadoccomment">/**</em>

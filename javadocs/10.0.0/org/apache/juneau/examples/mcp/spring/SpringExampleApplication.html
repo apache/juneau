@@ -79,13 +79,14 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations">@SpringBootApplication
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/examples/mcp/spring/SpringExampleApplication.html#line-38">SpringExampleApplication</a></span>
+</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/examples/mcp/spring/SpringExampleApplication.html#line-41">SpringExampleApplication</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A minimal Spring Boot application that serves <a href="SpringExampleMcpServer.html" title="class in org.apache.juneau.examples.mcp.spring"><code>SpringExampleMcpServer</code></a> on embedded Tomcat.
 
  <p>
  Run <a href="#main(java.lang.String%5B%5D)"><code>main</code></a> and the MCP endpoint is available at <code>http://localhost:8080/mcp</code>
- (default Spring Boot port). Point <a href="../ExampleClient.html" title="class in org.apache.juneau.examples.mcp"><code>ExampleClient</code></a> at
+ (default Spring Boot port). The server listens on the loopback interface only; set the <code>MCP_BIND</code>
+ environment variable (e.g. <code>0.0.0.0</code>) to listen elsewhere. Point <a href="../ExampleClient.html" title="class in org.apache.juneau.examples.mcp"><code>ExampleClient</code></a> at
  that URL, or drive it with any MCP client. The three <code>@Bean</code> methods are the entire integration:
 
  <ul>
@@ -160,7 +161,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>SpringExampleApplication</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/examples/mcp/spring/SpringExampleApplication.html#line-39">SpringExampleApplication</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/examples/mcp/spring/SpringExampleApplication.html#line-42">SpringExampleApplication</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -175,7 +176,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="greetingService()">
 <h3>greetingService</h3>
 <div class="member-signature"><span class="annotations">@Bean
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="GreetingService.html" title="class in org.apache.juneau.examples.mcp.spring">GreetingService</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/examples/mcp/spring/SpringExampleApplication.html#line-46">greetingService</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="GreetingService.html" title="class in org.apache.juneau.examples.mcp.spring">GreetingService</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/examples/mcp/spring/SpringExampleApplication.html#line-49">greetingService</a></span>()</div>
 <div class="block">The Spring-managed service injected into the MCP <code>greet</code> tool.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -187,7 +188,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="springExampleMcpServer()">
 <h3>springExampleMcpServer</h3>
 <div class="member-signature"><span class="annotations">@Bean
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SpringExampleMcpServer.html" title="class in org.apache.juneau.examples.mcp.spring">SpringExampleMcpServer</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/examples/mcp/spring/SpringExampleApplication.html#line-56">springExampleMcpServer</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SpringExampleMcpServer.html" title="class in org.apache.juneau.examples.mcp.spring">SpringExampleMcpServer</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/examples/mcp/spring/SpringExampleApplication.html#line-59">springExampleMcpServer</a></span>()</div>
 <div class="block">The MCP servlet bean (constructed by Spring so it participates in the application context).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -199,7 +200,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="mcpServletRegistration(org.apache.juneau.examples.mcp.spring.SpringExampleMcpServer)">
 <h3>mcpServletRegistration</h3>
 <div class="member-signature"><span class="annotations">@Bean
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.boot.web.servlet.ServletRegistrationBean&lt;<a href="SpringExampleMcpServer.html" title="class in org.apache.juneau.examples.mcp.spring">SpringExampleMcpServer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/examples/mcp/spring/SpringExampleApplication.html#line-67">mcpServletRegistration</a></span><wbr><span class="parameters">(<a href="SpringExampleMcpServer.html" title="class in org.apache.juneau.examples.mcp.spring">SpringExampleMcpServer</a>&nbsp;servlet)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.boot.web.servlet.ServletRegistrationBean&lt;<a href="SpringExampleMcpServer.html" title="class in org.apache.juneau.examples.mcp.spring">SpringExampleMcpServer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/examples/mcp/spring/SpringExampleApplication.html#line-70">mcpServletRegistration</a></span><wbr><span class="parameters">(<a href="SpringExampleMcpServer.html" title="class in org.apache.juneau.examples.mcp.spring">SpringExampleMcpServer</a>&nbsp;servlet)</span></div>
 <div class="block">Mounts the MCP servlet on the embedded container.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -212,7 +213,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="main(java.lang.String[])">
 <h3>main</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/examples/mcp/spring/SpringExampleApplication.html#line-77">main</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/examples/mcp/spring/SpringExampleApplication.html#line-80">main</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args)</span></div>
 <div class="block">Boots the application.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

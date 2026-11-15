@@ -219,201 +219,203 @@
 <span class="source-line-no">206</span><span id="line-206">      try {</span>
 <span class="source-line-no">207</span><span id="line-207">         BasicFileAttributes attrs;</span>
 <span class="source-line-no">208</span><span id="line-208">         try {</span>
-<span class="source-line-no">209</span><span id="line-209">            attrs = Files.readAttributes(file, BasicFileAttributes.class);</span>
-<span class="source-line-no">210</span><span id="line-210">         } catch (NoSuchFileException e) {</span>
-<span class="source-line-no">211</span><span id="line-211">            return missing();</span>
-<span class="source-line-no">212</span><span id="line-212">         }</span>
-<span class="source-line-no">213</span><span id="line-213">         var key = attrs.fileKey();</span>
-<span class="source-line-no">214</span><span id="line-214">         var size = attrs.size();</span>
-<span class="source-line-no">215</span><span id="line-215">         try (var ch = FileChannel.open(file, StandardOpenOption.READ)) {</span>
-<span class="source-line-no">216</span><span id="line-216">            if (neq(key, fileKey) || size &lt; indexedBytes || headChanged(ch, size))</span>
-<span class="source-line-no">217</span><span id="line-217">               reset(key);</span>
-<span class="source-line-no">218</span><span id="line-218">            readHead(ch, size);</span>
-<span class="source-line-no">219</span><span id="line-219">            scan(ch, size);</span>
-<span class="source-line-no">220</span><span id="line-220">         } catch (NoSuchFileException e) {</span>
-<span class="source-line-no">221</span><span id="line-221">            return missing();</span>
-<span class="source-line-no">222</span><span id="line-222">         }</span>
-<span class="source-line-no">223</span><span id="line-223">         return publish(size);</span>
-<span class="source-line-no">224</span><span id="line-224">      } finally {</span>
-<span class="source-line-no">225</span><span id="line-225">         lock.unlock();</span>
-<span class="source-line-no">226</span><span id="line-226">      }</span>
-<span class="source-line-no">227</span><span id="line-227">   }</span>
-<span class="source-line-no">228</span><span id="line-228"></span>
-<span class="source-line-no">229</span><span id="line-229">   /**</span>
-<span class="source-line-no">230</span><span id="line-230">    * Returns the byte offset of the start of line {@code n}.</span>
-<span class="source-line-no">231</span><span id="line-231">    *</span>
-<span class="source-line-no">232</span><span id="line-232">    * @param n The 1-based line number.</span>
-<span class="source-line-no">233</span><span id="line-233">    * @return The offset; {@code indexedBytes} for {@code n = indexedLines + 1}; {@code -1} outside</span>
-<span class="source-line-no">234</span><span id="line-234">    *    {@code [1, indexedLines + 1]} or when the file no longer has that line.</span>
-<span class="source-line-no">235</span><span id="line-235">    * @throws IOException If reading fails.</span>
-<span class="source-line-no">236</span><span id="line-236">    */</span>
-<span class="source-line-no">237</span><span id="line-237">   public long seek(long n) throws IOException {</span>
-<span class="source-line-no">238</span><span id="line-238">      lock.lock();</span>
-<span class="source-line-no">239</span><span id="line-239">      try {</span>
-<span class="source-line-no">240</span><span id="line-240">         if (n &lt; 1 || n &gt; indexedLines + 1)</span>
-<span class="source-line-no">241</span><span id="line-241">            return -1;</span>
-<span class="source-line-no">242</span><span id="line-242">         var i = (int)Math.min((n - 1) / stride, count - 1L);</span>
-<span class="source-line-no">243</span><span id="line-243">         var line = 1 + (long)i * stride;</span>
-<span class="source-line-no">244</span><span id="line-244">         var pos = entries[i];</span>
-<span class="source-line-no">245</span><span id="line-245">         if (line == n)</span>
-<span class="source-line-no">246</span><span id="line-246">            return pos;</span>
-<span class="source-line-no">247</span><span id="line-247">         try (var ch = FileChannel.open(file, StandardOpenOption.READ)) {</span>
-<span class="source-line-no">248</span><span id="line-248">            var buf = ByteBuffer.allocate(BLOCK_BYTES);</span>
-<span class="source-line-no">249</span><span id="line-249">            while (pos &lt; indexedBytes) {</span>
-<span class="source-line-no">250</span><span id="line-250">               buf.clear();</span>
-<span class="source-line-no">251</span><span id="line-251">               if (indexedBytes - pos &lt; BLOCK_BYTES)</span>
-<span class="source-line-no">252</span><span id="line-252">                  buf.limit((int)(indexedBytes - pos));</span>
-<span class="source-line-no">253</span><span id="line-253">               var r = ch.read(buf, pos);</span>
-<span class="source-line-no">254</span><span id="line-254">               if (r &lt;= 0)</span>
-<span class="source-line-no">255</span><span id="line-255">                  return -1;</span>
-<span class="source-line-no">256</span><span id="line-256">               for (var k = 0; k &lt; r; k++)</span>
-<span class="source-line-no">257</span><span id="line-257">                  if (buf.get(k) == '\n' &amp;&amp; ++line == n)</span>
-<span class="source-line-no">258</span><span id="line-258">                     return pos + k + 1;</span>
-<span class="source-line-no">259</span><span id="line-259">               pos += r;</span>
-<span class="source-line-no">260</span><span id="line-260">            }</span>
-<span class="source-line-no">261</span><span id="line-261">         } catch (NoSuchFileException e) {</span>
-<span class="source-line-no">262</span><span id="line-262">            return -1;</span>
-<span class="source-line-no">263</span><span id="line-263">         }</span>
-<span class="source-line-no">264</span><span id="line-264">         return -1;</span>
-<span class="source-line-no">265</span><span id="line-265">      } finally {</span>
-<span class="source-line-no">266</span><span id="line-266">         lock.unlock();</span>
-<span class="source-line-no">267</span><span id="line-267">      }</span>
-<span class="source-line-no">268</span><span id="line-268">   }</span>
-<span class="source-line-no">269</span><span id="line-269"></span>
-<span class="source-line-no">270</span><span id="line-270">   /**</span>
-<span class="source-line-no">271</span><span id="line-271">    * Whether a token epoch belongs to the current file generation.</span>
-<span class="source-line-no">272</span><span id="line-272">    *</span>
-<span class="source-line-no">273</span><span id="line-273">    * &lt;p&gt;</span>
-<span class="source-line-no">274</span><span id="line-274">    * Accepts the current epoch and, when this instance published one, the generation's epoch from before the</span>
-<span class="source-line-no">275</span><span id="line-275">    * 64-byte head fingerprint existed.</span>
-<span class="source-line-no">276</span><span id="line-276">    *</span>
-<span class="source-line-no">277</span><span id="line-277">    * @param epoch The epoch from a token.</span>
-<span class="source-line-no">278</span><span id="line-278">    * @return &lt;jk&gt;true&lt;/jk&gt; if tokens with this epoch are still valid.</span>
-<span class="source-line-no">279</span><span id="line-279">    */</span>
-<span class="source-line-no">280</span><span id="line-280">   boolean acceptsEpoch(String epoch) {</span>
-<span class="source-line-no">281</span><span id="line-281">      return epoch != null &amp;&amp; (epoch.equals(snapshot.get().epoch()) || epoch.equals(earlyEpoch));</span>
-<span class="source-line-no">282</span><span id="line-282">   }</span>
-<span class="source-line-no">283</span><span id="line-283"></span>
-<span class="source-line-no">284</span><span id="line-284">   /** Current stride (grows when the entry cap is reached). */</span>
-<span class="source-line-no">285</span><span id="line-285">   int stride() {</span>
-<span class="source-line-no">286</span><span id="line-286">      lock.lock();</span>
-<span class="source-line-no">287</span><span id="line-287">      try {</span>
-<span class="source-line-no">288</span><span id="line-288">         return stride;</span>
-<span class="source-line-no">289</span><span id="line-289">      } finally {</span>
-<span class="source-line-no">290</span><span id="line-290">         lock.unlock();</span>
-<span class="source-line-no">291</span><span id="line-291">      }</span>
-<span class="source-line-no">292</span><span id="line-292">   }</span>
-<span class="source-line-no">293</span><span id="line-293"></span>
-<span class="source-line-no">294</span><span id="line-294">   /** Current number of index entries. */</span>
-<span class="source-line-no">295</span><span id="line-295">   int entryCount() {</span>
-<span class="source-line-no">296</span><span id="line-296">      lock.lock();</span>
-<span class="source-line-no">297</span><span id="line-297">      try {</span>
-<span class="source-line-no">298</span><span id="line-298">         return count;</span>
-<span class="source-line-no">299</span><span id="line-299">      } finally {</span>
-<span class="source-line-no">300</span><span id="line-300">         lock.unlock();</span>
-<span class="source-line-no">301</span><span id="line-301">      }</span>
-<span class="source-line-no">302</span><span id="line-302">   }</span>
-<span class="source-line-no">303</span><span id="line-303"></span>
-<span class="source-line-no">304</span><span id="line-304">   private Snapshot missing() {</span>
-<span class="source-line-no">305</span><span id="line-305">      if (fileKey != null || head.length &gt; 0 || indexedBytes &gt; 0 || scannedBytes &gt; 0)</span>
-<span class="source-line-no">306</span><span id="line-306">         reset(null);</span>
-<span class="source-line-no">307</span><span id="line-307">      return publish(0);</span>
-<span class="source-line-no">308</span><span id="line-308">   }</span>
-<span class="source-line-no">309</span><span id="line-309"></span>
-<span class="source-line-no">310</span><span id="line-310">   private void reset(Object key) {</span>
-<span class="source-line-no">311</span><span id="line-311">      fileKey = key;</span>
-<span class="source-line-no">312</span><span id="line-312">      head = EMPTY;</span>
-<span class="source-line-no">313</span><span id="line-313">      earlyEpoch = null;</span>
-<span class="source-line-no">314</span><span id="line-314">      indexedBytes = 0;</span>
-<span class="source-line-no">315</span><span id="line-315">      indexedLines = 0;</span>
-<span class="source-line-no">316</span><span id="line-316">      scannedBytes = 0;</span>
-<span class="source-line-no">317</span><span id="line-317">      stride = initialStride;</span>
-<span class="source-line-no">318</span><span id="line-318">      entries = new long[Math.min(16, maxEntries)];</span>
-<span class="source-line-no">319</span><span id="line-319">      entries[0] = 0;</span>
-<span class="source-line-no">320</span><span id="line-320">      count = 1;</span>
-<span class="source-line-no">321</span><span id="line-321">   }</span>
-<span class="source-line-no">322</span><span id="line-322"></span>
-<span class="source-line-no">323</span><span id="line-323">   private boolean headChanged(FileChannel ch, long size) throws IOException {</span>
-<span class="source-line-no">324</span><span id="line-324">      if (head.length == 0)</span>
-<span class="source-line-no">325</span><span id="line-325">         return false;</span>
-<span class="source-line-no">326</span><span id="line-326">      if (size &lt; head.length)</span>
-<span class="source-line-no">327</span><span id="line-327">         return true;</span>
-<span class="source-line-no">328</span><span id="line-328">      return ! Arrays.equals(head, read(ch, head.length));</span>
-<span class="source-line-no">329</span><span id="line-329">   }</span>
-<span class="source-line-no">330</span><span id="line-330"></span>
-<span class="source-line-no">331</span><span id="line-331">   private void readHead(FileChannel ch, long size) throws IOException {</span>
-<span class="source-line-no">332</span><span id="line-332">      if (head.length &gt;= FINGERPRINT_BYTES || size &lt;= head.length)</span>
-<span class="source-line-no">333</span><span id="line-333">         return;</span>
-<span class="source-line-no">334</span><span id="line-334">      head = read(ch, (int)Math.min(FINGERPRINT_BYTES, size));</span>
-<span class="source-line-no">335</span><span id="line-335">   }</span>
-<span class="source-line-no">336</span><span id="line-336"></span>
-<span class="source-line-no">337</span><span id="line-337">   private static byte[] read(FileChannel ch, int len) throws IOException {</span>
-<span class="source-line-no">338</span><span id="line-338">      var buf = ByteBuffer.allocate(len);</span>
-<span class="source-line-no">339</span><span id="line-339">      while (buf.hasRemaining()) {</span>
-<span class="source-line-no">340</span><span id="line-340">         if (ch.read(buf, buf.position()) &lt;= 0)</span>
-<span class="source-line-no">341</span><span id="line-341">            break;</span>
-<span class="source-line-no">342</span><span id="line-342">      }</span>
-<span class="source-line-no">343</span><span id="line-343">      return Arrays.copyOf(buf.array(), buf.position());</span>
-<span class="source-line-no">344</span><span id="line-344">   }</span>
-<span class="source-line-no">345</span><span id="line-345"></span>
-<span class="source-line-no">346</span><span id="line-346">   private void scan(FileChannel ch, long size) throws IOException {</span>
-<span class="source-line-no">347</span><span id="line-347">      var buf = ByteBuffer.allocate(BLOCK_BYTES);</span>
-<span class="source-line-no">348</span><span id="line-348">      var pos = scannedBytes;</span>
-<span class="source-line-no">349</span><span id="line-349">      while (pos &lt; size) {</span>
-<span class="source-line-no">350</span><span id="line-350">         buf.clear();</span>
-<span class="source-line-no">351</span><span id="line-351">         if (size - pos &lt; BLOCK_BYTES)</span>
-<span class="source-line-no">352</span><span id="line-352">            buf.limit((int)(size - pos));</span>
-<span class="source-line-no">353</span><span id="line-353">         var r = ch.read(buf, pos);</span>
-<span class="source-line-no">354</span><span id="line-354">         if (r &lt;= 0)</span>
-<span class="source-line-no">355</span><span id="line-355">            break;</span>
-<span class="source-line-no">356</span><span id="line-356">         for (var k = 0; k &lt; r; k++) {</span>
-<span class="source-line-no">357</span><span id="line-357">            if (buf.get(k) == '\n') {</span>
-<span class="source-line-no">358</span><span id="line-358">               indexedLines++;</span>
-<span class="source-line-no">359</span><span id="line-359">               indexedBytes = pos + k + 1;</span>
-<span class="source-line-no">360</span><span id="line-360">               recordLine(indexedLines + 1, indexedBytes);</span>
-<span class="source-line-no">361</span><span id="line-361">            }</span>
-<span class="source-line-no">362</span><span id="line-362">         }</span>
-<span class="source-line-no">363</span><span id="line-363">         pos += r;</span>
-<span class="source-line-no">364</span><span id="line-364">      }</span>
-<span class="source-line-no">365</span><span id="line-365">      scannedBytes = pos;</span>
-<span class="source-line-no">366</span><span id="line-366">   }</span>
-<span class="source-line-no">367</span><span id="line-367"></span>
-<span class="source-line-no">368</span><span id="line-368">   private void recordLine(long line, long offset) {</span>
-<span class="source-line-no">369</span><span id="line-369">      if ((line - 1) % stride != 0)</span>
-<span class="source-line-no">370</span><span id="line-370">         return;</span>
-<span class="source-line-no">371</span><span id="line-371">      if (count == maxEntries) {</span>
-<span class="source-line-no">372</span><span id="line-372">         var kept = 0;</span>
-<span class="source-line-no">373</span><span id="line-373">         for (var i = 0; i &lt; count; i += 2)</span>
-<span class="source-line-no">374</span><span id="line-374">            entries[kept++] = entries[i];</span>
-<span class="source-line-no">375</span><span id="line-375">         count = kept;</span>
-<span class="source-line-no">376</span><span id="line-376">         stride *= 2;</span>
-<span class="source-line-no">377</span><span id="line-377">         if ((line - 1) % stride != 0)</span>
-<span class="source-line-no">378</span><span id="line-378">            return;</span>
-<span class="source-line-no">379</span><span id="line-379">      }</span>
-<span class="source-line-no">380</span><span id="line-380">      if (count == entries.length)</span>
-<span class="source-line-no">381</span><span id="line-381">         entries = Arrays.copyOf(entries, Math.min(maxEntries, entries.length * 2));</span>
-<span class="source-line-no">382</span><span id="line-382">      entries[count++] = offset;</span>
-<span class="source-line-no">383</span><span id="line-383">   }</span>
-<span class="source-line-no">384</span><span id="line-384"></span>
-<span class="source-line-no">385</span><span id="line-385">   private Snapshot publish(long size) {</span>
-<span class="source-line-no">386</span><span id="line-386">      var full = head.length &gt;= FINGERPRINT_BYTES;</span>
-<span class="source-line-no">387</span><span id="line-387">      var epoch = epoch(fileKey, full ? head : EMPTY);</span>
-<span class="source-line-no">388</span><span id="line-388">      if (! full)</span>
-<span class="source-line-no">389</span><span id="line-389">         earlyEpoch = epoch;</span>
-<span class="source-line-no">390</span><span id="line-390">      var s = new Snapshot(epoch, indexedBytes, indexedLines, size);</span>
-<span class="source-line-no">391</span><span id="line-391">      snapshot.set(s);</span>
-<span class="source-line-no">392</span><span id="line-392">      return s;</span>
-<span class="source-line-no">393</span><span id="line-393">   }</span>
-<span class="source-line-no">394</span><span id="line-394"></span>
-<span class="source-line-no">395</span><span id="line-395">   private static String epoch(Object key, byte[] fingerprint) {</span>
-<span class="source-line-no">396</span><span id="line-396">      var crc = new CRC32();</span>
-<span class="source-line-no">397</span><span id="line-397">      crc.update(String.valueOf(key).getBytes(UTF_8));</span>
-<span class="source-line-no">398</span><span id="line-398">      crc.update(0);</span>
-<span class="source-line-no">399</span><span id="line-399">      crc.update(fingerprint);</span>
-<span class="source-line-no">400</span><span id="line-400">      var s = Long.toString(crc.getValue() % EPOCH_SPACE, 36);</span>
-<span class="source-line-no">401</span><span id="line-401">      return "0".repeat(6 - s.length()) + s;</span>
-<span class="source-line-no">402</span><span id="line-402">   }</span>
-<span class="source-line-no">403</span><span id="line-403">}</span>
+<span class="source-line-no">209</span><span id="line-209">            attrs = Files.readAttributes(file, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);</span>
+<span class="source-line-no">210</span><span id="line-210">            if (attrs.isSymbolicLink())</span>
+<span class="source-line-no">211</span><span id="line-211">               return missing();</span>
+<span class="source-line-no">212</span><span id="line-212">         } catch (NoSuchFileException e) {</span>
+<span class="source-line-no">213</span><span id="line-213">            return missing();</span>
+<span class="source-line-no">214</span><span id="line-214">         }</span>
+<span class="source-line-no">215</span><span id="line-215">         var key = attrs.fileKey();</span>
+<span class="source-line-no">216</span><span id="line-216">         var size = attrs.size();</span>
+<span class="source-line-no">217</span><span id="line-217">         try (var ch = FileChannel.open(file, StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS)) {</span>
+<span class="source-line-no">218</span><span id="line-218">            if (neq(key, fileKey) || size &lt; indexedBytes || headChanged(ch, size))</span>
+<span class="source-line-no">219</span><span id="line-219">               reset(key);</span>
+<span class="source-line-no">220</span><span id="line-220">            readHead(ch, size);</span>
+<span class="source-line-no">221</span><span id="line-221">            scan(ch, size);</span>
+<span class="source-line-no">222</span><span id="line-222">         } catch (NoSuchFileException e) {</span>
+<span class="source-line-no">223</span><span id="line-223">            return missing();</span>
+<span class="source-line-no">224</span><span id="line-224">         }</span>
+<span class="source-line-no">225</span><span id="line-225">         return publish(size);</span>
+<span class="source-line-no">226</span><span id="line-226">      } finally {</span>
+<span class="source-line-no">227</span><span id="line-227">         lock.unlock();</span>
+<span class="source-line-no">228</span><span id="line-228">      }</span>
+<span class="source-line-no">229</span><span id="line-229">   }</span>
+<span class="source-line-no">230</span><span id="line-230"></span>
+<span class="source-line-no">231</span><span id="line-231">   /**</span>
+<span class="source-line-no">232</span><span id="line-232">    * Returns the byte offset of the start of line {@code n}.</span>
+<span class="source-line-no">233</span><span id="line-233">    *</span>
+<span class="source-line-no">234</span><span id="line-234">    * @param n The 1-based line number.</span>
+<span class="source-line-no">235</span><span id="line-235">    * @return The offset; {@code indexedBytes} for {@code n = indexedLines + 1}; {@code -1} outside</span>
+<span class="source-line-no">236</span><span id="line-236">    *    {@code [1, indexedLines + 1]} or when the file no longer has that line.</span>
+<span class="source-line-no">237</span><span id="line-237">    * @throws IOException If reading fails.</span>
+<span class="source-line-no">238</span><span id="line-238">    */</span>
+<span class="source-line-no">239</span><span id="line-239">   public long seek(long n) throws IOException {</span>
+<span class="source-line-no">240</span><span id="line-240">      lock.lock();</span>
+<span class="source-line-no">241</span><span id="line-241">      try {</span>
+<span class="source-line-no">242</span><span id="line-242">         if (n &lt; 1 || n &gt; indexedLines + 1)</span>
+<span class="source-line-no">243</span><span id="line-243">            return -1;</span>
+<span class="source-line-no">244</span><span id="line-244">         var i = (int)Math.min((n - 1) / stride, count - 1L);</span>
+<span class="source-line-no">245</span><span id="line-245">         var line = 1 + (long)i * stride;</span>
+<span class="source-line-no">246</span><span id="line-246">         var pos = entries[i];</span>
+<span class="source-line-no">247</span><span id="line-247">         if (line == n)</span>
+<span class="source-line-no">248</span><span id="line-248">            return pos;</span>
+<span class="source-line-no">249</span><span id="line-249">         try (var ch = FileChannel.open(file, StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS)) {</span>
+<span class="source-line-no">250</span><span id="line-250">            var buf = ByteBuffer.allocate(BLOCK_BYTES);</span>
+<span class="source-line-no">251</span><span id="line-251">            while (pos &lt; indexedBytes) {</span>
+<span class="source-line-no">252</span><span id="line-252">               buf.clear();</span>
+<span class="source-line-no">253</span><span id="line-253">               if (indexedBytes - pos &lt; BLOCK_BYTES)</span>
+<span class="source-line-no">254</span><span id="line-254">                  buf.limit((int)(indexedBytes - pos));</span>
+<span class="source-line-no">255</span><span id="line-255">               var r = ch.read(buf, pos);</span>
+<span class="source-line-no">256</span><span id="line-256">               if (r &lt;= 0)</span>
+<span class="source-line-no">257</span><span id="line-257">                  return -1;</span>
+<span class="source-line-no">258</span><span id="line-258">               for (var k = 0; k &lt; r; k++)</span>
+<span class="source-line-no">259</span><span id="line-259">                  if (buf.get(k) == '\n' &amp;&amp; ++line == n)</span>
+<span class="source-line-no">260</span><span id="line-260">                     return pos + k + 1;</span>
+<span class="source-line-no">261</span><span id="line-261">               pos += r;</span>
+<span class="source-line-no">262</span><span id="line-262">            }</span>
+<span class="source-line-no">263</span><span id="line-263">         } catch (NoSuchFileException e) {</span>
+<span class="source-line-no">264</span><span id="line-264">            return -1;</span>
+<span class="source-line-no">265</span><span id="line-265">         }</span>
+<span class="source-line-no">266</span><span id="line-266">         return -1;</span>
+<span class="source-line-no">267</span><span id="line-267">      } finally {</span>
+<span class="source-line-no">268</span><span id="line-268">         lock.unlock();</span>
+<span class="source-line-no">269</span><span id="line-269">      }</span>
+<span class="source-line-no">270</span><span id="line-270">   }</span>
+<span class="source-line-no">271</span><span id="line-271"></span>
+<span class="source-line-no">272</span><span id="line-272">   /**</span>
+<span class="source-line-no">273</span><span id="line-273">    * Whether a token epoch belongs to the current file generation.</span>
+<span class="source-line-no">274</span><span id="line-274">    *</span>
+<span class="source-line-no">275</span><span id="line-275">    * &lt;p&gt;</span>
+<span class="source-line-no">276</span><span id="line-276">    * Accepts the current epoch and, when this instance published one, the generation's epoch from before the</span>
+<span class="source-line-no">277</span><span id="line-277">    * 64-byte head fingerprint existed.</span>
+<span class="source-line-no">278</span><span id="line-278">    *</span>
+<span class="source-line-no">279</span><span id="line-279">    * @param epoch The epoch from a token.</span>
+<span class="source-line-no">280</span><span id="line-280">    * @return &lt;jk&gt;true&lt;/jk&gt; if tokens with this epoch are still valid.</span>
+<span class="source-line-no">281</span><span id="line-281">    */</span>
+<span class="source-line-no">282</span><span id="line-282">   boolean acceptsEpoch(String epoch) {</span>
+<span class="source-line-no">283</span><span id="line-283">      return epoch != null &amp;&amp; (eq(epoch, snapshot.get().epoch()) || eq(epoch, earlyEpoch));</span>
+<span class="source-line-no">284</span><span id="line-284">   }</span>
+<span class="source-line-no">285</span><span id="line-285"></span>
+<span class="source-line-no">286</span><span id="line-286">   /** Current stride (grows when the entry cap is reached). */</span>
+<span class="source-line-no">287</span><span id="line-287">   int stride() {</span>
+<span class="source-line-no">288</span><span id="line-288">      lock.lock();</span>
+<span class="source-line-no">289</span><span id="line-289">      try {</span>
+<span class="source-line-no">290</span><span id="line-290">         return stride;</span>
+<span class="source-line-no">291</span><span id="line-291">      } finally {</span>
+<span class="source-line-no">292</span><span id="line-292">         lock.unlock();</span>
+<span class="source-line-no">293</span><span id="line-293">      }</span>
+<span class="source-line-no">294</span><span id="line-294">   }</span>
+<span class="source-line-no">295</span><span id="line-295"></span>
+<span class="source-line-no">296</span><span id="line-296">   /** Current number of index entries. */</span>
+<span class="source-line-no">297</span><span id="line-297">   int entryCount() {</span>
+<span class="source-line-no">298</span><span id="line-298">      lock.lock();</span>
+<span class="source-line-no">299</span><span id="line-299">      try {</span>
+<span class="source-line-no">300</span><span id="line-300">         return count;</span>
+<span class="source-line-no">301</span><span id="line-301">      } finally {</span>
+<span class="source-line-no">302</span><span id="line-302">         lock.unlock();</span>
+<span class="source-line-no">303</span><span id="line-303">      }</span>
+<span class="source-line-no">304</span><span id="line-304">   }</span>
+<span class="source-line-no">305</span><span id="line-305"></span>
+<span class="source-line-no">306</span><span id="line-306">   private Snapshot missing() {</span>
+<span class="source-line-no">307</span><span id="line-307">      if (fileKey != null || head.length &gt; 0 || indexedBytes &gt; 0 || scannedBytes &gt; 0)</span>
+<span class="source-line-no">308</span><span id="line-308">         reset(null);</span>
+<span class="source-line-no">309</span><span id="line-309">      return publish(0);</span>
+<span class="source-line-no">310</span><span id="line-310">   }</span>
+<span class="source-line-no">311</span><span id="line-311"></span>
+<span class="source-line-no">312</span><span id="line-312">   private void reset(Object key) {</span>
+<span class="source-line-no">313</span><span id="line-313">      fileKey = key;</span>
+<span class="source-line-no">314</span><span id="line-314">      head = EMPTY;</span>
+<span class="source-line-no">315</span><span id="line-315">      earlyEpoch = null;</span>
+<span class="source-line-no">316</span><span id="line-316">      indexedBytes = 0;</span>
+<span class="source-line-no">317</span><span id="line-317">      indexedLines = 0;</span>
+<span class="source-line-no">318</span><span id="line-318">      scannedBytes = 0;</span>
+<span class="source-line-no">319</span><span id="line-319">      stride = initialStride;</span>
+<span class="source-line-no">320</span><span id="line-320">      entries = new long[Math.min(16, maxEntries)];</span>
+<span class="source-line-no">321</span><span id="line-321">      entries[0] = 0;</span>
+<span class="source-line-no">322</span><span id="line-322">      count = 1;</span>
+<span class="source-line-no">323</span><span id="line-323">   }</span>
+<span class="source-line-no">324</span><span id="line-324"></span>
+<span class="source-line-no">325</span><span id="line-325">   private boolean headChanged(FileChannel ch, long size) throws IOException {</span>
+<span class="source-line-no">326</span><span id="line-326">      if (head.length == 0)</span>
+<span class="source-line-no">327</span><span id="line-327">         return false;</span>
+<span class="source-line-no">328</span><span id="line-328">      if (size &lt; head.length)</span>
+<span class="source-line-no">329</span><span id="line-329">         return true;</span>
+<span class="source-line-no">330</span><span id="line-330">      return ! Arrays.equals(head, read(ch, head.length));</span>
+<span class="source-line-no">331</span><span id="line-331">   }</span>
+<span class="source-line-no">332</span><span id="line-332"></span>
+<span class="source-line-no">333</span><span id="line-333">   private void readHead(FileChannel ch, long size) throws IOException {</span>
+<span class="source-line-no">334</span><span id="line-334">      if (head.length &gt;= FINGERPRINT_BYTES || size &lt;= head.length)</span>
+<span class="source-line-no">335</span><span id="line-335">         return;</span>
+<span class="source-line-no">336</span><span id="line-336">      head = read(ch, (int)Math.min(FINGERPRINT_BYTES, size));</span>
+<span class="source-line-no">337</span><span id="line-337">   }</span>
+<span class="source-line-no">338</span><span id="line-338"></span>
+<span class="source-line-no">339</span><span id="line-339">   private static byte[] read(FileChannel ch, int len) throws IOException {</span>
+<span class="source-line-no">340</span><span id="line-340">      var buf = ByteBuffer.allocate(len);</span>
+<span class="source-line-no">341</span><span id="line-341">      while (buf.hasRemaining()) {</span>
+<span class="source-line-no">342</span><span id="line-342">         if (ch.read(buf, buf.position()) &lt;= 0)</span>
+<span class="source-line-no">343</span><span id="line-343">            break;</span>
+<span class="source-line-no">344</span><span id="line-344">      }</span>
+<span class="source-line-no">345</span><span id="line-345">      return Arrays.copyOf(buf.array(), buf.position());</span>
+<span class="source-line-no">346</span><span id="line-346">   }</span>
+<span class="source-line-no">347</span><span id="line-347"></span>
+<span class="source-line-no">348</span><span id="line-348">   private void scan(FileChannel ch, long size) throws IOException {</span>
+<span class="source-line-no">349</span><span id="line-349">      var buf = ByteBuffer.allocate(BLOCK_BYTES);</span>
+<span class="source-line-no">350</span><span id="line-350">      var pos = scannedBytes;</span>
+<span class="source-line-no">351</span><span id="line-351">      while (pos &lt; size) {</span>
+<span class="source-line-no">352</span><span id="line-352">         buf.clear();</span>
+<span class="source-line-no">353</span><span id="line-353">         if (size - pos &lt; BLOCK_BYTES)</span>
+<span class="source-line-no">354</span><span id="line-354">            buf.limit((int)(size - pos));</span>
+<span class="source-line-no">355</span><span id="line-355">         var r = ch.read(buf, pos);</span>
+<span class="source-line-no">356</span><span id="line-356">         if (r &lt;= 0)</span>
+<span class="source-line-no">357</span><span id="line-357">            break;</span>
+<span class="source-line-no">358</span><span id="line-358">         for (var k = 0; k &lt; r; k++) {</span>
+<span class="source-line-no">359</span><span id="line-359">            if (buf.get(k) == '\n') {</span>
+<span class="source-line-no">360</span><span id="line-360">               indexedLines++;</span>
+<span class="source-line-no">361</span><span id="line-361">               indexedBytes = pos + k + 1;</span>
+<span class="source-line-no">362</span><span id="line-362">               recordLine(indexedLines + 1, indexedBytes);</span>
+<span class="source-line-no">363</span><span id="line-363">            }</span>
+<span class="source-line-no">364</span><span id="line-364">         }</span>
+<span class="source-line-no">365</span><span id="line-365">         pos += r;</span>
+<span class="source-line-no">366</span><span id="line-366">      }</span>
+<span class="source-line-no">367</span><span id="line-367">      scannedBytes = pos;</span>
+<span class="source-line-no">368</span><span id="line-368">   }</span>
+<span class="source-line-no">369</span><span id="line-369"></span>
+<span class="source-line-no">370</span><span id="line-370">   private void recordLine(long line, long offset) {</span>
+<span class="source-line-no">371</span><span id="line-371">      if ((line - 1) % stride != 0)</span>
+<span class="source-line-no">372</span><span id="line-372">         return;</span>
+<span class="source-line-no">373</span><span id="line-373">      if (count == maxEntries) {</span>
+<span class="source-line-no">374</span><span id="line-374">         var kept = 0;</span>
+<span class="source-line-no">375</span><span id="line-375">         for (var i = 0; i &lt; count; i += 2)</span>
+<span class="source-line-no">376</span><span id="line-376">            entries[kept++] = entries[i];</span>
+<span class="source-line-no">377</span><span id="line-377">         count = kept;</span>
+<span class="source-line-no">378</span><span id="line-378">         stride *= 2;</span>
+<span class="source-line-no">379</span><span id="line-379">         if ((line - 1) % stride != 0)</span>
+<span class="source-line-no">380</span><span id="line-380">            return;</span>
+<span class="source-line-no">381</span><span id="line-381">      }</span>
+<span class="source-line-no">382</span><span id="line-382">      if (count == entries.length)</span>
+<span class="source-line-no">383</span><span id="line-383">         entries = Arrays.copyOf(entries, Math.min(maxEntries, entries.length * 2));</span>
+<span class="source-line-no">384</span><span id="line-384">      entries[count++] = offset;</span>
+<span class="source-line-no">385</span><span id="line-385">   }</span>
+<span class="source-line-no">386</span><span id="line-386"></span>
+<span class="source-line-no">387</span><span id="line-387">   private Snapshot publish(long size) {</span>
+<span class="source-line-no">388</span><span id="line-388">      var full = head.length &gt;= FINGERPRINT_BYTES;</span>
+<span class="source-line-no">389</span><span id="line-389">      var epoch = epoch(fileKey, full ? head : EMPTY);</span>
+<span class="source-line-no">390</span><span id="line-390">      if (! full)</span>
+<span class="source-line-no">391</span><span id="line-391">         earlyEpoch = epoch;</span>
+<span class="source-line-no">392</span><span id="line-392">      var s = new Snapshot(epoch, indexedBytes, indexedLines, size);</span>
+<span class="source-line-no">393</span><span id="line-393">      snapshot.set(s);</span>
+<span class="source-line-no">394</span><span id="line-394">      return s;</span>
+<span class="source-line-no">395</span><span id="line-395">   }</span>
+<span class="source-line-no">396</span><span id="line-396"></span>
+<span class="source-line-no">397</span><span id="line-397">   private static String epoch(Object key, byte[] fingerprint) {</span>
+<span class="source-line-no">398</span><span id="line-398">      var crc = new CRC32();</span>
+<span class="source-line-no">399</span><span id="line-399">      crc.update(String.valueOf(key).getBytes(UTF_8));</span>
+<span class="source-line-no">400</span><span id="line-400">      crc.update(0);</span>
+<span class="source-line-no">401</span><span id="line-401">      crc.update(fingerprint);</span>
+<span class="source-line-no">402</span><span id="line-402">      var s = Long.toString(crc.getValue() % EPOCH_SPACE, 36);</span>
+<span class="source-line-no">403</span><span id="line-403">      return "0".repeat(6 - s.length()) + s;</span>
+<span class="source-line-no">404</span><span id="line-404">   }</span>
+<span class="source-line-no">405</span><span id="line-405">}</span>
 
 
 

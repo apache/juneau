@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.http.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * The {@code /petstore} API's CSRF boundary, and the console boundary publishing the API's token on console pages.</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * The {@code /petstore} API's request-token boundary, and the console boundary publishing the API's token on console pages.</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * Every test drives the filter itself with mock servlet objects and a counting chain.  A mock REST client would not</em>
@@ -49,7 +49,7 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String HOST = <span class="jxr_string">"localhost:8080"</span>;
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SELF = <span class="jxr_string">"http://localhost:8080"</span>;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String EVIL = <span class="jxr_string">"http://evil.example"</span>;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String OTHER_ORIGIN = <span class="jxr_string">"http://other.example"</span>;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JSON = <span class="jxr_string">"application/json"</span>;
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String FORM = <span class="jxr_string">"application/x-www-form-urlencoded"</span>;
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String REASON = <span class="jxr_string">"X-Request-Boundary"</span>;
@@ -132,7 +132,7 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@Test <strong class="jxr_keyword">void</strong> a04_crossOriginFormPostIsRefused() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">var</strong> req = req(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"/petstore/pets"</span>, HOST).h(<span class="jxr_string">"Origin"</span>, EVIL).h(<span class="jxr_string">"Content-Type"</span>, FORM);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">var</strong> req = req(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"/petstore/pets"</span>, HOST).h(<span class="jxr_string">"Origin"</span>, OTHER_ORIGIN).h(<span class="jxr_string">"Content-Type"</span>, FORM);
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertRefused(<strong class="jxr_keyword">new</strong> PetstoreApiBoundary(), req, 403, BoundaryReason.ORIGIN_MISMATCH);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
@@ -145,8 +145,8 @@
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		assertPasses(<strong class="jxr_keyword">new</strong> PetstoreApiBoundary(), req(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"/petstore/pets"</span>, HOST).h(<span class="jxr_string">"Content-Type"</span>, JSON));
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 	}
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	@Test <strong class="jxr_keyword">void</strong> a07_safeReadIsAdmittedOnAnyHost() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertPasses(<strong class="jxr_keyword">new</strong> PetstoreApiBoundary(), req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/petstore/pets"</span>, <span class="jxr_string">"192.0.2.7:1"</span>));
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	@Test <strong class="jxr_keyword">void</strong> a07_readOnAnotherHostIsRefusedByDefault() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertRefused(<strong class="jxr_keyword">new</strong> PetstoreApiBoundary(), req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/petstore/pets"</span>, <span class="jxr_string">"192.0.2.7:1"</span>), 421, BoundaryReason.HOST_NOT_ALLOWED);
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	}
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	@Test <strong class="jxr_keyword">void</strong> a08_nullOriginIsRefused() <strong class="jxr_keyword">throws</strong> Exception {
@@ -156,9 +156,9 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	@Test <strong class="jxr_keyword">void</strong> a09_forwardedHostIsIgnored() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> api = <strong class="jxr_keyword">new</strong> PetstoreApiBoundary();
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> req = photoPut().h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"evil.example"</span>);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> req = photoPut().h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"other.example"</span>);
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertPasses(api, req.h(<span class="jxr_string">"X-Csrf-Token"</span>, api.tokenFor(req)));
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> req2 = req(<span class="jxr_string">"PUT"</span>, <span class="jxr_string">"/petstore/pets/1/photo"</span>, HOST).h(<span class="jxr_string">"Origin"</span>, EVIL).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"evil.example"</span>).h(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"image/png"</span>);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> req2 = req(<span class="jxr_string">"PUT"</span>, <span class="jxr_string">"/petstore/pets/1/photo"</span>, HOST).h(<span class="jxr_string">"Origin"</span>, OTHER_ORIGIN).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"other.example"</span>).h(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"image/png"</span>);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertRefused(api, req2.h(<span class="jxr_string">"X-Csrf-Token"</span>, api.tokenFor(req2)), 403, BoundaryReason.ORIGIN_MISMATCH);
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 
@@ -184,49 +184,56 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertPasses(api, req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/petstore/pets"</span>, <span class="jxr_string">"shop.example:8080"</span>));
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 	}
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	@Test <strong class="jxr_keyword">void</strong> b02_malformedAllowedHostsFailsAtConstruction() {
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		Settings.get().setLocal(PetstoreApiBoundary.ALLOWED_HOSTS_PROPERTY, <span class="jxr_string">"shop.example:80"</span>);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, PetstoreApiBoundary::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			Settings.get().unsetLocal(PetstoreApiBoundary.ALLOWED_HOSTS_PROPERTY);
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		}
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	@Test <strong class="jxr_keyword">void</strong> b03_aTokenMintedWithoutASessionVerifiesOnARequestWithOne() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> api = <strong class="jxr_keyword">new</strong> PetstoreApiBoundary();
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> req1 = req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, HOST);
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> token = api.tokenFor(req1);
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> req2 = photoPut().h(<span class="jxr_string">"X-Csrf-Token"</span>, token);
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		req2.httpSession(MockHttpSession.create().id(<span class="jxr_string">"x"</span>));
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertPasses(api, req2);
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		assertEquals(0, req1.createSession.get());
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		assertEquals(0, req2.createSession.get());
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<em class="jxr_comment">// c - the console boundary publishes the API's token on the console requests it allows</em>
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	@Test <strong class="jxr_keyword">void</strong> c01_consoleBoundaryPublishesTheApiTokenOnAllowedRequests() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> api = <strong class="jxr_keyword">new</strong> PetstoreApiBoundary();
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">var</strong> req = req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, HOST);
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		req.localPort(8080);
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertPasses(<strong class="jxr_keyword">new</strong> PetstoreConsoleBoundary(api), req);
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">var</strong> token = (String)req.getAttribute(PetstoreApiBoundary.TOKEN_ATTRIBUTE);
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		assertNotNull(token);
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		assertTrue(token.matches(<span class="jxr_string">"[0-9a-f]{128}"</span>), token);
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">var</strong> write = photoPut();
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		assertPasses(api, write.h(<span class="jxr_string">"X-Csrf-Token"</span>, token));
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	}
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	@Test <strong class="jxr_keyword">void</strong> c02_consoleBoundaryPublishesNothingOnARefusedRequest() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">var</strong> req = req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, <span class="jxr_string">"127.0.0.1:8080"</span>);
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		req.localPort(8080);
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertRefused(<strong class="jxr_keyword">new</strong> PetstoreConsoleBoundary(<strong class="jxr_keyword">new</strong> PetstoreApiBoundary()), req, 421, BoundaryReason.HOST_MISMATCH);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertNull(req.getAttribute(PetstoreApiBoundary.TOKEN_ATTRIBUTE));
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	@Test <strong class="jxr_keyword">void</strong> b03_unsetSettingAnswersOnlyLoopbackHosts() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> api = <strong class="jxr_keyword">new</strong> PetstoreApiBoundary();
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertPasses(api, req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/petstore/pets"</span>, <span class="jxr_string">"localhost:8080"</span>));
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertPasses(api, req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/petstore/pets"</span>, <span class="jxr_string">"127.0.0.1:8080"</span>));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertRefused(api, req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/petstore/pets"</span>, <span class="jxr_string">"shop.example:8080"</span>), 421, BoundaryReason.HOST_NOT_ALLOWED);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	@Test <strong class="jxr_keyword">void</strong> b02_malformedAllowedHostsFailsAtConstruction() {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		Settings.get().setLocal(PetstoreApiBoundary.ALLOWED_HOSTS_PROPERTY, <span class="jxr_string">"shop.example:80"</span>);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, PetstoreApiBoundary::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			Settings.get().unsetLocal(PetstoreApiBoundary.ALLOWED_HOSTS_PROPERTY);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		}
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	}
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	@Test <strong class="jxr_keyword">void</strong> b03_aTokenMintedWithoutASessionVerifiesOnARequestWithOne() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> api = <strong class="jxr_keyword">new</strong> PetstoreApiBoundary();
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">var</strong> req1 = req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, HOST);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">var</strong> token = api.tokenFor(req1);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">var</strong> req2 = photoPut().h(<span class="jxr_string">"X-Csrf-Token"</span>, token);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		req2.httpSession(MockHttpSession.create().id(<span class="jxr_string">"x"</span>));
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertPasses(api, req2);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		assertEquals(0, req1.createSession.get());
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertEquals(0, req2.createSession.get());
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	}
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	<em class="jxr_comment">// c - the console boundary publishes the API's token on the console requests it allows</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	@Test <strong class="jxr_keyword">void</strong> c01_consoleBoundaryPublishesTheApiTokenOnAllowedRequests() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">var</strong> api = <strong class="jxr_keyword">new</strong> PetstoreApiBoundary();
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">var</strong> req = req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, HOST);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		req.localPort(8080);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertPasses(<strong class="jxr_keyword">new</strong> PetstoreConsoleBoundary(api), req);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">var</strong> token = (String)req.getAttribute(PetstoreApiBoundary.TOKEN_ATTRIBUTE);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		assertNotNull(token);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertTrue(token.matches(<span class="jxr_string">"[0-9a-f]{128}"</span>), token);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">var</strong> write = photoPut();
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertPasses(api, write.h(<span class="jxr_string">"X-Csrf-Token"</span>, token));
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 	}
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> }
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	@Test <strong class="jxr_keyword">void</strong> c02_consoleBoundaryPublishesNothingOnARefusedRequest() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">var</strong> req = req(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, <span class="jxr_string">"127.0.0.1:8080"</span>);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		req.localPort(8080);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertRefused(<strong class="jxr_keyword">new</strong> PetstoreConsoleBoundary(<strong class="jxr_keyword">new</strong> PetstoreApiBoundary()), req, 421, BoundaryReason.HOST_MISMATCH);
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		assertNull(req.getAttribute(PetstoreApiBoundary.TOKEN_ATTRIBUTE));
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	}
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

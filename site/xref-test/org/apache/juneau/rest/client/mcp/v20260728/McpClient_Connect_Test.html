@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<em class="jxr_comment">// endpoint-only overload builds its own transport internally in production, but tests must inject a fake</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<em class="jxr_comment">// transport - so exercise the Builder overload here and cover the String overload's delegation separately.</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		savedTransport.set(countingTransport(calls, DISCOVER_WIRE));
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = McpClient.connect(McpClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(savedTransport.get()))) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = McpClient.connect(McpClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(savedTransport.get()))) {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			assertNotNull(c);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			assertEquals(1, calls.get());
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		}
@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	@Test
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">void</strong> a02_connect_cachesDiscoveredServerSoNoSecondRoundTripIsNeeded() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">var</strong> calls = <strong class="jxr_keyword">new</strong> AtomicInteger();
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = McpClient.connect(McpClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(countingTransport(calls, DISCOVER_WIRE)))) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = McpClient.connect(McpClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(countingTransport(calls, DISCOVER_WIRE)))) {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">var</strong> result = c.discoveredServer();
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			assertNotNull(result);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			assertEquals(<span class="jxr_string">"2026-07-28"</span>, result.getSupportedVersions().get(0));
@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Test
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">void</strong> a03_discoveredServer_isNullBeforeAnyHandshake() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = McpClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(countingTransport(<strong class="jxr_keyword">new</strong> AtomicInteger(), DISCOVER_WIRE)).build()) {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = McpClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(countingTransport(<strong class="jxr_keyword">new</strong> AtomicInteger(), DISCOVER_WIRE)).build()) {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			assertNull(c.discoveredServer());
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		}
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
@@ -96,7 +96,7 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">void</strong> a04_discoveredServer_populatedByDirectServerDiscoverCallNotJustConnect() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> calls = <strong class="jxr_keyword">new</strong> AtomicInteger();
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = McpClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(countingTransport(calls, DISCOVER_WIRE)).build()) {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = McpClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(countingTransport(calls, DISCOVER_WIRE)).build()) {
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  			assertNull(c.discoveredServer());
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  			c.serverDiscover();
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  			assertNotNull(c.discoveredServer());
@@ -117,7 +117,7 @@
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 				closed.set();
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			}
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		};
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> builder = McpClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(failing);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> builder = McpClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(failing);
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertThrowsWithMessage(IOException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"boom"</span>, () -&gt; McpClient.connect(builder));
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertTrue(closed.isSet());
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"close-boom"</span>);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 			}
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		};
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> builder = McpClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(failing);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> builder = McpClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(failing);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrowsWithMessage(IOException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"boom"</span>, () -&gt; McpClient.connect(builder));
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertEquals(1, ex.getSuppressed().length);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(<span class="jxr_string">"close-boom"</span>, ex.getSuppressed()[0].getMessage());
@@ -150,7 +150,7 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"close-boom"</span>);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			}
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		};
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">var</strong> builder = McpClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(failing);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">var</strong> builder = McpClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(failing);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrowsWithMessage(IOException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"boom"</span>, () -&gt; McpClient.connect(builder));
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertEquals(1, ex.getSuppressed().length);
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		assertEquals(<span class="jxr_string">"close-boom"</span>, ex.getSuppressed()[0].getMessage());
@@ -168,7 +168,7 @@
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 				closed.set();
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			}
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		};
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> builder = McpClient.builder().endpoint(<span class="jxr_string">"http://x/mcp"</span>).transport(failing);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> builder = McpClient.builder().endpoint(<span class="jxr_string">"https://x/mcp"</span>).transport(failing);
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertThrowsWithMessage(StackOverflowError.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"boom"</span>, () -&gt; McpClient.connect(builder));
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertTrue(closed.isSet());
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}

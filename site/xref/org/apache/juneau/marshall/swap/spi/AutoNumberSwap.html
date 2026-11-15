@@ -258,17 +258,18 @@
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">if</strong> (unswapType == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ParseException(<span class="jxr_string">"No unparse methodology found for object."</span>);
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			Object o2 = BasicConverter.INSTANCE.to(o, unswapType);
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">if</strong> (nn(unswapMethod))
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 				<strong class="jxr_keyword">return</strong> (T)unswapMethod.invoke(<strong class="jxr_keyword">null</strong>, getMatchingArgs(unswapMethod.getParameterTypes(), session, o2));
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">if</strong> (nn(unswapConstructor))
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 				<strong class="jxr_keyword">return</strong> (T)unswapConstructor.newInstance(o2);
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.unswap(session, o, hint);
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">throw</strong> ParseException.create(e);
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		}
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	}
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> }
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<strong class="jxr_keyword">var</strong> converter = nn(session) ? session.getMarshallingContext().getBasicConverter() : BasicConverter.INSTANCE;
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			Object o2 = converter.to(o, unswapType);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<strong class="jxr_keyword">if</strong> (nn(unswapMethod))
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 				<strong class="jxr_keyword">return</strong> (T)unswapMethod.invoke(<strong class="jxr_keyword">null</strong>, getMatchingArgs(unswapMethod.getParameterTypes(), session, o2));
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">if</strong> (nn(unswapConstructor))
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 				<strong class="jxr_keyword">return</strong> (T)unswapConstructor.newInstance(o2);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.unswap(session, o, hint);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<strong class="jxr_keyword">throw</strong> ParseException.create(e);
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		}
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	}
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -59,7 +59,7 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  					.spEntityId(<span class="jxr_string">"https://sp.example.com"</span>)
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  					.expectedIssuer(<span class="jxr_string">"https://idp.example.com"</span>)
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  					.signingCredential(<strong class="jxr_keyword">new</strong> BasicCredential(pair.getPublic(), pair.getPrivate()))) {
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			@Override <strong class="jxr_keyword">public</strong> Principal validate(String xml) {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			@Override <strong class="jxr_keyword">public</strong> Principal validate(String xml, String binding) {
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"alice"</span>, claims);
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  			}
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		};
@@ -68,44 +68,45 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<em class="jxr_javadoccomment">/** A request for {@code /saml/acs} whose {@code getRequestURL()} is null, forcing reconstruction. */</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpServletRequest noUrlReq(String scheme, String host, <strong class="jxr_keyword">int</strong> port, String uri) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">var</strong> r = mock(HttpServletRequest.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		when(r.getPathInfo()).thenReturn(<span class="jxr_string">"/saml/acs"</span>);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		when(r.getParameter(<span class="jxr_string">"SAMLResponse"</span>)).thenReturn(B64);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		when(r.getRequestURL()).thenReturn(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		when(r.getScheme()).thenReturn(scheme);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		when(r.getServerName()).thenReturn(host);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		when(r.getServerPort()).thenReturn(port);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		when(r.getRequestURI()).thenReturn(uri);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">return</strong> r;
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<em class="jxr_comment">// B: builder settings</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	@Test <strong class="jxr_keyword">void</strong> b01_consumerPath_customPathMatches_defaultNoLongerDoes() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">var</strong> f = SamlAuthFilter.create().validator(capturing(Map.of())).consumerPath(<span class="jxr_string">"/sso/post"</span>).build();
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> custom = noUrlReq(<span class="jxr_string">"https"</span>, <span class="jxr_string">"sp.example.com"</span>, 443, <span class="jxr_string">"/sso/post"</span>);
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		when(custom.getPathInfo()).thenReturn(<span class="jxr_string">"/sso/post"</span>);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertTrue(f.authenticate(custom).isPresent());
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertTrue(f.authenticate(noUrlReq(<span class="jxr_string">"https"</span>, <span class="jxr_string">"sp.example.com"</span>, 443, <span class="jxr_string">"/saml/acs"</span>)).isEmpty());
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> b02_rolesClaim_customClaimNameUsed() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> claims = Map.&lt;String,Object&gt;of(<span class="jxr_string">"roles"</span>, List.of(<span class="jxr_string">"ignored"</span>), <span class="jxr_string">"groups"</span>, List.of(<span class="jxr_string">"admin"</span>, <span class="jxr_string">"ops"</span>));
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> f = SamlAuthFilter.create().validator(capturing(claims)).rolesClaim(<span class="jxr_string">"groups"</span>).build();
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> result = f.authenticate(noUrlReq(<span class="jxr_string">"https"</span>, <span class="jxr_string">"sp.example.com"</span>, 443, <span class="jxr_string">"/saml/acs"</span>));
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertEquals(Set.of(<span class="jxr_string">"admin"</span>, <span class="jxr_string">"ops"</span>), result.orElseThrow().getRoles());
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Test <strong class="jxr_keyword">void</strong> b03_realm_usedInChallenge() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> f = SamlAuthFilter.create().validator(capturing(Map.of())).realm(<span class="jxr_string">"corp"</span>).build();
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> r = noUrlReq(<span class="jxr_string">"https"</span>, <span class="jxr_string">"sp.example.com"</span>, 443, <span class="jxr_string">"/saml/acs"</span>);
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		when(r.getParameter(<span class="jxr_string">"SAMLResponse"</span>)).thenReturn(<span class="jxr_string">"!!!not-base64!!!"</span>);
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> ex = assertThrows(AuthenticationException.<strong class="jxr_keyword">class</strong>, () -&gt; f.authenticate(r));
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> header = ex.getHeaders().stream().filter(h -&gt; eqic(<span class="jxr_string">"WWW-Authenticate"</span>, h.getName())).findFirst().orElseThrow();
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(<span class="jxr_string">"SAML realm=\&quot;corp\&quot;"</span>, header.getValue());
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	}
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> }
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		when(r.getMethod()).thenReturn(<span class="jxr_string">"POST"</span>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		when(r.getPathInfo()).thenReturn(<span class="jxr_string">"/saml/acs"</span>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		when(r.getParameter(<span class="jxr_string">"SAMLResponse"</span>)).thenReturn(B64);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		when(r.getRequestURL()).thenReturn(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		when(r.getScheme()).thenReturn(scheme);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		when(r.getServerName()).thenReturn(host);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		when(r.getServerPort()).thenReturn(port);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		when(r.getRequestURI()).thenReturn(uri);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">return</strong> r;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<em class="jxr_comment">// B: builder settings</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	@Test <strong class="jxr_keyword">void</strong> b01_consumerPath_customPathMatches_defaultNoLongerDoes() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> f = SamlAuthFilter.create().validator(capturing(Map.of())).consumerPath(<span class="jxr_string">"/sso/post"</span>).build();
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> custom = noUrlReq(<span class="jxr_string">"https"</span>, <span class="jxr_string">"sp.example.com"</span>, 443, <span class="jxr_string">"/sso/post"</span>);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		when(custom.getPathInfo()).thenReturn(<span class="jxr_string">"/sso/post"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertTrue(f.authenticate(custom).isPresent());
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertTrue(f.authenticate(noUrlReq(<span class="jxr_string">"https"</span>, <span class="jxr_string">"sp.example.com"</span>, 443, <span class="jxr_string">"/saml/acs"</span>)).isEmpty());
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> b02_rolesClaim_customClaimNameUsed() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> claims = Map.&lt;String,Object&gt;of(<span class="jxr_string">"roles"</span>, List.of(<span class="jxr_string">"ignored"</span>), <span class="jxr_string">"groups"</span>, List.of(<span class="jxr_string">"admin"</span>, <span class="jxr_string">"ops"</span>));
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> f = SamlAuthFilter.create().validator(capturing(claims)).rolesClaim(<span class="jxr_string">"groups"</span>).build();
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> result = f.authenticate(noUrlReq(<span class="jxr_string">"https"</span>, <span class="jxr_string">"sp.example.com"</span>, 443, <span class="jxr_string">"/saml/acs"</span>));
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertEquals(Set.of(<span class="jxr_string">"admin"</span>, <span class="jxr_string">"ops"</span>), result.orElseThrow().getRoles());
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	}
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@Test <strong class="jxr_keyword">void</strong> b03_realm_usedInChallenge() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> f = SamlAuthFilter.create().validator(capturing(Map.of())).realm(<span class="jxr_string">"corp"</span>).build();
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> r = noUrlReq(<span class="jxr_string">"https"</span>, <span class="jxr_string">"sp.example.com"</span>, 443, <span class="jxr_string">"/saml/acs"</span>);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		when(r.getParameter(<span class="jxr_string">"SAMLResponse"</span>)).thenReturn(<span class="jxr_string">"!!!not-base64!!!"</span>);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> ex = assertThrows(AuthenticationException.<strong class="jxr_keyword">class</strong>, () -&gt; f.authenticate(r));
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> header = ex.getHeaders().stream().filter(h -&gt; eqic(<span class="jxr_string">"WWW-Authenticate"</span>, h.getName())).findFirst().orElseThrow();
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(<span class="jxr_string">"SAML realm=\&quot;corp\&quot;"</span>, header.getValue());
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

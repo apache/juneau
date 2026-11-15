@@ -953,202 +953,260 @@
 <a class="jxr_linenumber" name="L945" href="#L945">945</a> 	}
 <a class="jxr_linenumber" name="L946" href="#L946">946</a> 
 <a class="jxr_linenumber" name="L947" href="#L947">947</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> 	<em class="jxr_comment">// toBufferedReader(Reader)</em>
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 	<em class="jxr_comment">// readCapped(InputStream, long, Charset[, Supplier])</em>
 <a class="jxr_linenumber" name="L949" href="#L949">949</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L950" href="#L950">950</a> 	@Test
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 	<strong class="jxr_keyword">void</strong> a043_toBufferedReader() {
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> StringReader(<span class="jxr_string">"test"</span>);
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		<strong class="jxr_keyword">var</strong> br = toBufferedReader(r);
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		assertSame(r, br); <em class="jxr_comment">// StringReader should be returned as-is</em>
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> 
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> 		<em class="jxr_comment">// Test with BufferedReader</em>
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> 		<strong class="jxr_keyword">var</strong> br2 = <strong class="jxr_keyword">new</strong> BufferedReader(<strong class="jxr_keyword">new</strong> StringReader(<span class="jxr_string">"test"</span>));
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> 		<strong class="jxr_keyword">var</strong> br3 = toBufferedReader(br2);
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> 		assertSame(br2, br3);
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 		<em class="jxr_comment">// Test with other Reader</em>
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 		<strong class="jxr_keyword">var</strong> fr = <strong class="jxr_keyword">new</strong> StringReader(<span class="jxr_string">"test"</span>);
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 		<strong class="jxr_keyword">var</strong> br4 = toBufferedReader(fr);
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 		assertSame(fr, br4); <em class="jxr_comment">// StringReader should be returned as-is</em>
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 		<em class="jxr_comment">// Test with FileReader (not StringReader or BufferedReader)</em>
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> 		<em class="jxr_comment">// We can't easily test this without creating a file, but we can test the logic</em>
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> 		<em class="jxr_comment">// Test with null</em>
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> 		assertNull(toBufferedReader(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 	<strong class="jxr_keyword">void</strong> a042a_readCapped_InputStream() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		<strong class="jxr_keyword">var</strong> utf8 = StandardCharsets.UTF_8;
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		assertEquals(<span class="jxr_string">"abc"</span>, readCapped(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"abc"</span>.getBytes(utf8)), 3, utf8));
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		assertEquals(<span class="jxr_string">""</span>, readCapped(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<strong class="jxr_keyword">new</strong> byte[0]), 0, utf8));
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; readCapped(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"abcd"</span>.getBytes(utf8)), 3, utf8));
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 		assertTrue(e.getMessage().contains(<span class="jxr_string">"3 bytes"</span>), e.getMessage());
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 		assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; readCapped(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"a"</span>.getBytes(utf8)), 0, utf8));
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; readCapped(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<strong class="jxr_keyword">new</strong> byte[0]), -1, utf8));
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; readCapped((InputStream)<strong class="jxr_keyword">null</strong>, 3, utf8));
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; readCapped(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<strong class="jxr_keyword">new</strong> byte[0]), 3, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 	}
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 	@Test
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 	<strong class="jxr_keyword">void</strong> a042b_readCapped_InputStream_Supplier() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 		<strong class="jxr_keyword">var</strong> utf8 = StandardCharsets.UTF_8;
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 		assertEquals(<span class="jxr_string">"ab"</span>, readCapped(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"ab"</span>.getBytes(utf8)), 2, utf8, () -&gt; <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"over"</span>)));
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; readCapped(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<span class="jxr_string">"abc"</span>.getBytes(utf8)), 2, utf8, () -&gt; <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"over"</span>)));
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 		assertEquals(<span class="jxr_string">"over"</span>, e.getMessage());
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; readCapped(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(<strong class="jxr_keyword">new</strong> byte[0]), 2, utf8, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L970" href="#L970">970</a> 	}
 <a class="jxr_linenumber" name="L971" href="#L971">971</a> 
 <a class="jxr_linenumber" name="L972" href="#L972">972</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 	<em class="jxr_comment">// EMPTY_INPUT_STREAM and EMPTY_READER tests</em>
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 	<em class="jxr_comment">// readCapped(Path, long, Charset, OpenOption...)</em>
 <a class="jxr_linenumber" name="L974" href="#L974">974</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L975" href="#L975">975</a> 	@Test
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 	<strong class="jxr_keyword">void</strong> a044_emptyInputStream() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> 		<em class="jxr_comment">// Test line 44: EMPTY_INPUT_STREAM.read()</em>
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		assertEquals(-1, EMPTY_INPUT_STREAM.read());
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 	}
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 	@Test
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> 	<strong class="jxr_keyword">void</strong> a045_emptyReader() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 		<em class="jxr_comment">// Test line 65: EMPTY_READER.close()</em>
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 		EMPTY_READER.close(); <em class="jxr_comment">// Should not throw</em>
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		<em class="jxr_comment">// Test line 69: EMPTY_READER.read()</em>
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		assertEquals(-1, EMPTY_READER.read());
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 		<em class="jxr_comment">// Test line 74: EMPTY_READER.read(char[], int, int)</em>
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 		<strong class="jxr_keyword">var</strong> buf = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[10];
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		assertEquals(-1, EMPTY_READER.read(buf, 0, 10));
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 	}
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> 	<em class="jxr_comment">// cleanupThreadLocals()</em>
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> 	@Test
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> 	<strong class="jxr_keyword">void</strong> a046_cleanupThreadLocals() {
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		<em class="jxr_comment">// Test that cleanupThreadLocals() can be called without throwing</em>
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		<em class="jxr_comment">// Note: We can't easily verify the ThreadLocal was cleared without accessing private fields,</em>
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		<em class="jxr_comment">// but we can verify the method executes successfully</em>
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		cleanupThreadLocals();
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		<em class="jxr_comment">// Should not throw</em>
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 	<strong class="jxr_keyword">void</strong> a042c_readCapped_Path() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> 		<strong class="jxr_keyword">var</strong> utf8 = StandardCharsets.UTF_8;
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		<strong class="jxr_keyword">var</strong> dir = Files.createTempDirectory(<span class="jxr_string">"readCapped"</span>);
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 			<strong class="jxr_keyword">var</strong> file = dir.resolve(<span class="jxr_string">"f.txt"</span>);
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 			Files.writeString(file, <span class="jxr_string">"abc"</span>, utf8);
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 			assertEquals(<span class="jxr_string">"abc"</span>, readCapped(file, 3, utf8));
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 			<strong class="jxr_keyword">var</strong> e = assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; readCapped(file, 2, utf8));
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 			assertTrue(e.getMessage().contains(<span class="jxr_string">"f.txt"</span>), e.getMessage());
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; readCapped((Path)<strong class="jxr_keyword">null</strong>, 2, utf8));
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 			assertThrows(NoSuchFileException.<strong class="jxr_keyword">class</strong>, () -&gt; readCapped(dir.resolve(<span class="jxr_string">"missing"</span>), 2, utf8));
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 			<strong class="jxr_keyword">var</strong> link = dir.resolve(<span class="jxr_string">"link.txt"</span>);
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 				Files.createSymbolicLink(link, file);
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 			} <strong class="jxr_keyword">catch</strong> (UnsupportedOperationException | IOException x) {
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 				<strong class="jxr_keyword">return</strong>;  <em class="jxr_comment">// Symbolic links not available on this file system.</em>
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 			}
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> 			assertEquals(<span class="jxr_string">"abc"</span>, readCapped(link, 3, utf8));
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 			assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; readCapped(link, 3, utf8, LinkOption.NOFOLLOW_LINKS));
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = Files.list(dir)) {
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : (Iterable&lt;Path&gt;)s::iterator)
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 					Files.deleteIfExists(p);
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 			}
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 			Files.deleteIfExists(dir);
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		}
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 	}
 <a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		<em class="jxr_comment">// Call again to ensure it's safe to call multiple times (idempotency)</em>
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		cleanupThreadLocals();
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		<em class="jxr_comment">// Verify method completed successfully - if we reach here, no exception was thrown</em>
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 		assertDoesNotThrow(() -&gt; cleanupThreadLocals());
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 	}
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 	<em class="jxr_comment">// Test helper classes</em>
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestReader <strong class="jxr_keyword">extends</strong> StringReader {
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		<strong class="jxr_keyword">boolean</strong> closed;
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 		<strong class="jxr_keyword">public</strong> TestReader(String s) {
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 			<strong class="jxr_keyword">super</strong>(s);
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 		}
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 		@Override <em class="jxr_comment">/* Reader */</em>
-<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() {
-<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 			closed = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 		}
-<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 	}
-<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 
-<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestWriter <strong class="jxr_keyword">extends</strong> StringWriter {
-<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 		<strong class="jxr_keyword">boolean</strong> closed;
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 	<em class="jxr_comment">// toBufferedReader(Reader)</em>
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 	@Test
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 	<strong class="jxr_keyword">void</strong> a043_toBufferedReader() {
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> StringReader(<span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 		<strong class="jxr_keyword">var</strong> br = toBufferedReader(r);
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 		assertSame(r, br); <em class="jxr_comment">// StringReader should be returned as-is</em>
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		<em class="jxr_comment">// Test with BufferedReader</em>
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		<strong class="jxr_keyword">var</strong> br2 = <strong class="jxr_keyword">new</strong> BufferedReader(<strong class="jxr_keyword">new</strong> StringReader(<span class="jxr_string">"test"</span>));
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		<strong class="jxr_keyword">var</strong> br3 = toBufferedReader(br2);
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 		assertSame(br2, br3);
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 		<em class="jxr_comment">// Test with other Reader</em>
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 		<strong class="jxr_keyword">var</strong> fr = <strong class="jxr_keyword">new</strong> StringReader(<span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 		<strong class="jxr_keyword">var</strong> br4 = toBufferedReader(fr);
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 		assertSame(fr, br4); <em class="jxr_comment">// StringReader should be returned as-is</em>
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 		<em class="jxr_comment">// Test with FileReader (not StringReader or BufferedReader)</em>
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 		<em class="jxr_comment">// We can't easily test this without creating a file, but we can test the logic</em>
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		<em class="jxr_comment">// Test with null</em>
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 		assertNull(toBufferedReader(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 	}
 <a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 
-<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 		<strong class="jxr_keyword">public</strong> TestWriter() { <em class="jxr_comment">/* no-op */</em> }
-<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 
-<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 		@Override <em class="jxr_comment">/* Writer */</em>
-<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() {
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 			closed = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 		}
-<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 	}
-<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 
-<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestInputStream <strong class="jxr_keyword">extends</strong> ByteArrayInputStream {
-<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 		<strong class="jxr_keyword">boolean</strong> closed;
-<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 
-<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		<strong class="jxr_keyword">public</strong> TestInputStream(String s) {
-<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 			<strong class="jxr_keyword">super</strong>(s.getBytes());
-<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 		}
-<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 
-<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 		@Override <em class="jxr_comment">/* InputStream */</em>
-<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 			<strong class="jxr_keyword">super</strong>.close();
-<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 			closed = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 		}
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 	<em class="jxr_comment">// EMPTY_INPUT_STREAM and EMPTY_READER tests</em>
+<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 	@Test
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 	<strong class="jxr_keyword">void</strong> a044_emptyInputStream() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 		<em class="jxr_comment">// Test line 44: EMPTY_INPUT_STREAM.read()</em>
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 		assertEquals(-1, EMPTY_INPUT_STREAM.read());
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 	}
+<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 	@Test
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 	<strong class="jxr_keyword">void</strong> a045_emptyReader() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		<em class="jxr_comment">// Test line 65: EMPTY_READER.close()</em>
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 		EMPTY_READER.close(); <em class="jxr_comment">// Should not throw</em>
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 		<em class="jxr_comment">// Test line 69: EMPTY_READER.read()</em>
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 		assertEquals(-1, EMPTY_READER.read());
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 		<em class="jxr_comment">// Test line 74: EMPTY_READER.read(char[], int, int)</em>
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		<strong class="jxr_keyword">var</strong> buf = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[10];
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 		assertEquals(-1, EMPTY_READER.read(buf, 0, 10));
 <a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 	}
 <a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 
-<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestOutputStream <strong class="jxr_keyword">extends</strong> ByteArrayOutputStream {
-<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 		<strong class="jxr_keyword">boolean</strong> closed;
-<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 
-<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		<strong class="jxr_keyword">public</strong> TestOutputStream() { <em class="jxr_comment">/* no-op */</em> }
-<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 
-<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 		@Override <em class="jxr_comment">/* OutputStream */</em>
-<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 			<strong class="jxr_keyword">super</strong>.close();
-<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 			closed = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 		}
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 	<em class="jxr_comment">// cleanupThreadLocals()</em>
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 	@Test
+<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 	<strong class="jxr_keyword">void</strong> a046_cleanupThreadLocals() {
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 		<em class="jxr_comment">// Test that cleanupThreadLocals() can be called without throwing</em>
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 		<em class="jxr_comment">// Note: We can't easily verify the ThreadLocal was cleared without accessing private fields,</em>
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 		<em class="jxr_comment">// but we can verify the method executes successfully</em>
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 		cleanupThreadLocals();
+<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 		<em class="jxr_comment">// Should not throw</em>
 <a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 
-<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 		@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> String toString() {
-<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String(<strong class="jxr_keyword">this</strong>.toByteArray(), UTF8);
-<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 		}
+<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 		<em class="jxr_comment">// Call again to ensure it's safe to call multiple times (idempotency)</em>
+<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 		cleanupThreadLocals();
+<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 		<em class="jxr_comment">// Verify method completed successfully - if we reach here, no exception was thrown</em>
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 		assertDoesNotThrow(() -&gt; cleanupThreadLocals());
 <a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 	}
 <a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 
-<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ThrowingTestInputStream <strong class="jxr_keyword">extends</strong> InputStream {
-<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> byte[] data;
-<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> pos = 0;
-<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 
-<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 		<strong class="jxr_keyword">public</strong> ThrowingTestInputStream(String s) {
-<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 			<strong class="jxr_keyword">this</strong>.data = s.getBytes();
-<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 		}
-<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 
-<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 		@Override
-<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> read() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 			<strong class="jxr_keyword">if</strong> (pos &gt;= data.length)
-<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 				<strong class="jxr_keyword">return</strong> -1;
-<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 			<strong class="jxr_keyword">return</strong> data[pos++] &amp; 0xFF;
+<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 	<em class="jxr_comment">// Test helper classes</em>
+<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestReader <strong class="jxr_keyword">extends</strong> StringReader {
+<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 		<strong class="jxr_keyword">boolean</strong> closed;
+<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 
+<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 		<strong class="jxr_keyword">public</strong> TestReader(String s) {
+<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 			<strong class="jxr_keyword">super</strong>(s);
+<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 		}
+<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> 
+<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 		@Override <em class="jxr_comment">/* Reader */</em>
+<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() {
+<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 			closed = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 		}
-<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 
-<a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> 		@Override
-<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> read(byte[] b, <strong class="jxr_keyword">int</strong> off, <strong class="jxr_keyword">int</strong> len) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
-<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 		}
-<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 	}
+<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 	}
+<a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> 
+<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestWriter <strong class="jxr_keyword">extends</strong> StringWriter {
+<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 		<strong class="jxr_keyword">boolean</strong> closed;
+<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 
+<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 		<strong class="jxr_keyword">public</strong> TestWriter() { <em class="jxr_comment">/* no-op */</em> }
 <a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 
-<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ThrowingTestOutputStream <strong class="jxr_keyword">extends</strong> OutputStream {
-<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ByteArrayOutputStream baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
-<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 
-<a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 		@Override
-<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> write(<strong class="jxr_keyword">int</strong> b) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 			baos.write(b);
-<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 		}
-<a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 
-<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 		@Override
-<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> flush() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
+<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 		@Override <em class="jxr_comment">/* Writer */</em>
+<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() {
+<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 			closed = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 		}
+<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 	}
+<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 
+<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestInputStream <strong class="jxr_keyword">extends</strong> ByteArrayInputStream {
+<a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 		<strong class="jxr_keyword">boolean</strong> closed;
+<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 
+<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 		<strong class="jxr_keyword">public</strong> TestInputStream(String s) {
+<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 			<strong class="jxr_keyword">super</strong>(s.getBytes());
 <a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 		}
 <a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 
-<a class="jxr_linenumber" name="L1103" href="#L1103">1103</a> 		@Override
+<a class="jxr_linenumber" name="L1103" href="#L1103">1103</a> 		@Override <em class="jxr_comment">/* InputStream */</em>
 <a class="jxr_linenumber" name="L1104" href="#L1104">1104</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
-<a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> 		}
-<a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> 	}
-<a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> 
-<a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ThrowingTestReader <strong class="jxr_keyword">extends</strong> Reader {
-<a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> 		<strong class="jxr_keyword">public</strong> ThrowingTestReader() {
-<a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> 		}
+<a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> 			<strong class="jxr_keyword">super</strong>.close();
+<a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> 			closed = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> 		}
+<a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> 	}
+<a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> 
+<a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestOutputStream <strong class="jxr_keyword">extends</strong> ByteArrayOutputStream {
+<a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> 		<strong class="jxr_keyword">boolean</strong> closed;
 <a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> 
-<a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 		@Override
-<a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> read(<strong class="jxr_keyword">char</strong>[] cbuf, <strong class="jxr_keyword">int</strong> off, <strong class="jxr_keyword">int</strong> len) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
-<a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> 		}
-<a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> 
-<a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 		@Override
-<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
-<a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 		}
-<a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 	}
-<a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 
-<a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ThrowingTestWriter <strong class="jxr_keyword">extends</strong> Writer {
-<a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> StringWriter sw = <strong class="jxr_keyword">new</strong> StringWriter();
+<a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 		<strong class="jxr_keyword">public</strong> TestOutputStream() { <em class="jxr_comment">/* no-op */</em> }
+<a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 
+<a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 		@Override <em class="jxr_comment">/* OutputStream */</em>
+<a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> 			<strong class="jxr_keyword">super</strong>.close();
+<a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 			closed = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 		}
+<a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 
+<a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 		@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> String toString() {
+<a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String(<strong class="jxr_keyword">this</strong>.toByteArray(), UTF8);
+<a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 		}
+<a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> 	}
 <a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> 
-<a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 		@Override
-<a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> write(<strong class="jxr_keyword">char</strong>[] cbuf, <strong class="jxr_keyword">int</strong> off, <strong class="jxr_keyword">int</strong> len) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> 			sw.write(cbuf, off, len);
-<a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> 		}
-<a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> 
-<a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> 		@Override
-<a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> flush() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
-<a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> 		}
-<a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> 
-<a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> 		@Override
-<a class="jxr_linenumber" name="L1138" href="#L1138">1138</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L1139" href="#L1139">1139</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
+<a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ThrowingTestInputStream <strong class="jxr_keyword">extends</strong> InputStream {
+<a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> byte[] data;
+<a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> pos = 0;
+<a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> 
+<a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> 		<strong class="jxr_keyword">public</strong> ThrowingTestInputStream(String s) {
+<a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> 			<strong class="jxr_keyword">this</strong>.data = s.getBytes();
+<a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> 		}
+<a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> 
+<a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> 		@Override
+<a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> read() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> 			<strong class="jxr_keyword">if</strong> (pos &gt;= data.length)
+<a class="jxr_linenumber" name="L1138" href="#L1138">1138</a> 				<strong class="jxr_keyword">return</strong> -1;
+<a class="jxr_linenumber" name="L1139" href="#L1139">1139</a> 			<strong class="jxr_keyword">return</strong> data[pos++] &amp; 0xFF;
 <a class="jxr_linenumber" name="L1140" href="#L1140">1140</a> 		}
-<a class="jxr_linenumber" name="L1141" href="#L1141">1141</a> 	}
-<a class="jxr_linenumber" name="L1142" href="#L1142">1142</a> }
-<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> 
+<a class="jxr_linenumber" name="L1141" href="#L1141">1141</a> 
+<a class="jxr_linenumber" name="L1142" href="#L1142">1142</a> 		@Override
+<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> read(byte[] b, <strong class="jxr_keyword">int</strong> off, <strong class="jxr_keyword">int</strong> len) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
+<a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> 		}
+<a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> 	}
+<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 
+<a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ThrowingTestOutputStream <strong class="jxr_keyword">extends</strong> OutputStream {
+<a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ByteArrayOutputStream baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
+<a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> 
+<a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> 		@Override
+<a class="jxr_linenumber" name="L1152" href="#L1152">1152</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> write(<strong class="jxr_keyword">int</strong> b) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> 			baos.write(b);
+<a class="jxr_linenumber" name="L1154" href="#L1154">1154</a> 		}
+<a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> 
+<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 		@Override
+<a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> flush() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
+<a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 		}
+<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 
+<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 		@Override
+<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
+<a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 		}
+<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 	}
+<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 
+<a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ThrowingTestReader <strong class="jxr_keyword">extends</strong> Reader {
+<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 		<strong class="jxr_keyword">public</strong> ThrowingTestReader() {
+<a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 		}
+<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 
+<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 		@Override
+<a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> read(<strong class="jxr_keyword">char</strong>[] cbuf, <strong class="jxr_keyword">int</strong> off, <strong class="jxr_keyword">int</strong> len) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
+<a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 		}
+<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 
+<a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 		@Override
+<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
+<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 		}
+<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 	}
+<a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 
+<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ThrowingTestWriter <strong class="jxr_keyword">extends</strong> Writer {
+<a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> StringWriter sw = <strong class="jxr_keyword">new</strong> StringWriter();
+<a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> 
+<a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> 		@Override
+<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> write(<strong class="jxr_keyword">char</strong>[] cbuf, <strong class="jxr_keyword">int</strong> off, <strong class="jxr_keyword">int</strong> len) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> 			sw.write(cbuf, off, len);
+<a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> 		}
+<a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> 
+<a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> 		@Override
+<a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> flush() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
+<a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 		}
+<a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> 
+<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 		@Override
+<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Test exception"</span>);
+<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 		}
+<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 	}
+<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> }
+<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -249,158 +249,163 @@
 <span class="source-line-no">236</span><span id="line-236">      return worker.applyTemplateSuffix(name);</span>
 <span class="source-line-no">237</span><span id="line-237">   }</span>
 <span class="source-line-no">238</span><span id="line-238"></span>
-<span class="source-line-no">239</span><span id="line-239">   /**</span>
-<span class="source-line-no">240</span><span id="line-240">    * Resolves the active {@link MustacheFactory} via the shared {@link MustacheDispatcher} worker.</span>
-<span class="source-line-no">241</span><span id="line-241">    *</span>
-<span class="source-line-no">242</span><span id="line-242">    * @param req The current REST request.</span>
-<span class="source-line-no">243</span><span id="line-243">    * @return The active Mustache factory. Never {@code null}.</span>
-<span class="source-line-no">244</span><span id="line-244">    */</span>
-<span class="source-line-no">245</span><span id="line-245">   public MustacheFactory resolveMustacheFactory(RestRequest req) {</span>
-<span class="source-line-no">246</span><span id="line-246">      return worker.resolveMustacheFactory(req);</span>
-<span class="source-line-no">247</span><span id="line-247">   }</span>
-<span class="source-line-no">248</span><span id="line-248"></span>
-<span class="source-line-no">249</span><span id="line-249">   /**</span>
-<span class="source-line-no">250</span><span id="line-250">    * [GET /mustache/*] &amp;mdash; render a raw template through the Mustache engine.</span>
-<span class="source-line-no">251</span><span id="line-251">    *</span>
-<span class="source-line-no">252</span><span id="line-252">    * &lt;p&gt;</span>
-<span class="source-line-no">253</span><span id="line-253">    * The {@code @Path("/*") String path} captures the multi-segment trailing remainder (e.g. a</span>
-<span class="source-line-no">254</span><span id="line-254">    * request for {@code /mustache/about.mustache} matches the mount with</span>
-<span class="source-line-no">255</span><span id="line-255">    * {@code path = "about.mustache"}). Delegates to the shared {@link MustacheDispatcher} worker</span>
-<span class="source-line-no">256</span><span id="line-256">    * (path-traversal hardening, suffix application, factory resolution, and render).</span>
-<span class="source-line-no">257</span><span id="line-257">    *</span>
-<span class="source-line-no">258</span><span id="line-258">    * &lt;p&gt;</span>
-<span class="source-line-no">259</span><span id="line-259">    * Missing template surfaces as the engine's own {@link MustacheNotFoundException}</span>
-<span class="source-line-no">260</span><span id="line-260">    * (HTTP 500 from the renderer's catch-all); missing engine surfaces as</span>
-<span class="source-line-no">261</span><span id="line-261">    * {@link MustacheViewRenderer#NO_ENGINE_DIAGNOSTIC}.</span>
+<span class="source-line-no">239</span><span id="line-239">   // The extension of the templates served: the configured suffix, or ".mustache" when none is set.</span>
+<span class="source-line-no">240</span><span id="line-240">   String servedExtension() {</span>
+<span class="source-line-no">241</span><span id="line-241">      return worker.servedExtension();</span>
+<span class="source-line-no">242</span><span id="line-242">   }</span>
+<span class="source-line-no">243</span><span id="line-243"></span>
+<span class="source-line-no">244</span><span id="line-244">   /**</span>
+<span class="source-line-no">245</span><span id="line-245">    * Resolves the active {@link MustacheFactory} via the shared {@link MustacheDispatcher} worker.</span>
+<span class="source-line-no">246</span><span id="line-246">    *</span>
+<span class="source-line-no">247</span><span id="line-247">    * @param req The current REST request.</span>
+<span class="source-line-no">248</span><span id="line-248">    * @return The active Mustache factory. Never {@code null}.</span>
+<span class="source-line-no">249</span><span id="line-249">    */</span>
+<span class="source-line-no">250</span><span id="line-250">   public MustacheFactory resolveMustacheFactory(RestRequest req) {</span>
+<span class="source-line-no">251</span><span id="line-251">      return worker.resolveMustacheFactory(req);</span>
+<span class="source-line-no">252</span><span id="line-252">   }</span>
+<span class="source-line-no">253</span><span id="line-253"></span>
+<span class="source-line-no">254</span><span id="line-254">   /**</span>
+<span class="source-line-no">255</span><span id="line-255">    * [GET /mustache/*] &amp;mdash; render a raw template through the Mustache engine.</span>
+<span class="source-line-no">256</span><span id="line-256">    *</span>
+<span class="source-line-no">257</span><span id="line-257">    * &lt;p&gt;</span>
+<span class="source-line-no">258</span><span id="line-258">    * The {@code @Path("/*") String path} captures the multi-segment trailing remainder (e.g. a</span>
+<span class="source-line-no">259</span><span id="line-259">    * request for {@code /mustache/about.mustache} matches the mount with</span>
+<span class="source-line-no">260</span><span id="line-260">    * {@code path = "about.mustache"}). Delegates to the shared {@link MustacheDispatcher} worker</span>
+<span class="source-line-no">261</span><span id="line-261">    * (path-traversal hardening, suffix application, factory resolution, and render).</span>
 <span class="source-line-no">262</span><span id="line-262">    *</span>
-<span class="source-line-no">263</span><span id="line-263">    * @param path The trailing path segment after {@code /mustache/} (the template name relative</span>
-<span class="source-line-no">264</span><span id="line-264">    *    to the configured {@link #getBasePath() base path}; configured suffix appended if</span>
-<span class="source-line-no">265</span><span id="line-265">    *    missing).</span>
-<span class="source-line-no">266</span><span id="line-266">    * @param req The current REST request.</span>
-<span class="source-line-no">267</span><span id="line-267">    * @param res The current REST response.</span>
-<span class="source-line-no">268</span><span id="line-268">    * @throws IOException If the underlying response writer fails.</span>
-<span class="source-line-no">269</span><span id="line-269">    * @throws BasicHttpException On boundary violation (403), missing engine (500), or render</span>
-<span class="source-line-no">270</span><span id="line-270">    *    failure (500).</span>
-<span class="source-line-no">271</span><span id="line-271">    */</span>
-<span class="source-line-no">272</span><span id="line-272">   @RestGet(</span>
-<span class="source-line-no">273</span><span id="line-273">      path="/${juneau.mustache.path:mustache}/*",</span>
-<span class="source-line-no">274</span><span id="line-274">      summary="Mustache view",</span>
-<span class="source-line-no">275</span><span id="line-275">      description="Render a raw Mustache template under the configured base path.",</span>
-<span class="source-line-no">276</span><span id="line-276">      swagger=@OpSwagger(ignore=true)</span>
-<span class="source-line-no">277</span><span id="line-277">   )</span>
-<span class="source-line-no">278</span><span id="line-278">   public void render(@Path("/*") String path, RestRequest req, RestResponse res)</span>
-<span class="source-line-no">279</span><span id="line-279">         throws IOException, BasicHttpException {</span>
-<span class="source-line-no">280</span><span id="line-280">      worker.render(path, req, res);</span>
-<span class="source-line-no">281</span><span id="line-281">   }</span>
-<span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">   /**</span>
-<span class="source-line-no">284</span><span id="line-284">    * Builder for {@link MustacheMixin}.</span>
-<span class="source-line-no">285</span><span id="line-285">    *</span>
-<span class="source-line-no">286</span><span id="line-286">    * &lt;p&gt;</span>
-<span class="source-line-no">287</span><span id="line-287">    * Mirrors {@link MustacheDispatcher.Builder}'s configuration methods on its own surface and</span>
-<span class="source-line-no">288</span><span id="line-288">    * forwards each call into a held {@link MustacheDispatcher.Builder} (worker-bean</span>
-<span class="source-line-no">289</span><span id="line-289">    * composition). Implements {@link ViewMixinBuilder} so {@link #basePath(String)} and</span>
-<span class="source-line-no">290</span><span id="line-290">    * {@link #cacheTemplates(boolean)} are guaranteed to transfer to the sibling JSP / Thymeleaf /</span>
-<span class="source-line-no">291</span><span id="line-291">    * FreeMarker bridge builders.</span>
-<span class="source-line-no">292</span><span id="line-292">    */</span>
-<span class="source-line-no">293</span><span id="line-293">   public static class Builder implements ViewMixinBuilder&lt;Builder&gt; {</span>
-<span class="source-line-no">294</span><span id="line-294"></span>
-<span class="source-line-no">295</span><span id="line-295">      private final MustacheDispatcher.Builder worker = MustacheDispatcher.create();</span>
-<span class="source-line-no">296</span><span id="line-296"></span>
-<span class="source-line-no">297</span><span id="line-297">      /** Constructor &amp;mdash; package access for {@link MustacheMixin#create()}. */</span>
-<span class="source-line-no">298</span><span id="line-298">      protected Builder() {}</span>
+<span class="source-line-no">263</span><span id="line-263">    * &lt;p&gt;</span>
+<span class="source-line-no">264</span><span id="line-264">    * Missing template surfaces as the engine's own {@link MustacheNotFoundException}</span>
+<span class="source-line-no">265</span><span id="line-265">    * (HTTP 500 from the renderer's catch-all); missing engine surfaces as</span>
+<span class="source-line-no">266</span><span id="line-266">    * {@link MustacheViewRenderer#NO_ENGINE_DIAGNOSTIC}.</span>
+<span class="source-line-no">267</span><span id="line-267">    *</span>
+<span class="source-line-no">268</span><span id="line-268">    * @param path The trailing path segment after {@code /mustache/} (the template name relative</span>
+<span class="source-line-no">269</span><span id="line-269">    *    to the configured {@link #getBasePath() base path}; configured suffix appended if</span>
+<span class="source-line-no">270</span><span id="line-270">    *    missing).</span>
+<span class="source-line-no">271</span><span id="line-271">    * @param req The current REST request.</span>
+<span class="source-line-no">272</span><span id="line-272">    * @param res The current REST response.</span>
+<span class="source-line-no">273</span><span id="line-273">    * @throws IOException If the underlying response writer fails.</span>
+<span class="source-line-no">274</span><span id="line-274">    * @throws BasicHttpException On boundary violation (403), missing engine (500), or render</span>
+<span class="source-line-no">275</span><span id="line-275">    *    failure (500).</span>
+<span class="source-line-no">276</span><span id="line-276">    */</span>
+<span class="source-line-no">277</span><span id="line-277">   @RestGet(</span>
+<span class="source-line-no">278</span><span id="line-278">      path="/${juneau.mustache.path:mustache}/*",</span>
+<span class="source-line-no">279</span><span id="line-279">      summary="Mustache view",</span>
+<span class="source-line-no">280</span><span id="line-280">      description="Render a raw Mustache template under the configured base path.",</span>
+<span class="source-line-no">281</span><span id="line-281">      swagger=@OpSwagger(ignore=true)</span>
+<span class="source-line-no">282</span><span id="line-282">   )</span>
+<span class="source-line-no">283</span><span id="line-283">   public void render(@Path("/*") String path, RestRequest req, RestResponse res)</span>
+<span class="source-line-no">284</span><span id="line-284">         throws IOException, BasicHttpException {</span>
+<span class="source-line-no">285</span><span id="line-285">      worker.render(path, req, res);</span>
+<span class="source-line-no">286</span><span id="line-286">   }</span>
+<span class="source-line-no">287</span><span id="line-287"></span>
+<span class="source-line-no">288</span><span id="line-288">   /**</span>
+<span class="source-line-no">289</span><span id="line-289">    * Builder for {@link MustacheMixin}.</span>
+<span class="source-line-no">290</span><span id="line-290">    *</span>
+<span class="source-line-no">291</span><span id="line-291">    * &lt;p&gt;</span>
+<span class="source-line-no">292</span><span id="line-292">    * Mirrors {@link MustacheDispatcher.Builder}'s configuration methods on its own surface and</span>
+<span class="source-line-no">293</span><span id="line-293">    * forwards each call into a held {@link MustacheDispatcher.Builder} (worker-bean</span>
+<span class="source-line-no">294</span><span id="line-294">    * composition). Implements {@link ViewMixinBuilder} so {@link #basePath(String)} and</span>
+<span class="source-line-no">295</span><span id="line-295">    * {@link #cacheTemplates(boolean)} are guaranteed to transfer to the sibling JSP / Thymeleaf /</span>
+<span class="source-line-no">296</span><span id="line-296">    * FreeMarker bridge builders.</span>
+<span class="source-line-no">297</span><span id="line-297">    */</span>
+<span class="source-line-no">298</span><span id="line-298">   public static class Builder implements ViewMixinBuilder&lt;Builder&gt; {</span>
 <span class="source-line-no">299</span><span id="line-299"></span>
-<span class="source-line-no">300</span><span id="line-300">      /**</span>
-<span class="source-line-no">301</span><span id="line-301">       * Sets the classpath base path under which template resources are resolved.</span>
-<span class="source-line-no">302</span><span id="line-302">       *</span>
-<span class="source-line-no">303</span><span id="line-303">       * &lt;p&gt;</span>
-<span class="source-line-no">304</span><span id="line-304">       * Defaults to {@link MustacheMixin#DEFAULT_BASE_PATH "/templates/"}. A typical configured</span>
-<span class="source-line-no">305</span><span id="line-305">       * value is {@code "/templates/"} &amp;mdash; the same Spring-Boot-compatible layout</span>
-<span class="source-line-no">306</span><span id="line-306">       * convention the sibling JSP / Thymeleaf bridges use.</span>
+<span class="source-line-no">300</span><span id="line-300">      private final MustacheDispatcher.Builder worker = MustacheDispatcher.create();</span>
+<span class="source-line-no">301</span><span id="line-301"></span>
+<span class="source-line-no">302</span><span id="line-302">      /** Constructor &amp;mdash; package access for {@link MustacheMixin#create()}. */</span>
+<span class="source-line-no">303</span><span id="line-303">      protected Builder() {}</span>
+<span class="source-line-no">304</span><span id="line-304"></span>
+<span class="source-line-no">305</span><span id="line-305">      /**</span>
+<span class="source-line-no">306</span><span id="line-306">       * Sets the classpath base path under which template resources are resolved.</span>
 <span class="source-line-no">307</span><span id="line-307">       *</span>
-<span class="source-line-no">308</span><span id="line-308">       * @param value The base path. {@code null} or blank values reset to the default</span>
-<span class="source-line-no">309</span><span id="line-309">       *    {@link MustacheMixin#DEFAULT_BASE_PATH}.</span>
-<span class="source-line-no">310</span><span id="line-310">       * @return This object.</span>
-<span class="source-line-no">311</span><span id="line-311">       */</span>
-<span class="source-line-no">312</span><span id="line-312">      @Override /* ViewMixinBuilder */</span>
-<span class="source-line-no">313</span><span id="line-313">      public Builder basePath(String value) {</span>
-<span class="source-line-no">314</span><span id="line-314">         worker.basePath(value);</span>
-<span class="source-line-no">315</span><span id="line-315">         return this;</span>
-<span class="source-line-no">316</span><span id="line-316">      }</span>
-<span class="source-line-no">317</span><span id="line-317"></span>
-<span class="source-line-no">318</span><span id="line-318">      /**</span>
-<span class="source-line-no">319</span><span id="line-319">       * Sets the suffix to append to template names that don't already end with it (idempotent).</span>
-<span class="source-line-no">320</span><span id="line-320">       *</span>
-<span class="source-line-no">321</span><span id="line-321">       * &lt;p&gt;</span>
-<span class="source-line-no">322</span><span id="line-322">       * Defaults to {@link MustacheMixin#DEFAULT_TEMPLATE_SUFFIX ""} (no implicit</span>
-<span class="source-line-no">323</span><span id="line-323">       * suffix &amp;mdash; literal template names). Typical configured value is</span>
-<span class="source-line-no">324</span><span id="line-324">       * {@code ".mustache"}, the mustache.java convention.</span>
+<span class="source-line-no">308</span><span id="line-308">       * &lt;p&gt;</span>
+<span class="source-line-no">309</span><span id="line-309">       * Defaults to {@link MustacheMixin#DEFAULT_BASE_PATH "/templates/"}. A typical configured</span>
+<span class="source-line-no">310</span><span id="line-310">       * value is {@code "/templates/"} &amp;mdash; the same Spring-Boot-compatible layout</span>
+<span class="source-line-no">311</span><span id="line-311">       * convention the sibling JSP / Thymeleaf bridges use.</span>
+<span class="source-line-no">312</span><span id="line-312">       *</span>
+<span class="source-line-no">313</span><span id="line-313">       * @param value The base path. {@code null} or blank values reset to the default</span>
+<span class="source-line-no">314</span><span id="line-314">       *    {@link MustacheMixin#DEFAULT_BASE_PATH}.</span>
+<span class="source-line-no">315</span><span id="line-315">       * @return This object.</span>
+<span class="source-line-no">316</span><span id="line-316">       */</span>
+<span class="source-line-no">317</span><span id="line-317">      @Override /* ViewMixinBuilder */</span>
+<span class="source-line-no">318</span><span id="line-318">      public Builder basePath(String value) {</span>
+<span class="source-line-no">319</span><span id="line-319">         worker.basePath(value);</span>
+<span class="source-line-no">320</span><span id="line-320">         return this;</span>
+<span class="source-line-no">321</span><span id="line-321">      }</span>
+<span class="source-line-no">322</span><span id="line-322"></span>
+<span class="source-line-no">323</span><span id="line-323">      /**</span>
+<span class="source-line-no">324</span><span id="line-324">       * Sets the suffix to append to template names that don't already end with it (idempotent).</span>
 <span class="source-line-no">325</span><span id="line-325">       *</span>
-<span class="source-line-no">326</span><span id="line-326">       * @param value The new suffix. {@code null} resets to</span>
-<span class="source-line-no">327</span><span id="line-327">       *    {@link MustacheMixin#DEFAULT_TEMPLATE_SUFFIX}.</span>
-<span class="source-line-no">328</span><span id="line-328">       * @return This object.</span>
-<span class="source-line-no">329</span><span id="line-329">       */</span>
-<span class="source-line-no">330</span><span id="line-330">      public Builder templateSuffix(String value) {</span>
-<span class="source-line-no">331</span><span id="line-331">         worker.templateSuffix(value);</span>
-<span class="source-line-no">332</span><span id="line-332">         return this;</span>
-<span class="source-line-no">333</span><span id="line-333">      }</span>
-<span class="source-line-no">334</span><span id="line-334"></span>
-<span class="source-line-no">335</span><span id="line-335">      /**</span>
-<span class="source-line-no">336</span><span id="line-336">       * Sets whether the bridge's default factory caches compiled templates.</span>
-<span class="source-line-no">337</span><span id="line-337">       *</span>
-<span class="source-line-no">338</span><span id="line-338">       * &lt;p&gt;</span>
-<span class="source-line-no">339</span><span id="line-339">       * Defaults to {@link MustacheMixin#DEFAULT_CACHE_TEMPLATES true} (cache forever</span>
-<span class="source-line-no">340</span><span id="line-340">       * &amp;mdash; production-safe). Set {@code false} to enable dev hot-reload (the bridge rebuilds</span>
-<span class="source-line-no">341</span><span id="line-341">       * the factory from a fresh, empty compile-cache on every render). This setting only</span>
-<span class="source-line-no">342</span><span id="line-342">       * applies to the bridge's fallback factory; if a {@link MustacheFactory} bean is</span>
-<span class="source-line-no">343</span><span id="line-343">       * registered, its own caching behavior is honored.</span>
-<span class="source-line-no">344</span><span id="line-344">       *</span>
-<span class="source-line-no">345</span><span id="line-345">       * @param value The new value.</span>
-<span class="source-line-no">346</span><span id="line-346">       * @return This object.</span>
-<span class="source-line-no">347</span><span id="line-347">       */</span>
-<span class="source-line-no">348</span><span id="line-348">      @Override /* ViewMixinBuilder */</span>
-<span class="source-line-no">349</span><span id="line-349">      public Builder cacheTemplates(boolean value) {</span>
-<span class="source-line-no">350</span><span id="line-350">         worker.cacheTemplates(value);</span>
-<span class="source-line-no">351</span><span id="line-351">         return this;</span>
-<span class="source-line-no">352</span><span id="line-352">      }</span>
-<span class="source-line-no">353</span><span id="line-353"></span>
-<span class="source-line-no">354</span><span id="line-354">      /**</span>
-<span class="source-line-no">355</span><span id="line-355">       * Reads the current base path setting (test/inspection helper).</span>
-<span class="source-line-no">356</span><span id="line-356">       *</span>
-<span class="source-line-no">357</span><span id="line-357">       * @return The base path. Never {@code null}.</span>
-<span class="source-line-no">358</span><span id="line-358">       */</span>
-<span class="source-line-no">359</span><span id="line-359">      public String getBasePath() {</span>
-<span class="source-line-no">360</span><span id="line-360">         return worker.getBasePath();</span>
-<span class="source-line-no">361</span><span id="line-361">      }</span>
-<span class="source-line-no">362</span><span id="line-362"></span>
-<span class="source-line-no">363</span><span id="line-363">      /**</span>
-<span class="source-line-no">364</span><span id="line-364">       * Reads the current template-suffix setting (test/inspection helper).</span>
-<span class="source-line-no">365</span><span id="line-365">       *</span>
-<span class="source-line-no">366</span><span id="line-366">       * @return The template suffix. Never {@code null}.</span>
-<span class="source-line-no">367</span><span id="line-367">       */</span>
-<span class="source-line-no">368</span><span id="line-368">      public String getTemplateSuffix() {</span>
-<span class="source-line-no">369</span><span id="line-369">         return worker.getTemplateSuffix();</span>
-<span class="source-line-no">370</span><span id="line-370">      }</span>
-<span class="source-line-no">371</span><span id="line-371"></span>
-<span class="source-line-no">372</span><span id="line-372">      /**</span>
-<span class="source-line-no">373</span><span id="line-373">       * Reads the current cache-templates setting (test/inspection helper).</span>
-<span class="source-line-no">374</span><span id="line-374">       *</span>
-<span class="source-line-no">375</span><span id="line-375">       * @return The cache flag.</span>
-<span class="source-line-no">376</span><span id="line-376">       */</span>
-<span class="source-line-no">377</span><span id="line-377">      public boolean isCacheTemplates() {</span>
-<span class="source-line-no">378</span><span id="line-378">         return worker.isCacheTemplates();</span>
-<span class="source-line-no">379</span><span id="line-379">      }</span>
-<span class="source-line-no">380</span><span id="line-380"></span>
-<span class="source-line-no">381</span><span id="line-381">      /**</span>
-<span class="source-line-no">382</span><span id="line-382">       * Builds the {@link MustacheMixin}.</span>
-<span class="source-line-no">383</span><span id="line-383">       *</span>
-<span class="source-line-no">384</span><span id="line-384">       * @return A new {@link MustacheMixin} instance.</span>
-<span class="source-line-no">385</span><span id="line-385">       */</span>
-<span class="source-line-no">386</span><span id="line-386">      public MustacheMixin build() {</span>
-<span class="source-line-no">387</span><span id="line-387">         return new MustacheMixin(this);</span>
-<span class="source-line-no">388</span><span id="line-388">      }</span>
-<span class="source-line-no">389</span><span id="line-389">   }</span>
-<span class="source-line-no">390</span><span id="line-390">}</span>
+<span class="source-line-no">326</span><span id="line-326">       * &lt;p&gt;</span>
+<span class="source-line-no">327</span><span id="line-327">       * Defaults to {@link MustacheMixin#DEFAULT_TEMPLATE_SUFFIX ""} (no implicit</span>
+<span class="source-line-no">328</span><span id="line-328">       * suffix &amp;mdash; literal template names). Typical configured value is</span>
+<span class="source-line-no">329</span><span id="line-329">       * {@code ".mustache"}, the mustache.java convention.</span>
+<span class="source-line-no">330</span><span id="line-330">       *</span>
+<span class="source-line-no">331</span><span id="line-331">       * @param value The new suffix. {@code null} resets to</span>
+<span class="source-line-no">332</span><span id="line-332">       *    {@link MustacheMixin#DEFAULT_TEMPLATE_SUFFIX}.</span>
+<span class="source-line-no">333</span><span id="line-333">       * @return This object.</span>
+<span class="source-line-no">334</span><span id="line-334">       */</span>
+<span class="source-line-no">335</span><span id="line-335">      public Builder templateSuffix(String value) {</span>
+<span class="source-line-no">336</span><span id="line-336">         worker.templateSuffix(value);</span>
+<span class="source-line-no">337</span><span id="line-337">         return this;</span>
+<span class="source-line-no">338</span><span id="line-338">      }</span>
+<span class="source-line-no">339</span><span id="line-339"></span>
+<span class="source-line-no">340</span><span id="line-340">      /**</span>
+<span class="source-line-no">341</span><span id="line-341">       * Sets whether the bridge's default factory caches compiled templates.</span>
+<span class="source-line-no">342</span><span id="line-342">       *</span>
+<span class="source-line-no">343</span><span id="line-343">       * &lt;p&gt;</span>
+<span class="source-line-no">344</span><span id="line-344">       * Defaults to {@link MustacheMixin#DEFAULT_CACHE_TEMPLATES true} (cache forever</span>
+<span class="source-line-no">345</span><span id="line-345">       * &amp;mdash; production-safe). Set {@code false} to enable dev hot-reload (the bridge rebuilds</span>
+<span class="source-line-no">346</span><span id="line-346">       * the factory from a fresh, empty compile-cache on every render). This setting only</span>
+<span class="source-line-no">347</span><span id="line-347">       * applies to the bridge's fallback factory; if a {@link MustacheFactory} bean is</span>
+<span class="source-line-no">348</span><span id="line-348">       * registered, its own caching behavior is honored.</span>
+<span class="source-line-no">349</span><span id="line-349">       *</span>
+<span class="source-line-no">350</span><span id="line-350">       * @param value The new value.</span>
+<span class="source-line-no">351</span><span id="line-351">       * @return This object.</span>
+<span class="source-line-no">352</span><span id="line-352">       */</span>
+<span class="source-line-no">353</span><span id="line-353">      @Override /* ViewMixinBuilder */</span>
+<span class="source-line-no">354</span><span id="line-354">      public Builder cacheTemplates(boolean value) {</span>
+<span class="source-line-no">355</span><span id="line-355">         worker.cacheTemplates(value);</span>
+<span class="source-line-no">356</span><span id="line-356">         return this;</span>
+<span class="source-line-no">357</span><span id="line-357">      }</span>
+<span class="source-line-no">358</span><span id="line-358"></span>
+<span class="source-line-no">359</span><span id="line-359">      /**</span>
+<span class="source-line-no">360</span><span id="line-360">       * Reads the current base path setting (test/inspection helper).</span>
+<span class="source-line-no">361</span><span id="line-361">       *</span>
+<span class="source-line-no">362</span><span id="line-362">       * @return The base path. Never {@code null}.</span>
+<span class="source-line-no">363</span><span id="line-363">       */</span>
+<span class="source-line-no">364</span><span id="line-364">      public String getBasePath() {</span>
+<span class="source-line-no">365</span><span id="line-365">         return worker.getBasePath();</span>
+<span class="source-line-no">366</span><span id="line-366">      }</span>
+<span class="source-line-no">367</span><span id="line-367"></span>
+<span class="source-line-no">368</span><span id="line-368">      /**</span>
+<span class="source-line-no">369</span><span id="line-369">       * Reads the current template-suffix setting (test/inspection helper).</span>
+<span class="source-line-no">370</span><span id="line-370">       *</span>
+<span class="source-line-no">371</span><span id="line-371">       * @return The template suffix. Never {@code null}.</span>
+<span class="source-line-no">372</span><span id="line-372">       */</span>
+<span class="source-line-no">373</span><span id="line-373">      public String getTemplateSuffix() {</span>
+<span class="source-line-no">374</span><span id="line-374">         return worker.getTemplateSuffix();</span>
+<span class="source-line-no">375</span><span id="line-375">      }</span>
+<span class="source-line-no">376</span><span id="line-376"></span>
+<span class="source-line-no">377</span><span id="line-377">      /**</span>
+<span class="source-line-no">378</span><span id="line-378">       * Reads the current cache-templates setting (test/inspection helper).</span>
+<span class="source-line-no">379</span><span id="line-379">       *</span>
+<span class="source-line-no">380</span><span id="line-380">       * @return The cache flag.</span>
+<span class="source-line-no">381</span><span id="line-381">       */</span>
+<span class="source-line-no">382</span><span id="line-382">      public boolean isCacheTemplates() {</span>
+<span class="source-line-no">383</span><span id="line-383">         return worker.isCacheTemplates();</span>
+<span class="source-line-no">384</span><span id="line-384">      }</span>
+<span class="source-line-no">385</span><span id="line-385"></span>
+<span class="source-line-no">386</span><span id="line-386">      /**</span>
+<span class="source-line-no">387</span><span id="line-387">       * Builds the {@link MustacheMixin}.</span>
+<span class="source-line-no">388</span><span id="line-388">       *</span>
+<span class="source-line-no">389</span><span id="line-389">       * @return A new {@link MustacheMixin} instance.</span>
+<span class="source-line-no">390</span><span id="line-390">       */</span>
+<span class="source-line-no">391</span><span id="line-391">      public MustacheMixin build() {</span>
+<span class="source-line-no">392</span><span id="line-392">         return new MustacheMixin(this);</span>
+<span class="source-line-no">393</span><span id="line-393">      }</span>
+<span class="source-line-no">394</span><span id="line-394">   }</span>
+<span class="source-line-no">395</span><span id="line-395">}</span>
 
 
 

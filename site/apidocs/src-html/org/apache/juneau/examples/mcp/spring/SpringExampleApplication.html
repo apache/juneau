@@ -29,71 +29,77 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.examples.mcp.spring;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import org.springframework.boot.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.springframework.boot.autoconfigure.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import org.springframework.boot.web.servlet.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.springframework.context.annotation.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">/**</span>
-<span class="source-line-no">025</span><span id="line-25"> * A minimal Spring Boot application that serves {@link SpringExampleMcpServer} on embedded Tomcat.</span>
-<span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> * Run {@link #main(String[]) main} and the MCP endpoint is available at {@code http://localhost:8080/mcp}</span>
-<span class="source-line-no">029</span><span id="line-29"> * (default Spring Boot port). Point {@link org.apache.juneau.examples.mcp.ExampleClient ExampleClient} at</span>
-<span class="source-line-no">030</span><span id="line-30"> * that URL, or drive it with any MCP client. The three {@code @Bean} methods are the entire integration:</span>
-<span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;ul&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;the {@link GreetingService} the MCP tool resolves via Spring DI;</span>
-<span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;the {@link SpringExampleMcpServer} servlet itself; and</span>
-<span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;a {@link ServletRegistrationBean} mounting it at {@code /*} (so the MCP operation lands at {@code /mcp}).</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;/ul&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> */</span>
-<span class="source-line-no">038</span><span id="line-38">@SpringBootApplication</span>
-<span class="source-line-no">039</span><span id="line-39">public class SpringExampleApplication {</span>
-<span class="source-line-no">040</span><span id="line-40"></span>
-<span class="source-line-no">041</span><span id="line-41">   /**</span>
-<span class="source-line-no">042</span><span id="line-42">    * The Spring-managed service injected into the MCP {@code greet} tool.</span>
-<span class="source-line-no">043</span><span id="line-43">    *</span>
-<span class="source-line-no">044</span><span id="line-44">    * @return A new {@link GreetingService}.</span>
-<span class="source-line-no">045</span><span id="line-45">    */</span>
-<span class="source-line-no">046</span><span id="line-46">   @Bean</span>
-<span class="source-line-no">047</span><span id="line-47">   public GreetingService greetingService() {</span>
-<span class="source-line-no">048</span><span id="line-48">      return new GreetingService();</span>
-<span class="source-line-no">049</span><span id="line-49">   }</span>
-<span class="source-line-no">050</span><span id="line-50"></span>
-<span class="source-line-no">051</span><span id="line-51">   /**</span>
-<span class="source-line-no">052</span><span id="line-52">    * The MCP servlet bean (constructed by Spring so it participates in the application context).</span>
-<span class="source-line-no">053</span><span id="line-53">    *</span>
-<span class="source-line-no">054</span><span id="line-54">    * @return A new {@link SpringExampleMcpServer}.</span>
-<span class="source-line-no">055</span><span id="line-55">    */</span>
-<span class="source-line-no">056</span><span id="line-56">   @Bean</span>
-<span class="source-line-no">057</span><span id="line-57">   public SpringExampleMcpServer springExampleMcpServer() {</span>
-<span class="source-line-no">058</span><span id="line-58">      return new SpringExampleMcpServer();</span>
-<span class="source-line-no">059</span><span id="line-59">   }</span>
-<span class="source-line-no">060</span><span id="line-60"></span>
-<span class="source-line-no">061</span><span id="line-61">   /**</span>
-<span class="source-line-no">062</span><span id="line-62">    * Mounts the MCP servlet on the embedded container.</span>
-<span class="source-line-no">063</span><span id="line-63">    *</span>
-<span class="source-line-no">064</span><span id="line-64">    * @param servlet The MCP servlet bean.</span>
-<span class="source-line-no">065</span><span id="line-65">    * @return The registration mapping the servlet at {@code /*}.</span>
-<span class="source-line-no">066</span><span id="line-66">    */</span>
-<span class="source-line-no">067</span><span id="line-67">   @Bean</span>
-<span class="source-line-no">068</span><span id="line-68">   public ServletRegistrationBean&lt;SpringExampleMcpServer&gt; mcpServletRegistration(SpringExampleMcpServer servlet) {</span>
-<span class="source-line-no">069</span><span id="line-69">      return new ServletRegistrationBean&lt;&gt;(servlet, "/*");</span>
-<span class="source-line-no">070</span><span id="line-70">   }</span>
-<span class="source-line-no">071</span><span id="line-71"></span>
-<span class="source-line-no">072</span><span id="line-72">   /**</span>
-<span class="source-line-no">073</span><span id="line-73">    * Boots the application.</span>
-<span class="source-line-no">074</span><span id="line-74">    *</span>
-<span class="source-line-no">075</span><span id="line-75">    * @param args Standard Spring Boot arguments.</span>
-<span class="source-line-no">076</span><span id="line-76">    */</span>
-<span class="source-line-no">077</span><span id="line-77">   @SuppressWarnings({</span>
-<span class="source-line-no">078</span><span id="line-78">      "resource" // the returned application context intentionally lives for the app's lifetime.</span>
-<span class="source-line-no">079</span><span id="line-79">   })</span>
-<span class="source-line-no">080</span><span id="line-80">   public static void main(String[] args) {</span>
-<span class="source-line-no">081</span><span id="line-81">      SpringApplication.run(SpringExampleApplication.class, args);</span>
-<span class="source-line-no">082</span><span id="line-82">   }</span>
-<span class="source-line-no">083</span><span id="line-83">}</span>
+<span class="source-line-no">019</span><span id="line-19">import java.util.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import org.springframework.boot.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import org.springframework.boot.autoconfigure.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import org.springframework.boot.web.servlet.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.springframework.context.annotation.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">/**</span>
+<span class="source-line-no">027</span><span id="line-27"> * A minimal Spring Boot application that serves {@link SpringExampleMcpServer} on embedded Tomcat.</span>
+<span class="source-line-no">028</span><span id="line-28"> *</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * Run {@link #main(String[]) main} and the MCP endpoint is available at {@code http://localhost:8080/mcp}</span>
+<span class="source-line-no">031</span><span id="line-31"> * (default Spring Boot port). The server listens on the loopback interface only; set the {@code MCP_BIND}</span>
+<span class="source-line-no">032</span><span id="line-32"> * environment variable (e.g. {@code 0.0.0.0}) to listen elsewhere. Point {@link org.apache.juneau.examples.mcp.ExampleClient ExampleClient} at</span>
+<span class="source-line-no">033</span><span id="line-33"> * that URL, or drive it with any MCP client. The three {@code @Bean} methods are the entire integration:</span>
+<span class="source-line-no">034</span><span id="line-34"> *</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;ul&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;the {@link GreetingService} the MCP tool resolves via Spring DI;</span>
+<span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;the {@link SpringExampleMcpServer} servlet itself; and</span>
+<span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;a {@link ServletRegistrationBean} mounting it at {@code /*} (so the MCP operation lands at {@code /mcp}).</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;/ul&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> */</span>
+<span class="source-line-no">041</span><span id="line-41">@SpringBootApplication</span>
+<span class="source-line-no">042</span><span id="line-42">public class SpringExampleApplication {</span>
+<span class="source-line-no">043</span><span id="line-43"></span>
+<span class="source-line-no">044</span><span id="line-44">   /**</span>
+<span class="source-line-no">045</span><span id="line-45">    * The Spring-managed service injected into the MCP {@code greet} tool.</span>
+<span class="source-line-no">046</span><span id="line-46">    *</span>
+<span class="source-line-no">047</span><span id="line-47">    * @return A new {@link GreetingService}.</span>
+<span class="source-line-no">048</span><span id="line-48">    */</span>
+<span class="source-line-no">049</span><span id="line-49">   @Bean</span>
+<span class="source-line-no">050</span><span id="line-50">   public GreetingService greetingService() {</span>
+<span class="source-line-no">051</span><span id="line-51">      return new GreetingService();</span>
+<span class="source-line-no">052</span><span id="line-52">   }</span>
+<span class="source-line-no">053</span><span id="line-53"></span>
+<span class="source-line-no">054</span><span id="line-54">   /**</span>
+<span class="source-line-no">055</span><span id="line-55">    * The MCP servlet bean (constructed by Spring so it participates in the application context).</span>
+<span class="source-line-no">056</span><span id="line-56">    *</span>
+<span class="source-line-no">057</span><span id="line-57">    * @return A new {@link SpringExampleMcpServer}.</span>
+<span class="source-line-no">058</span><span id="line-58">    */</span>
+<span class="source-line-no">059</span><span id="line-59">   @Bean</span>
+<span class="source-line-no">060</span><span id="line-60">   public SpringExampleMcpServer springExampleMcpServer() {</span>
+<span class="source-line-no">061</span><span id="line-61">      return new SpringExampleMcpServer();</span>
+<span class="source-line-no">062</span><span id="line-62">   }</span>
+<span class="source-line-no">063</span><span id="line-63"></span>
+<span class="source-line-no">064</span><span id="line-64">   /**</span>
+<span class="source-line-no">065</span><span id="line-65">    * Mounts the MCP servlet on the embedded container.</span>
+<span class="source-line-no">066</span><span id="line-66">    *</span>
+<span class="source-line-no">067</span><span id="line-67">    * @param servlet The MCP servlet bean.</span>
+<span class="source-line-no">068</span><span id="line-68">    * @return The registration mapping the servlet at {@code /*}.</span>
+<span class="source-line-no">069</span><span id="line-69">    */</span>
+<span class="source-line-no">070</span><span id="line-70">   @Bean</span>
+<span class="source-line-no">071</span><span id="line-71">   public ServletRegistrationBean&lt;SpringExampleMcpServer&gt; mcpServletRegistration(SpringExampleMcpServer servlet) {</span>
+<span class="source-line-no">072</span><span id="line-72">      return new ServletRegistrationBean&lt;&gt;(servlet, "/*");</span>
+<span class="source-line-no">073</span><span id="line-73">   }</span>
+<span class="source-line-no">074</span><span id="line-74"></span>
+<span class="source-line-no">075</span><span id="line-75">   /**</span>
+<span class="source-line-no">076</span><span id="line-76">    * Boots the application.</span>
+<span class="source-line-no">077</span><span id="line-77">    *</span>
+<span class="source-line-no">078</span><span id="line-78">    * @param args Standard Spring Boot arguments.</span>
+<span class="source-line-no">079</span><span id="line-79">    */</span>
+<span class="source-line-no">080</span><span id="line-80">   @SuppressWarnings({</span>
+<span class="source-line-no">081</span><span id="line-81">      "resource" // the returned application context intentionally lives for the app's lifetime.</span>
+<span class="source-line-no">082</span><span id="line-82">   })</span>
+<span class="source-line-no">083</span><span id="line-83">   public static void main(String[] args) {</span>
+<span class="source-line-no">084</span><span id="line-84">      var app = new SpringApplication(SpringExampleApplication.class);</span>
+<span class="source-line-no">085</span><span id="line-85">      // Binds to the loopback interface by default; set MCP_BIND (e.g. 0.0.0.0) to listen elsewhere.</span>
+<span class="source-line-no">086</span><span id="line-86">      app.setDefaultProperties(Map.of("server.address", "${MCP_BIND:127.0.0.1}"));</span>
+<span class="source-line-no">087</span><span id="line-87">      app.run(args);</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89">}</span>
 
 
 

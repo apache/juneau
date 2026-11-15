@@ -117,259 +117,277 @@
 <span class="source-line-no">104</span><span id="line-104">      boolean attemptStepUp = true;</span>
 <span class="source-line-no">105</span><span id="line-105">      int maxScopes = DEFAULT_MAX_SCOPES;</span>
 <span class="source-line-no">106</span><span id="line-106">      Set&lt;String&gt; allowedScopes;</span>
-<span class="source-line-no">107</span><span id="line-107">      final Set&lt;String&gt; previouslyRequestedScopes = st();</span>
-<span class="source-line-no">108</span><span id="line-108"></span>
-<span class="source-line-no">109</span><span id="line-109">      /** Constructor. */</span>
-<span class="source-line-no">110</span><span id="line-110">      protected Builder() {}</span>
-<span class="source-line-no">111</span><span id="line-111"></span>
-<span class="source-line-no">112</span><span id="line-112">      /**</span>
-<span class="source-line-no">113</span><span id="line-113">       * Sets the RFC 8707 resource indicator this authorizer tracks attempts for.  Required.</span>
-<span class="source-line-no">114</span><span id="line-114">       *</span>
-<span class="source-line-no">115</span><span id="line-115">       * @param value The resource URI.</span>
-<span class="source-line-no">116</span><span id="line-116">       * @return This object.</span>
-<span class="source-line-no">117</span><span id="line-117">       */</span>
-<span class="source-line-no">118</span><span id="line-118">      public Builder resource(URI value) {</span>
-<span class="source-line-no">119</span><span id="line-119">         resource = reqnn("value", value);</span>
-<span class="source-line-no">120</span><span id="line-120">         return this;</span>
-<span class="source-line-no">121</span><span id="line-121">      }</span>
-<span class="source-line-no">122</span><span id="line-122"></span>
-<span class="source-line-no">123</span><span id="line-123">      /**</span>
-<span class="source-line-no">124</span><span id="line-124">       * Sets the authorization server issuer.  Required.</span>
-<span class="source-line-no">125</span><span id="line-125">       *</span>
-<span class="source-line-no">126</span><span id="line-126">       * @param value The issuer URI.</span>
-<span class="source-line-no">127</span><span id="line-127">       * @return This object.</span>
-<span class="source-line-no">128</span><span id="line-128">       */</span>
-<span class="source-line-no">129</span><span id="line-129">      public Builder issuer(URI value) {</span>
-<span class="source-line-no">130</span><span id="line-130">         issuer = reqnn("value", value);</span>
-<span class="source-line-no">131</span><span id="line-131">         return this;</span>
-<span class="source-line-no">132</span><span id="line-132">      }</span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">      /**</span>
-<span class="source-line-no">135</span><span id="line-135">       * Sets the scope accumulator.  Defaults to a fresh {@link McpScopeAccumulator}.</span>
-<span class="source-line-no">136</span><span id="line-136">       *</span>
-<span class="source-line-no">137</span><span id="line-137">       * @param value The accumulator.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">138</span><span id="line-138">       * @return This object.</span>
-<span class="source-line-no">139</span><span id="line-139">       */</span>
-<span class="source-line-no">140</span><span id="line-140">      public Builder accumulator(McpScopeAccumulator value) {</span>
-<span class="source-line-no">141</span><span id="line-141">         accumulator = reqnn("value", value);</span>
-<span class="source-line-no">142</span><span id="line-142">         return this;</span>
-<span class="source-line-no">143</span><span id="line-143">      }</span>
-<span class="source-line-no">144</span><span id="line-144"></span>
-<span class="source-line-no">145</span><span id="line-145">      /**</span>
-<span class="source-line-no">146</span><span id="line-146">       * Sets the re-authorization callback invoked with the widened scope union.  Required.</span>
-<span class="source-line-no">147</span><span id="line-147">       *</span>
-<span class="source-line-no">148</span><span id="line-148">       * @param value The reauthorizer.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">149</span><span id="line-149">       * @return This object.</span>
-<span class="source-line-no">150</span><span id="line-150">       */</span>
-<span class="source-line-no">151</span><span id="line-151">      public Builder reauthorizer(Reauthorizer value) {</span>
-<span class="source-line-no">152</span><span id="line-152">         reauthorizer = reqnn("value", value);</span>
-<span class="source-line-no">153</span><span id="line-153">         return this;</span>
-<span class="source-line-no">154</span><span id="line-154">      }</span>
-<span class="source-line-no">155</span><span id="line-155"></span>
-<span class="source-line-no">156</span><span id="line-156">      /**</span>
-<span class="source-line-no">157</span><span id="line-157">       * Sets the hard cap on re-authorization attempts per {@code (resource, operation)} before a permanent failure.</span>
-<span class="source-line-no">158</span><span id="line-158">       * Default 3.</span>
-<span class="source-line-no">159</span><span id="line-159">       *</span>
-<span class="source-line-no">160</span><span id="line-160">       * @param value The maximum attempts.  Must be &amp;ge; 1.</span>
-<span class="source-line-no">161</span><span id="line-161">       * @return This object.</span>
-<span class="source-line-no">162</span><span id="line-162">       */</span>
-<span class="source-line-no">163</span><span id="line-163">      public Builder maxAttempts(int value) {</span>
-<span class="source-line-no">164</span><span id="line-164">         req(value &gt;= 1, "maxAttempts must be &gt;= 1 (was %s)", value);</span>
-<span class="source-line-no">165</span><span id="line-165">         maxAttempts = value;</span>
-<span class="source-line-no">166</span><span id="line-166">         return this;</span>
-<span class="source-line-no">167</span><span id="line-167">      }</span>
-<span class="source-line-no">168</span><span id="line-168"></span>
-<span class="source-line-no">169</span><span id="line-169">      /**</span>
-<span class="source-line-no">170</span><span id="line-170">       * Whether to attempt step-up at all.  Default &lt;jk&gt;true&lt;/jk&gt;; a {@code client_credentials} client MAY set</span>
-<span class="source-line-no">171</span><span id="line-171">       * &lt;jk&gt;false&lt;/jk&gt; to abort immediately on the first challenge.</span>
-<span class="source-line-no">172</span><span id="line-172">       *</span>
-<span class="source-line-no">173</span><span id="line-173">       * @param value &lt;jk&gt;false&lt;/jk&gt; to abort immediately rather than attempt step-up.</span>
-<span class="source-line-no">174</span><span id="line-174">       * @return This object.</span>
-<span class="source-line-no">175</span><span id="line-175">       */</span>
-<span class="source-line-no">176</span><span id="line-176">      public Builder attemptStepUp(boolean value) {</span>
-<span class="source-line-no">177</span><span id="line-177">         attemptStepUp = value;</span>
-<span class="source-line-no">178</span><span id="line-178">         return this;</span>
-<span class="source-line-no">179</span><span id="line-179">      }</span>
-<span class="source-line-no">180</span><span id="line-180"></span>
-<span class="source-line-no">181</span><span id="line-181">      /**</span>
-<span class="source-line-no">182</span><span id="line-182">       * Restricts the scopes a server challenge may add to the step-up union.</span>
-<span class="source-line-no">183</span><span id="line-183">       *</span>
-<span class="source-line-no">184</span><span id="line-184">       * &lt;p&gt;</span>
-<span class="source-line-no">185</span><span id="line-185">       * When set, a challenge naming any scope outside this set (and outside the previously-requested scopes) aborts</span>
-<span class="source-line-no">186</span><span id="line-186">       * the step-up with an {@link McpAuthException} instead of re-authorizing.  When unset, only the</span>
-<span class="source-line-no">187</span><span id="line-187">       * {@link #maxScopes(int) scope-count cap} applies.</span>
-<span class="source-line-no">188</span><span id="line-188">       *</span>
-<span class="source-line-no">189</span><span id="line-189">       * @param values The permitted scopes.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">190</span><span id="line-190">       * @return This object.</span>
-<span class="source-line-no">191</span><span id="line-191">       */</span>
-<span class="source-line-no">192</span><span id="line-192">      public Builder allowedScopes(String... values) {</span>
-<span class="source-line-no">193</span><span id="line-193">         reqnn("values", values);</span>
-<span class="source-line-no">194</span><span id="line-194">         var set = new LinkedHashSet&lt;String&gt;();</span>
-<span class="source-line-no">195</span><span id="line-195">         for (var v : values)</span>
-<span class="source-line-no">196</span><span id="line-196">            set.add(reqnb("scope", v));</span>
-<span class="source-line-no">197</span><span id="line-197">         allowedScopes = set;</span>
-<span class="source-line-no">198</span><span id="line-198">         return this;</span>
-<span class="source-line-no">199</span><span id="line-199">      }</span>
-<span class="source-line-no">200</span><span id="line-200"></span>
-<span class="source-line-no">201</span><span id="line-201">      /**</span>
-<span class="source-line-no">202</span><span id="line-202">       * Caps the number of scopes the accumulated step-up union may contain.</span>
-<span class="source-line-no">203</span><span id="line-203">       *</span>
-<span class="source-line-no">204</span><span id="line-204">       * @param value The cap.  Must be &amp;gt;= 1.  Defaults to {@value McpStepUpAuthorizer#DEFAULT_MAX_SCOPES}.</span>
-<span class="source-line-no">205</span><span id="line-205">       * @return This object.</span>
-<span class="source-line-no">206</span><span id="line-206">       */</span>
-<span class="source-line-no">207</span><span id="line-207">      public Builder maxScopes(int value) {</span>
-<span class="source-line-no">208</span><span id="line-208">         req(value &gt;= 1, "maxScopes must be &gt;= 1 (was %s)", value);</span>
-<span class="source-line-no">209</span><span id="line-209">         maxScopes = value;</span>
-<span class="source-line-no">210</span><span id="line-210">         return this;</span>
-<span class="source-line-no">211</span><span id="line-211">      }</span>
-<span class="source-line-no">212</span><span id="line-212"></span>
-<span class="source-line-no">213</span><span id="line-213">      /**</span>
-<span class="source-line-no">214</span><span id="line-214">       * Seeds the scope accumulator with the client's previously-requested scopes so the first union preserves them.</span>
-<span class="source-line-no">215</span><span id="line-215">       *</span>
-<span class="source-line-no">216</span><span id="line-216">       * @param values The previously-requested scopes.</span>
-<span class="source-line-no">217</span><span id="line-217">       * @return This object.</span>
-<span class="source-line-no">218</span><span id="line-218">       */</span>
-<span class="source-line-no">219</span><span id="line-219">      public Builder previouslyRequestedScopes(String... values) {</span>
-<span class="source-line-no">220</span><span id="line-220">         reqnn("values", values);</span>
-<span class="source-line-no">221</span><span id="line-221">         for (var v : values) {</span>
-<span class="source-line-no">222</span><span id="line-222">            reqnb("scope", v);</span>
-<span class="source-line-no">223</span><span id="line-223">            previouslyRequestedScopes.add(v);</span>
-<span class="source-line-no">224</span><span id="line-224">         }</span>
-<span class="source-line-no">225</span><span id="line-225">         return this;</span>
-<span class="source-line-no">226</span><span id="line-226">      }</span>
-<span class="source-line-no">227</span><span id="line-227"></span>
-<span class="source-line-no">228</span><span id="line-228">      /**</span>
-<span class="source-line-no">229</span><span id="line-229">       * Builds the authorizer.</span>
-<span class="source-line-no">230</span><span id="line-230">       *</span>
-<span class="source-line-no">231</span><span id="line-231">       * @return A new {@link McpStepUpAuthorizer}.</span>
-<span class="source-line-no">232</span><span id="line-232">       */</span>
-<span class="source-line-no">233</span><span id="line-233">      public McpStepUpAuthorizer build() {</span>
-<span class="source-line-no">234</span><span id="line-234">         if (resource == null)</span>
-<span class="source-line-no">235</span><span id="line-235">            throw isex("McpStepUpAuthorizer requires resource(...)");</span>
-<span class="source-line-no">236</span><span id="line-236">         if (issuer == null)</span>
-<span class="source-line-no">237</span><span id="line-237">            throw isex("McpStepUpAuthorizer requires issuer(...)");</span>
-<span class="source-line-no">238</span><span id="line-238">         if (reauthorizer == null)</span>
-<span class="source-line-no">239</span><span id="line-239">            throw isex("McpStepUpAuthorizer requires reauthorizer(...)");</span>
-<span class="source-line-no">240</span><span id="line-240">         if (accumulator == null)</span>
-<span class="source-line-no">241</span><span id="line-241">            accumulator = new McpScopeAccumulator();</span>
-<span class="source-line-no">242</span><span id="line-242">         if (! previouslyRequestedScopes.isEmpty())</span>
-<span class="source-line-no">243</span><span id="line-243">            accumulator.seed(resource, issuer, previouslyRequestedScopes);</span>
-<span class="source-line-no">244</span><span id="line-244">         return new McpStepUpAuthorizer(this);</span>
-<span class="source-line-no">245</span><span id="line-245">      }</span>
-<span class="source-line-no">246</span><span id="line-246">   }</span>
-<span class="source-line-no">247</span><span id="line-247"></span>
-<span class="source-line-no">248</span><span id="line-248">   private final URI resource;</span>
-<span class="source-line-no">249</span><span id="line-249">   private final URI issuer;</span>
-<span class="source-line-no">250</span><span id="line-250">   private final McpScopeAccumulator accumulator;</span>
-<span class="source-line-no">251</span><span id="line-251">   private final Reauthorizer reauthorizer;</span>
-<span class="source-line-no">252</span><span id="line-252">   private final int maxAttempts;</span>
-<span class="source-line-no">253</span><span id="line-253">   private final boolean attemptStepUp;</span>
-<span class="source-line-no">254</span><span id="line-254">   private final int maxScopes;</span>
-<span class="source-line-no">255</span><span id="line-255">   private final Set&lt;String&gt; allowedScopes;</span>
-<span class="source-line-no">256</span><span id="line-256">   private final ConcurrentMap&lt;String,Integer&gt; attemptsByOperation = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">257</span><span id="line-257"></span>
-<span class="source-line-no">258</span><span id="line-258">   /**</span>
-<span class="source-line-no">259</span><span id="line-259">    * Constructor.</span>
-<span class="source-line-no">260</span><span id="line-260">    *</span>
-<span class="source-line-no">261</span><span id="line-261">    * @param b The builder.</span>
-<span class="source-line-no">262</span><span id="line-262">    */</span>
-<span class="source-line-no">263</span><span id="line-263">   protected McpStepUpAuthorizer(Builder b) {</span>
-<span class="source-line-no">264</span><span id="line-264">      this.resource = b.resource;</span>
-<span class="source-line-no">265</span><span id="line-265">      this.issuer = b.issuer;</span>
-<span class="source-line-no">266</span><span id="line-266">      this.accumulator = b.accumulator;</span>
-<span class="source-line-no">267</span><span id="line-267">      this.reauthorizer = b.reauthorizer;</span>
-<span class="source-line-no">268</span><span id="line-268">      this.maxAttempts = b.maxAttempts;</span>
-<span class="source-line-no">269</span><span id="line-269">      this.attemptStepUp = b.attemptStepUp;</span>
-<span class="source-line-no">270</span><span id="line-270">      this.maxScopes = b.maxScopes;</span>
-<span class="source-line-no">271</span><span id="line-271">      this.allowedScopes = b.allowedScopes == null ? null : Set.copyOf(b.allowedScopes);</span>
-<span class="source-line-no">272</span><span id="line-272">   }</span>
-<span class="source-line-no">273</span><span id="line-273"></span>
-<span class="source-line-no">274</span><span id="line-274">   /**</span>
-<span class="source-line-no">275</span><span id="line-275">    * Executes an MCP call, transparently handling SEP-2350 step-up: on an {@code insufficient_scope} challenge it</span>
-<span class="source-line-no">276</span><span id="line-276">    * unions the challenge scopes onto the accumulated set, re-authorizes, and retries &amp;mdash; up to the configured</span>
-<span class="source-line-no">277</span><span id="line-277">    * attempt cap, after which it throws a permanent {@link McpAuthException}.</span>
+<span class="source-line-no">107</span><span id="line-107">      boolean allowAnyScope;</span>
+<span class="source-line-no">108</span><span id="line-108">      final Set&lt;String&gt; previouslyRequestedScopes = st();</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">      /** Constructor. */</span>
+<span class="source-line-no">111</span><span id="line-111">      protected Builder() {}</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">      /**</span>
+<span class="source-line-no">114</span><span id="line-114">       * Sets the RFC 8707 resource indicator this authorizer tracks attempts for.  Required.</span>
+<span class="source-line-no">115</span><span id="line-115">       *</span>
+<span class="source-line-no">116</span><span id="line-116">       * @param value The resource URI.</span>
+<span class="source-line-no">117</span><span id="line-117">       * @return This object.</span>
+<span class="source-line-no">118</span><span id="line-118">       */</span>
+<span class="source-line-no">119</span><span id="line-119">      public Builder resource(URI value) {</span>
+<span class="source-line-no">120</span><span id="line-120">         resource = reqnn("value", value);</span>
+<span class="source-line-no">121</span><span id="line-121">         return this;</span>
+<span class="source-line-no">122</span><span id="line-122">      }</span>
+<span class="source-line-no">123</span><span id="line-123"></span>
+<span class="source-line-no">124</span><span id="line-124">      /**</span>
+<span class="source-line-no">125</span><span id="line-125">       * Sets the authorization server issuer.  Required.</span>
+<span class="source-line-no">126</span><span id="line-126">       *</span>
+<span class="source-line-no">127</span><span id="line-127">       * @param value The issuer URI.</span>
+<span class="source-line-no">128</span><span id="line-128">       * @return This object.</span>
+<span class="source-line-no">129</span><span id="line-129">       */</span>
+<span class="source-line-no">130</span><span id="line-130">      public Builder issuer(URI value) {</span>
+<span class="source-line-no">131</span><span id="line-131">         issuer = reqnn("value", value);</span>
+<span class="source-line-no">132</span><span id="line-132">         return this;</span>
+<span class="source-line-no">133</span><span id="line-133">      }</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">      /**</span>
+<span class="source-line-no">136</span><span id="line-136">       * Sets the scope accumulator.  Defaults to a fresh {@link McpScopeAccumulator}.</span>
+<span class="source-line-no">137</span><span id="line-137">       *</span>
+<span class="source-line-no">138</span><span id="line-138">       * @param value The accumulator.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">139</span><span id="line-139">       * @return This object.</span>
+<span class="source-line-no">140</span><span id="line-140">       */</span>
+<span class="source-line-no">141</span><span id="line-141">      public Builder accumulator(McpScopeAccumulator value) {</span>
+<span class="source-line-no">142</span><span id="line-142">         accumulator = reqnn("value", value);</span>
+<span class="source-line-no">143</span><span id="line-143">         return this;</span>
+<span class="source-line-no">144</span><span id="line-144">      }</span>
+<span class="source-line-no">145</span><span id="line-145"></span>
+<span class="source-line-no">146</span><span id="line-146">      /**</span>
+<span class="source-line-no">147</span><span id="line-147">       * Sets the re-authorization callback invoked with the widened scope union.  Required.</span>
+<span class="source-line-no">148</span><span id="line-148">       *</span>
+<span class="source-line-no">149</span><span id="line-149">       * @param value The reauthorizer.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">150</span><span id="line-150">       * @return This object.</span>
+<span class="source-line-no">151</span><span id="line-151">       */</span>
+<span class="source-line-no">152</span><span id="line-152">      public Builder reauthorizer(Reauthorizer value) {</span>
+<span class="source-line-no">153</span><span id="line-153">         reauthorizer = reqnn("value", value);</span>
+<span class="source-line-no">154</span><span id="line-154">         return this;</span>
+<span class="source-line-no">155</span><span id="line-155">      }</span>
+<span class="source-line-no">156</span><span id="line-156"></span>
+<span class="source-line-no">157</span><span id="line-157">      /**</span>
+<span class="source-line-no">158</span><span id="line-158">       * Sets the hard cap on re-authorization attempts per {@code (resource, operation)} before a permanent failure.</span>
+<span class="source-line-no">159</span><span id="line-159">       * Default 3.</span>
+<span class="source-line-no">160</span><span id="line-160">       *</span>
+<span class="source-line-no">161</span><span id="line-161">       * @param value The maximum attempts.  Must be &amp;ge; 1.</span>
+<span class="source-line-no">162</span><span id="line-162">       * @return This object.</span>
+<span class="source-line-no">163</span><span id="line-163">       */</span>
+<span class="source-line-no">164</span><span id="line-164">      public Builder maxAttempts(int value) {</span>
+<span class="source-line-no">165</span><span id="line-165">         req(value &gt;= 1, "maxAttempts must be &gt;= 1 (was %s)", value);</span>
+<span class="source-line-no">166</span><span id="line-166">         maxAttempts = value;</span>
+<span class="source-line-no">167</span><span id="line-167">         return this;</span>
+<span class="source-line-no">168</span><span id="line-168">      }</span>
+<span class="source-line-no">169</span><span id="line-169"></span>
+<span class="source-line-no">170</span><span id="line-170">      /**</span>
+<span class="source-line-no">171</span><span id="line-171">       * Whether to attempt step-up at all.  Default &lt;jk&gt;true&lt;/jk&gt;; a {@code client_credentials} client MAY set</span>
+<span class="source-line-no">172</span><span id="line-172">       * &lt;jk&gt;false&lt;/jk&gt; to abort immediately on the first challenge.</span>
+<span class="source-line-no">173</span><span id="line-173">       *</span>
+<span class="source-line-no">174</span><span id="line-174">       * @param value &lt;jk&gt;false&lt;/jk&gt; to abort immediately rather than attempt step-up.</span>
+<span class="source-line-no">175</span><span id="line-175">       * @return This object.</span>
+<span class="source-line-no">176</span><span id="line-176">       */</span>
+<span class="source-line-no">177</span><span id="line-177">      public Builder attemptStepUp(boolean value) {</span>
+<span class="source-line-no">178</span><span id="line-178">         attemptStepUp = value;</span>
+<span class="source-line-no">179</span><span id="line-179">         return this;</span>
+<span class="source-line-no">180</span><span id="line-180">      }</span>
+<span class="source-line-no">181</span><span id="line-181"></span>
+<span class="source-line-no">182</span><span id="line-182">      /**</span>
+<span class="source-line-no">183</span><span id="line-183">       * Restricts the scopes a server challenge may add to the step-up union.</span>
+<span class="source-line-no">184</span><span id="line-184">       *</span>
+<span class="source-line-no">185</span><span id="line-185">       * &lt;p&gt;</span>
+<span class="source-line-no">186</span><span id="line-186">       * When set, a challenge naming any scope outside this set (and outside the previously-requested scopes) aborts</span>
+<span class="source-line-no">187</span><span id="line-187">       * the step-up with an {@link McpAuthException} instead of re-authorizing.  When unset, the allow-list defaults to</span>
+<span class="source-line-no">188</span><span id="line-188">       * the scopes passed to {@link #previouslyRequestedScopes(String...)}; call {@link #allowAnyScope()} to accept</span>
+<span class="source-line-no">189</span><span id="line-189">       * any scope the server names (subject to the {@link #maxScopes(int) scope-count cap}).</span>
+<span class="source-line-no">190</span><span id="line-190">       *</span>
+<span class="source-line-no">191</span><span id="line-191">       * @param values The permitted scopes.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">192</span><span id="line-192">       * @return This object.</span>
+<span class="source-line-no">193</span><span id="line-193">       */</span>
+<span class="source-line-no">194</span><span id="line-194">      public Builder allowedScopes(String... values) {</span>
+<span class="source-line-no">195</span><span id="line-195">         reqnn("values", values);</span>
+<span class="source-line-no">196</span><span id="line-196">         var set = new LinkedHashSet&lt;String&gt;();</span>
+<span class="source-line-no">197</span><span id="line-197">         for (var v : values)</span>
+<span class="source-line-no">198</span><span id="line-198">            set.add(reqnb("scope", v));</span>
+<span class="source-line-no">199</span><span id="line-199">         allowedScopes = set;</span>
+<span class="source-line-no">200</span><span id="line-200">         return this;</span>
+<span class="source-line-no">201</span><span id="line-201">      }</span>
+<span class="source-line-no">202</span><span id="line-202"></span>
+<span class="source-line-no">203</span><span id="line-203">      /**</span>
+<span class="source-line-no">204</span><span id="line-204">       * Accepts any scope a server challenge names, bounded only by the {@link #maxScopes(int) scope-count cap}.</span>
+<span class="source-line-no">205</span><span id="line-205">       *</span>
+<span class="source-line-no">206</span><span id="line-206">       * &lt;p&gt;</span>
+<span class="source-line-no">207</span><span id="line-207">       * Without this and without {@link #allowedScopes(String...)}, a step-up may only re-request scopes the client</span>
+<span class="source-line-no">208</span><span id="line-208">       * already holds.</span>
+<span class="source-line-no">209</span><span id="line-209">       *</span>
+<span class="source-line-no">210</span><span id="line-210">       * @return This object.</span>
+<span class="source-line-no">211</span><span id="line-211">       */</span>
+<span class="source-line-no">212</span><span id="line-212">      public Builder allowAnyScope() {</span>
+<span class="source-line-no">213</span><span id="line-213">         allowAnyScope = true;</span>
+<span class="source-line-no">214</span><span id="line-214">         return this;</span>
+<span class="source-line-no">215</span><span id="line-215">      }</span>
+<span class="source-line-no">216</span><span id="line-216"></span>
+<span class="source-line-no">217</span><span id="line-217">      /**</span>
+<span class="source-line-no">218</span><span id="line-218">       * Caps the number of scopes the accumulated step-up union may contain.</span>
+<span class="source-line-no">219</span><span id="line-219">       *</span>
+<span class="source-line-no">220</span><span id="line-220">       * @param value The cap.  Must be &amp;gt;= 1.  Defaults to {@value McpStepUpAuthorizer#DEFAULT_MAX_SCOPES}.</span>
+<span class="source-line-no">221</span><span id="line-221">       * @return This object.</span>
+<span class="source-line-no">222</span><span id="line-222">       */</span>
+<span class="source-line-no">223</span><span id="line-223">      public Builder maxScopes(int value) {</span>
+<span class="source-line-no">224</span><span id="line-224">         req(value &gt;= 1, "maxScopes must be &gt;= 1 (was %s)", value);</span>
+<span class="source-line-no">225</span><span id="line-225">         maxScopes = value;</span>
+<span class="source-line-no">226</span><span id="line-226">         return this;</span>
+<span class="source-line-no">227</span><span id="line-227">      }</span>
+<span class="source-line-no">228</span><span id="line-228"></span>
+<span class="source-line-no">229</span><span id="line-229">      /**</span>
+<span class="source-line-no">230</span><span id="line-230">       * Seeds the scope accumulator with the client's previously-requested scopes so the first union preserves them.</span>
+<span class="source-line-no">231</span><span id="line-231">       *</span>
+<span class="source-line-no">232</span><span id="line-232">       * @param values The previously-requested scopes.</span>
+<span class="source-line-no">233</span><span id="line-233">       * @return This object.</span>
+<span class="source-line-no">234</span><span id="line-234">       */</span>
+<span class="source-line-no">235</span><span id="line-235">      public Builder previouslyRequestedScopes(String... values) {</span>
+<span class="source-line-no">236</span><span id="line-236">         reqnn("values", values);</span>
+<span class="source-line-no">237</span><span id="line-237">         for (var v : values) {</span>
+<span class="source-line-no">238</span><span id="line-238">            reqnb("scope", v);</span>
+<span class="source-line-no">239</span><span id="line-239">            previouslyRequestedScopes.add(v);</span>
+<span class="source-line-no">240</span><span id="line-240">         }</span>
+<span class="source-line-no">241</span><span id="line-241">         return this;</span>
+<span class="source-line-no">242</span><span id="line-242">      }</span>
+<span class="source-line-no">243</span><span id="line-243"></span>
+<span class="source-line-no">244</span><span id="line-244">      /**</span>
+<span class="source-line-no">245</span><span id="line-245">       * Builds the authorizer.</span>
+<span class="source-line-no">246</span><span id="line-246">       *</span>
+<span class="source-line-no">247</span><span id="line-247">       * @return A new {@link McpStepUpAuthorizer}.</span>
+<span class="source-line-no">248</span><span id="line-248">       */</span>
+<span class="source-line-no">249</span><span id="line-249">      public McpStepUpAuthorizer build() {</span>
+<span class="source-line-no">250</span><span id="line-250">         if (resource == null)</span>
+<span class="source-line-no">251</span><span id="line-251">            throw isex("McpStepUpAuthorizer requires resource(...)");</span>
+<span class="source-line-no">252</span><span id="line-252">         if (issuer == null)</span>
+<span class="source-line-no">253</span><span id="line-253">            throw isex("McpStepUpAuthorizer requires issuer(...)");</span>
+<span class="source-line-no">254</span><span id="line-254">         if (reauthorizer == null)</span>
+<span class="source-line-no">255</span><span id="line-255">            throw isex("McpStepUpAuthorizer requires reauthorizer(...)");</span>
+<span class="source-line-no">256</span><span id="line-256">         if (accumulator == null)</span>
+<span class="source-line-no">257</span><span id="line-257">            accumulator = new McpScopeAccumulator();</span>
+<span class="source-line-no">258</span><span id="line-258">         if (! previouslyRequestedScopes.isEmpty())</span>
+<span class="source-line-no">259</span><span id="line-259">            accumulator.seed(resource, issuer, previouslyRequestedScopes);</span>
+<span class="source-line-no">260</span><span id="line-260">         if (allowedScopes == null &amp;&amp; ! allowAnyScope)</span>
+<span class="source-line-no">261</span><span id="line-261">            allowedScopes = new LinkedHashSet&lt;&gt;(previouslyRequestedScopes);</span>
+<span class="source-line-no">262</span><span id="line-262">         return new McpStepUpAuthorizer(this);</span>
+<span class="source-line-no">263</span><span id="line-263">      }</span>
+<span class="source-line-no">264</span><span id="line-264">   }</span>
+<span class="source-line-no">265</span><span id="line-265"></span>
+<span class="source-line-no">266</span><span id="line-266">   private final URI resource;</span>
+<span class="source-line-no">267</span><span id="line-267">   private final URI issuer;</span>
+<span class="source-line-no">268</span><span id="line-268">   private final McpScopeAccumulator accumulator;</span>
+<span class="source-line-no">269</span><span id="line-269">   private final Reauthorizer reauthorizer;</span>
+<span class="source-line-no">270</span><span id="line-270">   private final int maxAttempts;</span>
+<span class="source-line-no">271</span><span id="line-271">   private final boolean attemptStepUp;</span>
+<span class="source-line-no">272</span><span id="line-272">   private final int maxScopes;</span>
+<span class="source-line-no">273</span><span id="line-273">   private final Set&lt;String&gt; allowedScopes;</span>
+<span class="source-line-no">274</span><span id="line-274">   private final ConcurrentMap&lt;String,Integer&gt; attemptsByOperation = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">275</span><span id="line-275"></span>
+<span class="source-line-no">276</span><span id="line-276">   /**</span>
+<span class="source-line-no">277</span><span id="line-277">    * Constructor.</span>
 <span class="source-line-no">278</span><span id="line-278">    *</span>
-<span class="source-line-no">279</span><span id="line-279">    * @param &lt;T&gt; The call result type.</span>
-<span class="source-line-no">280</span><span id="line-280">    * @param operation The operation identifier (e.g. {@code tools/call:deploy}) used for per-operation attempt</span>
-<span class="source-line-no">281</span><span id="line-281">    *    tracking.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">282</span><span id="line-282">    * @param call The MCP call.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">283</span><span id="line-283">    * @return The successful call result.</span>
-<span class="source-line-no">284</span><span id="line-284">    * @throws McpAuthException If step-up is disabled, or the attempt cap is exceeded (permanent authorization failure).</span>
-<span class="source-line-no">285</span><span id="line-285">    */</span>
-<span class="source-line-no">286</span><span id="line-286">   @SuppressWarnings({</span>
-<span class="source-line-no">287</span><span id="line-287">      "java:S3776" // Branching is inherent to the step-up retry loop.</span>
-<span class="source-line-no">288</span><span id="line-288">   })</span>
-<span class="source-line-no">289</span><span id="line-289">   public &lt;T&gt; T execute(String operation, ScopedCall&lt;T&gt; call) {</span>
-<span class="source-line-no">290</span><span id="line-290">      reqnb("operation", operation);</span>
-<span class="source-line-no">291</span><span id="line-291">      reqnn("call", call);</span>
-<span class="source-line-no">292</span><span id="line-292">      var opKey = opKey(operation);</span>
-<span class="source-line-no">293</span><span id="line-293">      while (true) {</span>
-<span class="source-line-no">294</span><span id="line-294">         try {</span>
-<span class="source-line-no">295</span><span id="line-295">            var result = call.call();</span>
-<span class="source-line-no">296</span><span id="line-296">            // Success clears the operation's attempt burst so a later legitimate step-up starts fresh.</span>
-<span class="source-line-no">297</span><span id="line-297">            attemptsByOperation.remove(opKey);</span>
-<span class="source-line-no">298</span><span id="line-298">            return result;</span>
-<span class="source-line-no">299</span><span id="line-299">         } catch (McpInsufficientScopeException e) {</span>
-<span class="source-line-no">300</span><span id="line-300">            if (! attemptStepUp)</span>
-<span class="source-line-no">301</span><span id="line-301">               throw new McpAuthException("Step-up authorization aborted for operation '" + operation</span>
-<span class="source-line-no">302</span><span id="line-302">                  + "' (attemptStepUp=false)", e);</span>
-<span class="source-line-no">303</span><span id="line-303">            var used = attemptsByOperation.merge(opKey, 1, Integer::sum);</span>
-<span class="source-line-no">304</span><span id="line-304">            if (used &gt; maxAttempts)</span>
-<span class="source-line-no">305</span><span id="line-305">               throw new McpAuthException("Step-up authorization exhausted after " + maxAttempts</span>
-<span class="source-line-no">306</span><span id="line-306">                  + " attempt(s) for resource '" + resource + "' operation '" + operation</span>
-<span class="source-line-no">307</span><span id="line-307">                  + "'; treating as a permanent authorization failure", e);</span>
-<span class="source-line-no">308</span><span id="line-308">            var requested = e.challenge().scopes();</span>
-<span class="source-line-no">309</span><span id="line-309">            if (allowedScopes != null &amp;&amp; requested != null) {</span>
-<span class="source-line-no">310</span><span id="line-310">               var known = accumulator.current(resource, issuer);</span>
-<span class="source-line-no">311</span><span id="line-311">               for (var sc : requested)</span>
-<span class="source-line-no">312</span><span id="line-312">                  if (! allowedScopes.contains(sc) &amp;&amp; ! known.contains(sc))</span>
-<span class="source-line-no">313</span><span id="line-313">                     throw new McpAuthException("Step-up authorization refused for operation '" + operation</span>
-<span class="source-line-no">314</span><span id="line-314">                        + "': the server requested a scope outside the configured allow-list", e);</span>
-<span class="source-line-no">315</span><span id="line-315">            }</span>
-<span class="source-line-no">316</span><span id="line-316">            // Check the cap before accumulating so a refused challenge leaves the stored scope set untouched.</span>
-<span class="source-line-no">317</span><span id="line-317">            if (McpScopeAccumulator.union(accumulator.current(resource, issuer), requested).size() &gt; maxScopes)</span>
-<span class="source-line-no">318</span><span id="line-318">               throw new McpAuthException("Step-up authorization refused for operation '" + operation</span>
-<span class="source-line-no">319</span><span id="line-319">                  + "': the requested scope set exceeds the maximum of " + maxScopes, e);</span>
-<span class="source-line-no">320</span><span id="line-320">            var union = accumulator.accumulate(resource, issuer, requested);</span>
-<span class="source-line-no">321</span><span id="line-321">            reauthorizer.reauthorize(union);</span>
-<span class="source-line-no">322</span><span id="line-322">         }</span>
-<span class="source-line-no">323</span><span id="line-323">      }</span>
-<span class="source-line-no">324</span><span id="line-324">   }</span>
-<span class="source-line-no">325</span><span id="line-325"></span>
-<span class="source-line-no">326</span><span id="line-326">   /**</span>
-<span class="source-line-no">327</span><span id="line-327">    * Returns the number of step-up attempts recorded for the given operation.</span>
-<span class="source-line-no">328</span><span id="line-328">    *</span>
-<span class="source-line-no">329</span><span id="line-329">    * @param operation The operation identifier.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">330</span><span id="line-330">    * @return The recorded attempt count.</span>
-<span class="source-line-no">331</span><span id="line-331">    */</span>
-<span class="source-line-no">332</span><span id="line-332">   public int attempts(String operation) {</span>
-<span class="source-line-no">333</span><span id="line-333">      reqnb("operation", operation);</span>
-<span class="source-line-no">334</span><span id="line-334">      return attemptsByOperation.getOrDefault(opKey(operation), 0);</span>
-<span class="source-line-no">335</span><span id="line-335">   }</span>
-<span class="source-line-no">336</span><span id="line-336"></span>
-<span class="source-line-no">337</span><span id="line-337">   /**</span>
-<span class="source-line-no">338</span><span id="line-338">    * Clears the recorded step-up attempt count for a single operation (e.g. after the caller has resolved the cause of</span>
-<span class="source-line-no">339</span><span id="line-339">    * a prior permanent failure), so a subsequent {@link #execute(String, ScopedCall)} may step up again.</span>
-<span class="source-line-no">340</span><span id="line-340">    *</span>
-<span class="source-line-no">341</span><span id="line-341">    * @param operation The operation identifier.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">342</span><span id="line-342">    */</span>
-<span class="source-line-no">343</span><span id="line-343">   public void reset(String operation) {</span>
-<span class="source-line-no">344</span><span id="line-344">      reqnb("operation", operation);</span>
-<span class="source-line-no">345</span><span id="line-345">      attemptsByOperation.remove(opKey(operation));</span>
-<span class="source-line-no">346</span><span id="line-346">   }</span>
-<span class="source-line-no">347</span><span id="line-347"></span>
-<span class="source-line-no">348</span><span id="line-348">   /**</span>
-<span class="source-line-no">349</span><span id="line-349">    * Clears all recorded step-up attempt counts for this authorizer's resource across every operation.</span>
-<span class="source-line-no">350</span><span id="line-350">    */</span>
-<span class="source-line-no">351</span><span id="line-351">   public void resetAll() {</span>
-<span class="source-line-no">352</span><span id="line-352">      attemptsByOperation.clear();</span>
+<span class="source-line-no">279</span><span id="line-279">    * @param b The builder.</span>
+<span class="source-line-no">280</span><span id="line-280">    */</span>
+<span class="source-line-no">281</span><span id="line-281">   protected McpStepUpAuthorizer(Builder b) {</span>
+<span class="source-line-no">282</span><span id="line-282">      this.resource = b.resource;</span>
+<span class="source-line-no">283</span><span id="line-283">      this.issuer = b.issuer;</span>
+<span class="source-line-no">284</span><span id="line-284">      this.accumulator = b.accumulator;</span>
+<span class="source-line-no">285</span><span id="line-285">      this.reauthorizer = b.reauthorizer;</span>
+<span class="source-line-no">286</span><span id="line-286">      this.maxAttempts = b.maxAttempts;</span>
+<span class="source-line-no">287</span><span id="line-287">      this.attemptStepUp = b.attemptStepUp;</span>
+<span class="source-line-no">288</span><span id="line-288">      this.maxScopes = b.maxScopes;</span>
+<span class="source-line-no">289</span><span id="line-289">      this.allowedScopes = b.allowedScopes == null ? null : Set.copyOf(b.allowedScopes);</span>
+<span class="source-line-no">290</span><span id="line-290">   }</span>
+<span class="source-line-no">291</span><span id="line-291"></span>
+<span class="source-line-no">292</span><span id="line-292">   /**</span>
+<span class="source-line-no">293</span><span id="line-293">    * Executes an MCP call, transparently handling SEP-2350 step-up: on an {@code insufficient_scope} challenge it</span>
+<span class="source-line-no">294</span><span id="line-294">    * unions the challenge scopes onto the accumulated set, re-authorizes, and retries &amp;mdash; up to the configured</span>
+<span class="source-line-no">295</span><span id="line-295">    * attempt cap, after which it throws a permanent {@link McpAuthException}.</span>
+<span class="source-line-no">296</span><span id="line-296">    *</span>
+<span class="source-line-no">297</span><span id="line-297">    * @param &lt;T&gt; The call result type.</span>
+<span class="source-line-no">298</span><span id="line-298">    * @param operation The operation identifier (e.g. {@code tools/call:deploy}) used for per-operation attempt</span>
+<span class="source-line-no">299</span><span id="line-299">    *    tracking.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">300</span><span id="line-300">    * @param call The MCP call.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">301</span><span id="line-301">    * @return The successful call result.</span>
+<span class="source-line-no">302</span><span id="line-302">    * @throws McpAuthException If step-up is disabled, or the attempt cap is exceeded (permanent authorization failure).</span>
+<span class="source-line-no">303</span><span id="line-303">    */</span>
+<span class="source-line-no">304</span><span id="line-304">   @SuppressWarnings({</span>
+<span class="source-line-no">305</span><span id="line-305">      "java:S3776" // Branching is inherent to the step-up retry loop.</span>
+<span class="source-line-no">306</span><span id="line-306">   })</span>
+<span class="source-line-no">307</span><span id="line-307">   public &lt;T&gt; T execute(String operation, ScopedCall&lt;T&gt; call) {</span>
+<span class="source-line-no">308</span><span id="line-308">      reqnb("operation", operation);</span>
+<span class="source-line-no">309</span><span id="line-309">      reqnn("call", call);</span>
+<span class="source-line-no">310</span><span id="line-310">      var opKey = opKey(operation);</span>
+<span class="source-line-no">311</span><span id="line-311">      while (true) {</span>
+<span class="source-line-no">312</span><span id="line-312">         try {</span>
+<span class="source-line-no">313</span><span id="line-313">            var result = call.call();</span>
+<span class="source-line-no">314</span><span id="line-314">            // Success clears the operation's attempt burst so a later legitimate step-up starts fresh.</span>
+<span class="source-line-no">315</span><span id="line-315">            attemptsByOperation.remove(opKey);</span>
+<span class="source-line-no">316</span><span id="line-316">            return result;</span>
+<span class="source-line-no">317</span><span id="line-317">         } catch (McpInsufficientScopeException e) {</span>
+<span class="source-line-no">318</span><span id="line-318">            if (! attemptStepUp)</span>
+<span class="source-line-no">319</span><span id="line-319">               throw new McpAuthException("Step-up authorization aborted for operation '" + operation</span>
+<span class="source-line-no">320</span><span id="line-320">                  + "' (attemptStepUp=false)", e);</span>
+<span class="source-line-no">321</span><span id="line-321">            var used = attemptsByOperation.merge(opKey, 1, Integer::sum);</span>
+<span class="source-line-no">322</span><span id="line-322">            if (used &gt; maxAttempts)</span>
+<span class="source-line-no">323</span><span id="line-323">               throw new McpAuthException("Step-up authorization exhausted after " + maxAttempts</span>
+<span class="source-line-no">324</span><span id="line-324">                  + " attempt(s) for resource '" + resource + "' operation '" + operation</span>
+<span class="source-line-no">325</span><span id="line-325">                  + "'; treating as a permanent authorization failure", e);</span>
+<span class="source-line-no">326</span><span id="line-326">            var requested = e.challenge().scopes();</span>
+<span class="source-line-no">327</span><span id="line-327">            if (allowedScopes != null &amp;&amp; requested != null) {</span>
+<span class="source-line-no">328</span><span id="line-328">               var known = accumulator.current(resource, issuer);</span>
+<span class="source-line-no">329</span><span id="line-329">               for (var sc : requested)</span>
+<span class="source-line-no">330</span><span id="line-330">                  if (! allowedScopes.contains(sc) &amp;&amp; ! known.contains(sc))</span>
+<span class="source-line-no">331</span><span id="line-331">                     throw new McpAuthException("Step-up authorization refused for operation '" + operation</span>
+<span class="source-line-no">332</span><span id="line-332">                        + "': the server requested a scope outside the configured allow-list", e);</span>
+<span class="source-line-no">333</span><span id="line-333">            }</span>
+<span class="source-line-no">334</span><span id="line-334">            // Check the cap before accumulating so a refused challenge leaves the stored scope set untouched.</span>
+<span class="source-line-no">335</span><span id="line-335">            if (McpScopeAccumulator.union(accumulator.current(resource, issuer), requested).size() &gt; maxScopes)</span>
+<span class="source-line-no">336</span><span id="line-336">               throw new McpAuthException("Step-up authorization refused for operation '" + operation</span>
+<span class="source-line-no">337</span><span id="line-337">                  + "': the requested scope set exceeds the maximum of " + maxScopes, e);</span>
+<span class="source-line-no">338</span><span id="line-338">            var union = accumulator.accumulate(resource, issuer, requested);</span>
+<span class="source-line-no">339</span><span id="line-339">            reauthorizer.reauthorize(union);</span>
+<span class="source-line-no">340</span><span id="line-340">         }</span>
+<span class="source-line-no">341</span><span id="line-341">      }</span>
+<span class="source-line-no">342</span><span id="line-342">   }</span>
+<span class="source-line-no">343</span><span id="line-343"></span>
+<span class="source-line-no">344</span><span id="line-344">   /**</span>
+<span class="source-line-no">345</span><span id="line-345">    * Returns the number of step-up attempts recorded for the given operation.</span>
+<span class="source-line-no">346</span><span id="line-346">    *</span>
+<span class="source-line-no">347</span><span id="line-347">    * @param operation The operation identifier.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">348</span><span id="line-348">    * @return The recorded attempt count.</span>
+<span class="source-line-no">349</span><span id="line-349">    */</span>
+<span class="source-line-no">350</span><span id="line-350">   public int attempts(String operation) {</span>
+<span class="source-line-no">351</span><span id="line-351">      reqnb("operation", operation);</span>
+<span class="source-line-no">352</span><span id="line-352">      return attemptsByOperation.getOrDefault(opKey(operation), 0);</span>
 <span class="source-line-no">353</span><span id="line-353">   }</span>
 <span class="source-line-no">354</span><span id="line-354"></span>
-<span class="source-line-no">355</span><span id="line-355">   /** The per-operation attempt-tracking key: {@code resource + '\n' + operation}. */</span>
-<span class="source-line-no">356</span><span id="line-356">   private String opKey(String operation) {</span>
-<span class="source-line-no">357</span><span id="line-357">      return resource.toString() + '\n' + operation;</span>
-<span class="source-line-no">358</span><span id="line-358">   }</span>
-<span class="source-line-no">359</span><span id="line-359">}</span>
+<span class="source-line-no">355</span><span id="line-355">   /**</span>
+<span class="source-line-no">356</span><span id="line-356">    * Clears the recorded step-up attempt count for a single operation (e.g. after the caller has resolved the cause of</span>
+<span class="source-line-no">357</span><span id="line-357">    * a prior permanent failure), so a subsequent {@link #execute(String, ScopedCall)} may step up again.</span>
+<span class="source-line-no">358</span><span id="line-358">    *</span>
+<span class="source-line-no">359</span><span id="line-359">    * @param operation The operation identifier.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">360</span><span id="line-360">    */</span>
+<span class="source-line-no">361</span><span id="line-361">   public void reset(String operation) {</span>
+<span class="source-line-no">362</span><span id="line-362">      reqnb("operation", operation);</span>
+<span class="source-line-no">363</span><span id="line-363">      attemptsByOperation.remove(opKey(operation));</span>
+<span class="source-line-no">364</span><span id="line-364">   }</span>
+<span class="source-line-no">365</span><span id="line-365"></span>
+<span class="source-line-no">366</span><span id="line-366">   /**</span>
+<span class="source-line-no">367</span><span id="line-367">    * Clears all recorded step-up attempt counts for this authorizer's resource across every operation.</span>
+<span class="source-line-no">368</span><span id="line-368">    */</span>
+<span class="source-line-no">369</span><span id="line-369">   public void resetAll() {</span>
+<span class="source-line-no">370</span><span id="line-370">      attemptsByOperation.clear();</span>
+<span class="source-line-no">371</span><span id="line-371">   }</span>
+<span class="source-line-no">372</span><span id="line-372"></span>
+<span class="source-line-no">373</span><span id="line-373">   /** The per-operation attempt-tracking key: {@code resource + '\n' + operation}. */</span>
+<span class="source-line-no">374</span><span id="line-374">   private String opKey(String operation) {</span>
+<span class="source-line-no">375</span><span id="line-375">      return resource.toString() + '\n' + operation;</span>
+<span class="source-line-no">376</span><span id="line-376">   }</span>
+<span class="source-line-no">377</span><span id="line-377">}</span>
 
 
 

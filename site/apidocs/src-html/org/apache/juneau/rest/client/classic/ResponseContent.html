@@ -33,17 +33,17 @@
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ObjectUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">import java.io.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import java.lang.reflect.*;</span>
-<span class="source-line-no">027</span><span id="line-27">import java.nio.charset.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import java.util.concurrent.*;</span>
-<span class="source-line-no">029</span><span id="line-29">import java.util.regex.*;</span>
-<span class="source-line-no">030</span><span id="line-30"></span>
-<span class="source-line-no">031</span><span id="line-31">import org.apache.http.*;</span>
-<span class="source-line-no">032</span><span id="line-32">import org.apache.http.conn.*;</span>
-<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.commons.conversion.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.StringUtils.abbreviate;</span>
+<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">import java.io.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import java.lang.reflect.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import java.nio.charset.*;</span>
+<span class="source-line-no">029</span><span id="line-29">import java.util.concurrent.*;</span>
+<span class="source-line-no">030</span><span id="line-30">import java.util.regex.*;</span>
+<span class="source-line-no">031</span><span id="line-31"></span>
+<span class="source-line-no">032</span><span id="line-32">import org.apache.http.*;</span>
+<span class="source-line-no">033</span><span id="line-33">import org.apache.http.conn.*;</span>
 <span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.commons.http.*;</span>
 <span class="source-line-no">035</span><span id="line-35">import org.apache.juneau.commons.reflect.ConstructorInfo;</span>
 <span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.commons.reflect.ExecutableException;</span>
@@ -287,16 +287,16 @@
 <span class="source-line-no">274</span><span id="line-274">         var mt = MediaType.of(ct);</span>
 <span class="source-line-no">275</span><span id="line-275"></span>
 <span class="source-line-no">276</span><span id="line-276">         if ((parser == null || (mt.toString().contains(CONTENT_TYPE_TEXT_PLAIN) &amp;&amp; ! parser.canHandle(ct))) &amp;&amp; type.hasStringMutater())</span>
-<span class="source-line-no">277</span><span id="line-277">            return BasicConverter.INSTANCE.to(asString(), type.inner());</span>
+<span class="source-line-no">277</span><span id="line-277">            return type.basicConverter().to(asString(), type.inner());</span>
 <span class="source-line-no">278</span><span id="line-278"></span>
 <span class="source-line-no">279</span><span id="line-279">         if (nn(parser))</span>
 <span class="source-line-no">280</span><span id="line-280">            return parse(type, mt);</span>
 <span class="source-line-no">281</span><span id="line-281"></span>
 <span class="source-line-no">282</span><span id="line-282">         if (type.hasReaderMutater())</span>
-<span class="source-line-no">283</span><span id="line-283">            return BasicConverter.INSTANCE.to(asReader(), type.inner());</span>
+<span class="source-line-no">283</span><span id="line-283">            return type.basicConverter().to(asReader(), type.inner());</span>
 <span class="source-line-no">284</span><span id="line-284"></span>
 <span class="source-line-no">285</span><span id="line-285">         if (type.hasInputStreamMutater())</span>
-<span class="source-line-no">286</span><span id="line-286">            return BasicConverter.INSTANCE.to(asInputStream(), type.inner());</span>
+<span class="source-line-no">286</span><span id="line-286">            return type.basicConverter().to(asInputStream(), type.inner());</span>
 <span class="source-line-no">287</span><span id="line-287"></span>
 <span class="source-line-no">288</span><span id="line-288">         ct = response.getStringHeader(HEADER_ContentType).orElse(null);</span>
 <span class="source-line-no">289</span><span id="line-289"></span>
@@ -511,7 +511,7 @@
 <span class="source-line-no">498</span><span id="line-498">    * @throws RestCallException If a problem occurred trying to read from the reader.</span>
 <span class="source-line-no">499</span><span id="line-499">    */</span>
 <span class="source-line-no">500</span><span id="line-500">   public String asAbbreviatedString(int length) throws RestCallException {</span>
-<span class="source-line-no">501</span><span id="line-501">      return StringUtils.abbreviate(asString(), length);</span>
+<span class="source-line-no">501</span><span id="line-501">      return abbreviate(asString(), length);</span>
 <span class="source-line-no">502</span><span id="line-502">   }</span>
 <span class="source-line-no">503</span><span id="line-503"></span>
 <span class="source-line-no">504</span><span id="line-504">   /**</span>

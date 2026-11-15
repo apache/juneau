@@ -30,68 +30,115 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> com.sun.net.httpserver.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Tests that the RDF parsers do not make network requests while parsing.</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">class</strong> <a name="RdfParser_NoNetwork_Test" href="../../../../../org/apache/juneau/marshall/jena/RdfParser_NoNetwork_Test.html#RdfParser_NoNetwork_Test">RdfParser_NoNetwork_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">private</strong> HttpServer server;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicInteger hits = <strong class="jxr_keyword">new</strong> AtomicInteger();
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	@BeforeEach <strong class="jxr_keyword">void</strong> setUp() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		server = HttpServer.create(<strong class="jxr_keyword">new</strong> InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		server.createContext(<span class="jxr_string">"/"</span>, x -&gt; {
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  			hits.incrementAndGet();
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			<strong class="jxr_keyword">var</strong> body = <span class="jxr_string">"{\&quot;@context\&quot;:{\&quot;name\&quot;:\&quot;http://example.com/name\&quot;}}"</span>.getBytes();
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  			x.getResponseHeaders().add(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/ld+json"</span>);
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			x.sendResponseHeaders(200, body.length);
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			x.getResponseBody().write(body);
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  			x.close();
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		});
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		server.start();
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	}
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	@AfterEach <strong class="jxr_keyword">void</strong> tearDown() {
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		server.stop(0);
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	}
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">private</strong> String url() {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"http://127.0.0.1:"</span> + server.getAddress().getPort() + <span class="jxr_string">"/ctx.jsonld"</span>;
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	}
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	@Test <strong class="jxr_keyword">void</strong> a01_jsonLd_remoteContextNotFetchedByDefault() {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">"{\&quot;@context\&quot;:\&quot;"</span> + url() + <span class="jxr_string">"\&quot;,\&quot;@id\&quot;:\&quot;http://example.com/a\&quot;,\&quot;name\&quot;:\&quot;x\&quot;}"</span>;
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; JsonLdParser.DEFAULT.read(in, Object.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertEquals(0, hits.get());
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	}
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@Test <strong class="jxr_keyword">void</strong> a02_jsonLd_remoteContextFetchedWhenAllowed() {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">"{\&quot;@context\&quot;:\&quot;"</span> + url() + <span class="jxr_string">"\&quot;,\&quot;@id\&quot;:\&quot;http://example.com/a\&quot;,\&quot;name\&quot;:\&quot;x\&quot;}"</span>;
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> p = JsonLdParser.create().allowRemoteContexts().build();
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			p.read(in, Object.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) Exception e) {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<em class="jxr_comment">// Result shape is irrelevant here; only the fetch is checked.</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		}
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertTrue(hits.get() &gt; 0);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	@Test <strong class="jxr_keyword">void</strong> a03_rdfXml_externalEntityNotFetched() {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">"&lt;?xml version=\&quot;1.0\&quot;?&gt;&lt;!DOCTYPE rdf:RDF [&lt;!ENTITY x SYSTEM \&quot;"</span> + url() + <span class="jxr_string">"\&quot;&gt;]&gt;"</span>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			+ <span class="jxr_string">"&lt;rdf:RDF xmlns:rdf=\&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#\&quot; xmlns:e=\&quot;http://example.com/\&quot;&gt;"</span>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			+ <span class="jxr_string">"&lt;rdf:Description rdf:about=\&quot;http://example.com/a\&quot;&gt;&lt;e:name&gt;&amp;x;&lt;/e:name&gt;&lt;/rdf:Description&gt;&lt;/rdf:RDF&gt;"</span>;
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			RdfParser.create().xml().build().read(in, Object.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) Exception e) {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<em class="jxr_comment">// Rejection is acceptable; the fetch is what matters.</em>
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		}
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertEquals(0, hits.get());
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  }
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.parser.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> com.sun.net.httpserver.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * Tests that the RDF parsers do not make network requests while parsing.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">class</strong> <a name="RdfParser_NoNetwork_Test" href="../../../../../org/apache/juneau/marshall/jena/RdfParser_NoNetwork_Test.html#RdfParser_NoNetwork_Test">RdfParser_NoNetwork_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> HttpServer server;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicInteger hits = <strong class="jxr_keyword">new</strong> AtomicInteger();
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@BeforeEach <strong class="jxr_keyword">void</strong> setUp() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		server = HttpServer.create(<strong class="jxr_keyword">new</strong> InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		server.createContext(<span class="jxr_string">"/"</span>, x -&gt; {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			hits.incrementAndGet();
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  			<strong class="jxr_keyword">var</strong> body = <span class="jxr_string">"{\&quot;@context\&quot;:{\&quot;name\&quot;:\&quot;http://example.com/name\&quot;}}"</span>.getBytes();
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			x.getResponseHeaders().add(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/ld+json"</span>);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			x.sendResponseHeaders(200, body.length);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  			x.getResponseBody().write(body);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			x.close();
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		});
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		server.start();
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	@AfterEach <strong class="jxr_keyword">void</strong> tearDown() {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		server.stop(0);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	}
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">private</strong> String url() {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"http://127.0.0.1:"</span> + server.getAddress().getPort() + <span class="jxr_string">"/ctx.jsonld"</span>;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	}
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	@Test <strong class="jxr_keyword">void</strong> a01_jsonLd_remoteContextNotFetchedByDefault() {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">"{\&quot;@context\&quot;:\&quot;"</span> + url() + <span class="jxr_string">"\&quot;,\&quot;@id\&quot;:\&quot;http://example.com/a\&quot;,\&quot;name\&quot;:\&quot;x\&quot;}"</span>;
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; JsonLdParser.DEFAULT.read(in, Object.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertEquals(0, hits.get());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	@Test <strong class="jxr_keyword">void</strong> a02_jsonLd_remoteContextFetchedWhenAllowed() {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">"{\&quot;@context\&quot;:\&quot;"</span> + url() + <span class="jxr_string">"\&quot;,\&quot;@id\&quot;:\&quot;http://example.com/a\&quot;,\&quot;name\&quot;:\&quot;x\&quot;}"</span>;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">var</strong> p = JsonLdParser.create().allowRemoteContexts().build();
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			p.read(in, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) Exception e) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<em class="jxr_comment">// Result shape is irrelevant here; only the fetch is checked.</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertTrue(hits.get() &gt; 0);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String OTHER = <span class="jxr_string">"http://other.example/doc.dtd"</span>;
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String RDF_OPEN = <span class="jxr_string">"&lt;rdf:RDF xmlns:rdf=\&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#\&quot; xmlns:e=\&quot;http://example.com/\&quot;&gt;"</span>;
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String rdf(String name) {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">return</strong> RDF_OPEN + <span class="jxr_string">"&lt;rdf:Description rdf:about=\&quot;http://example.com/a\&quot;&gt;&lt;e:name&gt;"</span> + name + <span class="jxr_string">"&lt;/e:name&gt;&lt;/rdf:Description&gt;&lt;/rdf:RDF&gt;"</span>;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object readXml(String in) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">return</strong> RdfParser.create().xml().build().read(in, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> a03_rdfXml_externalEntityRejected() {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">"&lt;?xml version=\&quot;1.0\&quot;?&gt;&lt;!DOCTYPE rdf:RDF [&lt;!ENTITY x SYSTEM \&quot;"</span> + url() + <span class="jxr_string">"\&quot;&gt;]&gt;"</span> + rdf(<span class="jxr_string">"&amp;x;"</span>);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; readXml(in));
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertTrue(e.getMessage().contains(<span class="jxr_string">"External DTD and entity declarations are not supported."</span>), e.getMessage());
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(0, hits.get());
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Test <strong class="jxr_keyword">void</strong> a04_rdfXml_externalDtdRejected() {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">"&lt;?xml version=\&quot;1.0\&quot;?&gt;&lt;!DOCTYPE rdf:RDF SYSTEM \&quot;"</span> + url() + <span class="jxr_string">"\&quot;&gt;"</span> + rdf(<span class="jxr_string">"x"</span>);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; readXml(in));
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertTrue(e.getMessage().contains(<span class="jxr_string">"External DTD and entity declarations are not supported."</span>), e.getMessage());
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(0, hits.get());
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@Test <strong class="jxr_keyword">void</strong> a05_rdfXml_externalParameterEntityAndPublicIdRejected() {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; readXml(<span class="jxr_string">"&lt;!DOCTYPE rdf:RDF [&lt;!ENTITY % p SYSTEM \&quot;"</span> + url() + <span class="jxr_string">"\&quot;&gt; %p;]&gt;"</span> + rdf(<span class="jxr_string">"x"</span>)));
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, () -&gt; readXml(<span class="jxr_string">"&lt;!DOCTYPE rdf:RDF PUBLIC \&quot;-//X//EN\&quot; \&quot;"</span> + url() + <span class="jxr_string">"\&quot;&gt;"</span> + rdf(<span class="jxr_string">"x"</span>)));
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertEquals(0, hits.get());
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	@Test <strong class="jxr_keyword">void</strong> a06_rdfXml_internalEntityStillParses() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">"&lt;?xml version=\&quot;1.0\&quot;?&gt;&lt;!DOCTYPE rdf:RDF [&lt;!ENTITY x \&quot;value\&quot;&gt;]&gt;"</span> + rdf(<span class="jxr_string">"&amp;x;"</span>);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertTrue(String.valueOf(readXml(in)).contains(<span class="jxr_string">"value"</span>));
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	@Test <strong class="jxr_keyword">void</strong> a07_rdfXml_noDoctypeOrDoctypeTextInCommentOrCdataParses() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertTrue(String.valueOf(readXml(rdf(<span class="jxr_string">"x"</span>))).contains(<span class="jxr_string">"x"</span>));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">var</strong> comment = <span class="jxr_string">"&lt;?xml version=\&quot;1.0\&quot;?&gt;&lt;!-- &lt;!DOCTYPE rdf:RDF SYSTEM \&quot;"</span> + url() + <span class="jxr_string">"\&quot;&gt; --&gt;"</span> + rdf(<span class="jxr_string">"y"</span>);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertTrue(String.valueOf(readXml(comment)).contains(<span class="jxr_string">"y"</span>));
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">var</strong> cdata = rdf(<span class="jxr_string">"&lt;![CDATA[&lt;!DOCTYPE rdf:RDF SYSTEM \&quot;"</span> + url() + <span class="jxr_string">"\&quot;&gt;]]&gt;"</span>);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertTrue(String.valueOf(readXml(cdata)).contains(<span class="jxr_string">"DOCTYPE"</span>));
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertEquals(0, hits.get());
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	}
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	@Test <strong class="jxr_keyword">void</strong> a08_hasExternalDoctype() {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertFalse(RdfParserSession.hasExternalDoctype(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertFalse(RdfParserSession.hasExternalDoctype(<span class="jxr_string">"&lt;a/&gt;"</span>));
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertFalse(RdfParserSession.hasExternalDoctype(<span class="jxr_string">"&lt;!DOCTYPE a&gt;"</span>));
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertFalse(RdfParserSession.hasExternalDoctype(<span class="jxr_string">"&lt;!DOCTYPE a [&lt;!ENTITY x \&quot;SYSTEM\&quot;&gt;&lt;!-- SYSTEM --&gt;&lt;!ELEMENT a ANY&gt;]&gt;&lt;a/&gt;"</span>));
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertFalse(RdfParserSession.hasExternalDoctype(<span class="jxr_string">"&lt;a&gt;&lt;!DOCTYPE b SYSTEM \&quot;"</span> + OTHER + <span class="jxr_string">"\&quot;&gt;&lt;/a&gt;"</span>));
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertTrue(RdfParserSession.hasExternalDoctype(<span class="jxr_string">"\uFEFF&lt;?xml version=\&quot;1.0\&quot;?&gt;\n&lt;!DOCTYPE a SYSTEM \&quot;"</span> + OTHER + <span class="jxr_string">"\&quot;&gt;"</span>));
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertTrue(RdfParserSession.hasExternalDoctype(<span class="jxr_string">"&lt;!DOCTYPE a PUBLIC \&quot;p\&quot; \&quot;"</span> + OTHER + <span class="jxr_string">"\&quot;&gt;"</span>));
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertTrue(RdfParserSession.hasExternalDoctype(<span class="jxr_string">"&lt;!DOCTYPE a [&lt;!ENTITY x \&quot;v\&quot;&gt;&lt;!ENTITY y SYSTEM '"</span> + OTHER + <span class="jxr_string">"'&gt;]&gt;"</span>));
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertTrue(RdfParserSession.hasExternalDoctype(<span class="jxr_string">"&lt;!DOCTYPE a [&lt;!ENTITY y PUBLIC 'p' '"</span> + OTHER + <span class="jxr_string">"'&gt;]&gt;"</span>));
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

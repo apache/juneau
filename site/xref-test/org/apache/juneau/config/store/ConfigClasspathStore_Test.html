@@ -184,7 +184,16 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">var</strong> fs = ClasspathStore.create().build();
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertDoesNotThrow(() -&gt; fs.unregister(<span class="jxr_string">"nonexistent.cfg"</span>, s -&gt; {}));
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 	}
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> }
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	@Test <strong class="jxr_keyword">void</strong> z01_traversalNamesRejected() {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> fs = ClasspathStore.create().build();
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; fs.read(<span class="jxr_string">"../foo1.cfg"</span>));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; fs.read(<span class="jxr_string">"sub/../../foo1.cfg"</span>));
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; fs.read(<span class="jxr_string">"/foo1.cfg"</span>));
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; fs.read(<span class="jxr_string">"sub&#92;&#92;foo2.cfg"</span>));
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertFalse(fs.exists(<span class="jxr_string">"../foo1.cfg"</span>));
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	}
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

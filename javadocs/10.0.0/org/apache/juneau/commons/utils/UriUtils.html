@@ -122,10 +122,20 @@ loadScripts(document, 'script');</script>
 <div class="block">Throwing variant of <a href="#isSecureOrLoopback(java.net.URI)"><code>isSecureOrLoopback(URI)</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isSecureOrLoopback(java.net.URI)" class="member-name-link">isSecureOrLoopback</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isLoopbackHost(java.lang.String)" class="member-name-link">isLoopbackHost</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Returns <jk>true</jk> if the specified host name is a loopback host.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isSecureOrLoopback(java.net.URI)" class="member-name-link">isSecureOrLoopback</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns <jk>true</jk> if the specified URI either uses the <js>"https"</js> scheme or targets a loopback
  host.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static byte[]</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseIpv4(java.lang.String)" class="member-name-link">parseIpv4</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Parses a strict dotted-quad IPv4 literal.</div>
 </div>
 </div>
 </div>
@@ -147,7 +157,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>UriUtils</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/UriUtils.html#line-69">UriUtils</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/UriUtils.html#line-133">UriUtils</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -181,9 +191,50 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="isLoopbackHost(java.lang.String)">
+<h3>isLoopbackHost</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/UriUtils.html#line-63">isLoopbackHost</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host)</span></div>
+<div class="block">Returns <jk>true</jk> if the specified host name is a loopback host.
+
+ <p>
+ A loopback host is one of <js>"localhost"</js> (case-insensitive), <js>"127.0.0.1"</js>, <js>"::1"</js>, or
+ <js>"[::1]"</js>.  Other addresses in the <c>127.0.0.0/8</c> range and other spellings of the same addresses
+ are not matched.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>host</code> - The host name.  Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
+<dt>Returns:</dt>
+<dd><jk>true</jk> if the host is a loopback host.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="parseIpv4(java.lang.String)">
+<h3>parseIpv4</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/UriUtils.html#line-83">parseIpv4</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
+<div class="block">Parses a strict dotted-quad IPv4 literal.
+
+ <p>
+ The value must be exactly four decimal octets in the range 0-255 separated by dots, with no sign, no leading
+ zeros and no surrounding whitespace.  No name lookup is done.
+
+ <h4 class='section'>Example:</h4>
+ <p class='bjava'>
+   parseIpv4(<js>"10.0.0.1"</js>);  <jc>// {10, 0, 0, 1}</jc>
+   parseIpv4(<js>"10.0.0.01"</js>); <jc>// null</jc>
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>s</code> - The string to parse.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
+<dt>Returns:</dt>
+<dd>The four address bytes, or <jk>null</jk> if the string is not a strict dotted-quad literal.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="assertSecureOrLoopback(java.net.URI)">
 <h3>assertSecureOrLoopback</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/UriUtils.html#line-60">assertSecureOrLoopback</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/UriUtils.html#line-124">assertSecureOrLoopback</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri)</span></div>
 <div class="block">Throwing variant of <a href="#isSecureOrLoopback(java.net.URI)"><code>isSecureOrLoopback(URI)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

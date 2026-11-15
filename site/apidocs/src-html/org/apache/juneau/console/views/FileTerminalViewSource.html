@@ -132,7 +132,7 @@
 <span class="source-line-no">119</span><span id="line-119">       * @return A new source.</span>
 <span class="source-line-no">120</span><span id="line-120">       */</span>
 <span class="source-line-no">121</span><span id="line-121">      public FileTerminalViewSource build() {</span>
-<span class="source-line-no">122</span><span id="line-122">         if (index != null &amp;&amp; ! index.file().equals(file))</span>
+<span class="source-line-no">122</span><span id="line-122">         if (index != null &amp;&amp; neq(index.file(), file))</span>
 <span class="source-line-no">123</span><span id="line-123">            throw iaex("FileTerminalViewSource index is for a different file: '%s' vs '%s'.", index.file(), file);</span>
 <span class="source-line-no">124</span><span id="line-124">         return new FileTerminalViewSource(this);</span>
 <span class="source-line-no">125</span><span id="line-125">      }</span>
@@ -280,7 +280,7 @@
 <span class="source-line-no">267</span><span id="line-267">            return null;</span>
 <span class="source-line-no">268</span><span id="line-268">         if (ch == null) {</span>
 <span class="source-line-no">269</span><span id="line-269">            try {</span>
-<span class="source-line-no">270</span><span id="line-270">               ch = FileChannel.open(file, StandardOpenOption.READ);</span>
+<span class="source-line-no">270</span><span id="line-270">               ch = FileChannel.open(file, StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS);</span>
 <span class="source-line-no">271</span><span id="line-271">            } catch (NoSuchFileException e) {</span>
 <span class="source-line-no">272</span><span id="line-272">               eof = true;</span>
 <span class="source-line-no">273</span><span id="line-273">               return null;</span>

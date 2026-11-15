@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * {@link #unseal} is wired to untrusted, client-supplied {@code requestState} strings, so it applies defensive</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * length guards (a plausibly-sized token, and a bounded {@code keyId} segment) before any base64 decode; an</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * out-of-bounds input returns {@link Optional#empty()} rather than allocating from an attacker-controlled</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * out-of-bounds input returns {@link Optional#empty()} rather than allocating from an untrusted</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> * length.</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="AeadRequestStateCodec" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/AeadRequestStateCodec.html#AeadRequestStateCodec">AeadRequestStateCodec</a> <strong class="jxr_keyword">implements</strong> <a name="RequestStateCodec" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/RequestStateCodec.html#RequestStateCodec">RequestStateCodec</a> {
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<em class="jxr_comment">// Derived from KeyedSecret's MAX_KEY_ID_CHARS=128 producer limit (measured in UTF-16 code units, no</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<em class="jxr_comment">// charset restriction) at the worst case of 3 UTF-8 bytes/char: 128*3=384 bytes, whose unpadded base64url</em>
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<em class="jxr_comment">// encoding is ceil(384/3)*4=512 chars. Set to that worst case so it dominates any legitimately-issued</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<em class="jxr_comment">// keyId while still capping an attacker-inflated segment before base64 decode.</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<em class="jxr_comment">// keyId while still capping an oversized segment before base64 decode.</em>
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_KEY_ID_B64_CHARS = 512;
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<em class="jxr_comment">// Defensive floor on the untrusted, client-supplied token string as a whole (see unseal). The real floor of</em>
@@ -252,7 +252,7 @@
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<strong class="jxr_keyword">if</strong> (sub.isEmpty())
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 				sub = ein(cp.getName());
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			iss = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			iss = principal.getClass().getName();
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 			sub = ein(principal.getName());
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 		}
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">return</strong> lengthPrefixJoin(iss, sub);

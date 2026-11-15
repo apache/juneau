@@ -112,7 +112,17 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertNotNull(t);
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertEquals(1, t.count());
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> }
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	@Test <strong class="jxr_keyword">void</strong> z01_methodTagIsBounded() {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		recorder.record(<span class="jxr_string">"op"</span>, <span class="jxr_string">"GET"</span>, <span class="jxr_string">"/x"</span>, 200, Duration.ofMillis(1), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		recorder.record(<span class="jxr_string">"op"</span>, <span class="jxr_string">"FOO1"</span>, <span class="jxr_string">"/x"</span>, 200, Duration.ofMillis(1), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		recorder.record(<span class="jxr_string">"op"</span>, <span class="jxr_string">"FOO2"</span>, <span class="jxr_string">"/x"</span>, 200, Duration.ofMillis(1), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> name = recorder.getTimerName();
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertNotNull(registry.find(name).tag(<span class="jxr_string">"method"</span>, <span class="jxr_string">"GET"</span>).timer());
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertEquals(2, registry.find(name).tag(<span class="jxr_string">"method"</span>, <span class="jxr_string">"OTHER"</span>).timer().count());
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertNull(registry.find(name).tag(<span class="jxr_string">"method"</span>, <span class="jxr_string">"FOO1"</span>).timer());
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

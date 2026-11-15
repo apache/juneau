@@ -481,123 +481,134 @@
 <span class="source-line-no">468</span><span id="line-468">   SELF problemDetails(String value);</span>
 <span class="source-line-no">469</span><span id="line-469"></span>
 <span class="source-line-no">470</span><span id="line-470">   /**</span>
-<span class="source-line-no">471</span><span id="line-471">    * Specifies the {@link Rest#debugMarshalling() debugMarshalling} flag for this resource.</span>
+<span class="source-line-no">471</span><span id="line-471">    * Specifies the {@link Rest#showCauseMessages() showCauseMessages} flag for this resource.</span>
 <span class="source-line-no">472</span><span id="line-472">    *</span>
-<span class="source-line-no">473</span><span id="line-473">    * @param value The new value for this property.</span>
-<span class="source-line-no">474</span><span id="line-474">    * @return This object.</span>
-<span class="source-line-no">475</span><span id="line-475">    */</span>
-<span class="source-line-no">476</span><span id="line-476">   SELF debugMarshalling(String value);</span>
-<span class="source-line-no">477</span><span id="line-477"></span>
-<span class="source-line-no">478</span><span id="line-478">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">479</span><span id="line-479">   // Docs / metadata / i18n / static files</span>
-<span class="source-line-no">480</span><span id="line-480">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">481</span><span id="line-481"></span>
-<span class="source-line-no">482</span><span id="line-482">   /**</span>
-<span class="source-line-no">483</span><span id="line-483">    * Specifies the {@link Rest#title() title} for this resource.</span>
-<span class="source-line-no">484</span><span id="line-484">    *</span>
-<span class="source-line-no">485</span><span id="line-485">    * @param value The new value for this property.</span>
-<span class="source-line-no">486</span><span id="line-486">    * @return This object.</span>
-<span class="source-line-no">487</span><span id="line-487">    */</span>
-<span class="source-line-no">488</span><span id="line-488">   SELF title(String... value);</span>
-<span class="source-line-no">489</span><span id="line-489"></span>
-<span class="source-line-no">490</span><span id="line-490">   /**</span>
-<span class="source-line-no">491</span><span id="line-491">    * Specifies the {@link Rest#description() description} for this resource.</span>
-<span class="source-line-no">492</span><span id="line-492">    *</span>
-<span class="source-line-no">493</span><span id="line-493">    * @param value The new value for this property.</span>
-<span class="source-line-no">494</span><span id="line-494">    * @return This object.</span>
-<span class="source-line-no">495</span><span id="line-495">    */</span>
-<span class="source-line-no">496</span><span id="line-496">   SELF description(String... value);</span>
-<span class="source-line-no">497</span><span id="line-497"></span>
-<span class="source-line-no">498</span><span id="line-498">   /**</span>
-<span class="source-line-no">499</span><span id="line-499">    * Specifies the {@link Rest#siteName() siteName} for this resource.</span>
-<span class="source-line-no">500</span><span id="line-500">    *</span>
-<span class="source-line-no">501</span><span id="line-501">    * @param value The new value for this property.</span>
-<span class="source-line-no">502</span><span id="line-502">    * @return This object.</span>
-<span class="source-line-no">503</span><span id="line-503">    */</span>
-<span class="source-line-no">504</span><span id="line-504">   SELF siteName(String value);</span>
-<span class="source-line-no">505</span><span id="line-505"></span>
-<span class="source-line-no">506</span><span id="line-506">   /**</span>
-<span class="source-line-no">507</span><span id="line-507">    * Specifies the {@link Rest#swaggerProvider() swaggerProvider} for this resource.</span>
-<span class="source-line-no">508</span><span id="line-508">    *</span>
-<span class="source-line-no">509</span><span id="line-509">    * @param value The new value for this property.</span>
-<span class="source-line-no">510</span><span id="line-510">    * @return This object.</span>
-<span class="source-line-no">511</span><span id="line-511">    */</span>
-<span class="source-line-no">512</span><span id="line-512">   SELF swaggerProvider(Class&lt;? extends SwaggerProvider&gt; value);</span>
-<span class="source-line-no">513</span><span id="line-513"></span>
-<span class="source-line-no">514</span><span id="line-514">   /**</span>
-<span class="source-line-no">515</span><span id="line-515">    * Specifies the {@link Rest#openApiProvider() openApiProvider} for this resource.</span>
-<span class="source-line-no">516</span><span id="line-516">    *</span>
-<span class="source-line-no">517</span><span id="line-517">    * @param value The new value for this property.</span>
-<span class="source-line-no">518</span><span id="line-518">    * @return This object.</span>
-<span class="source-line-no">519</span><span id="line-519">    */</span>
-<span class="source-line-no">520</span><span id="line-520">   SELF openApiProvider(Class&lt;? extends OpenApiProvider&gt; value);</span>
-<span class="source-line-no">521</span><span id="line-521"></span>
-<span class="source-line-no">522</span><span id="line-522">   /**</span>
-<span class="source-line-no">523</span><span id="line-523">    * Specifies the {@link Rest#messages() messages} bundle location for this resource.</span>
-<span class="source-line-no">524</span><span id="line-524">    *</span>
-<span class="source-line-no">525</span><span id="line-525">    * @param value The new value for this property.</span>
-<span class="source-line-no">526</span><span id="line-526">    * @return This object.</span>
-<span class="source-line-no">527</span><span id="line-527">    */</span>
-<span class="source-line-no">528</span><span id="line-528">   SELF messages(String value);</span>
-<span class="source-line-no">529</span><span id="line-529"></span>
-<span class="source-line-no">530</span><span id="line-530">   /**</span>
-<span class="source-line-no">531</span><span id="line-531">    * Specifies the {@link Rest#config() config} location for this resource.</span>
-<span class="source-line-no">532</span><span id="line-532">    *</span>
-<span class="source-line-no">533</span><span id="line-533">    * @param value The new value for this property.</span>
-<span class="source-line-no">534</span><span id="line-534">    * @return This object.</span>
-<span class="source-line-no">535</span><span id="line-535">    */</span>
-<span class="source-line-no">536</span><span id="line-536">   SELF config(String value);</span>
-<span class="source-line-no">537</span><span id="line-537"></span>
-<span class="source-line-no">538</span><span id="line-538">   /**</span>
-<span class="source-line-no">539</span><span id="line-539">    * Specifies the {@link Rest#staticFiles() staticFiles} for this resource.</span>
-<span class="source-line-no">540</span><span id="line-540">    *</span>
-<span class="source-line-no">541</span><span id="line-541">    * @param value The new value for this property.</span>
-<span class="source-line-no">542</span><span id="line-542">    * @return This object.</span>
-<span class="source-line-no">543</span><span id="line-543">    */</span>
-<span class="source-line-no">544</span><span id="line-544">   SELF staticFiles(Class&lt;? extends StaticFiles&gt; value);</span>
-<span class="source-line-no">545</span><span id="line-545"></span>
-<span class="source-line-no">546</span><span id="line-546">   /**</span>
-<span class="source-line-no">547</span><span id="line-547">    * Specifies the {@link Rest#noInherit() noInherit} property names for this resource.</span>
-<span class="source-line-no">548</span><span id="line-548">    *</span>
-<span class="source-line-no">549</span><span id="line-549">    * @param value The new value for this property.</span>
-<span class="source-line-no">550</span><span id="line-550">    * @return This object.</span>
-<span class="source-line-no">551</span><span id="line-551">    */</span>
-<span class="source-line-no">552</span><span id="line-552">   SELF noInherit(String... value);</span>
-<span class="source-line-no">553</span><span id="line-553"></span>
-<span class="source-line-no">554</span><span id="line-554">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">555</span><span id="line-555">   // Programmatic-only knob (no @Rest member)</span>
-<span class="source-line-no">556</span><span id="line-556">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">557</span><span id="line-557"></span>
-<span class="source-line-no">558</span><span id="line-558">   /**</span>
-<span class="source-line-no">559</span><span id="line-559">    * Specifies whether MDC async propagation is enabled for this resource.</span>
-<span class="source-line-no">560</span><span id="line-560">    *</span>
-<span class="source-line-no">561</span><span id="line-561">    * &lt;p&gt;</span>
-<span class="source-line-no">562</span><span id="line-562">    * This is a &lt;b&gt;programmatic-only&lt;/b&gt; knob &amp;mdash; it has no {@link Rest @Rest} annotation member (its default is</span>
-<span class="source-line-no">563</span><span id="line-563">    * env-driven).  Setting it here overrides the {@code RestContext.mdcAsyncPropagation} env-driven default.</span>
-<span class="source-line-no">564</span><span id="line-564">    *</span>
-<span class="source-line-no">565</span><span id="line-565">    * @param value The new value for this property.</span>
-<span class="source-line-no">566</span><span id="line-566">    * @return This object.</span>
-<span class="source-line-no">567</span><span id="line-567">    */</span>
-<span class="source-line-no">568</span><span id="line-568">   SELF mdcAsyncPropagation(boolean value);</span>
-<span class="source-line-no">569</span><span id="line-569"></span>
-<span class="source-line-no">570</span><span id="line-570">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">571</span><span id="line-571">   // Forward-compat escape hatch</span>
-<span class="source-line-no">572</span><span id="line-572">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">573</span><span id="line-573"></span>
-<span class="source-line-no">574</span><span id="line-574">   /**</span>
-<span class="source-line-no">575</span><span id="line-575">    * Generic forward-compatible override setter, keyed by the {@code @Rest} property name (e.g.</span>
-<span class="source-line-no">576</span><span id="line-576">    * {@code "allowContentParam"}, {@code "defaultRequestHeaders"}).</span>
-<span class="source-line-no">577</span><span id="line-577">    *</span>
-<span class="source-line-no">578</span><span id="line-578">    * &lt;p&gt;</span>
-<span class="source-line-no">579</span><span id="line-579">    * Use this escape hatch for members not yet exposed as a dedicated fluent method.  Keys reuse the existing</span>
-<span class="source-line-no">580</span><span id="line-580">    * {@code @Rest} member names.</span>
-<span class="source-line-no">581</span><span id="line-581">    *</span>
-<span class="source-line-no">582</span><span id="line-582">    * @param key The {@code @Rest} property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">583</span><span id="line-583">    * @param value The override value.</span>
-<span class="source-line-no">584</span><span id="line-584">    * @return This object.</span>
-<span class="source-line-no">585</span><span id="line-585">    */</span>
-<span class="source-line-no">586</span><span id="line-586">   SELF set(String key, Object value);</span>
-<span class="source-line-no">587</span><span id="line-587">}</span>
+<span class="source-line-no">473</span><span id="line-473">    * &lt;p&gt;</span>
+<span class="source-line-no">474</span><span id="line-474">    * Overrides the &lt;c&gt;RestContext.showCauseMessages&lt;/c&gt; system-property / environment default.</span>
+<span class="source-line-no">475</span><span id="line-475">    *</span>
+<span class="source-line-no">476</span><span id="line-476">    * @param value The new value for this property.</span>
+<span class="source-line-no">477</span><span id="line-477">    * @return This object.</span>
+<span class="source-line-no">478</span><span id="line-478">    */</span>
+<span class="source-line-no">479</span><span id="line-479">   SELF showCauseMessages(String value);</span>
+<span class="source-line-no">480</span><span id="line-480"></span>
+<span class="source-line-no">481</span><span id="line-481">   /**</span>
+<span class="source-line-no">482</span><span id="line-482">    * Specifies the {@link Rest#debugMarshalling() debugMarshalling} flag for this resource.</span>
+<span class="source-line-no">483</span><span id="line-483">    *</span>
+<span class="source-line-no">484</span><span id="line-484">    * @param value The new value for this property.</span>
+<span class="source-line-no">485</span><span id="line-485">    * @return This object.</span>
+<span class="source-line-no">486</span><span id="line-486">    */</span>
+<span class="source-line-no">487</span><span id="line-487">   SELF debugMarshalling(String value);</span>
+<span class="source-line-no">488</span><span id="line-488"></span>
+<span class="source-line-no">489</span><span id="line-489">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">490</span><span id="line-490">   // Docs / metadata / i18n / static files</span>
+<span class="source-line-no">491</span><span id="line-491">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">492</span><span id="line-492"></span>
+<span class="source-line-no">493</span><span id="line-493">   /**</span>
+<span class="source-line-no">494</span><span id="line-494">    * Specifies the {@link Rest#title() title} for this resource.</span>
+<span class="source-line-no">495</span><span id="line-495">    *</span>
+<span class="source-line-no">496</span><span id="line-496">    * @param value The new value for this property.</span>
+<span class="source-line-no">497</span><span id="line-497">    * @return This object.</span>
+<span class="source-line-no">498</span><span id="line-498">    */</span>
+<span class="source-line-no">499</span><span id="line-499">   SELF title(String... value);</span>
+<span class="source-line-no">500</span><span id="line-500"></span>
+<span class="source-line-no">501</span><span id="line-501">   /**</span>
+<span class="source-line-no">502</span><span id="line-502">    * Specifies the {@link Rest#description() description} for this resource.</span>
+<span class="source-line-no">503</span><span id="line-503">    *</span>
+<span class="source-line-no">504</span><span id="line-504">    * @param value The new value for this property.</span>
+<span class="source-line-no">505</span><span id="line-505">    * @return This object.</span>
+<span class="source-line-no">506</span><span id="line-506">    */</span>
+<span class="source-line-no">507</span><span id="line-507">   SELF description(String... value);</span>
+<span class="source-line-no">508</span><span id="line-508"></span>
+<span class="source-line-no">509</span><span id="line-509">   /**</span>
+<span class="source-line-no">510</span><span id="line-510">    * Specifies the {@link Rest#siteName() siteName} for this resource.</span>
+<span class="source-line-no">511</span><span id="line-511">    *</span>
+<span class="source-line-no">512</span><span id="line-512">    * @param value The new value for this property.</span>
+<span class="source-line-no">513</span><span id="line-513">    * @return This object.</span>
+<span class="source-line-no">514</span><span id="line-514">    */</span>
+<span class="source-line-no">515</span><span id="line-515">   SELF siteName(String value);</span>
+<span class="source-line-no">516</span><span id="line-516"></span>
+<span class="source-line-no">517</span><span id="line-517">   /**</span>
+<span class="source-line-no">518</span><span id="line-518">    * Specifies the {@link Rest#swaggerProvider() swaggerProvider} for this resource.</span>
+<span class="source-line-no">519</span><span id="line-519">    *</span>
+<span class="source-line-no">520</span><span id="line-520">    * @param value The new value for this property.</span>
+<span class="source-line-no">521</span><span id="line-521">    * @return This object.</span>
+<span class="source-line-no">522</span><span id="line-522">    */</span>
+<span class="source-line-no">523</span><span id="line-523">   SELF swaggerProvider(Class&lt;? extends SwaggerProvider&gt; value);</span>
+<span class="source-line-no">524</span><span id="line-524"></span>
+<span class="source-line-no">525</span><span id="line-525">   /**</span>
+<span class="source-line-no">526</span><span id="line-526">    * Specifies the {@link Rest#openApiProvider() openApiProvider} for this resource.</span>
+<span class="source-line-no">527</span><span id="line-527">    *</span>
+<span class="source-line-no">528</span><span id="line-528">    * @param value The new value for this property.</span>
+<span class="source-line-no">529</span><span id="line-529">    * @return This object.</span>
+<span class="source-line-no">530</span><span id="line-530">    */</span>
+<span class="source-line-no">531</span><span id="line-531">   SELF openApiProvider(Class&lt;? extends OpenApiProvider&gt; value);</span>
+<span class="source-line-no">532</span><span id="line-532"></span>
+<span class="source-line-no">533</span><span id="line-533">   /**</span>
+<span class="source-line-no">534</span><span id="line-534">    * Specifies the {@link Rest#messages() messages} bundle location for this resource.</span>
+<span class="source-line-no">535</span><span id="line-535">    *</span>
+<span class="source-line-no">536</span><span id="line-536">    * @param value The new value for this property.</span>
+<span class="source-line-no">537</span><span id="line-537">    * @return This object.</span>
+<span class="source-line-no">538</span><span id="line-538">    */</span>
+<span class="source-line-no">539</span><span id="line-539">   SELF messages(String value);</span>
+<span class="source-line-no">540</span><span id="line-540"></span>
+<span class="source-line-no">541</span><span id="line-541">   /**</span>
+<span class="source-line-no">542</span><span id="line-542">    * Specifies the {@link Rest#config() config} location for this resource.</span>
+<span class="source-line-no">543</span><span id="line-543">    *</span>
+<span class="source-line-no">544</span><span id="line-544">    * @param value The new value for this property.</span>
+<span class="source-line-no">545</span><span id="line-545">    * @return This object.</span>
+<span class="source-line-no">546</span><span id="line-546">    */</span>
+<span class="source-line-no">547</span><span id="line-547">   SELF config(String value);</span>
+<span class="source-line-no">548</span><span id="line-548"></span>
+<span class="source-line-no">549</span><span id="line-549">   /**</span>
+<span class="source-line-no">550</span><span id="line-550">    * Specifies the {@link Rest#staticFiles() staticFiles} for this resource.</span>
+<span class="source-line-no">551</span><span id="line-551">    *</span>
+<span class="source-line-no">552</span><span id="line-552">    * @param value The new value for this property.</span>
+<span class="source-line-no">553</span><span id="line-553">    * @return This object.</span>
+<span class="source-line-no">554</span><span id="line-554">    */</span>
+<span class="source-line-no">555</span><span id="line-555">   SELF staticFiles(Class&lt;? extends StaticFiles&gt; value);</span>
+<span class="source-line-no">556</span><span id="line-556"></span>
+<span class="source-line-no">557</span><span id="line-557">   /**</span>
+<span class="source-line-no">558</span><span id="line-558">    * Specifies the {@link Rest#noInherit() noInherit} property names for this resource.</span>
+<span class="source-line-no">559</span><span id="line-559">    *</span>
+<span class="source-line-no">560</span><span id="line-560">    * @param value The new value for this property.</span>
+<span class="source-line-no">561</span><span id="line-561">    * @return This object.</span>
+<span class="source-line-no">562</span><span id="line-562">    */</span>
+<span class="source-line-no">563</span><span id="line-563">   SELF noInherit(String... value);</span>
+<span class="source-line-no">564</span><span id="line-564"></span>
+<span class="source-line-no">565</span><span id="line-565">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">566</span><span id="line-566">   // Programmatic-only knob (no @Rest member)</span>
+<span class="source-line-no">567</span><span id="line-567">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">568</span><span id="line-568"></span>
+<span class="source-line-no">569</span><span id="line-569">   /**</span>
+<span class="source-line-no">570</span><span id="line-570">    * Specifies whether MDC async propagation is enabled for this resource.</span>
+<span class="source-line-no">571</span><span id="line-571">    *</span>
+<span class="source-line-no">572</span><span id="line-572">    * &lt;p&gt;</span>
+<span class="source-line-no">573</span><span id="line-573">    * This is a &lt;b&gt;programmatic-only&lt;/b&gt; knob &amp;mdash; it has no {@link Rest @Rest} annotation member (its default is</span>
+<span class="source-line-no">574</span><span id="line-574">    * env-driven).  Setting it here overrides the {@code RestContext.mdcAsyncPropagation} env-driven default.</span>
+<span class="source-line-no">575</span><span id="line-575">    *</span>
+<span class="source-line-no">576</span><span id="line-576">    * @param value The new value for this property.</span>
+<span class="source-line-no">577</span><span id="line-577">    * @return This object.</span>
+<span class="source-line-no">578</span><span id="line-578">    */</span>
+<span class="source-line-no">579</span><span id="line-579">   SELF mdcAsyncPropagation(boolean value);</span>
+<span class="source-line-no">580</span><span id="line-580"></span>
+<span class="source-line-no">581</span><span id="line-581">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">582</span><span id="line-582">   // Forward-compat escape hatch</span>
+<span class="source-line-no">583</span><span id="line-583">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">584</span><span id="line-584"></span>
+<span class="source-line-no">585</span><span id="line-585">   /**</span>
+<span class="source-line-no">586</span><span id="line-586">    * Generic forward-compatible override setter, keyed by the {@code @Rest} property name (e.g.</span>
+<span class="source-line-no">587</span><span id="line-587">    * {@code "allowContentParam"}, {@code "defaultRequestHeaders"}).</span>
+<span class="source-line-no">588</span><span id="line-588">    *</span>
+<span class="source-line-no">589</span><span id="line-589">    * &lt;p&gt;</span>
+<span class="source-line-no">590</span><span id="line-590">    * Use this escape hatch for members not yet exposed as a dedicated fluent method.  Keys reuse the existing</span>
+<span class="source-line-no">591</span><span id="line-591">    * {@code @Rest} member names.</span>
+<span class="source-line-no">592</span><span id="line-592">    *</span>
+<span class="source-line-no">593</span><span id="line-593">    * @param key The {@code @Rest} property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">594</span><span id="line-594">    * @param value The override value.</span>
+<span class="source-line-no">595</span><span id="line-595">    * @return This object.</span>
+<span class="source-line-no">596</span><span id="line-596">    */</span>
+<span class="source-line-no">597</span><span id="line-597">   SELF set(String key, Object value);</span>
+<span class="source-line-no">598</span><span id="line-598">}</span>
 
 
 

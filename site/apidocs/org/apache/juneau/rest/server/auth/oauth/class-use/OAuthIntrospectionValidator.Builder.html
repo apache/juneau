@@ -143,13 +143,19 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds required scopes (scope enforcement lives on the validator, not the filter).</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">OAuthIntrospectionValidator.Builder.</span><code><a href="../OAuthIntrospectionValidator.Builder.html#resource(java.lang.String...)" class="member-name-link">resource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OAuthIntrospectionValidator.Builder.</span><code><a href="../OAuthIntrospectionValidator.Builder.html#requireTokenType(boolean)" class="member-name-link">requireTokenType</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Adds expected resource-indicator values (RFC 8707).</div>
+<div class="block">Requires the introspection response to carry a <code>token_type</code> of <code>Bearer</code> or
+ <code>access_token</code>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">OAuthIntrospectionValidator.Builder.</span><code><a href="../OAuthIntrospectionValidator.Builder.html#tokenCache(org.apache.juneau.rest.server.auth.oauth.TokenCache)" class="member-name-link">tokenCache</a><wbr>(<a href="../TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth">TokenCache</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OAuthIntrospectionValidator.Builder.</span><code><a href="../OAuthIntrospectionValidator.Builder.html#resource(java.lang.String...)" class="member-name-link">resource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Adds expected resource-indicator values (RFC 8707).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OAuthIntrospectionValidator.Builder.</span><code><a href="../OAuthIntrospectionValidator.Builder.html#tokenCache(org.apache.juneau.rest.server.auth.oauth.TokenCache)" class="member-name-link">tokenCache</a><wbr>(<a href="../TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth">TokenCache</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets a custom token cache.</div>
 </div>
 </div>

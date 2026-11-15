@@ -331,7 +331,15 @@
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 		assertEquals(1, ((Number) ((Map&lt;String,Object&gt;) items.get(0)).get(<span class="jxr_string">"id"</span>)).intValue());
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		assertEquals(2, ((Number) ((Map&lt;String,Object&gt;) items.get(1)).get(<span class="jxr_string">"id"</span>)).intValue());
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 	}
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> }
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	@Test <strong class="jxr_keyword">void</strong> z01_deepNestingRejected() {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 5000; i++) sb.append(<span class="jxr_string">"a{"</span>);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 5000; i++) sb.append(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; HoconParser.DEFAULT.read(sb.toString(), Object.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		assertTrue(e.getMessage().contains(<span class="jxr_string">"depth"</span>), e.getMessage());
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	}
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

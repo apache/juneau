@@ -167,7 +167,7 @@
 <span class="source-line-no">154</span><span id="line-154">      static ComponentHealth from(Health h) {</span>
 <span class="source-line-no">155</span><span id="line-155">         var details = new LinkedHashMap&lt;&gt;(h.getDetails());</span>
 <span class="source-line-no">156</span><span id="line-156">         if (h.getError() != null)</span>
-<span class="source-line-no">157</span><span id="line-157">            details.putIfAbsent("error", h.getError().toString());</span>
+<span class="source-line-no">157</span><span id="line-157">            details.putIfAbsent("error", h.getError().getClass().getSimpleName());</span>
 <span class="source-line-no">158</span><span id="line-158">         return new ComponentHealth(h.getStatus(), details);</span>
 <span class="source-line-no">159</span><span id="line-159">      }</span>
 <span class="source-line-no">160</span><span id="line-160"></span>

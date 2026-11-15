@@ -81,7 +81,7 @@
 <span class="source-line-no">068</span><span id="line-68">   /**</span>
 <span class="source-line-no">069</span><span id="line-69">    * Default value for {@link Builder#maxParseDepth(int)}.</span>
 <span class="source-line-no">070</span><span id="line-70">    */</span>
-<span class="source-line-no">071</span><span id="line-71">   protected static final int DEFAULT_MAX_PARSE_DEPTH = 1000;</span>
+<span class="source-line-no">071</span><span id="line-71">   protected static final int DEFAULT_MAX_PARSE_DEPTH = 500;</span>
 <span class="source-line-no">072</span><span id="line-72"></span>
 <span class="source-line-no">073</span><span id="line-73">   /**</span>
 <span class="source-line-no">074</span><span id="line-74">    * Builder class.</span>
@@ -970,7 +970,7 @@
 <span class="source-line-no">957</span><span id="line-957"></span>
 <span class="source-line-no">958</span><span id="line-958">         // Iterate through all the entries in the map and set the individual field values.</span>
 <span class="source-line-no">959</span><span id="line-959">         m.forEach((k, v) -&gt; {</span>
-<span class="source-line-no">960</span><span id="line-960">            if (! k.equals(btpn)) {</span>
+<span class="source-line-no">960</span><span id="line-960">            if (neq(k, btpn)) {</span>
 <span class="source-line-no">961</span><span id="line-961">               // Attempt to recursively cast child maps.</span>
 <span class="source-line-no">962</span><span id="line-962">               if (v instanceof MarshalledMap v2)</span>
 <span class="source-line-no">963</span><span id="line-963">                  v = cast(v2, pMeta, eType);</span>
@@ -1485,7 +1485,7 @@
 <span class="source-line-no">1472</span><span id="line-1472">    */</span>
 <span class="source-line-no">1473</span><span id="line-1473">   protected final &lt;T&gt; void onUnknownProperty(String propertyName, BeanMap&lt;T&gt; beanMap, Object value) throws ParseException {</span>
 <span class="source-line-no">1474</span><span id="line-1474">      var bmcm = (ClassMeta&lt;T&gt;) beanMap.getBeanInfo();</span>
-<span class="source-line-no">1475</span><span id="line-1475">      if (propertyName.equals(getBeanTypePropertyName(bmcm)))</span>
+<span class="source-line-no">1475</span><span id="line-1475">      if (eq(propertyName, getBeanTypePropertyName(bmcm)))</span>
 <span class="source-line-no">1476</span><span id="line-1476">         return;</span>
 <span class="source-line-no">1477</span><span id="line-1477">      if (! isIgnoreUnknownBeanProperties() &amp;&amp; (nn(value) || ! isIgnoreUnknownNullBeanProperties()))</span>
 <span class="source-line-no">1478</span><span id="line-1478">         throw new ParseException(this, "Unknown property '%s' encountered while trying to parse into class '%s'", propertyName, bmcm);</span>

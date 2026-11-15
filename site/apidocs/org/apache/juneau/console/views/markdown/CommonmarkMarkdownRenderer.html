@@ -145,7 +145,7 @@ implements <a href="MarkdownRenderer.html" title="interface in org.apache.juneau
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isSafeUrl(java.lang.String)" class="member-name-link">isSafeUrl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Whether <code>url</code> is safe to emit as an <code>href</code> or <code>src</code>: <code>http</code>/<code>https</code>/
- <code>mailto</code>, a fragment, a same-origin path, or a scheme-less relative URL.</div>
+ <code>mailto</code>, a fragment, a same-origin path (not protocol-relative), or a scheme-less relative URL.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toHtml(java.lang.String)" class="member-name-link">toHtml</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;markdown)</code></div>
@@ -209,7 +209,7 @@ implements <a href="MarkdownRenderer.html" title="interface in org.apache.juneau
 <h3>isSafeUrl</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/console/views/markdown/CommonmarkMarkdownRenderer.html#line-93">isSafeUrl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url)</span></div>
 <div class="block">Whether <code>url</code> is safe to emit as an <code>href</code> or <code>src</code>: <code>http</code>/<code>https</code>/
- <code>mailto</code>, a fragment, a same-origin path, or a scheme-less relative URL.</div>
+ <code>mailto</code>, a fragment, a same-origin path (not protocol-relative), or a scheme-less relative URL.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>url</code> - The candidate URL.  May be <jk>null</jk>.</dd>

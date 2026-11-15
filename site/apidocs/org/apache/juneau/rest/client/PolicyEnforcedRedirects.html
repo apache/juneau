@@ -80,11 +80,11 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/PolicyEnforcedRedirects.html#line-55">PolicyEnforcedRedirects</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Shared Juneau-controlled redirect loop for SSRF-guard-active (<a href="TransportRequest.html#isSsrfGuardActive()"><code>TransportRequest.isSsrfGuardActive()</code></a>)
+<div class="block">Shared Juneau-controlled redirect loop for outbound-URL-guard-active (<a href="TransportRequest.html#isSsrfGuardActive()"><code>TransportRequest.isSsrfGuardActive()</code></a>)
  <code>@Remote</code> requests.
 
  <p>
- Every first-party transport that supports the SSRF guardrail's connect-time contract (see
+ Every first-party transport that supports the outbound-URL guardrail's connect-time contract (see
  <a href="HttpTransport.html#supportsUrlPolicy()"><code>HttpTransport.supportsUrlPolicy()</code></a>) disables its own automatic redirect-following for policy-covered
  requests and instead routes each hop through <a href="#execute(org.apache.juneau.rest.client.TransportRequest,org.apache.juneau.rest.client.PolicyEnforcedRedirects.HopExecutor)"><code>execute(TransportRequest, HopExecutor)</code></a>, which re-runs the
  <a href="../../http/remote/RemoteUrlPolicy.html" title="class in org.apache.juneau.http.remote"><code>RemoteUrlPolicy</code></a> pre-check &mdash; and, via the supplied <a href="PolicyEnforcedRedirects.HopExecutor.html" title="interface in org.apache.juneau.rest.client"><code>PolicyEnforcedRedirects.HopExecutor</code></a>, pin-on-connect &mdash; on

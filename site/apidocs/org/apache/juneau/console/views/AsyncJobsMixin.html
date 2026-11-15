@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../petstore/console/ops/JobsRest.html" title="class in org.apache.juneau.petstore.console.ops">JobsRest</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-78">AsyncJobsMixin</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-80">AsyncJobsMixin</a></span></div>
 <div class="block">Mixin interface that exposes the async-job SSE progress stream and cancel endpoint on any Juneau REST resource.
 
  <p>
@@ -97,9 +97,9 @@ loadScripts(document, 'script');</script>
  <h2 class='section'>Authorization: the stream URL is the capability</h2>
  <p>
  The stream is a held-open <b>GET</b>, so <a href="../../rest/server/filter/LoopbackBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>LoopbackBoundary</code></a> applies only
- its <b>Host</b> check (DNS-rebinding stays covered on every request); the Origin/CSRF/JSON checks apply to non-safe
+ its <b>Host</b> check (DNS-rebinding stays covered on every request); the Origin/token/JSON checks apply to non-safe
  methods only.  A browser <code>EventSource</code> cannot set an <code>X-Csrf-Token</code> header and cookies are unsound on a
- loopback port, so CSRF-on-GET is not an available control.  Access is therefore gated by the <b>unguessability of
+ loopback port, so token-on-GET is not an available control.  Access is therefore gated by the <b>unguessability of
  the <code>jobId</code></b> path segment &mdash; an <a href="AsyncJobRegistry.html#CAPABILITY_BITS">256</a>-bit
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/SecureRandom.html" title="class or interface in java.security" class="external-link"><code>SecureRandom</code></a> capability &mdash; and nothing else.  An unknown id answers <code>404</code> (a miss
  is indistinguishable, so the id space cannot be enumerated); a job already at its subscriber cap answers
@@ -183,7 +183,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the <a href="AsyncJobRegistry.html" title="class in org.apache.juneau.console.views"><code>AsyncJobRegistry</code></a> backing this resource's async jobs.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#cancelJob(java.lang.String,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">cancelJob</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobId,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#cancelJob(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">cancelJob</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobId,
+ <a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">[POST /juneau-jobs/{jobId}/cancel] &mdash; cancel a job and return its terminal result.</div>
@@ -222,7 +223,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="JOBS_PREFIX">
 <h3>JOBS_PREFIX</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-84">JOBS_PREFIX</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-86">JOBS_PREFIX</a></span></div>
 <div class="block">The URL path prefix for the async-job endpoints (relative to the host mount).</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -237,7 +238,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="STREAM_PATH">
 <h3>STREAM_PATH</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-87">STREAM_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-89">STREAM_PATH</a></span></div>
 <div class="block">The URL path template of the SSE progress stream.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -252,7 +253,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="CANCEL_PATH">
 <h3>CANCEL_PATH</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-90">CANCEL_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-92">CANCEL_PATH</a></span></div>
 <div class="block">The URL path template of the cancel endpoint.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -267,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="STREAM_POLL_INTERVAL">
 <h3>STREAM_POLL_INTERVAL</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-93">STREAM_POLL_INTERVAL</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-95">STREAM_POLL_INTERVAL</a></span></div>
 <div class="block">How long the stream loop blocks per poll while a job is still running (a liveness tick, not a timeout).</div>
 </section>
 </li>
@@ -282,7 +283,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asyncJobRegistry()">
 <h3>asyncJobRegistry</h3>
-<div class="member-signature"><span class="return-type"><a href="AsyncJobRegistry.html" title="class in org.apache.juneau.console.views">AsyncJobRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-100">asyncJobRegistry</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="AsyncJobRegistry.html" title="class in org.apache.juneau.console.views">AsyncJobRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-102">asyncJobRegistry</a></span>()</div>
 <div class="block">Returns the <a href="AsyncJobRegistry.html" title="class in org.apache.juneau.console.views"><code>AsyncJobRegistry</code></a> backing this resource's async jobs.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -293,7 +294,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="streamJob(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>streamJob</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-134">streamJob</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("jobId")
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-136">streamJob</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("jobId")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobId,
  <a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
@@ -334,15 +335,16 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="cancelJob(java.lang.String,org.apache.juneau.rest.server.RestResponse)">
+<section class="detail" id="cancelJob(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>cancelJob</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-200">cancelJob</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("jobId")
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-210">cancelJob</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("jobId")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobId,
+ <a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span></div>
 <div class="block">[POST /juneau-jobs/{jobId}/cancel] &mdash; cancel a job and return its terminal result.
 
  <p>
- A non-safe POST, so the boundary applies its full Origin/CSRF/JSON checks.  Cancellation is enforced
+ A non-safe POST, so the boundary applies its full Origin/token/JSON checks.  Cancellation is enforced
  server-side (a client cannot be trusted to stop the work); the returned outcome distinguishes <code>cancelled</code>
  from <code>cancelled-after-effect</code>.  An unknown id is a <code>404</code> carrying a named refusal.</div>
 <dl class="notes">
@@ -357,7 +359,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="streamPath(java.lang.String)">
 <h3>streamPath</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-217">streamPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobId)</span></div>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-227">streamPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobId)</span></div>
 <div class="block">Builds the servlet-relative stream path for a job id.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -370,7 +372,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cancelPath(java.lang.String)">
 <h3>cancelPath</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-227">cancelPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobId)</span></div>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/AsyncJobsMixin.html#line-237">cancelPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobId)</span></div>
 <div class="block">Builds the servlet-relative cancel path for a job id.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

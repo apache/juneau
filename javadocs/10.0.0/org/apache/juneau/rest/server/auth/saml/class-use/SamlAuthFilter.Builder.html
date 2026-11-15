@@ -78,40 +78,46 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the SAML binding the filter listens for.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SamlAuthFilter.Builder.</span><code><a href="../SamlAuthFilter.Builder.html#consumerPath(java.lang.String)" class="member-name-link">consumerPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SamlAuthFilter.Builder.</span><code><a href="../SamlAuthFilter.Builder.html#bindingCookieName(java.lang.String)" class="member-name-link">bindingCookieName</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Sets the name of the cookie that carries the browser-binding secret returned by
+ <a href="../SamlAssertionValidator.html#rememberAuthnRequest(java.lang.String)"><code>SamlAssertionValidator.rememberAuthnRequest(String)</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SamlAuthFilter.Builder.</span><code><a href="../SamlAuthFilter.Builder.html#consumerPath(java.lang.String)" class="member-name-link">consumerPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the request path that carries the SAML assertion.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SamlAuthFilter.</span><code><a href="../SamlAuthFilter.html#create()" class="member-name-link">create</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static <a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SamlAuthFilter.</span><code><a href="../SamlAuthFilter.html#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Static creator.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SamlAuthFilter.Builder.</span><code><a href="../SamlAuthFilter.Builder.html#maxInflatedBytes(long)" class="member-name-link">maxInflatedBytes</a><wbr>(long&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SamlAuthFilter.Builder.</span><code><a href="../SamlAuthFilter.Builder.html#maxInflatedBytes(long)" class="member-name-link">maxInflatedBytes</a><wbr>(long&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the ceiling on the number of decompressed bytes accepted from a <a href="../SamlBinding.html#REDIRECT"><code>SamlBinding.REDIRECT</code></a>
  <code>SAMLResponse</code>.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SamlAuthFilter.Builder.</span><code><a href="../SamlAuthFilter.Builder.html#maxInflateRatio(int)" class="member-name-link">maxInflateRatio</a><wbr>(int&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SamlAuthFilter.Builder.</span><code><a href="../SamlAuthFilter.Builder.html#maxInflateRatio(int)" class="member-name-link">maxInflateRatio</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the ceiling on the decompressed-to-compressed size ratio accepted from a
  <a href="../SamlBinding.html#REDIRECT"><code>SamlBinding.REDIRECT</code></a> <code>SAMLResponse</code>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SamlAuthFilter.Builder.</span><code><a href="../SamlAuthFilter.Builder.html#realm(java.lang.String)" class="member-name-link">realm</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SamlAuthFilter.Builder.</span><code><a href="../SamlAuthFilter.Builder.html#realm(java.lang.String)" class="member-name-link">realm</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the <code>WWW-Authenticate: SAML realm="&lt;value&gt;"</code> challenge realm.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SamlAuthFilter.Builder.</span><code><a href="../SamlAuthFilter.Builder.html#rolesClaim(java.lang.String)" class="member-name-link">rolesClaim</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SamlAuthFilter.Builder.</span><code><a href="../SamlAuthFilter.Builder.html#rolesClaim(java.lang.String)" class="member-name-link">rolesClaim</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the claim name used to extract roles from the resolved <a href="../../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SamlAuthFilter.Builder.</span><code><a href="../SamlAuthFilter.Builder.html#validator(org.apache.juneau.rest.server.auth.saml.SamlAssertionValidator)" class="member-name-link">validator</a><wbr>(<a href="../SamlAssertionValidator.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SamlAuthFilter.Builder.</span><code><a href="../SamlAuthFilter.Builder.html#validator(org.apache.juneau.rest.server.auth.saml.SamlAssertionValidator)" class="member-name-link">validator</a><wbr>(<a href="../SamlAssertionValidator.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the SAML assertion validator.</div>
 </div>
 </div>

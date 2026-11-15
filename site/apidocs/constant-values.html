@@ -1972,6 +1972,17 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color"><code>128</code></div>
 </div>
 </li>
+<li>
+<div class="caption"><span>org.apache.juneau.http.<a href="org/apache/juneau/http/RestDebugBodyGate.html" title="class in org.apache.juneau.http">RestDebugBodyGate</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Constant Field</div>
+<div class="table-header col-last">Value</div>
+<div class="col-first even-row-color"><code id="org.apache.juneau.http.RestDebugBodyGate.ENV_ALLOW_DUMP_BODIES">public&nbsp;static&nbsp;final&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="org/apache/juneau/http/RestDebugBodyGate.html#ENV_ALLOW_DUMP_BODIES">ENV_ALLOW_DUMP_BODIES</a></code></div>
+<div class="col-last even-row-color"><code>"JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES"</code></div>
+</div>
+</li>
 </ul>
 <ul class="block-list">
 <li>
@@ -4557,7 +4568,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Value</div>
 <div class="col-first even-row-color"><code id="org.apache.juneau.marshall.parser.ParserSession.DEFAULT_MAX_PARSE_DEPTH">protected&nbsp;static&nbsp;final&nbsp;int</code></div>
 <div class="col-second even-row-color"><code><a href="org/apache/juneau/marshall/parser/ParserSession.html#DEFAULT_MAX_PARSE_DEPTH">DEFAULT_MAX_PARSE_DEPTH</a></code></div>
-<div class="col-last even-row-color"><code>1000</code></div>
+<div class="col-last even-row-color"><code>500</code></div>
 </div>
 </li>
 </ul>
@@ -4571,6 +4582,20 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code id="org.apache.juneau.marshall.sse.SseEvent.DEFAULT_EVENT">public&nbsp;static&nbsp;final&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="org/apache/juneau/marshall/sse/SseEvent.html#DEFAULT_EVENT">DEFAULT_EVENT</a></code></div>
 <div class="col-last even-row-color"><code>"message"</code></div>
+</div>
+</li>
+<li>
+<div class="caption"><span>org.apache.juneau.marshall.sse.<a href="org/apache/juneau/marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Constant Field</div>
+<div class="table-header col-last">Value</div>
+<div class="col-first even-row-color"><code id="org.apache.juneau.marshall.sse.SseEventReader.DEFAULT_MAX_EVENT_LENGTH">public&nbsp;static&nbsp;final&nbsp;int</code></div>
+<div class="col-second even-row-color"><code><a href="org/apache/juneau/marshall/sse/SseEventReader.html#DEFAULT_MAX_EVENT_LENGTH">DEFAULT_MAX_EVENT_LENGTH</a></code></div>
+<div class="col-last even-row-color"><code>16777216</code></div>
+<div class="col-first odd-row-color"><code id="org.apache.juneau.marshall.sse.SseEventReader.DEFAULT_MAX_LINE_LENGTH">public&nbsp;static&nbsp;final&nbsp;int</code></div>
+<div class="col-second odd-row-color"><code><a href="org/apache/juneau/marshall/sse/SseEventReader.html#DEFAULT_MAX_LINE_LENGTH">DEFAULT_MAX_LINE_LENGTH</a></code></div>
+<div class="col-last odd-row-color"><code>16777216</code></div>
 </div>
 </li>
 <li>
@@ -4852,6 +4877,22 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="block-list">
 <li>
+<div class="caption"><span>org.apache.juneau.petstore.marshall.<a href="org/apache/juneau/petstore/marshall/PetPhotoParser.html" title="class in org.apache.juneau.petstore.marshall">PetPhotoParser</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Constant Field</div>
+<div class="table-header col-last">Value</div>
+<div class="col-first even-row-color"><code id="org.apache.juneau.petstore.marshall.PetPhotoParser.MAX_DIMENSION">public&nbsp;static&nbsp;final&nbsp;int</code></div>
+<div class="col-second even-row-color"><code><a href="org/apache/juneau/petstore/marshall/PetPhotoParser.html#MAX_DIMENSION">MAX_DIMENSION</a></code></div>
+<div class="col-last even-row-color"><code>8192</code></div>
+<div class="col-first odd-row-color"><code id="org.apache.juneau.petstore.marshall.PetPhotoParser.MAX_PIXELS">public&nbsp;static&nbsp;final&nbsp;long</code></div>
+<div class="col-second odd-row-color"><code><a href="org/apache/juneau/petstore/marshall/PetPhotoParser.html#MAX_PIXELS">MAX_PIXELS</a></code></div>
+<div class="col-last odd-row-color"><code>16777216L</code></div>
+</div>
+</li>
+</ul>
+<ul class="block-list">
+<li>
 <div class="caption"><span>org.apache.juneau.petstore.service.<a href="org/apache/juneau/petstore/service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -4885,6 +4926,19 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code id="org.apache.juneau.rest.RestSharedConstants.QUERY_juneauSerializerOptions">public&nbsp;static&nbsp;final&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="org/apache/juneau/rest/RestSharedConstants.html#QUERY_juneauSerializerOptions">QUERY_juneauSerializerOptions</a></code></div>
 <div class="col-last odd-row-color"><code>"juneauSerializerOptions"</code></div>
+</div>
+</li>
+</ul>
+<ul class="block-list">
+<li>
+<div class="caption"><span>org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/JwksResourceRetriever.html" title="class in org.apache.juneau.rest.auth.oauth.flow">JwksResourceRetriever</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Constant Field</div>
+<div class="table-header col-last">Value</div>
+<div class="col-first even-row-color"><code id="org.apache.juneau.rest.auth.oauth.flow.JwksResourceRetriever.MAX_BYTES">public&nbsp;static&nbsp;final&nbsp;int</code></div>
+<div class="col-second even-row-color"><code><a href="org/apache/juneau/rest/auth/oauth/flow/JwksResourceRetriever.html#MAX_BYTES">MAX_BYTES</a></code></div>
+<div class="col-last even-row-color"><code>65536</code></div>
 </div>
 </li>
 </ul>
@@ -5421,9 +5475,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code id="org.apache.juneau.rest.server.mcp.v20260728.McpSubscriptionsConfig.DEFAULT_MAX_CONCURRENT_SUBSCRIPTIONS">public&nbsp;static&nbsp;final&nbsp;int</code></div>
 <div class="col-second even-row-color"><code><a href="org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#DEFAULT_MAX_CONCURRENT_SUBSCRIPTIONS">DEFAULT_MAX_CONCURRENT_SUBSCRIPTIONS</a></code></div>
 <div class="col-last even-row-color"><code>256</code></div>
-<div class="col-first odd-row-color"><code id="org.apache.juneau.rest.server.mcp.v20260728.McpSubscriptionsConfig.DEFAULT_QUEUE_SIZE">public&nbsp;static&nbsp;final&nbsp;int</code></div>
-<div class="col-second odd-row-color"><code><a href="org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#DEFAULT_QUEUE_SIZE">DEFAULT_QUEUE_SIZE</a></code></div>
-<div class="col-last odd-row-color"><code>1024</code></div>
+<div class="col-first odd-row-color"><code id="org.apache.juneau.rest.server.mcp.v20260728.McpSubscriptionsConfig.DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL">public&nbsp;static&nbsp;final&nbsp;int</code></div>
+<div class="col-second odd-row-color"><code><a href="org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL">DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL</a></code></div>
+<div class="col-last odd-row-color"><code>16</code></div>
+<div class="col-first even-row-color"><code id="org.apache.juneau.rest.server.mcp.v20260728.McpSubscriptionsConfig.DEFAULT_QUEUE_SIZE">public&nbsp;static&nbsp;final&nbsp;int</code></div>
+<div class="col-second even-row-color"><code><a href="org/apache/juneau/rest/server/mcp/v20260728/McpSubscriptionsConfig.html#DEFAULT_QUEUE_SIZE">DEFAULT_QUEUE_SIZE</a></code></div>
+<div class="col-last even-row-color"><code>1024</code></div>
 </div>
 </li>
 <li>

@@ -113,8 +113,8 @@
 <span class="source-line-no">100</span><span id="line-100"> *</span>
 <span class="source-line-no">101</span><span id="line-101"> * &lt;h2 class='section'&gt;Interruptible {@code pattern} matching:&lt;/h2&gt;</span>
 <span class="source-line-no">102</span><span id="line-102"> * &lt;p&gt;</span>
-<span class="source-line-no">103</span><span id="line-103"> * A {@code pattern} keyword can encode a catastrophically-backtracking regular expression that a hostile input can</span>
-<span class="source-line-no">104</span><span id="line-104"> * drive into effectively-unbounded work. {@link java.util.regex.Matcher} never checks {@link Thread#isInterrupted()},</span>
+<span class="source-line-no">103</span><span id="line-103"> * A {@code pattern} keyword can encode a catastrophically-backtracking regular expression that an untrusted input can</span>
+<span class="source-line-no">104</span><span id="line-104"> * drive into effectively-unbounded work. {@link Matcher} never checks {@link Thread#isInterrupted()},</span>
 <span class="source-line-no">105</span><span id="line-105"> * so such a match cannot be stopped by interrupting the matching thread - it runs to completion, pinning a core even</span>
 <span class="source-line-no">106</span><span id="line-106"> * after the caller has given up. To make a runaway match abortable, the string is fed to the matcher through an</span>
 <span class="source-line-no">107</span><span id="line-107"> * {@link InterruptibleCharSequence}: because the matcher reads its input exclusively via {@link CharSequence#charAt(int)},</span>
@@ -381,173 +381,227 @@
 <span class="source-line-no">368</span><span id="line-368">   private static boolean hasDuplicates(Collection&lt;?&gt; c) {</span>
 <span class="source-line-no">369</span><span id="line-369">      if (c.size() &lt; 2)</span>
 <span class="source-line-no">370</span><span id="line-370">         return false;</span>
-<span class="source-line-no">371</span><span id="line-371">      var seen = new ArrayList&lt;&gt;(c.size());</span>
+<span class="source-line-no">371</span><span id="line-371">      var seen = new HashSet&lt;&gt;(Math.max(16, (int)(c.size() / 0.75f) + 1));</span>
 <span class="source-line-no">372</span><span id="line-372">      for (var e : c) {</span>
-<span class="source-line-no">373</span><span id="line-373">         for (var s : seen) {</span>
-<span class="source-line-no">374</span><span id="line-374">            if (jsonEquals(e, s))</span>
-<span class="source-line-no">375</span><span id="line-375">               return true;</span>
-<span class="source-line-no">376</span><span id="line-376">         }</span>
-<span class="source-line-no">377</span><span id="line-377">         seen.add(e);</span>
-<span class="source-line-no">378</span><span id="line-378">      }</span>
-<span class="source-line-no">379</span><span id="line-379">      return false;</span>
-<span class="source-line-no">380</span><span id="line-380">   }</span>
-<span class="source-line-no">381</span><span id="line-381"></span>
-<span class="source-line-no">382</span><span id="line-382">   // =================================================================================================================</span>
-<span class="source-line-no">383</span><span id="line-383">   // Object (Map / bean shape)</span>
-<span class="source-line-no">384</span><span id="line-384">   // =================================================================================================================</span>
-<span class="source-line-no">385</span><span id="line-385"></span>
-<span class="source-line-no">386</span><span id="line-386">   private static void validateObject(JsonSchema&lt;?&gt; s, Map&lt;?,?&gt; value) {</span>
-<span class="source-line-no">387</span><span id="line-387">      var minP = s.getMinProperties();</span>
-<span class="source-line-no">388</span><span id="line-388">      var maxP = s.getMaxProperties();</span>
-<span class="source-line-no">389</span><span id="line-389">      var size = value.size();</span>
-<span class="source-line-no">390</span><span id="line-390">      if (nn(minP) &amp;&amp; size &lt; minP)</span>
-<span class="source-line-no">391</span><span id="line-391">         throw new SchemaValidationException("Object property count %s is less than minProperties %s.", size, minP);</span>
-<span class="source-line-no">392</span><span id="line-392">      if (nn(maxP) &amp;&amp; size &gt; maxP)</span>
-<span class="source-line-no">393</span><span id="line-393">         throw new SchemaValidationException("Object property count %s exceeds maxProperties %s.", size, maxP);</span>
-<span class="source-line-no">394</span><span id="line-394">      var required = s.getRequired();</span>
-<span class="source-line-no">395</span><span id="line-395">      if (nn(required)) {</span>
-<span class="source-line-no">396</span><span id="line-396">         for (var key : required) {</span>
-<span class="source-line-no">397</span><span id="line-397">            if (! value.containsKey(key))</span>
-<span class="source-line-no">398</span><span id="line-398">               throw new SchemaValidationException("Required property '%s' is missing.", key);</span>
-<span class="source-line-no">399</span><span id="line-399">         }</span>
-<span class="source-line-no">400</span><span id="line-400">      }</span>
-<span class="source-line-no">401</span><span id="line-401">      var props = s.getProperties();</span>
-<span class="source-line-no">402</span><span id="line-402">      if (nn(props)) {</span>
-<span class="source-line-no">403</span><span id="line-403">         for (var entry : props.entrySet()) {</span>
-<span class="source-line-no">404</span><span id="line-404">            var name = entry.getKey();</span>
-<span class="source-line-no">405</span><span id="line-405">            var sub = entry.getValue();</span>
-<span class="source-line-no">406</span><span id="line-406">            if (value.containsKey(name))</span>
-<span class="source-line-no">407</span><span id="line-407">               validateAgainst(sub, value.get(name), null);</span>
-<span class="source-line-no">408</span><span id="line-408">         }</span>
-<span class="source-line-no">409</span><span id="line-409">      }</span>
-<span class="source-line-no">410</span><span id="line-410">   }</span>
-<span class="source-line-no">411</span><span id="line-411"></span>
-<span class="source-line-no">412</span><span id="line-412">   // =================================================================================================================</span>
-<span class="source-line-no">413</span><span id="line-413">   // Helpers</span>
-<span class="source-line-no">414</span><span id="line-414">   // =================================================================================================================</span>
-<span class="source-line-no">415</span><span id="line-415"></span>
-<span class="source-line-no">416</span><span id="line-416">   private static BigDecimal toBigDecimal(Number n) {</span>
-<span class="source-line-no">417</span><span id="line-417">      if (n instanceof BigDecimal n2)</span>
-<span class="source-line-no">418</span><span id="line-418">         return n2;</span>
-<span class="source-line-no">419</span><span id="line-419">      if (n instanceof BigInteger n2)</span>
-<span class="source-line-no">420</span><span id="line-420">         return new BigDecimal(n2);</span>
-<span class="source-line-no">421</span><span id="line-421">      if (n instanceof Long || n instanceof Integer || n instanceof Short || n instanceof Byte)</span>
-<span class="source-line-no">422</span><span id="line-422">         return BigDecimal.valueOf(n.longValue());</span>
-<span class="source-line-no">423</span><span id="line-423">      return new BigDecimal(n.toString());</span>
-<span class="source-line-no">424</span><span id="line-424">   }</span>
-<span class="source-line-no">425</span><span id="line-425"></span>
-<span class="source-line-no">426</span><span id="line-426">   private static boolean jsonEquals(Object a, Object b) {</span>
-<span class="source-line-no">427</span><span id="line-427">      if (a == b)</span>
-<span class="source-line-no">428</span><span id="line-428">         return true;</span>
-<span class="source-line-no">429</span><span id="line-429">      if (a == null || b == null)</span>
-<span class="source-line-no">430</span><span id="line-430">         return false;</span>
-<span class="source-line-no">431</span><span id="line-431">      if (a instanceof Number a2 &amp;&amp; b instanceof Number b2)</span>
-<span class="source-line-no">432</span><span id="line-432">         return toBigDecimal(a2).compareTo(toBigDecimal(b2)) == 0;</span>
-<span class="source-line-no">433</span><span id="line-433">      if (a instanceof Number a2 &amp;&amp; b instanceof CharSequence b2) {</span>
-<span class="source-line-no">434</span><span id="line-434">         var bd = tryAsBigDecimal(b2.toString());</span>
-<span class="source-line-no">435</span><span id="line-435">         return nn(bd) &amp;&amp; toBigDecimal(a2).compareTo(bd) == 0;</span>
-<span class="source-line-no">436</span><span id="line-436">      }</span>
-<span class="source-line-no">437</span><span id="line-437">      if (b instanceof Number b2 &amp;&amp; a instanceof CharSequence a2) {</span>
-<span class="source-line-no">438</span><span id="line-438">         var bd = tryAsBigDecimal(a2.toString());</span>
-<span class="source-line-no">439</span><span id="line-439">         return nn(bd) &amp;&amp; toBigDecimal(b2).compareTo(bd) == 0;</span>
-<span class="source-line-no">440</span><span id="line-440">      }</span>
-<span class="source-line-no">441</span><span id="line-441">      if (a instanceof CharSequence a2 &amp;&amp; b instanceof CharSequence b2)</span>
-<span class="source-line-no">442</span><span id="line-442">         return a2.toString().equals(b2.toString());</span>
-<span class="source-line-no">443</span><span id="line-443">      if (a.equals(b))</span>
-<span class="source-line-no">444</span><span id="line-444">         return true;</span>
-<span class="source-line-no">445</span><span id="line-445">      try {</span>
-<span class="source-line-no">446</span><span id="line-446">         return Json.of(a).equals(Json.of(b));</span>
-<span class="source-line-no">447</span><span id="line-447">      } catch (@SuppressWarnings("unused") Exception e) {</span>
-<span class="source-line-no">448</span><span id="line-448">         return false;</span>
-<span class="source-line-no">449</span><span id="line-449">      }</span>
-<span class="source-line-no">450</span><span id="line-450">   }</span>
-<span class="source-line-no">451</span><span id="line-451"></span>
-<span class="source-line-no">452</span><span id="line-452">   private static BigDecimal tryAsBigDecimal(String s) {</span>
-<span class="source-line-no">453</span><span id="line-453">      try {</span>
-<span class="source-line-no">454</span><span id="line-454">         return new BigDecimal(s);</span>
-<span class="source-line-no">455</span><span id="line-455">      } catch (@SuppressWarnings("unused") NumberFormatException e) {</span>
-<span class="source-line-no">456</span><span id="line-456">         return null;</span>
-<span class="source-line-no">457</span><span id="line-457">      }</span>
-<span class="source-line-no">458</span><span id="line-458">   }</span>
-<span class="source-line-no">459</span><span id="line-459"></span>
-<span class="source-line-no">460</span><span id="line-460">   // =================================================================================================================</span>
-<span class="source-line-no">461</span><span id="line-461">   // Interruptible pattern matching</span>
-<span class="source-line-no">462</span><span id="line-462">   // =================================================================================================================</span>
-<span class="source-line-no">463</span><span id="line-463"></span>
-<span class="source-line-no">464</span><span id="line-464">   /**</span>
-<span class="source-line-no">465</span><span id="line-465">    * A read-only {@link CharSequence} view over the string being matched that lets a runaway {@link Matcher} be</span>
-<span class="source-line-no">466</span><span id="line-466">    * aborted by interrupting the matching thread.</span>
-<span class="source-line-no">467</span><span id="line-467">    *</span>
-<span class="source-line-no">468</span><span id="line-468">    * &lt;p&gt;</span>
-<span class="source-line-no">469</span><span id="line-469">    * {@link Matcher} reads its input exclusively through {@link #charAt(int)} and never observes the thread's</span>
-<span class="source-line-no">470</span><span id="line-470">    * interrupt status, so a catastrophically-backtracking pattern cannot be stopped by {@link Thread#interrupt()}</span>
-<span class="source-line-no">471</span><span id="line-471">    * alone. Interposing this sequence makes every {@link #CHECK_INTERVAL}-th character read sample</span>
-<span class="source-line-no">472</span><span id="line-472">    * {@link Thread#isInterrupted()} and throw {@link InterruptedMatchException} once it is set, unwinding the match</span>
-<span class="source-line-no">473</span><span id="line-473">    * promptly. The interrupt status is checked without clearing it, so an outer caller can still observe it.</span>
-<span class="source-line-no">474</span><span id="line-474">    *</span>
-<span class="source-line-no">475</span><span id="line-475">    * &lt;p&gt;</span>
-<span class="source-line-no">476</span><span id="line-476">    * Instances are single-use and not thread-safe: a {@link Matcher} drives its input from one thread, which is the</span>
-<span class="source-line-no">477</span><span id="line-477">    * same thread whose interrupt status is being sampled.</span>
-<span class="source-line-no">478</span><span id="line-478">    */</span>
-<span class="source-line-no">479</span><span id="line-479">   private static final class InterruptibleCharSequence implements CharSequence {</span>
-<span class="source-line-no">480</span><span id="line-480"></span>
-<span class="source-line-no">481</span><span id="line-481">      /**</span>
-<span class="source-line-no">482</span><span id="line-482">       * Number of character reads between interrupt checks. Large enough that the sampling overhead is negligible</span>
-<span class="source-line-no">483</span><span id="line-483">       * against the matcher's per-character work, small enough that an interrupt aborts a runaway match within</span>
-<span class="source-line-no">484</span><span id="line-484">       * microseconds (catastrophic backtracking re-reads characters an enormous number of times).</span>
-<span class="source-line-no">485</span><span id="line-485">       */</span>
-<span class="source-line-no">486</span><span id="line-486">      private static final int CHECK_INTERVAL = 1 &lt;&lt; 12;</span>
-<span class="source-line-no">487</span><span id="line-487"></span>
-<span class="source-line-no">488</span><span id="line-488">      private final CharSequence delegate;</span>
-<span class="source-line-no">489</span><span id="line-489">      private int readsUntilCheck = CHECK_INTERVAL;</span>
-<span class="source-line-no">490</span><span id="line-490"></span>
-<span class="source-line-no">491</span><span id="line-491">      InterruptibleCharSequence(CharSequence delegate) {</span>
-<span class="source-line-no">492</span><span id="line-492">         this.delegate = delegate;</span>
-<span class="source-line-no">493</span><span id="line-493">      }</span>
-<span class="source-line-no">494</span><span id="line-494"></span>
-<span class="source-line-no">495</span><span id="line-495">      @Override</span>
-<span class="source-line-no">496</span><span id="line-496">      public char charAt(int index) {</span>
-<span class="source-line-no">497</span><span id="line-497">         if (--readsUntilCheck &lt;= 0) {</span>
-<span class="source-line-no">498</span><span id="line-498">            readsUntilCheck = CHECK_INTERVAL;</span>
-<span class="source-line-no">499</span><span id="line-499">            if (Thread.currentThread().isInterrupted())</span>
-<span class="source-line-no">500</span><span id="line-500">               throw new InterruptedMatchException();</span>
-<span class="source-line-no">501</span><span id="line-501">         }</span>
-<span class="source-line-no">502</span><span id="line-502">         return delegate.charAt(index);</span>
+<span class="source-line-no">373</span><span id="line-373">         checkInterrupted();</span>
+<span class="source-line-no">374</span><span id="line-374">         if (! seen.add(canonical(e)))</span>
+<span class="source-line-no">375</span><span id="line-375">            return true;</span>
+<span class="source-line-no">376</span><span id="line-376">      }</span>
+<span class="source-line-no">377</span><span id="line-377">      return false;</span>
+<span class="source-line-no">378</span><span id="line-378">   }</span>
+<span class="source-line-no">379</span><span id="line-379"></span>
+<span class="source-line-no">380</span><span id="line-380">   /**</span>
+<span class="source-line-no">381</span><span id="line-381">    * Wrapper for values with no structural JSON form, keyed by their serialized representation.</span>
+<span class="source-line-no">382</span><span id="line-382">    */</span>
+<span class="source-line-no">383</span><span id="line-383">   private record OpaqueKey(String json) {}</span>
+<span class="source-line-no">384</span><span id="line-384"></span>
+<span class="source-line-no">385</span><span id="line-385">   /**</span>
+<span class="source-line-no">386</span><span id="line-386">    * Returns a form of the specified value whose {@link Object#equals(Object)} and {@link Object#hashCode()} follow</span>
+<span class="source-line-no">387</span><span id="line-387">    * JSON equality: numbers compare by value, object members compare irrespective of order, arrays compare in order.</span>
+<span class="source-line-no">388</span><span id="line-388">    */</span>
+<span class="source-line-no">389</span><span id="line-389">   private static Object canonical(Object o) {</span>
+<span class="source-line-no">390</span><span id="line-390">      checkInterrupted();</span>
+<span class="source-line-no">391</span><span id="line-391">      if (o == null)</span>
+<span class="source-line-no">392</span><span id="line-392">         return JsonNull.INSTANCE;</span>
+<span class="source-line-no">393</span><span id="line-393">      if (o instanceof Number n) {</span>
+<span class="source-line-no">394</span><span id="line-394">         if ((n instanceof Double || n instanceof Float) &amp;&amp; ! Double.isFinite(n.doubleValue()))</span>
+<span class="source-line-no">395</span><span id="line-395">            return n;</span>
+<span class="source-line-no">396</span><span id="line-396">         var bd = toBigDecimal(n);</span>
+<span class="source-line-no">397</span><span id="line-397">         return bd.signum() == 0 ? BigDecimal.ZERO : bd.stripTrailingZeros();</span>
+<span class="source-line-no">398</span><span id="line-398">      }</span>
+<span class="source-line-no">399</span><span id="line-399">      if (o instanceof CharSequence || o instanceof Character)</span>
+<span class="source-line-no">400</span><span id="line-400">         return o.toString();</span>
+<span class="source-line-no">401</span><span id="line-401">      if (o instanceof Boolean)</span>
+<span class="source-line-no">402</span><span id="line-402">         return o;</span>
+<span class="source-line-no">403</span><span id="line-403">      if (o instanceof Map&lt;?,?&gt; m) {</span>
+<span class="source-line-no">404</span><span id="line-404">         var out = new HashMap&lt;String,Object&gt;(Math.max(16, (int)(m.size() / 0.75f) + 1));</span>
+<span class="source-line-no">405</span><span id="line-405">         for (var e : m.entrySet())</span>
+<span class="source-line-no">406</span><span id="line-406">            out.put(String.valueOf(e.getKey()), canonical(e.getValue()));</span>
+<span class="source-line-no">407</span><span id="line-407">         return out;</span>
+<span class="source-line-no">408</span><span id="line-408">      }</span>
+<span class="source-line-no">409</span><span id="line-409">      if (o instanceof Collection&lt;?&gt; c) {</span>
+<span class="source-line-no">410</span><span id="line-410">         var out = new ArrayList&lt;&gt;(c.size());</span>
+<span class="source-line-no">411</span><span id="line-411">         for (var e : c)</span>
+<span class="source-line-no">412</span><span id="line-412">            out.add(canonical(e));</span>
+<span class="source-line-no">413</span><span id="line-413">         return out;</span>
+<span class="source-line-no">414</span><span id="line-414">      }</span>
+<span class="source-line-no">415</span><span id="line-415">      if (o.getClass().isArray()) {</span>
+<span class="source-line-no">416</span><span id="line-416">         var len = Array.getLength(o);</span>
+<span class="source-line-no">417</span><span id="line-417">         var out = new ArrayList&lt;&gt;(len);</span>
+<span class="source-line-no">418</span><span id="line-418">         for (var i = 0; i &lt; len; i++)</span>
+<span class="source-line-no">419</span><span id="line-419">            out.add(canonical(Array.get(o, i)));</span>
+<span class="source-line-no">420</span><span id="line-420">         return out;</span>
+<span class="source-line-no">421</span><span id="line-421">      }</span>
+<span class="source-line-no">422</span><span id="line-422">      try {</span>
+<span class="source-line-no">423</span><span id="line-423">         return new OpaqueKey(Json.of(o));</span>
+<span class="source-line-no">424</span><span id="line-424">      } catch (@SuppressWarnings("unused") Exception e) {</span>
+<span class="source-line-no">425</span><span id="line-425">         return o;</span>
+<span class="source-line-no">426</span><span id="line-426">      }</span>
+<span class="source-line-no">427</span><span id="line-427">   }</span>
+<span class="source-line-no">428</span><span id="line-428"></span>
+<span class="source-line-no">429</span><span id="line-429">   private enum JsonNull { INSTANCE }</span>
+<span class="source-line-no">430</span><span id="line-430"></span>
+<span class="source-line-no">431</span><span id="line-431">   private static void checkInterrupted() {</span>
+<span class="source-line-no">432</span><span id="line-432">      if (Thread.currentThread().isInterrupted())</span>
+<span class="source-line-no">433</span><span id="line-433">         throw new InterruptedMatchException();</span>
+<span class="source-line-no">434</span><span id="line-434">   }</span>
+<span class="source-line-no">435</span><span id="line-435"></span>
+<span class="source-line-no">436</span><span id="line-436">   // =================================================================================================================</span>
+<span class="source-line-no">437</span><span id="line-437">   // Object (Map / bean shape)</span>
+<span class="source-line-no">438</span><span id="line-438">   // =================================================================================================================</span>
+<span class="source-line-no">439</span><span id="line-439"></span>
+<span class="source-line-no">440</span><span id="line-440">   private static void validateObject(JsonSchema&lt;?&gt; s, Map&lt;?,?&gt; value) {</span>
+<span class="source-line-no">441</span><span id="line-441">      var minP = s.getMinProperties();</span>
+<span class="source-line-no">442</span><span id="line-442">      var maxP = s.getMaxProperties();</span>
+<span class="source-line-no">443</span><span id="line-443">      var size = value.size();</span>
+<span class="source-line-no">444</span><span id="line-444">      if (nn(minP) &amp;&amp; size &lt; minP)</span>
+<span class="source-line-no">445</span><span id="line-445">         throw new SchemaValidationException("Object property count %s is less than minProperties %s.", size, minP);</span>
+<span class="source-line-no">446</span><span id="line-446">      if (nn(maxP) &amp;&amp; size &gt; maxP)</span>
+<span class="source-line-no">447</span><span id="line-447">         throw new SchemaValidationException("Object property count %s exceeds maxProperties %s.", size, maxP);</span>
+<span class="source-line-no">448</span><span id="line-448">      var required = s.getRequired();</span>
+<span class="source-line-no">449</span><span id="line-449">      if (nn(required)) {</span>
+<span class="source-line-no">450</span><span id="line-450">         for (var key : required) {</span>
+<span class="source-line-no">451</span><span id="line-451">            if (! value.containsKey(key))</span>
+<span class="source-line-no">452</span><span id="line-452">               throw new SchemaValidationException("Required property '%s' is missing.", key);</span>
+<span class="source-line-no">453</span><span id="line-453">         }</span>
+<span class="source-line-no">454</span><span id="line-454">      }</span>
+<span class="source-line-no">455</span><span id="line-455">      var props = s.getProperties();</span>
+<span class="source-line-no">456</span><span id="line-456">      if (nn(props)) {</span>
+<span class="source-line-no">457</span><span id="line-457">         for (var entry : props.entrySet()) {</span>
+<span class="source-line-no">458</span><span id="line-458">            var name = entry.getKey();</span>
+<span class="source-line-no">459</span><span id="line-459">            var sub = entry.getValue();</span>
+<span class="source-line-no">460</span><span id="line-460">            if (value.containsKey(name))</span>
+<span class="source-line-no">461</span><span id="line-461">               validateAgainst(sub, value.get(name), null);</span>
+<span class="source-line-no">462</span><span id="line-462">         }</span>
+<span class="source-line-no">463</span><span id="line-463">      }</span>
+<span class="source-line-no">464</span><span id="line-464">   }</span>
+<span class="source-line-no">465</span><span id="line-465"></span>
+<span class="source-line-no">466</span><span id="line-466">   // =================================================================================================================</span>
+<span class="source-line-no">467</span><span id="line-467">   // Helpers</span>
+<span class="source-line-no">468</span><span id="line-468">   // =================================================================================================================</span>
+<span class="source-line-no">469</span><span id="line-469"></span>
+<span class="source-line-no">470</span><span id="line-470">   private static BigDecimal toBigDecimal(Number n) {</span>
+<span class="source-line-no">471</span><span id="line-471">      if (n instanceof BigDecimal n2)</span>
+<span class="source-line-no">472</span><span id="line-472">         return n2;</span>
+<span class="source-line-no">473</span><span id="line-473">      if (n instanceof BigInteger n2)</span>
+<span class="source-line-no">474</span><span id="line-474">         return new BigDecimal(n2);</span>
+<span class="source-line-no">475</span><span id="line-475">      if (n instanceof Long || n instanceof Integer || n instanceof Short || n instanceof Byte)</span>
+<span class="source-line-no">476</span><span id="line-476">         return BigDecimal.valueOf(n.longValue());</span>
+<span class="source-line-no">477</span><span id="line-477">      return new BigDecimal(n.toString());</span>
+<span class="source-line-no">478</span><span id="line-478">   }</span>
+<span class="source-line-no">479</span><span id="line-479"></span>
+<span class="source-line-no">480</span><span id="line-480">   private static boolean jsonEquals(Object a, Object b) {</span>
+<span class="source-line-no">481</span><span id="line-481">      if (a == b)</span>
+<span class="source-line-no">482</span><span id="line-482">         return true;</span>
+<span class="source-line-no">483</span><span id="line-483">      if (a == null || b == null)</span>
+<span class="source-line-no">484</span><span id="line-484">         return false;</span>
+<span class="source-line-no">485</span><span id="line-485">      if (a instanceof Number a2 &amp;&amp; b instanceof Number b2)</span>
+<span class="source-line-no">486</span><span id="line-486">         return toBigDecimal(a2).compareTo(toBigDecimal(b2)) == 0;</span>
+<span class="source-line-no">487</span><span id="line-487">      if (a instanceof Number a2 &amp;&amp; b instanceof CharSequence b2) {</span>
+<span class="source-line-no">488</span><span id="line-488">         var bd = tryAsBigDecimal(b2.toString());</span>
+<span class="source-line-no">489</span><span id="line-489">         return nn(bd) &amp;&amp; toBigDecimal(a2).compareTo(bd) == 0;</span>
+<span class="source-line-no">490</span><span id="line-490">      }</span>
+<span class="source-line-no">491</span><span id="line-491">      if (b instanceof Number b2 &amp;&amp; a instanceof CharSequence a2) {</span>
+<span class="source-line-no">492</span><span id="line-492">         var bd = tryAsBigDecimal(a2.toString());</span>
+<span class="source-line-no">493</span><span id="line-493">         return nn(bd) &amp;&amp; toBigDecimal(b2).compareTo(bd) == 0;</span>
+<span class="source-line-no">494</span><span id="line-494">      }</span>
+<span class="source-line-no">495</span><span id="line-495">      if (a instanceof CharSequence a2 &amp;&amp; b instanceof CharSequence b2)</span>
+<span class="source-line-no">496</span><span id="line-496">         return eq(a2.toString(), b2.toString());</span>
+<span class="source-line-no">497</span><span id="line-497">      if (eq(a, b))</span>
+<span class="source-line-no">498</span><span id="line-498">         return true;</span>
+<span class="source-line-no">499</span><span id="line-499">      try {</span>
+<span class="source-line-no">500</span><span id="line-500">         return eq(Json.of(a), Json.of(b));</span>
+<span class="source-line-no">501</span><span id="line-501">      } catch (@SuppressWarnings("unused") Exception e) {</span>
+<span class="source-line-no">502</span><span id="line-502">         return false;</span>
 <span class="source-line-no">503</span><span id="line-503">      }</span>
-<span class="source-line-no">504</span><span id="line-504"></span>
-<span class="source-line-no">505</span><span id="line-505">      @Override</span>
-<span class="source-line-no">506</span><span id="line-506">      public int length() {</span>
-<span class="source-line-no">507</span><span id="line-507">         return delegate.length();</span>
-<span class="source-line-no">508</span><span id="line-508">      }</span>
-<span class="source-line-no">509</span><span id="line-509"></span>
-<span class="source-line-no">510</span><span id="line-510">      @Override</span>
-<span class="source-line-no">511</span><span id="line-511">      public CharSequence subSequence(int start, int end) {</span>
-<span class="source-line-no">512</span><span id="line-512">         return delegate.subSequence(start, end);</span>
-<span class="source-line-no">513</span><span id="line-513">      }</span>
-<span class="source-line-no">514</span><span id="line-514"></span>
-<span class="source-line-no">515</span><span id="line-515">      @Override</span>
-<span class="source-line-no">516</span><span id="line-516">      public String toString() {</span>
-<span class="source-line-no">517</span><span id="line-517">         return delegate.toString();</span>
-<span class="source-line-no">518</span><span id="line-518">      }</span>
-<span class="source-line-no">519</span><span id="line-519">   }</span>
-<span class="source-line-no">520</span><span id="line-520"></span>
-<span class="source-line-no">521</span><span id="line-521">   /**</span>
-<span class="source-line-no">522</span><span id="line-522">    * Thrown by {@link InterruptibleCharSequence} to abort a {@code pattern} match whose thread has been interrupted.</span>
-<span class="source-line-no">523</span><span id="line-523">    *</span>
-<span class="source-line-no">524</span><span id="line-524">    * &lt;p&gt;</span>
-<span class="source-line-no">525</span><span id="line-525">    * This is control flow rather than a reportable error: the stack trace is suppressed since the abort point (deep</span>
-<span class="source-line-no">526</span><span id="line-526">    * inside {@link Matcher}) carries no useful diagnostic, and the only thing that interrupts a validating thread is</span>
-<span class="source-line-no">527</span><span id="line-527">    * a caller cancelling the work.</span>
-<span class="source-line-no">528</span><span id="line-528">    */</span>
-<span class="source-line-no">529</span><span id="line-529">   private static final class InterruptedMatchException extends RuntimeException {</span>
-<span class="source-line-no">530</span><span id="line-530"></span>
-<span class="source-line-no">531</span><span id="line-531">      private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">532</span><span id="line-532"></span>
-<span class="source-line-no">533</span><span id="line-533">      InterruptedMatchException() {</span>
-<span class="source-line-no">534</span><span id="line-534">         super(null, null, false, false);</span>
-<span class="source-line-no">535</span><span id="line-535">      }</span>
-<span class="source-line-no">536</span><span id="line-536">   }</span>
-<span class="source-line-no">537</span><span id="line-537">}</span>
+<span class="source-line-no">504</span><span id="line-504">   }</span>
+<span class="source-line-no">505</span><span id="line-505"></span>
+<span class="source-line-no">506</span><span id="line-506">   private static BigDecimal tryAsBigDecimal(String s) {</span>
+<span class="source-line-no">507</span><span id="line-507">      try {</span>
+<span class="source-line-no">508</span><span id="line-508">         return new BigDecimal(s);</span>
+<span class="source-line-no">509</span><span id="line-509">      } catch (@SuppressWarnings("unused") NumberFormatException e) {</span>
+<span class="source-line-no">510</span><span id="line-510">         return null;</span>
+<span class="source-line-no">511</span><span id="line-511">      }</span>
+<span class="source-line-no">512</span><span id="line-512">   }</span>
+<span class="source-line-no">513</span><span id="line-513"></span>
+<span class="source-line-no">514</span><span id="line-514">   // =================================================================================================================</span>
+<span class="source-line-no">515</span><span id="line-515">   // Interruptible pattern matching</span>
+<span class="source-line-no">516</span><span id="line-516">   // =================================================================================================================</span>
+<span class="source-line-no">517</span><span id="line-517"></span>
+<span class="source-line-no">518</span><span id="line-518">   /**</span>
+<span class="source-line-no">519</span><span id="line-519">    * A read-only {@link CharSequence} view over the string being matched that lets a runaway {@link Matcher} be</span>
+<span class="source-line-no">520</span><span id="line-520">    * aborted by interrupting the matching thread.</span>
+<span class="source-line-no">521</span><span id="line-521">    *</span>
+<span class="source-line-no">522</span><span id="line-522">    * &lt;p&gt;</span>
+<span class="source-line-no">523</span><span id="line-523">    * {@link Matcher} reads its input exclusively through {@link #charAt(int)} and never observes the thread's</span>
+<span class="source-line-no">524</span><span id="line-524">    * interrupt status, so a catastrophically-backtracking pattern cannot be stopped by {@link Thread#interrupt()}</span>
+<span class="source-line-no">525</span><span id="line-525">    * alone. Interposing this sequence makes every {@link #CHECK_INTERVAL}-th character read sample</span>
+<span class="source-line-no">526</span><span id="line-526">    * {@link Thread#isInterrupted()} and throw {@link InterruptedMatchException} once it is set, unwinding the match</span>
+<span class="source-line-no">527</span><span id="line-527">    * promptly. The interrupt status is checked without clearing it, so an outer caller can still observe it.</span>
+<span class="source-line-no">528</span><span id="line-528">    *</span>
+<span class="source-line-no">529</span><span id="line-529">    * &lt;p&gt;</span>
+<span class="source-line-no">530</span><span id="line-530">    * Instances are single-use and not thread-safe: a {@link Matcher} drives its input from one thread, which is the</span>
+<span class="source-line-no">531</span><span id="line-531">    * same thread whose interrupt status is being sampled.</span>
+<span class="source-line-no">532</span><span id="line-532">    */</span>
+<span class="source-line-no">533</span><span id="line-533">   private static final class InterruptibleCharSequence implements CharSequence {</span>
+<span class="source-line-no">534</span><span id="line-534"></span>
+<span class="source-line-no">535</span><span id="line-535">      /**</span>
+<span class="source-line-no">536</span><span id="line-536">       * Number of character reads between interrupt checks. Large enough that the sampling overhead is negligible</span>
+<span class="source-line-no">537</span><span id="line-537">       * against the matcher's per-character work, small enough that an interrupt aborts a runaway match within</span>
+<span class="source-line-no">538</span><span id="line-538">       * microseconds (catastrophic backtracking re-reads characters an enormous number of times).</span>
+<span class="source-line-no">539</span><span id="line-539">       */</span>
+<span class="source-line-no">540</span><span id="line-540">      private static final int CHECK_INTERVAL = 1 &lt;&lt; 12;</span>
+<span class="source-line-no">541</span><span id="line-541"></span>
+<span class="source-line-no">542</span><span id="line-542">      private final CharSequence delegate;</span>
+<span class="source-line-no">543</span><span id="line-543">      private int readsUntilCheck = CHECK_INTERVAL;</span>
+<span class="source-line-no">544</span><span id="line-544"></span>
+<span class="source-line-no">545</span><span id="line-545">      InterruptibleCharSequence(CharSequence delegate) {</span>
+<span class="source-line-no">546</span><span id="line-546">         this.delegate = delegate;</span>
+<span class="source-line-no">547</span><span id="line-547">      }</span>
+<span class="source-line-no">548</span><span id="line-548"></span>
+<span class="source-line-no">549</span><span id="line-549">      @Override</span>
+<span class="source-line-no">550</span><span id="line-550">      public char charAt(int index) {</span>
+<span class="source-line-no">551</span><span id="line-551">         if (--readsUntilCheck &lt;= 0) {</span>
+<span class="source-line-no">552</span><span id="line-552">            readsUntilCheck = CHECK_INTERVAL;</span>
+<span class="source-line-no">553</span><span id="line-553">            if (Thread.currentThread().isInterrupted())</span>
+<span class="source-line-no">554</span><span id="line-554">               throw new InterruptedMatchException();</span>
+<span class="source-line-no">555</span><span id="line-555">         }</span>
+<span class="source-line-no">556</span><span id="line-556">         return delegate.charAt(index);</span>
+<span class="source-line-no">557</span><span id="line-557">      }</span>
+<span class="source-line-no">558</span><span id="line-558"></span>
+<span class="source-line-no">559</span><span id="line-559">      @Override</span>
+<span class="source-line-no">560</span><span id="line-560">      public int length() {</span>
+<span class="source-line-no">561</span><span id="line-561">         return delegate.length();</span>
+<span class="source-line-no">562</span><span id="line-562">      }</span>
+<span class="source-line-no">563</span><span id="line-563"></span>
+<span class="source-line-no">564</span><span id="line-564">      @Override</span>
+<span class="source-line-no">565</span><span id="line-565">      public CharSequence subSequence(int start, int end) {</span>
+<span class="source-line-no">566</span><span id="line-566">         return delegate.subSequence(start, end);</span>
+<span class="source-line-no">567</span><span id="line-567">      }</span>
+<span class="source-line-no">568</span><span id="line-568"></span>
+<span class="source-line-no">569</span><span id="line-569">      @Override</span>
+<span class="source-line-no">570</span><span id="line-570">      public String toString() {</span>
+<span class="source-line-no">571</span><span id="line-571">         return delegate.toString();</span>
+<span class="source-line-no">572</span><span id="line-572">      }</span>
+<span class="source-line-no">573</span><span id="line-573">   }</span>
+<span class="source-line-no">574</span><span id="line-574"></span>
+<span class="source-line-no">575</span><span id="line-575">   /**</span>
+<span class="source-line-no">576</span><span id="line-576">    * Thrown by {@link InterruptibleCharSequence} to abort a {@code pattern} match whose thread has been interrupted.</span>
+<span class="source-line-no">577</span><span id="line-577">    *</span>
+<span class="source-line-no">578</span><span id="line-578">    * &lt;p&gt;</span>
+<span class="source-line-no">579</span><span id="line-579">    * This is control flow rather than a reportable error: the stack trace is suppressed since the abort point (deep</span>
+<span class="source-line-no">580</span><span id="line-580">    * inside {@link Matcher}) carries no useful diagnostic, and the only thing that interrupts a validating thread is</span>
+<span class="source-line-no">581</span><span id="line-581">    * a caller cancelling the work.</span>
+<span class="source-line-no">582</span><span id="line-582">    */</span>
+<span class="source-line-no">583</span><span id="line-583">   private static final class InterruptedMatchException extends RuntimeException {</span>
+<span class="source-line-no">584</span><span id="line-584"></span>
+<span class="source-line-no">585</span><span id="line-585">      private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">586</span><span id="line-586"></span>
+<span class="source-line-no">587</span><span id="line-587">      InterruptedMatchException() {</span>
+<span class="source-line-no">588</span><span id="line-588">         super(null, null, false, false);</span>
+<span class="source-line-no">589</span><span id="line-589">      }</span>
+<span class="source-line-no">590</span><span id="line-590">   }</span>
+<span class="source-line-no">591</span><span id="line-591">}</span>
 
 
 

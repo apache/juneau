@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27">import jakarta.servlet.*;</span>
 <span class="source-line-no">028</span><span id="line-28"></span>
 <span class="source-line-no">029</span><span id="line-29">/**</span>
-<span class="source-line-no">030</span><span id="line-30"> * The CSRF boundary for the admin resources {@link ConfigResource}, {@link LogsResource} and {@link ShutdownResource}.</span>
+<span class="source-line-no">030</span><span id="line-30"> * The cross-site request boundary for the admin resources {@link ConfigResource}, {@link DebugResource}, {@link LogsResource} and {@link ShutdownResource}.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * This boundary is not authentication.  It checks the {@code Host} and {@code Origin} headers a browser sends; it does</span>
@@ -48,7 +48,7 @@
 <span class="source-line-no">035</span><span id="line-35"> * of their own, so an application that mounts them must add its own, and must not expose them on an untrusted network.</span>
 <span class="source-line-no">036</span><span id="line-36"> *</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
-<span class="source-line-no">038</span><span id="line-38"> * {@link #registration(String, String...)} returns a {@link ServletFilterRegistration} that puts the three resources</span>
+<span class="source-line-no">038</span><span id="line-38"> * {@link #registration(String, String...)} returns a {@link ServletFilterRegistration} that puts the four resources</span>
 <span class="source-line-no">039</span><span id="line-39"> * behind their own {@link CsrfBoundary}.  A write from another site's page is refused with {@code 403} and an</span>
 <span class="source-line-no">040</span><span id="line-40"> * {@value RequestBoundaryFilter#REJECTION_HEADER} header naming the reason.  So is a write that a browser could</span>
 <span class="source-line-no">041</span><span id="line-41"> * have sent cross-site without a CORS preflight and that carries no {@code Origin}: a urlencoded, multipart or</span>
@@ -72,7 +72,7 @@
 <span class="source-line-no">059</span><span id="line-59"> * list that name.</span>
 <span class="source-line-no">060</span><span id="line-60"> *</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;p&gt;</span>
-<span class="source-line-no">062</span><span id="line-62"> * The boundary answers only CSRF and DNS rebinding.  It does not authenticate anyone, and a direct network caller</span>
+<span class="source-line-no">062</span><span id="line-62"> * The boundary answers only cross-site requests and DNS rebinding.  It does not authenticate anyone, and a direct network caller</span>
 <span class="source-line-no">063</span><span id="line-63"> * passes it.  The admin resources have no authentication of their own, so do not expose them on an untrusted network.</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;p&gt;</span>
@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71"> *</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;p&gt;</span>
-<span class="source-line-no">074</span><span id="line-74"> * In a Juneau microservice whose root resource mounts the three resources as children, contribute the registration</span>
+<span class="source-line-no">074</span><span id="line-74"> * In a Juneau microservice whose root resource mounts the four resources as children, contribute the registration</span>
 <span class="source-line-no">075</span><span id="line-75"> * as a &lt;c&gt;@Bean&lt;/c&gt;:</span>
 <span class="source-line-no">076</span><span id="line-76"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;ja&gt;@Bean&lt;/ja&gt;(name=&lt;js&gt;"adminBoundary"&lt;/js&gt;)</span>
@@ -108,7 +108,7 @@
 <span class="source-line-no">095</span><span id="line-95">   /** The order the registration runs at: ahead of authentication, behind anything registered at the very front. */</span>
 <span class="source-line-no">096</span><span id="line-96">   public static final int ORDER = ServletFilterRegistration.HIGHEST_PRECEDENCE + 20;</span>
 <span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">   private static final String[] PATHS = { "/config", "/logs", "/shutdown" };</span>
+<span class="source-line-no">098</span><span id="line-98">   private static final String[] PATHS = { "/config", "/debug", "/logs", "/shutdown" };</span>
 <span class="source-line-no">099</span><span id="line-99"></span>
 <span class="source-line-no">100</span><span id="line-100">   // One or more "/segment" parts of unreserved characters, so every pattern built on it is one the container matches.</span>
 <span class="source-line-no">101</span><span id="line-101">   private static final Pattern PREFIX = Pattern.compile("(?:/[A-Za-z0-9_~-][A-Za-z0-9._~-]*+)*+");</span>
@@ -116,15 +116,15 @@
 <span class="source-line-no">103</span><span id="line-103">   private AdminBoundary() {}</span>
 <span class="source-line-no">104</span><span id="line-104"></span>
 <span class="source-line-no">105</span><span id="line-105">   /**</span>
-<span class="source-line-no">106</span><span id="line-106">    * A registration of a new CSRF boundary over the three admin resources.</span>
+<span class="source-line-no">106</span><span id="line-106">    * A registration of a new cross-site request boundary over the four admin resources.</span>
 <span class="source-line-no">107</span><span id="line-107">    *</span>
 <span class="source-line-no">108</span><span id="line-108">    * &lt;p&gt;</span>
 <span class="source-line-no">109</span><span id="line-109">    * The registration maps each resource's path both exactly and as a prefix ({@code /config} and</span>
-<span class="source-line-no">110</span><span id="line-110">    * {@code /config/*}, and so on: six patterns), for {@code REQUEST} dispatches only, at {@link #ORDER}.  Each call</span>
+<span class="source-line-no">110</span><span id="line-110">    * {@code /config/*}, and so on: eight patterns), for {@code REQUEST} dispatches only, at {@link #ORDER}.  Each call</span>
 <span class="source-line-no">111</span><span id="line-111">    * builds its own filter, so the registration never shares an instance with another boundary.  The boundary's token</span>
 <span class="source-line-no">112</span><span id="line-112">    * is per process; no admin page carries one.</span>
 <span class="source-line-no">113</span><span id="line-113">    *</span>
-<span class="source-line-no">114</span><span id="line-114">    * @param prefix The path the three resources are mounted under: &lt;js&gt;""&lt;/js&gt; when they are children of the root</span>
+<span class="source-line-no">114</span><span id="line-114">    * @param prefix The path the four resources are mounted under: &lt;js&gt;""&lt;/js&gt; when they are children of the root</span>
 <span class="source-line-no">115</span><span id="line-115">    *    resource, otherwise a path such as &lt;js&gt;"/admin"&lt;/js&gt;: one or more {@code /}-separated segments of letters,</span>
 <span class="source-line-no">116</span><span id="line-116">    *    digits, {@code .}, {@code _}, {@code ~} or {@code -}, none starting with {@code .}, and no trailing {@code /}.</span>
 <span class="source-line-no">117</span><span id="line-117">    *    A prefix the container would not match as written is refused, so the resources are never left uncovered.</span>
