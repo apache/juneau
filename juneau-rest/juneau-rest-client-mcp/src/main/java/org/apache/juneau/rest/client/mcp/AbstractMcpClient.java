@@ -82,8 +82,7 @@ public abstract class AbstractMcpClient implements Closeable {
 	 *
 	 * @param builder The builder supplying this client's configuration. Must not be <jk>null</jk>.
 	 * @throws IllegalArgumentException If {@code builder} is <jk>null</jk>, or its endpoint is <jk>null</jk>/blank
-	 * 	or is not a syntactically valid absolute {@code http}/{@code https} URL (see
-	 * 	{@link #validateEndpoint(String)}).
+	 * 	or is not a syntactically valid absolute {@code http}/{@code https} URL.
 	 */
 	protected AbstractMcpClient(Builder<?> builder) {
 		reqnn("builder", builder);
