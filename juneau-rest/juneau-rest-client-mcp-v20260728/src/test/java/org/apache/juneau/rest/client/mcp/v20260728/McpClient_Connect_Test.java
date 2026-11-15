@@ -61,7 +61,7 @@ class McpClient_Connect_Test extends TestBase {
 		// endpoint-only overload builds its own transport internally in production, but tests must inject a fake
 		// transport - so exercise the Builder overload here and cover the String overload's delegation separately.
 		savedTransport.set(countingTransport(calls, DISCOVER_WIRE));
-		try (var c = McpClient.connect(McpClient.builder().endpoint("http://x/mcp").transport(savedTransport.get()))) {
+		try (var c = McpClient.connect(McpClient.builder().endpoint("https://x/mcp").transport(savedTransport.get()))) {
 			assertNotNull(c);
 			assertEquals(1, calls.get());
 		}
@@ -70,7 +70,7 @@ class McpClient_Connect_Test extends TestBase {
 	@Test
 	void a02_connect_cachesDiscoveredServerSoNoSecondRoundTripIsNeeded() throws Exception {
 		var calls = new AtomicInteger();
-		try (var c = McpClient.connect(McpClient.builder().endpoint("http://x/mcp").transport(countingTransport(calls, DISCOVER_WIRE)))) {
+		try (var c = McpClient.connect(McpClient.builder().endpoint("https://x/mcp").transport(countingTransport(calls, DISCOVER_WIRE)))) {
 			var result = c.discoveredServer();
 			assertNotNull(result);
 			assertEquals("2026-07-28", result.getSupportedVersions().get(0));
@@ -80,7 +80,7 @@ class McpClient_Connect_Test extends TestBase {
 
 	@Test
 	void a03_discoveredServer_isNullBeforeAnyHandshake() throws Exception {
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(countingTransport(new AtomicInteger(), DISCOVER_WIRE)).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(countingTransport(new AtomicInteger(), DISCOVER_WIRE)).build()) {
 			assertNull(c.discoveredServer());
 		}
 	}
@@ -88,7 +88,7 @@ class McpClient_Connect_Test extends TestBase {
 	@Test
 	void a04_discoveredServer_populatedByDirectServerDiscoverCallNotJustConnect() throws Exception {
 		var calls = new AtomicInteger();
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(countingTransport(calls, DISCOVER_WIRE)).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(countingTransport(calls, DISCOVER_WIRE)).build()) {
 			assertNull(c.discoveredServer());
 			c.serverDiscover();
 			assertNotNull(c.discoveredServer());
@@ -109,7 +109,7 @@ class McpClient_Connect_Test extends TestBase {
 				closed.set();
 			}
 		};
-		var builder = McpClient.builder().endpoint("http://x/mcp").transport(failing);
+		var builder = McpClient.builder().endpoint("https://x/mcp").transport(failing);
 		assertThrowsWithMessage(IOException.class, "boom", () -> McpClient.connect(builder));
 		assertTrue(closed.isSet());
 	}
@@ -125,7 +125,7 @@ class McpClient_Connect_Test extends TestBase {
 				throw new IOException("close-boom");
 			}
 		};
-		var builder = McpClient.builder().endpoint("http://x/mcp").transport(failing);
+		var builder = McpClient.builder().endpoint("https://x/mcp").transport(failing);
 		var ex = assertThrowsWithMessage(IOException.class, "boom", () -> McpClient.connect(builder));
 		assertEquals(1, ex.getSuppressed().length);
 		assertEquals("close-boom", ex.getSuppressed()[0].getMessage());
@@ -142,7 +142,7 @@ class McpClient_Connect_Test extends TestBase {
 				throw new RuntimeException("close-boom");
 			}
 		};
-		var builder = McpClient.builder().endpoint("http://x/mcp").transport(failing);
+		var builder = McpClient.builder().endpoint("https://x/mcp").transport(failing);
 		var ex = assertThrowsWithMessage(IOException.class, "boom", () -> McpClient.connect(builder));
 		assertEquals(1, ex.getSuppressed().length);
 		assertEquals("close-boom", ex.getSuppressed()[0].getMessage());
@@ -160,7 +160,7 @@ class McpClient_Connect_Test extends TestBase {
 				closed.set();
 			}
 		};
-		var builder = McpClient.builder().endpoint("http://x/mcp").transport(failing);
+		var builder = McpClient.builder().endpoint("https://x/mcp").transport(failing);
 		assertThrowsWithMessage(StackOverflowError.class, "boom", () -> McpClient.connect(builder));
 		assertTrue(closed.isSet());
 	}

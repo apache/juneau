@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.conversion;
 
 import java.util.*;
+import java.util.function.*;
 
 /**
  * A {@link BasicConverter} subclass that supports pluggable type conversion discovery via {@link ConversionFinder}.
@@ -53,6 +54,20 @@ public class ConfigurableConverter extends BasicConverter {
 	 *   type-pair conversions and the built-in {@link BasicConverter} reflection logic.
 	 */
 	public ConfigurableConverter(ConversionFinder... finders) {
+		this(null, finders);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param classNameGuard
+	 * 	Vets class names before a <c>String</c> is converted to a {@link Class}.
+	 * 	<br>Can be <jk>null</jk> (all names allowed).
+	 * @param finders Optional {@link ConversionFinder} instances consulted in order before registered
+	 *   type-pair conversions and the built-in {@link BasicConverter} reflection logic.
+	 */
+	public ConfigurableConverter(Predicate<String> classNameGuard, ConversionFinder... finders) {
+		super(classNameGuard);
 		this.finders = List.of(finders);
 	}
 

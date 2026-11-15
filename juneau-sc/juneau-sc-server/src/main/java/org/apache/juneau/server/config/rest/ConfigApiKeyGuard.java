@@ -21,6 +21,8 @@ import java.net.*;
 import java.nio.charset.*;
 import java.security.*;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.apache.juneau.config.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
@@ -47,6 +49,8 @@ import org.apache.juneau.rest.server.guard.*;
  * <p>
  * Requests that did not arrive over a secure channel are refused unless they come from a loopback address or
  * <c>[Security]</c> <ck>allowInsecure</ck> is <cv>true</cv>.
+ * A loopback peer is only exempt when the request carries no <c>Forwarded</c> or <c>X-Forwarded-*</c> header,
+ * since a local reverse proxy would otherwise make remote plain-HTTP traffic look local.
  *
  * <p>
  * The guard <b>fails closed</b>: if no key is configured (missing, empty or unreadable setting), every request is
@@ -91,14 +95,26 @@ public class ConfigApiKeyGuard extends RestGuard {
 	@Override /* Overridden from RestGuard */
 	public boolean isRequestAllowed(RestRequest req) {
 		var r = req.getHttpServletRequest();
-		if (! isChannelAcceptable(r.isSecure(), r.getRemoteAddr(), allowInsecure))
+		if (! isChannelAcceptable(r.isSecure(), r.getRemoteAddr(), allowInsecure, isForwarded(r)))
 			return false;
 		return isAuthorized(configuredKey(), req.getHeader("Authorization"), req.getHeader("X-Api-Key"));
 	}
 
-	static boolean isChannelAcceptable(boolean secure, String remoteAddr, boolean allowInsecure) {
+	private static boolean isForwarded(HttpServletRequest r) {
+		if (r.getHeader("Forwarded") != null)
+			return true;
+		var names = r.getHeaderNames();
+		while (names != null && names.hasMoreElements())
+			if (names.nextElement().regionMatches(true, 0, "X-Forwarded-", 0, 12))
+				return true;
+		return false;
+	}
+
+	static boolean isChannelAcceptable(boolean secure, String remoteAddr, boolean allowInsecure, boolean forwarded) {
 		if (secure || allowInsecure)
 			return true;
+		if (forwarded)
+			return false;
 		try {
 			return remoteAddr != null && InetAddress.getByName(remoteAddr).isLoopbackAddress();
 		} catch (@SuppressWarnings("unused") IOException e) {

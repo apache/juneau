@@ -119,7 +119,7 @@ public final class FileTerminalViewSource implements TerminalViewSource {
 		 * @return A new source.
 		 */
 		public FileTerminalViewSource build() {
-			if (index != null && ! index.file().equals(file))
+			if (index != null && neq(index.file(), file))
 				throw iaex("FileTerminalViewSource index is for a different file: '%s' vs '%s'.", index.file(), file);
 			return new FileTerminalViewSource(this);
 		}
@@ -267,7 +267,7 @@ public final class FileTerminalViewSource implements TerminalViewSource {
 				return null;
 			if (ch == null) {
 				try {
-					ch = FileChannel.open(file, StandardOpenOption.READ);
+					ch = FileChannel.open(file, StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS);
 				} catch (NoSuchFileException e) {
 					eof = true;
 					return null;

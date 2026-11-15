@@ -87,7 +87,7 @@ class CommonmarkMarkdownRenderer_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// d) XSS: raw HTML escaped, javascript:/data: URLs stripped
+	// d) Raw HTML escaped, javascript:/data: URLs stripped
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_rawScript_isEscapedNotAnElement() {
@@ -125,5 +125,14 @@ class CommonmarkMarkdownRenderer_Test extends TestBase {
 		assertTrue(CommonmarkMarkdownRenderer.isSafeUrl("relative/path"));
 		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl(null));
 		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl(""));
+	}
+
+	@Test void d06_protocolRelativeUrl_isRejected() {
+		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl("//host.example/x"));
+		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl("///host.example/x"));
+		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl("/\\host.example/x"));
+		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl("  //host.example/x"));
+		var html = RENDERER.toHtml("[y](//host.example/x)");
+		assertFalse(html.contains("href=\"//host.example"), () -> html);
 	}
 }

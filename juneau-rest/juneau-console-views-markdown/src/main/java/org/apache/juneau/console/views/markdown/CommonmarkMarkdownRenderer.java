@@ -85,7 +85,7 @@ public class CommonmarkMarkdownRenderer implements MarkdownRenderer {
 
 	/**
 	 * Whether {@code url} is safe to emit as an {@code href} or {@code src}: {@code http}/{@code https}/
-	 * {@code mailto}, a fragment, a same-origin path, or a scheme-less relative URL.
+	 * {@code mailto}, a fragment, a same-origin path (not protocol-relative), or a scheme-less relative URL.
 	 *
 	 * @param url The candidate URL.  May be <jk>null</jk>.
 	 * @return <jk>true</jk> if the URL may be copied onto an element.
@@ -99,6 +99,8 @@ public class CommonmarkMarkdownRenderer implements MarkdownRenderer {
 			return false;
 		if (lower.startsWith("http://") || lower.startsWith("https://") || lower.startsWith("mailto:"))
 			return true;
+		if (t.startsWith("//") || t.startsWith("/\\"))
+			return false;
 		if (t.charAt(0) == '#' || t.charAt(0) == '/')
 			return true;
 		return lower.indexOf(':') < 0;

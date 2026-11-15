@@ -28,7 +28,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
 /**
- * The {@code /petstore} API's CSRF boundary: a {@link RequestBoundaryFilter} over the framework's {@link CsrfBoundary},
+ * The {@code /petstore} API's request-token boundary: a {@link RequestBoundaryFilter} over the framework's {@link CsrfBoundary},
  * applied to {@code /petstore} and everything under it.
  *
  * <p>
@@ -106,9 +106,12 @@ public class PetstoreApiBoundary implements Filter {
 
 	/**
 	 * Setting (system property, environment, or any registered source) listing the host names the API answers to:
-	 * comma-separated, no ports.  Unset or blank, any host is answered.
+	 * comma-separated, no ports.  Unset or blank, only the loopback names {@link #LOOPBACK_HOSTS} are answered.
 	 */
 	public static final String ALLOWED_HOSTS_PROPERTY = "petstore.api.allowedHosts";
+
+	/** The host names answered when {@value #ALLOWED_HOSTS_PROPERTY} is not set: {@code localhost}, {@code 127.0.0.1} and {@code [::1]}. */
+	public static final List<String> LOOPBACK_HOSTS = List.of("localhost", "127.0.0.1", "[::1]");
 
 	/**
 	 * Request attribute under which an allowed console request carries a {@link String}: a freshly masked token for
@@ -140,12 +143,12 @@ public class PetstoreApiBoundary implements Filter {
 	 * The host names in an {@value #ALLOWED_HOSTS_PROPERTY} setting.
 	 *
 	 * @param setting The setting.  Can be <jk>null</jk> or blank (not set).
-	 * @return The comma-separated entries, trimmed, blank ones included so the boundary refuses them; empty when the
-	 * 	setting is not set.
+	 * @return The comma-separated entries, trimmed, blank ones included so the boundary refuses them; the loopback
+	 * 	names when the setting is not set.
 	 */
 	private static String[] allowedHosts(String setting) {
 		if (ib(setting))
-			return new String[0];
+			return LOOPBACK_HOSTS.toArray(String[]::new);
 		return Arrays.stream(setting.split(",", -1)).map(String::trim).toArray(String[]::new);
 	}
 

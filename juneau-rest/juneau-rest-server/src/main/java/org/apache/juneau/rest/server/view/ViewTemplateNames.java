@@ -16,12 +16,14 @@
  */
 package org.apache.juneau.rest.server.view;
 
+import static org.apache.juneau.commons.utils.StringUtils.endsWithIgnoreCase;
+
 /**
  * Shared template-name checks applied by the view bridges before a name reaches a templating engine.
  *
  * <p>
  * A template name is a path relative to the bridge's configured base path.  Names that carry a URL scheme
- * (or any {@code :}) or a backslash are never valid, and raw-served names must end in one of the extensions
+ * (or any {@code :}), a backslash, or one of {@code ; % ? #} are never valid, and raw-served names must end in one of the extensions
  * registered for the engine.
  *
  * @since 10.0.0
@@ -34,14 +36,14 @@ public final class ViewTemplateNames {
 	 * Returns {@code true} if the name is free of URL-scheme and path-separator tricks.
 	 *
 	 * @param name The template name.  May be {@code null}.
-	 * @return {@code false} if the name contains {@code :}, a backslash, or a control character.
+	 * @return {@code false} if the name contains {@code :}, {@code ;}, {@code %}, {@code ?}, {@code #}, a backslash, or a control character.
 	 */
 	public static boolean isPlainName(String name) {
 		if (name == null)
 			return true;
 		for (var i = 0; i < name.length(); i++) {
 			var c = name.charAt(i);
-			if (c == ':' || c == '\\' || c <= 0x1f || c == 0x7f)
+			if (c == ':' || c == ';' || c == '%' || c == '?' || c == '#' || c == '\\' || c <= 0x1f || c == 0x7f)
 				return false;
 		}
 		return true;
@@ -55,9 +57,8 @@ public final class ViewTemplateNames {
 	 * @return {@code true} if the name has an allowed extension.
 	 */
 	public static boolean hasAllowedExtension(String name, String... extensions) {
-		var lower = name.toLowerCase();
 		for (var e : extensions)
-			if (lower.endsWith(e))
+			if (endsWithIgnoreCase(name, e))
 				return true;
 		return false;
 	}

@@ -17,6 +17,7 @@
 package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.UriUtils.parseIpv4;
 
 import java.net.*;
 import java.util.*;
@@ -25,7 +26,7 @@ import java.util.regex.*;
 import java.util.stream.*;
 
 /**
- * Shared SSRF-hardening policy for the {@link Remote @Remote}/{@link RemoteOp @RemoteOp} proxy engines.
+ * Shared outbound-URL hardening policy for the {@link Remote @Remote}/{@link RemoteOp @RemoteOp} proxy engines.
  *
  * <p>
  * Replaces the earlier scheme-only guard (<c>requireHttpScheme</c>) with a <b>deny-private</b> default policy:
@@ -105,7 +106,7 @@ public final class RemoteUrlPolicy {
 	}
 
 	/**
-	 * Enforces the SSRF guardrail on an effective {@code @Remote} URL: when {@code url} carries a URI scheme, it
+	 * Enforces the outbound-URL guardrail on an effective {@code @Remote} URL: when {@code url} carries a URI scheme, it
 	 * must be a canonical absolute {@code http}/{@code https} URL with a nonempty host, and &mdash; unless
 	 * {@code allowPrivateUrls} is set &mdash; the literal host must not match the deny-list (see class javadoc).
 	 * Scheme-less (relative) values pass through unchanged (they resolve against the client root, which is not
@@ -452,27 +453,6 @@ public final class RemoteUrlPolicy {
 		} catch (IllegalArgumentException e) {
 			return new ParsedAllow(spec, List.of(), e.getMessage());
 		}
-	}
-
-	// Parses a dotted-quad IPv4 literal purely syntactically (octets 0-255, no leading zeros); returns null if invalid.
-	@SuppressWarnings({
-		"java:S1168" // null signals an invalid IPv4 literal (see comment); callers test for it
-	})
-	private static byte[] parseIpv4(String s) {
-		var parts = s.split("\\.", -1);
-		if (parts.length != 4)
-			return null;
-		var out = new byte[4];
-		for (var i = 0; i < 4; i++) {
-			var p = parts[i];
-			if (! (p.equals("0") || p.matches("[1-9]\\d{0,2}")))
-				return null;
-			var v = Integer.parseInt(p);
-			if (v > 255)
-				return null;
-			out[i] = (byte) v;
-		}
-		return out;
 	}
 
 	private static Cidr parseAllowEntry(String token) {

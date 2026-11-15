@@ -29,6 +29,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.terminal.report.*;
 import org.apache.juneau.console.views.TerminalViewSource.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.*;
 import org.junit.jupiter.api.io.*;
 
 class FileTerminalViewSource_Test extends TestBase {
@@ -70,6 +71,14 @@ class FileTerminalViewSource_Test extends TestBase {
 	@Test void a02_seqMemberInFileIsOverwritten() throws Exception {
 		write("{\"ev\":\"done\",\"status\":\"ok\",\"seq\":99}");
 		assertEquals(List.of(1L), seqs(src().page(null, 10)));
+	}
+
+	@DisabledOnOs(OS.WINDOWS)
+	@Test void a03_symlinkedEventsFileIsNotRead() throws Exception {
+		var target = dir.resolve("elsewhere.jsonl");
+		Files.writeString(target, "{\"ev\":\"note\",\"level\":\"info\",\"text\":\"n1\"}\n");
+		Files.createSymbolicLink(f, target);
+		assertEquals(List.of(), seqs(src().page(null, 10)));
 	}
 
 	@Test void b01_partialTrailingLineWaitsForNewline() throws Exception {

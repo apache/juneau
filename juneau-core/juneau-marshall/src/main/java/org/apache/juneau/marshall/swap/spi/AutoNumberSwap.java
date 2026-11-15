@@ -250,7 +250,8 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		if (unswapType == null)
 			throw new ParseException("No unparse methodology found for object.");
 		try {
-			Object o2 = BasicConverter.INSTANCE.to(o, unswapType);
+			var converter = nn(session) ? session.getMarshallingContext().getBasicConverter() : BasicConverter.INSTANCE;
+			Object o2 = converter.to(o, unswapType);
 			if (nn(unswapMethod))
 				return (T)unswapMethod.invoke(null, getMatchingArgs(unswapMethod.getParameterTypes(), session, o2));
 			if (nn(unswapConstructor))

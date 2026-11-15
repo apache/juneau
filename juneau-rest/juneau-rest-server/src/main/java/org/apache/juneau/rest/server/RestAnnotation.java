@@ -100,6 +100,7 @@ public class RestAnnotation {
 		private String[] paths = {};
 		private String observability = "";
 		private String problemDetails = "";
+		private String showCauseMessages = "";
 		private String debugMarshalling = "";
 		private String virtualThreads = "";
 		private String asyncTimeoutMillis = "";
@@ -641,6 +642,17 @@ public class RestAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Rest#showCauseMessages()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder showCauseMessages(String value) {
+			showCauseMessages = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Rest#renderResponseStackTraces()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -866,6 +878,7 @@ public class RestAnnotation {
 		private final String[] paths;
 		private final String observability;
 		private final String problemDetails;
+		private final String showCauseMessages;
 		private final String debugMarshalling;
 		private final String virtualThreads;
 		private final String asyncTimeoutMillis;
@@ -934,6 +947,7 @@ public class RestAnnotation {
 			paths = cp(b.paths);
 			observability = b.observability;
 			problemDetails = b.problemDetails;
+			showCauseMessages = b.showCauseMessages;
 			debugMarshalling = b.debugMarshalling;
 			virtualThreads = b.virtualThreads;
 			asyncTimeoutMillis = b.asyncTimeoutMillis;
@@ -1179,6 +1193,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public String problemDetails() {
 			return problemDetails;
+		}
+
+		@Override /* Overridden from Rest */
+		public String showCauseMessages() {
+			return showCauseMessages;
 		}
 
 		@Override /* Overridden from Rest */

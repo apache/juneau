@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.*;
 
 import jakarta.servlet.*;
@@ -221,6 +222,22 @@ class JspViewRenderer_ForwardPaths_Test extends TestBase {
 		var res = c.get("/escape").run();
 		res.assertStatus(500);
 		res.assertContent().asString().isContains("escapes configured base path");
+	}
+
+	@Test void a0b2_noJspMixin_resolvesUnderDefaultBasePath() throws Exception {
+		var paths = new ArrayList<String>();
+		var ctx = (ServletContext)Proxy.newProxyInstance(
+			JspViewRenderer_ForwardPaths_Test.class.getClassLoader(),
+			new Class<?>[] { ServletContext.class },
+			(proxy, method, args) -> {
+				if (! eq(method.getName(), "getRequestDispatcher"))
+					return null;
+				paths.add((String)args[0]);
+				return new FakeDispatcher(() -> { /* committed */ });
+			});
+		c.get("/view").servletContext(ctx).run().assertStatus(200);
+		assertEquals(1, paths.size());
+		assertEquals(JspDispatcher.DEFAULT_BASE_PATH + "hello.jsp", paths.get(0));
 	}
 
 	@Test void a0c_protectedDirectoryNotForwarded() throws Exception {

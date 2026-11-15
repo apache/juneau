@@ -52,6 +52,10 @@ import org.apache.juneau.commons.concurrent.*;
  * 		token within its {@link #getTtlMs() TTL}; it is per-process only, so cross-node single-use requires a shared
  * 		{@link ReplayCache} (see {@link #setReplayCache(ReplayCache)}). Passing <jk>null</jk> disables the check, and
  * 		a handler must then write idempotent resume side effects.
+ * 	<li><b>A failing replay cache admits the token.</b> If {@link ReplayCache#checkAndRecord(String, long)} throws,
+ * 		the failure is logged and the token is treated as first-seen, so a store outage allows reuse until the token
+ * 		expires. To reject tokens while the store is unavailable, have the cache return <jk>false</jk> instead of
+ * 		throwing.
  * </ul>
  */
 public class McpMrtrConfig {

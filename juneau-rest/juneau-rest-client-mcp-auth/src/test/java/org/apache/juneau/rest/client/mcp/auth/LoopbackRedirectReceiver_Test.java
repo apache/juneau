@@ -42,7 +42,7 @@ class LoopbackRedirectReceiver_Test extends TestBase {
 	}
 
 	@Test void a02_awaitCallbackReturnsFullUri() throws Exception {
-		try (var r = LoopbackRedirectReceiver.open()) {
+		try (var r = LoopbackRedirectReceiver.open().expectState("s1")) {
 			var target = URI.create(r.redirectUri() + "?code=abc&state=s1");
 			var t = new Thread(() -> get(target));
 			t.start();
@@ -142,6 +142,32 @@ class LoopbackRedirectReceiver_Test extends TestBase {
 			} finally {
 				Thread.interrupted();  // clear the flag so it cannot leak into other tests
 			}
+		}
+	}
+
+	@Test void e01_callbackBeforeStateIsSetIsRefused() throws Exception {
+		try (var r = LoopbackRedirectReceiver.open()) {
+			assertEquals(400, status("GET", URI.create(r.redirectUri() + "?code=x&state=s")));
+			r.expectState("s");
+			assertEquals(200, status("GET", URI.create(r.redirectUri() + "?code=x&state=s")));
+		}
+	}
+
+	@Test void e02_foreignHostHeaderIsRefused() throws Exception {
+		try (var r = LoopbackRedirectReceiver.open().expectState("s")) {
+			assertEquals(400, statusWithHost(URI.create(r.redirectUri() + "?code=x&state=s"), "example.com:" + r.port()));
+			assertEquals(400, statusWithHost(URI.create(r.redirectUri() + "?code=x&state=s"), "127.0.0.1"));
+			assertEquals(200, statusWithHost(URI.create(r.redirectUri() + "?code=x&state=s"), "localhost:" + r.port()));
+		}
+	}
+
+	private static int statusWithHost(URI u, String host) throws IOException {
+		try (var s = new Socket(u.getHost(), u.getPort())) {
+			var out = s.getOutputStream();
+			out.write(("GET " + u.getRawPath() + "?" + u.getRawQuery() + " HTTP/1.1\r\nHost: " + host + "\r\nConnection: close\r\n\r\n").getBytes());
+			out.flush();
+			var line = new BufferedReader(new InputStreamReader(s.getInputStream())).readLine();
+			return Integer.parseInt(line.split(" ")[1]);
 		}
 	}
 }

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.mustache;
 
+import static org.apache.juneau.commons.utils.FileUtils.resolveVirtualPathSafely;
+
 import java.io.*;
 
 import org.apache.juneau.commons.utils.*;
@@ -136,6 +138,7 @@ public class MustacheViewRenderer implements ViewRenderer {
 		}
 
 		var templateName = bridge.applyTemplateSuffix(safeName);
+		requireAllowedExtension(templateName, bridge.servedExtension());
 		try {
 			var factory = bridge.resolveMustacheFactory(req);
 			var mustache = factory.compile(templateName);
@@ -150,12 +153,18 @@ public class MustacheViewRenderer implements ViewRenderer {
 		}
 	}
 
+	// Rejects a typed-View template name (after the configured suffix is applied) that lacks the served template extension.
+	static void requireAllowedExtension(String templateName, String extension) {
+		if (! ViewTemplateNames.hasAllowedExtension(templateName, extension))
+			throw new InternalServerError("Mustache template name does not have an allowed extension: '%s'", templateName);
+	}
+
 	// Rejects '../'-style traversal in a typed-View template name using the same virtual-path gate the raw
 	// mount applies, returning the configuration-relative template name.  Delegates to the shared
 	// FileUtils.resolveVirtualPathSafely + MustacheDispatcher.stripBasePath used by the raw render path.
 	static String gateTemplateName(String basePath, String templateName) {
 		ViewTemplateNames.requirePlainName(templateName);
-		var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);
+		var resolved = resolveVirtualPathSafely(basePath, templateName);
 		return MustacheDispatcher.stripBasePath(basePath, resolved);
 	}
 

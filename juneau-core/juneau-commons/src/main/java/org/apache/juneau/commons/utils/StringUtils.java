@@ -21,12 +21,14 @@ import static java.nio.charset.StandardCharsets.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.lang.StateEnum.*;
+import static org.apache.juneau.commons.utils.ClassUtils.isArray;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.list;
 import static org.apache.juneau.commons.utils.CollectionUtils.toList;
 import static org.apache.juneau.commons.utils.Exceptions.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.eq;
 import static org.apache.juneau.commons.utils.Shorts.req;
 import static org.apache.juneau.commons.utils.Shorts.reqnn;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -672,7 +674,7 @@ public class StringUtils {
 	 * @return A negative integer, zero, or a positive integer as the first string is less than, equal to, or greater than the second.
 	 */
 	public static int compareIgnoreCase(String str1, String str2) {
-		if (Objects.equals(str1, str2))
+		if (eq(str1, str2))
 			return 0;
 		if (str1 == null)
 			return -1;
@@ -1532,7 +1534,7 @@ public class StringUtils {
 	 * @see #equalsIgnoreCase(String, String)
 	 */
 	public static boolean equalsIgnoreCase(String str1, String str2) {
-		if (Objects.equals(str1, str2))
+		if (eq(str1, str2))
 			return true;
 		if (str1 == null || str2 == null)
 			return false;
@@ -1645,7 +1647,7 @@ public class StringUtils {
 	 * 		switches the tokenizer to its "script data escaped" state, and a subsequent {@code <script} switches it
 	 * 		to "script data double escaped" &mdash; a state in which the element's own real {@code </script>} no
 	 * 		longer closes it, so the rest of the document is swallowed as script data and the page's structure is
-	 * 		attacker-controlled.  Escaping {@code </} alone does <b>not</b> stop this; escaping {@code <} does.
+	 * 		untrusted.  Escaping {@code </} alone does <b>not</b> stop this; escaping {@code <} does.
 	 * 	<li><b>{@code U+2028}/{@code U+2029} string-literal break-out.</b>  Both are legal raw characters inside a
 	 * 		JSON string but were JavaScript <i>line terminators</i> before ES2019, so a payload embedded in a
 	 * 		JavaScript expression context could terminate its string literal mid-value.  Escaped unconditionally so
@@ -1710,8 +1712,8 @@ public class StringUtils {
 	 *
 	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
-	 * 	escapeHtml(<js>"&lt;script&gt;alert('xss')&lt;/script&gt;"</js>);
-	 * 	<jc>// Returns: "&amp;lt;script&amp;gt;alert(&amp;#39;xss&amp;#39;)&amp;lt;/script&amp;gt;"</jc>
+	 * 	escapeHtml(<js>"&lt;script&gt;alert('x')&lt;/script&gt;"</js>);
+	 * 	<jc>// Returns: "&amp;lt;script&amp;gt;alert(&amp;#39;x&amp;#39;)&amp;lt;/script&amp;gt;"</jc>
 	 * </p>
 	 *
 	 * @param str The string to escape.
@@ -2247,7 +2249,7 @@ public class StringUtils {
 	}
 
 	/**
-	 * Formats a pattern string using {@link java.text.MessageFormat}-style placeholders only.
+	 * Formats a pattern string using {@link MessageFormat}-style placeholders only.
 	 *
 	 * <p>
 	 * This is the MessageFormat counterpart to {@link #format(String, Object...)}: it is intended for
@@ -2257,7 +2259,7 @@ public class StringUtils {
 	 * (<js>"%s"</js>/<js>"%d"</js>) patterns.
 	 *
 	 * <p>
-	 * Rendering is delegated to {@link java.text.MessageFormat}. As a convenience, when no arguments are
+	 * Rendering is delegated to {@link MessageFormat}. As a convenience, when no arguments are
 	 * supplied the pattern is returned verbatim (so <js>"''"</js>-quoting is left untouched for placeholder-free
 	 * strings).
 	 *
@@ -2964,6 +2966,29 @@ public class StringUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified URI reference starts with a scheme.
+	 *
+	 * <p>
+	 * A scheme is present when a colon appears before any {@code /}, {@code ?} or {@code #} character, so
+	 * {@code "mailto:x"} and {@code "http:host"} have one but {@code "foo/bar:baz"} and {@code "?a=b:c"} do not.
+	 *
+	 * @param s The string to test.  Can be <jk>null</jk> (returns <jk>false</jk>).
+	 * @return <jk>true</jk> if the string starts with a scheme.
+	 */
+	public static boolean hasUriScheme(String s) {
+		if (s == null)
+			return false;
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (c == ':')
+				return true;
+			if (c == '/' || c == '?' || c == '#')
+				return false;
+		}
+		return false;
+	}
+
+	/**
 	 * Efficiently determines whether a URL is of the pattern "xxx://xxx"
 	 *
 	 * @param s The string to test.  Can be <jk>null</jk> (returns <jk>false</jk>).
@@ -3491,7 +3516,7 @@ public class StringUtils {
 		if (s == null || s.isEmpty())
 			return false;
 		if (! FIRST_NUMBER_CHARS.contains(s.charAt(0)))
-			return (s.equals("NaN") || s.equals("Infinity"));
+			return (eq(s, "NaN") || eq(s, "Infinity"));
 		var i = 0;
 		var length = s.length();
 		var c = s.charAt(0);
@@ -4779,7 +4804,7 @@ public class StringUtils {
 	 * @return A negative integer, zero, or a positive integer as the first string is less than, equal to, or greater than the second.
 	 */
 	public static int naturalCompare(String str1, String str2) {
-		if (Objects.equals(str1, str2))
+		if (eq(str1, str2))
 			return 0;
 		if (str1 == null)
 			return -1;
@@ -5615,8 +5640,11 @@ public class StringUtils {
 			return Short.decode(s);
 		if (type == Byte.class || type == Byte.TYPE)
 			return Byte.decode(s);
-		if (type == BigInteger.class)
+		if (type == BigInteger.class) {
+			if (s.length() > MAX_BIG_DECIMAL_LENGTH)
+				throw new NumberFormatException("Integer value is too long.");
 			return new BigInteger(s);
+		}
 		if (type == AtomicInteger.class)
 			return new AtomicInteger(Integer.decode(s));
 		throw new NumberFormatException("Unsupported Number type: " + type.getName());
@@ -6338,12 +6366,12 @@ public class StringUtils {
 	 * Basic HTML/XML sanitization - removes or escapes potentially dangerous content.
 	 *
 	 * <p>
-	 * Removes HTML/XML tags and escapes special characters to prevent XSS attacks.
+	 * Removes HTML/XML tags and escapes special characters so the text renders as plain text.
 	 * This is a basic sanitization - for production use, consider a more robust library.
 	 *
 	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
-	 * 	sanitize(<js>"&lt;script&gt;alert('xss')&lt;/script&gt;"</js>);     <jc>// "&amp;lt;script&amp;gt;alert('xss')&amp;lt;/script&amp;gt;"</jc>
+	 * 	sanitize(<js>"&lt;script&gt;alert('x')&lt;/script&gt;"</js>);     <jc>// "&amp;lt;script&amp;gt;alert('x')&amp;lt;/script&amp;gt;"</jc>
 	 * 	sanitize(<js>"Hello &lt;b&gt;World&lt;/b&gt;"</js>);                <jc>// "Hello &amp;lt;b&amp;gt;World&amp;lt;/b&amp;gt;"</jc>
 	 * </p>
 	 *
@@ -6380,7 +6408,7 @@ public class StringUtils {
 		if (str2 == null)
 			str2 = "";
 
-		if (str1.equals(str2))
+		if (eq(str1, str2))
 			return 1.0;
 
 		var maxLen = Math.max(str1.length(), str2.length());
@@ -7322,7 +7350,7 @@ public class StringUtils {
 	public static String toCdl(Object o) {
 		if (o == null)
 			return null;
-		if (ClassUtils.isArray(o)) {
+		if (isArray(o)) {
 			var sb = new StringBuilder();
 			for (int i = 0, j = Array.getLength(o); i < j; i++) {
 				if (i > 0)
@@ -8320,7 +8348,7 @@ public class StringUtils {
 			// Validate IPv6 part before the IPv4
 			var ipv6Part = ip.substring(0, lastColon);
 			// Accept empty, ::, ::ffff, ::FFFF, or : (when string starts with ::)
-			if (ipv6Part.isEmpty() || ipv6Part.equals("::") || ipv6Part.equals("::ffff") || ipv6Part.equals("::FFFF") || (ipv6Part.equals(":") && ip.startsWith("::")))
+			if (ipv6Part.isEmpty() || eq(ipv6Part, "::") || eq(ipv6Part, "::ffff") || eq(ipv6Part, "::FFFF") || (eq(ipv6Part, ":") && ip.startsWith("::")))
 				return true;
 			// More complex validation would be needed for other IPv4-mapped formats
 			// For now, accept common formats
@@ -8499,7 +8527,7 @@ public class StringUtils {
 		}
 
 		// Check milliseconds first (before minutes) - must check exact "ms" before checking "m"
-		if (unit.equals("ms") || unit.equals("millis") || unit.equals("milliseconds"))
+		if (eq(unit, "ms") || eq(unit, "millis") || eq(unit, "milliseconds"))
 			return (long)value;
 
 		// Seconds

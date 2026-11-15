@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.mustache;
 
+import static org.apache.juneau.commons.utils.FileUtils.resolveVirtualPathSafely;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -132,7 +133,7 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 	 * The extension of the templates this bridge serves: the configured {@link #getTemplateSuffix() templateSuffix}, or
 	 * {@code ".mustache"} when no suffix is configured.
 	 */
-	private String servedExtension() {
+	String servedExtension() {
 		return isEmpty(templateSuffix) ? ".mustache" : templateSuffix;
 	}
 
@@ -256,7 +257,7 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 		// stripping the (already-normalized) basePath prefix.
 		String safeTemplate;
 		try {
-			var resolved = FileUtils.resolveVirtualPathSafely(basePath, template);
+			var resolved = resolveVirtualPathSafely(basePath, template);
 			safeTemplate = stripBasePath(basePath, resolved);
 		} catch (IllegalArgumentException ex) {
 			throw new Forbidden("Path escapes configured base path.");

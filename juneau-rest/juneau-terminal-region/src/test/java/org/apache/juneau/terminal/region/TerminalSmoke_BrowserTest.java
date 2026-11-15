@@ -17,14 +17,15 @@
 package org.apache.juneau.terminal.region;
 
 import static java.nio.charset.StandardCharsets.*;
-import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.apache.juneau.bct.BctAssertions.assertSize;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
 import java.io.*;
 import java.net.*;
 import java.nio.file.*;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -84,13 +85,23 @@ class TerminalSmoke_BrowserTest extends TestBase {
 		static volatile TerminalProcess process;
 
 		@Override
+		public TerminalAccess terminalAccess() {
+			return (caller, id) -> true;
+		}
+
+		@Override
+		public TerminalViewAccess terminalViewAccess() {
+			return (req, runId) -> true;
+		}
+
+		@Override
 		public Optional<TerminalSource> terminalSource(String id, RestRequest req) {
-			return ID.equals(id) ? Optional.of(process.terminal()) : Optional.empty();
+			return eq(ID, id) ? Optional.of(process.terminal()) : Optional.empty();
 		}
 
 		@Override
 		public Optional<TerminalViewSource> terminalViewSource(String runId, RestRequest req) {
-			return ID.equals(runId) ? Optional.of(process.events()) : Optional.empty();
+			return eq(ID, runId) ? Optional.of(process.events()) : Optional.empty();
 		}
 	}
 
@@ -120,7 +131,7 @@ class TerminalSmoke_BrowserTest extends TestBase {
 		Files.writeString(feedFile, feed, UTF_8);
 		var tool = dir.resolve("tool");
 		Files.writeString(tool, "#!/bin/sh\ncat '" + feedFile + "'\nexit 3\n", UTF_8);
-		Files.setPosixFilePermissions(tool, java.nio.file.attribute.PosixFilePermissions.fromString("rwx------"));
+		Files.setPosixFilePermissions(tool, PosixFilePermissions.fromString("rwx------"));
 
 		var host = new Host(System.getProperty("os.name"), script.toString(), null, path);
 		R.process = TerminalProcess.start("maven", List.of(tool.toString()), 100, 30, dir.resolve("run"), host);

@@ -86,10 +86,10 @@ class McpClientRegistration_Test extends TestBase {
 		var src = new ArrayList<>(List.of(URI.create("http://127.0.0.1/callback")));
 		var r = new McpClientRegistration("c", Optional.empty(), Optional.empty(), Optional.empty(),
 			Optional.empty(), ISSUER, src, McpApplicationType.NATIVE, Map.of());
-		src.add(URI.create("http://evil/callback"));
+		src.add(URI.create("http://other/callback"));
 		assertSize(() -> "mutating the source list must not affect the record", 1, r.redirectUris());
 		var uris = r.redirectUris();
-		var extra = URI.create("http://x/y");
+		var extra = URI.create("https://x/y");
 		assertThrows(UnsupportedOperationException.class, () -> uris.add(extra));
 	}
 

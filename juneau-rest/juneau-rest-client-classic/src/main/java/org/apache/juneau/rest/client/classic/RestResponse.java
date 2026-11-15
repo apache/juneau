@@ -27,6 +27,8 @@ import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.http.util.*;
+import org.apache.juneau.http.RedactedHeaders;
+import org.apache.juneau.http.RestDebugBodyGate;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.marshall.*;
@@ -373,6 +375,13 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		return this;
 	}
 
+	// Renders a header for the FULL log, masking the value of credential-bearing headers.
+	private static String redacted(Header h) {
+		return RedactedHeaders.isSensitive(h.getName(), RedactedHeaders.DEFAULT)
+			? h.getName() + ": " + RedactedHeaders.REDACTED
+			: h.toString();
+	}
+
 	/**
 	 * Closes this response.
 	 *
@@ -416,27 +425,30 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 					if (client.logRequests == DetailLevel.SIMPLE) {
 						client.log(client.logRequestsLevel, "HTTP %s %s, %s", request.getMethod(), request.getURI(), this.getStatusLine());
 					} else if (request.isDebug() || client.logRequests == DetailLevel.FULL) {
-						var output = getContent().asString();
+						var allowBodies = RestDebugBodyGate.isAllowDumpBodies();
+						var output = getContent().asString();  // always read so the body is cached for later callers
 						var sb = new StringBuilder();
 						sb.append("\n=== HTTP Call (outgoing) ======================================================");
 						sb.append("\n=== REQUEST ===\n");
 						sb.append(request.getMethod()).append(" ").append(request.getURI());
 						sb.append("\n---request headers---");
-						request.getHeaders().forEach(x -> sb.append("\n\t").append(x));
+						request.getHeaders().forEach(x -> sb.append("\n\t").append(redacted(x)));
 						if (request.hasHttpEntity()) {
 							sb.append("\n---request entity---");
 							var e = request.getHttpEntity();
 							if (nn(e.getContentType()))
 								sb.append("\n\t").append(e.getContentType());
-							if (e.isRepeatable()) {
-								appendRequestContent(sb, e);
-							}
+							if (e.isRepeatable())
+								appendRequestContent(sb, e, allowBodies);
 						}
 						sb.append("\n=== RESPONSE ===\n").append(getStatusLine());
 						sb.append("\n---response headers---");
 						for (var h : getAllHeaders())
-							sb.append("\n\t").append(h);
-						sb.append("\n---response content---\n").append(output);
+							sb.append("\n\t").append(redacted(h));
+						if (allowBodies)
+							sb.append("\n---response content---\n").append(output);
+						else
+							sb.append("\n---response content---\n").append(SUPPRESSED);
 						sb.append("\n=== END =======================================================================");
 						client.log(client.logRequestsLevel, sb.toString());
 					}
@@ -474,7 +486,13 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		return this;
 	}
 
-	private static void appendRequestContent(StringBuilder sb, HttpEntity e) {
+	private static final String SUPPRESSED = "[body suppressed; set " + RestDebugBodyGate.ENV_ALLOW_DUMP_BODIES + " to enable]";
+
+	private static void appendRequestContent(StringBuilder sb, HttpEntity e, boolean allowBodies) {
+		if (! allowBodies) {
+			sb.append("\n---request content---\n").append(SUPPRESSED);
+			return;
+		}
 		try {
 			sb.append("\n---request content---\n").append(EntityUtils.toString(e));
 		} catch (Exception ex) {

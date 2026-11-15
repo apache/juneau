@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.junit.jupiter.api.*;
+import org.opensaml.saml.common.SAMLObjectBuilder;
 import org.opensaml.saml.saml2.core.*;
 import org.opensaml.security.credential.*;
 
@@ -89,7 +90,7 @@ class SamlAssertionValidator_SubjectConfirmation_Test extends TestBase {
 
 	@Test void b02_wrongRecipient_rejected() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
-		var sc = SamlTestSupport.bearerConfirmation("https://evil.example.com/acs", null, NOA, null, null);
+		var sc = SamlTestSupport.bearerConfirmation("https://other.example.com/acs", null, NOA, null, null);
 		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", sc));
 		var v = base(cred).recipient(ACS).build();
 		assertThrows(AuthenticationException.class, () -> v.validate(xml));
@@ -126,7 +127,7 @@ class SamlAssertionValidator_SubjectConfirmation_Test extends TestBase {
 		@SuppressWarnings({
 			"unchecked" // OpenSAML builder factory returns a wildcard-typed builder; cast is safe for the requested element QName.
 		})
-		var scb = (org.opensaml.saml.common.SAMLObjectBuilder<SubjectConfirmation>)
+		var scb = (SAMLObjectBuilder<SubjectConfirmation>)
 			bf.getBuilder(SubjectConfirmation.DEFAULT_ELEMENT_NAME);
 		var sc = scb.buildObject();
 		sc.setMethod(SubjectConfirmation.METHOD_HOLDER_OF_KEY);
@@ -196,7 +197,7 @@ class SamlAssertionValidator_SubjectConfirmation_Test extends TestBase {
 
 	@Test void e01_multipleConfirmations_oneValid_accepted() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
-		var bad = SamlTestSupport.bearerConfirmation("https://evil.example.com/acs", null, NOA, null, null);
+		var bad = SamlTestSupport.bearerConfirmation("https://other.example.com/acs", null, NOA, null, null);
 		var good = SamlTestSupport.bearerConfirmation(ACS, null, NOA, null, null);
 		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", bad, good));
 		assertEquals("alice", base(cred).recipient(ACS).build().validate(xml).getName());
@@ -217,18 +218,18 @@ class SamlAssertionValidator_SubjectConfirmation_Test extends TestBase {
 		var sc = SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-7", null);
 		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", sc));
 		var v = base(cred).build();
-		v.rememberAuthnRequest("_req-7");
-		assertEquals("alice", v.validate(xml).getName());
+		var binding = v.rememberAuthnRequest("_req-7");
+		assertEquals("alice", v.validate(xml, binding).getName());
 	}
 
 	@Test void f03_registeredRequestId_consumedByFirstUse() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
 		var v = base(cred).build();
-		v.rememberAuthnRequest("_req-8");
+		var binding = v.rememberAuthnRequest("_req-8");
 		var xml1 = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-8", null)));
-		assertEquals("alice", v.validate(xml1).getName());
+		assertEquals("alice", v.validate(xml1, binding).getName());
 		var xml2 = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-8", null)));
-		assertThrows(AuthenticationException.class, () -> v.validate(xml2));
+		assertThrows(AuthenticationException.class, () -> v.validate(xml2, binding));
 	}
 
 	@Test void f04_unregisteredRequestId_rejected() throws Exception {
@@ -266,9 +267,9 @@ class SamlAssertionValidator_SubjectConfirmation_Test extends TestBase {
 			@Override public Clock withZone(ZoneId z) { return this; }
 			@Override public Instant instant() { return clock.get(); }
 		}).build();
-		v.rememberAuthnRequest("_req-9");
+		var binding = v.rememberAuthnRequest("_req-9");
 		clock.set(NOW.plusSeconds(31));
-		assertThrows(AuthenticationException.class, () -> v.validate(xml));
+		assertThrows(AuthenticationException.class, () -> v.validate(xml, binding));
 	}
 
 	@Test void f08_customAuthnRequestStore_usedAndSingleUse() throws Exception {
@@ -277,22 +278,22 @@ class SamlAssertionValidator_SubjectConfirmation_Test extends TestBase {
 		var consumed = new ArrayList<String>();
 		var ids = new HashSet<String>();
 		AuthnRequestStore store = new AuthnRequestStore() {
-			@Override public void remember(String id, long expiresAtMs, long nowMs) {
+			@Override public void remember(String id, byte[] bindingDigest, long expiresAtMs, long nowMs) {
 				remembered.add(id);
 				ids.add(id);
 			}
-			@Override public boolean consume(String id, long nowMs) {
+			@Override public boolean consume(String id, byte[] bindingDigest, long nowMs) {
 				consumed.add(id);
 				return ids.remove(id);
 			}
 		};
 		var v = base(cred).authnRequestStore(store).build();
-		v.rememberAuthnRequest("_req-10");
+		var binding = v.rememberAuthnRequest("_req-10");
 		assertEquals(List.of("_req-10"), remembered);
 		var xml1 = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-10", null)));
-		assertEquals("alice", v.validate(xml1).getName());
+		assertEquals("alice", v.validate(xml1, binding).getName());
 		var xml2 = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-10", null)));
-		assertThrows(AuthenticationException.class, () -> v.validate(xml2));
+		assertThrows(AuthenticationException.class, () -> v.validate(xml2, binding));
 		assertEquals(List.of("_req-10", "_req-10"), consumed);
 	}
 
@@ -303,14 +304,34 @@ class SamlAssertionValidator_SubjectConfirmation_Test extends TestBase {
 
 	@Test void f10_inMemoryStore_singleUseExpiryAndCap() {
 		var store = new InMemoryAuthnRequestStore(2);
-		store.remember("a", 1000, 0);
-		store.remember("b", 50, 0);
-		assertThrows(IllegalStateException.class, () -> store.remember("c", 1000, 10));
-		store.remember("c", 1000, 60);
-		assertFalse(store.consume("b", 60));
-		assertTrue(store.consume("a", 60));
-		assertFalse(store.consume("a", 60));
+		var d = new byte[]{1};
+		store.remember("a", d, 1000, 0);
+		store.remember("b", d, 50, 0);
+		assertThrows(IllegalStateException.class, () -> store.remember("c", d, 1000, 10));
+		store.remember("c", d, 1000, 60);
+		assertFalse(store.consume("b", d, 60));
+		assertTrue(store.consume("a", d, 60));
+		assertFalse(store.consume("a", d, 60));
 		assertThrows(IllegalArgumentException.class, () -> new InMemoryAuthnRequestStore(0));
+	}
+
+	@Test void f11_missingBrowserBinding_rejected() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var v = base(cred).build();
+		v.rememberAuthnRequest("_req-11");
+		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-11", null)));
+		assertThrows(AuthenticationException.class, () -> v.validate(xml));
+		assertThrows(AuthenticationException.class, () -> v.validate(xml, null));
+	}
+
+	@Test void f12_wrongBrowserBinding_rejected() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var v = base(cred).build();
+		var binding = v.rememberAuthnRequest("_req-12");
+		var other = v.rememberAuthnRequest("_req-12b");
+		assertNotEquals(binding, other);
+		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req-12", null)));
+		assertThrows(AuthenticationException.class, () -> v.validate(xml, other));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -351,7 +372,7 @@ class SamlAssertionValidator_SubjectConfirmation_Test extends TestBase {
 	@Test void g04_attributesCannotReplaceValidatorClaims() throws Exception {
 		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NBF, NOA);
-		SamlTestSupport.addAttributeStatement(assertion, "iss", "https://evil.example.com");
+		SamlTestSupport.addAttributeStatement(assertion, "iss", "https://other.example.com");
 		SamlTestSupport.addAttributeStatement(assertion, "aud", "other");
 		SamlTestSupport.addAttributeStatement(assertion, "issuerType", "JWT");
 		SamlTestSupport.addAttributeStatement(assertion, "dept", "eng");

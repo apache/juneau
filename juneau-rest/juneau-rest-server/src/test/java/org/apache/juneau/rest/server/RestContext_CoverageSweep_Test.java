@@ -22,10 +22,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.lang.reflect.*;
+import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
+import jakarta.servlet.ServletException;
+
+import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.reflect.ExecutableException;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.InvalidDataConversionException;
 import org.apache.juneau.marshall.encoders.*;
@@ -55,13 +63,13 @@ import org.junit.jupiter.api.*;
 	"java:S125", // Comments are explanatory; they are not commented-out code.
 	"unused" // Fixture lambdas and methods (SwaggerProvider/OpenApiProvider lambdas, setContext, init(AtomicInteger)) ignore their parameters; the signatures are the contract under test.
 })
-class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
+class RestContext_CoverageSweep_Test extends TestBase {
 
-	static RestContext.Args argsOf(Class<?> resourceClass, java.util.function.Supplier<?> supplier) {
+	static RestContext.Args argsOf(Class<?> resourceClass, Supplier<?> supplier) {
 		return new RestContext.Args(resourceClass, null, null, supplier, null, null, null, null, null, null);
 	}
 
-	static RestContext.Args argsOf(Class<?> resourceClass, java.util.function.Supplier<?> supplier, java.util.function.Consumer<WritableBeanStore> configurer) {
+	static RestContext.Args argsOf(Class<?> resourceClass, Supplier<?> supplier, Consumer<WritableBeanStore> configurer) {
 		return new RestContext.Args(resourceClass, null, null, supplier, null, configurer, null, null, null, null);
 	}
 
@@ -89,7 +97,7 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 	@Test void a02_convertThrowable_executableException_unwraps() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_Bare.class, Fix_Bare::new));
 		var target = new ExecutableExceptionTarget("boom");
-		var ee = new org.apache.juneau.commons.reflect.ExecutableException(target);
+		var ee = new ExecutableException(target);
 		var result = ctx.convertThrowable(ee);
 		assertInstanceOf(InternalServerError.class, result);
 		assertSame(target, result.getCause());
@@ -165,8 +173,10 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 		var result = ctx.convertThrowable(e);
 		assertInstanceOf(InternalServerError.class, result);
 		assertSame(e, result.getCause());
-		assertFalse(result.getMessage().contains("boom"));
-		assertFalse(result.getMessage().contains("Arithmetic"));
+		var shown = ((BasicHttpException)result).getResponseMessage();
+		assertFalse(shown.contains("boom"));
+		assertFalse(shown.contains("Arithmetic"));
+		assertEquals("boom", result.getMessage());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------
@@ -506,7 +516,7 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 
 	@Test void o03_postInitChildFirst_hookThrows_wrappedAsServletException() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_PostInitChildFirstThrows.class, Fix_PostInitChildFirstThrows::new));
-		assertThrows(jakarta.servlet.ServletException.class, ctx::postInitChildFirst);
+		assertThrows(ServletException.class, ctx::postInitChildFirst);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------
@@ -527,11 +537,11 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 
 	public static class Fix_RestInitMissingPrereq {
 		@RestInit
-		public void init(java.util.concurrent.atomic.AtomicInteger notAResolvableBean) { /* never reached */ }
+		public void init(AtomicInteger notAResolvableBean) { /* never reached */ }
 	}
 
 	@Test void q01_restInit_unresolvablePrerequisite_throwsAtConstruction() {
-		var e = assertThrows(jakarta.servlet.ServletException.class,
+		var e = assertThrows(ServletException.class,
 			() -> new RestContext(argsOf(Fix_RestInitMissingPrereq.class, Fix_RestInitMissingPrereq::new)));
 		assertTrue(e.getMessage().contains("Fix_RestInitMissingPrereq"));
 	}
@@ -542,11 +552,11 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 	}
 
 	@Test void q02_restInit_hookThrows_wrappedAsServletException() {
-		var e = assertThrows(jakarta.servlet.ServletException.class,
+		var e = assertThrows(ServletException.class,
 			() -> new RestContext(argsOf(Fix_RestInitThrows.class, Fix_RestInitThrows::new)));
 		// MethodInfo's inject step wraps the reflective InvocationTargetException as an ExecutableException before
 		// RestContext's own top-level exception handler re-wraps that as the outer ServletException.
-		assertInstanceOf(org.apache.juneau.commons.reflect.ExecutableException.class, e.getCause());
+		assertInstanceOf(ExecutableException.class, e.getCause());
 		assertInstanceOf(IllegalStateException.class, e.getCause().getCause());
 	}
 
@@ -571,5 +581,19 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 		var records = LogRecordCapture.quietly(Fix_RestDestroyThrows.class, () -> assertDoesNotThrow(ctx::destroy));
 		assertSize(records::toString, 1, records);
 		assertTrue(records.get(0).getMessage().contains("servlet-destroy method"), records.get(0).getMessage());
+	}
+
+	@Test void a99_convertThrowable_nameMatched_doesNotCopyCauseMessage() throws Exception {
+		var ctx = new RestContext(argsOf(Fix_Bare.class, Fix_Bare::new));
+		var secret = "internal-detail-xyz";
+		assertFalse(((BasicHttpException)ctx.convertThrowable(new MyAccessDeniedException(secret))).getResponseMessage().contains(secret));
+		assertFalse(((BasicHttpException)ctx.convertThrowable(new MyUnauthorizedException(secret))).getResponseMessage().contains(secret));
+		assertFalse(((BasicHttpException)ctx.convertThrowable(new MyEmptyException(secret))).getResponseMessage().contains(secret));
+		assertFalse(((BasicHttpException)ctx.convertThrowable(new MyNotFoundException(secret))).getResponseMessage().contains(secret));
+	}
+
+	@Test void a99b_handleError_isNotSynchronized() throws Exception {
+		var m = RestContext.class.getDeclaredMethod("handleError", RestSession.class, Throwable.class);
+		assertFalse(Modifier.isSynchronized(m.getModifiers()));
 	}
 }

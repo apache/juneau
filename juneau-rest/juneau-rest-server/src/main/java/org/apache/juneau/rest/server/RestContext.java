@@ -28,6 +28,8 @@ import static org.apache.juneau.commons.utils.PredicateUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.Shorts.eq;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.isNotBlank;
+import static org.apache.juneau.commons.utils.StringUtils.split;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.rest.server.RestOpAnnotation.*;
@@ -44,6 +46,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
+import java.util.logging.Logger;
 import java.util.stream.*;
 
 import org.apache.juneau.bean.openapi3.OpenApi;
@@ -137,7 +140,7 @@ import jakarta.servlet.http.*;
  * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * 	<li class='note'>
- * 		No authentication, authorization or CSRF filter is registered by default; those are opt-in
+ * 		No authentication, authorization or request-token filter is registered by default; those are opt-in
  * 		(see {@link CsrfBoundary} and the auth modules).
  * 		The one default request check is the cross-site refusal for unsafe methods:  a request using a method other
  * 		than <c>GET</c>, <c>HEAD</c>, <c>OPTIONS</c> or <c>TRACE</c> is answered with a <c>403</c> when the browser marks it
@@ -995,7 +998,7 @@ public class RestContext extends Context {
 	 * @return {@code true} if the value should be visible to {@code @Rest(children)} sub-resources.
 	 */
 	private boolean isInheritableBeanType(Class<?> type, String name) {
-		if (WritableBeanStore.class.equals(type) || BeanStore.class.equals(type))
+		if (eq(WritableBeanStore.class, type) || eq(BeanStore.class, type))
 			return false;
 		return ! isFrameworkBeanType(type, name);
 	}
@@ -1078,7 +1081,7 @@ public class RestContext extends Context {
 		bs.addDefaultSupplier(SerializerSet.class, serializers::get);
 		bs.addDefaultSupplier(ParserSet.class, parsers::get);
 		bs.addDefaultSupplier(RichLogger.class, logger::get);
-		bs.addDefaultSupplier(java.util.logging.Logger.class, logger::get);
+		bs.addDefaultSupplier(Logger.class, logger::get);
 		bs.addDefaultSupplier(ThrownStore.class, thrownStore::get);
 		bs.addDefaultSupplier(MethodExecStore.class, methodExecStore::get);
 		bs.addDefaultSupplier(Messages.class, messages::get);
@@ -1665,7 +1668,7 @@ public class RestContext extends Context {
 		var rmMessages = resolvedMixinField();
 		if (rmMessages != null) {
 			var mm = rmMessages.overrides().messages();
-			if (StringUtils.isNotBlank(mm))
+			if (isNotBlank(mm))
 				b.location(vrs.resolve(mm));
 		}
 		var override = beanStore().createBeanFromMethod(Messages.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
@@ -2223,10 +2226,10 @@ public class RestContext extends Context {
 		var m = rm.overrides();
 		var out = new LinkedHashSet<String>();
 		var vrs = getBootstrapVarResolver().createSession();
-		if (StringUtils.isNotBlank(m.path()))
+		if (isNotBlank(m.path()))
 			addMountPrefix(out, vrs.resolve(m.path()));
 		for (var p : m.paths())
-			if (StringUtils.isNotBlank(p))
+			if (isNotBlank(p))
 				addMountPrefix(out, vrs.resolve(p));
 		return List.copyOf(out);
 	});
@@ -2680,7 +2683,7 @@ public class RestContext extends Context {
 				var rt = x.getReturnType().<Object>inner();
 				var name = BeanAnnotation.name(found);
 				// Skip the WritableBeanStore factory (already consumed by createBeanStore()) and void methods.
-				if (WritableBeanStore.class.equals(rt) || BeanStore.class.equals(rt) || void.class.equals(rt))
+				if (eq(WritableBeanStore.class, rt) || eq(BeanStore.class, rt) || eq(void.class, rt))
 					return;
 				var overridable = ! x.isPrivate() && ! x.isStatic();
 				var sig = x.getSignature();
@@ -3071,11 +3074,11 @@ public class RestContext extends Context {
 		// BasicRestServlet/BasicRestServletGroup, which implement DefaultConfig), so that when a seed IS
 		// present it can always be inserted between them — below everything the child itself declares, but
 		// above DefaultConfig's fallback values, whether that fallback is embedded here or synthesized below.
-		var embeddedDefaultConfig = raw.stream().filter(ai -> ai.getAnnotatable() instanceof ClassInfo ci && DefaultConfig.class.equals(ci.inner())).toList();
+		var embeddedDefaultConfig = raw.stream().filter(ai -> ai.getAnnotatable() instanceof ClassInfo ci && eq(DefaultConfig.class, ci.inner())).toList();
 		if (!embeddedDefaultConfig.isEmpty()) {
 			if (seed == null)
 				return raw;
-			var ownDeclarations = raw.stream().filter(ai -> !(ai.getAnnotatable() instanceof ClassInfo ci && DefaultConfig.class.equals(ci.inner()))).toList();
+			var ownDeclarations = raw.stream().filter(ai -> !(ai.getAnnotatable() instanceof ClassInfo ci && eq(DefaultConfig.class, ci.inner()))).toList();
 			var combined = new ArrayList<AnnotationInfo<Rest>>(raw.size() + 1);
 			combined.addAll(ownDeclarations);
 			combined.add(seed);
@@ -3270,6 +3273,13 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<Boolean> problemDetails = memoizer(() ->
 		mergeReplacedBooleanAttribute("problemDetails", resolveBooleanDefault(getRestContextProperties().getProblemDetailsRaw())));
+
+	/**
+	 * Whether messages taken from an exception's cause are written to error responses; resolved from
+	 * {@code @Rest(showCauseMessages)}.
+	 */
+	private final Memoizer<Boolean> showCauseMessages = memoizer(() ->
+		mergeReplacedBooleanAttribute("showCauseMessages", resolveBooleanDefault(getRestContextProperties().getShowCauseMessagesRaw())));
 
 	/**
 	 * Whether REST-driven serializer/parser debug behavior is enabled for this resource; resolved from
@@ -3631,7 +3641,7 @@ public class RestContext extends Context {
 			// Fold in the mixin class's OWN @Rest chain (parent-to-child), excluding the framework DefaultConfig
 			// entries — those are already contributed by the host's own chain, so re-adding them would double-count.
 			rstream(getAnnotationProvider().find(Rest.class, ClassInfo.of(rm.type())))
-				.filter(ai -> ! (ai.getAnnotatable() instanceof ClassInfo ci && DefaultConfig.class.equals(ci.inner())))
+				.filter(ai -> ! (ai.getAnnotatable() instanceof ClassInfo ci && eq(DefaultConfig.class, ci.inner())))
 				.forEach(out::add);
 		}
 		return u(out);
@@ -3663,7 +3673,7 @@ public class RestContext extends Context {
 			// Fold in the mixin class's OWN @Rest chain (parent-to-child), excluding the framework DefaultConfig
 			// entries, but only when the mixin's own @Rest declares the mergeResponseProcessorsIntoHost opt-in.
 			var mixinRest = rstream(getAnnotationProvider().find(Rest.class, ClassInfo.of(rm.type())))
-				.filter(ai -> ! (ai.getAnnotatable() instanceof ClassInfo ci && DefaultConfig.class.equals(ci.inner())))
+				.filter(ai -> ! (ai.getAnnotatable() instanceof ClassInfo ci && eq(DefaultConfig.class, ci.inner())))
 				.toList();
 			if (mixinRest.stream().anyMatch(ai -> ai.inner().mergeResponseProcessorsIntoHost()))
 				out.addAll(mixinRest);
@@ -3769,7 +3779,7 @@ public class RestContext extends Context {
 			.stream()
 			.flatMap(Arrays::stream)
 			.filter(Objects::nonNull)
-			.flatMap(s -> StringUtils.split(s, ',').stream())
+			.flatMap(s -> split(s, ',').stream())
 			.map(String::trim)
 			.filter(StringUtils::isNotBlank)
 			.anyMatch(property::equalsIgnoreCase);
@@ -3779,7 +3789,7 @@ public class RestContext extends Context {
 		// messages memoizer's cutoff check sees both noInherit sources without inducing the resolver cycle.
 		if (resolvedMixin != null) {
 			for (var s : resolvedMixin.overrides().noInherit())
-				for (var t : StringUtils.split(s, ','))
+				for (var t : split(s, ','))
 					if (eqic(property, t.trim()))
 						return true;
 		}
@@ -4803,6 +4813,20 @@ public class RestContext extends Context {
 	public boolean isRenderResponseStackTraces() { return renderResponseStackTraces.get(); }
 
 	/**
+	 * Returns whether messages taken from an exception's cause are written to error responses.
+	 *
+	 * <p>
+	 * An HTTP exception created with a cause and no message of its own (e.g. <c><jk>new</jk> InternalServerError(<jv>cause</jv>)</c>)
+	 * takes its message from the cause.  When this setting is off (the default), the response carries the status
+	 * reason phrase instead of that message.  Messages supplied explicitly by the code that throws the exception are
+	 * always written, and logs keep the full cause message either way.
+	 *
+	 * @return <jk>true</jk> if cause messages are written to error responses.
+	 * @see Rest#showCauseMessages()
+	 */
+	public boolean isShowCauseMessages() { return showCauseMessages.get(); }
+
+	/**
 	 * Returns whether this resource is opted into
 	 * <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807">RFC 7807</a>
 	 * {@code application/problem+json} error responses.
@@ -5143,7 +5167,7 @@ public class RestContext extends Context {
 				return v != null && super.contains(v);
 			}
 		};
-		StringUtils.split(value, s::add);
+		split(value, s::add);
 		return u(s);
 	}
 
@@ -5176,8 +5200,8 @@ public class RestContext extends Context {
 	 * 		<js>"Query execution failed."</js>; the original exception (and its cause) stays attached for logging.
 	 * 	<li><js>"*AccessDenied*"</js> - Converted to {@link Unauthorized}.
 	 * 	<li><js>"*Empty*"</js>,<js>"*NotFound*"</js> - Converted to {@link NotFound}.
-	 * 	<li>Any other exception - Converted to {@link InternalServerError} with the generic message
-	 * 		<js>"Internal Server Error."</js>; the original exception stays attached as the cause.
+	 * 	<li>Any other exception - Converted to {@link InternalServerError} wrapping the original exception as the cause.
+	 * 		The cause's message is written to the response only when {@link #isShowCauseMessages()} is enabled.
 	 * 		Returned unchanged when {@link #isRenderResponseStackTraces()} is enabled, or when the throwable is a
 	 * 		problem-details exception, a legacy HTTP response exception, or has a registered {@link ProblemMapper}.
 	 * </ul>
@@ -5194,7 +5218,7 @@ public class RestContext extends Context {
 			t = t2.getTargetException();
 
 		if (t instanceof BasicHttpException t2)
-			return t2;
+			return applyCauseMessagePolicy(t2);
 
 		var ci = ClassInfo.of(t);
 
@@ -5202,10 +5226,10 @@ public class RestContext extends Context {
 			return t;
 
 		if (ci.isAssignableTo(ParseException.class) || ci.is(InvalidDataConversionException.class))
-			return new BadRequest(t);
+			return new BadRequest(t, t.getMessage());
 
 		if (t instanceof BeanQuerySyntaxException e)
-			return new BadRequest(e).setHeader(BeanQueryRequest.ERROR_HEADER, e.code().name());
+			return new BadRequest(e, e.getMessage()).setHeader(BeanQueryRequest.ERROR_HEADER, e.code().name());
 
 		// The cause may carry SQL or table names: keep it attached for logging, but never in the client-facing message.
 		if (t instanceof BeanQueryExecutionException e)
@@ -5213,17 +5237,26 @@ public class RestContext extends Context {
 
 		String n = cn(t);
 
+		// The cause is kept for logging, but its message is not written for a client audience.
 		if (co(n, "AccessDenied") || co(n, "Unauthorized"))
-			return new Unauthorized(t);
+			return applyCauseMessagePolicy(new Unauthorized(t));
 
 		if (co(n, "Empty") || co(n, "NotFound"))
-			return new NotFound(t);
+			return applyCauseMessagePolicy(new NotFound(t));
 
 		// Any other exception is an unplanned failure: its class name and message were never written for a client audience,
 		// so hide them behind a generic 500 (the original stays attached as the cause for logging and for RRPC).
 		if (isRenderResponseStackTraces() || isIntentionalResponse(t))
 			return t;
-		return new InternalServerError(t, "Internal Server Error.");
+		return applyCauseMessagePolicy(new InternalServerError(t));
+	}
+
+	/**
+	 * Hides the message of an HTTP exception from the response when it was taken from the exception's cause and
+	 * {@link #isShowCauseMessages()} is off.
+	 */
+	private BasicHttpException applyCauseMessagePolicy(BasicHttpException e) {
+		return isShowCauseMessages() ? e : e.hideCauseMessage();
 	}
 
 	private static final Class<?> LEGACY_HTTP_RESPONSE = loadClassOrNull("org.apache.http.HttpResponse");
@@ -5400,7 +5433,7 @@ public class RestContext extends Context {
 	 * @param e The exception that occurred.
 	 * @throws IOException Can be thrown if a problem occurred trying to write to the output stream.
 	 */
-	protected synchronized void handleError(RestSession session, Throwable e) throws IOException {
+	protected void handleError(RestSession session, Throwable e) throws IOException {
 
 		// Client disconnected mid-response: routine.  Don't record it, log it, or try to write an error to a dead socket.
 		if (session.logContainerClientAbort(e))
@@ -5419,7 +5452,7 @@ public class RestContext extends Context {
 			code = r.value()[0];
 
 		var appThrown = e instanceof BasicHttpException;
-		var e2 = (e instanceof BasicHttpException e3 ? e3 : new BasicHttpException(code, null, e));
+		var e2 = applyCauseMessagePolicy(e instanceof BasicHttpException e3 ? e3 : new BasicHttpException(code, null, e));
 
 		var req = session.getRequest();
 		var res = session.getResponse();
@@ -5430,7 +5463,7 @@ public class RestContext extends Context {
 
 		// Matches the op-method path (HttpResponseProcessor / ProblemDetailsProcessor), which sends this header too.
 		e2.getHeaders().stream()
-			.filter(h -> BeanQueryRequest.ERROR_HEADER.equals(h.getName()))
+			.filter(h -> eq(BeanQueryRequest.ERROR_HEADER, h.getName()))
 			.findFirst()
 			.ifPresent(h -> res.setHeader(h.getName(), h.getValue()));
 
@@ -5530,7 +5563,7 @@ public class RestContext extends Context {
 	 * 	wasn't application-authored, so its message is treated as internal detail).
 	 */
 	static String suppressedErrorBodyMessage(BasicHttpException e2, boolean appThrown) {
-		return appThrown ? scrubForXss(e2.getMessage()) : "";
+		return appThrown ? scrubForXss(e2.getResponseMessage()) : "";
 	}
 
 	/**
@@ -5556,7 +5589,7 @@ public class RestContext extends Context {
 		try {
 			var problem = ProblemAdapters.fromException(e);
 			e.getHeaders().stream()
-				.filter(h -> BeanQueryRequest.ERROR_HEADER.equals(h.getName()))
+				.filter(h -> eq(BeanQueryRequest.ERROR_HEADER, h.getName()))
 				.findFirst()
 				.ifPresent(h -> problem.set("code", h.getValue()));
 			res.setStatus(statusCode);
@@ -5601,7 +5634,7 @@ public class RestContext extends Context {
 				var problem = new Problem()
 					.setStatus(statusCode)
 					.setTitle(ve.getStatusLine().getReasonPhrase())
-					.setDetail(ve.getMessage())
+					.setDetail(ve.getResponseMessage())
 					.set("errors", ve.getViolations());
 				res.setContentType(ContentType.APPLICATION_PROBLEM_JSON.getValue());
 				Json.DEFAULT.write(problem, os);

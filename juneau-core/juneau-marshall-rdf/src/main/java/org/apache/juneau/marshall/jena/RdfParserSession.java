@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.jena.rdf.model.*;
+import org.apache.jena.rdf.model.Property;
 import org.apache.jena.riot.*;
 import org.apache.jena.riot.lang.*;
 import org.apache.jena.sparql.util.Context;
@@ -98,10 +99,10 @@ public class RdfParserSession extends ReaderParserSession {
 	}
 
 	private final Model model;
-	private final org.apache.jena.rdf.model.Property pRoot;
-	private final org.apache.jena.rdf.model.Property pValue;
-	private final org.apache.jena.rdf.model.Property pType;
-	private final org.apache.jena.rdf.model.Property pRdfType;
+	private final Property pRoot;
+	private final Property pValue;
+	private final Property pType;
+	private final Property pRdfType;
 	private final Lang lang;
 	private final RdfParser ctx;
 	private final Set<Resource> urisVisited = st();
@@ -141,6 +142,124 @@ public class RdfParserSession extends ReaderParserSession {
 			c.set(LangJSONLD11.JSONLD_OPTIONS, o);
 		}
 		return c;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the XML document's type declaration names an external DTD or declares an external entity.
+	 *
+	 * <p>
+	 * Only the prolog is scanned.  The XML declaration, comments, processing instructions and internal entity
+	 * declarations are allowed, and scanning stops at the root element, so markup inside comments, CDATA sections or
+	 * the document body is never treated as a type declaration.
+	 *
+	 * @param s The XML document.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the prolog contains an external DTD or entity declaration.
+	 */
+	// Package-private (not private) for white-box testing.
+	static boolean hasExternalDoctype(String s) {
+		var n = s.length();
+		var i = s.startsWith("\uFEFF") ? 1 : 0;
+		while (i < n) {
+			i = skipXmlWs(s, i);
+			if (s.startsWith("<?", i))
+				i = indexAfter(s, "?>", i + 2);
+			else if (s.startsWith("<!--", i))
+				i = indexAfter(s, "-->", i + 4);
+			else if (s.startsWith("<!DOCTYPE", i))
+				return isExternalDoctype(s, i + 9);
+			else
+				return false;
+		}
+		return false;
+	}
+
+	// Scans a DOCTYPE starting just after "<!DOCTYPE": its external id, then each declaration in the internal subset.
+	private static boolean isExternalDoctype(String s, int start) {
+		var n = s.length();
+		var i = skipXmlWs(s, skipXmlName(s, skipXmlWs(s, start)));
+		if (isExternalId(s, i))
+			return true;
+		if (i >= n || s.charAt(i) != '[')
+			return false;
+		i++;
+		while (i < n) {
+			i = skipXmlWs(s, i);
+			if (i >= n || s.charAt(i) == ']')
+				return false;
+			if (s.startsWith("<!--", i)) {
+				i = indexAfter(s, "-->", i + 4);
+			} else if (s.startsWith("<?", i)) {
+				i = indexAfter(s, "?>", i + 2);
+			} else if (s.startsWith("<!ENTITY", i)) {
+				var j = skipXmlWs(s, i + 8);
+				if (j < n && s.charAt(j) == '%')
+					j = skipXmlWs(s, j + 1);
+				j = skipXmlWs(s, skipXmlName(s, j));
+				if (isExternalId(s, j))
+					return true;
+				i = indexAfterDecl(s, j);
+			} else if (s.charAt(i) == '<') {
+				i = indexAfterDecl(s, i + 1);
+			} else {
+				i++;  // Parameter-entity reference.
+			}
+		}
+		return false;
+	}
+
+	private static boolean isExternalId(String s, int i) {
+		return isXmlKeyword(s, i, "SYSTEM") || isXmlKeyword(s, i, "PUBLIC");
+	}
+
+	private static boolean isXmlKeyword(String s, int i, String keyword) {
+		if (! s.startsWith(keyword, i))
+			return false;
+		var j = i + keyword.length();
+		return j >= s.length() || isXmlWs(s.charAt(j)) || s.charAt(j) == '"' || s.charAt(j) == '\'';
+	}
+
+	// Index just past the '>' closing a markup declaration, skipping quoted literals.
+	private static int indexAfterDecl(String s, int i) {
+		var n = s.length();
+		while (i < n) {
+			var c = s.charAt(i);
+			if (c == '"' || c == '\'') {
+				var end = s.indexOf(c, i + 1);
+				i = end < 0 ? n : end + 1;
+			} else if (c == '>') {
+				return i + 1;
+			} else {
+				i++;
+			}
+		}
+		return n;
+	}
+
+	private static int indexAfter(String s, String terminator, int i) {
+		var end = s.indexOf(terminator, i);
+		return end < 0 ? s.length() : end + terminator.length();
+	}
+
+	private static int skipXmlName(String s, int i) {
+		var n = s.length();
+		while (i < n) {
+			var c = s.charAt(i);
+			if (isXmlWs(c) || c == '[' || c == '>' || c == '"' || c == '\'' || c == '%')
+				break;
+			i++;
+		}
+		return i;
+	}
+
+	private static int skipXmlWs(String s, int i) {
+		var n = s.length();
+		while (i < n && isXmlWs(s.charAt(i)))
+			i++;
+		return i;
+	}
+
+	private static boolean isXmlWs(char c) {
+		return c == ' ' || c == '\t' || c == '\r' || c == '\n';
 	}
 
 	// Package-private (not private) for white-box testing.
@@ -201,7 +320,7 @@ public class RdfParserSession extends ReaderParserSession {
 			var st = i.next();
 			var subject = st.getSubject();
 			var object = st.getObject();
-			if (object.isResource() && ! object.equals(subject))
+			if (object.isResource() && neq(object, subject))
 				objects.add(object);
 		}
 		for (ResIterator i = m.listSubjects(); i.hasNext();) {
@@ -233,7 +352,7 @@ public class RdfParserSession extends ReaderParserSession {
 		if (n.isResource()) {
 			var st = n.asResource().getProperty(pRdfType);
 			if (nn(st))
-				return RDF_BAG.equals(st.getResource().getURI());
+				return eq(RDF_BAG, st.getResource().getURI());
 		}
 		return false;
 	}
@@ -253,7 +372,7 @@ public class RdfParserSession extends ReaderParserSession {
 		if (n.isResource()) {
 			var st = n.asResource().getProperty(pRdfType);
 			if (nn(st))
-				return RDF_SEQ.equals(st.getResource().getURI());
+				return eq(RDF_SEQ, st.getResource().getURI());
 		}
 		return false;
 	}
@@ -289,7 +408,7 @@ public class RdfParserSession extends ReaderParserSession {
 		}
 
 		Object o = null;
-		if (n.isResource() && nn(n.asResource().getURI()) && n.asResource().getURI().equals(RDF_NIL)) {
+		if (n.isResource() && eq(n.asResource().getURI(), RDF_NIL)) {
 			// Do nothing.  Leave o == null.
 		} else if (sType.isObject()) {
 			if (n.isLiteral()) {
@@ -446,7 +565,7 @@ public class RdfParserSession extends ReaderParserSession {
 						throw e;
 					}
 				}
-			} else if (! (p.equals(pRoot) || p.equals(pType))) {
+			} else if (neq(p, pRoot) && neq(p, pType)) {
 				var o = st.getObject();
 				var value = readAnything(object(), o, m.getBean(false), null);
 				onUnknownProperty(key, m, value);
@@ -488,7 +607,7 @@ public class RdfParserSession extends ReaderParserSession {
 			var st = i.next();
 			var p = st.getPredicate();
 			var key = p.getLocalName();
-			if (! (eq(key, "root") && p.getURI().equals(getJuneauNs().getUri()))) { // Bug: p.getURI() is the property's FULL URI, never equal to the bare namespace URI on the right; the inner && is therefore always false and this guard's "skip" branch is permanently unreachable.
+			if (! (eq(key, "root") && eq(p.getURI(), getJuneauNs().getUri()))) { // Bug: p.getURI() is the property's FULL URI, never equal to the bare namespace URI on the right; the inner && is therefore always false and this guard's "skip" branch is permanently unreachable.
 				key = decodeString(key);
 				var o = st.getObject();
 				var key2 = convertAttrToType(m, key, keyType);
@@ -506,6 +625,8 @@ public class RdfParserSession extends ReaderParserSession {
 
 		// RDFDataMgr.read accepts StringReader; use RDFParser for Reader input
 		var content = pipe.asString();
+		if ((lang == Lang.RDFXML || lang == Lang.TRIX) && hasExternalDoctype(content))
+			throw new ParseException(this, "External DTD and entity declarations are not supported.");
 		RDFParser.fromString(content, lang)
 			.base("http://unknown/")
 			.context(parserContext(ctx.allowRemoteContexts))

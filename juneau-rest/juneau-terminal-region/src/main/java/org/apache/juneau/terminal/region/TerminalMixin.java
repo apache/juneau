@@ -26,8 +26,8 @@ import org.apache.juneau.rest.server.*;
  * Mixin interface that serves the terminal bytes and raw endpoints, plus this module's own JS and CSS.
  *
  * <p>
- * The one abstract method is the application's resolver, which is where authorization lives: an unknown id and a
- * forbidden id both answer {@code 404}.  Ids match {@code ^[A-Za-z0-9_-]{1,128}$}; anything else answers {@code 400}
+ * The abstract methods are the application's access rules and resolver, which is where authorization lives: an
+ * unknown id and a forbidden id both answer {@code 404}.  Ids match {@code ^[A-Za-z0-9_-]{1,128}$}; anything else answers {@code 400}
  * before the resolver runs.  The mixin adds no auth of its own; the host resource's guards apply.
  *
  * <p>
@@ -37,6 +37,16 @@ import org.apache.juneau.rest.server.*;
  * <p class='bjava'>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> RunsResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> TerminalMixin, TerminalViewMixin {
+ * 		<ja>@Override</ja>
+ * 		<jk>public</jk> TerminalAccess terminalAccess() {
+ * 			<jk>return</jk> (<jv>caller</jv>, <jv>id</jv>) -&gt; <jv>caller</jv>.principalName() != <jk>null</jk>;
+ * 		}
+ *
+ * 		<ja>@Override</ja>
+ * 		<jk>public</jk> TerminalViewAccess terminalViewAccess() {
+ * 			<jk>return</jk> (<jv>req</jv>, <jv>runId</jv>) -&gt; <jv>req</jv>.getUserPrincipal() != <jk>null</jk>;
+ * 		}
+ *
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> Optional&lt;TerminalSource&gt; terminalSource(String <jv>id</jv>, RestRequest <jv>req</jv>) {
  * 			<jk>return</jk> <jf>runs</jf>.find(<jv>id</jv>).map(Run::terminal);
@@ -81,15 +91,12 @@ public interface TerminalMixin {
 	 *
 	 * <p>
 	 * A caller that may not watch the id is answered {@code 404}, the same as an unknown id.  The caller handed to the
-	 * rules is the request's principal and request attributes.  Override to share one {@link TerminalAccess} with the
-	 * bus input path; the default admits every caller and leaves the decision to
-	 * {@link #terminalSource(String, RestRequest)}.
+	 * rules is the request's principal and request attributes.  There is no default: every host states who may watch,
+	 * and may share one {@link TerminalAccess} with the bus input path.
 	 *
 	 * @return The access rules.  Never <jk>null</jk>.
 	 */
-	default TerminalAccess terminalAccess() {
-		return (caller, id) -> true;
-	}
+	TerminalAccess terminalAccess();
 
 	/**
 	 * [GET /juneau-terminal/{id}/bytes] &mdash; raw bytes from an offset.

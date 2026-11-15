@@ -18,11 +18,13 @@ package org.apache.juneau.rest.server.auth.oidc.rp;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.UriUtils.assertSecureOrLoopback;
 
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
 import java.security.*;
+import java.text.ParseException;
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
@@ -181,7 +183,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder issuer(URI value) {
-			issuer = UriUtils.assertSecureOrLoopback(reqnn("value", value));
+			issuer = assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 
@@ -678,11 +680,17 @@ public class OidcRelyingParty {
 		var code = success.getAuthorizationCode().getValue();
 		var state = success.getState() == null ? null : success.getState().getValue(); // HTT: null state branch: AuthCode response always carries state per PKCE flow; null branch is defensive dead code
 
+		// The binding cookie must be present before the pending login is consumed, so a callback that cannot
+		// complete does not use up the stored state.
+		var bindingValue = readSingleCookie(req, loginBindingCookieName());
+		if (bindingValue == null)
+			throw new AuthenticationException("OIDC callback is not bound to the browser that started the login");
+
 		Optional<LoginStateStore.PendingLogin> consumed;
 		try {
 			consumed = loginStateStore.consume(state);
 		} catch (RuntimeException e) {
-			// Infra failure (backend unreachable) is distinct from a CSRF/replay miss; reject as unavailable
+			// Infra failure (backend unreachable) is distinct from a forged/replayed state; reject as unavailable
 			// without leaking the payload (do not chain the raw backend exception as cause).
 			throw new AuthenticationException("OIDC login-state store unavailable");
 		}
@@ -691,7 +699,7 @@ public class OidcRelyingParty {
 
 		// The login must complete in the same browser that started it: the callback must present the binding cookie
 		// whose hash was stored with the state.
-		if (! bindingMatches(readCookie(req, loginBindingCookieName()), pending.bindingHash()))
+		if (! bindingMatches(bindingValue, pending.bindingHash()))
 			throw new AuthenticationException("OIDC callback is not bound to the browser that started the login");
 
 		// Fail-closed expiry re-check BEFORE the token exchange: the framework owns the TTL ceiling independently
@@ -728,6 +736,8 @@ public class OidcRelyingParty {
 
 		var cookieValue = sessionStore.createSessionCookieValue(session);
 		noStore(res);
+		// The binding cookie is single-use: expire it once the login has completed.
+		res.addHeader("Set-Cookie", buildLoginBindingCookie("", 0));
 		res.addHeader("Set-Cookie", buildSetCookie(cookieValue, sessionTtl.toSeconds()));
 		// Re-validate the redirect target on consume: a writable/compromised shared store cannot inject an open
 		// redirect.  A failing re-validation falls back to the operator-configured default (not itself re-sanitized).
@@ -746,7 +756,7 @@ public class OidcRelyingParty {
 	public void logout(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		reqnn("req", req);
 		reqnn("res", res);
-		if (! "POST".equals(req.getMethod())) {
+		if (neq("POST", req.getMethod())) {
 			res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 			res.setHeader("Allow", "POST");
 			return;
@@ -864,7 +874,7 @@ public class OidcRelyingParty {
 		JWT jwt;
 		try {
 			jwt = JWTParser.parse(logoutToken);
-		} catch (java.text.ParseException e) {
+		} catch (ParseException e) {
 			throw new AuthenticationException(e, "Logout token could not be parsed");
 		}
 		LogoutTokenClaimsSet claims;
@@ -946,17 +956,17 @@ public class OidcRelyingParty {
 	 */
 	private static OidcMetadata validateEndpoints(OidcMetadata m) {
 		if (m.issuer() != null) // HTT: null issuer unreachable; OIDC metadata always carries an issuer
-			UriUtils.assertSecureOrLoopback(m.issuer());
+			assertSecureOrLoopback(m.issuer());
 		if (m.tokenEndpoint() != null)
-			UriUtils.assertSecureOrLoopback(m.tokenEndpoint());
+			assertSecureOrLoopback(m.tokenEndpoint());
 		if (m.jwksUri() != null)
-			UriUtils.assertSecureOrLoopback(m.jwksUri());
+			assertSecureOrLoopback(m.jwksUri());
 		if (m.authorizationEndpoint() != null)
-			UriUtils.assertSecureOrLoopback(m.authorizationEndpoint());
+			assertSecureOrLoopback(m.authorizationEndpoint());
 		if (m.userinfoEndpoint() != null)
-			UriUtils.assertSecureOrLoopback(m.userinfoEndpoint());
+			assertSecureOrLoopback(m.userinfoEndpoint());
 		if (m.endSessionEndpoint() != null)
-			UriUtils.assertSecureOrLoopback(m.endSessionEndpoint());
+			assertSecureOrLoopback(m.endSessionEndpoint());
 		return m;
 	}
 
@@ -1015,7 +1025,7 @@ public class OidcRelyingParty {
 				jwkSourceCache = new ImmutableJWKSet<>(jwkSet);
 			} else {
 				try {
-					jwkSourceCache = JWKSourceBuilder.create(metadata().jwksUri().toURL()).build();
+					jwkSourceCache = JWKSourceBuilder.<SecurityContext>create(metadata().jwksUri().toURL(), new JwksResourceRetriever()).outageTolerant(false).build();
 				} catch (MalformedURLException e) {
 					throw isex(e, "Invalid JWKS URI: %s", metadata().jwksUri());
 				}
@@ -1080,7 +1090,7 @@ public class OidcRelyingParty {
 			if (! resp.indicatesSuccess())
 				return principal;
 			var ui = resp.toSuccessResponse().getUserInfo().toJSONObject();
-			if (! Objects.equals(principal.getName(), ui.get("sub")))
+			if (neq(principal.getName(), ui.get("sub")))
 				return principal;  // The UserInfo subject must match the ID-token subject.
 			var merged = new LinkedHashMap<String,Object>(principal.getClaims());
 			for (var c : userInfoClaims)
@@ -1140,7 +1150,7 @@ public class OidcRelyingParty {
 			return null;
 		try {
 			return JWTParser.parse(idt.get());
-		} catch (java.text.ParseException e) {
+		} catch (ParseException e) {
 			return null;  // HTT - best-effort hint only
 		}
 	}
@@ -1150,7 +1160,8 @@ public class OidcRelyingParty {
 	}
 
 	private String loginBindingCookieName() {
-		return cookieName + "_LOGIN";
+		// The __Host- prefix makes browsers refuse a cookie set by a sibling host or with a Domain attribute.
+		return (cookieSecure ? "__Host-" : "") + cookieName + "_LOGIN";
 	}
 
 	private String buildLoginBindingCookie(String value, long maxAgeSeconds) {
@@ -1189,6 +1200,22 @@ public class OidcRelyingParty {
 			if (eq(name, c.getName()) && c.getValue() != null && ! c.getValue().isBlank())
 				return c.getValue();
 		return null;
+	}
+
+	/** Returns the cookie value only when exactly one cookie of that name is present; otherwise <jk>null</jk>. */
+	private static String readSingleCookie(HttpServletRequest req, String name) {
+		var cookies = req.getCookies();
+		if (cookies == null)
+			return null;
+		String found = null;
+		for (var c : cookies) {
+			if (! eq(name, c.getName()))
+				continue;
+			if (found != null)
+				return null;
+			found = c.getValue() == null || c.getValue().isBlank() ? "" : c.getValue();
+		}
+		return found == null || found.isEmpty() ? null : found;
 	}
 
 	private static void noStore(HttpServletResponse res) {

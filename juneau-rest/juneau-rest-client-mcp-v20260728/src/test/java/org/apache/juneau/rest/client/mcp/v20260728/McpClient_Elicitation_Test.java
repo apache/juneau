@@ -80,7 +80,7 @@ class McpClient_Elicitation_Test extends TestBase {
 	}
 
 	private static McpClient client(HttpTransport transport) {
-		return McpClient.builder().endpoint("http://x/mcp").transport(transport).build();
+		return McpClient.builder().endpoint("https://x/mcp").transport(transport).build();
 	}
 
 	/** The wire params ({@code inputResponses}/{@code requestState}) the server saw on the Nth (0-based) request. */

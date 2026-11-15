@@ -73,7 +73,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.header("Content-Type", "application/json")
 			.body(new ByteArrayInputStream(wire.getBytes(StandardCharsets.UTF_8)))
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("ping");
 			var res = client.send(req);
 			assertEquals("1", res.getId());
@@ -90,7 +90,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.header("Content-Type", "application/json")
 			.body(new ByteArrayInputStream(wire.getBytes(StandardCharsets.UTF_8)))
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("2").setMethod("bogus/method");
 			var res = client.send(req);
 			assertNull(res.getResult());
@@ -106,7 +106,7 @@ class AbstractMcpClient_Test extends TestBase {
 			called.incrementAndGet();
 			return TransportResponse.builder().statusCode(202).build();
 		};
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setMethod("notifications/x");
 			var res = client.send(req);
 			assertNull(res);
@@ -125,9 +125,9 @@ class AbstractMcpClient_Test extends TestBase {
 				.body(new ByteArrayInputStream("{\"jsonrpc\":\"2.0\",\"id\":\"9\",\"result\":{}}".getBytes(StandardCharsets.UTF_8)))
 				.build();
 		};
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("9").setMethod("ping"));
-			assertEquals("http://x/mcp", seenUri.get());
+			assertEquals("https://x/mcp", seenUri.get());
 		}
 	}
 
@@ -151,7 +151,7 @@ class AbstractMcpClient_Test extends TestBase {
 				.body(new ByteArrayInputStream("{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{}}".getBytes(StandardCharsets.UTF_8)))
 				.build();
 		};
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("ping"));
 			assertNotNull(seenContentType.get());
 			assertTrue(seenContentType.get().contains("json"));
@@ -171,7 +171,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.body(new ByteArrayInputStream("{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{}}".getBytes(StandardCharsets.UTF_8)))
 			.closeCallback(successClosed::set)
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(successTransport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(successTransport).build()) {
 			client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("ping"));
 		}
 		assertTrue(successClosed.isSet());
@@ -183,7 +183,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.body(new ByteArrayInputStream("{\"jsonrpc\":\"2.0\",\"id\":\"2\",\"error\":{\"code\":-32000,\"message\":\"boom\"}}".getBytes(StandardCharsets.UTF_8)))
 			.closeCallback(errorClosed::set)
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(errorTransport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(errorTransport).build()) {
 			client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("2").setMethod("ping"));
 		}
 		assertTrue(errorClosed.isSet());
@@ -193,7 +193,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.statusCode(202)
 			.closeCallback(notificationClosed::set)
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(notificationTransport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(notificationTransport).build()) {
 			client.send(new JsonRpcRequest().setJsonrpc("2.0").setMethod("notifications/x"));
 		}
 		assertTrue(notificationClosed.isSet());
@@ -205,7 +205,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.body(new ByteArrayInputStream("{".getBytes(StandardCharsets.UTF_8)))
 			.closeCallback(parseFailureClosed::set)
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(parseFailureTransport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(parseFailureTransport).build()) {
 			assertThrows(IOException.class, () -> client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("3").setMethod("ping")));
 		}
 		assertTrue(parseFailureClosed.isSet());
@@ -218,7 +218,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.header("Content-Type", "text/plain")
 			.body(new ByteArrayInputStream("server down".getBytes(StandardCharsets.UTF_8)))
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			assertThrowsWithMessage(IOException.class, "MCP server returned HTTP 500 and the body was not a JSON-RPC envelope.",
 				() -> client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("7").setMethod("ping")));
 		}
@@ -231,7 +231,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.header("Content-Type", "application/json")
 			.body(new ByteArrayInputStream("{\"jsonrpc\":\"2.0\",\"id\":\"8\",\"error\":{\"code\":-32603,\"message\":\"Internal error\"}}".getBytes(StandardCharsets.UTF_8)))
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("8").setMethod("ping");
 			var res = client.send(req);
 			assertNotNull(res);
@@ -246,7 +246,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.statusCode(200)
 			.header("Content-Type", "application/json")
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("9").setMethod("ping");
 			assertThrowsWithMessage(IOException.class, "No response body received for JSON-RPC request id '9' (HTTP 200).", () -> client.send(req));
 		}
@@ -266,7 +266,7 @@ class AbstractMcpClient_Test extends TestBase {
 				closeCount.incrementAndGet();
 			}
 		};
-		var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build();
+		var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build();
 		client.close();
 		assertEquals(1, closeCount.get());
 	}
@@ -278,7 +278,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.header("Content-Type", "application/json")
 			.body(new ByteArrayInputStream("not json {{{".getBytes(StandardCharsets.UTF_8)))
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("11").setMethod("ping");
 			var e = assertThrows(IOException.class, () -> client.send(req));
 			assertFalse(e.getMessage().contains("MCP server returned HTTP"));
@@ -293,7 +293,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.header("Content-Type", "application/json")
 			.body(new ByteArrayInputStream("not json {{{".getBytes(StandardCharsets.UTF_8)))
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("12").setMethod("ping");
 			assertThrowsWithMessage(IOException.class, "MCP server returned HTTP 199", () -> client.send(req));
 		}
@@ -311,7 +311,7 @@ class AbstractMcpClient_Test extends TestBase {
 				.body(new ByteArrayInputStream("{\"jsonrpc\":\"2.0\",\"id\":\"13\",\"result\":{}}".getBytes(StandardCharsets.UTF_8)))
 				.build();
 		};
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("13").setMethod("ping");
 			var res = client.send(req, Map.of("X-Foo", "bar"));
 			assertNotNull(res);
@@ -326,7 +326,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.header("Content-Type", "application/json")
 			.body(new ByteArrayInputStream("{\"jsonrpc\":\"2.0\",\"id\":\"14\",\"result\":{}}".getBytes(StandardCharsets.UTF_8)))
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("14").setMethod("ping");
 			var res = client.send(req, null);
 			assertNotNull(res);
@@ -348,7 +348,7 @@ class AbstractMcpClient_Test extends TestBase {
 			return TransportResponse.builder().statusCode(200).header("Content-Type", "text/event-stream")
 				.body(new ByteArrayInputStream("data: {\"ok\":true}\n\n".getBytes(StandardCharsets.UTF_8))).build();
 		};
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
 			try (var reader = client.openStream(req)) {
 				assertTrue(reader.hasNext());
@@ -362,7 +362,7 @@ class AbstractMcpClient_Test extends TestBase {
 	@Test
 	void c02_openEventStream_nullRequest_throwsIllegalArgumentException() throws Exception {
 		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'request' cannot be null.", () -> client.openStream(null));
 		}
 	}
@@ -379,7 +379,7 @@ class AbstractMcpClient_Test extends TestBase {
 			return TransportResponse.builder().statusCode(200).header("Content-Type", "text/event-stream")
 				.body(new ByteArrayInputStream("data: {\"ok\":true}\n\n".getBytes(StandardCharsets.UTF_8))).build();
 		};
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
 			try (var reader = client.openStream(req, Map.of("Mcp-Method", "subscriptions/listen", "Mcp-Name", ""))) {
 				assertTrue(reader.hasNext());
@@ -393,7 +393,7 @@ class AbstractMcpClient_Test extends TestBase {
 	void c04_openEventStream_nullHeaders_behavesLikeNoHeadersOverload() throws Exception {
 		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).header("Content-Type", "text/event-stream")
 			.body(new ByteArrayInputStream("data: {\"ok\":true}\n\n".getBytes(StandardCharsets.UTF_8))).build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
 			try (var reader = client.openStream(req, null)) {
 				assertTrue(reader.hasNext());
@@ -412,7 +412,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.header("Content-Type", "text/event-stream;charset=utf-8")
 			.body(new ByteArrayInputStream("data: {\"ok\":true}\n\n".getBytes(StandardCharsets.UTF_8)))
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
 			try (var reader = client.openStream(req)) {
 				assertTrue(reader.hasNext());
@@ -434,7 +434,7 @@ class AbstractMcpClient_Test extends TestBase {
 				"{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"error\":{\"code\":-32600,\"message\":\"subscriptions/listen requires Accept: text/event-stream\"}}"
 					.getBytes(StandardCharsets.UTF_8)))
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
 			var e = assertThrowsWithMessage(McpException.class, "subscriptions/listen requires Accept: text/event-stream", () -> client.openStream(req));
 			assertEquals(-32600, e.getCode());
@@ -452,7 +452,7 @@ class AbstractMcpClient_Test extends TestBase {
 				"{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"error\":{\"code\":-32000,\"message\":\"Too many concurrent subscriptions\"}}"
 					.getBytes(StandardCharsets.UTF_8)))
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
 			var e = assertThrowsWithMessage(McpException.class, "Too many concurrent subscriptions", () -> client.openStream(req));
 			assertEquals(-32000, e.getCode());
@@ -468,7 +468,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.header("Content-Type", "text/plain")
 			.body(new ByteArrayInputStream("bad gateway".getBytes(StandardCharsets.UTF_8)))
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("subscriptions/listen");
 			// assertThrows(IOException.class, ...) itself proves this wasn't McpException (a RuntimeException,
 			// not an IOException) - a wrong-type throw would fail this assertion with "unexpected exception type".
@@ -479,7 +479,7 @@ class AbstractMcpClient_Test extends TestBase {
 	@Test
 	void c05_openEventStream_headersOverload_nullRequest_throwsIllegalArgumentException() throws Exception {
 		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'request' cannot be null.", () -> client.openStream(null, Map.of()));
 		}
 	}
@@ -524,7 +524,7 @@ class AbstractMcpClient_Test extends TestBase {
 	/** A syntactically malformed endpoint is rejected at construction with a clear message. */
 	@Test
 	void b10_build_malformedEndpoint_throwsIllegalArgumentException() {
-		var builder = TestClient.builder().endpoint("http://x y/mcp");
+		var builder = TestClient.builder().endpoint("https://x y/mcp");
 		assertThrowsWithMessage(IllegalArgumentException.class, "Invalid MCP endpoint URL", builder::build);
 	}
 
@@ -537,10 +537,43 @@ class AbstractMcpClient_Test extends TestBase {
 		}
 	}
 
+	/** A non-loopback http endpoint is refused unless explicitly allowed. */
+	@Test
+	void b12_build_plainHttpRemoteEndpoint_isRefused() {
+		var builder = TestClient.builder().endpoint("http://mcp.example.com/mcp");
+		assertThrowsWithMessage(IllegalArgumentException.class, "https", builder::build);
+	}
+
+	@Test
+	void b13_build_plainHttpRemoteEndpoint_allowedWhenOptedIn() throws Exception {
+		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).build();
+		try (var client = TestClient.builder().endpoint("http://mcp.example.com/mcp").allowInsecureHttp(true).transport(transport).build()) {
+			assertNotNull(client);
+		}
+	}
+
+	@Test
+	void b14_build_plainHttpLoopbackEndpoint_isAccepted() throws Exception {
+		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).build();
+		try (var client = TestClient.builder().endpoint("http://127.0.0.1:8080/mcp").transport(transport).build()) {
+			assertNotNull(client);
+		}
+	}
+
+	/** A redirect response is surfaced as a failure rather than followed. */
+	@Test
+	void b15_send_redirectResponse_isRefused() throws Exception {
+		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(302).header("Location", "https://other.example.com/mcp").build();
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
+			var req = new JsonRpcRequest().setMethod("ping").setId("1");
+			assertThrows(Exception.class, () -> client.send(req));
+		}
+	}
+
 	@Test
 	void b05_send_nullRequest_throwsIllegalArgumentException() throws Exception {
 		HttpTransport transport = tReq -> TransportResponse.builder().statusCode(200).build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'request' cannot be null.", () -> client.send(null));
 		}
 	}
@@ -552,7 +585,7 @@ class AbstractMcpClient_Test extends TestBase {
 			.header("Content-Type", "application/json")
 			.body(new ByteArrayInputStream("{".getBytes(StandardCharsets.UTF_8)))
 			.build();
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var req = new JsonRpcRequest().setJsonrpc("2.0").setId("3").setMethod("ping");
 			assertThrows(IOException.class, () -> client.send(req));
 		}
@@ -572,7 +605,7 @@ class AbstractMcpClient_Test extends TestBase {
 				called.set();
 			}
 		};
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).interceptor(interceptor).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).interceptor(interceptor).build()) {
 			client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("ping"));
 			assertTrue(called.isSet());
 		}

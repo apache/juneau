@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 import org.apache.juneau.commons.svl.*;
 
@@ -125,7 +126,8 @@ public final class StringFunctions {
 	 *
 	 * <p>
 	 * Strips leading and trailing {@code /}, plus a trailing {@code /*} (or {@code *} that
-	 * sits immediately after a {@code /}). Multi-segment paths are preserved.
+	 * sits immediately after a {@code /}). Multi-segment paths are preserved, but {@code .} and {@code ..} segments are dropped
+	 * and backslashes are treated as separators.
 	 *
 	 * <h2 class='section'>Edge cases:</h2>
 	 * <ul>
@@ -161,7 +163,22 @@ public final class StringFunctions {
 			var end = t.length();
 			while (start < end && t.charAt(start) == '/') start++;
 			while (end > start && t.charAt(end - 1) == '/') end--;
-			return t.substring(start, end);
+			return dropTraversal(t.substring(start, end));
+		}
+
+		// Backslashes act as separators, and "." / ".." / empty segments are dropped so the token cannot climb out of its template path.
+		private static String dropTraversal(String t) {
+			if (t.indexOf('.') == -1 && t.indexOf('\\') == -1 && t.indexOf("//") == -1)
+				return t;
+			var sb = new StringBuilder();
+			for (var seg : t.replace('\\', '/').split("/")) {
+				if (seg.isEmpty() || eq(seg, ".") || eq(seg, ".."))
+					continue;
+				if (sb.length() > 0)
+					sb.append('/');
+				sb.append(seg);
+			}
+			return sb.toString();
 		}
 	}
 
@@ -180,7 +197,7 @@ public final class StringFunctions {
 		public String invoke(String s, String delimiter) {
 			if (s == null) return "0";
 			if (ie(delimiter)) return String.valueOf(s.length());
-			return String.valueOf(s.trim().split(java.util.regex.Pattern.quote(delimiter)).length);
+			return String.valueOf(s.trim().split(Pattern.quote(delimiter)).length);
 		}
 	}
 
@@ -273,7 +290,22 @@ public final class StringFunctions {
 			var coerced = new Object[args.length];
 			for (var i = 0; i < args.length; i++)
 				coerced[i] = coerceArgForFormat(args[i]);
-			return String.format(pattern, coerced);
+			checkFormatSizes(pattern);
+			var result = String.format(pattern, coerced);
+			if (result.length() > MAX_RESULT_LENGTH) throw iaex("format: result exceeds %s characters", MAX_RESULT_LENGTH);
+			return result;
+		}
+
+		// Rejects width or precision values large enough to exhaust memory before the formatter builds its output.
+		private static void checkFormatSizes(String pattern) {
+			var m = Pattern.compile("%(?:\\d+\\$)?[-#+ 0,(<]*(\\d+)?(?:\\.(\\d+))?").matcher(pattern);
+			while (m.find()) {
+				for (var g = 1; g <= 2; g++) {
+					var v = m.group(g);
+					if (v != null && (v.length() > 7 || Integer.parseInt(v) > MAX_RESULT_LENGTH))
+						throw iaex("format: width or precision exceeds %s", MAX_RESULT_LENGTH);
+				}
+			}
 		}
 
 		/**

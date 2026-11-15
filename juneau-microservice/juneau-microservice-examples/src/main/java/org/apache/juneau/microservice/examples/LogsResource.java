@@ -16,10 +16,12 @@
  */
 package org.apache.juneau.microservice.examples;
 
+import static org.apache.juneau.commons.utils.FileUtils.resolveSafely;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
+import java.net.URI;
 import java.nio.charset.*;
 import java.nio.file.*;
 import java.time.*;
@@ -67,7 +69,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * <p>
  * Every read is a plain {@code GET}, and the {@code method} query parameter is not accepted, so no {@code GET} link
  * can delete anything.  A delete must be a real {@code DELETE}, sent by a REST client or from the command line; the
- * HTML listing has no delete link, because a browser link or form cannot carry the header-borne token a CSRF
+ * HTML listing has no delete link, because a browser link or form cannot carry the header-borne token a request-token
  * boundary requires.  A {@code DELETE} cannot be sent cross-site without a CORS preflight, so a boundary in front of
  * this resource (see {@link AdminBoundary}) admits it without a token:
  * <p class='bcode'>
@@ -116,7 +118,7 @@ public class LogsResource extends BasicRestServlet {
 
 		/** {@inheritDoc} */
 		@Override /* Overridden from LinkString */
-		public Action setUri(java.net.URI value) {
+		public Action setUri(URI value) {
 			super.setUri(value);
 			return this;
 		}
@@ -344,11 +346,11 @@ public class LogsResource extends BasicRestServlet {
 	})
 	public void init(Config config) {
 		logDir = new File(config.get("Logging/logDir").asString().orElse("logs"));
-		allowDeletes = config.get("Logging/allowDeletes").asBoolean().orElse(true);
+		allowDeletes = config.get("Logging/allowDeletes").asBoolean().orElse(false);
 		leFormatter = new LogEntryFormatter(
 			config.get("Logging/format").asString().orElse("[{date} {level}] {msg}%n"),
 			config.get("Logging/dateFormat").asString().orElse("yyyy.MM.dd hh:mm:ss"),
-			config.get("Logging/useStackTraceHashes").asBoolean().orElse(true)
+			config.get("Logging/useStackTraceHashes").asBoolean().orElse(false)
 		);
 	}
 
@@ -507,7 +509,7 @@ public class LogsResource extends BasicRestServlet {
 	 */
 	private static File getFile(String path) throws NotFound {
 		try {
-			return FileUtils.resolveSafely(logDir, path)
+			return resolveSafely(logDir, path)
 				.orElseThrow(() -> new NotFound("File not found."));
 		} catch (IllegalArgumentException e) {
 			throw new Forbidden(e.getMessage());

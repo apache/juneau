@@ -68,7 +68,7 @@ public class ParserSession extends MarshallingSession {
 	/**
 	 * Default value for {@link Builder#maxParseDepth(int)}.
 	 */
-	protected static final int DEFAULT_MAX_PARSE_DEPTH = 1000;
+	protected static final int DEFAULT_MAX_PARSE_DEPTH = 500;
 
 	/**
 	 * Builder class.
@@ -957,7 +957,7 @@ public class ParserSession extends MarshallingSession {
 
 			// Iterate through all the entries in the map and set the individual field values.
 			m.forEach((k, v) -> {
-				if (! k.equals(btpn)) {
+				if (neq(k, btpn)) {
 					// Attempt to recursively cast child maps.
 					if (v instanceof MarshalledMap v2)
 						v = cast(v2, pMeta, eType);
@@ -1472,7 +1472,7 @@ public class ParserSession extends MarshallingSession {
 	 */
 	protected final <T> void onUnknownProperty(String propertyName, BeanMap<T> beanMap, Object value) throws ParseException {
 		var bmcm = (ClassMeta<T>) beanMap.getBeanInfo();
-		if (propertyName.equals(getBeanTypePropertyName(bmcm)))
+		if (eq(propertyName, getBeanTypePropertyName(bmcm)))
 			return;
 		if (! isIgnoreUnknownBeanProperties() && (nn(value) || ! isIgnoreUnknownNullBeanProperties()))
 			throw new ParseException(this, "Unknown property '%s' encountered while trying to parse into class '%s'", propertyName, bmcm);

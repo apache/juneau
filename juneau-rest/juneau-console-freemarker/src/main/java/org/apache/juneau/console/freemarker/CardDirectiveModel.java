@@ -26,6 +26,7 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.console.*;
 import org.apache.juneau.console.views.*;
+import org.apache.juneau.marshall.parser.ParseException;
 
 import freemarker.core.*;
 import freemarker.template.*;
@@ -110,7 +111,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		var authoredId = FtlAttrLists.scalar(p, "id");
 		var requires = FtlAttrLists.list(p, NAME, "requires");
 		var cssClass = cssClass(p, authoredId);
-		var sanitize = FtlAttrLists.strictBoolean(p, NAME, "sanitize", false);
+		var sanitize = p.containsKey("sanitize") ? (Boolean)FtlAttrLists.strictBoolean(p, NAME, "sanitize", false) : null;
 		var subsAttr = p.containsKey("subscribes") ? DeepUnwrap.unwrap(p.get("subscribes")) : null;
 		var pubsAttr = p.containsKey("publishes") ? DeepUnwrap.unwrap(p.get("publishes")) : null;
 		if ((subsAttr != null || pubsAttr != null) && authoredId.isEmpty())
@@ -145,7 +146,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		var src = FtlAttrLists.scalar(p, "src");
 		var template = FtlAttrLists.scalar(p, "template");
 		var cardType = type.isEmpty() ? "html" : type;
-		if (sanitize && (neq(cardType, "html") || src.isEmpty()))
+		if (sanitize != null && (neq(cardType, "html") || src.isEmpty()))
 			throw FtlAttrLists.reject(f("<@card id='%s'> sanitize= applies only to an html card with src=.", authoredId));
 		var style = FtlAttrLists.scalar(p, "style");
 		if (! style.isEmpty() && neq(cardType, "switcher"))
@@ -248,7 +249,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		"java:S107" // Internal helper whose parameters are the render/validation context.
 	})
 	private static void htmlCard(PageCapture cap, String id, String title, String src, String template, String markup,
-			String cssClass, boolean sanitize, Object pubs, Object subs)
+			String cssClass, Boolean sanitize, Object pubs, Object subs)
 			throws TemplateModelException {
 		var hasBody = ! markup.isBlank();
 		var sources = (hasBody ? 1 : 0) + (src.isEmpty() ? 0 : 1) + (template.isEmpty() ? 0 : 1);
@@ -266,8 +267,8 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 			card.template(template);
 		if (! cssClass.isEmpty())
 			card.cssClass(cssClass);
-		if (sanitize)
-			card.sanitize(true);
+		if (sanitize != null)
+			card.sanitize(sanitize);
 		wire(card, pubs, subs);
 		cap.addCard(card, hasBody ? markup : null);
 	}
@@ -416,7 +417,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		JsonMap envelope;
 		try {
 			envelope = Json5Parser.DEFAULT.read(trimmed, JsonMap.class);
-		} catch (org.apache.juneau.marshall.parser.ParseException ex) {
+		} catch (ParseException ex) {
 			throw FtlAttrLists.reject("Card JSON5 is invalid: " + ex.getMessage());
 		}
 		var bodySubs = envelope.remove("subscribes");

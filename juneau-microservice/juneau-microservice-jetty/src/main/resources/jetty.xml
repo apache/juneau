@@ -25,9 +25,9 @@
   - No resourceBase / ResourceHandler / WebAppContext filesystem mount: no static-file serving by
     default (path-traversal-safe by construction).  Servlets are auto-mounted from @Bean Servlet
     contributions; consumers who need static content register their own handler via a user-supplied
-    jetty.xml on the working directory or classpath.
-  - All defaults are overridable: a consumer-supplied jetty.xml on the working directory or earlier on
-    the classpath wins, as does a @Bean JettyServerFactory in the consumer's @Configuration.
+    jetty.xml on the classpath.
+  - All defaults are overridable: a consumer-supplied jetty.xml earlier on the classpath (or one named by
+    the Jetty/config setting) wins, as does a @Bean JettyServerFactory in the consumer's @Configuration.
   - Graceful shutdown: stopTimeout is intentionally NOT set here.  JettyServerComponent applies a sensible
     default (30s) at startup so server.stop() drains in-flight requests, and lets the [Jetty]/stopTimeout
     config or a @Bean JettySettings override it.  Setting <Set name="stopTimeout"> here would take effect only
@@ -73,11 +73,6 @@
 							<Set name="handler"><Ref refid="context" /></Set>
 						</New>
 					</Item>
-					<Item>
-						<New class="org.eclipse.jetty.server.handler.ContextHandler">
-							<New class="org.eclipse.jetty.server.handler.DefaultHandler" />
-						</New>
-					</Item>
 				</Array>
 			</Arg>
 		</New>
@@ -105,6 +100,5 @@
 		<Set name="minThreads" type="int">10</Set>
 		<Set name="maxThreads" type="int">100</Set>
 		<Set name="idleTimeout" type="int">60000</Set>
-		<Set name="detailedDump">true</Set>
 	</Get>
 </Configure>

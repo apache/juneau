@@ -17,6 +17,11 @@
 package org.apache.juneau.commons.http;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.hasUriScheme;
+
+import java.net.*;
+
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Shared, dependency-free predicates for validating <b>same-origin</b> request paths declared by higher layers, plus
@@ -160,5 +165,45 @@ public final class SafePathTemplate {
 	 */
 	public static boolean isSafeDocumentUrl(String url) {
 		return isSameOriginPath(url);
+	}
+
+	/**
+	 * Whether {@code uri} is safe to send as a redirect target: either a relative reference, or an absolute or
+	 * protocol-relative URI whose host is in {@code allowedHosts}.
+	 *
+	 * <p>
+	 * A <jk>null</jk> or empty value is accepted.  A backslash, any character at or below U+0020, and DEL are
+	 * rejected anywhere in the value.  A relative reference that carries a scheme (for example
+	 * {@code "mailto:x"} or {@code "http:host"}) is rejected; see {@link StringUtils#hasUriScheme(String)}.
+	 *
+	 * @param uri The candidate redirect target.  Can be <jk>null</jk>.
+	 * @param allowedHosts The hosts (case-insensitive) an absolute or protocol-relative {@code uri} may target.
+	 * 	Can be <jk>null</jk> or empty (no absolute target is accepted).
+	 * @return <jk>true</jk> if the URI is safe to redirect to.
+	 */
+	public static boolean isSafeRedirect(String uri, String...allowedHosts) {
+		if (ie(uri))
+			return true;
+		for (var i = 0; i < uri.length(); i++) {
+			var c = uri.charAt(i);
+			if (c == '\\' || c <= ' ' || c == 0x7f)
+				return false;
+		}
+		if (uri.charAt(0) == '/' && ! uri.startsWith("//"))
+			return true;
+		if (uri.indexOf("://") == -1 && ! uri.startsWith("//"))
+			return ! hasUriScheme(uri);
+		String host;
+		try {
+			host = new URI(uri.startsWith("//") ? "http:" + uri : uri).getHost();
+		} catch (@SuppressWarnings("unused") URISyntaxException e) {
+			return false;
+		}
+		if (host == null || allowedHosts == null)
+			return false;
+		for (var h : allowedHosts)
+			if (eqic(host, h))
+				return true;
+		return false;
 	}
 }

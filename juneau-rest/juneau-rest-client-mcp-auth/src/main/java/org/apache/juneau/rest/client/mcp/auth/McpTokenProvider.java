@@ -114,6 +114,7 @@ public class McpTokenProvider implements Supplier<String> {
 		private Clock clock = Clock.systemUTC();
 		private Duration httpTimeout = Duration.ofSeconds(10);
 		private Consumer<HTTPRequest> httpRequestConfigurator;
+		private boolean allowPrivateUrls;
 
 		/**
 		 * Constructor.
@@ -243,7 +244,22 @@ public class McpTokenProvider implements Supplier<String> {
 		}
 
 		/**
-		 * Sets a callback that customizes the Nimbus {@link HTTPRequest} for each token request.
+		 * Allows the token endpoint to be a private, link-local or otherwise reserved address.
+		 *
+		 * <p>
+		 * By default the endpoint must be an <c>https</c> URL whose host is not a private or reserved address (literal
+		 * loopback hosts are accepted), redirects are refused, and the resolved address is checked.
+		 *
+		 * @param value <jk>true</jk> to allow private targets.
+		 * @return This object.
+		 */
+		public Builder allowPrivateUrls(boolean value) {
+			allowPrivateUrls = value;
+			return this;
+		}
+
+		/**
+		 * Sets a callback that customizes the Nimbus {@link HTTPRequest} before it is sent.
 		 *
 		 * @param value The callback.  Must not be <jk>null</jk>.
 		 * @return This object.
@@ -284,6 +300,7 @@ public class McpTokenProvider implements Supplier<String> {
 	private final Clock clock;
 	private final Duration httpTimeout;
 	private final Consumer<HTTPRequest> httpRequestConfigurator;
+	private final boolean allowPrivateUrls;
 
 	private final Object lock = new Object();
 	private OAuthToken currentToken;
@@ -310,6 +327,7 @@ public class McpTokenProvider implements Supplier<String> {
 		this.clock = b.clock;
 		this.httpTimeout = b.httpTimeout;
 		this.httpRequestConfigurator = b.httpRequestConfigurator;
+		this.allowPrivateUrls = b.allowPrivateUrls;
 		this.currentRefreshToken = b.initialRefreshToken;
 	}
 
@@ -363,8 +381,7 @@ public class McpTokenProvider implements Supplier<String> {
 			f.httpTimeout(httpTimeout);
 			scopes.forEach(f::scope);
 			f.resource(resource);
-			if (httpRequestConfigurator != null)
-				f.httpRequestConfigurator(httpRequestConfigurator);
+			f.httpRequestConfigurator(policy().wrap(httpRequestConfigurator));
 			return f.build().acquire();
 		}
 		// REFRESH
@@ -377,8 +394,7 @@ public class McpTokenProvider implements Supplier<String> {
 		f.httpTimeout(httpTimeout);
 		scopes.forEach(f::scope);
 		f.resource(resource);
-		if (httpRequestConfigurator != null)
-			f.httpRequestConfigurator(httpRequestConfigurator);
+		f.httpRequestConfigurator(policy().wrap(httpRequestConfigurator));
 		return f.build().acquire();
 	}
 
@@ -421,5 +437,9 @@ public class McpTokenProvider implements Supplier<String> {
 			+ ", staticToken=" + (staticToken != null ? "<redacted>" : "<none>")
 			+ ", refreshToken=" + (currentRefreshToken != null ? "<redacted>" : "<none>")
 			+ "]";
+	}
+
+	private OAuthHttpPolicy policy() {
+		return allowPrivateUrls ? OAuthHttpPolicy.of(true, false) : OAuthHttpPolicy.DEFAULT;
 	}
 }

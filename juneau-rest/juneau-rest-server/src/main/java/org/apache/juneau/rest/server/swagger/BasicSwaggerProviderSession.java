@@ -648,7 +648,7 @@ public class BasicSwaggerProviderSession {
 		} else {
 			var cm = js.getClassMeta(type);
 			if (cm.hasStringMutater()) {
-				example = BasicConverter.INSTANCE.to(sex, cm.inner());
+				example = cm.basicConverter().to(sex, cm.inner());
 			}
 		}
 

@@ -64,7 +64,15 @@ public class SseEventReader implements Iterator<SseEvent>, Closeable {
 	/** UTF-8 BOM character that must be stripped exactly once from the start of an SSE stream. */
 	private static final int BOM = 0xFEFF;
 
+	/** Default maximum length, in characters, of a single line. */
+	public static final int DEFAULT_MAX_LINE_LENGTH = 16 * 1024 * 1024;
+
+	/** Default maximum accumulated size, in characters, of the data of a single event. */
+	public static final int DEFAULT_MAX_EVENT_LENGTH = 16 * 1024 * 1024;
+
 	private final Reader in;
+	private final int maxLineLength;
+	private final int maxEventLength;
 
 	private boolean bomChecked;
 	private boolean eof;
@@ -88,7 +96,29 @@ public class SseEventReader implements Iterator<SseEvent>, Closeable {
 		"java:S2095" // Reader ownership is transferred to this Closeable and released by close().
 	})
 	public SseEventReader(Reader in) {
+		this(in, DEFAULT_MAX_LINE_LENGTH, DEFAULT_MAX_EVENT_LENGTH);
+	}
+
+	/**
+	 * Constructor with explicit size limits.
+	 *
+	 * <p>
+	 * A stream that exceeds either limit causes {@link #hasNext()} to fail with an {@link UncheckedIOException}
+	 * (or {@link #toList()} to throw an {@link IOException}).
+	 *
+	 * @param in The reader to consume events from. Must not be <jk>null</jk>.
+	 * @param maxLineLength The maximum length, in characters, of one line. Must be positive.
+	 * @param maxEventLength The maximum accumulated length, in characters, of one event's data. Must be positive.
+	 */
+	@SuppressWarnings({
+		"java:S2095" // Reader ownership is transferred to this Closeable and released by close().
+	})
+	public SseEventReader(Reader in, int maxLineLength, int maxEventLength) {
 		this.in = reqnn("in", in);
+		req(maxLineLength > 0, "maxLineLength must be positive (was %s)", maxLineLength);
+		req(maxEventLength > 0, "maxEventLength must be positive (was %s)", maxEventLength);
+		this.maxLineLength = maxLineLength;
+		this.maxEventLength = maxEventLength;
 	}
 
 	@Override /* Overridden from Iterator */
@@ -153,6 +183,8 @@ public class SseEventReader implements Iterator<SseEvent>, Closeable {
 				continue;
 			}
 			processField(line);
+			if (dataBuf.length() > maxEventLength)
+				throw new IOException("SSE event data exceeds the maximum of " + maxEventLength + " characters");
 		}
 	}
 
@@ -267,6 +299,8 @@ public class SseEventReader implements Iterator<SseEvent>, Closeable {
 					pendingChar = next;
 				return sb.toString();
 			}
+			if (sb.length() >= maxLineLength)
+				throw new IOException("SSE line exceeds the maximum of " + maxLineLength + " characters");
 			sb.append((char) c);
 		}
 	}

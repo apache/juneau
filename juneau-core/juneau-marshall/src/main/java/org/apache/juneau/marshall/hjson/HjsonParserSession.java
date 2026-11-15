@@ -172,6 +172,15 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 	}
 
 	private Object readObject(HjsonTokenizer t, ClassMeta<?> type) throws IOException, ParseException, ExecutableException {
+		enterParseDepth();
+		try {
+			return readObjectImpl(t, type);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	private Object readObjectImpl(HjsonTokenizer t, ClassMeta<?> type) throws IOException, ParseException, ExecutableException {
 		var result = newGenericMap();
 		// When parsing a typed Bean, look up per-property ClassMetas so that nested Map<K,V> properties
 		// see their declared key/value types and the key coercion in the inner readObject can fire
@@ -241,7 +250,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 	 * conversion path keeps working unchanged.
 	 */
 	private ClassMeta<?> propertyType(BeanMeta<?> beanMeta, String key, ClassMeta<?> enclosingType) {
-		if (beanMeta != null && key != null && !key.equals(getBeanTypePropertyName(enclosingType))) {
+		if (beanMeta != null && key != null && neq(key, getBeanTypePropertyName(enclosingType))) {
 			var pMeta = beanMeta.getPropertyMeta(key);
 			if (pMeta != null) {
 				var cm = (ClassMeta<?>) pMeta.getBeanInfo();
@@ -265,6 +274,15 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 	}
 
 	private Object readArray(HjsonTokenizer t, ClassMeta<?> type) throws IOException, ParseException, ExecutableException {
+		enterParseDepth();
+		try {
+			return readArrayImpl(t, type);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	private Object readArrayImpl(HjsonTokenizer t, ClassMeta<?> type) throws IOException, ParseException, ExecutableException {
 		if (type == null)
 			type = object();
 		var result = new JsonList();

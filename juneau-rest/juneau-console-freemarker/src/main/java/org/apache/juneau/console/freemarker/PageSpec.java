@@ -18,6 +18,8 @@ package org.apache.juneau.console.freemarker;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
@@ -156,7 +158,7 @@ public final class PageSpec implements Handled<PageSpec> {
 	 * @return This object.
 	 */
 	public PageSpec attr(String key, Object value) {
-		if (ATTR.equals(key))
+		if (eq(ATTR, key))
 			throw iaex("PageSpec.attr key '%s' is reserved for the spec itself.", key);
 		attrs.put(key, value);
 		return this;
@@ -393,7 +395,7 @@ public final class PageSpec implements Handled<PageSpec> {
 	 */
 	CardSpec addCard(CardSpec card) {
 		for (var c : cards)
-			if (c.id().equals(card.id()))
+			if (eq(c.id(), card.id()))
 				throw iaex("PageSpec card id '%s' is already declared.", card.id());
 		cards.add(card);
 		return card;
@@ -486,8 +488,8 @@ public final class PageSpec implements Handled<PageSpec> {
 	}
 
 	/**
-	 * Adds an {@code html} card whose body is fetched from {@code src}, with a title, unsanitized.  See
-	 * {@link #htmlSrc(String,String,String,boolean)} for the trust boundary.
+	 * Adds an {@code html} card whose body is fetched from {@code src}, with a title, sanitized.  See
+	 * {@link #htmlSrc(String,String,String,boolean)} for the trust boundary and for opting out.
 	 *
 	 * @param id The card id.
 	 * @param title The card title.  May be <jk>null</jk> for no title.
@@ -496,7 +498,7 @@ public final class PageSpec implements Handled<PageSpec> {
 	 * @throws IllegalArgumentException If {@code src} is <jk>null</jk> or blank.
 	 */
 	public PageSpec htmlSrc(String id, String title, String src) {
-		return htmlSrc(id, title, src, false);
+		return htmlSrc(id, title, src, true);
 	}
 
 	/**
@@ -505,8 +507,8 @@ public final class PageSpec implements Handled<PageSpec> {
 	 *
 	 * <h4 class='section'>Trust boundary:</h4>
 	 * <p>
-	 * With {@code sanitize} <jk>false</jk> the shell fetches {@code src} and inserts the returned HTML as-is through a
-	 * raw HTML-sink assignment, <b>unsanitized</b>, the same trust level as {@code footer.text} (see
+	 * With {@code sanitize} <jk>false</jk> (an explicit opt-out) the shell fetches {@code src} and inserts the returned
+	 * HTML as-is through a raw HTML-sink assignment, <b>unsanitized</b>, the same trust level as {@code footer.text} (see
 	 * {@code HtmlCardType}).  The endpoint must therefore be a trusted first-party route, must never be derived from
 	 * request data, and must escape any data it embeds in the fragment.  {@code src} must be a same-origin path; an
 	 * absolute URL, a scheme, {@code //}, {@code ..} or a backslash is refused when the page is built, exactly as for
@@ -517,9 +519,9 @@ public final class PageSpec implements Handled<PageSpec> {
 	 * instead: script, {@code on*} handlers, {@code javascript:} and {@code data:} URLs and every attribute off the
 	 * allowlist are dropped, and benign markup (text, tables, links, images) survives.  It needs the views toolkit on
 	 * the page; without the toolkit nothing is painted (the shell fails closed rather than inserting the fragment
-	 * unsanitized).  The sanitizer does not remove the need to escape any data you embed in the fragment.  Turn it on when the fragment's content is not fully under your control (it embeds user-supplied or
-	 * third-party markup, or comes from an endpoint you do not own); leave it off for a fragment that needs
-	 * {@code class}, {@code id}, {@code style}, forms, SVG or iframes, which the allowlist drops.  The default stays off.
+	 * unsanitized).  The sanitizer does not remove the need to escape any data you embed in the fragment.  Pass {@code false} for a fragment that needs
+	 * {@code class}, {@code id}, {@code style}, forms, SVG or iframes, which the allowlist drops.  Sanitizing is the default.
+	 * The shell also refuses a fragment response that redirected to another origin.
 	 *
 	 * @param id The card id.
 	 * @param title The card title.  May be <jk>null</jk> for no title.
@@ -632,9 +634,9 @@ public final class PageSpec implements Handled<PageSpec> {
 			throw iaex("PageSpec.card id '%s' requires a non-blank type.", card.id());
 		if (CardDirectiveModel.REMOVED_TYPES.contains(type))
 			throw iaex("PageSpec.card type '%s' was removed in 10.0.0; use PageSpec.html(...) with a markup/template, or a registered card type.", type);
-		if ("html".equals(type))
+		if (eq("html", type))
 			throw iaex("PageSpec.card type '%s' has a dedicated method; use PageSpec.%s(...).", type, "html");
-		if ("datatables".equals(type))
+		if (eq("datatables", type))
 			throw iaex("PageSpec.card type '%s' has a dedicated method; use PageSpec.%s(...).", type, "table");
 		var registry = CardTypeRegistry.standard();
 		if (CardTypeRegistry.RESERVED.contains(type) && ! registry.isRegistered(type))
@@ -642,11 +644,11 @@ public final class PageSpec implements Handled<PageSpec> {
 	}
 
 	/**
-	 * Sets the CSRF body attributes: {@code data-juneau-csrf} and, if {@code headerName} is non-blank,
+	 * Sets the request-token body attributes: {@code data-juneau-csrf} and, if {@code headerName} is non-blank,
 	 * {@code data-juneau-csrf-header}.
 	 *
-	 * @param token The CSRF token value.
-	 * @param headerName The CSRF header name, or <jk>null</jk>/blank to omit the header attribute.
+	 * @param token The request-token value.
+	 * @param headerName The request-token header name, or <jk>null</jk>/blank to omit the header attribute.
 	 * @return This object.
 	 */
 	public PageSpec csrf(String token, String headerName) {
@@ -688,7 +690,7 @@ public final class PageSpec implements Handled<PageSpec> {
 	 * @return The card, or empty if none was declared with this id.
 	 */
 	public Optional<CardSpec> card(String id) {
-		return cards.stream().filter(c -> c.id().equals(id)).findFirst();
+		return cards.stream().filter(c -> eq(c.id(), id)).findFirst();
 	}
 
 	/**
@@ -755,7 +757,7 @@ public final class PageSpec implements Handled<PageSpec> {
 
 	private static boolean isPlainNumber(Object v) {
 		return v instanceof Integer || v instanceof Long || v instanceof Short || v instanceof Byte || v instanceof Float
-			|| v instanceof Double || v instanceof java.math.BigInteger || v instanceof java.math.BigDecimal;
+			|| v instanceof Double || v instanceof BigInteger || v instanceof BigDecimal;
 	}
 
 	private static IllegalArgumentException badFact(String path, Object v) {
@@ -804,13 +806,13 @@ public final class PageSpec implements Handled<PageSpec> {
 		var m = decl.toMap();
 		var retain = (Boolean)m.get("retain");
 		var prior = topicRetain.putIfAbsent(decl.topic(), retain);
-		if (prior != null && ! prior.equals(retain))
+		if (prior != null && neq(prior, retain))
 			throw iaex("topic '%s' is declared with retain=%s here and retain=%s at %s", decl.topic(), retain, prior, "PageSpec.topic");
 		if (prior == null) {
 			topics.add(decl);
 		} else {
-			var priorPub = topics.stream().filter(t -> t.topic().equals(decl.topic())).findFirst().get().toMap().get("publisher");
-			if (! priorPub.equals(m.get("publisher")))
+			var priorPub = topics.stream().filter(t -> eq(t.topic(), decl.topic())).findFirst().get().toMap().get("publisher");
+			if (neq(priorPub, m.get("publisher")))
 				throw iaex("topic '%s' is declared with publisher=%s here and publisher=%s at %s", decl.topic(), m.get("publisher"), priorPub, "PageSpec.topic");
 		}
 		return this;
@@ -1065,7 +1067,7 @@ public final class PageSpec implements Handled<PageSpec> {
 
 	// sanitize= is refused before any other check, as <@card> refuses it: only an html card with src= takes it.
 	private static void checkSanitize(CardSpec card) throws TemplateModelException {
-		if (card.sanitize())
+		if (card.sanitizeStated())
 			throw FtlAttrLists.reject(f("<@card id='%s'> sanitize= applies only to an html card with src=.", card.id()));
 	}
 

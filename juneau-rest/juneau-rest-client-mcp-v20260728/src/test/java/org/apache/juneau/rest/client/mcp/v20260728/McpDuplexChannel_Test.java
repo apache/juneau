@@ -57,7 +57,7 @@ class McpDuplexChannel_Test extends TestBase {
 				.body(new ByteArrayInputStream("{\"jsonrpc\":\"2.0\",\"id\":\"42\",\"result\":{\"ok\":true}}".getBytes(StandardCharsets.UTF_8))).build();
 		};
 
-		var c = McpClient.builder().endpoint("http://x/mcp").transport(transport).build();
+		var c = McpClient.builder().endpoint("https://x/mcp").transport(transport).build();
 		var seenParamType = new AtomicReference<Class<?>>();
 		c.setServerRequestHandler((request, ctx) -> {
 			seenParamType.set(request.getParams().getClass());
@@ -91,7 +91,7 @@ class McpDuplexChannel_Test extends TestBase {
 				.body(new ByteArrayInputStream("{\"jsonrpc\":\"2.0\",\"id\":\"77\",\"result\":{}}".getBytes(StandardCharsets.UTF_8))).build();
 		};
 
-		var c = McpClient.builder().endpoint("http://x/mcp").transport(transport).build();
+		var c = McpClient.builder().endpoint("https://x/mcp").transport(transport).build();
 		c.setServerRequestHandler((request, ctx) -> {
 			throw new McpException(-32603, "handler failed");
 		});
@@ -138,7 +138,7 @@ class McpDuplexChannel_Test extends TestBase {
 		// guarantees a decode regression fails with a clear assertion instead of a confusing envelope mismatch.
 		var seenText = new AtomicReference<String>();
 		var seenMaxTokens = new AtomicReference<Integer>();
-		var c = McpClient.builder().endpoint("http://x/mcp").transport(transport).build();
+		var c = McpClient.builder().endpoint("https://x/mcp").transport(transport).build();
 		c.setServerRequestHandler((req, ctx) -> {
 			var typed = Json.to(Json.of(req.getParams()), CreateMessageRequest.class);
 			seenText.set(((TextContent) typed.getMessages().get(0).getContent()).getText());

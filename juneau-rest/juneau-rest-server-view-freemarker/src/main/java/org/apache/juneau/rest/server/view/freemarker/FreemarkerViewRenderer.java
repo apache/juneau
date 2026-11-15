@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker;
 
+import static org.apache.juneau.commons.utils.FileUtils.resolveVirtualPathSafely;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -137,6 +138,7 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 		}
 
 		var templateName = bridge.applyTemplateSuffix(safeName);
+		requireAllowedExtension(templateName);
 		try {
 			var cfg = bridge.resolveConfiguration(req);
 			var template = cfg.getTemplate(templateName);
@@ -202,12 +204,18 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 		return m == null ? c.getClass().getSimpleName() : m;
 	}
 
+	// Rejects a typed-View template name (after the configured suffix is applied) that lacks a FreeMarker template extension.
+	static void requireAllowedExtension(String templateName) {
+		if (! ViewTemplateNames.hasAllowedExtension(templateName, ".ftlh", ".ftl"))
+			throw new InternalServerError("FreeMarker template name does not have an allowed extension: '%s'", templateName);
+	}
+
 	// Rejects '../'-style traversal in a typed-View template name using the same virtual-path gate the raw
 	// mount applies, returning the configuration-relative template name.  Delegates to the shared
 	// FileUtils.resolveVirtualPathSafely + FreemarkerDispatcher.stripBasePath used by the raw render path.
 	static String gateTemplateName(String basePath, String templateName) {
 		ViewTemplateNames.requirePlainName(templateName);
-		var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);
+		var resolved = resolveVirtualPathSafely(basePath, templateName);
 		return FreemarkerDispatcher.stripBasePath(basePath, resolved);
 	}
 

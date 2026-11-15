@@ -36,7 +36,13 @@ class GetConfiguration_Validation_Test {
 	}
 
 	@Test void a03_badBranch() {
-		for (var b : new String[]{null, "", "..", "a/../b", "a\\b", "a\0b"})
+		for (var b : new String[]{null, "", "..", "a/../b", "a\\b", "a\0b", "-x", "HEAD", "a b", "a;b", "a~1"})
 			assertThrows(IllegalArgumentException.class, () -> new GetConfiguration("proj", b), String.valueOf(b));
+	}
+
+	@Test void a04_pullIntervalClamped() {
+		assertEquals(1, GetConfiguration.clampPullInterval(0));
+		assertEquals(1, GetConfiguration.clampPullInterval(-5));
+		assertEquals(60, GetConfiguration.clampPullInterval(60));
 	}
 }

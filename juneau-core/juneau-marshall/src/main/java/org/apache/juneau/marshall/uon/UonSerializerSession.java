@@ -179,9 +179,9 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			var cm = getClassMetaForObject(value);
 			if (nn(cm) && (schema == null || schema.getType() == HttpPartDataType.NO_TYPE)) {
 				if (cm.isNumber() || cm.isBoolean())
-					return BasicConverter.INSTANCE.to(value, String.class);
+					return getMarshallingContext().getBasicConverter().to(value, String.class);
 				if (cm.isString()) {
-					var s = BasicConverter.INSTANCE.to(value, String.class);
+					var s = getMarshallingContext().getBasicConverter().to(value, String.class);
 					if (s.isEmpty() || ! UonUtils.needsQuotes(s))
 						return s;
 				}

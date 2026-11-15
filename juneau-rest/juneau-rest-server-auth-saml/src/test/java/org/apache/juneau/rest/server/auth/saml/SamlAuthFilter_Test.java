@@ -22,12 +22,18 @@ import static org.mockito.Mockito.*;
 
 import java.nio.charset.*;
 import java.security.*;
+import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.*;
+import java.util.function.Function;
 import java.util.zip.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.junit.jupiter.api.*;
+import org.mockito.ArgumentCaptor;
 import org.opensaml.security.credential.*;
 
 import jakarta.servlet.http.*;
@@ -43,7 +49,7 @@ import jakarta.servlet.http.*;
 })
 class SamlAuthFilter_Test extends TestBase {
 
-	private static SamlAssertionValidator validator(java.util.function.Function<String,Principal> impl) throws Exception {
+	private static SamlAssertionValidator validator(Function<String,Principal> impl) throws Exception {
 		var kp = KeyPairGenerator.getInstance("RSA");
 		kp.initialize(2048);
 		var pair = kp.generateKeyPair();
@@ -52,14 +58,19 @@ class SamlAuthFilter_Test extends TestBase {
 					.spEntityId("https://sp.example.com")
 					.expectedIssuer("https://idp.example.com")
 					.signingCredential(new BasicCredential(pair.getPublic(), pair.getPrivate()))) {
-			@Override public Principal validate(String xml) {
+			@Override public Principal validate(String xml, String binding) {
 				return impl.apply(xml);
 			}
 		};
 	}
 
 	private static HttpServletRequest req(String path, String samlResponse) {
+		return req(path, samlResponse, "POST");
+	}
+
+	private static HttpServletRequest req(String path, String samlResponse, String method) {
 		var r = mock(HttpServletRequest.class);
+		when(r.getMethod()).thenReturn(method);
 		when(r.getPathInfo()).thenReturn(path);
 		when(r.getServletPath()).thenReturn(path);
 		when(r.getParameter("SAMLResponse")).thenReturn(samlResponse);
@@ -102,7 +113,7 @@ class SamlAuthFilter_Test extends TestBase {
 		var received = new String[1];
 		var v = validator(x -> { received[0] = x; return new ClaimsPrincipal("alice", Map.of()); });
 		var f = SamlAuthFilter.create().binding(SamlBinding.REDIRECT).validator(v).build();
-		var result = f.authenticate(req("/saml/acs", b64));
+		var result = f.authenticate(req("/saml/acs", b64, "GET"));
 		assertTrue(result.isPresent());
 		assertEquals("<dummy>redirect-content</dummy>", received[0]);
 	}
@@ -142,6 +153,7 @@ class SamlAuthFilter_Test extends TestBase {
 	@Test void e01_pathInfo_null_fallsToServletPath() throws Exception {
 		// pathInfo==null → use servletPath; servletPath=="/saml/acs" → matches
 		var r = mock(HttpServletRequest.class);
+		when(r.getMethod()).thenReturn("POST");
 		when(r.getPathInfo()).thenReturn(null);
 		when(r.getServletPath()).thenReturn("/saml/acs");
 		var b64 = Base64.getEncoder().encodeToString("<x/>".getBytes(StandardCharsets.UTF_8));
@@ -229,6 +241,92 @@ class SamlAuthFilter_Test extends TestBase {
 		var v = validator(x -> new ClaimsPrincipal("x", Map.of()));
 		var f = SamlAuthFilter.create().binding(SamlBinding.REDIRECT).validator(v).build();
 		var b64 = Base64.getEncoder().encodeToString(new byte[]{(byte)0xff, (byte)0xfe, 0x01, 0x02, 0x03, 0x04});
-		assertThrows(AuthenticationException.class, () -> f.authenticate(req("/saml/acs", b64)));
+		assertThrows(AuthenticationException.class, () -> f.authenticate(req("/saml/acs", b64, "GET")));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// Request method and browser binding
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void j01_post_getRequest_ignored() throws Exception {
+		var f = SamlAuthFilter.create().validator(validator(x -> new ClaimsPrincipal("x", Map.of()))).build();
+		assertTrue(f.authenticate(req("/saml/acs", "anything", "GET")).isEmpty());
+	}
+
+	@Test void j02_redirect_postRequest_ignored() throws Exception {
+		var f = SamlAuthFilter.create().binding(SamlBinding.REDIRECT).validator(validator(x -> new ClaimsPrincipal("x", Map.of()))).build();
+		assertTrue(f.authenticate(req("/saml/acs", "anything", "POST")).isEmpty());
+	}
+
+	@Test void j03_bindingCookie_passedToValidator() throws Exception {
+		var received = new String[1];
+		var kp = KeyPairGenerator.getInstance("RSA");
+		kp.initialize(2048);
+		var pair = kp.generateKeyPair();
+		var v = new SamlAssertionValidator(
+			SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
+				.spEntityId("https://sp.example.com")
+				.expectedIssuer("https://idp.example.com")
+				.signingCredential(new BasicCredential(pair.getPublic(), pair.getPrivate()))) {
+			@Override public Principal validate(String xml, String binding) {
+				received[0] = binding;
+				return new ClaimsPrincipal("alice", Map.of());
+			}
+		};
+		var r = req("/saml/acs", Base64.getEncoder().encodeToString("<x/>".getBytes(StandardCharsets.UTF_8)));
+		when(r.getCookies()).thenReturn(new Cookie[]{new Cookie("other", "no"), new Cookie("MY_BIND", "secret-1")});
+		var f = SamlAuthFilter.create().validator(v).bindingCookieName("MY_BIND").build();
+		assertTrue(f.authenticate(r).isPresent());
+		assertEquals("secret-1", received[0]);
+	}
+
+	private static SamlAssertionValidator.Builder loginBase(BasicCredential cred) {
+		return SamlAssertionValidator.create().recipient(SamlTestSupport.ACS)
+			.spEntityId("https://sp.example.com")
+			.expectedIssuer("https://idp.example.com")
+			.signingCredential(cred);
+	}
+
+	private static Cookie startLogin(SamlAuthFilter f, String id) {
+		var res = mock(HttpServletResponse.class);
+		var captor = ArgumentCaptor.forClass(Cookie.class);
+		f.startLogin(res, id);
+		verify(res).addCookie(captor.capture());
+		return captor.getValue();
+	}
+
+	@Test void k01_startLogin_cookieAttributes() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var v = loginBase(cred).authnRequestTtl(Duration.ofMinutes(5)).build();
+		var c = startLogin(SamlAuthFilter.create().validator(v).build(), "_req-1");
+		assertEquals("SAML_LOGIN", c.getName());
+		assertFalse(c.getValue().isEmpty());
+		assertTrue(c.getSecure());
+		assertTrue(c.isHttpOnly());
+		assertEquals("None", c.getAttribute("SameSite"));
+		assertEquals("/", c.getPath());
+		assertEquals(300, c.getMaxAge());
+	}
+
+	@Test void k02_startLogin_customCookieName() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var f = SamlAuthFilter.create().validator(loginBase(cred).build()).bindingCookieName("MY_BIND").build();
+		assertEquals("MY_BIND", startLogin(f, "_req-2").getName());
+	}
+
+	@Test void k03_startLogin_roundTrip_filterAcceptsCookie() throws Exception {
+		var now = Instant.parse("2026-01-01T00:00:00Z");
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var v = loginBase(cred).clock(Clock.fixed(now, ZoneOffset.UTC)).build();
+		var f = SamlAuthFilter.create().validator(v).build();
+		var c = startLogin(f, "_req-3");
+		var sc = SamlTestSupport.bearerConfirmation(SamlTestSupport.ACS, null, now.plusSeconds(300), "_req-3", null);
+		var assertion = SamlTestSupport.buildMinimalAssertionWithSubject("https://idp.example.com", "https://sp.example.com",
+			SamlTestSupport.subjectWithConfirmations("alice", sc), now.minusSeconds(60), now.plusSeconds(300));
+		var xml = SamlTestSupport.signAndBuildResponse(cred, "https://idp.example.com", assertion);
+		var b64 = Base64.getEncoder().encodeToString(xml.getBytes(StandardCharsets.UTF_8));
+		var withCookie = req("/saml/acs", b64);
+		when(withCookie.getCookies()).thenReturn(new Cookie[]{c});
+		assertEquals("alice", f.authenticate(withCookie).get().getPrincipal().getName());
 	}
 }

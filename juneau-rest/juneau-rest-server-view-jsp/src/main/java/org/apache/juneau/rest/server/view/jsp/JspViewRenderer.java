@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.jsp;
 
+import static org.apache.juneau.commons.utils.FileUtils.resolveVirtualPathSafely;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
@@ -110,11 +111,11 @@ public class JspViewRenderer implements ViewRenderer {
 			return NEXT;
 
 		// Resolve the base path. Prefer the registered JspMixin bean (which the mixin
-		// instantiates), fall back to "/" when the renderer is used standalone.
+		// instantiates), fall back to the default base path when the renderer is used standalone.
 		var basePath = req.getContext().getBeanStore()
 			.getBean(JspMixin.class)
 			.map(JspMixin::getBasePath)
-			.orElse("/");
+			.orElse(JspDispatcher.DEFAULT_BASE_PATH);
 
 		// Copy attributes onto the request so the JSP / JSTL EL can resolve them.
 		content2.getAttributes().forEach(req::setAttribute);
@@ -186,6 +187,6 @@ public class JspViewRenderer implements ViewRenderer {
 	static String joinPath(String basePath, String template) {
 		ViewTemplateNames.requirePlainName(template);
 		var bp = isEmpty(basePath) ? "/" : basePath;
-		return FileUtils.resolveVirtualPathSafely(bp, template);
+		return resolveVirtualPathSafely(bp, template);
 	}
 }

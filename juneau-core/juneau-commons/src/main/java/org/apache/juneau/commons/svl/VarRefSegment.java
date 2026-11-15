@@ -134,7 +134,9 @@ final class VarRefSegment extends TemplateSegment {
 		try {
 			if (v.streamed && ! session.isHtmlDocEncode()) {
 				var varVal = (hasInternalVar && v.allowNested()) ? body.resolve(session) : body.getSource();
-				v.resolveTo(session, w, varVal);
+				var cw = new CountingWriter(w);
+				v.resolveTo(session, cw, varVal);
+				session.charge(cw.count);
 				return;
 			}
 			w.write(resolveReplacement(session, v));
@@ -186,5 +188,33 @@ final class VarRefSegment extends TemplateSegment {
 	/** The original {@code ${...}} source fragment (escapes removed) for diagnostic messages. */
 	private String sourceFragment() {
 		return fallthrough;
+	}
+
+	/** Counts the characters written through it so streamed output is charged against the work budget. */
+	private static final class CountingWriter extends Writer {
+		private final Writer w;
+		int count;
+
+		CountingWriter(Writer w) {
+			this.w = w;
+		}
+
+		@Override
+		public void write(char[] cbuf, int off, int len) throws IOException {
+			count += len;
+			if (count > VarResolverSession.MAX_OUTPUT_CHARS)
+				throw new VarResolverException("Variable resolution work limit exceeded (%s characters).", VarResolverSession.MAX_OUTPUT_CHARS);
+			w.write(cbuf, off, len);
+		}
+
+		@Override
+		public void flush() throws IOException {
+			w.flush();
+		}
+
+		@Override
+		public void close() throws IOException {
+			// The underlying writer is owned by the caller.
+		}
 	}
 }

@@ -69,7 +69,7 @@ public class UnsupportedMediaType extends BasicHttpException {
 	 * @param cause The cause. May be <jk>null</jk>.
 	 */
 	public UnsupportedMediaType(Throwable cause) {
-		super(STATUS_CODE, REASON_PHRASE, cause, cause != null ? cause.getMessage() : null);
+		super(STATUS_CODE, REASON_PHRASE, cause);
 	}
 
 	/**

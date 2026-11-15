@@ -27,7 +27,7 @@
         publishes: [ { topic: 'zoom:prices', retain: true } ],
         helper: { kind: 'scatter', x: { field: 'id', type: 'number', label: 'Pet' }, series: [ { field: 'price', label: 'Price' } ] },
         option: { dataZoom: [ { type: 'inside' }, { type: 'slider' } ] } } },
-    { id: 'toolbar', label: 'Card API', card: { type: 'html', id: 'toolbar', title: 'Card API', src: '/console/dev/cards/fragments/toolbar' } },
+    { id: 'toolbar', label: 'Card API', card: { type: 'html', id: 'toolbar', title: 'Card API', src: '/console/dev/cards/fragments/toolbar', sanitize: false } },
     { id: 'how', label: 'Writing a card type', card: { type: 'html', id: 'how', title: 'Writing a card type', src: '/console/dev/cards/fragments/how' } } ] }
 </@card>
 </@page>

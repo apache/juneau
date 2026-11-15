@@ -26,6 +26,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.logging.LogRecordCapture;
 import org.apache.juneau.rest.server.auth.*;
 import org.junit.jupiter.api.*;
 
@@ -157,6 +158,30 @@ class JwksCache_Test extends TestBase {
 
 		assertFalse(second.isEmpty(), "must serve stale cached keys when upstream fetch fails past TTL");
 		assertEquals(2, src.fetches.get(), "the failing refresh attempt must still be observed");
+	}
+
+	@Test void b01b_staleKeysNotServedBeyondMaxStale() throws Exception {
+		var rsa = generateRsa("kid-1");
+		var src = new CountingSource(new JWKSet(rsa.toPublicJWK()));
+		var t0 = Instant.parse("2026-01-01T00:00:00Z");
+		var clockHolder = new AtomicReference<>(Clock.fixed(t0, ZoneOffset.UTC));
+		var clock = new Clock() {
+			@Override public ZoneId getZone() { return clockHolder.get().getZone(); }
+			@Override public Clock withZone(ZoneId z) { return clockHolder.get().withZone(z); }
+			@Override public Instant instant() { return clockHolder.get().instant(); }
+		};
+		var cache = new JwksCache(src, Duration.ofMinutes(1), clock, true, Duration.ofSeconds(10), Duration.ofMinutes(5));
+		var sel = new JWKSelector(new JWKMatcher.Builder().build());
+		cache.get(sel, null);
+		src.fail = true;
+		try (var q = LogRecordCapture.quiet(JwksCache.class)) {
+			// Within ttl + maxStale: still served.
+			clockHolder.set(Clock.fixed(t0.plus(Duration.ofMinutes(4)), ZoneOffset.UTC));
+			assertFalse(cache.get(sel, null).isEmpty());
+			// Beyond ttl + maxStale: fails closed.
+			clockHolder.set(Clock.fixed(t0.plus(Duration.ofMinutes(7)), ZoneOffset.UTC));
+			assertThrows(KeySourceException.class, () -> cache.get(sel, null));
+		}
 	}
 
 	@Test void b02_failureWithoutPriorFetch_rethrows() throws Exception {

@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.mockito.ArgumentCaptor;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -113,6 +114,7 @@ class AuthFilterChain_Test extends TestBase {
 		var original = req("/public/page");
 		var chain = AuthFilterChain.create(null)
 			.append(succeeds(ALICE), "/api/*")
+			.passThroughUnmatched()
 			.build();
 		var capturing = new CapturingChain();
 		chain.doFilter(original, capturingResponse(), capturing);
@@ -277,6 +279,7 @@ class AuthFilterChain_Test extends TestBase {
 	@Test void e02_authenticateNoMatch_returnsEmpty() {
 		var chain = AuthFilterChain.create(null)
 			.append(succeeds(ALICE), "/api/*")
+			.passThroughUnmatched()
 			.build();
 		assertTrue(chain.authenticate(req("/public/page")).isEmpty());
 	}
@@ -377,10 +380,41 @@ class AuthFilterChain_Test extends TestBase {
 		chain.doFilter(req("/"), resp, capturing);
 		verify(resp).setStatus(401);
 		// Both WWW-Authenticate challenges must appear in the aggregated header
-		var wwwCaptor = org.mockito.ArgumentCaptor.forClass(String.class);
+		var wwwCaptor = ArgumentCaptor.forClass(String.class);
 		verify(resp).setHeader(eq("WWW-Authenticate"), wwwCaptor.capture());
 		var headerValue = wwwCaptor.getValue();
 		assertTrue(headerValue.contains("Bearer realm=\"r1\""), "Missing Bearer challenge: " + headerValue);
 		assertTrue(headerValue.contains("ApiKey realm=\"r2\""), "Missing ApiKey challenge: " + headerValue);
+	}
+
+	@Test void z01_unmatchedPath_refusedByDefault() throws Exception {
+		var chain = AuthFilterChain.create(null).append(succeeds(ALICE), "/api/*").build();
+		var capturing = new CapturingChain();
+		var resp = capturingResponse();
+		chain.doFilter(req("/public/page"), resp, capturing);
+		assertNull(capturing.captured);
+		verify(resp).setStatus(401);
+	}
+
+	@Test void z02_equivalentSpellings_matchScopedEntry() throws Exception {
+		var chain = AuthFilterChain.create(null).append(fails("no"), "/admin/*").build();
+		for (var p : new String[]{"/admin/users", "/admin;x/users", "//admin/users", "/./admin/users", "/x/../admin/users", "/%61dmin/users", "/admin/users;jsessionid=1"}) {
+			var capturing = new CapturingChain();
+			var resp = capturingResponse();
+			chain.doFilter(req(p), resp, capturing);
+			assertNull(capturing.captured, p);
+			verify(resp).setStatus(401);
+		}
+	}
+
+	@Test void z03_malformedPath_refused() throws Exception {
+		var chain = AuthFilterChain.create(null).append(succeeds(ALICE)).passThroughUnmatched().build();
+		for (var p : new String[]{"/../admin", "/a%2Fb", "/a%5Cb"}) {
+			var capturing = new CapturingChain();
+			var resp = capturingResponse();
+			chain.doFilter(req(p), resp, capturing);
+			assertNull(capturing.captured, p);
+			verify(resp).setStatus(401);
+		}
 	}
 }

@@ -35,13 +35,13 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on source-shape coverage for the {@code juneau-views.js} row-action + fail-closed CSRF plumbing, plus
+ * Always-on source-shape coverage for the {@code juneau-views.js} row-action + fail-closed token plumbing, plus
  * the {@code RowAction.endpoint} {@code {property}} substitution.  Source-shape always runs;
  * the substitution's behavioral proof runs via a Node harness when {@code node} is on {@code PATH} (no
  * {@code -Pjs-tests}/browser required - {@code buildActionRequest} is pure).  Mirrors
  * {@code ViewsMixin_Serving_Test}'s served-script substring style: proves the load-bearing pieces of the
  * runtime's row-menu/submit contract are present in the shipped asset, without booting a browser (the
- * fail-closed-CSRF behavioral proof lives in the opt-in {@code RowActionCsrf_BrowserTest} canary).
+ * fail-closed-token behavioral proof lives in the opt-in {@code RowActionCsrf_BrowserTest} canary).
  *
  * <p>
  * The client refusal these tests pin is <b>defense-against-consumer-omission</b>, not the security control: the
@@ -72,7 +72,7 @@ class ViewsJs_RowActions_Test extends TestBase {
 		assertEquals("5", ViewsMixin.CONTRACT_VERSION);
 	}
 
-	@Test void a02_defaultCsrfHeaderMatchesTheServerBoundary() throws Exception {
+	@Test void a02_defaultTokenHeaderMatchesTheServerBoundary() throws Exception {
 		// The runtime's default header MUST equal LoopbackBoundary.DEFAULT_CSRF_HEADER or the two halves disagree.
 		var body = viewsJs();
 		assertTrue(body.contains("DEFAULT_CSRF_HEADER = \"" + LoopbackBoundary.DEFAULT_CSRF_HEADER + "\""), body);
@@ -90,7 +90,7 @@ class ViewsJs_RowActions_Test extends TestBase {
 		assertTrue(fn.contains(".trim()"), fn);   // whitespace-sensitive
 	}
 
-	@Test void a04_actionSubmitSendsJsonBodyAndCsrfHeader() throws Exception {
+	@Test void a04_actionSubmitSendsJsonBodyAndTokenHeader() throws Exception {
 		var body = viewsJs();
 		var start = body.indexOf("function buildActionRequest(");
 		assertTrue(start >= 0, () -> "buildActionRequest not found:\n" + body);
@@ -137,7 +137,7 @@ class ViewsJs_RowActions_Test extends TestBase {
 		assertTrue(body.contains("role\", \"alert\""), body);
 	}
 
-	@Test void a08_readsAutoEmbeddedCsrfAttribute() throws Exception {
+	@Test void a08_readsAutoEmbeddedTokenAttribute() throws Exception {
 		// The runtime reads the token ViewTable auto-embeds under data-juneau-csrf (ViewTable.CSRF_ATTR).
 		var body = viewsJs();
 		assertTrue(body.contains("data-juneau-csrf"), body);
@@ -396,6 +396,13 @@ class ViewsJs_RowActions_Test extends TestBase {
 		return reportNoRendersJs;
 	}
 
+	@Test void b00_offOriginEndpointRefuses_sameOriginPathStillResolves() {
+		var r = report();
+		for (var k : List.of("offOrigin_absolute", "offOrigin_protocolRelative", "offOrigin_backslash", "offOrigin_scheme"))
+			assertRefusal((Map<?,?>) r.get(k), "unsafe-endpoint");
+		assertEquals("/x/a1", r.get("sameOrigin_path"));
+	}
+
 	@Test void b01_idTemplateResolvesAgainstTheCurrentRow_exactlyLikeColumnHref() {
 		// The whole marker is captured (not a bare url string) because this SAME call, re-run by the harness a
 		// second time with juneau-renders.js absent, becomes a refusal instead (see b09).
@@ -477,7 +484,7 @@ class ViewsJs_RowActions_Test extends TestBase {
 		// The headline finding: encodeURIComponent('..') === '..' (`.` is RFC 3986 unreserved, never escaped), so
 		// a row value of `..` would otherwise turn `servlet:/incidents/{id}/ack` into
 		// `servlet:/incidents/../ack`, which browser URL resolution normalizes to `/ack` - a DIFFERENT, undeclared
-		// mutating endpoint - and submitRowAction would fire it as an authenticated, CSRF-headered POST.
+		// mutating endpoint - and submitRowAction would fire it as an authenticated, token-headered POST.
 		assertRefusal((Map<?,?>) report().get("dotdot_rowValue"), "unsafe-endpoint");
 	}
 

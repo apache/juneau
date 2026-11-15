@@ -359,7 +359,7 @@ public final class PageCapture {
 	public PageCapture addCard(CardSpec card, String markupOrNull) throws TemplateModelException {
 		checkSrc(card);
 		for (var c : cards)
-			if (c.id().equals(card.id()))
+			if (eq(c.id(), card.id()))
 				throw FtlAttrLists.reject(f("<@card id='%s'> duplicates an existing card id.", card.id()));
 		if (builtCardIds.contains(card.id()))
 			throw FtlAttrLists.reject(f("<@card id='%s'> duplicates an existing card id.", card.id()));
@@ -379,7 +379,7 @@ public final class PageCapture {
 		if (nn(src) && ! SafePathTemplate.isSameOriginPath(src))
 			throw FtlAttrLists.reject(f("<@card id='%s'> type='%s' src must be a same-origin path (no scheme, '//', backslash, control character, edge space or '..' segment); got '%s'.",
 				card.id(), card.type(), src));
-		if (card.sanitize() && (neq(card.type(), "html") || ! nn(src)))
+		if (card.sanitizeStated() && (neq(card.type(), "html") || ! nn(src)))
 			throw FtlAttrLists.reject(f("<@card id='%s'> sanitize= applies only to an html card with src=.", card.id()));
 	}
 
@@ -394,7 +394,7 @@ public final class PageCapture {
 	void addBuiltCard(CardSpec card, String markupOrNull) throws TemplateModelException {
 		checkSrc(card);
 		for (var c : cards)
-			if (c.id().equals(card.id()))
+			if (eq(c.id(), card.id()))
 				throw FtlAttrLists.reject(f("<@card id='%s'> duplicates an existing card id.", card.id()));
 		if (builtCards.containsKey(card.id()) || builtCardIds.contains(card.id()))
 			throw FtlAttrLists.reject(f("<@card id='%s'> duplicates an existing card id.", card.id()));
@@ -624,7 +624,7 @@ public final class PageCapture {
 			for (var card : badgeCardRefs(m))
 				if (! cardIds.contains(card))
 					throw FtlAttrLists.reject(f(BADGE_CARD_MSG, id, card));
-			if (m.get("scope") instanceof Map<?,?> scope && "nav".equals(scope.get("by")) && scope.get("values") instanceof Map<?,?> values)
+			if (m.get("scope") instanceof Map<?,?> scope && eq("nav", scope.get("by")) && scope.get("values") instanceof Map<?,?> values)
 				for (var key : ((Map<String,Object>)values).keySet())
 					if (! navIds.contains(key))
 						throw FtlAttrLists.reject(f(BADGE_NAV_MSG, id, key));
@@ -722,7 +722,7 @@ public final class PageCapture {
 			themeFromDirective = true;
 			return this;
 		}
-		if (theme.equals(name))
+		if (eq(theme, name))
 			return this;
 		if (themeFromDirective)
 			throw FtlAttrLists.reject(f(
@@ -815,13 +815,13 @@ public final class PageCapture {
 
 	/**
 	 * Whether the merged body-attribute text already sets {@code name}.  Used so a spec- or {@code <@body>}-authored
-	 * CSRF attribute is not emitted a second time by the request-attribute auto-detection.
+	 * request-token attribute is not emitted a second time by the request-attribute auto-detection.
 	 *
 	 * @param name An HTML attribute name.
 	 * @return Whether the merged text sets it.
 	 */
 	boolean hasBodyAttr(String name) {
-		return bodyAttrs != null && tokenizeBodyAttrs(bodyAttrs).stream().anyMatch(a -> a.hasValue() && a.name().equalsIgnoreCase(name));
+		return bodyAttrs != null && tokenizeBodyAttrs(bodyAttrs).stream().anyMatch(a -> a.hasValue() && eqic(a.name(), name));
 	}
 
 	/**
@@ -1083,7 +1083,7 @@ public final class PageCapture {
 			return true;
 		if (mp.get("subscribes") instanceof Collection<?> subs && subs.stream().anyMatch(x -> x instanceof Map<?,?> sm && sm.get("handler") != null))
 			return true;
-		if (mp.get("ribbon") instanceof Collection<?> rb && rb.stream().anyMatch(x -> x instanceof Map<?,?> im && "handler".equals(im.get("type"))))
+		if (mp.get("ribbon") instanceof Collection<?> rb && rb.stream().anyMatch(x -> x instanceof Map<?,?> im && eq("handler", im.get("type"))))
 			return true;
 		for (var k : List.of("table", "detail", "tabs", "ribbon", "region"))
 			if (containsModel(mp.get(k)))

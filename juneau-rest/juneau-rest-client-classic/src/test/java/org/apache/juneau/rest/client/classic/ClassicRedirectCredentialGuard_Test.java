@@ -95,4 +95,21 @@ class ClassicRedirectCredentialGuard_Test {
 		assertDoesNotThrow(() -> guard.process(second, context));
 		assertNull(second.getFirstHeader("Authorization"));
 	}
+
+	@Test
+	void a06_crossOriginHop_keepsHostHeaderAndStripsCredentials() {
+		var context = new BasicHttpContext();
+		var core = HttpCoreContext.adapt(context);
+		core.setTargetHost(new HttpHost("example.com", 80, "http"));
+		guard.process(new BasicHttpRequest("GET", "/"), context);
+		core.setTargetHost(new HttpHost("other.example", 80, "http"));
+		var second = new BasicHttpRequest("GET", "/");
+		second.addHeader("Host", "example.com");
+		second.addHeader("Authorization", "Bearer secret");
+		second.addHeader("Cookie", "a=b");
+		guard.process(second, context);
+		assertNull(second.getFirstHeader("Authorization"));
+		assertNull(second.getFirstHeader("Cookie"));
+		assertNotNull(second.getFirstHeader("Host"), "Host is on the forward list; the transport rewrites it for the new origin");
+	}
 }

@@ -22,6 +22,7 @@ import java.net.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 import com.sun.net.httpserver.*;
@@ -72,15 +73,61 @@ class RdfParser_NoNetwork_Test extends TestBase {
 		assertTrue(hits.get() > 0);
 	}
 
-	@Test void a03_rdfXml_externalEntityNotFetched() {
-		var in = "<?xml version=\"1.0\"?><!DOCTYPE rdf:RDF [<!ENTITY x SYSTEM \"" + url() + "\">]>"
-			+ "<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:e=\"http://example.com/\">"
-			+ "<rdf:Description rdf:about=\"http://example.com/a\"><e:name>&x;</e:name></rdf:Description></rdf:RDF>";
-		try {
-			RdfParser.create().xml().build().read(in, Object.class);
-		} catch (@SuppressWarnings("unused") Exception e) {
-			// Rejection is acceptable; the fetch is what matters.
-		}
+	private static final String OTHER = "http://other.example/doc.dtd";
+
+	private static final String RDF_OPEN = "<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:e=\"http://example.com/\">";
+
+	private static String rdf(String name) {
+		return RDF_OPEN + "<rdf:Description rdf:about=\"http://example.com/a\"><e:name>" + name + "</e:name></rdf:Description></rdf:RDF>";
+	}
+
+	private static Object readXml(String in) throws Exception {
+		return RdfParser.create().xml().build().read(in, Object.class);
+	}
+
+	@Test void a03_rdfXml_externalEntityRejected() {
+		var in = "<?xml version=\"1.0\"?><!DOCTYPE rdf:RDF [<!ENTITY x SYSTEM \"" + url() + "\">]>" + rdf("&x;");
+		var e = assertThrows(ParseException.class, () -> readXml(in));
+		assertTrue(e.getMessage().contains("External DTD and entity declarations are not supported."), e.getMessage());
 		assertEquals(0, hits.get());
+	}
+
+	@Test void a04_rdfXml_externalDtdRejected() {
+		var in = "<?xml version=\"1.0\"?><!DOCTYPE rdf:RDF SYSTEM \"" + url() + "\">" + rdf("x");
+		var e = assertThrows(ParseException.class, () -> readXml(in));
+		assertTrue(e.getMessage().contains("External DTD and entity declarations are not supported."), e.getMessage());
+		assertEquals(0, hits.get());
+	}
+
+	@Test void a05_rdfXml_externalParameterEntityAndPublicIdRejected() {
+		assertThrows(ParseException.class, () -> readXml("<!DOCTYPE rdf:RDF [<!ENTITY % p SYSTEM \"" + url() + "\"> %p;]>" + rdf("x")));
+		assertThrows(ParseException.class, () -> readXml("<!DOCTYPE rdf:RDF PUBLIC \"-//X//EN\" \"" + url() + "\">" + rdf("x")));
+		assertEquals(0, hits.get());
+	}
+
+	@Test void a06_rdfXml_internalEntityStillParses() throws Exception {
+		var in = "<?xml version=\"1.0\"?><!DOCTYPE rdf:RDF [<!ENTITY x \"value\">]>" + rdf("&x;");
+		assertTrue(String.valueOf(readXml(in)).contains("value"));
+	}
+
+	@Test void a07_rdfXml_noDoctypeOrDoctypeTextInCommentOrCdataParses() throws Exception {
+		assertTrue(String.valueOf(readXml(rdf("x"))).contains("x"));
+		var comment = "<?xml version=\"1.0\"?><!-- <!DOCTYPE rdf:RDF SYSTEM \"" + url() + "\"> -->" + rdf("y");
+		assertTrue(String.valueOf(readXml(comment)).contains("y"));
+		var cdata = rdf("<![CDATA[<!DOCTYPE rdf:RDF SYSTEM \"" + url() + "\">]]>");
+		assertTrue(String.valueOf(readXml(cdata)).contains("DOCTYPE"));
+		assertEquals(0, hits.get());
+	}
+
+	@Test void a08_hasExternalDoctype() {
+		assertFalse(RdfParserSession.hasExternalDoctype(""));
+		assertFalse(RdfParserSession.hasExternalDoctype("<a/>"));
+		assertFalse(RdfParserSession.hasExternalDoctype("<!DOCTYPE a>"));
+		assertFalse(RdfParserSession.hasExternalDoctype("<!DOCTYPE a [<!ENTITY x \"SYSTEM\"><!-- SYSTEM --><!ELEMENT a ANY>]><a/>"));
+		assertFalse(RdfParserSession.hasExternalDoctype("<a><!DOCTYPE b SYSTEM \"" + OTHER + "\"></a>"));
+		assertTrue(RdfParserSession.hasExternalDoctype("\uFEFF<?xml version=\"1.0\"?>\n<!DOCTYPE a SYSTEM \"" + OTHER + "\">"));
+		assertTrue(RdfParserSession.hasExternalDoctype("<!DOCTYPE a PUBLIC \"p\" \"" + OTHER + "\">"));
+		assertTrue(RdfParserSession.hasExternalDoctype("<!DOCTYPE a [<!ENTITY x \"v\"><!ENTITY y SYSTEM '" + OTHER + "'>]>"));
+		assertTrue(RdfParserSession.hasExternalDoctype("<!DOCTYPE a [<!ENTITY y PUBLIC 'p' '" + OTHER + "'>]>"));
 	}
 }

@@ -541,5 +541,42 @@ class FileUtils_Test extends TestBase {
 		var newTime = dir.lastModified();
 		assertTrue(newTime > originalTime || newTime == originalTime + 1000);
 	}
-}
 
+	//====================================================================================================
+	// isSafeFileName(String)
+	//====================================================================================================
+	@Test
+	void a060_isSafeFileName() {
+		assertTrue(FileUtils.isSafeFileName("a.txt"));
+		assertTrue(FileUtils.isSafeFileName("..a"));
+		assertTrue(FileUtils.isSafeFileName("a..b"));
+		assertFalse(FileUtils.isSafeFileName(null));
+		assertFalse(FileUtils.isSafeFileName(""));
+		assertFalse(FileUtils.isSafeFileName("."));
+		assertFalse(FileUtils.isSafeFileName(".."));
+		assertFalse(FileUtils.isSafeFileName("a/b"));
+		assertFalse(FileUtils.isSafeFileName("a\\b"));
+		assertFalse(FileUtils.isSafeFileName("a\0b"));
+	}
+
+	//====================================================================================================
+	// isSafeRelativePath(String)
+	//====================================================================================================
+	@Test
+	void a061_isSafeRelativePath() {
+		assertTrue(FileUtils.isSafeRelativePath(""));
+		assertTrue(FileUtils.isSafeRelativePath("a.cfg"));
+		assertTrue(FileUtils.isSafeRelativePath("a/b/c.cfg"));
+		assertTrue(FileUtils.isSafeRelativePath("./a"));
+		assertTrue(FileUtils.isSafeRelativePath("a..b/c"));
+		assertTrue(FileUtils.isSafeRelativePath("a/"));
+		assertFalse(FileUtils.isSafeRelativePath(null));
+		assertFalse(FileUtils.isSafeRelativePath("/a"));
+		assertFalse(FileUtils.isSafeRelativePath(".."));
+		assertFalse(FileUtils.isSafeRelativePath("../a"));
+		assertFalse(FileUtils.isSafeRelativePath("a/../b"));
+		assertFalse(FileUtils.isSafeRelativePath("a/.."));
+		assertFalse(FileUtils.isSafeRelativePath("a\\b"));
+		assertFalse(FileUtils.isSafeRelativePath("a\0b"));
+	}
+}

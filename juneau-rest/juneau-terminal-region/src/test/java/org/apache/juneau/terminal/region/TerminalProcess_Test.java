@@ -20,6 +20,8 @@ import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
 import java.time.*;
@@ -194,7 +196,7 @@ class TerminalProcess_Test extends TestBase {
 		fakePython("trap 'echo got > \"$(dirname \"$0\")/term.txt\"; exit 0' TERM\necho ready > \"$(dirname \"$0\")/ready.txt\"\nsleep 30 &\nwait");
 		var p = TerminalProcess.start("generic", List.of("true"), 80, 24, run, host("/x.py", null));
 		awaitStarted(bin.resolve("ready.txt"));
-		p.terminate(java.time.Duration.ofSeconds(10));
+		p.terminate(Duration.ofSeconds(10));
 		assertTrue(p.isDone() || p.waitFor(10, TimeUnit.SECONDS) == 0);
 		assertEquals("got", Files.readString(bin.resolve("term.txt")).trim());
 		p.close();
@@ -206,7 +208,7 @@ class TerminalProcess_Test extends TestBase {
 		var p = TerminalProcess.start("generic", List.of("true"), 80, 24, run, host("/x.py", null));
 		awaitStarted(bin.resolve("ready.txt"));
 		var t0 = System.nanoTime();
-		p.terminate(java.time.Duration.ofMillis(500));
+		p.terminate(Duration.ofMillis(500));
 		assertTrue(System.nanoTime() - t0 >= 400_000_000L, "waited for the grace period before killing");
 		p.waitFor(10, TimeUnit.SECONDS);
 		assertTrue(p.isDone());
@@ -218,8 +220,8 @@ class TerminalProcess_Test extends TestBase {
 		fakePython("exit 0");
 		var p = TerminalProcess.start("generic", List.of("true"), 80, 24, run, host("/x.py", null));
 		assertEquals(0, p.waitFor(30, TimeUnit.SECONDS));
-		p.terminate(java.time.Duration.ofSeconds(1));
-		p.terminate(java.time.Duration.ofSeconds(1));
+		p.terminate(Duration.ofSeconds(1));
+		p.terminate(Duration.ofSeconds(1));
 		assertThrows(NullPointerException.class, () -> p.terminate(null));
 		p.close();
 	}
@@ -232,6 +234,17 @@ class TerminalProcess_Test extends TestBase {
 		while (! Files.exists(f) && System.nanoTime() < end)
 			Thread.sleep(20);
 		assertTrue(Files.exists(f), "the fake process never started: " + f);
+	}
+
+	@DisabledOnOs(OS.WINDOWS)
+	@Test void b03a_ensureDoneDoesNotFollowASymlink() throws Exception {
+		Files.createDirectories(run);
+		var target = run.resolve("target.jsonl");
+		Files.writeString(target, "{\"ev\":\"done\",\"status\":\"ok\"}\n");
+		var link = run.resolve("link.jsonl");
+		Files.createSymbolicLink(link, target);
+		assertThrows(IOException.class, () -> TerminalProcess.ensureDone(link, 1));
+		assertEquals(1, Files.readAllLines(target).size());
 	}
 
 	@Test void b04_onlyTheTailIsScannedForDone() throws Exception {
@@ -310,7 +323,7 @@ class TerminalProcess_Test extends TestBase {
 	@DisabledOnOs(OS.WINDOWS)
 	@Test void c01_findOnPath() throws Exception {
 		fakePython("exit 0");
-		assertEquals(bin.resolve("python3"), TerminalProcess.findOnPath("python3", "/nonexistent" + java.io.File.pathSeparator + bin));
+		assertEquals(bin.resolve("python3"), TerminalProcess.findOnPath("python3", "/nonexistent" + File.pathSeparator + bin));
 		assertNull(TerminalProcess.findOnPath("python3", null));
 		assertNull(TerminalProcess.findOnPath("nope", bin.toString()));
 		Files.writeString(bin.resolve("plain"), "not executable");

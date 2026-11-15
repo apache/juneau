@@ -239,7 +239,7 @@ public class McpClientRegistrationManager {
 		 * Allows an AS-advertised registration endpoint that points at a loopback, private, link-local or metadata host.
 		 *
 		 * <p>
-		 * By default such endpoints are rejected (the endpoint comes from AS metadata, so a hostile document could
+		 * By default such endpoints are rejected (the endpoint comes from AS metadata, so an untrusted document could
 		 * otherwise aim the registration request at an internal service).  Intended for local development and
 		 * testing; plain {@code http} is still limited to loopback hosts.
 		 *
@@ -310,7 +310,7 @@ public class McpClientRegistrationManager {
 		// Pre-registered credentials: use only if bound to this exact AS; a mismatch means the AS migrated (SEP-2352
 		// MUST NOT reuse cross-AS creds — SHOULD surface an error rather than silently reuse).
 		if (preRegistered != null) {
-			if (! preRegistered.issuer().equals(issuer))
+			if (neq(preRegistered.issuer(), issuer))
 				throw new McpAuthException("Pre-registered client credentials are bound to issuer '" + preRegistered.issuer()
 					+ "' but the resource now indicates a different authorization server '" + issuer
 					+ "' (SEP-2352): refusing to reuse credentials across authorization servers");
@@ -326,7 +326,7 @@ public class McpClientRegistrationManager {
 			if (hit.isPresent()) {
 				// Defensive: a buggy durable store that returns an entry keyed under the wrong issuer would otherwise
 				// cause exactly the cross-AS credential reuse SEP-2352 forbids.  Never trust the returned entry's key.
-				if (! hit.get().issuer().equals(issuer))
+				if (neq(hit.get().issuer(), issuer))
 					throw new McpAuthException("Client-registration store returned an entry bound to issuer '" + hit.get().issuer()
 						+ "' for a lookup of issuer '" + issuer + "' (SEP-2352): refusing to reuse credentials across authorization servers");
 				return hit.get();
@@ -354,7 +354,8 @@ public class McpClientRegistrationManager {
 			.applicationType(applicationType)
 			.addRedirectUris(redirectUrisSupplier.get())
 			.confidential(confidential)
-			.httpTimeout(httpTimeout);
+			.httpTimeout(httpTimeout)
+			.allowPrivateUrls(allowPrivateUrls);
 		scopes.forEach(b::scope);
 		if (clientName != null)
 			b.clientName(clientName);
@@ -369,7 +370,7 @@ public class McpClientRegistrationManager {
 	 * Extracts the RFC 7591 {@code registration_endpoint} from the discovered AS metadata's extras, if present.
 	 *
 	 * <p>
-	 * The value is AS-supplied, so a hostile/misconfigured AS document is defended against here: a malformed URI or a
+	 * The value is AS-supplied, so an untrusted/misconfigured AS document is defended against here: a malformed URI or a
 	 * plaintext {@code http://} (non-loopback) endpoint yields the documented {@link McpAuthException} rather than a raw
 	 * {@link IllegalArgumentException} (from {@code URI.create}) or a downstream {@link IllegalStateException} (from the
 	 * registrar's https gate).

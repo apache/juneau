@@ -44,7 +44,11 @@ public class HoconResolver {
 	/** Maximum total number of characters produced by all concatenations during one resolution. */
 	private static final long MAX_CONCAT_OUTPUT = 10_000_000L;
 
+	/** Maximum number of value visits during one resolution (bounds structural expansion through substitutions). */
+	private static final long MAX_NODE_VISITS = 1_000_000L;
+
 	private long concatOutput;
+	private long nodeVisits;
 
 	/**
 	 * Constructor.
@@ -80,6 +84,7 @@ public class HoconResolver {
 	private HoconValue resolveValue(HoconValue val) {
 		if (val == null)
 			return null;
+		chargeNode();
 		return switch (val.getType()) {
 			case STRING, NUMBER, BOOLEAN, NULL -> val;
 			case OBJECT -> {
@@ -128,6 +133,11 @@ public class HoconResolver {
 				sb.append(resolveConcatPart(resolved));
 		}
 		return concatResult(sb);
+	}
+
+	private void chargeNode() {
+		if (++nodeVisits > MAX_NODE_VISITS)
+			throw rex("Resolved output is too large.");
 	}
 
 	private HoconValue concatResult(StringBuilder sb) {
@@ -188,6 +198,7 @@ public class HoconResolver {
 	private HoconValue resolveValueWithLookup(HoconValue val, Function<String,HoconValue> lookup) {
 		if (val == null)
 			return null;
+		chargeNode();
 		return switch (val.getType()) {
 			case STRING, NUMBER, BOOLEAN, NULL -> val;
 			case OBJECT -> {

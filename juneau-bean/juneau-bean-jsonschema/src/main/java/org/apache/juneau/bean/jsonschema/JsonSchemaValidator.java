@@ -100,8 +100,8 @@ import org.apache.juneau.marshall.marshaller.*;
  *
  * <h2 class='section'>Interruptible {@code pattern} matching:</h2>
  * <p>
- * A {@code pattern} keyword can encode a catastrophically-backtracking regular expression that a hostile input can
- * drive into effectively-unbounded work. {@link java.util.regex.Matcher} never checks {@link Thread#isInterrupted()},
+ * A {@code pattern} keyword can encode a catastrophically-backtracking regular expression that an untrusted input can
+ * drive into effectively-unbounded work. {@link Matcher} never checks {@link Thread#isInterrupted()},
  * so such a match cannot be stopped by interrupting the matching thread - it runs to completion, pinning a core even
  * after the caller has given up. To make a runaway match abortable, the string is fed to the matcher through an
  * {@link InterruptibleCharSequence}: because the matcher reads its input exclusively via {@link CharSequence#charAt(int)},
@@ -368,15 +368,69 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	private static boolean hasDuplicates(Collection<?> c) {
 		if (c.size() < 2)
 			return false;
-		var seen = new ArrayList<>(c.size());
+		var seen = new HashSet<>(Math.max(16, (int)(c.size() / 0.75f) + 1));
 		for (var e : c) {
-			for (var s : seen) {
-				if (jsonEquals(e, s))
-					return true;
-			}
-			seen.add(e);
+			checkInterrupted();
+			if (! seen.add(canonical(e)))
+				return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Wrapper for values with no structural JSON form, keyed by their serialized representation.
+	 */
+	private record OpaqueKey(String json) {}
+
+	/**
+	 * Returns a form of the specified value whose {@link Object#equals(Object)} and {@link Object#hashCode()} follow
+	 * JSON equality: numbers compare by value, object members compare irrespective of order, arrays compare in order.
+	 */
+	private static Object canonical(Object o) {
+		checkInterrupted();
+		if (o == null)
+			return JsonNull.INSTANCE;
+		if (o instanceof Number n) {
+			if ((n instanceof Double || n instanceof Float) && ! Double.isFinite(n.doubleValue()))
+				return n;
+			var bd = toBigDecimal(n);
+			return bd.signum() == 0 ? BigDecimal.ZERO : bd.stripTrailingZeros();
+		}
+		if (o instanceof CharSequence || o instanceof Character)
+			return o.toString();
+		if (o instanceof Boolean)
+			return o;
+		if (o instanceof Map<?,?> m) {
+			var out = new HashMap<String,Object>(Math.max(16, (int)(m.size() / 0.75f) + 1));
+			for (var e : m.entrySet())
+				out.put(String.valueOf(e.getKey()), canonical(e.getValue()));
+			return out;
+		}
+		if (o instanceof Collection<?> c) {
+			var out = new ArrayList<>(c.size());
+			for (var e : c)
+				out.add(canonical(e));
+			return out;
+		}
+		if (o.getClass().isArray()) {
+			var len = Array.getLength(o);
+			var out = new ArrayList<>(len);
+			for (var i = 0; i < len; i++)
+				out.add(canonical(Array.get(o, i)));
+			return out;
+		}
+		try {
+			return new OpaqueKey(Json.of(o));
+		} catch (@SuppressWarnings("unused") Exception e) {
+			return o;
+		}
+	}
+
+	private enum JsonNull { INSTANCE }
+
+	private static void checkInterrupted() {
+		if (Thread.currentThread().isInterrupted())
+			throw new InterruptedMatchException();
 	}
 
 	// =================================================================================================================
@@ -439,11 +493,11 @@ public final class JsonSchemaValidator implements PropertyValidator {
 			return nn(bd) && toBigDecimal(b2).compareTo(bd) == 0;
 		}
 		if (a instanceof CharSequence a2 && b instanceof CharSequence b2)
-			return a2.toString().equals(b2.toString());
-		if (a.equals(b))
+			return eq(a2.toString(), b2.toString());
+		if (eq(a, b))
 			return true;
 		try {
-			return Json.of(a).equals(Json.of(b));
+			return eq(Json.of(a), Json.of(b));
 		} catch (@SuppressWarnings("unused") Exception e) {
 			return false;
 		}

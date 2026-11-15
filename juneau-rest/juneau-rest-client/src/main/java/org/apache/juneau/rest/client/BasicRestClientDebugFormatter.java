@@ -46,7 +46,7 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 	 * {@code org.apache.juneau.rest.server.logging.BasicRestDebugFormatter}'s counterpart — the same operator-facing
 	 * kill switch must protect both the server and client debug pipelines.
 	 */
-	static final String ENV_ALLOW_DUMP_BODIES = "JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES";
+	static final String ENV_ALLOW_DUMP_BODIES = RestDebugBodyGate.ENV_ALLOW_DUMP_BODIES;
 
 	/**
 	 * The widened, formatter-local default set of header names whose values are masked. Starts from a copy of
@@ -65,12 +65,6 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 		s.add("Location");
 		DEFAULT_REDACTED_HEADERS = Collections.unmodifiableSet(s);
 	}
-
-	/**
-	 * Cached resolution of the body-dump master gate. {@code null} means "not yet resolved"; resolution reads the
-	 * environment exactly once. Not a system property, and there is no system-property fallback.
-	 */
-	private static volatile Boolean allowDumpBodiesCache;
 
 	/** The set of header names whose values are masked. */
 	protected Set<String> redactedHeaders = DEFAULT_REDACTED_HEADERS;
@@ -348,12 +342,7 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 	 * @return <jk>true</jk> if body dumping is enabled.
 	 */
 	static boolean isAllowDumpBodies() {
-		var v = allowDumpBodiesCache;
-		if (v == null) {
-			v = parseAllowDumpBodies(System.getenv(ENV_ALLOW_DUMP_BODIES));
-			allowDumpBodiesCache = v;
-		}
-		return v;
+		return RestDebugBodyGate.isAllowDumpBodies();
 	}
 
 	/**
@@ -369,12 +358,7 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 	 * @return <jk>true</jk> if the value enables body dumping.
 	 */
 	static boolean parseAllowDumpBodies(String raw) {
-		if (raw == null)
-			return false;
-		var t = raw.trim();
-		if (t.isEmpty())
-			return false;
-		return ! (eqic(t, "false") || eq(t, "0"));
+		return RestDebugBodyGate.parse(raw);
 	}
 
 	/**
@@ -388,6 +372,6 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 	 * 	non-<jk>null</jk> value is cached directly as the test gate state.
 	 */
 	static void resetAllowDumpBodiesForTest(Boolean override) {
-		allowDumpBodiesCache = override;
+		RestDebugBodyGate.setAllowDumpBodiesForTest(override);
 	}
 }

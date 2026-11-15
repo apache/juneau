@@ -126,7 +126,7 @@ public class YamlConfigFormat implements ConfigFormat {
 				var value = entry == null ? "" : emptyIfNull(entry.getValue());
 				indent(sb, segments.size()).append(key).append(": ").append(quoteIfNeeded(value));
 				if (entry != null && ine(entry.getComment()))
-					sb.append(" # ").append(entry.getComment());
+					sb.append(" # ").append(entry.getComment().replace('\r', ' ').replace('\n', ' '));
 				sb.append('\n');
 			}
 		}
@@ -188,17 +188,77 @@ public class YamlConfigFormat implements ConfigFormat {
 	}
 
 	private String unquote(String value) {
-		if (value.length() >= 2 && ((value.startsWith("\"") && value.endsWith("\"")) || (value.startsWith("'") && value.endsWith("'"))))
+		if (value.length() >= 2 && value.startsWith("\"") && value.endsWith("\""))
+			return unescape(value.substring(1, value.length() - 1));
+		if (value.length() >= 2 && value.startsWith("'") && value.endsWith("'"))
 			return value.substring(1, value.length() - 1);
 		return value;
+	}
+
+	private String unescape(String s) {
+		if (s.indexOf('\\') == -1)
+			return s;
+		var sb = new StringBuilder(s.length());
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (c != '\\' || i == s.length() - 1) {
+				sb.append(c);
+				continue;
+			}
+			var n = s.charAt(++i);
+			switch (n) {
+				case 'n' -> sb.append('\n');
+				case 'r' -> sb.append('\r');
+				case 't' -> sb.append('\t');
+				case 'u' -> {
+					if (i + 4 < s.length() + 0 && s.substring(i + 1, i + 5).matches("[0-9a-fA-F]{4}")) {
+						sb.append((char)Integer.parseInt(s.substring(i + 1, i + 5), 16));
+						i += 4;
+					} else {
+						sb.append("\\u");
+					}
+				}
+				case '\\', '"' -> sb.append(n);
+				default -> sb.append('\\').append(n);
+			}
+		}
+		return sb.toString();
 	}
 
 	private String quoteIfNeeded(String value) {
 		if (value.isEmpty())
 			return "\"\"";
-		if (value.indexOf(':') != -1 || value.indexOf('#') != -1 || value.startsWith(" ") || value.endsWith(" "))
-			return '"' + value.replace("\"", "\\\"") + '"';
+		if (needsQuotes(value)) {
+			var sb = new StringBuilder("\"");
+			for (var i = 0; i < value.length(); i++) {
+				var c = value.charAt(i);
+				switch (c) {
+					case '\\' -> sb.append("\\\\");
+					case '"' -> sb.append("\\\"");
+					case '\n' -> sb.append("\\n");
+					case '\r' -> sb.append("\\r");
+					case '\t' -> sb.append("\\t");
+					default -> {
+						if (Character.isISOControl(c))
+							sb.append(String.format("\\u%04x", (int)c));
+						else
+							sb.append(c);
+					}
+				}
+			}
+			return sb.append('"').toString();
+		}
 		return value;
+	}
+
+	private static boolean needsQuotes(String value) {
+		if (value.indexOf(':') != -1 || value.indexOf('#') != -1 || value.startsWith(" ") || value.endsWith(" "))
+			return true;
+		for (var i = 0; i < value.length(); i++)
+			if (Character.isISOControl(value.charAt(i)))
+				return true;
+		// A leading quote would otherwise be taken as a quoted scalar on reload.
+		return value.startsWith("\"") || value.startsWith("'");
 	}
 
 	private static class Node {

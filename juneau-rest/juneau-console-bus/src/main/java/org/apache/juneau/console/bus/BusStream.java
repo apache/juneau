@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.console.bus;
 
+import static org.apache.juneau.commons.utils.IoUtils.readCapped;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.time.*;
@@ -72,11 +74,8 @@ final class BusStream {
 	 * @throws IOException If the body could not be read.
 	 * @throws BusRefusal 400 when the body is larger than the cap.
 	 */
-	static String readCapped(InputStream in) throws IOException, BusRefusal {
-		var bytes = in.readNBytes(MAX_SESSION_BODY_BYTES + 1);
-		if (bytes.length > MAX_SESSION_BODY_BYTES)
-			throw BusRefusal.badRequest("the session request is larger than " + MAX_SESSION_BODY_BYTES + " bytes");
-		return new String(bytes, StandardCharsets.UTF_8);
+	static String readSessionBody(InputStream in) throws IOException, BusRefusal {
+		return readCapped(in, MAX_SESSION_BODY_BYTES, StandardCharsets.UTF_8, () -> BusRefusal.badRequest("the session request is larger than " + MAX_SESSION_BODY_BYTES + " bytes"));
 	}
 
 	/**

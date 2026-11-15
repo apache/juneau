@@ -127,8 +127,8 @@ public class LoopbackRedirectReceiver implements AutoCloseable {
 	 * Sets the {@code state} value a callback must carry to be accepted.
 	 *
 	 * <p>
-	 * Requests that are not {@code GET}, do not target the exact callback path, or (once this is set) carry a different
-	 * {@code state} are answered with {@code 400} and ignored; the receiver keeps listening until a valid callback
+	 * Requests that are not {@code GET}, do not target the exact callback path, or do not carry the expected
+	 * {@code state}, or whose {@code Host} header does not name the loopback address and port, are answered with {@code 400} and ignored; the receiver keeps listening until a valid callback
 	 * arrives or the wait times out.
 	 *
 	 * @param state The expected state.  Must not be <jk>null</jk>.
@@ -140,23 +140,37 @@ public class LoopbackRedirectReceiver implements AutoCloseable {
 	}
 
 	private boolean acceptable(HttpExchange ex) {
-		if (! "GET".equals(ex.getRequestMethod()))
+		if (neq("GET", ex.getRequestMethod()))
 			return false;
 		var uri = ex.getRequestURI();
-		if (! path.equals(uri.getPath()))
+		if (neq(path, uri.getPath()))
+			return false;
+		if (! hostAllowed(ex))
 			return false;
 		var want = expectedState.get();
 		if (want == null)
-			return true;
+			return false;
 		var q = uri.getRawQuery();
 		if (q == null)
 			return false;
 		for (var kv : q.split("&")) {
 			var i = kv.indexOf('=');
-			if (i > 0 && "state".equals(kv.substring(0, i)))
-				return want.equals(URLDecoder.decode(kv.substring(i + 1), StandardCharsets.UTF_8));
+			if (i > 0 && eq("state", kv.substring(0, i)))
+				return eq(want, URLDecoder.decode(kv.substring(i + 1), StandardCharsets.UTF_8));
 		}
 		return false;
+	}
+
+	/** Accepts only requests whose {@code Host} header names the bound loopback address and port. */
+	private boolean hostAllowed(HttpExchange ex) {
+		var h = ex.getRequestHeaders().getFirst("Host");
+		if (h == null)
+			return false;
+		var suffix = ":" + port;
+		if (! h.endsWith(suffix))
+			return false;
+		var name = h.substring(0, h.length() - suffix.length());
+		return eq(name, host) || eq(name, "localhost") || eq(name, "127.0.0.1") || eq(name, "[::1]");
 	}
 
 	/** Formats the bound loopback address as a URI host literal, bracketing IPv6 (e.g. {@code [::1]}). */

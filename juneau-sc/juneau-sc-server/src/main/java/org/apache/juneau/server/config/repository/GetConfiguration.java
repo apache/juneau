@@ -16,11 +16,9 @@
  */
 package org.apache.juneau.server.config.repository;
 
-import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
-import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.config.*;
@@ -43,6 +41,10 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 
 	// Remote pulls are throttled: at most one fetch per interval (settable as [GitServer] pullInterval, in seconds).
 	private static final long DEFAULT_PULL_INTERVAL_SECONDS = 60;
+	private static final long MIN_PULL_INTERVAL_SECONDS = 1;
+
+	// Upper bound on the size of a single configuration file read from the repository.
+	static final long MAX_CONFIG_FILE_BYTES = 1024L * 1024L;
 	private static long lastPullNanos;
 	private static boolean pulledOnce;
 
@@ -62,8 +64,8 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 	 */
 	public GetConfiguration(String project, String branch) {
 		// Path variables are URL-decoded after the path is split, so an encoded '%2F' or '..' can survive (CWE-22).
-		validate("project", project, false);
-		validate("branch", branch, true);
+		validateProject(project);
+		BranchNames.validate(branch);
 		this.branch = branch;
 		this.project = project;
 	}
@@ -79,7 +81,7 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 		try {
 			pathStr = config.get("GitServer/pathLocal").orElse(null);
 			git = config.get("GitServer/gitRemote").orElse(null);
-			pullInterval = config.get("GitServer/pullInterval").asLong().orElse(DEFAULT_PULL_INTERVAL_SECONDS);
+			pullInterval = clampPullInterval(config.get("GitServer/pullInterval").asLong().orElse(DEFAULT_PULL_INTERVAL_SECONDS));
 		} finally {
 			config.close();
 		}
@@ -90,14 +92,14 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 			throw new IllegalStateException("Required configuration 'GitServer/pathLocal' is not set.");
 
 		// Trusted operator-configured local git checkout directory (GitServer/pathLocal).
-		// Serves as the confinement root for the project/application config file lookups below.
+		// Used to decide whether the repository must be cloned.
 		var root = new File(pathStr);
 
 		var fileDefaultStr = lcr(APPLICATION).concat(EXT);
 		var fileProjectStr = this.project.concat(EXT);
 
-		// The checkout is shared, so the git operations AND the file reads must happen under one lock
-		// (otherwise another request could switch branches between checkout and read).
+		// The checkout is shared, so the git operations AND the object reads happen under one lock
+		// (otherwise concurrent requests could interleave fetches).
 		synchronized (GIT_LOCK) {
 			try (var gitControl = new GitControl(pathStr, git)) {
 
@@ -108,34 +110,29 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 					pulledOnce = true;
 					lastPullNanos = now;
 				} else if (due) {
-					gitControl.pullFromRepo();
+					gitControl.fetchFromRepo();
 					pulledOnce = true;
 					lastPullNanos = now;
 				}
 
-				gitControl.branch(branch);
-				if (due)
-					gitControl.pullFromRepo();
+				// The files are read from the object database at the branch tip, so the shared working checkout is never switched or read.
+				readFiles(gitControl, fileDefaultStr, fileProjectStr);
 			}
-
-			readFiles(root, fileDefaultStr, fileProjectStr);
 		}
 	}
 
-	private void readFiles(File root, String fileDefaultStr, String fileProjectStr) throws IOException {
-		// Resolve the config file names under the checkout root through the shared boundary check
-		// so a crafted project name cannot escape the repo directory (empty = file absent).
-		var fileDefault = resolveSafely(root, fileDefaultStr).orElse(null);
-		if (fileDefault != null) {
-			var lines = new String(Files.readAllBytes(fileDefault.toPath()));
+	private void readFiles(GitControl gitControl, String fileDefaultStr, String fileProjectStr) throws IOException {
+		var lines = gitControl.readBlob(branch, fileDefaultStr, MAX_CONFIG_FILE_BYTES);
+		if (lines != null)
 			configs.put(APPLICATION, new ConfigItem(lines));
-		}
 
-		var fileProject = resolveSafely(root, fileProjectStr).orElse(null);
-		if (fileProject != null) {
-			var linesProject = new String(Files.readAllBytes(fileProject.toPath()));
+		var linesProject = gitControl.readBlob(branch, fileProjectStr, MAX_CONFIG_FILE_BYTES);
+		if (linesProject != null)
 			configs.put(PROJECT, new ConfigItem(linesProject));
-		}
+	}
+
+	static long clampPullInterval(long seconds) {
+		return Math.max(seconds, MIN_PULL_INTERVAL_SECONDS);
 	}
 
 	/** {@inheritDoc} */
@@ -144,10 +141,9 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 		return Map.copyOf(configs);
 	}
 
-	// Project becomes a file name, so no separators at all.  Branch is only passed to git as a ref name, so
-	// legitimate names such as "feature/foo" are allowed, but '..', backslash and NUL are not.
-	private static void validate(String name, String value, boolean allowSlash) {
-		if (value == null || value.isEmpty() || value.contains("\\") || value.contains("..") || value.indexOf('\0') >= 0 || (! allowSlash && value.contains("/")))
-			throw new IllegalArgumentException("Invalid " + name + " value.");
+	// Project becomes a file name, so no separators at all.
+	private static void validateProject(String value) {
+		if (value == null || value.isEmpty() || value.startsWith("-") || value.contains("\\") || value.contains("..") || value.indexOf('\0') >= 0 || value.contains("/"))
+			throw new IllegalArgumentException("Invalid project value.");
 	}
 }

@@ -216,4 +216,46 @@ class MarshalledConfigAnnotation_Test extends TestBase {
 		check("", bc.getSwaps());
 		check(null, bc.getDefaultTimeZone());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// classNameAllow
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@MarshalledConfig(classNameAllow="java.util.Date, com.example.model.")
+	static class G {}
+
+	@MarshalledConfig(classNameAllow="java.util.Date,java.lang.Thread$")
+	static class G2 {}
+
+	private static MarshallingContext ctxOf(Class<?> c) {
+		var al = AnnotationWorkList.of(sr, rstream(ClassInfo.of(c).getAnnotations()));
+		return JsonSerializer.create().apply(al).build().getMarshallingContext();
+	}
+
+	@Test void g01_classNameAllow_allowedNameResolves() {
+		var bc = ctxOf(G.class);
+		assertTrue(bc.isClassNameAllowed("java.util.Date"));
+		assertTrue(bc.isClassNameAllowed("java.util.Date.Inner"));
+		assertTrue(bc.isClassNameAllowed("com.example.model.Person"));
+		assertEquals(Date.class, bc.getBasicConverter().to("java.util.Date", Class.class));
+	}
+
+	@Test void g02_classNameAllow_disallowedNameRefused() {
+		var bc = ctxOf(G.class);
+		assertFalse(bc.isClassNameAllowed("java.util.DateX"));
+		assertFalse(bc.isClassNameAllowed("java.lang.String"));
+		assertThrows(Exception.class, () -> bc.getBasicConverter().to("java.lang.String", Class.class));
+	}
+
+	@Test void g03_classNameAllow_prefixEntries() {
+		var bc = ctxOf(G2.class);
+		assertTrue(bc.isClassNameAllowed("java.lang.Thread$State"));
+		assertFalse(bc.isClassNameAllowed("java.lang.Thread"));
+	}
+
+	@Test void g04_classNameAllow_emptyLeavesNoGuard() {
+		var bc = ctxOf(B.class);
+		assertTrue(bc.isClassNameAllowed("java.lang.String"));
+		assertNull(bc.getBasicConverter().getClassNameGuard());
+	}
 }

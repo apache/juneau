@@ -20,6 +20,7 @@ import java.awt.image.*;
 import java.io.*;
 
 import javax.imageio.*;
+import javax.imageio.stream.*;
 
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
@@ -38,6 +39,12 @@ import org.apache.juneau.marshall.parser.*;
  */
 public class PetPhotoParser extends InputStreamParser {
 
+	/** The largest accepted photo, in pixels (width times height). */
+	public static final long MAX_PIXELS = 16L * 1024 * 1024;
+
+	/** The largest accepted photo width or height, in pixels. */
+	public static final int MAX_DIMENSION = 8192;
+
 	/**
 	 * Constructor with default settings (consumes image/png, image/jpeg and image/jpg).
 	 */
@@ -55,8 +62,8 @@ public class PetPhotoParser extends InputStreamParser {
 	public <T> T doRead(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		try (var is = pipe.getInputStream()) {
 			BufferedImage image;
-			try {
-				image = ImageIO.read(is);
+			try (var iis = ImageIO.createImageInputStream(is)) {
+				image = iis == null ? null : read(session, iis);
 			} catch (IIOException e) {
 				// Corrupt data that looks like a supported image.  Unchecked decoder failures are already wrapped
 				// as ParseException by ParserSession.readInner, so only IIOException needs handling here.
@@ -65,6 +72,23 @@ public class PetPhotoParser extends InputStreamParser {
 			if (image == null)
 				throw new ParseException(session, "Unsupported or unreadable image data");
 			return (T)image;
+		}
+	}
+
+	// Reads the declared dimensions from the image header and refuses an oversized image before it is decoded.
+	private static BufferedImage read(ParserSession session, ImageInputStream iis) throws IOException, ParseException {
+		var readers = ImageIO.getImageReaders(iis);
+		if (! readers.hasNext())
+			return null;
+		var reader = readers.next();
+		try {
+			reader.setInput(iis, true, true);
+			long w = reader.getWidth(0), h = reader.getHeight(0);
+			if (w > MAX_DIMENSION || h > MAX_DIMENSION || w * h > MAX_PIXELS)
+				throw new ParseException(session, "Image dimensions exceed the {0} pixel limit", MAX_PIXELS);
+			return reader.read(0);
+		} finally {
+			reader.dispose();
 		}
 	}
 }

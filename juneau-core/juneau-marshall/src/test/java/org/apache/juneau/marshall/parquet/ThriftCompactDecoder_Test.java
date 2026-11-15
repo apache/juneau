@@ -19,6 +19,8 @@ package org.apache.juneau.marshall.parquet;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.nio.charset.*;
+import java.util.*;
 
 import org.junit.jupiter.api.*;
 
@@ -479,7 +481,7 @@ class ThriftCompactDecoder_Test {
 	}
 
 	@Test void p06_readString() throws IOException {
-		var hello = "hello".getBytes(java.nio.charset.StandardCharsets.UTF_8);
+		var hello = "hello".getBytes(StandardCharsets.UTF_8);
 		assertEquals("hello", new ThriftCompactDecoder(concat(varint(hello.length), hello)).readString());
 	}
 
@@ -515,5 +517,11 @@ class ThriftCompactDecoder_Test {
 		var fh = d.readFieldHeader();
 		assertFalse(fh.isStop);
 		assertEquals(1, fh.fieldId);
+	}
+
+	@Test void z01_skipField_deepNestingRejected() {
+		var data = new byte[500];
+		Arrays.fill(data, (byte)((1 << 4) | ThriftCompactEncoder.LIST));
+		assertThrows(IOException.class, () -> dec(data).skipField(ThriftCompactEncoder.LIST));
 	}
 }

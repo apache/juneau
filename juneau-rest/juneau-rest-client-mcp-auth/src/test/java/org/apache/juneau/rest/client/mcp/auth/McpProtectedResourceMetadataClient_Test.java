@@ -150,7 +150,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 
 	@Test void c02_issuerMismatchRejected() {
 		// AS metadata advertises a different issuer than requested -> RFC 8414 issuer check fails.
-		issuerInDoc = "https://evil.example.com";
+		issuerInDoc = "https://other.example.com";
 		var client = local().build();
 		var prm = client.parse(prmJson(), null);
 		assertThrows(McpAuthException.class, () -> client.discoverAuthorizationServer(prm));
@@ -304,5 +304,36 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 		var client = McpProtectedResourceMetadataClient.create().expectedResource(URI.create(base())).build();
 		var prm = client.parse(prmJson(), null);
 		assertThrows(McpAuthException.class, () -> client.discoverAuthorizationServer(prm));
+	}
+
+	@Test void g01_nonCanonicalNumericHostRejected() {
+		var client = McpProtectedResourceMetadataClient.create().expectedResource(URI.create("https://mcp.example.com")).build();
+		for (var h : new String[]{"127.1", "2130706433", "0x7f000001"}) {
+			var url = URI.create("https://" + h + "/.well-known/oauth-protected-resource");
+			assertThrows(McpAuthException.class, () -> client.fetch(url), h);
+		}
+	}
+
+	@Test void g02_trailingDotAndLocalhostSubdomainRejected() {
+		var client = McpProtectedResourceMetadataClient.create().expectedResource(URI.create("https://mcp.example.com")).build();
+		assertThrows(McpAuthException.class, () -> client.fetch(URI.create("https://mcp.example.com./prm")));
+		assertThrows(McpAuthException.class, () -> client.fetch(URI.create("https://foo.localhost/prm")));
+	}
+
+	@Test void g03_redirectResponseIsNotFollowed() {
+		var hits = new AtomicInteger();
+		server.createContext("/moved", ex -> {
+			ex.getResponseHeaders().add("Location", base() + "/target");
+			ex.sendResponseHeaders(302, -1);
+			ex.close();
+		});
+		server.createContext("/target", ex -> {
+			hits.incrementAndGet();
+			respond(ex, prmJson());
+		});
+		var client = local().build();
+		var e = assertThrows(McpAuthException.class, () -> client.fetch(URI.create(base() + "/moved")));
+		assertTrue(e.getMessage().contains("302"), e::getMessage);
+		assertEquals(0, hits.get());
 	}
 }

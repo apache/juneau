@@ -26,6 +26,7 @@ import org.apache.http.*;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
+import org.apache.juneau.http.RestDebugBodyGate;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.mock.classic.*;
@@ -55,6 +56,9 @@ import org.junit.jupiter.api.*;
  * faithfully throws "Stream closed" after close.
  */
 class RestClient_Logging_StreamClosed_Test extends TestBase {
+
+	@BeforeEach void enableBodyDump() { RestDebugBodyGate.setAllowDumpBodiesForTest(Boolean.TRUE); }
+	@AfterEach void resetBodyDump() { RestDebugBodyGate.setAllowDumpBodiesForTest(null); }
 
 	@Rest
 	public static class A extends BasicRestResource {

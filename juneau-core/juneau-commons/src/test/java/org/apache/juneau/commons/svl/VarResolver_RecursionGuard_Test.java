@@ -16,7 +16,12 @@
  */
 package org.apache.juneau.commons.svl;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.apache.juneau.commons.TestBase;
 import org.junit.jupiter.api.*;
@@ -107,5 +112,46 @@ class VarResolver_RecursionGuard_Test extends TestBase {
 	@Test void a07_copyKeepsMaxRecursionDepth() {
 		var r = VarResolver.create().defaultVars().maxRecursionDepth(8).build();
 		assertEquals(8, r.copy().build().maxRecursionDepth);
+	}
+
+	/** A var that re-enters the same session's top-level resolve with its own key, like a self-referencing lookup. */
+	public static class ReentrantVar extends SimpleVar {
+		public ReentrantVar() {
+			super("RE");
+		}
+
+		@Override
+		public String resolve(VarResolverSession s, String arg) {
+			return s.resolve("${RE:" + arg + "}");
+		}
+	}
+
+	@Test void z01_reentrantResolveIsBounded() {
+		var session = VarResolver.create().vars(ReentrantVar.class).build().createSession();
+		assertThrows(VarResolverException.class, () -> session.resolve("${RE:a}"));
+		// The session remains usable afterwards.
+		assertEquals("plain", session.resolve("plain"));
+	}
+
+	@Test void z02_sharedSessionAcrossThreads() throws Exception {
+		var session = VarResolver.create().vars(PropVar.class).build().createSession();
+		System.setProperty("z02.prop", "v");
+		try {
+			var pool = Executors.newFixedThreadPool(8);
+			var futures = new ArrayList<Future<Integer>>();
+			for (var t = 0; t < 8; t++)
+				futures.add(pool.submit(() -> {
+					var n = 0;
+					for (var i = 0; i < 2000; i++)
+						if (eq("v", session.resolve("${PV:z02.prop}")))
+							n++;
+					return n;
+				}));
+			for (var f : futures)
+				assertEquals(2000, f.get());
+			pool.shutdown();
+		} finally {
+			System.clearProperty("z02.prop");
+		}
 	}
 }

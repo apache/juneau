@@ -16,17 +16,20 @@
  */
 package org.apache.juneau.petstore.console.ops;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.console.test.PageContractAssert.*;
 import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
 import java.util.*;
+import java.util.ArrayList;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.dto.*;
@@ -86,7 +89,7 @@ class JobsRest_Test extends TestBase {
 		var deadline = System.nanoTime() + HARD_TIMEOUT.plusSeconds(10).toNanos();
 		while (System.nanoTime() < deadline) {
 			var j = new JsonMap(c.get("/console/ops/jobs/" + id).run().assertStatus(200).getContent().asString());
-			if (! "RUNNING".equals(j.getString("state")))
+			if (neq("RUNNING", j.getString("state")))
 				return j;
 			Thread.sleep(20);
 		}
@@ -146,7 +149,7 @@ class JobsRest_Test extends TestBase {
 		var second = await(c, submit(c, "k-a06b").getString("jobId"));
 		assertBean(first, "state", "DONE");
 		assertBean(second, "state", "DONE");
-		var names = new java.util.ArrayList<String>();
+		var names = new ArrayList<String>();
 		for (var pet : new JsonList(c.get("/petstore/pets").run().assertStatus(200).getContent().asString()).elements(JsonMap.class))
 			if (pet.getString("name").startsWith("DOG #") || pet.getString("name").startsWith("CAT #"))
 				names.add(pet.getString("name"));
@@ -239,6 +242,17 @@ class JobsRest_Test extends TestBase {
 		c.get("/console/ops/jobs/juneau-terminal/" + id + "-file/bytes").run().assertStatus(200).assertHeader("Term-Rows").is(String.valueOf(GroomRuns.ROWS));
 		c.get("/console/ops/jobs/juneau-terminal/" + id + "/raw").run().assertStatus(200).assertHeader("Content-Disposition").isContains("attachment");
 		c.get("/console/ops/jobs/juneau-terminal/nope/bytes").run().assertStatus(404);
+	}
+
+	@Test void d06_groomNeedsTheTokenWhenSecure() throws Exception {
+		Settings.get().setLocal(ConsoleWrites.SECURE_PROPERTY, "true");
+		try {
+			var c = client();
+			c.post("/console/ops/jobs/groom", "{\"pet\":\"Rex\"}").contentType("application/json").run().assertStatus(401);
+			c.post("/console/ops/jobs/groom", "{\"pet\":\"Rex\"}").contentType("application/json").header("Authorization", "Bearer petstore-admin").run().assertStatus(200);
+		} finally {
+			Settings.get().unsetLocal(ConsoleWrites.SECURE_PROPERTY);
+		}
 	}
 
 	@Test void d05_groomFormHasPetAndVerbose() throws Exception {
@@ -387,7 +401,7 @@ class JobsRest_Test extends TestBase {
 
 	private static long available(MockRestClient c, String species) throws Exception {
 		for (var row : new JsonList(c.get("/console/ops/jobs/species").run().assertStatus(200).getContent().asString()).elements(JsonMap.class))
-			if (species.equals(row.getString("id")))
+			if (eq(species, row.getString("id")))
 				return row.getLong("available");
 		return fail("No species row '" + species + "'");
 	}
@@ -596,7 +610,7 @@ class JobsRest_Test extends TestBase {
 	private static void awaitGroomDone(MockRestClient c) throws Exception {
 		var id = groom(c, "{\"pet\":\"Rex\"}").getMap("row").getString("id");
 		var deadline = System.nanoTime() + Duration.ofSeconds(5).toNanos();
-		while (! "DONE".equals(groomState(c, id)) && System.nanoTime() < deadline)
+		while (neq("DONE", groomState(c, id)) && System.nanoTime() < deadline)
 			Thread.sleep(20);
 		assertString("DONE", groomState(c, id));
 	}

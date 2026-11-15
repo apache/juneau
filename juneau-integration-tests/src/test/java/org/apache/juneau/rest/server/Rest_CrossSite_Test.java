@@ -80,15 +80,31 @@ class Rest_CrossSite_Test extends TestBase {
 	}
 
 	@Test void a09_unlistedOrigin_refused() throws Exception {
-		c.post("/x", "").header("Host", "internal").header("Origin", "https://evil.example").run().assertStatus(403);
+		c.post("/x", "").header("Host", "internal").header("Origin", "https://other.example").run().assertStatus(403);
 	}
 
 	@Test void a10_unlistedForwardedHost_refused() throws Exception {
-		c.post("/x", "").header("Host", "internal").header("X-Forwarded-Host", "evil.example").header("Origin", "https://evil.example").run().assertStatus(403);
-		a.post("/x", "").header("Host", "internal").header("X-Forwarded-Host", "evil.example").header("Origin", "https://evil.example").run().assertStatus(403);
+		c.post("/x", "").header("Host", "internal").header("X-Forwarded-Host", "other.example").header("Origin", "https://other.example").run().assertStatus(403);
+		a.post("/x", "").header("Host", "internal").header("X-Forwarded-Host", "other.example").header("Origin", "https://other.example").run().assertStatus(403);
 	}
 
 	@Test void a11_listedForwardedHost_passes() throws Exception {
 		c.post("/x", "").header("Host", "internal").header("X-Forwarded-Host", "pub.example").header("Origin", "https://pub.example").run().assertStatus(200);
+	}
+
+	@Test void a12_sameSiteWithoutOrigin_refused() throws Exception {
+		a.post("/x", "").header("Sec-Fetch-Site", "same-site").run().assertStatus(403);
+	}
+
+	@Test void a13_sameSiteWithMismatchedOrigin_refused() throws Exception {
+		a.post("/x", "").header("Sec-Fetch-Site", "same-site").header("Host", "api.example.com").header("Origin", "https://sibling.example.com").run().assertStatus(403);
+	}
+
+	@Test void a14_sameSiteWithMatchingOrigin_passes() throws Exception {
+		a.post("/x", "").header("Sec-Fetch-Site", "same-site").header("Host", "api.example.com").header("Origin", "https://api.example.com").run().assertStatus(200);
+	}
+
+	@Test void a15_sameSiteWithListedOrigin_passes() throws Exception {
+		c.post("/x", "").header("Sec-Fetch-Site", "same-site").header("Host", "internal").header("Origin", "https://app.example").run().assertStatus(200);
 	}
 }

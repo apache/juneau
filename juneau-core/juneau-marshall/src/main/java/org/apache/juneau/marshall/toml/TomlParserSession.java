@@ -204,6 +204,15 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 	}
 
 	private Object readValue(TomlTokenizer t) throws IOException, ParseException {
+		enterParseDepth();
+		try {
+			return readValueImpl(t);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	private Object readValueImpl(TomlTokenizer t) throws IOException, ParseException {
 		int c = t.peek();
 		if (c == '"') {
 			if (isTripleQuote(t, '"'))
@@ -474,7 +483,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 		if (val == null)
 			return null;
 		String nv = ctx != null ? ctx.getNullValue() : null;
-		if (val instanceof String val2 && nv != null && val2.equals(nv))
+		if (val instanceof String val2 && nv != null && eq(val2, nv))
 			return null;
 		if (val instanceof Map val2) {
 			if (JsonMap.class.isAssignableFrom(targetType.inner()))

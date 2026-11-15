@@ -97,6 +97,13 @@ class PolicyEnforcedRedirects_Test {
 		assertList(headerNames(hops.last()), "Accept", "X-Trace");
 	}
 
+	@Test void a01b_callerSetHostHeader_isNotReplayedToAnotherOrigin() throws Exception {
+		var initial = TransportRequest.builder().method("GET").uri("http://a.example.com/start").remoteUrlPolicy(true, false)
+			.header("Host", "a.example.com").header("Accept", "text/plain").build();
+		var hops = run(initial, "http://b.example.com/echo");
+		assertList(headerNames(hops.last()), "Accept");
+	}
+
 	@Test void a02_differentPort_dropsCredentialHeaders() throws Exception {
 		var hops = run(request("http://a.example.com/start"), "http://a.example.com:8081/echo");
 		assertList(headerNames(hops.last()), "Accept", "X-Trace");

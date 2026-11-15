@@ -736,7 +736,7 @@
 		const url = substituteRowActionEndpoint(action.endpoint, rowData);
 		if (hasResidualToken(url))
 			return { refuse: true, reason: "unresolved-endpoint" };
-		if (hasDotDotSegment(url))
+		if (hasDotDotSegment(url) || !isSameOriginUrl(url.replace(/^servlet:(?=\/)/, "")))
 			return { refuse: true, reason: "unsafe-endpoint" };
 		// Accept: the typed action result is read as JSON, and a server whose default rendering is HTML would otherwise
 		// answer with a page that parses as no result at all - a bare success with no outcome shown.  The low-weight

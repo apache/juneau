@@ -192,6 +192,7 @@ public final class SecuredExampleClient {
 	 * &rarr; RFC 8414 &rarr; {@code token_endpoint} chain a compliant client walks end-to-end.
 	 */
 	private static URI discoverTokenEndpoint(McpProtectedResourceMetadata prm) {
+		// allowPrivateUrls is on only because the demo server runs on localhost.
 		var as = McpProtectedResourceMetadataClient.create().allowPrivateUrls(true).skipResourceValidation(true).build().discoverAuthorizationServer(prm);
 		System.out.println("   issuer:         " + as.issuer());
 		System.out.println("   token_endpoint: " + as.tokenEndpoint());

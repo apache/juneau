@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Function;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
@@ -280,7 +281,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 		if (existing == null)
 			return value;
 		var resolver = new HoconResolver(root);
-		java.util.function.Function<String,HoconValue> lookup = p -> p.equals(pathStr) ? existing : resolver.lookup(p);
+		Function<String,HoconValue> lookup = p -> eq(p, pathStr) ? existing : resolver.lookup(p);
 		return resolver.resolveConcatWithLookup(concat, lookup);
 	}
 
@@ -326,6 +327,16 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 	}
 
 	private HoconValue.HoconObject readObject(HoconTokenizer t, HoconValue.HoconObject root, String[] pathPrefix)
+			throws IOException, ParseException {
+		enterParseDepth();
+		try {
+			return readObjectImpl(t, root, pathPrefix);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	private HoconValue.HoconObject readObjectImpl(HoconTokenizer t, HoconValue.HoconObject root, String[] pathPrefix)
 			throws IOException, ParseException {
 		var obj = new HoconValue.HoconObject();
 		var effectiveRoot = or(root, obj);
@@ -383,6 +394,15 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 	}
 
 	private HoconValue.HoconArray readArray(HoconTokenizer t) throws IOException, ParseException {
+		enterParseDepth();
+		try {
+			return readArrayImpl(t);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	private HoconValue.HoconArray readArrayImpl(HoconTokenizer t) throws IOException, ParseException {
 		var arr = new HoconValue.HoconArray();
 		t.skipWhitespaceAndComments();
 		while (t.peek().type() != HoconTokenizer.TokenType.RBRACKET && t.peek().type() != HoconTokenizer.TokenType.EOF) {
@@ -412,6 +432,15 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 	}
 
 	private Object hoconToMap(HoconValue val, ClassMeta<?> type) throws ParseException {
+		enterParseDepth();
+		try {
+			return hoconToMapImpl(val, type);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	private Object hoconToMapImpl(HoconValue val, ClassMeta<?> type) throws ParseException {
 		if (val == null)
 			return null;
 		// STRING values targeting byte[] consult the configured BinaryFormat's variant BinarySwap
@@ -449,7 +478,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 				for (var e : obj.getMembers().entrySet()) {
 					var key = e.getKey();
 					ClassMeta<?> childType = object();
-					if (beanMeta != null && key != null && !key.equals(getBeanTypePropertyName(type))) {
+					if (beanMeta != null && key != null && neq(key, getBeanTypePropertyName(type))) {
 						var pMeta = beanMeta.getPropertyMeta(key);
 						if (pMeta != null) {
 							var cm = (ClassMeta<?>) pMeta.getBeanInfo();

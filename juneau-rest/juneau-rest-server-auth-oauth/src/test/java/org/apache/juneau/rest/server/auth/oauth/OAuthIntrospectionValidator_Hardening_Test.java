@@ -104,6 +104,32 @@ class OAuthIntrospectionValidator_Hardening_Test extends TestBase {
 		assertEquals("a", v.validate("t1").getName());
 	}
 
+	@Test void e01_tokenType_refreshOrIdTokenRejected() {
+		var v = builder().anyAudience().build();
+		nextResponse = "{\"active\":true,\"sub\":\"a\",\"token_type\":\"refresh_token\"}";
+		assertThrows(AuthenticationException.class, () -> v.validate("r1"));
+		nextResponse = "{\"active\":true,\"sub\":\"a\",\"token_type\":\"id_token\"}";
+		assertThrows(AuthenticationException.class, () -> v.validate("r2"));
+	}
+
+	@Test void e02_tokenType_bearerAndAbsentAccepted() throws Exception {
+		var v = builder().anyAudience().build();
+		nextResponse = "{\"active\":true,\"sub\":\"a\",\"token_type\":\"bearer\"}";
+		assertEquals("a", v.validate("b1").getName());
+		nextResponse = "{\"active\":true,\"sub\":\"a\",\"token_type\":\"access_token\"}";
+		assertEquals("a", v.validate("b2").getName());
+		nextResponse = "{\"active\":true,\"sub\":\"a\"}";
+		assertEquals("a", v.validate("b3").getName());
+	}
+
+	@Test void e03_requireTokenType_absentRejected() {
+		var v = builder().anyAudience().requireTokenType(true).build();
+		nextResponse = "{\"active\":true,\"sub\":\"a\"}";
+		assertThrows(AuthenticationException.class, () -> v.validate("n1"));
+		nextResponse = "{\"active\":true,\"sub\":\"a\",\"token_type\":\"Bearer\"}";
+		assertDoesNotThrow(() -> v.validate("n2"));
+	}
+
 	@Test void c01_timeout_slowEndpointFailsFast() {
 		delayMs = 3000;
 		var v = builder().anyAudience().httpTimeout(Duration.ofMillis(300)).build();

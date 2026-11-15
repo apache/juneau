@@ -32,7 +32,7 @@ import org.apache.juneau.rest.server.servlet.*;
  *
  * <p>
  * Reads are {@code GET}s.  Writes are {@code PUT}s only, sent by a REST client or from the command line; there is no
- * HTML edit form, because a browser form cannot carry the header-borne token a CSRF boundary requires.  A {@code PUT}
+ * HTML edit form, because a browser form cannot carry the header-borne token a request-token boundary requires.  A {@code PUT}
  * cannot be sent cross-site without a CORS preflight, so a boundary in front of this resource (see
  * {@link AdminBoundary}) admits it without a token:
  * <p class='bcode'>
@@ -61,8 +61,7 @@ import org.apache.juneau.rest.server.servlet.*;
 		"up: request:/..",
 		"api: servlet:/api",
 		"stats: servlet:/stats"
-	},
-	resolveBodyVars="true"
+	}
 )
 @SuppressWarnings({
 	"java:S112" // throws Exception intentional - callback/lifecycle method

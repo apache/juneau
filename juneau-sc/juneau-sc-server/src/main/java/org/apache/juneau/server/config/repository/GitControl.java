@@ -16,7 +16,10 @@
  */
 package org.apache.juneau.server.config.repository;
 
+import static org.apache.juneau.commons.utils.IoUtils.readCapped;
+
 import java.io.*;
+import java.nio.charset.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.logging.*;
@@ -25,7 +28,9 @@ import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.internal.storage.file.*;
 import org.eclipse.jgit.lib.*;
+import org.eclipse.jgit.revwalk.*;
 import org.eclipse.jgit.transport.*;
+import org.eclipse.jgit.treewalk.*;
 
 
 /**
@@ -183,9 +188,11 @@ public class GitControl implements AutoCloseable {
 	 * Checks out the specified branch from origin.
 	 *
 	 * @param name Branch name.  Must not be <jk>null</jk>.
+	 * @throws IllegalArgumentException If the branch name is not valid (leading '-', <c>HEAD</c>, or characters outside <c>[A-Za-z0-9._/-]</c>).
 	 * @throws GitAPIException If checkout fails.
 	 */
 	public void branch(String name) throws GitAPIException {
+		BranchNames.validate(name);
 		git.checkout().setName(name).setStartPoint("origin/".concat(name)).call();
 	}
 
@@ -221,6 +228,55 @@ public class GitControl implements AutoCloseable {
 	 */
 	public void pullFromRepo() throws GitAPIException {
 		git.pull().call();
+	}
+
+	/**
+	 * Fetches the latest changes from the remote repository without touching the working tree or the current branch.
+	 *
+	 * @throws GitAPIException If fetch fails.
+	 */
+	public void fetchFromRepo() throws GitAPIException {
+		git.fetch().call();
+	}
+
+	/**
+	 * Reads a file's content from the object database at the tip of the specified branch.
+	 *
+	 * <p>
+	 * The remote-tracking ref <c>origin/<jv>branch</jv></c> is preferred, falling back to the local branch.  The
+	 * working tree and the checked-out branch are not consulted.  The size limit is applied while the blob stream is
+	 * read, so an oversized blob is never loaded whole.
+	 *
+	 * @param branch Branch name.  Must satisfy the same validation as {@link #branch(String)}.
+	 * @param path Path of the file relative to the repository root.
+	 * @param maxBytes Maximum number of bytes allowed.
+	 * @return The file content (UTF-8), or <jk>null</jk> if the file does not exist at that commit.
+	 * @throws IllegalArgumentException If the branch name is not valid.
+	 * @throws IOException If the branch does not exist, the blob exceeds <jv>maxBytes</jv>, or it cannot be read.
+	 */
+	public String readBlob(String branch, String path, long maxBytes) throws IOException {
+		BranchNames.validate(branch);
+		var id = localRepo.resolve("refs/remotes/origin/".concat(branch));
+		if (id == null)
+			id = localRepo.resolve("refs/heads/".concat(branch));
+		if (id == null)
+			throw new IOException("Branch not found.");
+		try (var reader = localRepo.newObjectReader(); var walk = new RevWalk(reader)) {
+			var tree = walk.parseCommit(id).getTree();
+			var entry = TreeWalk.forPath(reader, path, tree);
+			if (entry == null || entry.isSubtree())
+				return null;
+			var loader = reader.open(entry.getObjectId(0));
+			if (loader.getSize() > maxBytes)
+				throw tooLarge(maxBytes);
+			try (var in = loader.openStream()) {
+				return readCapped(in, maxBytes, StandardCharsets.UTF_8, () -> tooLarge(maxBytes));
+			}
+		}
+	}
+
+	private static IOException tooLarge(long maxBytes) {
+		return new IOException("Configuration file exceeds the maximum allowed size of " + maxBytes + " bytes.");
 	}
 
 	/**

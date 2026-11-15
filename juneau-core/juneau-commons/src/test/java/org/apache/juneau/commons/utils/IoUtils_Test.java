@@ -945,6 +945,64 @@ class IoUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// readCapped(InputStream, long, Charset[, Supplier])
+	//====================================================================================================
+	@Test
+	void a042a_readCapped_InputStream() throws IOException {
+		var utf8 = StandardCharsets.UTF_8;
+		assertEquals("abc", readCapped(new ByteArrayInputStream("abc".getBytes(utf8)), 3, utf8));
+		assertEquals("", readCapped(new ByteArrayInputStream(new byte[0]), 0, utf8));
+		var e = assertThrows(IOException.class, () -> readCapped(new ByteArrayInputStream("abcd".getBytes(utf8)), 3, utf8));
+		assertTrue(e.getMessage().contains("3 bytes"), e.getMessage());
+		assertThrows(IOException.class, () -> readCapped(new ByteArrayInputStream("a".getBytes(utf8)), 0, utf8));
+		assertThrows(IllegalArgumentException.class, () -> readCapped(new ByteArrayInputStream(new byte[0]), -1, utf8));
+		assertThrows(IllegalArgumentException.class, () -> readCapped((InputStream)null, 3, utf8));
+		assertThrows(IllegalArgumentException.class, () -> readCapped(new ByteArrayInputStream(new byte[0]), 3, null));
+	}
+
+	@Test
+	void a042b_readCapped_InputStream_Supplier() throws Exception {
+		var utf8 = StandardCharsets.UTF_8;
+		assertEquals("ab", readCapped(new ByteArrayInputStream("ab".getBytes(utf8)), 2, utf8, () -> new IllegalStateException("over")));
+		var e = assertThrows(IllegalStateException.class, () -> readCapped(new ByteArrayInputStream("abc".getBytes(utf8)), 2, utf8, () -> new IllegalStateException("over")));
+		assertEquals("over", e.getMessage());
+		assertThrows(IllegalArgumentException.class, () -> readCapped(new ByteArrayInputStream(new byte[0]), 2, utf8, null));
+	}
+
+	//====================================================================================================
+	// readCapped(Path, long, Charset, OpenOption...)
+	//====================================================================================================
+	@Test
+	void a042c_readCapped_Path() throws IOException {
+		var utf8 = StandardCharsets.UTF_8;
+		var dir = Files.createTempDirectory("readCapped");
+		try {
+			var file = dir.resolve("f.txt");
+			Files.writeString(file, "abc", utf8);
+			assertEquals("abc", readCapped(file, 3, utf8));
+			var e = assertThrows(IOException.class, () -> readCapped(file, 2, utf8));
+			assertTrue(e.getMessage().contains("f.txt"), e.getMessage());
+			assertThrows(IllegalArgumentException.class, () -> readCapped((Path)null, 2, utf8));
+			assertThrows(NoSuchFileException.class, () -> readCapped(dir.resolve("missing"), 2, utf8));
+
+			var link = dir.resolve("link.txt");
+			try {
+				Files.createSymbolicLink(link, file);
+			} catch (UnsupportedOperationException | IOException x) {
+				return;  // Symbolic links not available on this file system.
+			}
+			assertEquals("abc", readCapped(link, 3, utf8));
+			assertThrows(IOException.class, () -> readCapped(link, 3, utf8, LinkOption.NOFOLLOW_LINKS));
+		} finally {
+			try (var s = Files.list(dir)) {
+				for (var p : (Iterable<Path>)s::iterator)
+					Files.deleteIfExists(p);
+			}
+			Files.deleteIfExists(dir);
+		}
+	}
+
+	//====================================================================================================
 	// toBufferedReader(Reader)
 	//====================================================================================================
 	@Test

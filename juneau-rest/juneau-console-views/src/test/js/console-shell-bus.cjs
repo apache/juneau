@@ -560,7 +560,7 @@ async function main() {
 		const fakeFetch = url => new Promise(res => gates.push(() => res({ ok: true, text: () => Promise.resolve('<p>' + url + '</p>') })));
 		const r = await page({
 			cards: [{ id: 'src', type: 'grid' },
-				{ id: 'b', type: 'html', bare: true, src: '/f/{x}', subscribes: [{ topic: 'selection:src', as: 'params', map: { x: 'ids.0' } }] },
+				{ id: 'b', type: 'html', bare: true, sanitize: false, src: '/f/{x}', subscribes: [{ topic: 'selection:src', as: 'params', map: { x: 'ids.0' } }] },
 				{ id: 'tail', type: 'rec' }]
 		}, { queue: [['grid', recorder([], { implicit: card => ['selection:' + card.id] })], ['rec', recorder([])]],
 			beforeShell: sb => { sb.fetch = fakeFetch; } });
@@ -589,7 +589,7 @@ async function main() {
 		const gates = [];
 		const fakeFetch = url => new Promise(res => gates.push(() => res({ ok: true, text: () => Promise.resolve('<p>' + url + '</p>') })));
 		const r = await page({
-			cards: [{ id: 'b', type: 'html', bare: true, src: '/f/static' }, { id: 'tail', type: 'rec' }]
+			cards: [{ id: 'b', type: 'html', bare: true, sanitize: false, src: '/f/static' }, { id: 'tail', type: 'rec' }]
 		}, { queue: [['rec', recorder([])]], beforeShell: sb => { sb.fetch = fakeFetch; } });
 		const main = r.doc.querySelector('.jc-main');
 		const texts = () => main.childNodes.filter(n => n.tagName === 'P').map(n => n.textContent);
@@ -612,7 +612,7 @@ async function main() {
 		const fakeFetch = url => { fetched.push(url); return Promise.resolve({ ok: true, text: () => Promise.resolve('<p>' + url + '</p>') }); };
 		const r = await page({
 			cards: [{ id: 'src', type: 'grid' },
-				{ id: 'b', type: 'html', bare: true, src: '/f/{x}', subscribes: [{ topic: 'selection:src', as: 'params', map: { x: 'ids.0' } }] }]
+				{ id: 'b', type: 'html', bare: true, sanitize: false, src: '/f/{x}', subscribes: [{ topic: 'selection:src', as: 'params', map: { x: 'ids.0' } }] }]
 		}, { queue: [['grid', recorder([], { implicit: card => ['selection:' + card.id] })]], beforeShell: sb => { sb.fetch = fakeFetch; } });
 		await tick();
 		const atMount = fetched.slice();

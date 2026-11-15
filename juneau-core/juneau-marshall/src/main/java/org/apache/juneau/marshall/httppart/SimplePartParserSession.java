@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.marshall.httppart;
 
-import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
@@ -36,6 +35,6 @@ public class SimplePartParserSession extends BaseHttpPartParserSession {
 
 	@Override /* Overridden from HttpPartParserSession */
 	public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-		return BasicConverter.INSTANCE.to(in, toType.inner());
+		return toType.basicConverter().to(in, toType.inner());
 	}
 }

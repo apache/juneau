@@ -64,6 +64,8 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	private HttpHeaderList headers;
 	private HttpBody body;
 	private Locale locale;
+	private boolean messageFromCause;
+	private boolean causeMessageHidden;
 
 	/**
 	 * Constructor with no message body.
@@ -78,12 +80,16 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	/**
 	 * Constructor with a status code and a cause.
 	 *
+	 * <p>
+	 * The message is taken from the cause, and {@link #isMessageFromCause()} returns <jk>true</jk> when the cause has a message.
+	 *
 	 * @param statusCode The HTTP status code.
 	 * @param reasonPhrase The reason phrase. May be <jk>null</jk>.
 	 * @param cause The cause. May be <jk>null</jk>.
 	 */
 	public BasicHttpException(int statusCode, String reasonPhrase, Throwable cause) {
 		this(statusCode, reasonPhrase, cause, cause != null ? cause.getMessage() : null);
+		this.messageFromCause = cause != null && cause.getMessage() != null;
 	}
 
 	/**
@@ -115,6 +121,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 		this.headers = HttpHeaderList.create();
 		var m = formatMessage(msg, args);
 		this.body = m != null ? StringBody.of(m) : null;
+		this.messageFromCause = msg == null && cause != null && cause.getMessage() != null;
 	}
 
 	private static String formatMessage(String msg, Object...args) {
@@ -141,6 +148,8 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 		this.headers = copyFrom.headers.copy();
 		this.body = copyFrom.body;
 		this.locale = copyFrom.locale;
+		this.messageFromCause = copyFrom.messageFromCause;
+		this.causeMessageHidden = copyFrom.causeMessageHidden;
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------
@@ -170,6 +179,66 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 		if (m == null)
 			m = statusLine.getReasonPhrase();
 		return m;
+	}
+
+	/**
+	 * Returns whether this exception's message was taken from its cause rather than supplied by the code that created it.
+	 *
+	 * <p>
+	 * This is <jk>true</jk> for exceptions created with a cause and no message of their own
+	 * (e.g. <c><jk>new</jk> InternalServerError(<jv>cause</jv>)</c>) when the cause has a message, and <jk>false</jk>
+	 * when a message was supplied explicitly (e.g. <c><jk>new</jk> InternalServerError(<jv>cause</jv>, <js>"Explicit %s"</js>, <jv>x</jv>)</c>).
+	 * REST servers use it to decide whether the message is written to the response body
+	 * (see the <c>showCauseMessages</c> setting on <c>RestContext</c>).
+	 *
+	 * @return <jk>true</jk> if the message came from the cause.
+	 */
+	public boolean isMessageFromCause() {
+		return messageFromCause;
+	}
+
+	/**
+	 * Marks the message of this exception as not intended for clients when it was taken from the cause.
+	 *
+	 * <p>
+	 * Does nothing unless {@link #isMessageFromCause()} is <jk>true</jk>.  Otherwise the response body is replaced with the
+	 * status reason phrase and {@link #getResponseMessage()} returns the reason phrase.  {@link #getMessage()} and the
+	 * cause chain are unchanged, so logging keeps the full detail.
+	 *
+	 * <p>
+	 * This applies to the instance directly (it is not routed through the unmodifiable-bean check), so it also works on
+	 * unmodifiable snapshots.
+	 *
+	 * @return This object.
+	 */
+	public BasicHttpException hideCauseMessage() {
+		if (messageFromCause && ! causeMessageHidden) {
+			causeMessageHidden = true;
+			var rp = statusLine.getReasonPhrase();
+			body = rp != null ? StringBody.of(rp) : null;
+		}
+		return this;
+	}
+
+	/**
+	 * Returns whether {@link #hideCauseMessage()} has taken effect on this exception.
+	 *
+	 * @return <jk>true</jk> if the cause's message is not written to the response.
+	 */
+	public boolean isCauseMessageHidden() {
+		return causeMessageHidden;
+	}
+
+	/**
+	 * Returns the message intended for the client.
+	 *
+	 * <p>
+	 * Same as {@link #getMessage()}, except that it returns the status reason phrase after {@link #hideCauseMessage()}.
+	 *
+	 * @return The client-facing message.
+	 */
+	public String getResponseMessage() {
+		return causeMessageHidden ? statusLine.getReasonPhrase() : getMessage();
 	}
 
 	/**

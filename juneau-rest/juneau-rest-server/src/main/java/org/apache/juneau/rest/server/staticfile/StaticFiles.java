@@ -92,6 +92,21 @@ public interface StaticFiles extends FileFinder {
 		}
 
 		/**
+		 * Specifies the maximum number of locales that keep their own name cache.
+		 *
+		 * <p>
+		 * The default is <c>32</c>.
+		 *
+		 * @param value The maximum number of locales.  Must not be negative.
+		 * @return This object.
+		 * @see FileFinder.Builder#maxCachedLocales(int)
+		 */
+		public Builder maxCachedLocales(int value) {
+			fileFinder.maxCachedLocales(value);
+			return this;
+		}
+
+		/**
 		 * Adds a class subpackage to the lookup paths.
 		 *
 		 * @param c The class whose package will be added to the lookup paths.  Must not be <jk>null</jk>.

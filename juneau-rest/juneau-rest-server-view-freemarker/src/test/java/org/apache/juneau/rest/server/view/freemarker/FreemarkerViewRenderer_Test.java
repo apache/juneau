@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.view.freemarker;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.response.InternalServerError;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -37,6 +38,11 @@ class FreemarkerViewRenderer_Test extends TestBase {
 	/* ---------------------------------------------------------------------------------------- *
 	 * Section A: NO_ENGINE_DIAGNOSTIC text
 	 * ---------------------------------------------------------------------------------------- */
+
+	@Test void b00_extensionGate() {
+		assertDoesNotThrow(() -> FreemarkerViewRenderer.requireAllowedExtension("a.ftlh"));
+		assertThrows(InternalServerError.class, () -> FreemarkerViewRenderer.requireAllowedExtension("a.properties"));
+	}
 
 	@Test void a01_diagnosticNamesFreemarkerCore() {
 		assertTrue(FreemarkerViewRenderer.NO_ENGINE_DIAGNOSTIC.contains("org.freemarker:freemarker"),

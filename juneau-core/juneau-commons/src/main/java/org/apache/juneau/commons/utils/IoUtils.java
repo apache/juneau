@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.apache.juneau.commons.utils.Shorts.eq;
 import static org.apache.juneau.commons.utils.Shorts.ioex;
+import static org.apache.juneau.commons.utils.Shorts.reqnn;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
@@ -555,6 +556,67 @@ public class IoUtils {
 		if (maxBytes > Integer.MAX_VALUE)
 			maxBytes = Integer.MAX_VALUE;
 		return read(in, (int)maxBytes, UTF8);
+	}
+
+	/**
+	 * Reads an input stream into a string, failing when it holds more than the specified number of bytes.
+	 *
+	 * <p>
+	 * Unlike {@link #read(InputStream, int, Charset)}, which truncates silently, this method reads at most
+	 * <c>maxBytes + 1</c> bytes and throws when the extra byte is present, so an oversized input is never loaded whole.
+	 *
+	 * @param in The input stream.  Must not be <jk>null</jk>.  The stream is not closed.
+	 * @param maxBytes The maximum number of bytes allowed.  Must not be negative.
+	 * @param cs The charset of the contents.  Must not be <jk>null</jk>.
+	 * @return The contents as a string.
+	 * @throws IOException If the input could not be read, or holds more than <c>maxBytes</c> bytes.
+	 */
+	public static String readCapped(InputStream in, long maxBytes, Charset cs) throws IOException {
+		return readCapped(in, maxBytes, cs, () -> ioex("Content exceeds the maximum allowed size of %s bytes.", maxBytes));
+	}
+
+	/**
+	 * Same as {@link #readCapped(InputStream, long, Charset)}, but throws the supplied exception when the input is
+	 * over the cap.
+	 *
+	 * @param <E> The exception type thrown when the input is over the cap.
+	 * @param in The input stream.  Must not be <jk>null</jk>.  The stream is not closed.
+	 * @param maxBytes The maximum number of bytes allowed.  Must not be negative.
+	 * @param cs The charset of the contents.  Must not be <jk>null</jk>.
+	 * @param overCap Supplies the exception thrown when the input holds more than <c>maxBytes</c> bytes.  Must not be <jk>null</jk>.
+	 * @return The contents as a string.
+	 * @throws IOException If the input could not be read.
+	 * @throws E If the input holds more than <c>maxBytes</c> bytes.
+	 */
+	public static <E extends Exception> String readCapped(InputStream in, long maxBytes, Charset cs, Supplier<E> overCap) throws IOException, E {
+		reqnn("in", in, "cs", cs, "overCap", overCap);
+		if (maxBytes < 0)
+			throw iaex("maxBytes must not be negative: %s", maxBytes);
+		var bytes = in.readNBytes((int)Math.min(maxBytes + 1, Integer.MAX_VALUE - 8L));
+		if (bytes.length > maxBytes)
+			throw overCap.get();
+		return new String(bytes, cs);
+	}
+
+	/**
+	 * Reads a file into a string, failing when it holds more than the specified number of bytes.
+	 *
+	 * <p>
+	 * The limit is applied while the file is read rather than by checking its length first, so a file that grows
+	 * between a length check and the read cannot get past it.
+	 *
+	 * @param p The file.  Must not be <jk>null</jk>.
+	 * @param maxBytes The maximum number of bytes allowed.  Must not be negative.
+	 * @param cs The charset of the contents.  Must not be <jk>null</jk>.
+	 * @param options Options for opening the file, for example {@link LinkOption#NOFOLLOW_LINKS} to refuse a symbolic link.
+	 * @return The contents as a string.
+	 * @throws IOException If the file could not be opened or read, or holds more than <c>maxBytes</c> bytes.
+	 */
+	public static String readCapped(Path p, long maxBytes, Charset cs, OpenOption...options) throws IOException {
+		reqnn("p", p);
+		try (var in = Files.newInputStream(p, options)) {
+			return readCapped(in, maxBytes, cs, () -> ioex("File exceeds the maximum allowed size of %s bytes: '%s'.", maxBytes, p));
+		}
 	}
 
 	/**

@@ -23,6 +23,7 @@ import static org.mockito.Mockito.*;
 import java.nio.charset.*;
 import java.security.*;
 import java.util.*;
+import java.util.function.Function;
 import java.util.zip.*;
 
 import org.apache.juneau.*;
@@ -43,7 +44,7 @@ import jakarta.servlet.http.*;
 })
 class SamlAuthFilter_Test extends TestBase {
 
-	private static SamlAssertionValidator validator(java.util.function.Function<String,Principal> impl) throws Exception {
+	private static SamlAssertionValidator validator(Function<String,Principal> impl) throws Exception {
 		var kp = KeyPairGenerator.getInstance("RSA");
 		kp.initialize(2048);
 		var pair = kp.generateKeyPair();
@@ -52,14 +53,19 @@ class SamlAuthFilter_Test extends TestBase {
 					.spEntityId("https://sp.example.com")
 					.expectedIssuer("https://idp.example.com")
 					.signingCredential(new BasicCredential(pair.getPublic(), pair.getPrivate()))) {
-			@Override public Principal validate(String xml) {
+			@Override public Principal validate(String xml, String binding) {
 				return impl.apply(xml);
 			}
 		};
 	}
 
 	private static HttpServletRequest req(String path, String samlResponse) {
+		return req(path, samlResponse, "POST");
+	}
+
+	private static HttpServletRequest req(String path, String samlResponse, String method) {
 		var r = mock(HttpServletRequest.class);
+		when(r.getMethod()).thenReturn(method);
 		when(r.getPathInfo()).thenReturn(path);
 		when(r.getServletPath()).thenReturn(path);
 		when(r.getParameter("SAMLResponse")).thenReturn(samlResponse);
@@ -102,7 +108,7 @@ class SamlAuthFilter_Test extends TestBase {
 		var received = new String[1];
 		var v = validator(x -> { received[0] = x; return new ClaimsPrincipal("alice", Map.of()); });
 		var f = SamlAuthFilter.create().binding(SamlBinding.REDIRECT).validator(v).build();
-		var result = f.authenticate(req("/saml/acs", b64));
+		var result = f.authenticate(req("/saml/acs", b64, "GET"));
 		assertTrue(result.isPresent());
 		assertEquals("<dummy>redirect-content</dummy>", received[0]);
 	}

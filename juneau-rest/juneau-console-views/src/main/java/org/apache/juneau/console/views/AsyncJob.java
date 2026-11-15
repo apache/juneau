@@ -36,7 +36,7 @@ import org.apache.juneau.console.views.ActionResult.*;
  * {@link org.apache.juneau.rest.server.filter.SynchronizerToken}'s bar.  Because a browser {@code EventSource}
  * constructor cannot set an {@code X-Csrf-Token} header and cookies are unsound on a loopback port, the SSE GET that
  * streams a job's progress is Host-checked at the boundary and <b>capability-gated by the unguessability of the
- * id</b> &mdash; there is no session cookie and no CSRF-on-GET.  Consequently the id is a secret:
+ * id</b> &mdash; there is no session cookie and no token-on-GET.  Consequently the id is a secret:
  * {@link #toString()} never renders it.
  *
  * <h2 class='section'>Server-side hard limits (a data-egress disclosure bound)</h2>
@@ -103,6 +103,7 @@ public final class AsyncJob {
 	private boolean effectStarted;
 	private int subscribers;
 	private ActionResult result;   // Non-null iff terminal; the single settled outcome.
+	private volatile String owner;   // The principal name bound to this job, or null when the job is not bound to a caller.
 
 	/**
 	 * Constructor.
@@ -127,6 +128,24 @@ public final class AsyncJob {
 	 * @return The id.  Never <jk>null</jk> or blank.
 	 */
 	public String id() { return id; }
+
+	/**
+	 * Binds the job to the principal that started it.
+	 *
+	 * <p>
+	 * Once bound, {@link AsyncJobsMixin} serves the stream and the cancel endpoint only to the same principal; any other
+	 * caller is answered {@code 404}, the same as an unknown id.  A job with no owner stays reachable by its id alone.
+	 *
+	 * @param principalName The principal name.  <jk>null</jk> leaves the job unbound.
+	 * @return This object.
+	 */
+	public AsyncJob owner(String principalName) {
+		owner = principalName;
+		return this;
+	}
+
+	/** @return The principal name this job is bound to, or <jk>null</jk> when it is not bound to a caller. */
+	public String owner() { return owner; }
 
 	/** @return The instant this job was created. */
 	public Instant createdAt() { return createdAt; }

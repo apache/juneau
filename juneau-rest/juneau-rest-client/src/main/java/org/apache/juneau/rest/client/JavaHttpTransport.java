@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.http.RedactedHeaders.isCredentialLike;
 
 import java.io.*;
 import java.net.*;
@@ -26,6 +27,7 @@ import java.net.http.HttpRequest.*;
 import java.net.http.HttpResponse.*;
 import java.time.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
@@ -38,7 +40,7 @@ import org.apache.juneau.http.remote.*;
  * {@code juneau-rest-client} artifact, requires no external dependencies, and is always available on Java 11+.
  *
  * <p>
- * It is auto-discovered via {@link java.util.ServiceLoader} and can also be instantiated explicitly:
+ * It is auto-discovered via {@link ServiceLoader} and can also be instantiated explicitly:
  *
  * <p class='bjava'>
  * 	<jv>transport</jv> = JavaHttpTransport.<jsm>builder</jsm>()
@@ -60,7 +62,7 @@ import org.apache.juneau.http.remote.*;
  * {@code POST} or any other non-idempotent request.
  *
  * <p>
- * For SSRF-guard-active ({@code @Remote}) requests (see {@link TransportRequest#isSsrfGuardActive()}), this
+ * For outbound-URL-guard-active ({@code @Remote}) requests (see {@link TransportRequest#isSsrfGuardActive()}), this
  * transport pin-on-connects: it resolves the request host, selects an address that passes
  * {@link RemoteUrlPolicy}, and rewrites the request URI to that literal address
  * (preserving the original host via an explicit {@code Host} header) so the socket connects only to the
@@ -94,6 +96,8 @@ public final class JavaHttpTransport implements HttpTransport {
 	/** Default cap, in bytes, on the response body this transport will deliver. */
 	public static final long DEFAULT_MAX_RESPONSE_BYTES = 128L * 1024 * 1024;
 
+	private static final Logger LOG = Logger.getLogger(JavaHttpTransport.class.getName());
+
 	private static final String RESTRICTED_HEADERS_PROPERTY = "jdk.httpclient.allowRestrictedHeaders";
 
 	private final HttpClient httpClient;
@@ -114,6 +118,10 @@ public final class JavaHttpTransport implements HttpTransport {
 			System.setProperty(RESTRICTED_HEADERS_PROPERTY, "host");
 		else if (! existing.toLowerCase(Locale.ROOT).contains("host"))
 			System.setProperty(RESTRICTED_HEADERS_PROPERTY, existing + ",host");
+		else
+			return;
+		LOG.warning("Set the JVM-wide system property " + RESTRICTED_HEADERS_PROPERTY + " to allow a caller-controlled Host header; "
+			+ "this affects every java.net.http.HttpClient in the process.  Prefer starting the JVM with -D" + RESTRICTED_HEADERS_PROPERTY + "=host.");
 	}
 
 	/**
@@ -165,7 +173,7 @@ public final class JavaHttpTransport implements HttpTransport {
 		if (httpClient.followRedirects() == Redirect.NEVER)
 			return;
 		for (var h : request.getHeaders())
-			if (RedactedHeaders.isSensitive(h.name(), RedirectSecurity.stripOnCrossOrigin()))
+			if (isCredentialLike(h.name()))
 				throw new TransportException("Refusing to send a request carrying the credential header '" + h.name()
 					+ "' through a JavaHttpTransport whose HttpClient auto-follows redirects (" + httpClient.followRedirects()
 					+ "); the JDK client would forward it to a redirect target of another origin.  Build the HttpClient with "

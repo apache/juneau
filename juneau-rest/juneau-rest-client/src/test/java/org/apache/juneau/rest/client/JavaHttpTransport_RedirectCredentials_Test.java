@@ -170,4 +170,13 @@ class JavaHttpTransport_RedirectCredentials_Test {
 		assertTrue(names.contains("X-Client"), names.toString());
 		assertFalse(names.contains("X-Drop"), names.toString());
 	}
+
+	@Test void a07_nonPolicyRequestWithCustomCredentialHeader_throughAutoFollowingClient_isRefused() {
+		var client = new RecordingHttpClient();
+		client.redirect = HttpClient.Redirect.NORMAL;
+		var transport = JavaHttpTransport.builder().httpClient(client).build();
+		var req = TransportRequest.builder().method("GET").uri(ORIGIN_A + "/cross").header("X-Auth-Token", "k").build();
+		assertThrows(TransportException.class, () -> transport.execute(req));
+		assertEquals(0, client.sent.size());
+	}
 }

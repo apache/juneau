@@ -86,10 +86,26 @@ final class ThriftCompactDecoder {
 		return new FieldHeader(type, fieldId, false);
 	}
 
+	void skipField(int fieldType) throws IOException {
+		if (++skipDepth > MAX_SKIP_DEPTH) {
+			skipDepth--;
+			throw ioex("Maximum nesting depth exceeded.");
+		}
+		try {
+			skipField0(fieldType);
+		} finally {
+			skipDepth--;
+		}
+	}
+
+	private static final int MAX_SKIP_DEPTH = 100;
+
+	private int skipDepth;
+
 	@SuppressWarnings({
 		"java:S3776" // Cognitive Complexity: Thrift type dispatch is inherently branchy
 	})
-	void skipField(int fieldType) throws IOException {
+	private void skipField0(int fieldType) throws IOException {
 		switch (fieldType) {
 			case ThriftCompactEncoder.BOOLEAN_TRUE, ThriftCompactEncoder.BOOLEAN_FALSE:
 				break;

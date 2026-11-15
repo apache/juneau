@@ -45,7 +45,7 @@ class McpAuthInterceptor_Test extends TestBase {
 		};
 		var interceptor = new McpAuthInterceptor(() -> "abc123");
 		try (var client = RestClient.builder().transport(transport).interceptors(interceptor).build()) {
-			try (var res = client.get("http://x/ping").run()) {
+			try (var res = client.get("https://x/ping").run()) {
 				assertEquals(204, res.getStatusCode());
 			}
 		}
@@ -62,10 +62,10 @@ class McpAuthInterceptor_Test extends TestBase {
 		};
 		var interceptor = McpAuthInterceptor.ofStaticBearer("static-token");
 		try (var client = RestClient.builder().transport(transport).interceptors(interceptor).build()) {
-			try (var res = client.get("http://x/ping").run()) {
+			try (var res = client.get("https://x/ping").run()) {
 				assertEquals(204, res.getStatusCode());
 			}
-			try (var res = client.get("http://x/ping").run()) {
+			try (var res = client.get("https://x/ping").run()) {
 				assertEquals(204, res.getStatusCode());
 			}
 		}
@@ -84,7 +84,7 @@ class McpAuthInterceptor_Test extends TestBase {
 		};
 		var interceptor = new McpAuthInterceptor(() -> token);
 		try (var client = RestClient.builder().transport(transport).interceptors(interceptor).build()) {
-			try (var res = client.get("http://x/ping").run()) {
+			try (var res = client.get("https://x/ping").run()) {
 				assertEquals(204, res.getStatusCode());
 			}
 		}

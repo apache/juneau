@@ -55,7 +55,9 @@ public class ClassFormatSwap extends StringSwap<Class<?>> {
 		ClassLoader cl = session != null ? session.getClassLoader() : null;
 		if (cl == null)
 			cl = Thread.currentThread().getContextClassLoader();
-		return ClassFormat.parse(o, fmt, cl);
+		// Conversions made without a session still carry the context through the hint.
+		var mc = session != null ? session.getMarshallingContext() : hint != null ? hint.getMarshallingContext() : null;
+		return ClassFormat.parse(o, fmt, cl, mc != null ? mc.getClassNameGuard() : null);
 	}
 
 	private static ClassFormat resolveFormat(MarshallingSession session) {

@@ -104,4 +104,14 @@ class MicrometerCustomObservation_Test extends TestBase {
 		assertNotNull(t);
 		assertEquals(1, t.count());
 	}
+
+	@Test void z01_methodTagIsBounded() {
+		recorder.record("op", "GET", "/x", 200, Duration.ofMillis(1), null, null, null);
+		recorder.record("op", "FOO1", "/x", 200, Duration.ofMillis(1), null, null, null);
+		recorder.record("op", "FOO2", "/x", 200, Duration.ofMillis(1), null, null, null);
+		var name = recorder.getTimerName();
+		assertNotNull(registry.find(name).tag("method", "GET").timer());
+		assertEquals(2, registry.find(name).tag("method", "OTHER").timer().count());
+		assertNull(registry.find(name).tag("method", "FOO1").timer());
+	}
 }

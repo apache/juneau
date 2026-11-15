@@ -16,8 +16,11 @@
  */
 package org.apache.juneau.bean.atom;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.xml.XmlFormat.*;
 
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.xml.*;
 
 /**
@@ -41,6 +44,13 @@ import org.apache.juneau.marshall.xml.*;
  * 	<li><c>atom:summary</c> - Entry summaries
  * 	<li><c>atom:rights</c> - Copyright and rights statements
  * </ul>
+ *
+ * <h2 class='section'>Content escaping:</h2>
+ * <p>
+ * For <js>"text"</js> (the default) and <js>"html"</js> types, the value of {@link #getText() text} is plain character
+ * data: markup characters in it are escaped when serialized to XML and restored when parsed.
+ * For the <js>"xhtml"</js> type, the value is written verbatim and is expected to be well-formed XHTML.
+ * The caller owns the safety of <js>"xhtml"</js> content; it is never escaped or sanitized.
  *
  * <h2 class='figure'>Schema</h2>
  * <p class='bschema'>
@@ -88,10 +98,43 @@ import org.apache.juneau.marshall.xml.*;
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
+@Marshalled(interceptor = Text.TextInterceptor.class)
 @SuppressWarnings({
 	"java:S1700" // Field name intentionally matches class name
 })
 public class Text extends Common {
+
+	/**
+	 * Escapes the text property on output for every type other than <js>"xhtml"</js>.
+	 *
+	 * <p>
+	 * The text property is rendered verbatim by the XML serializer so that <js>"xhtml"</js> content can pass through.
+	 * For other types the value is escaped here before it is rendered; the XML parser decodes it again on input.
+	 */
+	public static final class TextInterceptor extends BeanInterceptor<Text> {
+
+		@Override /* Overridden from BeanInterceptor */
+		public Object readProperty(Text bean, String name, Object value) {
+			// The property name is not supplied when values are read in bulk, so the text property is recognized by value.
+			if (value instanceof String s && s == bean.getText() && neq("xhtml", bean.getType()))
+				return escape(XmlUtils.escapeText(s));
+			return value;
+		}
+
+		private static String escape(String s) {
+			var sb = new StringBuilder(s.length() + 16);
+			for (var i = 0; i < s.length(); i++) {
+				var c = s.charAt(i);
+				switch (c) {
+					case '&' -> sb.append("&amp;");
+					case '<' -> sb.append("&lt;");
+					case '>' -> sb.append("&gt;");
+					default -> sb.append(c);
+				}
+			}
+			return sb.toString();
+		}
+	}
 
 	private String type;
 	private String text;
@@ -113,6 +156,10 @@ public class Text extends Common {
 	 *
 	 * <p>
 	 * The content of this content.
+	 *
+	 * <p>
+	 * Escaped on serialization unless the type is <js>"xhtml"</js>, in which case it is written verbatim and the caller
+	 * is responsible for its safety.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */

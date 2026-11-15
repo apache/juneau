@@ -35,10 +35,12 @@ import java.nio.charset.*;
 import java.time.*;
 import java.time.temporal.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.bean.BeanInfo;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.function.*;
@@ -240,6 +242,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		private CurrencyFormat currencyFormat;
 		private ClassFormat classFormat;
 		private ClassLoader classLoader;
+		private Predicate<String> classNameGuard;
 		private Class<? extends PropertyNamer> propertyNamer;
 		private final List<ClassInfo> beanDictionary;
 		private final List<Object> swaps;
@@ -357,6 +360,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			currencyFormat = copyFrom.currencyFormat;
 			classFormat = copyFrom.classFormat;
 			classLoader = copyFrom.classLoader;
+			classNameGuard = copyFrom.classNameGuard;
 			typePropertyName = copyFrom.typePropertyName;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
 			validateSchema = copyFrom.validateSchema;
@@ -417,6 +421,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			currencyFormat = copyFrom.currencyFormat;
 			classFormat = copyFrom.classFormat;
 			classLoader = copyFrom.classLoader;
+			classNameGuard = copyFrom.classNameGuard;
 			typePropertyName = copyFrom.typePropertyName;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
 			validateSchema = copyFrom.validateSchema;
@@ -2325,7 +2330,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 				locale,
 				propertyNamer,
 				System.identityHashCode(beanStore),
-				System.identityHashCode(classLoader)
+				System.identityHashCode(classLoader),
+				System.identityHashCode(classNameGuard)
 			);
 			// @formatter:on
 		}
@@ -3776,6 +3782,38 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			return this;
 		}
 
+		/**
+		 * Class-name guard.
+		 *
+		 * <p>
+		 * Vets class names before they are resolved to a {@link Class} from parsed or converted input.  The guard is
+		 * consulted for every candidate name, including the nested-type <c>$</c>-rewritten forms tried by
+		 * {@link ClassFormat#parse(String, ClassFormat, ClassLoader, Predicate)}, and for <c>String</c>-to-{@link Class}
+		 * conversion through {@link #getConverter()}.  Names the guard rejects are treated as unresolvable.
+		 *
+		 * <p>
+		 * The guard applies only to serializers, parsers and sessions built from this context, so different contexts
+		 * in the same JVM can permit different types.  No guard is set by default: classes are resolved without
+		 * running their static initializers, but any loadable name is accepted.  Contexts that read input from
+		 * untrusted sources and materialize {@link Class} values from it should set a guard that permits only the
+		 * expected types.
+		 *
+		 * <h4 class='section'>Example:</h4>
+		 * <p class='bjava'>
+		 * 	JsonParser <jv>parser</jv> = JsonParser.<jsm>create</jsm>()
+		 * 		.classNameGuard(<jv>name</jv> -&gt; <jv>name</jv>.startsWith(<js>"com.example.model."</js>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value The guard returning <jk>true</jk> for permitted class names.
+		 * 	<br>Can be <jk>null</jk> (all names allowed, the default).
+		 * @return This object.
+		 */
+		public Builder classNameGuard(Predicate<String> value) {
+			classNameGuard = value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends Context> value) {
 			reqnn("value", value);
@@ -4045,6 +4083,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	private final BeanRegistry beanRegistry;
 	private final MarshallingSession defaultSession;
 	private final ConfigurableConverter converter;
+	private final BasicConverter basicConverter;
 	private final boolean beanMapPutReturnsOldValue;
 	private final boolean beansRequireDefaultConstructor;
 	private final boolean beansRequireSerializable;
@@ -4097,6 +4136,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	private final CurrencyFormat currencyFormat;
 	private final ClassFormat classFormat;
 	private final ClassLoader classLoader;
+	private final Predicate<String> classNameGuard;
 	private final Visibility beanClassVisibility;
 	private final Visibility beanConstructorVisibility;
 	private final Visibility beanFieldVisibility;
@@ -4158,6 +4198,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		currencyFormat = builder.currencyFormat;
 		classFormat = builder.classFormat;
 		classLoader = builder.classLoader;
+		classNameGuard = builder.classNameGuard;
 		typePropertyName = o(builder.typePropertyName).orElse("_type");
 		useInterfaceProxies = ! builder.disableInterfaceProxies;
 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
@@ -4191,7 +4232,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			}
 		});
 		objectSwaps = u(objectSwapsList);
-		converter = new ConfigurableConverter(this);
+		converter = new ConfigurableConverter(classNameGuard, this);
+		basicConverter = classNameGuard == null ? BasicConverter.INSTANCE : new BasicConverter(classNameGuard);
 
 		cmCache = Cache.<Class,ClassMeta>create().supplier(type -> new ClassMeta<>(type, this)).build();
 		cmString = cmCache.get(String.class);
@@ -4341,6 +4383,17 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @return The converter.
 	 */
 	public final ConfigurableConverter getConverter() { return converter; }
+
+	/**
+	 * Returns the context-independent converter for this context.
+	 *
+	 * <p>
+	 * Performs the same conversions as {@link BasicConverter#INSTANCE}, with the
+	 * {@link Builder#classNameGuard(Predicate) class-name guard} of this context applied.
+	 *
+	 * @return The converter.  {@link BasicConverter#INSTANCE} if no class-name guard is set.
+	 */
+	public final BasicConverter getBasicConverter() { return basicConverter; }
 
 	/**
 	 * Fallback for an ObjectSwap-conversion whose swap-class doesn't bridge to the input, but where the input
@@ -5456,6 +5509,24 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	public final ClassLoader getClassLoader() { return classLoader; }
 
 	/**
+	 * Class-name guard.
+	 *
+	 * @see Builder#classNameGuard(Predicate)
+	 * @return The class-name guard, or <jk>null</jk> if all names are allowed.
+	 */
+	public final Predicate<String> getClassNameGuard() { return classNameGuard; }
+
+	/**
+	 * Returns whether the specified class name may be resolved to a {@link Class} by this context.
+	 *
+	 * @param name The candidate class name.
+	 * @return <jk>true</jk> if no class-name guard is set or the guard permits the name.
+	 */
+	public final boolean isClassNameAllowed(String name) {
+		return classNameGuard == null || classNameGuard.test(name);
+	}
+
+	/**
 	 * Ignore transient fields.
 	 *
 	 * @see MarshallingContext.Builder#disableIgnoreTransientFields()
@@ -5486,12 +5557,12 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Overridden from BeanTypeResolver */
-	public org.apache.juneau.commons.bean.BeanInfo<?> resolveType(AnnotationInfo<BeanProp> lastBeanProp, ClassInfo type, TypeVariables typeVarImpls) {
+	public BeanInfo<?> resolveType(AnnotationInfo<BeanProp> lastBeanProp, ClassInfo type, TypeVariables typeVarImpls) {
 		return resolveClassMeta(lastBeanProp, type, typeVarImpls);
 	}
 
 	@Override /* Overridden from BeanTypeResolver */
-	public org.apache.juneau.commons.bean.BeanInfo<?> objectType() {
+	public BeanInfo<?> objectType() {
 		return cmObject;
 	}
 
@@ -5536,6 +5607,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			.a("currencyFormat", currencyFormat)
 			.a("classFormat", classFormat)
 			.a("classLoader", classLoader)
+			.a("classNameGuard", classNameGuard)
 			.a("useInterfaceProxies", useInterfaceProxies)
 			.a("useJavaBeanIntrospector", useJavaBeanIntrospector)
 			.a("validateSchema", validateSchema);
@@ -5646,7 +5718,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			}
 		}
 
-		if (o instanceof ParameterizedType o2 && ! o2.getRawType().equals(Enum.class)) {
+		if (o instanceof ParameterizedType o2 && neq(o2.getRawType(), Enum.class)) {
 			var l = new LinkedList<ClassMeta<?>>();
 			for (var pt2 : o2.getActualTypeArguments()) {
 				if (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)

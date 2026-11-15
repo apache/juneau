@@ -88,4 +88,44 @@ class UriUtils_Test extends TestBase {
 	@Test void b04_assertNullThrows() {
 		assertThrows(IllegalArgumentException.class, () -> assertSecureOrLoopback(null));
 	}
+
+	@Test void c01_isLoopbackHost() {
+		assertTrue(isLoopbackHost("localhost"));
+		assertTrue(isLoopbackHost("LocalHost"));
+		assertTrue(isLoopbackHost("127.0.0.1"));
+		assertTrue(isLoopbackHost("::1"));
+		assertTrue(isLoopbackHost("[::1]"));
+		assertFalse(isLoopbackHost(null));
+		assertFalse(isLoopbackHost(""));
+		assertFalse(isLoopbackHost("127.0.0.2"));
+		assertFalse(isLoopbackHost("127.000.000.001"));
+		assertFalse(isLoopbackHost("example.com"));
+	}
+
+	@Test void d01_parseIpv4_valid() {
+		assertArrayEquals(new byte[]{10, 0, 0, 1}, parseIpv4("10.0.0.1"));
+		assertArrayEquals(new byte[]{0, 0, 0, 0}, parseIpv4("0.0.0.0"));
+		assertArrayEquals(new byte[]{(byte)255, (byte)255, (byte)255, (byte)255}, parseIpv4("255.255.255.255"));
+		assertArrayEquals(new byte[]{(byte)192, (byte)168, 1, 100}, parseIpv4("192.168.1.100"));
+	}
+
+	@Test void d02_parseIpv4_invalid() {
+		assertNull(parseIpv4(null));
+		assertNull(parseIpv4(""));
+		assertNull(parseIpv4("1.2.3"));
+		assertNull(parseIpv4("1.2.3.4.5"));
+		assertNull(parseIpv4("1.2.3."));
+		assertNull(parseIpv4(".1.2.3"));
+		assertNull(parseIpv4("1..2.3"));
+		assertNull(parseIpv4("256.0.0.1"));
+		assertNull(parseIpv4("1.2.3.01"));
+		assertNull(parseIpv4("1.2.3.00"));
+		assertNull(parseIpv4("1.2.3.+4"));
+		assertNull(parseIpv4("1.2.3.-4"));
+		assertNull(parseIpv4("1.2.3.1000"));
+		assertNull(parseIpv4("1.2.3.a"));
+		assertNull(parseIpv4(" 1.2.3.4"));
+		assertNull(parseIpv4("0x1.2.3.4"));
+		assertNull(parseIpv4("1.2.3.\u0664"));
+	}
 }

@@ -42,6 +42,12 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-auth-oauth-flow</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!--
 			nimbus-jose-jwt is the ONLY hard runtime dep of this module.  It is intentionally
 			declared `provided` so it does NOT leak as a transitive dependency of either

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.processor;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.commons.reflect.*;
@@ -50,7 +52,9 @@ public class ThrowableProcessor implements ResponseProcessor {
 		RestResponse res = opSession.getResponse();
 		Throwable t = res.getContent(Throwable.class);
 		if (t != null && isExposable(opSession, t))
-			res.addHeader(Thrown.of(t));
+			res.addHeader(t instanceof BasicHttpException t2 && t2.isCauseMessageHidden()
+				? Thrown.of(urlEncode(UnmodifiableBean.logicalType(t2).getName()) + ";" + urlEncode(t2.getResponseMessage()))
+				: Thrown.of(t));
 		return NEXT; // Continue processing as bean.
 	}
 

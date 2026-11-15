@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
+import org.apache.juneau.marshall.collections.JsonMap;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.jupiter.api.*;
@@ -83,7 +84,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 			}
 		};
 
-		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var handle = client.listen(new SubscriptionFilter().setResourcesListChanged(true).setToolsListChanged(true), listener);
 			assertTrue(done.await(5, TimeUnit.SECONDS), "listener never completed: " + events);
 			assertEquals(List.of("ack:true", "updated:file:///a.txt", "listChanged:TOOLS", "complete"), events);
@@ -113,7 +114,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 		var listener = new McpSubscriptionListener() {
 			@Override public void onComplete() { done.countDown(); }
 		};
-		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var handle = client.listen(new SubscriptionFilter(), listener);
 			assertTrue(done.await(5, TimeUnit.SECONDS));
 			handle.close();
@@ -137,7 +138,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 			} catch (IOException e) {
 				throw new UncheckedIOException(e);
 			}
-			var body = JsonParser.DEFAULT.read(out.toString(StandardCharsets.UTF_8), org.apache.juneau.marshall.collections.JsonMap.class);
+			var body = JsonParser.DEFAULT.read(out.toString(StandardCharsets.UTF_8), JsonMap.class);
 			sentId.set((String) body.get("id"));
 			var ack = new SubscriptionsAcknowledgedNotification().setNotifications(new SubscriptionFilter())
 				.setMeta(new RequestMeta().set(RequestMeta.KEY_SUBSCRIPTION_ID, sentId.get()));
@@ -152,7 +153,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 		var listener = new McpSubscriptionListener() {
 			@Override public void onComplete() { done.countDown(); }
 		};
-		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var handle = client.listen(new SubscriptionFilter(), listener);
 			assertTrue(done.await(5, TimeUnit.SECONDS));
 			assertNotNull(sentId.get());
@@ -175,7 +176,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 		var listener = new McpSubscriptionListener() {
 			@Override public void onComplete() { done.countDown(); }
 		};
-		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var handle = client.listen(new SubscriptionFilter(), listener);
 			assertTrue(done.await(5, TimeUnit.SECONDS));
 			assertFalse(handle.isOpen());
@@ -202,7 +203,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 				errorLatch.countDown();
 			}
 		};
-		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var handle = client.listen(new SubscriptionFilter(), listener);
 			assertTrue(errorLatch.await(5, TimeUnit.SECONDS));
 			assertNotNull(seenError.get());
@@ -239,7 +240,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 			}
 		};
 
-		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var handle = client.listen(new SubscriptionFilter(), listener);
 			assertTrue(errorLatch.await(5, TimeUnit.SECONDS), "onError never fired for an abrupt EOF with no terminal frame");
 			assertInstanceOf(EOFException.class, seenError.get());
@@ -290,7 +291,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 			}
 		};
 
-		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var handle = client.listen(new SubscriptionFilter(), listener);
 			assertTrue(done.await(5, TimeUnit.SECONDS), "listener never completed: " + events);
 			assertEquals(0, errorCount.get(), "a listener's own exception must not be routed through onError");
@@ -314,7 +315,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 			.build();
 		var listener = new McpSubscriptionListener() {};
 
-		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var handle = client.listen(new SubscriptionFilter(), listener);
 			assertTrue(stream.awaitBlocked(5, TimeUnit.SECONDS), "pump never parked in a blocking read");
 			assertTrue(handle instanceof McpClient.SubscriptionPump);
@@ -396,7 +397,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 			}
 		};
 
-		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var handle = client.listen(new SubscriptionFilter(), listener);
 			handleRef.set(handle);
 			handleReady.countDown();
@@ -426,7 +427,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 			}
 		};
 
-		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var handle = client.listen(new SubscriptionFilter(), listener);
 			handleRef.set(handle);
 			handleReady.countDown();
@@ -460,7 +461,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 			}
 		};
 
-		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var handle = client.listen(new SubscriptionFilter(), listener);
 			handleRef.set(handle);
 			handleReady.countDown();
@@ -492,7 +493,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 			}
 		};
 
-		try (var client = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var handle = client.listen(new SubscriptionFilter(), listener);
 			handleRef.set(handle);
 			handleReady.countDown();
@@ -509,7 +510,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 	 * failure so {@link McpClientSubscriptionsListen_Test#a06_cancelWhileBlockedInRead_terminatesPumpThread_andClosesStream}
 	 * can deterministically exercise the "closing the connection unblocks the parked pump" cancellation
 	 * contract. {@code release()} is deliberately invoked via the transport's close callback rather than this
-	 * stream's own {@link #close()}: {@link java.io.InputStreamReader#close()} synchronizes on the same
+	 * stream's own {@link #close()}: {@link InputStreamReader#close()} synchronizes on the same
 	 * per-reader monitor its {@code read()} holds for the entire duration of a blocking call, so unblocking
 	 * from {@link #close()} itself would deadlock against the parked pump thread.
 	 */

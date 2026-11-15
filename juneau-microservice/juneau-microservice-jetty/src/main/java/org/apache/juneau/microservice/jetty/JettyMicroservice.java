@@ -42,8 +42,9 @@ import jakarta.servlet.*;
  * 	<li>Interactive console enabled (use {@link #run(String[], Servlet, boolean)} with
  * 		{@code startConsole=false} to suppress).
  * 	<li>Classpath defaults for <c>jetty.xml</c> and <c>juneau.cfg</c> &mdash; a consumer-supplied
- * 		copy on the working-directory or classpath wins via the existing
- * 		{@link Microservice} resolution chain.
+ * 		<c>juneau.cfg</c> on the working-directory or classpath wins via the existing
+ * 		{@link Microservice} resolution chain; <c>jetty.xml</c> is read from the classpath, or from the
+ * 		file system only when named by <c>Jetty/config</c>.
  * </ul>
  *
  * <p>

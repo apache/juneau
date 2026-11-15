@@ -18,6 +18,7 @@ package org.apache.juneau.console.views;
 
 import static java.nio.charset.StandardCharsets.*;
 import static org.apache.juneau.bct.BctAssertions.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -71,6 +72,11 @@ class TerminalView_BrowserTest extends TestBase {
 	public static class R extends BasicRestServlet implements TerminalViewMixin {
 		private static final long serialVersionUID = 1L;
 		static final Map<String,TerminalViewSource> SOURCES = new ConcurrentHashMap<>();
+
+		@Override
+		public TerminalViewAccess terminalViewAccess() {
+			return (req, runId) -> true;
+		}
 
 		@Override
 		public Optional<TerminalViewSource> terminalViewSource(String runId, RestRequest req) {
@@ -281,7 +287,7 @@ class TerminalView_BrowserTest extends TestBase {
 			return null;
 		for (var pair : query.split("&")) {
 			var i = pair.indexOf('=');
-			if (i >= 0 && URLDecoder.decode(pair.substring(0, i), UTF_8).equals(name))
+			if (i >= 0 && eq(URLDecoder.decode(pair.substring(0, i), UTF_8), name))
 				return URLDecoder.decode(pair.substring(i + 1), UTF_8);
 		}
 		return null;

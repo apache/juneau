@@ -21,7 +21,7 @@ package org.apache.juneau.rest.server.auth.saml;
  *
  * <p>
  * {@link SamlAssertionValidator#rememberAuthnRequest(String)} records the ID of each request this SP sends, and a
- * response whose confirmation carries a matching {@code InResponseTo} consumes it.  Each ID is accepted once.
+ * response whose confirmation carries a matching {@code InResponseTo} consumes it.  Each ID is accepted once, and only together with the browser-binding digest it was registered with.
  * Multi-node deployments should supply an implementation backed by a store shared across every node, since the
  * response may arrive at a different node than the one that sent the request.
  *
@@ -37,18 +37,21 @@ public interface AuthnRequestStore {
 	 * Records an outstanding request ID.
 	 *
 	 * @param id The {@code ID} attribute of the outgoing request.  Never <jk>null</jk> or blank.
+	 * @param bindingDigest Digest of the browser-binding secret issued with the request.  Never <jk>null</jk>.
 	 * @param expiresAtMs The epoch-millisecond instant after which the ID is no longer accepted.
 	 * @param nowMs The current epoch-millisecond instant according to the validator's clock.
 	 * @throws IllegalStateException If the store cannot accept more outstanding requests.
 	 */
-	void remember(String id, long expiresAtMs, long nowMs);
+	void remember(String id, byte[] bindingDigest, long expiresAtMs, long nowMs);
 
 	/**
 	 * Atomically removes a request ID and reports whether it was outstanding.
 	 *
 	 * @param id The {@code InResponseTo} value from the response.  Never <jk>null</jk> or blank.
+	 * @param bindingDigest Digest of the binding secret the browser presented, or <jk>null</jk> if it presented none.
 	 * @param nowMs The current epoch-millisecond instant according to the validator's clock.
-	 * @return <jk>true</jk> if the ID was registered, unexpired and not yet consumed.
+	 * @return <jk>true</jk> if the ID was registered, unexpired, not yet consumed and the digest matches the one
+	 * 	stored with it.
 	 */
-	boolean consume(String id, long nowMs);
+	boolean consume(String id, byte[] bindingDigest, long nowMs);
 }

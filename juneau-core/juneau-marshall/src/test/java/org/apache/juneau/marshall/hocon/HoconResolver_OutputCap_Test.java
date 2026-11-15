@@ -39,4 +39,15 @@ class HoconResolver_OutputCap_Test extends TestBase {
 		var m = HoconParser.DEFAULT.read("a = \"x\"\nb = ${a}${a}\n", Map.class);
 		assertEquals("xx", m.get("b"));
 	}
+
+	@Test void a03_arrayFanOutRejected() {
+		var sb = new StringBuilder("a0 = [1,1,1,1,1,1,1,1,1,1]\n");
+		for (var i = 1; i <= 12; i++) {
+			sb.append("a").append(i).append(" = [");
+			for (var j = 0; j < 10; j++)
+				sb.append(j > 0 ? "," : "").append("${a").append(i - 1).append("}");
+			sb.append("]\n");
+		}
+		assertThrows(Exception.class, () -> HoconParser.DEFAULT.read(sb.toString(), Object.class));
+	}
 }

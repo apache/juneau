@@ -43,8 +43,8 @@ class SafePathTemplate_Test extends TestBase {
 		assertFalse(SafePathTemplate.isSameOriginPath(null));
 		assertFalse(SafePathTemplate.isSameOriginPath(""));
 		assertFalse(SafePathTemplate.isSameOriginPath("   "));
-		assertFalse(SafePathTemplate.isSameOriginPath("https://evil/x"));
-		assertFalse(SafePathTemplate.isSameOriginPath("//evil/x"));
+		assertFalse(SafePathTemplate.isSameOriginPath("https://other/x"));
+		assertFalse(SafePathTemplate.isSameOriginPath("//other/x"));
 		assertFalse(SafePathTemplate.isSameOriginPath("servlet:/data/x"));
 		assertFalse(SafePathTemplate.isSameOriginPath("javascript:alert(1)"));
 		assertFalse(SafePathTemplate.isSameOriginPath("/data/../x"));
@@ -61,8 +61,8 @@ class SafePathTemplate_Test extends TestBase {
 		assertFalse(SafePathTemplate.isNonTemplatedPath("/data/alerts/{id}"));
 		assertFalse(SafePathTemplate.isNonTemplatedPath("/cards/{cardId}"));
 		assertFalse(SafePathTemplate.isNonTemplatedPath("/{anything}"));
-		assertFalse(SafePathTemplate.isNonTemplatedPath("https://evil/x"));
-		assertFalse(SafePathTemplate.isNonTemplatedPath("//evil/x"));
+		assertFalse(SafePathTemplate.isNonTemplatedPath("https://other/x"));
+		assertFalse(SafePathTemplate.isNonTemplatedPath("//other/x"));
 		assertFalse(SafePathTemplate.isNonTemplatedPath("/data/../x"));
 		assertFalse(SafePathTemplate.isNonTemplatedPath(null));
 	}
@@ -81,8 +81,8 @@ class SafePathTemplate_Test extends TestBase {
 		assertFalse(SafePathTemplate.isSafeTemplate("/events/{year}", "{year}", "{month}"));
 		assertFalse(SafePathTemplate.isSafeTemplate("/events/{month}", "{year}", "{month}"));
 		assertFalse(SafePathTemplate.isSafeTemplate("/events/all", "{year}", "{month}"));
-		assertFalse(SafePathTemplate.isSafeTemplate("http://evil/{year}/{month}", "{year}", "{month}"));
-		assertFalse(SafePathTemplate.isSafeTemplate("//evil/{year}/{month}", "{year}", "{month}"));
+		assertFalse(SafePathTemplate.isSafeTemplate("http://other/{year}/{month}", "{year}", "{month}"));
+		assertFalse(SafePathTemplate.isSafeTemplate("//other/{year}/{month}", "{year}", "{month}"));
 		assertFalse(SafePathTemplate.isSafeTemplate("../{year}/{month}", "{year}", "{month}"));
 		assertFalse(SafePathTemplate.isSafeTemplate(null, "{year}"));
 	}
@@ -92,8 +92,8 @@ class SafePathTemplate_Test extends TestBase {
 		assertTrue(SafePathTemplate.isSafeDocumentUrl("/events/123?x=1"));
 		assertTrue(SafePathTemplate.isSafeDocumentUrl("/events/123#frag"));
 		assertTrue(SafePathTemplate.isSafeDocumentUrl("events/123"));
-		assertFalse(SafePathTemplate.isSafeDocumentUrl("https://evil/1"));
-		assertFalse(SafePathTemplate.isSafeDocumentUrl("//evil/1"));
+		assertFalse(SafePathTemplate.isSafeDocumentUrl("https://other/1"));
+		assertFalse(SafePathTemplate.isSafeDocumentUrl("//other/1"));
 		assertFalse(SafePathTemplate.isSafeDocumentUrl("javascript:alert(1)"));
 		assertFalse(SafePathTemplate.isSafeDocumentUrl("/x/../../etc/passwd"));
 		assertFalse(SafePathTemplate.isSafeDocumentUrl(null));
@@ -101,18 +101,18 @@ class SafePathTemplate_Test extends TestBase {
 
 	@Test void a09_sameOrigin_rejectsBackslashAndEdgeCharacters() {
 		// A browser reads "\\" as "/", and strips a leading or trailing C0 control or space, so each of these resolves cross-host.
-		assertFalse(SafePathTemplate.isSameOriginPath("\\\\evil.test/x"));
-		assertFalse(SafePathTemplate.isSameOriginPath("/\\evil.test"));
-		assertFalse(SafePathTemplate.isSameOriginPath("\\/evil.test"));
-		assertFalse(SafePathTemplate.isSameOriginPath(" //evil.test"));
-		assertFalse(SafePathTemplate.isSameOriginPath("\t//evil.test"));
-		assertFalse(SafePathTemplate.isSameOriginPath("\n//evil.test"));
-		assertFalse(SafePathTemplate.isSameOriginPath("\r//evil.test"));
-		assertFalse(SafePathTemplate.isSameOriginPath("\u0000//evil.test"));
-		assertFalse(SafePathTemplate.isSameOriginPath("\u001f//evil.test"));
-		assertFalse(SafePathTemplate.isSameOriginPath("/\t/evil.test"));
-		assertFalse(SafePathTemplate.isSameOriginPath("/\n/evil.test"));
-		assertFalse(SafePathTemplate.isSameOriginPath("//evil.test "));
+		assertFalse(SafePathTemplate.isSameOriginPath("\\\\other.test/x"));
+		assertFalse(SafePathTemplate.isSameOriginPath("/\\other.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("\\/other.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath(" //other.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("\t//other.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("\n//other.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("\r//other.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("\u0000//other.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("\u001f//other.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("/\t/other.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("/\n/other.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("//other.test "));
 		assertFalse(SafePathTemplate.isSameOriginPath("/foo "));
 		assertFalse(SafePathTemplate.isSameOriginPath("/foo?q=C:\\x"));
 		assertFalse(SafePathTemplate.isSameOriginPath("/a\u007fb"));
@@ -122,8 +122,69 @@ class SafePathTemplate_Test extends TestBase {
 		assertTrue(SafePathTemplate.isSameOriginPath("/a b"));
 		assertTrue(SafePathTemplate.isSameOriginPath("/%5Cevil.test"));
 		assertTrue(SafePathTemplate.isSameOriginPath("%2F%2Fevil.test"));
-		assertTrue(SafePathTemplate.isSameOriginPath("/.//evil.test"));
-		assertTrue(SafePathTemplate.isSameOriginPath("\u00a0//evil.test"));
+		assertTrue(SafePathTemplate.isSameOriginPath("/.//other.test"));
+		assertTrue(SafePathTemplate.isSameOriginPath("\u00a0//other.test"));
 		assertTrue(SafePathTemplate.isSameOriginPath("/caf\u00e9"));
+	}
+
+	//====================================================================================================
+	// isSafeRedirect(String, String...)
+	//====================================================================================================
+
+	@Test void b01_redirect_relativePath_isSafe() {
+		assertTrue(SafePathTemplate.isSafeRedirect("/foo/bar"));
+		assertTrue(SafePathTemplate.isSafeRedirect("foo/bar"));
+	}
+
+	@Test void b02_redirect_nullOrEmpty_isSafe() {
+		assertTrue(SafePathTemplate.isSafeRedirect(null));
+		assertTrue(SafePathTemplate.isSafeRedirect(""));
+	}
+
+	@Test void b03_redirect_absoluteUri_allowedHost_isSafe() {
+		assertTrue(SafePathTemplate.isSafeRedirect("https://example.com/foo", "example.com"));
+	}
+
+	@Test void b04_redirect_absoluteUri_otherHost_isUnsafe() {
+		assertFalse(SafePathTemplate.isSafeRedirect("https://other.example/foo", "example.com"));
+	}
+
+	@Test void b05_redirect_absoluteUri_noAllowedHosts_isUnsafe() {
+		assertFalse(SafePathTemplate.isSafeRedirect("https://example.com/foo"));
+		assertFalse(SafePathTemplate.isSafeRedirect("https://example.com/foo", (String[])null));
+	}
+
+	@Test void b06_redirect_protocolRelativeUri_otherHost_isUnsafe() {
+		assertFalse(SafePathTemplate.isSafeRedirect("//other.example/foo", "example.com"));
+	}
+
+	@Test void b07_redirect_protocolRelativeUri_allowedHost_isSafe() {
+		assertTrue(SafePathTemplate.isSafeRedirect("//example.com/foo", "example.com"));
+	}
+
+	@Test void b08_redirect_allowedHostMatch_isCaseInsensitive() {
+		assertTrue(SafePathTemplate.isSafeRedirect("https://Example.COM/foo", "example.com"));
+	}
+
+	@Test void b09_redirect_malformedUri_isUnsafe() {
+		assertFalse(SafePathTemplate.isSafeRedirect("https://exa mple.com/foo", "example.com"));
+		assertFalse(SafePathTemplate.isSafeRedirect("https://[bad/foo", "example.com"));
+	}
+
+	@Test void b10_redirect_backslashAndControlChars_areUnsafe() {
+		assertFalse(SafePathTemplate.isSafeRedirect("/\\example.com/foo", "example.com"));
+		assertFalse(SafePathTemplate.isSafeRedirect("/foo\\bar"));
+		assertFalse(SafePathTemplate.isSafeRedirect("/foo\tbar"));
+		assertFalse(SafePathTemplate.isSafeRedirect("/foo\nbar"));
+		assertFalse(SafePathTemplate.isSafeRedirect("/foo bar"));
+		assertFalse(SafePathTemplate.isSafeRedirect("/foo\u007fbar"));
+	}
+
+	@Test void b11_redirect_schemeWithoutAuthority_isUnsafe() {
+		assertFalse(SafePathTemplate.isSafeRedirect("javascript:alert(1)", "example.com"));
+		assertFalse(SafePathTemplate.isSafeRedirect("data:text/html,x"));
+		assertFalse(SafePathTemplate.isSafeRedirect("http:other.example"));
+		assertTrue(SafePathTemplate.isSafeRedirect("foo/bar:baz"));
+		assertTrue(SafePathTemplate.isSafeRedirect("?a=b:c"));
 	}
 }

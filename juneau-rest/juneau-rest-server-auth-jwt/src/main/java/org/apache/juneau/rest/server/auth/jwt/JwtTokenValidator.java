@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.auth.jwt;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.UriUtils.assertSecureOrLoopback;
 
 import java.net.*;
 import java.security.*;
@@ -27,6 +28,7 @@ import java.util.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
 import org.apache.juneau.rest.server.auth.*;
 
 import com.nimbusds.jose.*;
@@ -146,6 +148,8 @@ public class JwtTokenValidator implements TokenValidator {
 		private String audience;
 		private Set<JWSAlgorithm> algorithms = new LinkedHashSet<>(Arrays.asList(JWSAlgorithm.RS256, JWSAlgorithm.ES256));
 		private Duration clockSkew = Duration.ofSeconds(60);
+		private Duration jwksMaxStale = JwksCache.DEFAULT_MAX_STALE;
+		private boolean requireAccessTokenType;
 
 		/**
 		 * JWKS cache TTL; populated via {@link Value @Value} from
@@ -190,7 +194,7 @@ public class JwtTokenValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder jwksUrl(URI value) {
-			jwksUrl = UriUtils.assertSecureOrLoopback(reqnn("value", value));
+			jwksUrl = assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 
@@ -251,7 +255,7 @@ public class JwtTokenValidator implements TokenValidator {
 			Set<JWSAlgorithm> next = st();
 			for (var a : values) {
 				reqnn("algorithm", a);
-				if (Algorithm.NONE.equals(a))
+				if (eq(Algorithm.NONE, a))
 					throw iaex("\"none\" algorithm is permanently rejected (RFC 7518 §3.6 unsafe)");
 				next.add(a);
 			}
@@ -286,6 +290,45 @@ public class JwtTokenValidator implements TokenValidator {
 			if (value.isZero() || value.isNegative())
 				throw iaex("jwksCacheTtl must be positive");
 			jwksCacheTtl = value;
+			return this;
+		}
+
+		/**
+		 * Sets how long the JWKS cache may keep serving the last-known-good key set after its TTL has
+		 * expired while the JWKS endpoint is unreachable.
+		 *
+		 * <p>
+		 * Once the key set is older than {@code jwksCacheTtl + jwksMaxStale}, a failed refresh is no longer
+		 * masked and validation fails closed.  A zero duration disables stale serving entirely.  Default
+		 * is 15 minutes.
+		 *
+		 * @param value The maximum stale duration.  Must be non-negative.
+		 * @return This object.
+		 */
+		public Builder jwksMaxStale(Duration value) {
+			reqnn("value", value);
+			if (value.isNegative())
+				throw iaex("jwksMaxStale must be non-negative");
+			jwksMaxStale = value;
+			return this;
+		}
+
+		/**
+		 * Requires tokens to be explicitly typed as JWT access tokens (RFC 9068).
+		 *
+		 * <p>
+		 * When {@code true}, the JOSE {@code typ} header must be {@code at+jwt} or
+		 * {@code application/at+jwt}.  When {@code false} (the default), tokens with no {@code typ}
+		 * or a generic {@code JWT} type are accepted, but tokens that identify themselves as something other
+		 * than an access token are always rejected: a {@code typ} of {@code id_token} or {@code logout+jwt},
+		 * a {@code token_use} claim other than {@code access}, or ID-token / logout-token claims
+		 * ({@code nonce}, {@code at_hash}, {@code events}).
+		 *
+		 * @param value {@code true} to require an access-token {@code typ}.
+		 * @return This object.
+		 */
+		public Builder requireAccessTokenType(boolean value) {
+			requireAccessTokenType = value;
 			return this;
 		}
 
@@ -374,6 +417,7 @@ public class JwtTokenValidator implements TokenValidator {
 	private final Set<JWSAlgorithm> algorithms;
 	private final Duration clockSkew;
 	private final Clock clock;
+	private final boolean requireAccessTokenType;
 	private final JWKSource<SecurityContext> jwkSource;
 
 	/**
@@ -387,10 +431,11 @@ public class JwtTokenValidator implements TokenValidator {
 		this.algorithms = u(cp(builder.algorithms));
 		this.clockSkew = builder.clockSkew;
 		this.clock = builder.clock;
+		this.requireAccessTokenType = builder.requireAccessTokenType;
 		this.jwkSource = builder.jwkSource != null
 			? builder.jwkSource
 			: new JwksCache(createRemoteJwkSource(builder.jwksUrl), builder.jwksCacheTtl, builder.clock,
-				builder.jwksEagerRefreshOnKidMiss, builder.jwksEagerRefreshCooldown);
+				builder.jwksEagerRefreshOnKidMiss, builder.jwksEagerRefreshCooldown, builder.jwksMaxStale);
 	}
 
 	/**
@@ -443,7 +488,7 @@ public class JwtTokenValidator implements TokenValidator {
 			throw new AuthenticationException("JWT must be signed (alg=none and unsigned JWTs are rejected)")
 				.wwwAuthenticate("Bearer error=\"invalid_token\", error_description=\"unsigned JWT\"");
 		var alg = jwt2.getHeader().getAlgorithm();
-		if (alg == null || Algorithm.NONE.equals(alg))
+		if (alg == null || eq(Algorithm.NONE, alg))
 			throw new AuthenticationException("JWT alg \"none\" is not permitted")
 				.wwwAuthenticate("Bearer error=\"invalid_token\", error_description=\"alg=none rejected\"");
 		if (! algorithms.contains(alg))
@@ -452,6 +497,8 @@ public class JwtTokenValidator implements TokenValidator {
 
 		// Verify signature.
 		var processor = new DefaultJWTProcessor<SecurityContext>();
+		processor.setJWSTypeVerifier(new DefaultJOSEObjectTypeVerifier<>(null, JOSEObjectType.JWT,
+			new JOSEObjectType("at+jwt"), new JOSEObjectType("application/at+jwt")));
 		processor.setJWSKeySelector(new JWSVerificationKeySelector<>(algorithms, jwkSource));
 		// Disable nimbus' internal claims verifier — we run our own below so we control the Clock.
 		processor.setJWTClaimsSetVerifier((claims, ctx) -> { /* no-op */ });
@@ -468,6 +515,7 @@ public class JwtTokenValidator implements TokenValidator {
 		}
 
 		verifyClaims(claims);
+		verifyTokenType(jwt2.getHeader(), claims);
 
 		var subject = claims.getSubject();
 		if (isBlank(subject))
@@ -503,6 +551,25 @@ public class JwtTokenValidator implements TokenValidator {
 			throw reject("token not yet valid");
 	}
 
+	private void verifyTokenType(JWSHeader header, JWTClaimsSet claims) throws AuthenticationException {
+		var typ = header.getType() == null ? null : header.getType().getType();
+		if (typ != null) {
+			var t = typ.toLowerCase(Locale.ROOT);
+			if (eq(t, "id_token") || eq(t, "logout+jwt") || eq(t, "secevent+jwt"))
+				throw reject("token type is not an access token");
+		}
+		if (requireAccessTokenType) {
+			var t = typ == null ? "" : typ.toLowerCase(Locale.ROOT);
+			if (! (eq(t, "at+jwt") || eq(t, "application/at+jwt")))
+				throw reject("token type must be at+jwt");
+		}
+		var use = claims.getClaim("token_use");
+		if (use != null && neq("access", use))
+			throw reject("token is not an access token");
+		if (claims.getClaim("nonce") != null || claims.getClaim("at_hash") != null || claims.getClaim("events") != null)
+			throw reject("token carries ID-token or logout-token claims");
+	}
+
 	private static AuthenticationException reject(String reason) {
 		return new AuthenticationException("JWT validation failed: " + reason)
 			.wwwAuthenticate("Bearer error=\"invalid_token\", error_description=\"" + sanitize(reason) + "\"");
@@ -510,7 +577,7 @@ public class JwtTokenValidator implements TokenValidator {
 
 	private static JWKSource<SecurityContext> createRemoteJwkSource(URI jwksUrl) {
 		try {
-			return JWKSourceBuilder.create(jwksUrl.toURL()).build();
+			return JWKSourceBuilder.<SecurityContext>create(jwksUrl.toURL(), new JwksResourceRetriever()).outageTolerant(false).build();
 		} catch (MalformedURLException e) {
 			throw iaex(e, "Invalid JWKS URL: %s", jwksUrl);
 		}

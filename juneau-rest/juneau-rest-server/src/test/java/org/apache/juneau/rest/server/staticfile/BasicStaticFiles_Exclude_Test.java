@@ -30,7 +30,7 @@ class BasicStaticFiles_Exclude_Test {
 	private static final Pattern P = Pattern.compile(BasicStaticFiles.EXCLUDE_PATTERN);
 
 	@Test void a01_excludedNames() {
-		for (var n : new String[]{"Foo.class", "a.properties", ".env", "sub/.git", "sub/.htpasswd", "app.yml", "app.YAML", "pom.xml", "store.jks", "k.p12", "k.pem", "id.key", "a.env", "a.cfg", "a.conf", "a.bak"})
+		for (var n : new String[]{"Foo.class", "a.properties", ".env", "sub/.git", "sub/.htpasswd", "app.yml", "app.YAML", "pom.xml", "store.jks", "k.p12", "k.pem", "id.key", "a.env", "a.cfg", "a.conf", "a.bak", ".git/config", "sub/.ssh/id_rsa", ".well-known/x.txt", "a/.hidden/b/c.txt"})
 			assertTrue(P.matcher(n).matches(), n);
 	}
 

@@ -53,6 +53,9 @@ public final class RedactedHeaders {
 	public static final Set<String> DEFAULT = Set.of(
 		"Authorization", "Cookie", "Set-Cookie", "Proxy-Authorization", "X-API-Key");
 
+	private static final List<String> CREDENTIAL_WORDS = List.of(
+		"auth", "token", "secret", "credential", "session", "cookie", "api-key", "apikey");
+
 	private RedactedHeaders() {}
 
 	/**
@@ -78,6 +81,31 @@ public final class RedactedHeaders {
 			return false;
 		for (var n : names)
 			if (n != null && eqic(name, n))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Returns {@code true} if the given header name is in {@link #DEFAULT} or its name suggests it carries a
+	 * credential.
+	 *
+	 * <p>
+	 * A name suggests a credential when, ignoring case, it contains {@code auth}, {@code token}, {@code secret},
+	 * {@code credential}, {@code session}, {@code cookie}, {@code api-key} or {@code apikey} (for example
+	 * {@code X-Auth-Token}).  This is broader than {@link #isSensitive(String)} and is meant for decisions that
+	 * should fail closed, such as refusing to forward a header.
+	 *
+	 * @param name The header name to test. Can be {@code null} (returns {@code false}).
+	 * @return {@code true} if the name is a known or likely credential header.
+	 */
+	public static boolean isCredentialLike(String name) {
+		if (name == null)
+			return false;
+		if (isSensitive(name))
+			return true;
+		var n = name.toLowerCase(Locale.ROOT);
+		for (var w : CREDENTIAL_WORDS)
+			if (n.contains(w))
 				return true;
 		return false;
 	}

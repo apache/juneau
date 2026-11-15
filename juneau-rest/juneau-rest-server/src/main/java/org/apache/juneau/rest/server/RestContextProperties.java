@@ -66,6 +66,7 @@ public class RestContextProperties {
 	private String allowContentParam = FALSE;
 	private String renderResponseStackTraces = FALSE;
 	private String problemDetails = FALSE;
+	private String showCauseMessages = FALSE;
 	private String debugMarshalling = FALSE;
 	private String virtualThreads = FALSE;
 	private String responseTraceparent = "true";
@@ -142,6 +143,19 @@ public class RestContextProperties {
 	 */
 	public String getProblemDetailsRaw() {
 		return problemDetails;
+	}
+
+	/**
+	 * The raw (unresolved) {@code @Rest(showCauseMessages)} default &mdash; whether messages taken from an exception's
+	 * cause are written to error responses.
+	 *
+	 * <p>
+	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getAllowContentParamRaw()}).
+	 *
+	 * @return The raw value. Never <jk>null</jk>.
+	 */
+	public String getShowCauseMessagesRaw() {
+		return showCauseMessages;
 	}
 
 	/**

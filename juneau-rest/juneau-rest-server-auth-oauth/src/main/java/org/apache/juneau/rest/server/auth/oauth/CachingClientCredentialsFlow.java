@@ -76,6 +76,7 @@ public class CachingClientCredentialsFlow {
 		private final Set<String> scopes = st();
 		private TokenCache tokenCache;
 		private Duration cacheSkew = Duration.ofSeconds(30);
+		private URI resource;
 		private Consumer<HTTPRequest> httpRequestConfigurator;
 
 		/** Constructor. */
@@ -153,6 +154,21 @@ public class CachingClientCredentialsFlow {
 		}
 
 		/**
+		 * Sets the RFC 8707 {@code resource} indicator sent on the token request.
+		 *
+		 * <p>
+		 * The resource is forwarded to the token endpoint and is part of the cache key, so tokens
+		 * acquired for different resources are never shared.
+		 *
+		 * @param value The canonical resource URI.  Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder resource(URI value) {
+			resource = reqnn("value", value);
+			return this;
+		}
+
+		/**
 		 * Sets the skew tolerance subtracted from the cached token's expiry.  Default 30s.
 		 *
 		 * @param value The skew.  Must be non-negative.
@@ -211,12 +227,14 @@ public class CachingClientCredentialsFlow {
 			.clientSecretSupplier(b.clientSecretSupplier);
 		if (!scopes.isEmpty())
 			db.scope(scopes.toArray(new String[0]));
+		if (b.resource != null)
+			db.resource(b.resource);
 		if (b.httpRequestConfigurator != null)
 			db.httpRequestConfigurator(b.httpRequestConfigurator);
 		this.delegate = db.build();
 		this.tokenCache = b.tokenCache;
 		this.cacheSkew = b.cacheSkew;
-		this.cacheKey = "cc|" + b.clientId + "|" + String.join(" ", scopes);
+		this.cacheKey = "cc|" + b.tokenEndpoint + "|" + b.clientId + "|" + (b.resource == null ? "" : b.resource) + "|" + String.join(" ", scopes);
 	}
 
 	/**

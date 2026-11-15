@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth.oauth;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.UriUtils.assertSecureOrLoopback;
 
 import java.io.*;
 import java.net.*;
@@ -123,6 +124,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		private boolean anyAudience;
 		private Duration httpTimeout = DEFAULT_HTTP_TIMEOUT;
 		private Duration negativeCacheTtl = DEFAULT_NEGATIVE_CACHE_TTL;
+		private boolean requireTokenType;
 
 		/** Constructor. */
 		protected Builder() {}
@@ -139,7 +141,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 * @return This object.
 		 */
 		public Builder introspectionEndpoint(URI value) {
-			introspectionEndpoint = UriUtils.assertSecureOrLoopback(reqnn("value", value));
+			introspectionEndpoint = assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 
@@ -356,6 +358,23 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		}
 
 		/**
+		 * Requires the introspection response to carry a {@code token_type} of {@code Bearer} or
+		 * {@code access_token}.
+		 *
+		 * <p>
+		 * When {@code false} (the default), a response without {@code token_type} is accepted, but a response
+		 * whose {@code token_type} is present and is not {@code Bearer} / {@code access_token} (for example
+		 * {@code refresh_token} or {@code id_token}) is always rejected.
+		 *
+		 * @param value {@code true} to require {@code token_type} to be present.
+		 * @return This object.
+		 */
+		public Builder requireTokenType(boolean value) {
+			requireTokenType = value;
+			return this;
+		}
+
+		/**
 		 * Builds the validator.
 		 *
 		 * @return A new {@link OAuthIntrospectionValidator}.
@@ -387,6 +406,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 	private final String issuer;
 	private final Duration httpTimeout;
 	private final Duration negativeCacheTtl;
+	private final boolean requireTokenType;
 	private final Map<String,NegativeEntry> negativeCache = new LinkedHashMap<>(16, 0.75f, true) {
 		private static final long serialVersionUID = 1L;
 		@Override
@@ -435,6 +455,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		this.issuer = b.issuer;
 		this.httpTimeout = b.httpTimeout;
 		this.negativeCacheTtl = b.negativeCacheTtl;
+		this.requireTokenType = b.requireTokenType;
 	}
 
 	/**
@@ -586,6 +607,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 	}
 
 	private Principal toPrincipal(TokenIntrospectionSuccessResponse success) throws Rejection {
+		enforceTokenType(success);
 		enforceIssuer(success);
 		enforceAudience(success);
 		var scopes = extractScopes(success);
@@ -603,11 +625,22 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 			throw new Rejection("OAuth token expired", bearerError("invalid_token", "token expired"));
 	}
 
+	private void enforceTokenType(TokenIntrospectionSuccessResponse success) throws Rejection {
+		var type = success.getStringParameter("token_type");
+		if (type == null) {
+			if (requireTokenType)
+				throw new Rejection("OAuth token type missing", bearerError("invalid_token", "token type missing"));
+			return;
+		}
+		if (! (eqic(type, "Bearer") || eqic(type, "access_token")))
+			throw new Rejection("OAuth token is not an access token", bearerError("invalid_token", "token type not accepted"));
+	}
+
 	private void enforceIssuer(TokenIntrospectionSuccessResponse success) throws Rejection {
 		if (issuer == null)
 			return;
 		var iss = success.getIssuer();
-		if (iss == null || ! issuer.equals(iss.getValue()))
+		if (iss == null || neq(issuer, iss.getValue()))
 			throw new Rejection("OAuth token issuer mismatch", bearerError("invalid_token", "issuer mismatch"));
 	}
 

@@ -372,10 +372,18 @@ class AeadRequestStateCodec_Test {
 		assertEquals("1\u0000i\u00001\u0000s", AeadRequestStateCodec.principalIdentity(p));
 	}
 
-	@Test void b03_identity_barePrincipalFallsBackToNameAsSubjectWithEmptyIssuer() {
+	@Test void b03_identity_barePrincipalUsesClassNameAsIssuerAndNameAsSubject() {
 		Principal p = () -> "alice";
-		// iss empty (len 0), sub=name "alice" (len 5)
-		assertEquals("0\u0000\u00005\u0000alice", AeadRequestStateCodec.principalIdentity(p));
+		var cn = p.getClass().getName();
+		assertEquals(cn.length() + "\u0000" + cn + "\u00005\u0000alice", AeadRequestStateCodec.principalIdentity(p));
+	}
+
+	@Test void b03b_identity_barePrincipalsOfDifferentClassesDiffer() {
+		Principal a = () -> "alice";
+		Principal b = new Principal() {
+			@Override public String getName() { return "alice"; }
+		};
+		assertNotEquals(AeadRequestStateCodec.principalIdentity(a), AeadRequestStateCodec.principalIdentity(b));
 	}
 
 	@Test void b04_identity_claimsPrincipalMissingSubFallsBackToName() {

@@ -33,6 +33,9 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
+
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.conversion.*;
@@ -234,7 +237,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 			cat.set(PERIOD);
 		} else if (isAssignableTo(Temporal.class)) {
 			cat.set(TEMPORAL);
-		} else if (isAssignableTo(javax.xml.datatype.XMLGregorianCalendar.class)) {
+		} else if (isAssignableTo(XMLGregorianCalendar.class)) {
 			cat.set(CALENDAR);
 		} else if (inner().isArray()) {
 			cat.set(ARRAY);
@@ -637,7 +640,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * @return <jk>true</jk> if a conversion exists.
 	 */
 	public boolean canConvertFrom(Class<?> c) {
-		return BasicConverter.INSTANCE.canConvert(c, inner());
+		return basicConverter().canConvert(c, inner());
 	}
 
 	/**
@@ -843,7 +846,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * @return <jk>true</jk> if a conversion exists.
 	 */
 	public boolean canConvertTo(Class<?> c) {
-		return BasicConverter.INSTANCE.canConvert(inner(), c);
+		return basicConverter().canConvert(inner(), c);
 	}
 
 	/**
@@ -914,7 +917,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		// Exclude supertypes of InputStream (e.g. Object, Closeable): assignability, not an explicit transform.
 		if (inner() == String.class || inner().isAssignableFrom(InputStream.class))
 			return false;
-		return BasicConverter.INSTANCE.canConvert(InputStream.class, inner());
+		return basicConverter().canConvert(InputStream.class, inner());
 	}
 
 	/**
@@ -943,7 +946,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		// BasicConverter's generic conversions produce false positives that Mutaters never did.
 		if (Collection.class.isAssignableFrom(inner()) || Map.class.isAssignableFrom(inner()))
 			return false;
-		return BasicConverter.INSTANCE.canConvert(c, inner());
+		return basicConverter().canConvert(c, inner());
 	}
 
 	/**
@@ -981,7 +984,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		// BasicConverter's generic conversions produce false positives that Mutaters never did.
 		if (Collection.class.isAssignableFrom(c) || Map.class.isAssignableFrom(c))
 			return false;
-		return BasicConverter.INSTANCE.canConvert(inner(), c);
+		return basicConverter().canConvert(inner(), c);
 	}
 
 	/**
@@ -1008,7 +1011,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		// Exclude supertypes of Reader (e.g. Object, Closeable): assignability, not an explicit transform.
 		if (inner() == String.class || inner().isAssignableFrom(Reader.class))
 			return false;
-		return BasicConverter.INSTANCE.canConvert(Reader.class, inner());
+		return basicConverter().canConvert(Reader.class, inner());
 	}
 
 	/**
@@ -1326,7 +1329,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * @return The converted object, or <jk>null</jk> if no conversion is available.
 	 */
 	public T mutateFrom(Object o) {
-		return BasicConverter.INSTANCE.to(o, inner());
+		return basicConverter().to(o, inner());
 	}
 
 	/**
@@ -1387,6 +1390,15 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	}
 
 	/**
+	 * Returns the context-independent converter for this class, with the class-name guard of the owning context applied.
+	 *
+	 * @return The converter.
+	 */
+	public BasicConverter basicConverter() {
+		return marshallingContext != null ? marshallingContext.getBasicConverter() : BasicConverter.INSTANCE;
+	}
+
+	/**
 	 * Create a new instance of the main class of this declared type from a <c>String</c> input.
 	 *
 	 * <p>
@@ -1417,7 +1429,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 
 		// Class.forName(String) runs static initializers; resolve without initializing.
 		if (inner() == Class.class) {
-			if (!ClassFormat.isClassNameAllowed(arg))
+			if (marshallingContext != null && ! marshallingContext.isClassNameAllowed(arg))
 				throw new ExecutableException("Could not resolve class '%s'", arg);
 			var cl = Thread.currentThread().getContextClassLoader();
 			try {

@@ -50,7 +50,7 @@ class McpClient_Test extends TestBase {
 	}
 
 	private static McpClient client(HttpTransport transport) {
-		return McpClient.builder().endpoint("http://x/mcp").transport(transport).build();
+		return McpClient.builder().endpoint("https://x/mcp").transport(transport).build();
 	}
 
 	private static HttpTransport ok(String wireJson) {

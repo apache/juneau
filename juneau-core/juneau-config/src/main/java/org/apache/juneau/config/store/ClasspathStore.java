@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.config.store;
 
+import static org.apache.juneau.commons.utils.FileUtils.isSafeRelativePath;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -127,7 +128,7 @@ public class ClasspathStore extends ConfigStore {
 	public synchronized boolean exists(String name) {
 		try {
 			return ! read(name).isEmpty();
-		} catch (@SuppressWarnings("unused") IOException e) {
+		} catch (@SuppressWarnings("unused") IOException | IllegalArgumentException e) {
 			// A read failure (missing/unreadable classpath resource) means the config is not available, so report it as not existing.
 			return false;
 		}
@@ -135,6 +136,7 @@ public class ClasspathStore extends ConfigStore {
 
 	@Override /* Overridden from ConfigStore */
 	public synchronized String read(String name) throws IOException {
+		checkName(name);
 		var s = cache.get(name);
 		if (nn(s))
 			return s;
@@ -145,6 +147,15 @@ public class ClasspathStore extends ConfigStore {
 				cache.put(name, IoUtils.read(in));
 		}
 		return emptyIfNull(cache.get(name));
+	}
+
+	/*
+	 * Rejects names that are absolute, contain backslashes or NUL, or have ".." segments, so a name can't reach
+	 * classpath resources outside the intended location.
+	 */
+	private static void checkName(String name) {
+		if (nn(name) && ! isSafeRelativePath(name))
+			throw iaex("Invalid classpath config name.");
 	}
 
 	@Override /* Overridden from ConfigStore */

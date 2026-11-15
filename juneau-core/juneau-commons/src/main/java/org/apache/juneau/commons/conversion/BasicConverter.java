@@ -25,6 +25,7 @@ import java.math.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
+import java.util.function.*;
 
 import org.apache.juneau.commons.reflect.*;
 
@@ -146,6 +147,12 @@ import org.apache.juneau.commons.reflect.*;
  * 	</tr>
  * </table>
  *
+ * <h2 class='section'>Class-name guard:</h2>
+ * <p>
+ * <c>String</c>-to-{@link Class} conversion resolves the class without running its static initializer.  A converter
+ * created with {@link #BasicConverter(Predicate)} additionally vets each class name with the specified guard and
+ * rejects names the guard does not permit.  {@link #INSTANCE} has no guard.
+ *
  * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is thread-safe. The singleton instance can be safely shared across multiple threads.
@@ -179,10 +186,39 @@ public class BasicConverter extends CachingConverter {
 		short.class, Short.class
 	);
 
+	// Vets class names before a String is converted to a Class.  null == allow all.
+	private final Predicate<String> classNameGuard;
+
 	/**
 	 * Constructor.
+	 *
+	 * <p>
+	 * Creates a converter with no class-name guard.
 	 */
-	protected BasicConverter() {}
+	protected BasicConverter() {
+		this(null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param classNameGuard
+	 * 	Vets class names before a <c>String</c> is converted to a {@link Class}.
+	 * 	Names the guard rejects fail with {@link IllegalArgumentException}.
+	 * 	<br>Can be <jk>null</jk> (all names allowed).
+	 */
+	public BasicConverter(Predicate<String> classNameGuard) {
+		this.classNameGuard = classNameGuard;
+	}
+
+	/**
+	 * Returns the class-name guard of this converter.
+	 *
+	 * @return The class-name guard, or <jk>null</jk> if all names are allowed.
+	 */
+	public Predicate<String> getClassNameGuard() {
+		return classNameGuard;
+	}
 
 	@Override
 	protected <I,O> Conversion<I,O> findConversion(Class<I> inType, Class<O> outType) {
@@ -531,7 +567,9 @@ public class BasicConverter extends CachingConverter {
 	 * {@link Class#forName(String)} initializes the class, which would let an input string trigger arbitrary
 	 * static-initializer code, so the three-argument form with {@code initialize=false} is used instead.
 	 */
-	private static Class<?> loadClassWithoutInit(String name) {
+	private Class<?> loadClassWithoutInit(String name) {
+		if (classNameGuard != null && ! classNameGuard.test(name))
+			throw new IllegalArgumentException("Class not found: " + name);
 		var cl = Thread.currentThread().getContextClassLoader();
 		if (cl == null)
 			cl = BasicConverter.class.getClassLoader();
@@ -685,7 +723,7 @@ public class BasicConverter extends CachingConverter {
 	// Helpers
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private <T> T newInstanceOrDefault(Class<?> type, java.util.function.Supplier<T> defaultSupplier) {
+	private <T> T newInstanceOrDefault(Class<?> type, Supplier<T> defaultSupplier) {
 		var opt = info(type).getPublicConstructor(c -> c.getParameterCount() == 0);
 		if (opt.isPresent()) {
 			var ctor = opt.get();

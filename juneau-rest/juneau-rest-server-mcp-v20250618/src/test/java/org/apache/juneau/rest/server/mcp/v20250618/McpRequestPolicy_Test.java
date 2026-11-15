@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.mcp.v20250618;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.json.*;
@@ -62,10 +64,20 @@ class McpRequestPolicy_Test extends TestBase {
 		@Override
 		protected McpServerConfig createMcpConfig() {
 			return new McpServerConfig().setName("t").setVersion("1").setTokenValidator(t -> {
-				if (! "good".equals(t))
+				if (neq("good", t))
 					throw new AuthenticationException("bad");
 				return () -> "user";
 			});
+		}
+	}
+
+	@Rest(serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class Proxied extends McpRestServlet {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected McpServerConfig createMcpConfig() {
+			return new McpServerConfig().setName("t").setVersion("1").trustProxy(true);
 		}
 	}
 
@@ -97,13 +109,42 @@ class McpRequestPolicy_Test extends TestBase {
 		client(Open.class).post("/", PING).contentType("application/json").header("Host", "rebound.example.com").ignoreErrors().run().assertStatus(403);
 	}
 
-	@Test void a07_allowUnauthenticated_servesAnyHost() throws Exception {
-		client(Public.class).post("/", PING).contentType("application/json").header("Host", "rebound.example.com").ignoreErrors().run().assertStatus(200);
+	@Test void a07_allowUnauthenticated_servesNonLoopbackCallers() throws Exception {
+		client(Public.class).post("/", PING).contentType("application/json").header("Host", "localhost").remoteAddr("203.0.113.5").ignoreErrors().run().assertStatus(200);
 	}
 
 	@Test void a08_tokenValidator_requiresBearer() throws Exception {
 		client(Secured.class).post("/", PING).contentType("application/json").ignoreErrors().run().assertStatus(401);
 		client(Secured.class).post("/", PING).contentType("application/json").header("Authorization", "Bearer bad").ignoreErrors().run().assertStatus(401);
 		client(Secured.class).post("/", PING).contentType("application/json").header("Authorization", "Bearer good").ignoreErrors().run().assertStatus(200);
+	}
+
+	@Test void a09_unauthenticated_hostLookalikeLoopbackName_is403() throws Exception {
+		client(Open.class).post("/", PING).contentType("application/json").header("Host", "127.other.example").ignoreErrors().run().assertStatus(403);
+		client(Open.class).post("/", PING).contentType("application/json").header("Host", "127.0.0.1.other.example:8080").ignoreErrors().run().assertStatus(403);
+		client(Open.class).post("/", PING).contentType("application/json").header("Host", "127.0.0.1:8080").ignoreErrors().run().assertStatus(200);
+		client(Open.class).post("/", PING).contentType("application/json").header("Host", "[::1]:8080").ignoreErrors().run().assertStatus(200);
+	}
+
+	@Test void a10_allowUnauthenticated_stillChecksHost() throws Exception {
+		client(Public.class).post("/", PING).contentType("application/json").header("Host", "127.other.example").ignoreErrors().run().assertStatus(403);
+		client(Public.class).post("/", PING).contentType("application/json").header("Host", "localhost:8080").ignoreErrors().run().assertStatus(200);
+	}
+
+	@Test void a11_forwardingHeaders_refuseLoopbackTrust() throws Exception {
+		client(Open.class).post("/", PING).contentType("application/json").header("X-Forwarded-For", "203.0.113.5").ignoreErrors().run().assertStatus(403);
+		client(Open.class).post("/", PING).contentType("application/json").header("Forwarded", "for=203.0.113.5").ignoreErrors().run().assertStatus(403);
+		client(Open.class).post("/", PING).contentType("application/json").header("X-Forwarded-Host", "public.example.com").ignoreErrors().run().assertStatus(403);
+	}
+
+	@Test void a12_forwardingHeaders_acceptedWhenProxyTrusted() throws Exception {
+		client(Proxied.class).post("/", PING).contentType("application/json").header("X-Forwarded-For", "203.0.113.5").ignoreErrors().run().assertStatus(200);
+	}
+
+	@Test void a13_nonLoopbackRemoteAddress_is403() throws Exception {
+		MockRestClient.create(Open.class).accept("application/json").build()
+			.post("/", PING).contentType("application/json").header("Host", "localhost").remoteAddr("203.0.113.5").ignoreErrors().run().assertStatus(403);
+		MockRestClient.create(Open.class).accept("application/json").build()
+			.post("/", PING).contentType("application/json").header("Host", "localhost").remoteAddr("127.other").ignoreErrors().run().assertStatus(403);
 	}
 }

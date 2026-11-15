@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
+import static org.apache.juneau.commons.http.SafePathTemplate.isSafeRedirect;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -602,44 +603,9 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @throws BadRequest If <c>uri</c> is absolute or protocol-relative and its host isn't in <c>allowedHosts</c>.
 	 */
 	public void sendSafeRedirect(String uri, String...allowedHosts) throws IOException {
-		if (! isSafeRedirectUri(uri, allowedHosts))
+		if (! isSafeRedirect(uri, allowedHosts))
 			throw new BadRequest("Redirect target '%s' is not a relative path or an allowed host.", uri);
 		sendRedirect(uri);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <c>uri</c> is safe to pass to {@link #sendRedirect(String) sendRedirect(String)}
-	 * without risk of redirecting to an unintended external site: either a relative path, or an absolute/
-	 * protocol-relative URI whose host is in <c>allowedHosts</c>.
-	 *
-	 * @param uri The candidate redirection URL.
-	 * @param allowedHosts The hosts (case-insensitive) an absolute or protocol-relative <c>uri</c> is allowed to target.
-	 * @return <jk>true</jk> if the URI is safe to redirect to.
-	 */
-	static boolean isSafeRedirectUri(String uri, String...allowedHosts) {
-		if (ie(uri))
-			return true;
-		for (var i = 0; i < uri.length(); i++) {
-			var c = uri.charAt(i);
-			if (c == '\\' || c <= 0x20 || c == 0x7f)
-				return false;
-		}
-		if (uri.charAt(0) == '/' && ! uri.startsWith("//"))
-			return true;
-		if (uri.indexOf("://") == -1 && ! uri.startsWith("//"))
-			return true;
-		String host;
-		try {
-			host = new java.net.URI(uri.startsWith("//") ? "http:" + uri : uri).getHost();
-		} catch (java.net.URISyntaxException e) {
-			return false;
-		}
-		if (host == null || allowedHosts == null)
-			return false;
-		for (var h : allowedHosts)
-			if (eqic(host, h))
-				return true;
-		return false;
 	}
 
 	/**

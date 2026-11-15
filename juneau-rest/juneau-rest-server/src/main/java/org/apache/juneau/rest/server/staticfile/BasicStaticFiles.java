@@ -61,8 +61,8 @@ public class BasicStaticFiles implements StaticFiles {
 		return new StaticFiles.Builder(beanStore);
 	}
 
-	// Class files, dotfiles, and common configuration/credential/backup file types are never served.
-	static final String EXCLUDE_PATTERN = "(?i)(.*/)?\\.[^/]*|.*\\.(class|properties|ya?ml|xml|jks|p12|pfx|pem|key|env|cfg|conf|bak)";
+	// Class files, dotfiles, anything under a dot-directory, and common configuration/credential/backup file types are never served.
+	static final String EXCLUDE_PATTERN = "(?i)(.*/)?\\.[^/]*(/.*)?|.*\\.(class|properties|ya?ml|xml|jks|p12|pfx|pem|key|env|cfg|conf|bak)";
 
 	private final HttpHeader[] headers;
 	private final MimeTypeDetector mimeTypes;

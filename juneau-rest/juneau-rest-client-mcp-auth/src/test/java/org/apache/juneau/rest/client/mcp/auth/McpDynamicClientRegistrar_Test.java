@@ -322,4 +322,48 @@ class McpDynamicClientRegistrar_Test extends TestBase {
 			.addRedirectUri(URI.create("http://127.0.0.1:3000/callback")).build();
 		assertThrowsWithMessage(McpAuthException.class, "HTTP call failed", registrar::register);
 	}
+
+	@Test void h01_privateOrNonCanonicalEndpointRejectedByDefault() {
+		for (var h : new String[]{"10.0.0.5", "169.254.169.254", "127.1", "2130706433", "foo.localhost"}) {
+			var b = McpDynamicClientRegistrar.create().registrationEndpoint(URI.create("https://" + h + "/register"))
+				.issuer(ISSUER).applicationType(McpApplicationType.NATIVE)
+				.addRedirectUri(URI.create("http://127.0.0.1/callback"));
+			assertThrows(IllegalStateException.class, b::build, h);
+		}
+	}
+
+	@Test void h02_privateEndpointAllowedWithOptIn() {
+		assertDoesNotThrow(() -> McpDynamicClientRegistrar.create()
+			.registrationEndpoint(URI.create("https://10.0.0.5/register"))
+			.allowPrivateUrls(true)
+			.issuer(ISSUER).applicationType(McpApplicationType.NATIVE)
+			.addRedirectUri(URI.create("http://127.0.0.1/callback")).build());
+	}
+
+	@Test void h03_redirectResponseIsNotFollowed() throws Exception {
+		var server = com.sun.net.httpserver.HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
+		var hits = new AtomicInteger();
+		server.createContext("/register", ex -> {
+			try (var in = ex.getRequestBody()) { in.readAllBytes(); }
+			ex.getResponseHeaders().add("Location", "http://127.0.0.1:" + ex.getLocalAddress().getPort() + "/other");
+			ex.sendResponseHeaders(307, -1);
+			ex.close();
+		});
+		server.createContext("/other", ex -> {
+			hits.incrementAndGet();
+			ex.sendResponseHeaders(200, -1);
+			ex.close();
+		});
+		server.start();
+		try {
+			var registrar = McpDynamicClientRegistrar.create()
+				.registrationEndpoint(URI.create("http://127.0.0.1:" + server.getAddress().getPort() + "/register"))
+				.issuer(ISSUER).applicationType(McpApplicationType.NATIVE)
+				.addRedirectUri(URI.create("http://127.0.0.1:3000/callback")).build();
+			assertThrows(McpAuthException.class, registrar::register);
+			assertEquals(0, hits.get());
+		} finally {
+			server.stop(0);
+		}
+	}
 }

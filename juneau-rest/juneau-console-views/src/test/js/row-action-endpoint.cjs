@@ -159,4 +159,13 @@ out.dotdot_encodedInsideValue = I.buildActionRequest(ackAction, TOKEN, null, nul
 // Case 16: one blank token among several - the guard is per-token, not "the first token".
 out.multiToken_oneBlank = I.buildActionRequest(multiAction, TOKEN, null, null, { id: 'a1' });
 
+// Case 17: an endpoint that resolves off this origin (absolute URL, protocol-relative, backslash form, other scheme)
+// refuses; a same-origin absolute path and the servlet:-prefixed form still resolve.
+const offOrigin = ep => I.buildActionRequest({ id: 'ack', endpoint: ep, method: 'POST' }, TOKEN, null, null, { id: 'a1' });
+out.offOrigin_absolute = offOrigin('https://other.example/x/{id}');
+out.offOrigin_protocolRelative = offOrigin('//other.example/x/{id}');
+out.offOrigin_backslash = offOrigin('/\\other.example/x/{id}');
+out.offOrigin_scheme = offOrigin('ftp://other.example/x');
+out.sameOrigin_path = offOrigin('/x/{id}').url;
+
 console.log(JSON.stringify(out));

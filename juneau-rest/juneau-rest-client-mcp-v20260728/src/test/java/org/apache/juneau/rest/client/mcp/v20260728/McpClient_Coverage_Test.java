@@ -20,6 +20,7 @@ import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -73,7 +74,7 @@ class McpClient_Coverage_Test extends TestBase {
 	}
 
 	private static McpClient client(HttpTransport transport) {
-		return McpClient.builder().endpoint("http://x/mcp").transport(transport).build();
+		return McpClient.builder().endpoint("https://x/mcp").transport(transport).build();
 	}
 
 	private static String notification(String method) {
@@ -89,7 +90,7 @@ class McpClient_Coverage_Test extends TestBase {
 	@Test
 	void a01_connect_withEndpointString_performsDiscoverAgainstRealHttpServer() throws Exception {
 		var method = new AtomicReference<String>();
-		var server = HttpServer.create(new java.net.InetSocketAddress("127.0.0.1", 0), 0);
+		var server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
 		server.createContext("/mcp", ex -> {
 			method.set(ex.getRequestHeaders().getFirst("Mcp-Method"));
 			var body = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"supportedVersions\":[\"2026-07-28\"],\"capabilities\":{}}}".getBytes(StandardCharsets.UTF_8);
@@ -152,7 +153,7 @@ class McpClient_Coverage_Test extends TestBase {
 	@Test
 	void b01_clientInfo_isStampedIntoMeta() throws Exception {
 		var seen = new AtomicReference<String>();
-		try (var c = McpClient.builder().endpoint("http://x/mcp")
+		try (var c = McpClient.builder().endpoint("https://x/mcp")
 			.transport(recording(seen, EMPTY_RESULT))
 			.clientInfo(new Implementation().setName("my-client").setVersion("9.8.7"))
 			.build()) {
@@ -165,7 +166,7 @@ class McpClient_Coverage_Test extends TestBase {
 	@Test
 	void b02_traceFieldsSupplier_returningNull_stampsNoTraceFields() throws Exception {
 		var seen = new AtomicReference<String>();
-		try (var c = McpClient.builder().endpoint("http://x/mcp")
+		try (var c = McpClient.builder().endpoint("https://x/mcp")
 			.transport(recording(seen, EMPTY_RESULT))
 			.traceFieldsSupplier(() -> null)
 			.build()) {
@@ -179,7 +180,7 @@ class McpClient_Coverage_Test extends TestBase {
 	@Test
 	void b03_traceFieldsSupplier_onlyTracestate_stampsOnlyThatField() throws Exception {
 		var seen = new AtomicReference<String>();
-		try (var c = McpClient.builder().endpoint("http://x/mcp")
+		try (var c = McpClient.builder().endpoint("https://x/mcp")
 			.transport(recording(seen, EMPTY_RESULT))
 			.traceFieldsSupplier(() -> Map.of(RequestMeta.KEY_TRACESTATE, "only=state"))
 			.build()) {
@@ -193,7 +194,7 @@ class McpClient_Coverage_Test extends TestBase {
 	@Test
 	void b04_traceFieldsSupplier_onlyBaggage_stampsOnlyThatField() throws Exception {
 		var seen = new AtomicReference<String>();
-		try (var c = McpClient.builder().endpoint("http://x/mcp")
+		try (var c = McpClient.builder().endpoint("https://x/mcp")
 			.transport(recording(seen, EMPTY_RESULT))
 			.traceFieldsSupplier(() -> Map.of(RequestMeta.KEY_BAGGAGE, "only=baggage"))
 			.build()) {
@@ -207,7 +208,7 @@ class McpClient_Coverage_Test extends TestBase {
 	@Test
 	void b05_traceFieldsSupplier_onlyTraceparent_stampsOnlyThatField() throws Exception {
 		var seen = new AtomicReference<String>();
-		try (var c = McpClient.builder().endpoint("http://x/mcp")
+		try (var c = McpClient.builder().endpoint("https://x/mcp")
 			.transport(recording(seen, EMPTY_RESULT))
 			.traceFieldsSupplier(() -> Map.of(RequestMeta.KEY_TRACEPARENT, "00-only-01"))
 			.build()) {
@@ -231,7 +232,7 @@ class McpClient_Coverage_Test extends TestBase {
 			return TransportResponse.builder().statusCode(200).header("Content-Type", "application/json")
 				.body(new ByteArrayInputStream(wire.getBytes(StandardCharsets.UTF_8))).build();
 		};
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(transport).responseCache(new InMemoryMcpResponseCache()).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(transport).responseCache(new InMemoryMcpResponseCache()).build()) {
 			c.listTools();
 			c.listTools();
 		}
@@ -247,7 +248,7 @@ class McpClient_Coverage_Test extends TestBase {
 			return TransportResponse.builder().statusCode(200).header("Content-Type", "application/json")
 				.body(new ByteArrayInputStream(wire.getBytes(StandardCharsets.UTF_8))).build();
 		};
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(transport).responseCache(new InMemoryMcpResponseCache()).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(transport).responseCache(new InMemoryMcpResponseCache()).build()) {
 			var a = c.listTools();
 			var b = c.listTools();
 			assertSame(a, b);
@@ -264,7 +265,7 @@ class McpClient_Coverage_Test extends TestBase {
 			return TransportResponse.builder().statusCode(200).header("Content-Type", "application/json")
 				.body(new ByteArrayInputStream(wire.getBytes(StandardCharsets.UTF_8))).build();
 		};
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(transport).responseCache(new InMemoryMcpResponseCache()).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(transport).responseCache(new InMemoryMcpResponseCache()).build()) {
 			c.callTool("echo", null);
 			c.callTool("echo", null);
 		}

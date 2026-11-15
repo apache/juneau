@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.console.bus;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -55,7 +57,7 @@ import org.apache.juneau.rest.server.*;
  *
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
- *   <jc>// An application with its own CSRF guard puts it in front of the session POST.
+ *   <jc>// An application with its own request-token guard puts it in front of the session POST.
  *   // Re-declaring @RestPost here is optional and registers the route once.</jc>
  *   <ja>@Override</ja> <ja>@RestPost</ja>(path=<jsf>SESSION_PATH</jsf>)
  *   <jk>public</jk> JsonMap openBusSession(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
@@ -128,18 +130,24 @@ public interface BusEventsMixin {
 
 	/**
 	 * The default check applied when the policy has no boundary: a request with an {@code Origin} header passes only
-	 * when that origin's authority equals the request's {@code Host}.  A request with no {@code Origin} passes.
+	 * when that origin's scheme and authority equal the request's scheme and {@code Host}, and a {@code Sec-Fetch-Site}
+	 * header, when present, is {@code same-origin}.  A request with no {@code Origin} passes (non-browser clients).
 	 *
 	 * @param req The servlet request.
 	 * @return <jk>true</jk> if the request is allowed.
 	 */
 	private static boolean sameOrigin(HttpServletRequest req) {
+		var site = req.getHeader("Sec-Fetch-Site");
+		if (site != null && neqic("same-origin", site.trim()))
+			return false;
 		var origin = req.getHeader("Origin");
 		if (origin == null)
 			return true;
 		var host = req.getHeader("Host");
 		var i = origin.indexOf("://");
-		return host != null && i > 0 && origin.substring(i + 3).equalsIgnoreCase(host);
+		return host != null && i > 0
+			&& eqic(origin.substring(0, i), req.getScheme())
+			&& eqic(origin.substring(i + 3), host);
 	}
 
 	/**
@@ -203,7 +211,7 @@ public interface BusEventsMixin {
 	private static JsonMap sessionBody(RestRequest req) throws BusRefusal {
 		String text;
 		try {
-			text = BusStream.readCapped(req.getInputStream());
+			text = BusStream.readSessionBody(req.getInputStream());
 		} catch (IOException e) {
 			throw BusRefusal.badRequest("the session request could not be read");
 		}

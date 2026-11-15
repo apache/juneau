@@ -69,7 +69,7 @@ public class VariantAlsoNegotiates extends BasicHttpException {
 	 * @param cause The cause. May be <jk>null</jk>.
 	 */
 	public VariantAlsoNegotiates(Throwable cause) {
-		super(STATUS_CODE, REASON_PHRASE, cause, cause != null ? cause.getMessage() : null);
+		super(STATUS_CODE, REASON_PHRASE, cause);
 	}
 
 	/**

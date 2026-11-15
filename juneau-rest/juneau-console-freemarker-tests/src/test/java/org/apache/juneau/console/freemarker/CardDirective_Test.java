@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.console.freemarker;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.console.test.PageContractAssert.*;
 import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +46,7 @@ class CardDirective_Test extends TestBase {
 
 	// renderResponseStackTraces=true so the reject() diagnostic reaches the 500 body verbatim: the
 	// secure default suppressed-body path runs RestContext.scrubForXss, which replaces '<' '>' '&' with spaces
-	// as an XSS defense, so literal "<@card>" cannot survive there.  In DEBUG mode the full stack trace (with
+	// as part of output escaping, so literal "<@card>" cannot survive there.  In DEBUG mode the full stack trace (with
 	// the plain-cause IllegalArgumentException carrying the frozen sentence) is written unscrubbed.
 	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
 	public static class Host extends BasicRestServlet {
@@ -109,7 +110,7 @@ class CardDirective_Test extends TestBase {
 	/** The contract entry for card {@code id}. */
 	static JsonMap card(String body, String id) {
 		for (var o : assertPage(body).isValid().contract().getList("cards"))
-			if (id.equals(((JsonMap)o).getString("id")))
+			if (eq(id, ((JsonMap)o).getString("id")))
 				return (JsonMap)o;
 		throw new AssertionError("no card '" + id + "' in " + body);
 	}
@@ -254,11 +255,11 @@ class CardDirective_Test extends TestBase {
 			}
 	}
 
-	@Test void b19_sanitizeAttr_isInContractOnlyWhenTrue() throws Exception {
+	@Test void b19_sanitizeAttr_isInContractOnlyWhenStated() throws Exception {
 		var body = get("/card-html-sanitize");
 		assertEquals(true, card(body, "on").get("sanitize"));
 		assertEquals("/rest/fragment", card(body, "on").getString("src"));
-		assertFalse(card(body, "off").containsKey("sanitize"));
+		assertEquals(false, card(body, "off").get("sanitize"));
 		assertFalse(card(body, "plain").containsKey("sanitize"));
 	}
 

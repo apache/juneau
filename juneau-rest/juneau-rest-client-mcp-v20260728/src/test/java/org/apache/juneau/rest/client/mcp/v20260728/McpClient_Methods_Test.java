@@ -45,7 +45,7 @@ class McpClient_Methods_Test extends TestBase {
 
 	private static McpClient client(HttpTransport transport) {
 		return McpClient.builder()
-			.endpoint("http://x/mcp")
+			.endpoint("https://x/mcp")
 			.transport(transport)
 			.build();
 	}
@@ -73,7 +73,7 @@ class McpClient_Methods_Test extends TestBase {
 	@Test
 	void c01_callTool_parsesPolymorphicTextContent() throws Exception {
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"hello\"}]}}";
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(ok(wire)).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(ok(wire)).build()) {
 			var result = c.callTool("echo", Map.of("text", "hello"));
 			assertSize(1, result.getContent());
 			assertEquals("hello", ((TextContent)result.getContent().get(0)).getText());
@@ -83,7 +83,7 @@ class McpClient_Methods_Test extends TestBase {
 	@Test
 	void c02_callToolText_returnsFirstTextContentText() throws Exception {
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"hello\"}]}}";
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(ok(wire)).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(ok(wire)).build()) {
 			assertEquals("hello", c.callToolText("echo", Map.of("text", "hello")));
 		}
 	}
@@ -91,7 +91,7 @@ class McpClient_Methods_Test extends TestBase {
 	@Test
 	void c03_callToolText_nonTextFirstBlock_returnsNull() throws Exception {
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"content\":[{\"type\":\"audio\",\"data\":\"QUJD\",\"mimeType\":\"audio/wav\"}]}}";
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(ok(wire)).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(ok(wire)).build()) {
 			assertNull(c.callToolText("echo", Map.of()));
 		}
 	}
@@ -101,7 +101,7 @@ class McpClient_Methods_Test extends TestBase {
 		// The server returning "result":null is a documented, legal callTool() outcome; callToolText must
 		// not NPE dereferencing it.
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":null}";
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(ok(wire)).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(ok(wire)).build()) {
 			assertNull(c.callToolText("echo", Map.of()));
 		}
 	}
@@ -109,7 +109,7 @@ class McpClient_Methods_Test extends TestBase {
 	@Test
 	void d01_callTool_traceEchoEnabled_readsMetaPath() throws Exception {
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"_meta\":{\"traceparent\":\"00-parent-01\",\"tracestate\":\"v=x\",\"baggage\":\"u=42\"},\"content\":[{\"type\":\"text\",\"text\":\"ok\"}]}}";
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(ok(wire)).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(ok(wire)).build()) {
 			var result = c.callTool("echo", Map.of());
 			assertNotNull(result.getMeta());
 			assertEquals("00-parent-01", result.getMeta().getTraceparent());
@@ -170,7 +170,7 @@ class McpClient_Methods_Test extends TestBase {
 				.build();
 		};
 		try (var c = McpClient.builder()
-			.endpoint("http://x/mcp")
+			.endpoint("https://x/mcp")
 			.transport(transport)
 			.responseCache(new InMemoryMcpResponseCache())
 			.build()) {

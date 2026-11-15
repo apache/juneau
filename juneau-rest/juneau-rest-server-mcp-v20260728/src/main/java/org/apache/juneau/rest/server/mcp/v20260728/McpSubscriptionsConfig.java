@@ -42,6 +42,9 @@ public class McpSubscriptionsConfig {
 	/** Default cap on concurrently open {@code subscriptions/listen} streams per broker. */
 	public static final int DEFAULT_MAX_CONCURRENT_SUBSCRIPTIONS = 256;
 
+	/** Default cap on concurrently open {@code subscriptions/listen} streams per authenticated caller. */
+	public static final int DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL = 16;
+
 	/** Default per-subscription drop-oldest queue bound; matches {@code SseBroadcaster.DEFAULT_QUEUE_SIZE}. */
 	public static final int DEFAULT_QUEUE_SIZE = 1024;
 
@@ -52,6 +55,7 @@ public class McpSubscriptionsConfig {
 	public static final long DEFAULT_IDLE_TIMEOUT_MS = 300_000L;
 
 	private int maxConcurrentSubscriptions = DEFAULT_MAX_CONCURRENT_SUBSCRIPTIONS;
+	private int maxSubscriptionsPerPrincipal = DEFAULT_MAX_SUBSCRIPTIONS_PER_PRINCIPAL;
 	private int queueSize = DEFAULT_QUEUE_SIZE;
 	private long heartbeatIntervalMs = DEFAULT_HEARTBEAT_INTERVAL_MS;
 	private long idleTimeoutMs = DEFAULT_IDLE_TIMEOUT_MS;
@@ -76,6 +80,29 @@ public class McpSubscriptionsConfig {
 		if (value <= 0)
 			throw new IllegalArgumentException("maxConcurrentSubscriptions " + value + " must be > 0");
 		maxConcurrentSubscriptions = value;
+		return this;
+	}
+
+	/**
+	 * The cap on concurrently open {@code subscriptions/listen} streams per authenticated caller.
+	 *
+	 * @return The cap. Always {@code > 0}.
+	 */
+	public int getMaxSubscriptionsPerPrincipal() {
+		return maxSubscriptionsPerPrincipal;
+	}
+
+	/**
+	 * Sets the cap on concurrently open {@code subscriptions/listen} streams per authenticated caller.
+	 *
+	 * @param value The new value. Must be {@code > 0}.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is not {@code > 0}.
+	 */
+	public McpSubscriptionsConfig setMaxSubscriptionsPerPrincipal(int value) {
+		if (value <= 0)
+			throw new IllegalArgumentException("maxSubscriptionsPerPrincipal " + value + " must be > 0");
+		maxSubscriptionsPerPrincipal = value;
 		return this;
 	}
 

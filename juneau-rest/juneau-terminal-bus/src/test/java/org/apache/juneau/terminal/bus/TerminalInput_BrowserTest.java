@@ -18,6 +18,7 @@ package org.apache.juneau.terminal.bus;
 
 import static java.nio.charset.StandardCharsets.*;
 import static org.apache.juneau.bct.BctAssertions.assertSize;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -43,6 +44,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * End to end for terminal input: typed keys in a terminal card travel over a real bus WebSocket to
@@ -91,6 +93,10 @@ class TerminalInput_BrowserTest extends TestBase {
 
 		@Override public ServerBus serverBus() { return bus; }
 
+		@Override public TerminalAccess terminalAccess() { return (caller, id) -> true; }
+
+		@Override public TerminalViewAccess terminalViewAccess() { return (req, runId) -> true; }
+
 		@Override public Optional<TerminalSource> terminalSource(String id, RestRequest req) {
 			return Optional.ofNullable(JOBS.get(id)).map(TerminalProcess::terminal);
 		}
@@ -104,10 +110,10 @@ class TerminalInput_BrowserTest extends TestBase {
 	static final class Pages extends HttpServlet {
 		private static final long serialVersionUID = 1L;
 
-		@Override protected void doGet(HttpServletRequest req, jakarta.servlet.http.HttpServletResponse res) throws IOException {
+		@Override protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
 			var path = req.getPathInfo();
-			if (path == null || path.equals("/page")) {
-				write(res, "text/html;charset=utf-8", page(req.getParameter("id"), "1".equals(req.getParameter("typist")), "1".equals(req.getParameter("input"))).getBytes(UTF_8));
+			if (path == null || eq(path, "/page")) {
+				write(res, "text/html;charset=utf-8", page(req.getParameter("id"), eq("1", req.getParameter("typist")), eq("1", req.getParameter("input"))).getBytes(UTF_8));
 				return;
 			}
 			var name = path.substring("/a/".length());
@@ -115,7 +121,7 @@ class TerminalInput_BrowserTest extends TestBase {
 			write(res, type, asset(name));
 		}
 
-		private static void write(jakarta.servlet.http.HttpServletResponse res, String type, byte[] body) throws IOException {
+		private static void write(HttpServletResponse res, String type, byte[] body) throws IOException {
 			res.setContentType(type);
 			res.getOutputStream().write(body);
 		}
@@ -144,7 +150,7 @@ class TerminalInput_BrowserTest extends TestBase {
 		TerminalAccess access = new TerminalAccess() {
 			@Override public boolean canWatch(TerminalCaller caller, String id) { return JOBS.containsKey(id); }
 			@Override public Optional<TerminalSink> inputSink(TerminalCaller caller, String id) {
-				return Boolean.TRUE.equals(caller.attribute("typist")) ? Optional.ofNullable(JOBS.get(id)) : Optional.empty();
+				return eq(Boolean.TRUE, caller.attribute("typist")) ? Optional.ofNullable(JOBS.get(id)) : Optional.empty();
 			}
 		};
 		var input = TerminalInput.create(access);
@@ -152,7 +158,7 @@ class TerminalInput_BrowserTest extends TestBase {
 			.allowedOrigins(origin)
 			.upstream(TerminalInput.TOPIC, input)
 			.downstream(TerminalInput.STATUS_TOPIC, false)
-			.sessionAttributes(r -> Map.of("typist", "1".equals(r.getParameter("typist"))))
+			.sessionAttributes(r -> Map.of("typist", eq("1", r.getParameter("typist"))))
 			.build());
 		input.bind(bus);
 

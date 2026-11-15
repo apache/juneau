@@ -60,9 +60,11 @@ public class BasicFileFinder implements FileFinder {
 
 	private final Map<String,LocalFile> files = new ConcurrentHashMap<>();
 	private final Map<Locale,Map<String,LocalFile>> localizedFiles = new ConcurrentHashMap<>();
+	private final Map<String,LocalFile> resolvedFiles = new ConcurrentHashMap<>();
 
 	private final LocalDir[] roots;
 	private final long cachingLimit;
+	private final int maxCachedLocales;
 	private final Pattern[] include;
 	private final Pattern[] exclude;
 	private final String[] includePatterns;
@@ -77,11 +79,12 @@ public class BasicFileFinder implements FileFinder {
 	public BasicFileFinder(FileFinder.Builder builder) {
 		this.roots = builder.roots.toArray(new LocalDir[builder.roots.size()]);
 		this.cachingLimit = builder.cachingLimit;
+		this.maxCachedLocales = builder.maxCachedLocales;
 		this.include = builder.include;
 		this.exclude = builder.exclude;
 		this.includePatterns = l(include).stream().map(Pattern::pattern).toArray(String[]::new);
 		this.excludePatterns = l(exclude).stream().map(Pattern::pattern).toArray(String[]::new);
-		this.hashCode = h(getClass(), roots, cachingLimit, includePatterns, excludePatterns);
+		this.hashCode = h(getClass(), roots, cachingLimit, maxCachedLocales, includePatterns, excludePatterns);
 	}
 
 	/**
@@ -93,17 +96,23 @@ public class BasicFileFinder implements FileFinder {
 	protected BasicFileFinder() {
 		this.roots = new LocalDir[0];
 		this.cachingLimit = -1;
+		this.maxCachedLocales = 32;
 		this.include = new Pattern[0];
 		this.exclude = new Pattern[0];
 		this.includePatterns = new String[0];
 		this.excludePatterns = new String[0];
-		this.hashCode = h(getClass(), roots, cachingLimit, includePatterns, excludePatterns);
+		this.hashCode = h(getClass(), roots, cachingLimit, maxCachedLocales, includePatterns, excludePatterns);
 	}
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof BasicFileFinder o2 && eq(this, o2, (x, y) -> eq(x.hashCode, y.hashCode) && eq(x.getClass(), y.getClass()) && eq(x.roots, y.roots) && eq(x.cachingLimit, y.cachingLimit)
+		return o instanceof BasicFileFinder o2 && eq(this, o2, (x, y) -> eq(x.hashCode, y.hashCode) && eq(x.getClass(), y.getClass()) && eq(x.roots, y.roots) && eq(x.cachingLimit, y.cachingLimit) && eq(x.maxCachedLocales, y.maxCachedLocales)
 			&& eq(x.includePatterns, y.includePatterns) && eq(x.excludePatterns, y.excludePatterns));
+	}
+
+	/** Returns the number of locales that currently have a name cache.  Package-private for tests. */
+	int localeCacheSize() {
+		return localizedFiles.size();
 	}
 
 	@Override /* Overridden from FileFinder */
@@ -163,39 +172,52 @@ public class BasicFileFinder implements FileFinder {
 		if (isInvalidPath(name))
 			return oe();
 
-		if (nn(locale))
-			localizedFiles.putIfAbsent(locale, new ConcurrentHashMap<>());
+		// Per-locale caches are only kept for a bounded number of locales; other locales resolve without a name cache.
+		Map<String,LocalFile> fileCache = null;
+		if (locale == null)
+			fileCache = files;
+		else if (localizedFiles.size() < maxCachedLocales || localizedFiles.containsKey(locale))
+			fileCache = localizedFiles.computeIfAbsent(locale, x -> new ConcurrentHashMap<>());
 
-		Map<String,LocalFile> fileCache = locale == null ? files : localizedFiles.get(locale);
-
-		LocalFile lf = fileCache.get(name);
+		LocalFile lf = fileCache == null ? null : fileCache.get(name);
 
 		if (lf == null) {
 			List<String> candidateFileNames = getCandidateFileNames(name, locale);
+			String found = null;
+			var foundRoot = -1;
+			var rootIndex = -1;
 			for (LocalDir root : roots) {
+				rootIndex++;
 				for (var cfn : candidateFileNames) {
-					// Locale-derived candidates are screened too; a hostile locale (e.g. "..", "..") must yield not-found.
+					// Locale-derived candidates are screened too; a traversal locale (e.g. "..", "..") must yield not-found.
 					if (isInvalidPath(cfn))
 						continue;
 					lf = root.resolve(cfn);
-					if (nn(lf))
+					if (nn(lf)) {
+						found = cfn;
+						foundRoot = rootIndex;
 						break;
+					}
 				}
 				if (nn(lf))
 					break;
 			}
 
-			if (nn(lf) && isIgnoredFile(lf.getName()))
+			if (nn(lf) && (isExcludedPath(found) || isIgnoredFile(lf.getName())))
 				lf = null;
 
 			if (nn(lf)) {
-				fileCache.put(name, lf);
-
-				if (cachingLimit >= 0) {
+				// Share one cached copy per resolved path regardless of how many locales resolve to it.
+				var shared = resolvedFiles.putIfAbsent(foundRoot + ":" + found, lf);
+				if (nn(shared))
+					lf = shared;
+				else if (cachingLimit >= 0) {
 					long size = lf.size();
 					if (size > 0 && size <= cachingLimit)
 						lf.cache();
 				}
+				if (nn(fileCache))
+					fileCache.put(name, lf);
 			}
 		}
 
@@ -277,6 +299,14 @@ public class BasicFileFinder implements FileFinder {
 			if (p.matcher(name).matches())
 				return false;
 		return true;
+	}
+
+	/** Returns <jk>true</jk> if an exclude pattern matches the full relative path. */
+	private boolean isExcludedPath(String path) {
+		for (var p : exclude)
+			if (p.matcher(path).matches())
+				return true;
+		return false;
 	}
 
 	/**

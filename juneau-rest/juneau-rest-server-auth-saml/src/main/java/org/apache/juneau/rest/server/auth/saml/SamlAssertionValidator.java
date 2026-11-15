@@ -19,7 +19,11 @@ package org.apache.juneau.rest.server.auth.saml;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.time.*;
 import java.util.*;
 import java.util.logging.*;
@@ -27,7 +31,11 @@ import java.util.logging.*;
 import javax.xml.parsers.*;
 import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.rest.server.auth.*;
+
+import jakarta.servlet.http.*;
 import org.opensaml.core.criterion.*;
+import org.opensaml.core.xml.XMLObject;
+import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.*;
 import org.opensaml.saml.common.xml.*;
 import org.opensaml.saml.criterion.*;
@@ -42,9 +50,11 @@ import org.opensaml.xmlsec.encryption.support.*;
 import org.opensaml.xmlsec.keyinfo.*;
 import org.opensaml.xmlsec.keyinfo.impl.*;
 import org.opensaml.xmlsec.signature.*;
+import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.*;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 import net.shibboleth.shared.resolver.*;
 
@@ -131,6 +141,7 @@ import net.shibboleth.shared.resolver.*;
 })
 public class SamlAssertionValidator {
 
+	private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 	private static final Logger LOG = Logger.getLogger(SamlAssertionValidator.class.getName());
 
 	/** Marker claim name on the returned {@link ClaimsPrincipal}. */
@@ -204,6 +215,7 @@ public class SamlAssertionValidator {
 		private ReplayCache replayCache;
 		private AuthnRequestStore authnRequestStore;
 		private boolean allowIdpInitiated;
+		private Boolean requireEncryptedAssertions;
 		private Duration authnRequestTtl = Duration.ofMinutes(10);
 
 		/** Constructor. */
@@ -412,6 +424,22 @@ public class SamlAssertionValidator {
 		}
 
 		/**
+		 * Sets whether a response must carry an {@code <EncryptedAssertion>}; a plaintext {@code <Assertion>} is then rejected.
+		 *
+		 * <p>
+		 * Defaults to <jk>true</jk> when a {@link #decryptionCredential(Credential) decryption credential} is configured
+		 * and <jk>false</jk> otherwise.  Passing <jk>false</jk> explicitly lets a validator that holds a decryption
+		 * credential also accept plaintext assertions.
+		 *
+		 * @param value Whether encrypted assertions are mandatory.
+		 * @return This object.
+		 */
+		public Builder requireEncryptedAssertions(boolean value) {
+			requireEncryptedAssertions = value;
+			return this;
+		}
+
+		/**
 		 * Overrides the {@link AuthnRequestStore} that tracks outstanding authentication request IDs.
 		 *
 		 * <p>
@@ -485,6 +513,10 @@ public class SamlAssertionValidator {
 				throw new IllegalStateException("SamlAssertionValidator: metadataResolver(...) and signingCredential(...) are mutually exclusive");
 			if (recipient == null)
 				throw new IllegalStateException("SamlAssertionValidator requires recipient(...) (the SP assertion consumer service URL)");
+			if (eq(Boolean.TRUE, requireEncryptedAssertions) && decryptionCredential == null)
+				throw new IllegalStateException("SamlAssertionValidator: requireEncryptedAssertions(true) requires decryptionCredential(...)");
+			if (requireEncryptedAssertions == null)
+				requireEncryptedAssertions = decryptionCredential != null;
 			if (replayCache == null) {
 				LOG.warning("SamlAssertionValidator is using the default in-memory replay cache, which is not shared between nodes; configure replayCache(...) for multi-node deployments.");
 				replayCache = new InMemoryReplayCache();
@@ -511,6 +543,7 @@ public class SamlAssertionValidator {
 	private final Clock clock;
 	private final ReplayCache replayCache;
 	private final boolean allowIdpInitiated;
+	private final boolean requireEncryptedAssertions;
 	private final Duration authnRequestTtl;
 	private final AuthnRequestStore authnRequestStore;
 
@@ -539,6 +572,7 @@ public class SamlAssertionValidator {
 		this.replayCache = b.replayCache;
 		this.authnRequestStore = b.authnRequestStore;
 		this.allowIdpInitiated = b.allowIdpInitiated;
+		this.requireEncryptedAssertions = eq(Boolean.TRUE, b.requireEncryptedAssertions);
 		this.authnRequestTtl = b.authnRequestTtl;
 	}
 
@@ -579,23 +613,51 @@ public class SamlAssertionValidator {
 	}
 
 	/**
+	 * Returns how long a request ID registered with {@link #rememberAuthnRequest(String)} stays valid.
+	 *
+	 * @return The request lifetime.
+	 */
+	public Duration getAuthnRequestTtl() {
+		return authnRequestTtl;
+	}
+
+	/**
 	 * Registers the ID of an authentication request this SP sent, so a response answering it can be accepted.
 	 *
 	 * <p>
 	 * Each registered ID is accepted once and expires after the configured request lifetime.  The registry is the
 	 * {@link AuthnRequestStore} supplied to {@link Builder#authnRequestStore(AuthnRequestStore)} (in-memory by default).
 	 *
+	 * <p>
+	 * The ID is tied to the browser that starts the login.  This method generates a random secret, stores only its
+	 * digest next to the ID, and returns the secret.  The caller must hand the returned value to the same browser
+	 * (see {@link SamlAuthFilter#startLogin(HttpServletResponse, String)}) and the response must come back
+	 * with that value, see {@link #validate(String, String)}.
+	 *
 	 * @param id The {@code ID} attribute of the outgoing {@code <AuthnRequest>}.  Must not be <jk>null</jk> or blank.
+	 * @return The browser-binding secret to give to the browser that will receive the response.  Never <jk>null</jk>.
 	 * @throws IllegalStateException If the store cannot accept more outstanding requests.
 	 */
-	public void rememberAuthnRequest(String id) {
+	public String rememberAuthnRequest(String id) {
 		reqnb("id", id);
+		var bytes = new byte[32];
+		SECURE_RANDOM.nextBytes(bytes);
+		var secret = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
 		var now = clock.millis();
-		authnRequestStore.remember(id, now + authnRequestTtl.toMillis(), now);
+		authnRequestStore.remember(id, bindingDigest(secret), now + authnRequestTtl.toMillis(), now);
+		return secret;
 	}
 
-	private boolean consumeAuthnRequest(String id) {
-		return authnRequestStore.consume(id, clock.millis());
+	private boolean consumeAuthnRequest(String id, String browserBinding) {
+		return authnRequestStore.consume(id, browserBinding == null ? null : bindingDigest(browserBinding), clock.millis());
+	}
+
+	private static byte[] bindingDigest(String secret) {
+		try {
+			return MessageDigest.getInstance("SHA-256").digest(secret.getBytes(StandardCharsets.UTF_8));
+		} catch (NoSuchAlgorithmException e) {
+			throw new IllegalStateException(e); // HTT: SHA-256 is always available
+		}
 	}
 
 	/**
@@ -608,6 +670,22 @@ public class SamlAssertionValidator {
 	 * @throws AuthenticationException If the response cannot be parsed or validation fails.
 	 */
 	public Principal validate(String xml) throws AuthenticationException {
+		return validate(xml, null);
+	}
+
+	/**
+	 * Validates the supplied SAML 2.0 {@code <samlp:Response>} XML for a response that arrived from a specific browser.
+	 *
+	 * <p>
+	 * A response that answers a request registered with {@link #rememberAuthnRequest(String)} is accepted only when
+	 * <c>browserBinding</c> is the secret that method returned for that request.
+	 *
+	 * @param xml The full XML payload.  Must be a {@code <samlp:Response>} envelope.
+	 * @param browserBinding The binding secret presented by the browser, or <jk>null</jk> if it presented none.
+	 * @return A {@link ClaimsPrincipal} carrying the IdP-supplied claims plus the {@code issuerType=SAML} marker.
+	 * @throws AuthenticationException If the response cannot be parsed or validation fails.
+	 */
+	public Principal validate(String xml, String browserBinding) throws AuthenticationException {
 		reqnb("xml", xml);
 		var response = parseResponse(xml);
 		validateStatus(response);
@@ -615,7 +693,7 @@ public class SamlAssertionValidator {
 		var assertion = extractAndDecryptAssertion(response);
 		verifySignature(assertion);
 		var claims = buildClaims(response, assertion);
-		validateSubjectConfirmation(assertion);
+		validateSubjectConfirmation(assertion, browserBinding);
 		recordSingleUse(assertion);
 		var subject = nameId(assertion);
 		return new ClaimsPrincipal(subject, claims);
@@ -632,16 +710,16 @@ public class SamlAssertionValidator {
 		var status = response.getStatus();
 		var code = status == null ? null : status.getStatusCode();
 		var value = code == null ? null : code.getValue();
-		if (! StatusCode.SUCCESS.equals(value))
+		if (neq(StatusCode.SUCCESS, value))
 			throw new AuthenticationException("SAML response status is not Success: " + value)
 				.wwwAuthenticate("SAML error=\"invalid_response\"");
 	}
 
 	private Response parseResponse(String xml) throws AuthenticationException {
 		try {
-			var doc = SamlXml.newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
+			var doc = SamlXml.newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
 			Element root = doc.getDocumentElement();
-			var registry = org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport.getUnmarshallerFactory();
+			var registry = XMLObjectProviderRegistrySupport.getUnmarshallerFactory();
 			var unmarshaller = registry.getUnmarshaller(root);
 			if (unmarshaller == null)
 				throw new AuthenticationException("Unknown SAML element: " + root.getNodeName())
@@ -651,7 +729,7 @@ public class SamlAssertionValidator {
 				throw new AuthenticationException("SAML envelope is not a <Response>: " + cns(obj))
 					.wwwAuthenticate("SAML error=\"invalid_response\"");
 			return obj2;
-		} catch (UnmarshallingException | ParserConfigurationException | IOException | org.xml.sax.SAXException e) {
+		} catch (UnmarshallingException | ParserConfigurationException | IOException | SAXException e) {
 			throw new AuthenticationException(e, "SAML response could not be parsed")
 				.wwwAuthenticate("SAML error=\"invalid_response\"");
 		}
@@ -681,6 +759,11 @@ public class SamlAssertionValidator {
 				LOG.log(Level.FINE, e, () -> "SAML <EncryptedAssertion> could not be decrypted");
 				throw decryptionFailed();
 			}
+		}
+		if (requireEncryptedAssertions) {
+			LOG.fine("SAML response carries a plaintext <Assertion> but encrypted assertions are required");
+			throw new AuthenticationException("SAML assertion must be encrypted")
+				.wwwAuthenticate("SAML error=\"encryption_required\"");
 		}
 		return assertions.get(0);
 	}
@@ -794,13 +877,13 @@ public class SamlAssertionValidator {
 	private BasicX509Credential parseX509Credential(String base64) {
 		try {
 			var bytes = Base64.getMimeDecoder().decode(base64);
-			var cf = java.security.cert.CertificateFactory.getInstance("X.509");
-			var certificate = (java.security.cert.X509Certificate) cf.generateCertificate(new ByteArrayInputStream(bytes));
+			var cf = CertificateFactory.getInstance("X.509");
+			var certificate = (X509Certificate) cf.generateCertificate(new ByteArrayInputStream(bytes));
 			// The metadata signing cert is the trust anchor; reject one outside its validity window so an
 			// expired (or not-yet-valid) cert can no longer be used to verify assertions.
 			certificate.checkValidity(Date.from(clock.instant()));
 			return new BasicX509Credential(certificate);
-		} catch (java.security.cert.CertificateException | IllegalArgumentException e) {
+		} catch (CertificateException | IllegalArgumentException e) {
 			return null;  // Expired/not-yet-valid or malformed cert: caller tries the next certificate.
 		}
 	}
@@ -863,7 +946,7 @@ public class SamlAssertionValidator {
 			throw rejectAssertion("response <Issuer> does not match expected issuer");
 	}
 
-	private void validateDigestAlgorithms(org.opensaml.xmlsec.signature.Signature signature) throws AuthenticationException {
+	private void validateDigestAlgorithms(Signature signature) throws AuthenticationException {
 		var dom = signature.getDOM();
 		if (dom == null) // HTT: null DOM unreachable; a verifiable signature is always marshalled to DOM
 			return; // HTT: null DOM unreachable; a verifiable signature is always marshalled to DOM
@@ -876,17 +959,17 @@ public class SamlAssertionValidator {
 		}
 	}
 
-	private void validateSubjectConfirmation(Assertion assertion) throws AuthenticationException {
+	private void validateSubjectConfirmation(Assertion assertion, String browserBinding) throws AuthenticationException {
 		var subject = assertion.getSubject();
 		if (subject == null)
 			throw rejectAssertion("missing <Subject> for bearer confirmation");
 		String failure = null;
 		var sawBearer = false;
 		for (var sc : subject.getSubjectConfirmations()) {
-			if (! SubjectConfirmation.METHOD_BEARER.equals(sc.getMethod()))
+			if (neq(SubjectConfirmation.METHOD_BEARER, sc.getMethod()))
 				continue;
 			sawBearer = true;
-			var reason = confirmationFailureReason(sc);
+			var reason = confirmationFailureReason(sc, browserBinding);
 			if (reason == null)
 				return;  // A valid bearer confirmation was found.
 			failure = reason;
@@ -899,7 +982,7 @@ public class SamlAssertionValidator {
 	@SuppressWarnings({
 		"java:S3776" // Branching is inherent to the ordered bearer-confirmation checks.
 	})
-	private String confirmationFailureReason(SubjectConfirmation sc) {
+	private String confirmationFailureReason(SubjectConfirmation sc, String browserBinding) {
 		var data = sc.getSubjectConfirmationData();
 		if (data == null)
 			return "bearer <SubjectConfirmationData> is missing";
@@ -920,7 +1003,7 @@ public class SamlAssertionValidator {
 			if (neq(expectedInResponseTo, inResponseTo))
 				return "bearer confirmation <InResponseTo> does not match the expected request ID";
 		} else if (hasInResponseTo) {
-			if (! consumeAuthnRequest(inResponseTo))
+			if (! consumeAuthnRequest(inResponseTo, browserBinding))
 				return "bearer confirmation <InResponseTo> does not reference an outstanding request";
 		} else if (! allowIdpInitiated) {
 			return "unsolicited (IdP-initiated) responses are not allowed";
@@ -980,13 +1063,13 @@ public class SamlAssertionValidator {
 	 * @return The bearer confirmation's {@code NotOnOrAfter}, or <jk>null</jk>.
 	 */
 	private static Instant bearerNotOnOrAfter(SubjectConfirmation sc) {
-		if (! SubjectConfirmation.METHOD_BEARER.equals(sc.getMethod()))
+		if (neq(SubjectConfirmation.METHOD_BEARER, sc.getMethod()))
 			return null;
 		var data = sc.getSubjectConfirmationData();
 		return data == null ? null : data.getNotOnOrAfter();
 	}
 
-	private static String extractStringValue(org.opensaml.core.xml.XMLObject av) {
+	private static String extractStringValue(XMLObject av) {
 		if (av == null) // HTT: null av unreachable; OpenSAML attribute value lists never contain null entries
 			return null; // HTT: null av unreachable; OpenSAML attribute value lists never contain null entries
 		var dom = av.getDOM();

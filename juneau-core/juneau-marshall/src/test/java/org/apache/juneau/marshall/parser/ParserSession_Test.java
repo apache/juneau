@@ -22,12 +22,19 @@ import static org.apache.juneau.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.sql.SQLException;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
+import java.util.function.Supplier;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.JsonMap;
+import org.apache.juneau.marshall.httppart.HttpPartSchema;
 import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
 
@@ -549,8 +556,8 @@ class ParserSession_Test extends TestBase {
 
 	@Test void g12_builder_schemaDefault_noOverwrite() {
 		// schemaDefault should set when null, and not overwrite when a schema is already set.
-		var sch1 = org.apache.juneau.marshall.httppart.HttpPartSchema.create("string").build();
-		var sch2 = org.apache.juneau.marshall.httppart.HttpPartSchema.create("integer").build();
+		var sch1 = HttpPartSchema.create("string").build();
+		var sch2 = HttpPartSchema.create("integer").build();
 		var s1 = P.createSession()
 			.schema(sch1)
 			.schemaDefault(sch2)
@@ -562,7 +569,7 @@ class ParserSession_Test extends TestBase {
 
 	@Test void g13_builder_schemaDefault_setsWhenAbsent() {
 		var s = P.createSession()
-			.schemaDefault(org.apache.juneau.marshall.httppart.HttpPartSchema.create("string").build())
+			.schemaDefault(HttpPartSchema.create("string").build())
 			.build();
 		assertNotNull(s.getSchema());
 	}
@@ -617,7 +624,7 @@ class ParserSession_Test extends TestBase {
 	}
 
 	@Test void h06_getSchema_setExplicit() {
-		var schema = org.apache.juneau.marshall.httppart.HttpPartSchema.create("string").build();
+		var schema = HttpPartSchema.create("string").build();
 		var s = P.createSession().schema(schema).build();
 		assertSame(schema, s.getSchema());
 	}
@@ -770,23 +777,23 @@ class ParserSession_Test extends TestBase {
 
 	@Test void p01_convertAttr_temporalKey() {
 		// Use java.time.LocalDate as a map key — exercises sType.isTemporal() branch.
-		var m = (Map<java.time.LocalDate,String>) P.read(
-			"{\"2020-01-02\":\"v\"}", HashMap.class, java.time.LocalDate.class, String.class);
+		var m = (Map<LocalDate,String>) P.read(
+			"{\"2020-01-02\":\"v\"}", HashMap.class, LocalDate.class, String.class);
 		assertSize(1, m);
 		assertEquals("v", m.values().iterator().next());
 	}
 
 	@Test void p02_convertAttr_durationKey() {
 		// Duration as a map key — exercises sType.isDuration() branch.
-		var m = (Map<java.time.Duration,String>) P.read(
-			"{\"PT1H\":\"v\"}", HashMap.class, java.time.Duration.class, String.class);
+		var m = (Map<Duration,String>) P.read(
+			"{\"PT1H\":\"v\"}", HashMap.class, Duration.class, String.class);
 		assertSize(1, m);
 	}
 
 	@Test void p03_convertAttr_periodKey() {
 		// Period as a map key — exercises sType.isPeriod() branch.
-		var m = (Map<java.time.Period,String>) P.read(
-			"{\"P1D\":\"v\"}", HashMap.class, java.time.Period.class, String.class);
+		var m = (Map<Period,String>) P.read(
+			"{\"P1D\":\"v\"}", HashMap.class, Period.class, String.class);
 		assertSize(1, m);
 	}
 
@@ -841,14 +848,14 @@ class ParserSession_Test extends TestBase {
 		public CalendarFormat exposeGetCalendarFormat() { return getCalendarFormat(); }
 		public DateFormat exposeGetDateFormat() { return getDateFormat(); }
 		public TemporalFormat exposeGetTemporalFormat() { return getTemporalFormat(); }
-		public java.time.Duration exposeParseDuration(String s) { return readDuration(s); }
-		public java.time.Period exposeParsePeriod(String s) { return readPeriod(s); }
+		public Duration exposeParseDuration(String s) { return readDuration(s); }
+		public Period exposeParsePeriod(String s) { return readPeriod(s); }
 		public void exposeMark() { mark(); }
 		public void exposeUnmark() { unmark(); }
 		public void exposeEnterParseDepth() throws ParseException { enterParseDepth(); }
 		public void exposeExitParseDepth() { exitParseDepth(); }
-		public <T> T exposeAllocateLocal(String what, java.util.function.Supplier<T> alloc) throws ParseException { return allocateLocal(what, alloc); }
-		public org.apache.juneau.marshall.collections.JsonMap exposeGetLastLocation() { return getLastLocation(); }
+		public <T> T exposeAllocateLocal(String what, Supplier<T> alloc) throws ParseException { return allocateLocal(what, alloc); }
+		public JsonMap exposeGetLastLocation() { return getLastLocation(); }
 		public ParserPipe exposeSetPipe(ParserPipe pp) { return setPipe(pp); }
 		public Map<String,Object> doParseIntoMap_callDirect() throws Exception {
 			// Direct call to the (default) doReadIntoMap which throws UnsupportedOperationException.
@@ -957,7 +964,7 @@ class ParserSession_Test extends TestBase {
 		// The drainToConsumer→onError default rethrow path → wraps as ParseException.
 		BeanConsumer<String> a = new BeanConsumer<>() {
 			@Override public void acceptThrows(String t) throws Exception {
-				throw new java.sql.SQLException("sql-boom");
+				throw new SQLException("sql-boom");
 			}
 		};
 		var ex = assertThrows(ParseException.class,
@@ -1075,9 +1082,9 @@ class ParserSession_Test extends TestBase {
 		assertThrows(ParseException.class, s::exposeEnterParseDepth);
 	}
 
-	@Test void u05_builder_maxParseDepth_defaultIsAThousand() {
+	@Test void u05_builder_maxParseDepth_defaultIsFiveHundred() {
 		var s = new ExposingSession(JsonParser.DEFAULT);
-		for (var i = 0; i < 1000; i++)
+		for (var i = 0; i < 500; i++)
 			s.exposeEnterParseDepth();
 		assertThrows(ParseException.class, s::exposeEnterParseDepth);
 	}

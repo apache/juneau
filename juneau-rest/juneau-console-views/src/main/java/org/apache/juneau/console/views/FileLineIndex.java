@@ -206,13 +206,15 @@ public final class FileLineIndex {
 		try {
 			BasicFileAttributes attrs;
 			try {
-				attrs = Files.readAttributes(file, BasicFileAttributes.class);
+				attrs = Files.readAttributes(file, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+				if (attrs.isSymbolicLink())
+					return missing();
 			} catch (NoSuchFileException e) {
 				return missing();
 			}
 			var key = attrs.fileKey();
 			var size = attrs.size();
-			try (var ch = FileChannel.open(file, StandardOpenOption.READ)) {
+			try (var ch = FileChannel.open(file, StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS)) {
 				if (neq(key, fileKey) || size < indexedBytes || headChanged(ch, size))
 					reset(key);
 				readHead(ch, size);
@@ -244,7 +246,7 @@ public final class FileLineIndex {
 			var pos = entries[i];
 			if (line == n)
 				return pos;
-			try (var ch = FileChannel.open(file, StandardOpenOption.READ)) {
+			try (var ch = FileChannel.open(file, StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS)) {
 				var buf = ByteBuffer.allocate(BLOCK_BYTES);
 				while (pos < indexedBytes) {
 					buf.clear();
@@ -278,7 +280,7 @@ public final class FileLineIndex {
 	 * @return <jk>true</jk> if tokens with this epoch are still valid.
 	 */
 	boolean acceptsEpoch(String epoch) {
-		return epoch != null && (epoch.equals(snapshot.get().epoch()) || epoch.equals(earlyEpoch));
+		return epoch != null && (eq(epoch, snapshot.get().epoch()) || eq(epoch, earlyEpoch));
 	}
 
 	/** Current stride (grows when the entry cap is reached). */

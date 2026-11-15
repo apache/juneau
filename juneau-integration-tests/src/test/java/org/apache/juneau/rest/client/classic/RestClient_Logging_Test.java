@@ -28,8 +28,12 @@ import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
 
 class RestClient_Logging_Test extends TestBase {
+
+	@BeforeEach void enableBodyDump() { RestDebugBodyGate.setAllowDumpBodiesForTest(Boolean.TRUE); }
+	@AfterEach void resetBodyDump() { RestDebugBodyGate.setAllowDumpBodiesForTest(null); }
 
 	public static class ABean {
 		public int f;
@@ -57,6 +61,18 @@ class RestClient_Logging_Test extends TestBase {
 		public ABean bean() {
 			return bean;
 		}
+	}
+
+	@Test void a03_fullLog_masksCredentialHeaders() throws Exception {
+		var c = MockConsole.create();
+		var l = MockLogger.create();
+
+		client().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build()
+			.post("/bean",bean).header("Authorization","Bearer s3cret").header("Cookie","sid=s3cret").complete();
+		var out = c.toString();
+		Assertions.assertFalse(out.contains("s3cret"), out);
+		Assertions.assertTrue(out.contains("Authorization: [REDACTED]"), out);
+		Assertions.assertTrue(out.contains("Cookie: [REDACTED]"), out);
 	}
 
 	@Test void a01_logToConsole() throws Exception {

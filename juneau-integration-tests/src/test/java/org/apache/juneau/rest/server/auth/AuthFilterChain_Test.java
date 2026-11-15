@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.logging.LogRecordCapture;
 import org.junit.jupiter.api.*;
+import org.mockito.ArgumentCaptor;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -118,6 +119,7 @@ class AuthFilterChain_Test extends TestBase {
 		var original = req("/public/page");
 		var chain = AuthFilterChain.create(null)
 			.append(succeeds(ALICE), "/api/*")
+			.passThroughUnmatched()
 			.build();
 		var capturing = new CapturingChain();
 		chain.doFilter(original, capturingResponse(), capturing);
@@ -277,7 +279,7 @@ class AuthFilterChain_Test extends TestBase {
 		chain.doFilter(req("/"), resp, capturing);
 		verify(resp).setStatus(401);
 		// Both WWW-Authenticate challenges must appear in the aggregated header
-		var wwwCaptor = org.mockito.ArgumentCaptor.forClass(String.class);
+		var wwwCaptor = ArgumentCaptor.forClass(String.class);
 		verify(resp).setHeader(eq("WWW-Authenticate"), wwwCaptor.capture());
 		var headerValue = wwwCaptor.getValue();
 		assertTrue(headerValue.contains("Bearer realm=\"r1\""), "Missing Bearer challenge: " + headerValue);

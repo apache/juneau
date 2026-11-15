@@ -50,7 +50,7 @@ public class AtomXmlExample {
 		 *<title type='text'>Juneau ATOM specification</title>
 		 *<updated>2016-01-02T03:04:05Z</updated>
 		 *<generator uri='http://juneau.apache.org/' version='1.0'>Juneau</generator>
-		 *<subtitle type='html'>Describes <em>stuff</em> about Juneau</subtitle>
+		 *<subtitle type='html'>Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau</subtitle>
 		 *<entry>
 		 *  <author>
 		 *      <name>Jane Smith</name>
@@ -83,7 +83,7 @@ public class AtomXmlExample {
 		 * <title>Juneau ATOM specification</title>
 		 * <updated>2016-01-02T03:04:05Z</updated>
 		 * <id>tag:juneau.apache.org</id>
-		 * <subtitle type='html'>Describes <em>stuff</em> about Juneau</subtitle>
+		 * <subtitle type='html'>Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau</subtitle>
 		 * <generator version='1.0' uri='http://juneau.apache.org'>Juneau</generator>
 		 * <entry>
 		 *  <link rel='alternate' href='http://juneau.apache.org/juneau.atom' type='text/html'/>

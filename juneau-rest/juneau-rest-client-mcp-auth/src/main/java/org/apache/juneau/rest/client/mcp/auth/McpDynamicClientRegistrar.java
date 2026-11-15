@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.utils.UriUtils;
+import org.apache.juneau.rest.auth.oauth.flow.*;
 
 import com.nimbusds.oauth2.sdk.*;
 import com.nimbusds.oauth2.sdk.auth.*;
@@ -99,6 +100,7 @@ public class McpDynamicClientRegistrar {
 		Supplier<String> initialAccessTokenSupplier;
 		Duration httpTimeout = DEFAULT_HTTP_TIMEOUT;
 		Consumer<HTTPRequest> httpRequestConfigurator;
+		boolean allowPrivateUrls;
 
 		/** Constructor. */
 		protected Builder() {}
@@ -262,6 +264,21 @@ public class McpDynamicClientRegistrar {
 		}
 
 		/**
+		 * Allows the registration endpoint to be a private, link-local or otherwise reserved address.
+		 *
+		 * <p>
+		 * By default the endpoint must be an <c>https</c> URL whose host is not a loopback, private or reserved address
+		 * (literal loopback hosts are accepted), redirects are refused, and the resolved address is checked.
+		 *
+		 * @param value <jk>true</jk> to allow private targets.
+		 * @return This object.
+		 */
+		public Builder allowPrivateUrls(boolean value) {
+			allowPrivateUrls = value;
+			return this;
+		}
+
+		/**
 		 * Sets a callback that customizes the Nimbus {@link HTTPRequest} for the registration call.
 		 *
 		 * @param value The callback.  Must not be <jk>null</jk>.
@@ -288,6 +305,11 @@ public class McpDynamicClientRegistrar {
 				throw isex("McpDynamicClientRegistrar requires at least one redirectUri(...)");
 			if (! isSecureOrLoopback(registrationEndpoint))
 				throw isex("McpDynamicClientRegistrar registration endpoint must use https (loopback exempt): " + registrationEndpoint);
+			try {
+				policyFor(allowPrivateUrls).requireAllowed(registrationEndpoint);
+			} catch (IllegalArgumentException e) {
+				throw isex("McpDynamicClientRegistrar registration endpoint is not permitted: " + e.getMessage());
+			}
 			return new McpDynamicClientRegistrar(this);
 		}
 	}
@@ -307,6 +329,7 @@ public class McpDynamicClientRegistrar {
 	private final Supplier<String> initialAccessTokenSupplier;
 	private final Duration httpTimeout;
 	private final Consumer<HTTPRequest> httpRequestConfigurator;
+	private final boolean allowPrivateUrls;
 
 	/**
 	 * Constructor.
@@ -326,6 +349,7 @@ public class McpDynamicClientRegistrar {
 		this.initialAccessTokenSupplier = b.initialAccessTokenSupplier;
 		this.httpTimeout = b.httpTimeout;
 		this.httpRequestConfigurator = b.httpRequestConfigurator;
+		this.allowPrivateUrls = b.allowPrivateUrls;
 	}
 
 	/**
@@ -404,7 +428,10 @@ public class McpDynamicClientRegistrar {
 			httpRequestConfigurator.accept(http);
 		HTTPResponse httpResp;
 		try {
+			policyFor(allowPrivateUrls).apply(http);
 			httpResp = http.send();
+		} catch (IllegalArgumentException e) {
+			throw new McpAuthException("Dynamic client registration endpoint is not permitted: " + e.getMessage(), e);
 		} catch (IOException e) {
 			throw new McpAuthException("Dynamic client registration HTTP call failed", e);
 		}
@@ -461,6 +488,10 @@ public class McpDynamicClientRegistrar {
 	}
 
 	/** Whether the URI is {@code https} or targets a loopback host (exempt from the https requirement). */
+	static OAuthHttpPolicy policyFor(boolean allowPrivateUrls) {
+		return allowPrivateUrls ? OAuthHttpPolicy.of(true, false) : OAuthHttpPolicy.DEFAULT;
+	}
+
 	static boolean isSecureOrLoopback(URI uri) {
 		return UriUtils.isSecureOrLoopback(uri);
 	}

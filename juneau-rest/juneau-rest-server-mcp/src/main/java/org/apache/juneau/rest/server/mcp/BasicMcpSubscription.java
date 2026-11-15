@@ -45,8 +45,15 @@ final class BasicMcpSubscription implements McpSubscription {
 	// of the true oldest one. Deliberately does not also guard take()/takeFirst() - only producers contend here.
 	private final Object offerLock = new Object();
 
+	private final String owner;
+
 	BasicMcpSubscription(String id, McpSubscriptionFilter filter, int queueSize,
 			Consumer<BasicMcpSubscription> closeCallback) {
+		this(id, filter, queueSize, closeCallback, null);
+	}
+
+	BasicMcpSubscription(String id, McpSubscriptionFilter filter, int queueSize,
+			Consumer<BasicMcpSubscription> closeCallback, String owner) {
 		if (isEmpty(id))
 			throw iaex("id must not be null or empty");
 		if (filter == null)
@@ -59,6 +66,11 @@ final class BasicMcpSubscription implements McpSubscription {
 		this.filter = filter;
 		this.queue = new LinkedBlockingDeque<>(queueSize);
 		this.closeCallback = closeCallback;
+		this.owner = owner;
+	}
+
+	String getOwner() {
+		return owner;
 	}
 
 	@Override

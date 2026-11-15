@@ -19,9 +19,11 @@ package org.apache.juneau.rest.server.auth.saml;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.charset.*;
 import java.security.*;
 import java.util.*;
+import java.util.function.Function;
 import java.util.zip.*;
 
 import org.apache.juneau.*;
@@ -42,7 +44,7 @@ import jakarta.servlet.http.*;
 })
 class SamlAuthFilter_MaxInflate_Test extends TestBase {
 
-	private static SamlAssertionValidator validator(java.util.function.Function<String,Principal> impl) throws Exception {
+	private static SamlAssertionValidator validator(Function<String,Principal> impl) throws Exception {
 		var kp = KeyPairGenerator.getInstance("RSA");
 		kp.initialize(2048);
 		var pair = kp.generateKeyPair();
@@ -51,7 +53,7 @@ class SamlAuthFilter_MaxInflate_Test extends TestBase {
 					.spEntityId("https://sp.example.com")
 					.expectedIssuer("https://idp.example.com")
 					.signingCredential(new BasicCredential(pair.getPublic(), pair.getPrivate()))) {
-			@Override public Principal validate(String xml) {
+			@Override public Principal validate(String xml, String binding) {
 				return impl.apply(xml);
 			}
 		};
@@ -59,6 +61,7 @@ class SamlAuthFilter_MaxInflate_Test extends TestBase {
 
 	private static HttpServletRequest req(String samlResponse) {
 		var r = mock(HttpServletRequest.class);
+		when(r.getMethod()).thenReturn("GET");
 		when(r.getPathInfo()).thenReturn("/saml/acs");
 		when(r.getServletPath()).thenReturn("/saml/acs");
 		when(r.getParameter("SAMLResponse")).thenReturn(samlResponse);
@@ -71,7 +74,7 @@ class SamlAuthFilter_MaxInflate_Test extends TestBase {
 		var deflater = new Deflater(Deflater.BEST_COMPRESSION, true);
 		deflater.setInput(raw);
 		deflater.finish();
-		var out = new java.io.ByteArrayOutputStream();
+		var out = new ByteArrayOutputStream();
 		var buf = new byte[8192];
 		while (!deflater.finished()) {
 			int n = deflater.deflate(buf);
@@ -83,8 +86,8 @@ class SamlAuthFilter_MaxInflate_Test extends TestBase {
 
 	@Test void a01_highlyCompressiblePayload_exceedsDefaultCap_rejected() throws Exception {
 		// 2 MiB of zeros deflates to a few KB; inflating exceeds the 1 MiB default cap → rejected.
-		var bomb = new byte[2 * 1024 * 1024];
-		var b64 = deflateBase64(bomb);
+		var oversized = new byte[2 * 1024 * 1024];
+		var b64 = deflateBase64(oversized);
 		var f = SamlAuthFilter.create().binding(SamlBinding.REDIRECT)
 			.validator(validator(x -> new ClaimsPrincipal("x", Map.of())))
 			.build();

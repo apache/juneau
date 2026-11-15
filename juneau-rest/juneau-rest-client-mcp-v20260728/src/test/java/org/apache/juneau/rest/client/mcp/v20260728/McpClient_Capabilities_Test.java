@@ -54,7 +54,7 @@ class McpClient_Capabilities_Test extends TestBase {
 			.setSampling(new SamplingCapability())
 			.putExperimental("x-flag", "on")
 			.putExtensions("x-ext", 1);
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(transport).clientCapabilities(caps).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(transport).clientCapabilities(caps).build()) {
 			c.serverDiscover();
 		}
 		assertTrue(seenBody.get().contains(RequestMeta.KEY_CLIENT_CAPABILITIES));

@@ -73,7 +73,7 @@ public class FileStore extends ConfigStore {
 		protected Builder() {
 			charset = env("ConfigFileStore.charset").map(Charset::forName).orElse(Charset.defaultCharset());
 			directory = env("ConfigFileStore.directory", ".");
-			allowAbsoluteNames = env("ConfigFileStore.allowAbsoluteNames", false);
+			allowAbsoluteNames = false; // Only settable through the builder method, never from the environment or settings.
 			enableWatcher = env("ConfigFileStore.enableWatcher", false);
 			extensions = env("ConfigFileStore.extensions", "cfg,yml,yaml");
 			updateOnWrite = env("ConfigFileStore.updateOnWrite", false);
@@ -473,7 +473,7 @@ public class FileStore extends ConfigStore {
 			return "";
 
 		var isWritable = isWritable(p);
-		var oo = isWritable ? a(READ, WRITE, CREATE) : a(READ); // HTT - read-only files require special OS setup
+		var oo = isWritable ? new OpenOption[]{READ, WRITE, CREATE, LinkOption.NOFOLLOW_LINKS} : new OpenOption[]{READ, LinkOption.NOFOLLOW_LINKS}; // HTT - read-only files require special OS setup
 		try (var fc = FileChannel.open(p, oo)) {
 			try (var lock = isWritable ? fc.lock() : null) { // HTT - null lock path requires read-only file
 				var buf = ByteBuffer.allocate(1024);
@@ -524,7 +524,7 @@ public class FileStore extends ConfigStore {
 			if (newContents == null)
 				Files.delete(p);
 			else {
-				try (var fc = FileChannel.open(p, READ, WRITE, CREATE)) {
+				try (var fc = FileChannel.open(p, READ, WRITE, CREATE, LinkOption.NOFOLLOW_LINKS)) {
 					try (var lock = fc.lock()) {
 						var currentContents = "";
 						if (exists) {
@@ -686,6 +686,7 @@ public class FileStore extends ConfigStore {
 			if (n == null)
 				n = exts.length == 0 ? name : (name + "." + exts[0]);
 
+			checkContained(n); // Re-check the final name: the extension step can land on a different file (e.g. a symlink).
 			nameCache.put(name, n);
 		}
 		return nameCache.get(name);

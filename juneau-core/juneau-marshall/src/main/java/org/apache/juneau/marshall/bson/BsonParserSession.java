@@ -136,6 +136,15 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 	}
 
 	private <T> T readDocument(BsonInputStream is, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+		enterParseDepth();
+		try {
+			return readDocumentImpl(is, eType, outer, pMeta);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	private <T> T readDocumentImpl(BsonInputStream is, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 		is.readDocumentSize();
 		if (eType == null)
 			eType = object();
@@ -169,7 +178,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 			while (!is.isDocumentEnd()) {
 				var et = is.readElementType();
 				var name = is.readElementName();
-				var key = name.equals(nullKeyString) ? null : trimKey(name);
+				var key = eq(name, nullKeyString) ? null : trimKey(name);
 				var value = readTypedValue(is, et, sType.getValueType(), map, pMeta);
 				setName(sType.getValueType(), value, key);
 				var resolvedKey = coerceKeys ? convertAttrToType(map, key, keyType) : key;
@@ -192,7 +201,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 					var key = trimKey(name);
 					var bpm = beanMap.getPropertyMeta(key);
 					Object value;
-					if (name.equals(getBeanTypePropertyName(eType))) {
+					if (eq(name, getBeanTypePropertyName(eType))) {
 						value = readTypedValue(is, et, string(), null, null);
 						if (nn(value))
 							beanMap = applyTypeProperty(beanMap, value.toString(), eType);
@@ -222,8 +231,8 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 			while (!is.isDocumentEnd()) {
 				var et = is.readElementType();
 				var name = is.readElementName();
-				var key = name.equals(nullKeyString) ? null : trimKey(name);
-			map.put(key, readTypedValue(is, et, BSON_VALUE_KEY.equals(name) ? eType : object(), map, null));
+				var key = eq(name, nullKeyString) ? null : trimKey(name);
+			map.put(key, readTypedValue(is, et, eq(BSON_VALUE_KEY, name) ? eType : object(), map, null));
 		}
 		is.readDocumentTerminator();
 		// Unwrap {"value":x} when target is Optional or when scalar-like (BSON root wrap convention)
@@ -267,11 +276,20 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 		return beanMap;
 	}
 
+	private Object readArray(BsonInputStream is, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+		enterParseDepth();
+		try {
+			return readArrayImpl(is, eType, outer, pMeta);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
 	@SuppressWarnings({
 		"java:S1172", // pMeta kept for API consistency with other readXxx methods
 		"unused" // pMeta kept for API consistency with other readXxx methods
 	})
-	private Object readArray(BsonInputStream is, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private Object readArrayImpl(BsonInputStream is, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 		is.readDocumentSize();
 		if (eType == null)
 			eType = object();

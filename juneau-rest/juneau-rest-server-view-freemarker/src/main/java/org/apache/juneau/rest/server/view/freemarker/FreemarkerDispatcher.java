@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker;
 
+import static org.apache.juneau.commons.utils.FileUtils.resolveVirtualPathSafely;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -85,6 +86,8 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 		"java:S3077" // volatile is required here for correct double-checked-locking safe-publication of the lazily-built default Configuration in resolveConfiguration(); the reference is publish-once (fully constructed before assignment) and never compound-mutated.
 	})
 	private volatile Configuration defaultConfiguration;
+
+	private volatile Configuration hardenedConfiguration;
 
 	/**
 	 * Creates a new builder.
@@ -176,7 +179,10 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 	 * <ol class='spaced-list'>
 	 * 	<li>{@code req.getContext().getBeanStore().getBean(Configuration.class)} &mdash; any
 	 * 		user-supplied bean (Spring {@code @Bean} including Spring Boot autoconfig, microservice
-	 * 		{@code BasicBeanStore.put}, etc.).
+	 * 		{@code BasicBeanStore.put}, etc.). A registered configuration has its new-builtin class resolver set to
+	 * 		allow nothing and the {@code ?api} built-in disabled, applied in place; configuring a
+	 * 		{@code TemplateClassResolver} after registration is not supported. An application that needs
+	 * 		{@code ?new} must supply its own dispatcher.
 	 * 	<li>Lazy bridge default &mdash; constructed on first call when no configuration bean is
 	 * 		registered. Anchored on a classpath resource root derived from
 	 * 		{@link #getBasePath() basePath}, with {@code IncompatibleImprovements} pinned to the
@@ -189,7 +195,7 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 	public Configuration resolveConfiguration(RestRequest req) {
 		var bean = req.getContext().getBeanStore().getBean(Configuration.class);
 		if (bean.isPresent())
-			return bean.get();
+			return hardened(bean.get());
 		var local = defaultConfiguration;
 		if (local == null) {
 			synchronized (this) {
@@ -201,6 +207,18 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 			}
 		}
 		return local;
+	}
+
+	// Applies the built-in class resolver and API built-in restrictions to a user-supplied configuration (once per instance).
+	private Configuration hardened(Configuration cfg) {
+		if (hardenedConfiguration != cfg) {
+			synchronized (this) {
+				cfg.setNewBuiltinClassResolver(TemplateClassResolver.ALLOWS_NOTHING_RESOLVER);
+				cfg.setAPIBuiltinEnabled(false);
+				hardenedConfiguration = cfg;
+			}
+		}
+		return cfg;
 	}
 
 	/**
@@ -311,7 +329,7 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 		// stripping the (already-normalized) basePath prefix.
 		String safeTemplate;
 		try {
-			var resolved = FileUtils.resolveVirtualPathSafely(basePath, template);
+			var resolved = resolveVirtualPathSafely(basePath, template);
 			safeTemplate = stripBasePath(basePath, resolved);
 		} catch (IllegalArgumentException ex) {
 			throw new Forbidden("Path escapes configured base path.");

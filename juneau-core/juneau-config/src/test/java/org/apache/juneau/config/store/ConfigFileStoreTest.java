@@ -29,6 +29,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assumptions;
 
 @SuppressWarnings({
 	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
@@ -370,7 +371,7 @@ class ConfigFileStoreTest extends TestBase {
 			try {
 				Files.createSymbolicLink(link, outside);
 			} catch (UnsupportedOperationException | IOException e) {
-				org.junit.jupiter.api.Assumptions.assumeTrue(false, "No symlink support");
+				Assumptions.assumeTrue(false, "No symlink support");
 				return;
 			}
 			Files.writeString(outside.resolve("S.cfg"), "secret");
@@ -407,5 +408,37 @@ class ConfigFileStoreTest extends TestBase {
 
 	private static void assertFileNotExists(String name) {
 		assertTrue(! new File(DIR, name).exists());
+	}
+
+	@Test void z01_symlinkedExtensionFileRejected() throws Exception {
+		var outside = new File("./target/config-outside");
+		outside.mkdirs();
+		var target = new File(outside, "secret.cfg");
+		Files.writeString(target.toPath(), "[S]\nk=v\n");
+		DIR.mkdirs();
+		var link = new File(DIR, "X.cfg").toPath();
+		try {
+			Files.createSymbolicLink(link, target.getAbsoluteFile().toPath());
+		} catch (@SuppressWarnings("unused") UnsupportedOperationException | IOException e) {
+			return; // Symlinks unavailable on this platform.
+		}
+		try {
+			var fs = FileStore.create().directory(DIR).build();
+			assertThrows(IllegalArgumentException.class, () -> fs.read("X"));
+			assertThrows(IllegalArgumentException.class, () -> fs.write("X", null, "z"));
+			assertEquals("[S]\nk=v\n", Files.readString(target.toPath()));
+		} finally {
+			deleteFile(outside);
+		}
+	}
+
+	@Test void z02_allowAbsoluteNamesNotSettableFromEnvironment() {
+		System.setProperty("ConfigFileStore.allowAbsoluteNames", "true");
+		try {
+			var fs = FileStore.create().directory(DIR).build();
+			assertThrows(IllegalArgumentException.class, () -> fs.read(new File("./target/x.cfg").getAbsolutePath()));
+		} finally {
+			System.clearProperty("ConfigFileStore.allowAbsoluteNames");
+		}
 	}
 }

@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.awt.image.*;
 import java.io.*;
 import java.nio.charset.*;
+import java.util.Arrays;
 
 import javax.imageio.*;
 
@@ -78,7 +79,27 @@ class PetPhotoParser_Test extends TestBase {
 
 	@Test void a06_corruptPngThrowsParseException() throws Exception {
 		var good = encode("png");
-		var bad = java.util.Arrays.copyOf(good, 40);
+		var bad = Arrays.copyOf(good, 40);
 		assertThrows(ParseException.class, () -> parser.read(bad, BufferedImage.class));
+	}
+
+	private static byte[] encodeBlank(int w, int h) throws IOException {
+		var baos = new ByteArrayOutputStream();
+		assertTrue(ImageIO.write(new BufferedImage(w, h, BufferedImage.TYPE_BYTE_BINARY), "png", baos));
+		return baos.toByteArray();
+	}
+
+	@Test void a07_tooWideImageIsRefused() throws Exception {
+		var big = encodeBlank(PetPhotoParser.MAX_DIMENSION + 1, 1);
+		assertThrows(ParseException.class, () -> parser.read(big, BufferedImage.class));
+	}
+
+	@Test void a08_tooManyPixelsIsRefused() throws Exception {
+		var big = encodeBlank(5000, 4000);
+		assertThrows(ParseException.class, () -> parser.read(big, BufferedImage.class));
+	}
+
+	@Test void a09_imageAtTheLimitIsAccepted() throws Exception {
+		assertBean(parser.read(encodeBlank(PetPhotoParser.MAX_DIMENSION, 1), BufferedImage.class), "width,height", "8192,1");
 	}
 }

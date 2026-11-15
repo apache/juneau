@@ -51,7 +51,7 @@ class SamlAuthFilter_Fallback_Test extends TestBase {
 					.spEntityId("https://sp.example.com")
 					.expectedIssuer("https://idp.example.com")
 					.signingCredential(new BasicCredential(pair.getPublic(), pair.getPrivate()))) {
-			@Override public Principal validate(String xml) {
+			@Override public Principal validate(String xml, String binding) {
 				return new ClaimsPrincipal("alice", claims);
 			}
 		};
@@ -60,6 +60,7 @@ class SamlAuthFilter_Fallback_Test extends TestBase {
 	/** A request for {@code /saml/acs} whose {@code getRequestURL()} is null, forcing reconstruction. */
 	private static HttpServletRequest noUrlReq(String scheme, String host, int port, String uri) {
 		var r = mock(HttpServletRequest.class);
+		when(r.getMethod()).thenReturn("POST");
 		when(r.getPathInfo()).thenReturn("/saml/acs");
 		when(r.getParameter("SAMLResponse")).thenReturn(B64);
 		when(r.getRequestURL()).thenReturn(null);

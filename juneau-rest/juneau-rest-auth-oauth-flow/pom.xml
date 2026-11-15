@@ -46,6 +46,13 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- Imported directly (RemoteUrlPolicy). -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!--
 			Nimbus OAuth 2.0 SDK is declared `provided` so it does NOT leak as a transitive dependency of this
 			module or anything downstream.  `provided` is non-transitive, so this re-declaration is required (and

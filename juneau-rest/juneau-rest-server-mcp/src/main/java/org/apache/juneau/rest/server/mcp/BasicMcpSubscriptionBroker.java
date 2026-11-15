@@ -80,11 +80,35 @@ public class BasicMcpSubscriptionBroker implements McpSubscriptionBroker {
 		}
 	}
 
+	@Override
+	public Optional<McpSubscription> registerIfUnder(int max, int maxPerOwner, String owner, String subscriptionId, McpSubscriptionFilter honoredFilter) {
+		if (isEmpty(subscriptionId))
+			throw iaex("subscriptionId must not be null or empty");
+		if (honoredFilter == null)
+			throw iaex("honoredFilter must not be null");
+		synchronized (admissionLock) {
+			var existing = subscriptions.get(subscriptionId);
+			var replacement = existing != null;
+			if (! replacement && subscriptions.size() >= max)
+				return Optional.empty();
+			if (owner != null) {
+				var owned = subscriptions.values().stream().filter(x -> eq(owner, x.getOwner()) && x != existing).count();
+				if (owned >= maxPerOwner)
+					return Optional.empty();
+			}
+			return Optional.of(doRegister(subscriptionId, honoredFilter, owner));
+		}
+	}
+
 	private McpSubscription doRegister(String subscriptionId, McpSubscriptionFilter honoredFilter) {
+		return doRegister(subscriptionId, honoredFilter, null);
+	}
+
+	private McpSubscription doRegister(String subscriptionId, McpSubscriptionFilter honoredFilter, String owner) {
 		// The close callback removes this exact instance only (via the two-arg conditional ConcurrentMap.remove),
 		// so closing a stale/replaced subscription can never evict the fresher one that has since replaced it.
 		var sub = new BasicMcpSubscription(subscriptionId, honoredFilter, queueSize,
-			closed -> subscriptions.remove(subscriptionId, closed));
+			closed -> subscriptions.remove(subscriptionId, closed), owner);
 		var previous = subscriptions.put(subscriptionId, sub);
 		if (previous != null)
 			previous.close();

@@ -176,4 +176,13 @@ class ConfigClasspathStore_Test extends TestBase {
 		var fs = ClasspathStore.create().build();
 		assertDoesNotThrow(() -> fs.unregister("nonexistent.cfg", s -> {}));
 	}
+
+	@Test void z01_traversalNamesRejected() {
+		var fs = ClasspathStore.create().build();
+		assertThrows(IllegalArgumentException.class, () -> fs.read("../foo1.cfg"));
+		assertThrows(IllegalArgumentException.class, () -> fs.read("sub/../../foo1.cfg"));
+		assertThrows(IllegalArgumentException.class, () -> fs.read("/foo1.cfg"));
+		assertThrows(IllegalArgumentException.class, () -> fs.read("sub\\foo2.cfg"));
+		assertFalse(fs.exists("../foo1.cfg"));
+	}
 }

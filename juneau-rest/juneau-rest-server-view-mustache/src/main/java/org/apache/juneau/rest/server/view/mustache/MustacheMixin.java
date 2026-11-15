@@ -236,6 +236,11 @@ public class MustacheMixin {
 		return worker.applyTemplateSuffix(name);
 	}
 
+	// The extension of the templates served: the configured suffix, or ".mustache" when none is set.
+	String servedExtension() {
+		return worker.servedExtension();
+	}
+
 	/**
 	 * Resolves the active {@link MustacheFactory} via the shared {@link MustacheDispatcher} worker.
 	 *

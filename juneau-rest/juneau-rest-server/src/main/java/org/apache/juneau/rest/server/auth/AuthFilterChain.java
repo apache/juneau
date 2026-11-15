@@ -18,7 +18,7 @@ package org.apache.juneau.rest.server.auth;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
-import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 import java.security.*;
@@ -40,7 +40,11 @@ import jakarta.servlet.http.*;
  * <ol>
  * 	<li>Build the set of matching filters (those whose {@link UrlPathMatcher} pattern matches the request path, or
  * 		those registered without a pattern which always match).
- * 	<li>If no filters match the path, the request passes through unchanged.
+ * 	<li>The request path is canonicalized first (path parameters stripped, empty and <js>"."</js> segments dropped,
+ * 		<js>".."</js> segments resolved, each segment decoded once) so equivalent spellings of one path select the
+ * 		same filters.  A path that cannot be canonicalized is refused.
+ * 	<li>If no filters match the path, the request is refused with a {@code 401}, unless the chain was built with
+ * 		{@link Builder#passThroughUnmatched()}, in which case it passes through unchanged.
  * 	<li>Iterate matching filters in declaration order, calling {@link AuthFilter#authenticate(HttpServletRequest)}:
  * 		<ul>
  * 			<li>{@link Optional#empty()} &mdash; filter doesn't apply this request; continue.
@@ -115,6 +119,7 @@ public class AuthFilterChain implements Filter, Authenticator {
 
 		private final BeanStore beanStore;
 		private final List<Entry> entries = list();
+		private boolean passThroughUnmatched;
 
 		/**
 		 * Constructor.
@@ -165,6 +170,20 @@ public class AuthFilterChain implements Filter, Authenticator {
 		}
 
 		/**
+		 * Lets requests whose path matches no entry pass through unauthenticated.
+		 *
+		 * <p>
+		 * By default, a request whose path is matched by no entry is refused.  Use this when the chain protects only
+		 * part of the URL space and the remainder is intentionally public.
+		 *
+		 * @return This object.
+		 */
+		public Builder passThroughUnmatched() {
+			passThroughUnmatched = true;
+			return this;
+		}
+
+		/**
 		 * Builds the chain.
 		 *
 		 * @return A new {@link AuthFilterChain}.
@@ -185,6 +204,7 @@ public class AuthFilterChain implements Filter, Authenticator {
 	}
 
 	private final Entry[] entries;
+	private final boolean passThroughUnmatched;
 
 	/**
 	 * Constructor.
@@ -193,6 +213,7 @@ public class AuthFilterChain implements Filter, Authenticator {
 	 */
 	protected AuthFilterChain(Builder builder) {
 		this.entries = builder.entries.toArray(new Entry[0]);
+		this.passThroughUnmatched = builder.passThroughUnmatched;
 	}
 
 	/**
@@ -229,7 +250,9 @@ public class AuthFilterChain implements Filter, Authenticator {
 	 * 	<li>returns the folded {@link AuthResult} if any entry succeeded;
 	 * 	<li>throws an aggregated {@link AuthenticationException} (combining all {@code WWW-Authenticate} challenges)
 	 * 		if no entry succeeded but at least one rejected the request;
-	 * 	<li>returns {@link Optional#empty()} if no entry matched the path or all matching entries returned empty.
+	 * 	<li>returns {@link Optional#empty()} if all matching entries returned empty;
+	 * 	<li>throws an {@link AuthenticationException} if no entry matches the path, unless the chain passes unmatched
+	 * 		paths through (see {@link Builder#passThroughUnmatched()}), in which case it returns {@link Optional#empty()}.
 	 * </ul>
 	 *
 	 * @param hreq The incoming HTTP request. Never <jk>null</jk>.
@@ -239,15 +262,20 @@ public class AuthFilterChain implements Filter, Authenticator {
 	@Override /* Overridden from Authenticator */
 	public Optional<AuthResult> authenticate(HttpServletRequest hreq) throws AuthenticationException {
 		var urlPath = toUrlPath(hreq);
+		if (urlPath == null)
+			throw new AuthenticationException("Invalid request path.");
 
 		// Select matching entries.
 		var matchingEntries = Arrays.stream(entries)
 			.filter(e -> e.matcher == null || e.matcher.match(urlPath) != null)
 			.toList();
 
-		// No filters match this path — does not apply.
-		if (matchingEntries.isEmpty())
-			return oe();
+		// No filters match this path.
+		if (matchingEntries.isEmpty()) {
+			if (passThroughUnmatched)
+				return oe();
+			throw new AuthenticationException("Authentication required.");
+		}
 
 		var acc = new AuthResultAccumulator();
 		List<AuthenticationException> failures = null;
@@ -270,16 +298,41 @@ public class AuthFilterChain implements Filter, Authenticator {
 		return oe();
 	}
 
-	/** Builds the effective request path relative to the context root. */
+	/**
+	 * Builds the canonical request path relative to the context root, or <jk>null</jk> if the path is malformed.
+	 */
 	private static UrlPath toUrlPath(HttpServletRequest hreq) {
 		var contextPath = hreq.getContextPath();
 		var uri = hreq.getRequestURI();
+		if (uri == null)
+			return UrlPath.of("/");
 		var path = (contextPath != null && !contextPath.isEmpty() && uri.startsWith(contextPath))
 			? uri.substring(contextPath.length())
 			: uri;
-		if (isEmpty(path))
-			path = "/";
-		return UrlPath.of(path);
+		var q = path.indexOf('?');
+		if (q >= 0)
+			path = path.substring(0, q);
+		var out = new ArrayList<String>();
+		for (var seg : path.split("/", -1)) {
+			var semi = seg.indexOf(';');
+			if (semi >= 0)
+				seg = seg.substring(0, semi);
+			if (seg.isEmpty())
+				continue;
+			var decoded = urlDecode(seg);
+			if (decoded.indexOf('/') >= 0 || decoded.indexOf('\\') >= 0 || decoded.indexOf(';') >= 0)
+				return null;
+			if (eq(".", decoded))
+				continue;
+			if (eq("..", decoded)) {
+				if (out.isEmpty())
+					return null;
+				out.remove(out.size() - 1);
+				continue;
+			}
+			out.add(seg);
+		}
+		return UrlPath.of("/" + String.join("/", out));
 	}
 
 	/**

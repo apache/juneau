@@ -17,12 +17,14 @@
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.UriUtils.assertSecureOrLoopback;
 
 import java.net.*;
 import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
 import org.apache.juneau.rest.server.auth.*;
 
 import com.nimbusds.jose.*;
@@ -123,7 +125,7 @@ public class IdTokenValidatorAdapter {
 		 * @return This object.
 		 */
 		public Builder jwksUri(URI value) {
-			jwksUri = UriUtils.assertSecureOrLoopback(reqnn("value", value));
+			jwksUri = assertSecureOrLoopback(reqnn("value", value));
 			return this;
 		}
 
@@ -164,7 +166,7 @@ public class IdTokenValidatorAdapter {
 			var next = new LinkedHashSet<JWSAlgorithm>();
 			for (var a : values) {
 				reqnn("algorithm", a);
-				req(! Algorithm.NONE.equals(a), "\"none\" algorithm is permanently rejected");
+				req(neq(Algorithm.NONE, a), "\"none\" algorithm is permanently rejected");
 				next.add(a);
 			}
 			algorithms = next;
@@ -223,7 +225,7 @@ public class IdTokenValidatorAdapter {
 		if (b.jwkSet != null)
 			return new ImmutableJWKSet<>(b.jwkSet);
 		try {
-			return JWKSourceBuilder.create(b.jwksUri.toURL()).build();
+			return JWKSourceBuilder.<SecurityContext>create(b.jwksUri.toURL(), new JwksResourceRetriever()).outageTolerant(false).build();
 		} catch (MalformedURLException e) {
 			throw iaex(e, "Invalid JWKS URI: %s", b.jwksUri);
 		}

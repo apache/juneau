@@ -16,11 +16,9 @@
  */
 package org.apache.juneau.microservice.jetty;
 
-import static org.apache.juneau.commons.utils.FileUtils.*;
-import static org.apache.juneau.commons.utils.IoUtils.*;
-
-import java.io.*;
+import java.nio.file.*;
 import java.util.*;
+import java.util.regex.*;
 
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.resource.*;
@@ -34,6 +32,9 @@ import org.eclipse.jetty.xml.*;
  * </ul>
  */
 public class BasicJettyServerFactory implements JettyServerFactory {
+
+	/** A <c>host</c> setting with no value (empty or self-closing); left as-is it would listen on every interface. */
+	private static final Pattern BLANK_HOST = Pattern.compile("<Set\\s+name=\"host\"\\s*(?:>\\s*</Set>|/>)");
 
 	private static final String VALIDATING_PROPERTY = "org.eclipse.jetty.xml.XmlParser.Validating";
 
@@ -53,13 +54,15 @@ public class BasicJettyServerFactory implements JettyServerFactory {
 	public Server create(String jettyXml) throws Exception {
 		Objects.requireNonNull(jettyXml,
 			"jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config) or found on the file system or classpath.");
-		var f = createTempFile("jetty.xml");
-		try (var r = new StringReader(jettyXml); Writer w = new FileWriter(f)) {
-			pipe(r, w);
-			w.flush();
-		}
 		disableXmlValidationByDefault();
-		var xmlConfiguration = new XmlConfiguration(new PathResourceFactory().newResource(f.toPath()));
-		return (Server)xmlConfiguration.configure();
+		// Files.createTempFile creates the file readable and writable by its owner only (where POSIX permissions are supported).
+		var f = Files.createTempFile("jetty", ".xml");
+		try {
+			Files.writeString(f, BLANK_HOST.matcher(jettyXml).replaceAll("<Set name=\"host\">127.0.0.1</Set>"));
+			var xmlConfiguration = new XmlConfiguration(new PathResourceFactory().newResource(f));
+			return (Server)xmlConfiguration.configure();
+		} finally {
+			Files.deleteIfExists(f);
+		}
 	}
 }

@@ -53,8 +53,9 @@ class RequestFormParamList_Test {
 		assertEquals(413, ex.getStatusCode());
 	}
 
-	@Test void a03_declaredLength_absent_ok() {
-		assertDoesNotThrow(() -> RequestFormParamList.checkMultipartLength(1_000_000L, -1L));
+	@Test void a03_declaredLength_absent() {
+		assertThrows(LengthRequired.class, () -> RequestFormParamList.checkMultipartLength(1_000_000L, -1L));
+		assertDoesNotThrow(() -> RequestFormParamList.checkMultipartLength(0L, -1L));
 	}
 
 	@Test void a04_maxInputNotPositive_disablesCheck() {

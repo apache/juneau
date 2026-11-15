@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.charset.*;
 
+import org.eclipse.jetty.server.ServerConnector;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.*;
 
@@ -48,5 +49,23 @@ class BasicJettyServerFactory_Test {
 			if (old != null)
 				System.setProperty(prop, old);
 		}
+	}
+
+	@Test void a02_blankHostBindsToLoopback() throws Exception {
+		for (var blank : new String[] {"<Set name=\"host\"></Set>", "<Set name=\"host\"/>", "<Set name=\"host\" />", "<Set name=\"host\">  </Set>"}) {
+			var xml = shippedJettyXml()
+				.replace("<Set name=\"host\">${S:juneau.bindAddress:127.0.0.1}</Set>", blank)
+				.replaceAll("\\$\\{[^}]*\\}", "0");
+			assertTrue(xml.contains(blank), blank);
+			var server = new BasicJettyServerFactory().create(xml);
+			for (var c : server.getConnectors())
+				assertEquals("127.0.0.1", ((ServerConnector)c).getHost(), blank);
+		}
+	}
+
+	@Test void a03_shippedConfigHasNoDefaultHandlerOrDump() throws Exception {
+		var xml = shippedJettyXml();
+		assertFalse(xml.contains("DefaultHandler"));
+		assertFalse(xml.contains("detailedDump"));
 	}
 }

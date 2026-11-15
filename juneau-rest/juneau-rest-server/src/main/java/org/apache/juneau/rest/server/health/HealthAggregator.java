@@ -154,7 +154,7 @@ public class HealthAggregator {
 		static ComponentHealth from(Health h) {
 			var details = new LinkedHashMap<>(h.getDetails());
 			if (h.getError() != null)
-				details.putIfAbsent("error", h.getError().toString());
+				details.putIfAbsent("error", h.getError().getClass().getSimpleName());
 			return new ComponentHealth(h.getStatus(), details);
 		}
 

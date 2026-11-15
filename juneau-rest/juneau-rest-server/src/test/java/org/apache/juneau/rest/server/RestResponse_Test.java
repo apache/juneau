@@ -16,62 +16,72 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.apache.juneau.commons.http.SafePathTemplate.isSafeRedirect;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.http.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for the redirect-target validation in {@link RestResponse}, exercised via the package-private
- * {@link RestResponse#isSafeRedirectUri(String,String...)} helper.
+ * Tests for the redirect-target rule behind {@link RestResponse#sendSafeRedirect(String,String...)}, which delegates to
+ * {@link SafePathTemplate#isSafeRedirect(String,String...)}.
  *
  * @since 10.0.0
  */
 class RestResponse_Test {
 
 	@Test void a01_relativePath_isSafe() {
-		assertTrue(RestResponse.isSafeRedirectUri("/foo/bar"));
-		assertTrue(RestResponse.isSafeRedirectUri("foo/bar"));
+		assertTrue(isSafeRedirect("/foo/bar"));
+		assertTrue(isSafeRedirect("foo/bar"));
 	}
 
 	@Test void a02_nullOrEmpty_isSafe() {
-		assertTrue(RestResponse.isSafeRedirectUri(null));
-		assertTrue(RestResponse.isSafeRedirectUri(""));
+		assertTrue(isSafeRedirect(null));
+		assertTrue(isSafeRedirect(""));
 	}
 
 	@Test void a03_absoluteUri_allowedHost_isSafe() {
-		assertTrue(RestResponse.isSafeRedirectUri("https://example.com/foo", "example.com"));
+		assertTrue(isSafeRedirect("https://example.com/foo", "example.com"));
 	}
 
-	@Test void a04_absoluteUri_disallowedHost_isUnsafe() {
-		assertFalse(RestResponse.isSafeRedirectUri("https://evil.example/foo", "example.com"));
+	@Test void a04_absoluteUri_otherHost_isUnsafe() {
+		assertFalse(isSafeRedirect("https://other.example/foo", "example.com"));
 	}
 
 	@Test void a05_absoluteUri_noAllowedHosts_isUnsafe() {
-		assertFalse(RestResponse.isSafeRedirectUri("https://example.com/foo"));
+		assertFalse(isSafeRedirect("https://example.com/foo"));
 	}
 
-	@Test void a06_protocolRelativeUri_disallowedHost_isUnsafe() {
-		assertFalse(RestResponse.isSafeRedirectUri("//evil.example/foo", "example.com"));
+	@Test void a06_protocolRelativeUri_otherHost_isUnsafe() {
+		assertFalse(isSafeRedirect("//other.example/foo", "example.com"));
 	}
 
 	@Test void a07_protocolRelativeUri_allowedHost_isSafe() {
-		assertTrue(RestResponse.isSafeRedirectUri("//example.com/foo", "example.com"));
+		assertTrue(isSafeRedirect("//example.com/foo", "example.com"));
 	}
 
 	@Test void a08_allowedHostMatch_isCaseInsensitive() {
-		assertTrue(RestResponse.isSafeRedirectUri("https://Example.COM/foo", "example.com"));
+		assertTrue(isSafeRedirect("https://Example.COM/foo", "example.com"));
 	}
 
 	@Test void a09_malformedUri_isUnsafe() {
-		assertFalse(RestResponse.isSafeRedirectUri("https://exa mple.com/foo", "example.com"));
+		assertFalse(isSafeRedirect("https://exa mple.com/foo", "example.com"));
 	}
 
 	@Test void a10_backslashAndControlChars_areUnsafe() {
-		assertFalse(RestResponse.isSafeRedirectUri("/\\example.com/foo", "example.com"));
-		assertFalse(RestResponse.isSafeRedirectUri("/foo\\bar"));
-		assertFalse(RestResponse.isSafeRedirectUri("/foo\tbar"));
-		assertFalse(RestResponse.isSafeRedirectUri("/foo\nbar"));
-		assertFalse(RestResponse.isSafeRedirectUri("/foo bar"));
-		assertFalse(RestResponse.isSafeRedirectUri("/foo\u007fbar"));
+		assertFalse(isSafeRedirect("/\\example.com/foo", "example.com"));
+		assertFalse(isSafeRedirect("/foo\\bar"));
+		assertFalse(isSafeRedirect("/foo\tbar"));
+		assertFalse(isSafeRedirect("/foo\nbar"));
+		assertFalse(isSafeRedirect("/foo bar"));
+		assertFalse(isSafeRedirect("/foo\u007fbar"));
+	}
+
+	@Test void a99_schemeWithoutAuthority_isUnsafe() {
+		assertFalse(isSafeRedirect("javascript:alert(1)", "example.com"));
+		assertFalse(isSafeRedirect("data:text/html,x"));
+		assertFalse(isSafeRedirect("http:other.example"));
+		assertTrue(isSafeRedirect("foo/bar:baz"));
+		assertTrue(isSafeRedirect("?a=b:c"));
 	}
 }

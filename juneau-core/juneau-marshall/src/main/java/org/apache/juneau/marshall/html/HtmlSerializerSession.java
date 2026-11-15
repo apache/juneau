@@ -25,6 +25,8 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.marshall.xml.XmlSerializerSession.ContentResult.*;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URL;
 import java.time.*;
 import java.time.temporal.*;
 import java.util.*;
@@ -299,6 +301,26 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			return true;
 		var resolved = schemeOf(getUriResolver().resolve(uri));
 		return resolved == null || ctx.uriSchemes.contains(resolved);
+	}
+
+	private static final Set<String> URI_ATTRIBUTES = Set.of("href", "src", "action", "formaction", "poster", "data", "cite", "background", "xlink:href", "longdesc", "manifest", "ping");
+
+	/**
+	 * Returns <jk>true</jk> if the specified attribute can be written.
+	 *
+	 * <p>
+	 * In addition to the base name check, attributes that hold links (by name or by value type) are only written when
+	 * the resolved URI has an allowed scheme.
+	 */
+	@Override
+	protected boolean isAllowedAttribute(String name, Object value) {
+		if (! super.isAllowedAttribute(name, value))
+			return false;
+		if (value == null)
+			return true;
+		if (value instanceof URI || value instanceof URL || URI_ATTRIBUTES.contains(name.toLowerCase(Locale.ROOT)))
+			return isAllowedUri(value);
+		return true;
 	}
 
 	private static final Set<String> RESOLVED_SCHEMES = Set.of("servlet", "context", "request");
@@ -661,7 +683,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		} else {
 			out.oTag(i, isDc ? "p" : "ul");
-			if (! type2.equals("array"))
+			if (neq(type2, "array"))
 				out.attr(btpn, type2);
 			out.w('>').nl(i + 1);
 			var isFirst = true;
@@ -915,7 +937,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			sType = aType;
 
 			String typeName = null;
-			if (isAddBeanTypes() && ! eType.equals(aType))
+			if (isAddBeanTypes() && neq(eType, aType))
 				typeName = aType.getBeanDictionaryName();
 
 			// Swap if necessary

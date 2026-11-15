@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.beanquery;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.math.*;
 import java.time.*;
@@ -67,9 +68,9 @@ final class InMemoryMatch {
 
 	private static boolean matchCombinator(SearchExpression node, Object cell, SearchType type, RegexBudget budget) {
 		var name = node.name();
-		if ("$and".equals(name))
+		if (eq("$and", name))
 			return node.args().stream().allMatch(a -> matches(a, cell, type, budget));
-		if ("$or".equals(name))
+		if (eq("$or", name))
 			return node.args().stream().anyMatch(a -> matches(a, cell, type, budget));
 		return ! matches(node.args().get(0), cell, type, budget);  // $not — arity guaranteed 1 by the parser.
 	}
@@ -324,7 +325,7 @@ final class InMemoryMatch {
 		if (ib(v))
 			return null;
 		try {
-			return new BigDecimal(v.strip());
+			return parseBigDecimal(v.strip());
 		} catch (NumberFormatException e) {
 			return null;
 		}

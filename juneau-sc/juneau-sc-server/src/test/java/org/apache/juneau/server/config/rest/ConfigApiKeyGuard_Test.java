@@ -59,20 +59,26 @@ class ConfigApiKeyGuard_Test {
 	}
 
 	@Test void b01_secureChannel_accepted() {
-		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(true, "10.1.2.3", false));
+		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(true, "10.1.2.3", false, false));
 	}
 
 	@Test void b02_insecureLoopback_accepted() {
-		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(false, "127.0.0.1", false));
-		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(false, "::1", false));
+		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(false, "127.0.0.1", false, false));
+		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(false, "::1", false, false));
 	}
 
 	@Test void b03_insecureRemote_refused() {
-		assertFalse(ConfigApiKeyGuard.isChannelAcceptable(false, "10.1.2.3", false));
-		assertFalse(ConfigApiKeyGuard.isChannelAcceptable(false, null, false));
+		assertFalse(ConfigApiKeyGuard.isChannelAcceptable(false, "10.1.2.3", false, false));
+		assertFalse(ConfigApiKeyGuard.isChannelAcceptable(false, null, false, false));
 	}
 
 	@Test void b04_insecureRemote_acceptedWhenAllowInsecure() {
-		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(false, "10.1.2.3", true));
+		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(false, "10.1.2.3", true, false));
+	}
+
+	@Test void b05_forwardedLoopback_refused() {
+		assertFalse(ConfigApiKeyGuard.isChannelAcceptable(false, "127.0.0.1", false, true));
+		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(true, "127.0.0.1", false, true));
+		assertTrue(ConfigApiKeyGuard.isChannelAcceptable(false, "127.0.0.1", true, true));
 	}
 }

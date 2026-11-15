@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.escapeXml;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
@@ -94,21 +95,25 @@ public class VarResolverSession {
 
 	private final WritableBeanStore beanStore;
 
-	private int recursionDepth;
-	private int resolveDepth;
-	private int budgetSegments;
-	private long budgetChars;
+	// Per-thread resolve state, so one session can safely be shared by concurrent callers.
+	private static final class ResolveState {
+		int recursionDepth;
+		int resolveDepth;
+		int budgetSegments;
+		long budgetChars;
+		int exprVarDepth;
+		boolean htmlDocEncode;
+		boolean scriptStyleRefuse;
+	}
+
+	private final ThreadLocal<ResolveState> state = ThreadLocal.withInitial(ResolveState::new);
+
+	// Cap on nested resolve() calls on one thread, including re-entrant ones that do not go through resolveRecursive().
+	static final int MAX_RESOLVE_DEPTH = 128;
 
 	// Per top-level resolve() work caps: bound the total variable substitutions and the text they produce.
 	static final int MAX_SEGMENTS = 10_000;
 	static final long MAX_OUTPUT_CHARS = 1L << 20;
-
-	/** Number of {@code ${...}} references inside {@code #{...}} currently being resolved on this session. */
-	private int exprVarDepth;
-
-	private boolean htmlDocEncode;
-
-	private boolean scriptStyleRefuse;
 
 	private Function<Object,String> valueFormatter;
 	private Function<String,Object> scope;
@@ -175,7 +180,7 @@ public class VarResolverSession {
 			var b = (v.allowNested() && body.indexOf('$') != -1) ? resolve(body) : body;
 			var r = v.doResolveValue(this, b);
 			// HTML-doc chrome: values are escaped unless the var is an HTML passthrough, as in templates.
-			if (! htmlDocEncode || r == null || r instanceof Number || r instanceof Boolean)
+			if (! state.get().htmlDocEncode || r == null || r instanceof Number || r instanceof Boolean)
 				return r;
 			return applyHtmlDocChromeEncoding(prefix, r instanceof String s2 ? s2 : String.valueOf(r));
 		} catch (VarResolverException e) {
@@ -260,15 +265,16 @@ public class VarResolverSession {
 	 * @return <jk>false</jk> (and no depth change) if the cap is reached.
 	 */
 	boolean enterExprVar() {
-		if (exprVarDepth >= context.maxExprDepth)
+		var st = state.get();
+		if (st.exprVarDepth >= context.maxExprDepth)
 			return false;
-		exprVarDepth++;
+		st.exprVarDepth++;
 		return true;
 	}
 
 	/** Leaves a reference entered with {@link #enterExprVar()}. */
 	void exitExprVar() {
-		exprVarDepth--;
+		state.get().exprVarDepth--;
 	}
 
 	/**
@@ -321,14 +327,24 @@ public class VarResolverSession {
 			return null;
 		if (s.isEmpty())
 			return s;
-		if (resolveDepth++ == 0) {
-			budgetSegments = 0;
-			budgetChars = 0;
-		}
+		var st = state.get();
+		enterResolve(st);
 		try {
 			return context.compile(s).resolve(this);
 		} finally {
-			resolveDepth--;
+			st.resolveDepth--;
+		}
+	}
+
+	/*
+	 * Brackets a top-level or re-entrant resolve: resets the work budget on the outermost call and bounds nesting.
+	 */
+	private void enterResolve(ResolveState st) {
+		if (st.resolveDepth >= MAX_RESOLVE_DEPTH)
+			throw new VarResolverException("Maximum variable resolution nesting depth (%s) exceeded.", MAX_RESOLVE_DEPTH);
+		if (st.resolveDepth++ == 0) {
+			st.budgetSegments = 0;
+			st.budgetChars = 0;
 		}
 	}
 
@@ -339,8 +355,9 @@ public class VarResolverSession {
 	 * @throws VarResolverException If the budget is exhausted.
 	 */
 	void charge(int chars) {
-		budgetChars += chars;
-		if (++budgetSegments > MAX_SEGMENTS || budgetChars > MAX_OUTPUT_CHARS)
+		var st = state.get();
+		st.budgetChars += chars;
+		if (++st.budgetSegments > MAX_SEGMENTS || st.budgetChars > MAX_OUTPUT_CHARS)
 			throw new VarResolverException("Variable resolution work limit exceeded (%s substitutions, %s characters).", MAX_SEGMENTS, MAX_OUTPUT_CHARS);
 	}
 
@@ -352,14 +369,15 @@ public class VarResolverSession {
 	 * @throws VarResolverException If the maximum recursion depth is exceeded.
 	 */
 	String resolveRecursive(String s) {
-		if (++recursionDepth > context.maxRecursionDepth) {
-			recursionDepth--;
+		var st = state.get();
+		if (++st.recursionDepth > context.maxRecursionDepth) {
+			st.recursionDepth--;
 			throw new VarResolverException("Maximum variable recursion depth (%s) exceeded while resolving '%s'", context.maxRecursionDepth, s.length() > 80 ? s.substring(0, 80) + "..." : s);
 		}
 		try {
 			return resolve(s);
 		} finally {
-			recursionDepth--;
+			st.recursionDepth--;
 		}
 	}
 
@@ -379,11 +397,13 @@ public class VarResolverSession {
 	 * @return The resolved chrome string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public String resolveHtmlDoc(String s) {
-		htmlDocEncode = true;
+		var st = state.get();
+		var old = st.htmlDocEncode;
+		st.htmlDocEncode = true;
 		try {
 			return resolve(s);
 		} finally {
-			htmlDocEncode = false;
+			st.htmlDocEncode = old;
 		}
 	}
 
@@ -399,11 +419,13 @@ public class VarResolverSession {
 	 * @return The resolved string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	public String resolveScriptStyle(String s) {
-		scriptStyleRefuse = true;
+		var st = state.get();
+		var old = st.scriptStyleRefuse;
+		st.scriptStyleRefuse = true;
 		try {
 			return resolve(s);
 		} finally {
-			scriptStyleRefuse = false;
+			st.scriptStyleRefuse = old;
 		}
 	}
 
@@ -558,7 +580,13 @@ public class VarResolverSession {
 		if (s.isEmpty()) {
 			return out;
 		}
-		return context.compile(s).resolveTo(this, out);
+		var st = state.get();
+		enterResolve(st);
+		try {
+			return context.compile(s).resolveTo(this, out);
+		} finally {
+			st.resolveDepth--;
+		}
 	}
 
 	protected FluentMap<String,Object> properties() {
@@ -592,7 +620,7 @@ public class VarResolverSession {
 	 * @return <jk>true</jk> if HTML-doc chrome encoding is enabled.
 	 */
 	boolean isHtmlDocEncode() {
-		return htmlDocEncode;
+		return state.get().htmlDocEncode;
 	}
 
 	/**
@@ -602,7 +630,7 @@ public class VarResolverSession {
 	 * @return <jk>true</jk> if the var should fall through like an unknown var.
 	 */
 	boolean isScriptStyleRefused(String varName) {
-		return scriptStyleRefuse && SCRIPT_STYLE_REFUSED_VARS.contains(varName);
+		return state.get().scriptStyleRefuse && SCRIPT_STYLE_REFUSED_VARS.contains(varName);
 	}
 
 	/**
@@ -613,8 +641,8 @@ public class VarResolverSession {
 	 * @return The possibly escaped replacement.
 	 */
 	String applyHtmlDocChromeEncoding(String varName, String replacement) {
-		if (! htmlDocEncode || replacement == null || HTML_DOC_PASSTHROUGH_VARS.contains(varName))
+		if (! state.get().htmlDocEncode || replacement == null || HTML_DOC_PASSTHROUGH_VARS.contains(varName))
 			return replacement;
-		return StringUtils.escapeXml(replacement);
+		return escapeXml(replacement);
 	}
 }

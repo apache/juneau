@@ -32,6 +32,7 @@ import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.sub.*;
 import org.apache.juneau.marshall.cp.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.io.TempDir;
 
 
 @SuppressWarnings({
@@ -656,7 +657,7 @@ public class FileFinder_Test extends TestBase {
 		assertContains("[cp:/files/test1/_a.txt]", read(x,"files/test1/_a.txt"));
 	}
 
-	@Test void f01_hostileLocale_doesNotEscapeRoot(@org.junit.jupiter.api.io.TempDir Path tmp) throws Exception {
+	@Test void f01_traversalLocale_doesNotEscapeRoot(@TempDir Path tmp) throws Exception {
 		var root = Files.createDirectories(tmp.resolve("root"));
 		Files.writeString(root.resolve("file.txt"), "base");
 		Files.writeString(root.resolve("file_ja.txt"), "ja-file");
@@ -666,17 +667,17 @@ public class FileFinder_Test extends TestBase {
 
 		var x = FileFinder.create().dir(root.toString()).include(".*\\.txt").build();
 
-		// Hostile locale: must be not-found, never an exception and never the outside file.
-		var hostile = new Locale("..", "..");
-		assertDoesNotThrow(() -> assertTrue(x.getStream("OUTSIDE.txt", hostile).isEmpty()));
-		assertDoesNotThrow(() -> assertTrue(x.getString("OUTSIDE.txt", hostile).isEmpty()));
+		// Traversal locale: must be not-found, never an exception and never the outside file.
+		var traversal = new Locale("..", "..");
+		assertDoesNotThrow(() -> assertTrue(x.getStream("OUTSIDE.txt", traversal).isEmpty()));
+		assertDoesNotThrow(() -> assertTrue(x.getString("OUTSIDE.txt", traversal).isEmpty()));
 		// Control locale.
 		assertTrue(x.getStream("OUTSIDE.txt", new Locale("en", "US")).isEmpty());
 		// Legit lookups still work.
 		assertEquals("ja-file", x.getString("file.txt", Locale.JAPANESE).orElse(null));
 		assertEquals("base", x.getString("file.txt", new Locale("fr")).orElse(null));
-		// Hostile locale on an existing file falls back to the base file (screened candidates skipped).
-		assertEquals("base", x.getString("file.txt", hostile).orElse(null));
+		// Traversal locale on an existing file falls back to the base file (screened candidates skipped).
+		assertEquals("base", x.getString("file.txt", traversal).orElse(null));
 		Files.delete(root.resolve("file_ja.txt"));
 		var y = FileFinder.create().dir(root.toString()).include(".*\\.txt").build();
 		assertEquals("ja-dir", y.getString("file.txt", Locale.JAPANESE).orElse(null));
@@ -700,5 +701,11 @@ public class FileFinder_Test extends TestBase {
 		public E03b(E03a x) {
 			super(x);
 		}
+	}
+
+	@Test void f01_excludeMatchesFullRelativePath() throws Exception {
+		var x = FileFinder.create().dir(".").exclude("(.*/)?dir(/.*)?").build();
+		assertNull(read(x, "files/test1/dir/e.txt"));
+		assertContains("[home:/files/test1/e.txt]", read(x, "files/test1/e.txt"));
 	}
 }

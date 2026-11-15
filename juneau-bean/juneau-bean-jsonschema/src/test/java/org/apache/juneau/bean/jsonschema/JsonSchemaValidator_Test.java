@@ -19,6 +19,7 @@ package org.apache.juneau.bean.jsonschema;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.*;
+import java.time.Duration;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -482,5 +483,74 @@ class JsonSchemaValidator_Test extends TestBase {
 	@Test void h33_jsonEquals_objectFallback_unequal() {
 		// Drives a.equals(b) == false leg with non-collection objects that go to the JSON fallback.
 		assertThrows(SchemaValidationException.class, () -> v(new JsonSchema().setConst("abc")).validate(Boolean.FALSE));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// uniqueItems equality semantics and bounds
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static void assertDuplicates(Object...items) {
+		var l = Arrays.asList(items);
+		assertThrows(SchemaValidationException.class, () -> v(new JsonSchema().setUniqueItems(true)).validate(l));
+	}
+
+	private static void assertDistinct(Object...items) {
+		v(new JsonSchema().setUniqueItems(true)).validate(Arrays.asList(items));
+	}
+
+	@Test void i01_uniqueItems_numbersCompareByValue() {
+		assertDuplicates(1, 1.0);
+		assertDuplicates(1L, new BigDecimal("1.00"));
+		assertDuplicates(0.0, -0.0);
+		assertDistinct(1, 2.0, 1.5);
+	}
+
+	@Test void i02_uniqueItems_objectKeyOrderIgnored() {
+		var a = new LinkedHashMap<String,Object>();
+		a.put("x", 1);
+		a.put("y", 2);
+		var b = new LinkedHashMap<String,Object>();
+		b.put("y", 2.0);
+		b.put("x", 1);
+		assertDuplicates(a, b);
+		assertDistinct(a, Map.of("x", 1, "y", 3));
+	}
+
+	@Test void i03_uniqueItems_arraysAreOrdered() {
+		assertDuplicates(List.of(1, 2), new int[]{1, 2});
+		assertDistinct(List.of(1, 2), List.of(2, 1));
+	}
+
+	@Test void i04_uniqueItems_nestedStructures() {
+		assertDuplicates(Map.of("a", List.of(Map.of("b", 1))), Map.of("a", List.of(Map.of("b", 1.0))));
+		assertDistinct(Map.of("a", List.of(Map.of("b", 1))), Map.of("a", List.of(Map.of("b", 2))));
+	}
+
+	@Test void i05_uniqueItems_typesAreDistinct() {
+		assertDistinct("1", 1, true, null, List.of(), Map.of());
+	}
+
+	@Test void i06_uniqueItems_largeArrayCompletesQuickly() {
+		var l = new ArrayList<Object>();
+		for (var i = 0; i < 200_000; i++)
+			l.add(i);
+		var s = v(new JsonSchema().setUniqueItems(true));
+		assertTimeoutPreemptively(Duration.ofSeconds(10), () -> s.validate(l));
+		l.add(5.0);
+		assertTimeoutPreemptively(Duration.ofSeconds(10), () -> assertThrows(SchemaValidationException.class, () -> s.validate(l)));
+	}
+
+	@Test void i07_uniqueItems_interruptedThreadAborts() {
+		var l = new ArrayList<Object>();
+		for (var i = 0; i < 1000; i++)
+			l.add(i);
+		var s = v(new JsonSchema().setUniqueItems(true));
+		Thread.currentThread().interrupt();
+		try {
+			assertThrows(RuntimeException.class, () -> s.validate(l));
+			assertTrue(Thread.currentThread().isInterrupted());
+		} finally {
+			Thread.interrupted();
+		}
 	}
 }

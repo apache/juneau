@@ -261,7 +261,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 
 		private static void putCount(Map<Species,Integer> per, Species s, Object v) {
 			var x = v == null ? "" : String.valueOf(v).trim();
-			if (! x.isEmpty() && ! "0".equals(x))
+			if (! x.isEmpty() && neq("0", x))
 				per.put(s, Integer.valueOf(x));
 		}
 
@@ -413,7 +413,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 		var k = body.idempotencyKey();
 		if (ib(k))
 			throw new BadRequest("Missing 'idempotencyKey'");
-		var key = IdempotencyKey.of(k, ACTION, k.equals(json.getString("targetId")) ? k : ACTION);
+		var key = IdempotencyKey.of(k, ACTION, eq(k, json.getString("targetId")) ? k : ACTION);
 		if (body.perSpecies().isEmpty())
 			throw new BadRequest("Nothing to restock");
 		body.perSpecies().forEach((s, n) -> {
@@ -425,7 +425,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 		AsyncJob job;
 		synchronized (submitted) {
 			// Resolve the idempotency key first: a replay returns its existing job and never counts against the limit.
-			var prior = submitted.stream().filter(x -> k.equals(x.getString("idempotencyKey"))).findFirst();
+			var prior = submitted.stream().filter(x -> eq(k, x.getString("idempotencyKey"))).findFirst();
 			job = prior.flatMap(x -> registry.get(x.getString("jobId"))).orElse(null);
 			if (job == null) {
 				prior.ifPresent(submitted::remove); // The job aged out of the registry; this is a fresh submission.
@@ -525,6 +525,11 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	}
 
 	@Override /* TerminalMixin */
+	public TerminalAccess terminalAccess() {
+		return (caller, id) -> true; // The run id is an unguessable 128-bit secret; knowing it is the access rule.
+	}
+
+	@Override /* TerminalMixin */
 	public Optional<TerminalSource> terminalSource(String id, RestRequest req) {
 		return groomRuns().source(id); // The run id is an unguessable 128-bit secret; knowing it is the access rule.
 	}
@@ -550,12 +555,14 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	 * Accepts the API form {@code {pet, verbose}} or the dialog form {@code {action, targetId, idempotencyKey,
 	 * fields:{pet, verbose}}}; a resubmit with the same {@code idempotencyKey} returns the same run.
 	 *
+	 * @param req The request.
 	 * @param json The body.
 	 * @return The new run's row.
 	 * @throws IOException If the run's temp file cannot be created.
 	 */
 	@RestPost(path="/groom")
-	public ActionResult groom(@Content JsonMap json) throws IOException {
+	public ActionResult groom(RestRequest req, @Content JsonMap json) throws IOException {
+		ConsoleWrites.actor(req);
 		var fields = json.getMap("fields");
 		var src = fields != null ? fields : json;
 		var run = groomRuns().start(src.getString("pet"), isOn(src.get("verbose")), json.getString("idempotencyKey"));
@@ -564,7 +571,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 
 	private static boolean isOn(Object v) {
 		var s = v == null ? "" : String.valueOf(v);
-		return "true".equals(s) || "on".equals(s);
+		return eq("true", s) || eq("on", s);
 	}
 
 	/**
@@ -606,7 +613,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	 * Issues a restock key bound to one species and the caller.
 	 *
 	 * <p>
-	 * A POST, so it sits behind the console's CSRF boundary like every other console write; it changes nothing but the
+	 * A POST, so it sits behind the console's request-token boundary like every other console write; it changes nothing but the
 	 * key ledger.
 	 *
 	 * @param req The request.
@@ -641,7 +648,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	public Object restockSpecies(RestRequest req, RestResponse res, @Path("id") String id, @Content JsonMap json) {
 		var s = species(id);
 		var submit = RowJobSubmit.parse(json);
-		if (! s.name().equals(submit.targetId()))
+		if (neq(s.name(), submit.targetId()))
 			return refused(res, RowJobSubmit.bindingRefusal());
 		var actor = ConsoleWrites.actor(req);
 		var ledger = jobKeys();
@@ -740,7 +747,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	@RestPost(path="/groom-runs/{id}/regroom")
 	public ActionResult regroom(RestRequest req, RestResponse res, @Path("id") String id, @Content JsonMap json) throws IOException {
 		var submit = RowJobSubmit.parse(json);
-		if (! id.equals(submit.targetId()))
+		if (neq(id, submit.targetId()))
 			return refused(res, RowJobSubmit.bindingRefusal());
 		var ledger = jobKeys();
 		// As restockSpecies: the claim is read and recorded under the ledger's lock.  The replay check comes before the
@@ -782,7 +789,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 
 	private static Species species(String id) {
 		for (var s : Species.values())
-			if (s.name().equals(id))
+			if (eq(s.name(), id))
 				return s;
 		throw new NotFound("Unknown species '%s'", id);
 	}

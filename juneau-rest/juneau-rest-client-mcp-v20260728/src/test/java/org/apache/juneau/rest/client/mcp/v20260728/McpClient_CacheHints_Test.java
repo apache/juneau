@@ -62,8 +62,8 @@ class McpClient_CacheHints_Test extends TestBase {
 	void a01_privateScope_usesPerInstancePartitionPrefix() throws Exception {
 		var cache = new RecordingCache();
 		try (
-			var c1 = McpClient.builder().endpoint("http://x").responseCache(cache).build();
-			var c2 = McpClient.builder().endpoint("http://x").responseCache(cache).build();
+			var c1 = McpClient.builder().endpoint("https://x").responseCache(cache).build();
+			var c2 = McpClient.builder().endpoint("https://x").responseCache(cache).build();
 		) {
 			assertNotEquals(c1.privateScopePartitionPrefix(), c2.privateScopePartitionPrefix());
 		}
@@ -82,7 +82,7 @@ class McpClient_CacheHints_Test extends TestBase {
 				.build();
 		};
 		try (var c = McpClient.builder()
-			.endpoint("http://x/mcp")
+			.endpoint("https://x/mcp")
 			.transport(transport)
 			.responseCache(new InMemoryMcpResponseCache())
 			.build()) {

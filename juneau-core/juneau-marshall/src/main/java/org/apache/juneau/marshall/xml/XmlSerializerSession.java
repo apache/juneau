@@ -31,6 +31,7 @@ import java.time.temporal.*;
 import java.util.*;
 import java.util.AbstractMap.*;
 import java.util.function.*;
+import java.util.regex.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
@@ -321,7 +322,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 			if (n == ns)
 				return;
 
-		if (nn(defaultNamespace) && (ns.uri.equals(defaultNamespace.uri) || ns.name.equals(defaultNamespace.name)))
+		if (nn(defaultNamespace) && (eq(ns.uri, defaultNamespace.uri) || eq(ns.name, defaultNamespace.name)))
 			defaultNamespace = ns;
 		else
 			namespaces = addAll(namespaces, ns);
@@ -334,12 +335,12 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 			return n;
 		if (n.uri == null) {
 			for (var n2 : getNamespaces())
-				if (n2.name.equals(n.name))
+				if (eq(n2.name, n.name))
 					return n2;
 		}
 		if (n.name == null) {
 			for (var n2 : getNamespaces())
-				if (n2.uri.equals(n.uri))
+				if (eq(n2.uri, n.uri))
 					return n2;
 		}
 		return n;
@@ -409,7 +410,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		ClassMeta<?> contentType = null;
 		for (var p : lp) {
 			var n = p.getName();
-			if (attrs.contains(n) || attrs.contains("*") || n.equals(attrsProperty)) {
+			if (attrs.contains(n) || attrs.contains("*") || eq(n, attrsProperty)) {
 				var pMeta = p.getMeta();
 				if (pMeta.canRead()) {
 					var kv = getPropertyKeyValueIfNotIgnored(p, pMeta);
@@ -421,20 +422,25 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 					var ns = (isEnableNamespaces() && bpXml.getNamespace() != elementNs ? bpXml.getNamespace() : null);
 
 					if (pMeta.isUri()) {
-						out.attrUri(ns, key, value);
-					} else if (n.equals(attrsProperty)) {
+						if (isAllowedAttribute(key, value))
+							out.attrUri(ns, key, value);
+					} else if (eq(n, attrsProperty)) {
 						if (value instanceof BeanMap<?> value2) {
 							value2.forEachValue(x -> true, (pMeta2, key2, value3, thrown2) -> {
 								if (nn(thrown2))
 									onBeanGetterException(pMeta, thrown2);
-								out.attr(ns, key2, value3);
+								if (isAllowedAttribute(key2, value3))
+									out.attr(ns, key2, value3);
 							});
 						} else /* Map */ {
 							var m2 = (Map)value;
 							if (nn(m2))
-								m2.forEach((k, v) -> out.attr(ns, s(k), v));
+								m2.forEach((k, v) -> {
+									if (isAllowedAttribute(s(k), v))
+										out.attr(ns, s(k), v);
+								});
 						}
-					} else {
+					} else if (isAllowedAttribute(key, value)) {
 						out.attr(ns, key, value);
 					}
 				}
@@ -451,7 +457,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 				ClassMeta<?> cMeta = (ClassMeta<?>) p.getBeanInfo();
 
 				var n = p.getName();
-				if (n.equals(contentProperty)) {
+				if (eq(n, contentProperty)) {
 					content = p.getValue();
 					contentType = (ClassMeta<?>) p.getBeanInfo();
 					hasContent = true;
@@ -802,6 +808,22 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 	 * @return <jk>true</jk> if we're generating HTML.
 	 */
 	protected boolean isHtmlMode() { return false; }
+
+	private static final Pattern ATTR_NAME = Pattern.compile("[A-Za-z_:][-A-Za-z0-9_:.]*");
+
+	/**
+	 * Returns <jk>true</jk> if the specified attribute can be written.
+	 *
+	 * <p>
+	 * The default implementation only accepts names that are valid XML attribute names.
+	 *
+	 * @param name The attribute name.
+	 * @param value The attribute value.  Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the attribute should be written, <jk>false</jk> if it should be omitted.
+	 */
+	protected boolean isAllowedAttribute(String name, Object value) {
+		return name != null && ATTR_NAME.matcher(name).matches();
+	}
 
 	/**
 	 * Workhorse method.

@@ -27,14 +27,18 @@ import org.apache.juneau.rest.server.*;
  * Mixin interface that serves the terminal-view events endpoint.
  *
  * <p>
- * The one abstract method is the application's resolver, which is where authorization lives: an unknown id and a
- * forbidden id both answer {@code 404}, so ids cannot be enumerated.  Run ids are opaque URL tokens matching
+ * The abstract methods are the application's access rules and resolver, which is where authorization lives: an
+ * unknown id and a forbidden id both answer {@code 404}, so ids cannot be enumerated.  Run ids are opaque URL tokens matching
  * {@code ^[A-Za-z0-9_-]{1,128}$}; anything else answers {@code 400} before the resolver runs.
  *
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> RunsResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> TerminalViewMixin {
+ * 		<ja>@Override</ja>
+ * 		<jk>public</jk> TerminalViewAccess terminalViewAccess() {
+ * 			<jk>return</jk> (<jv>req</jv>, <jv>runId</jv>) -&gt; <jv>req</jv>.getUserPrincipal() != <jk>null</jk>;
+ * 		}
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> Optional&lt;TerminalViewSource&gt; terminalViewSource(String <jv>runId</jv>, RestRequest <jv>req</jv>) {
  * 			<jk>return</jk> <jf>runs</jf>.find(<jv>runId</jv>).map(Run::events);
@@ -60,6 +64,17 @@ public interface TerminalViewMixin {
 	Optional<TerminalViewSource> terminalViewSource(String runId, RestRequest req);
 
 	/**
+	 * The access rules applied to the events endpoint before the source is resolved.
+	 *
+	 * <p>
+	 * A caller that may not read the run is answered {@code 404}, the same as an unknown id.  There is no default:
+	 * every host states who may read.
+	 *
+	 * @return The access rules.  Never <jk>null</jk>.
+	 */
+	TerminalViewAccess terminalViewAccess();
+
+	/**
 	 * [GET /juneau-terminal-view/{runId}/events] &mdash; one page of events as JSON.
 	 *
 	 * @param runId The run id.
@@ -69,6 +84,8 @@ public interface TerminalViewMixin {
 	 */
 	@RestGet(path=EVENTS_PATH, summary="Terminal view events", serializers=JsonSerializer.class, swagger=@OpSwagger(ignore=true))
 	default void terminalViewEvents(@Path("runId") String runId, RestRequest req, RestResponse res) throws IOException {
-		TerminalViewEndpoints.events(terminalViewSource(TerminalViewEndpoints.checkRunId(runId), req), req, res);
+		var checked = TerminalViewEndpoints.checkRunId(runId);
+		var source = terminalViewAccess().canView(req, checked) ? terminalViewSource(checked, req) : Optional.<TerminalViewSource>empty();
+		TerminalViewEndpoints.events(source, req, res);
 	}
 }

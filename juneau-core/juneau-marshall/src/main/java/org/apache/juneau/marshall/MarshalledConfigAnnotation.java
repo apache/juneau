@@ -16,7 +16,10 @@
  */
 package org.apache.juneau.marshall;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.reflect.*;
@@ -47,6 +50,21 @@ public class MarshalledConfigAnnotation {
 			super(MarshalledConfig.class, MarshallingContext.Builder.class, vr);
 		}
 
+		/**
+		 * Converts a comma-separated allow-list into a class-name predicate.
+		 *
+		 * <p>
+		 * An entry ending in <js>"."</js> or <js>"$"</js> is a prefix; any other entry matches that exact name or
+		 * any name below it as a package.
+		 *
+		 * @param list The comma-separated entries.
+		 * @return A predicate returning <jk>true</jk> for permitted names.
+		 */
+		static Predicate<String> toGuard(String list) {
+			var entries = Arrays.stream(list.split(",")).map(String::trim).filter(x -> ! x.isEmpty()).toList();
+			return name -> entries.stream().anyMatch(e -> e.endsWith(".") || e.endsWith("$") ? name.startsWith(e) : eq(name, e) || name.startsWith(e + "."));
+		}
+
 		@Override
 		@SuppressWarnings({
 			"java:S3776" // Cognitive complexity acceptable for the flat per-attribute config-applier sequence.
@@ -56,6 +74,7 @@ public class MarshalledConfigAnnotation {
 
 			// @formatter:off
 			bool(a.debug()).ifPresent(b::debug);
+			string(a.classNameAllow()).map(Applier::toGuard).ifPresent(b::classNameGuard);
 			string(a.typePropertyName()).ifPresent(b::typePropertyName);
 			string(a.locale()).map(Locale::forLanguageTag).ifPresent(b::locale);
 			string(a.mediaType()).map(MediaType::of).ifPresent(b::mediaType);

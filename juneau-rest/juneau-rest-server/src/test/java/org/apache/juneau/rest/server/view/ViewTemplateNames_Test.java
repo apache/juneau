@@ -43,6 +43,13 @@ class ViewTemplateNames_Test extends TestBase {
 		assertFalse(ViewTemplateNames.isPlainName("a\u007fb.ftl"));
 	}
 
+	@Test void a03_isPlainName_rejectsPathParameterAndEncodingCharacters() {
+		assertFalse(ViewTemplateNames.isPlainName("..;/x.jsp"));
+		assertFalse(ViewTemplateNames.isPlainName("a%2e%2e/x.jsp"));
+		assertFalse(ViewTemplateNames.isPlainName("x.jsp?y"));
+		assertFalse(ViewTemplateNames.isPlainName("x.jsp#y"));
+	}
+
 	@Test void b01_hasAllowedExtension() {
 		assertTrue(ViewTemplateNames.hasAllowedExtension("a.ftlh", ".ftlh", ".ftl"));
 		assertTrue(ViewTemplateNames.hasAllowedExtension("A.FTL", ".ftlh", ".ftl"));

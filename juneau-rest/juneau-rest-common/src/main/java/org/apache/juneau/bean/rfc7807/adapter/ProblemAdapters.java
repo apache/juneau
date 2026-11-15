@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.rfc7807.adapter;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.bean.rfc7807.*;
 import org.apache.juneau.http.response.*;
 
@@ -80,8 +82,8 @@ public final class ProblemAdapters {
 			return null;
 		var statusLine = e.getStatusLine();
 		var reasonPhrase = statusLine == null ? null : statusLine.getReasonPhrase(); // HTT — statusLine is always set in BasicHttpException constructors
-		var message = e.getMessage();
-		var detail = (message == null || message.equals(reasonPhrase)) ? null : message; // HTT — getMessage() always returns non-null (falls back to reasonPhrase)
+		var message = e.getResponseMessage();
+		var detail = (message == null || eq(message, reasonPhrase)) ? null : message; // HTT — getMessage() always returns non-null (falls back to reasonPhrase)
 		return new Problem()
 			.setStatus(e.getStatusCode())
 			.setTitle(reasonPhrase)

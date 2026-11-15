@@ -20,6 +20,7 @@ import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
@@ -278,12 +279,12 @@ class RestConverter_Test extends TestBase {
 	// that resolves this for callers who need reflective dispatch.
 	@Test void c02_introspectableInvokeMethod_deniedByDefault() throws Exception {
 		var c = MockRestClient.create(C.class).json().ignoreErrors().build();
-		c.get("/?invokeMethod=getName").run().assertStatus(500).assertContent().isContains("has not been allow-listed");
+		c.get("/?invokeMethod=getName").run().assertStatus(500).assertContent().isContains("The requested method is not available.");
 	}
 
 	@Test void c03_introspectableInvokeToString_deniedByDefault() throws Exception {
 		var c = MockRestClient.create(C.class).json().ignoreErrors().build();
-		c.get("/?invokeMethod=toString").run().assertStatus(500).assertContent().isContains("has not been allow-listed");
+		c.get("/?invokeMethod=toString").run().assertStatus(500).assertContent().isContains("The requested method is not available.");
 	}
 
 	// Real per-resource allow-list configuration: a resource opts specific methods in by registering an
@@ -309,7 +310,7 @@ class RestConverter_Test extends TestBase {
 	@Test void c05_introspectableNonAllowListedMethod_refused() throws Exception {
 		// toString() was not allow-listed on C2 (only getName/getAge were), so it's still refused.
 		var c = MockRestClient.create(C2.class).json().ignoreErrors().build();
-		c.get("/?invokeMethod=toString").run().assertStatus(500).assertContent().isContains("has not been allow-listed");
+		c.get("/?invokeMethod=toString").run().assertStatus(500).assertContent().isContains("The requested method is not available.");
 	}
 
 	@Rest(converters=Introspectable.class)
@@ -431,7 +432,7 @@ class RestConverter_Test extends TestBase {
 
 	public static class CapturingQueryable extends Queryable {
 		// One converter instance is created per @RestOp, so capture all of them.
-		static final List<CapturingQueryable> instances = new java.util.concurrent.CopyOnWriteArrayList<>();
+		static final List<CapturingQueryable> instances = new CopyOnWriteArrayList<>();
 		public CapturingQueryable() { instances.add(this); }
 		static Object cached(Class<?> c) {
 			return instances.stream().map(q -> q.cachedContext(c)).filter(Objects::nonNull).findFirst().orElse(null);

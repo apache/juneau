@@ -16,12 +16,15 @@
  */
 package org.apache.juneau.server.config.repository;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.nio.file.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.secret.*;
+import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.transport.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.*;
@@ -97,6 +100,66 @@ class GitControl_Test {
 	@Test void b02_nullUsernameConstructorUsesAnonymousTransport(@TempDir File dir) throws IOException {
 		try (var gitControl = new GitControl(dir.getAbsolutePath(), "https://example.com/repo.git", null, "GIT_TOKEN", null, false)) {
 			assertNotNull(gitControl);
+		}
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// Branch validation and object-database reads.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void c01_branchRejectsInvalidNames(@TempDir File dir) throws IOException {
+		try (var gitControl = new GitControl(dir.getAbsolutePath(), "https://example.com/repo.git")) {
+			for (var b : new String[]{null, "", "..", "a/../b", "a\\b", "a\0b", "-x", "--orphan", "HEAD", "a b", "a;b", "a~1"})
+				assertThrows(IllegalArgumentException.class, () -> gitControl.branch(b), String.valueOf(b));
+		}
+	}
+
+	@Test void c02_readBlobRejectsInvalidBranch(@TempDir File dir) throws IOException {
+		try (var gitControl = new GitControl(dir.getAbsolutePath(), "https://example.com/repo.git")) {
+			assertThrows(IllegalArgumentException.class, () -> gitControl.readBlob("-x", "a.cfg", 10));
+			assertThrows(IllegalArgumentException.class, () -> gitControl.readBlob("HEAD", "a.cfg", 10));
+		}
+	}
+
+	private static void commit(File dir, String branch, String file, String content) throws Exception {
+		try (var g = Git.init().setDirectory(dir).setInitialBranch("main").call()) {
+			if (neq("main", branch))
+				g.checkout().setCreateBranch(true).setName(branch).call();
+			Files.writeString(new File(dir, file).toPath(), content);
+			g.add().addFilepattern(".").call();
+			g.commit().setMessage("c").setSign(false).setAuthor("t", "t@example.com").setCommitter("t", "t@example.com").call();
+		}
+	}
+
+	@Test void d01_readBlobReadsCommittedContentNotWorkingTree(@TempDir File dir) throws Exception {
+		commit(dir, "main", "a.cfg", "[S]\nk=v\n");
+		Files.writeString(new File(dir, "a.cfg").toPath(), "changed");
+		try (var gitControl = new GitControl(dir.getAbsolutePath(), "https://example.com/repo.git")) {
+			assertEquals("[S]\nk=v\n", gitControl.readBlob("main", "a.cfg", 1024));
+			assertNull(gitControl.readBlob("main", "missing.cfg", 1024));
+			assertThrows(IOException.class, () -> gitControl.readBlob("nope", "a.cfg", 1024));
+		}
+	}
+
+	@Test void d02_readBlobReadsRequestedBranchWhileAnotherIsCheckedOut(@TempDir File dir) throws Exception {
+		commit(dir, "main", "a.cfg", "main-content");
+		try (var g = Git.open(dir)) {
+			g.checkout().setCreateBranch(true).setName("other").call();
+			Files.writeString(new File(dir, "a.cfg").toPath(), "other-content");
+			g.add().addFilepattern(".").call();
+			g.commit().setMessage("o").setSign(false).setAuthor("t", "t@example.com").setCommitter("t", "t@example.com").call();
+		}
+		try (var gitControl = new GitControl(dir.getAbsolutePath(), "https://example.com/repo.git")) {
+			assertEquals("main-content", gitControl.readBlob("main", "a.cfg", 1024));
+			assertEquals("other-content", gitControl.readBlob("other", "a.cfg", 1024));
+		}
+	}
+
+	@Test void d03_readBlobRefusesOversizedBlob(@TempDir File dir) throws Exception {
+		commit(dir, "main", "a.cfg", "x".repeat(11));
+		try (var gitControl = new GitControl(dir.getAbsolutePath(), "https://example.com/repo.git")) {
+			assertEquals("x".repeat(11), gitControl.readBlob("main", "a.cfg", 11));
+			assertThrows(IOException.class, () -> gitControl.readBlob("main", "a.cfg", 10));
 		}
 	}
 }

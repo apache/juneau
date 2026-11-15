@@ -176,7 +176,7 @@ public @interface Rest {
 	 * rejected with a <c>403</c> when the <c>Sec-Fetch-Site</c> header is <c>cross-site</c>, or when an <c>Origin</c>
 	 * header is present and does not match the <c>Host</c> header.
 	 * <br>Requests carrying neither header (for example, non-browser clients) are not affected.
-	 * <br>This check is on by default; no other authentication or CSRF filter is registered unless the application adds one.
+	 * <br>This check is on by default; no other authentication or request-token filter is registered unless the application adds one.
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
@@ -641,7 +641,7 @@ public @interface Rest {
 	 * <p>
 	 * Accepted values include {@code "allowedParserOptions"}, {@code "allowedSerializerOptions"},
 	 * {@code "allowedHeaderParams"}, {@code "allowedMethodHeaders"}, {@code "allowedMethodParams"},
-	 * {@code "allowContentParam"}, {@code "renderResponseStackTraces"}, {@code "problemDetails"},
+	 * {@code "allowContentParam"}, {@code "renderResponseStackTraces"}, {@code "problemDetails"}, {@code "showCauseMessages"},
 	 * {@code "debugMarshalling"},
 	 * {@code "eagerInit"}, {@code "lazyChildren"}, {@code "clientVersionHeader"},
 	 * {@code "uriAuthority"}, {@code "uriContext"}, {@code "uriRelativity"}, and {@code "uriResolution"}.
@@ -919,6 +919,34 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	String problemDetails() default "";
+
+	/**
+	 * Show cause messages in error responses.
+	 *
+	 * <p>
+	 * When an HTTP exception wraps a cause and has no message of its own (e.g. <c><jk>new</jk> InternalServerError(<jv>cause</jv>)</c>),
+	 * its message is taken from the cause.  By default that message is not written to the response; the client sees
+	 * the status reason phrase (e.g. <js>"Internal Server Error"</js>) instead.  Set this to <js>"true"</js> to write the
+	 * cause's message.
+	 *
+	 * <p>
+	 * Messages supplied explicitly by the code that throws the exception (e.g. <c><jk>new</jk> NotFound(<js>"Unknown pet '%s'"</js>, <jv>id</jv>)</c>)
+	 * are always written.  Server logs always keep the full cause message.
+	 *
+	 * <p>
+	 * When this annotation value is not set, the default comes from the <c>RestContext.showCauseMessages</c> setting
+	 * (system property, or the equivalent environment variable), and is <js>"false"</js> if that is not set either.
+	 * A value set on this annotation or through the builder always wins.
+	 *
+	 * <h4 class='section'>Notes:</h4><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String showCauseMessages() default "";
 
 	/**
 	 * Opt the resource into REST-driven serializer/parser debug behavior.

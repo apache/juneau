@@ -66,6 +66,13 @@ class HealthMixin_Test extends TestBase {
 		c.get("/readyz").accept("application/json").run().assertStatus(503);
 	}
 
+	@Test void a01b_healthzErrorDetail_omitsMessage() throws Exception {
+		var c = MockRestClient.buildLax(A.class);
+		var body = c.get("/healthz").accept("application/json").run().getContent().asString();
+		assertTrue(body.contains("IllegalStateException"), body);
+		assertFalse(body.contains("offline"), body);
+	}
+
 	/** Docs pattern (16.09 / 10.07): a package-private named {@code @Bean HealthIndicator} is honored. */
 	@Rest(mixins={HealthMixin.class})
 	public static class B extends BasicRestServlet {

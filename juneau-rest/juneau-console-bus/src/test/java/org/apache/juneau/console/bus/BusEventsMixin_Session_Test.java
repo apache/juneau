@@ -19,14 +19,20 @@ package org.apache.juneau.console.bus;
 import static org.apache.juneau.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.Proxy;
 import java.security.*;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.*;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.JsonParser;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.rest.client.classic.RestResponse;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.filter.*;
@@ -82,7 +88,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 		return JsonMap.ofString(text, JsonParser.DEFAULT);
 	}
 
-	private static org.apache.juneau.rest.client.classic.RestResponse stream(Principal p, String id, int status) throws Exception {
+	private static RestResponse stream(Principal p, String id, int status) throws Exception {
 		return C.get(BusEventsMixin.STREAM_PATH.replace("{sessionId}", id)).userPrincipal(p)
 			.header("Accept", "text/event-stream").run().assertStatus(status);
 	}
@@ -242,7 +248,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 	})
 	@Test void b05_aSecondStreamReplacesTheFirstQuietly() throws Exception {
 		var id = post(JB, body("sse", "ops.jobs"), 200).getString("sessionId");
-		var pool = java.util.concurrent.Executors.newFixedThreadPool(2);
+		var pool = Executors.newFixedThreadPool(2);
 		try {
 			var first = pool.submit(() -> stream(JB, id, 200).getContent().asString());
 			var deadline = System.nanoTime() + 10_000_000_000L;
@@ -252,12 +258,12 @@ class BusEventsMixin_Session_Test extends TestBase {
 			}
 			var second = pool.submit(() -> stream(JB, id, 200).getContent().asString());
 			// The second stream's connect replaces the first, which ends within about 50 ms and without an error frame.
-			var firstBody = first.get(10, java.util.concurrent.TimeUnit.SECONDS);
+			var firstBody = first.get(10, TimeUnit.SECONDS);
 			assertTrue(firstBody.contains("\"type\":\"resync-end\""), firstBody);
 			assertFalse(firstBody.contains("bus:slow-consumer"), firstBody);
 			assertFalse(second.isDone(), "the replacement keeps streaming");
 			R.bus.close();
-			assertTrue(second.get(10, java.util.concurrent.TimeUnit.SECONDS).contains("\"type\":\"resync-end\""));
+			assertTrue(second.get(10, TimeUnit.SECONDS).contains("\"type\":\"resync-end\""));
 		} finally {
 			R.bus.close();
 			pool.shutdownNow();
@@ -273,14 +279,14 @@ class BusEventsMixin_Session_Test extends TestBase {
 		use(policy().boundary(LoopbackBoundary.create().authority(AUTHORITY).token(TOKEN).build()).build());
 	}
 
-	private static MockRestRequest boundaryPost(boolean csrf) throws Exception {
+	private static MockRestRequest boundaryPost(boolean withToken) throws Exception {
 		var r = C.post(BusEventsMixin.SESSION_PATH).userPrincipal(JB).contentString(body("sse", "ops.jobs"))
 			.contentType("application/json").header("Accept", "application/json")
 			.header("Host", AUTHORITY).header("Origin", "http://" + AUTHORITY).header("Sec-Fetch-Site", "same-origin");
-		return csrf ? r.header("X-Csrf-Token", TOKEN.value()) : r;
+		return withToken ? r.header("X-Csrf-Token", TOKEN.value()) : r;
 	}
 
-	@Test void c01_aPostWithoutTheCsrfTokenIs403() throws Exception {
+	@Test void c01_aPostWithoutTheBoundaryTokenIs403() throws Exception {
 		useBoundary();
 		var text = boundaryPost(false).run().assertStatus(403).getContent().asString();
 		assertTrue(text.contains("bus:refused"), text);
@@ -296,7 +302,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 	@Test void c03_theStreamChecksHost() throws Exception {
 		useBoundary();
 		C.get(BusEventsMixin.STREAM_PATH.replace("{sessionId}", "0".repeat(64))).userPrincipal(JB)
-			.header("Accept", "text/event-stream").header("Host", "evil.example:8790").run().assertStatus(421);
+			.header("Accept", "text/event-stream").header("Host", "other.example:8790").run().assertStatus(421);
 		C.get(BusEventsMixin.STREAM_PATH.replace("{sessionId}", "0".repeat(64))).userPrincipal(JB)
 			.header("Accept", "text/event-stream").header("Host", AUTHORITY).run().assertStatus(404);
 	}
@@ -327,41 +333,41 @@ class BusEventsMixin_Session_Test extends TestBase {
 
 	/** A token the boundary accepts: a per-process strategy never reads the request it is handed. */
 	private static String tokenOf(CsrfBoundary b) {
-		var req = (jakarta.servlet.http.HttpServletRequest) java.lang.reflect.Proxy.newProxyInstance(
-			jakarta.servlet.http.HttpServletRequest.class.getClassLoader(), new Class<?>[]{jakarta.servlet.http.HttpServletRequest.class},
+		var req = (HttpServletRequest) Proxy.newProxyInstance(
+			HttpServletRequest.class.getClassLoader(), new Class<?>[]{HttpServletRequest.class},
 			(proxy, method, args) -> method.getReturnType() == boolean.class ? (Object) false : null);
 		return b.tokenFor(req);
 	}
 
-	private static MockRestRequest csrfPost(String origin) throws Exception {
+	private static MockRestRequest tokenPost(String origin) throws Exception {
 		return C.post(BusEventsMixin.SESSION_PATH).userPrincipal(JB).contentString(body("sse", "ops.jobs"))
 			.contentType("application/json").header("Accept", "application/json")
 			.header("Host", APP_HOST).header("Origin", origin);
 	}
 
-	@Test void c05_csrfBoundaryAcceptedAsPolicy() throws Exception {
+	@Test void c05_tokenBoundaryAcceptedAsPolicy() throws Exception {
 		var b = useCsrfBoundary();
 		assertSame(b, R.bus.policy().boundary());
 
-		var ok = csrfPost(APP_ORIGIN).header("X-Csrf-Token", tokenOf(b)).run().assertStatus(200).getContent().asString();
+		var ok = tokenPost(APP_ORIGIN).header("X-Csrf-Token", tokenOf(b)).run().assertStatus(200).getContent().asString();
 		assertTrue(ok.contains("sessionId"), ok);
 
-		var refused = JsonMap.ofString(csrfPost("http://evil.example").header("X-Csrf-Token", tokenOf(b)).run()
+		var refused = JsonMap.ofString(tokenPost("http://other.example").header("X-Csrf-Token", tokenOf(b)).run()
 			.assertStatus(403).getContent().asString(), JsonParser.DEFAULT);
 		assertEquals("bus:refused", refused.getString("code"));
 		assertEquals(Set.of("code", "message"), refused.keySet(), "the reason name is not part of the bus refusal");
-		assertFalse(refused.getString("message").contains("evil.example"), "the presented Origin is never echoed");
+		assertFalse(refused.getString("message").contains("other.example"), "the presented Origin is never echoed");
 		assertSize(1, R.bus.sessions());
 	}
 
 	@Test void c05b_sameOriginPostWithoutTokenRefused() throws Exception {
 		useCsrfBoundary();
-		var text = csrfPost(APP_ORIGIN).run().assertStatus(403).getContent().asString();
+		var text = tokenPost(APP_ORIGIN).run().assertStatus(403).getContent().asString();
 		assertTrue(text.contains("bus:refused"), text);
 		assertTrue(R.bus.sessions().isEmpty());
 	}
 
-	@Test void c06_streamAppliesCsrfBoundary() throws Exception {
+	@Test void c06_streamAppliesTokenBoundary() throws Exception {
 		useCsrfBoundary();
 		var stream = BusEventsMixin.STREAM_PATH.replace("{sessionId}", "0".repeat(64));
 		// allowedHosts applies to the read as well.
@@ -369,14 +375,14 @@ class BusEventsMixin_Session_Test extends TestBase {
 		C.get(stream).userPrincipal(JB).header("Accept", "text/event-stream").header("Host", APP_HOST).run().assertStatus(404);
 		// A read claiming a write gets the write checks.
 		C.get(stream + "?method=DELETE").userPrincipal(JB).header("Accept", "text/event-stream").header("Host", APP_HOST)
-			.header("Origin", "http://evil.example").run().assertStatus(403);
+			.header("Origin", "http://other.example").run().assertStatus(403);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// d) default same-origin check when the policy has no boundary
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static org.apache.juneau.rest.client.classic.RestResponse openWith(String host, String origin, int status) throws Exception {
+	private static RestResponse openWith(String host, String origin, int status) throws Exception {
 		var req = C.post(BusEventsMixin.SESSION_PATH).userPrincipal(JB).contentString(body("sse", "ops.jobs"))
 			.contentType("application/json").header("Accept", "application/json").header("Host", host);
 		if (origin != null)
@@ -399,6 +405,18 @@ class BusEventsMixin_Session_Test extends TestBase {
 		var stream = BusEventsMixin.STREAM_PATH.replace("{sessionId}", "0".repeat(64));
 		C.get(stream).userPrincipal(JB).header("Accept", "text/event-stream").header("Host", "app.example")
 			.header("Origin", "http://app.example").run().assertStatus(404);
+	}
+
+	@Test void d02b_noBoundaryRefusesAForeignSchemeOrFetchSite() throws Exception {
+		openWith("app.example", "https://app.example", 403);
+		var req = C.post(BusEventsMixin.SESSION_PATH).userPrincipal(JB).contentString(body("sse", "ops.jobs"))
+			.contentType("application/json").header("Accept", "application/json").header("Host", "app.example")
+			.header("Origin", "http://app.example");
+		req.header("Sec-Fetch-Site", "cross-site").run().assertStatus(403);
+		assertTrue(R.bus.sessions().isEmpty());
+		C.post(BusEventsMixin.SESSION_PATH).userPrincipal(JB).contentString(body("sse", "ops.jobs"))
+			.contentType("application/json").header("Accept", "application/json").header("Host", "app.example")
+			.header("Origin", "http://app.example").header("Sec-Fetch-Site", "same-origin").run().assertStatus(200);
 	}
 
 	@Test void d03_noSameOriginCheckOptsOut() throws Exception {

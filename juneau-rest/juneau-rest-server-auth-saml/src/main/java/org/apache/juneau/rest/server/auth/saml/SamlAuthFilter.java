@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
+import static org.apache.juneau.commons.utils.IoUtils.inflate;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -33,6 +34,11 @@ import jakarta.servlet.http.*;
 /**
  * {@link AuthFilter} that authenticates requests carrying a SAML 2.0 {@code <samlp:Response>} delivered via
  * the {@link SamlBinding#POST} or {@link SamlBinding#REDIRECT} HTTP binding.
+ *
+ * <p>
+ * The {@link SamlBinding#POST} binding is accepted only on a {@code POST} request and {@link SamlBinding#REDIRECT} only
+ * on a {@code GET}.  A response to a request this SP sent must also present the binding cookie (see
+ * {@link Builder#bindingCookieName(String)}).
  *
  * <p>
  * On each request this filter:
@@ -93,6 +99,7 @@ public class SamlAuthFilter extends AuthFilter {
 
 	private static final String DEFAULT_CONSUMER_PATH = "/saml/acs";
 	private static final String DEFAULT_ROLES_CLAIM = "roles";
+	private static final String DEFAULT_BINDING_COOKIE = "SAML_LOGIN";
 	private static final String SAML_RESPONSE_PARAM = "SAMLResponse";
 
 	/**
@@ -125,6 +132,7 @@ public class SamlAuthFilter extends AuthFilter {
 		private String consumerPath = DEFAULT_CONSUMER_PATH;
 		private String rolesClaim = DEFAULT_ROLES_CLAIM;
 		private String realm = "saml";
+		private String bindingCookieName = DEFAULT_BINDING_COOKIE;
 		private long maxInflatedBytes = DEFAULT_MAX_INFLATED_BYTES;
 		private int maxInflateRatio = DEFAULT_MAX_INFLATE_RATIO;
 
@@ -187,6 +195,22 @@ public class SamlAuthFilter extends AuthFilter {
 		}
 
 		/**
+		 * Sets the name of the cookie that carries the browser-binding secret returned by
+		 * {@link SamlAssertionValidator#rememberAuthnRequest(String)}.  Defaults to {@code SAML_LOGIN}.
+		 *
+		 * <p>
+		 * The application sets this cookie (see {@link SamlAuthFilter#startLogin(HttpServletResponse, String)}) when it
+		 * starts a login, and the filter passes its value to the validator along with the response.
+		 *
+		 * @param value The cookie name.  Must not be <jk>null</jk> or blank.
+		 * @return This object.
+		 */
+		public Builder bindingCookieName(String value) {
+			bindingCookieName = reqnb("value", value);
+			return this;
+		}
+
+		/**
 		 * Sets the ceiling on the number of decompressed bytes accepted from a {@link SamlBinding#REDIRECT}
 		 * {@code SAMLResponse}.  Defaults to {@link SamlAuthFilter#DEFAULT_MAX_INFLATED_BYTES}.
 		 *
@@ -238,6 +262,7 @@ public class SamlAuthFilter extends AuthFilter {
 	private final String consumerPath;
 	private final String rolesClaim;
 	private final String challenge;
+	private final String bindingCookieName;
 	private final long maxInflatedBytes;
 	private final int maxInflateRatio;
 
@@ -251,6 +276,7 @@ public class SamlAuthFilter extends AuthFilter {
 		this.binding = b.binding;
 		this.consumerPath = b.consumerPath;
 		this.rolesClaim = b.rolesClaim;
+		this.bindingCookieName = b.bindingCookieName;
 		this.challenge = "SAML realm=\"" + b.realm + "\"";
 		this.maxInflatedBytes = b.maxInflatedBytes;
 		this.maxInflateRatio = b.maxInflateRatio;
@@ -258,20 +284,75 @@ public class SamlAuthFilter extends AuthFilter {
 
 	@Override /* Overridden from AuthFilter */
 	public Optional<AuthResult> authenticate(HttpServletRequest req) throws AuthenticationException {
-		if (!matchesPath(req))
+		if (!matchesPath(req) || !matchesMethod(req))
 			return oe();
 		var raw = req.getParameter(SAML_RESPONSE_PARAM);
 		if (isEmpty(raw))
 			return oe();
 		var xml = decodeSamlResponse(raw);
-		var principal = runValidator(xml);
+		var principal = runValidator(xml, bindingCookie(req));
 		return o(AuthResult.of(principal, extractRoles(principal)));
+	}
+
+	/**
+	 * Registers an outgoing authentication request and sends the browser-binding cookie that this filter checks on
+	 * the response.
+	 *
+	 * <p>
+	 * Call this when redirecting the browser to the identity provider, passing the {@code ID} attribute of the
+	 * {@code <AuthnRequest>} being sent.  The method calls {@link SamlAssertionValidator#rememberAuthnRequest(String)}
+	 * and adds a cookie named by {@link Builder#bindingCookieName(String)} carrying the returned secret.
+	 *
+	 * <p>
+	 * Cookie attributes:
+	 * <ul>
+	 * 	<li>{@code Secure} and {@code HttpOnly}: the value is never needed by page scripts and is sent only over HTTPS.
+	 * 	<li>{@code SameSite=None}: the POST binding delivers the response as a cross-site form post from the identity
+	 * 		provider, and browsers omit {@code Lax} and {@code Strict} cookies on that request.  {@code None} requires
+	 * 		{@code Secure}.
+	 * 	<li>{@code Path=/}: the ACS URL as seen by the browser includes the context and servlet paths, which this filter
+	 * 		does not know, so the cookie is scoped to the whole site.
+	 * 	<li>{@code Max-Age}: the validator's request lifetime, see {@link SamlAssertionValidator.Builder#authnRequestTtl(java.time.Duration)}.
+	 * </ul>
+	 *
+	 * <p class='bjava'>
+	 * 	<jv>filter</jv>.startLogin(<jv>res</jv>, <jv>authnRequestId</jv>);
+	 * 	<jv>res</jv>.sendRedirect(<jv>idpUrlCarryingTheRequest</jv>);
+	 * </p>
+	 *
+	 * @param res The response being sent to the browser.  Must not be <jk>null</jk>.
+	 * @param requestId The {@code ID} attribute of the outgoing {@code <AuthnRequest>}.  Must not be <jk>null</jk> or blank.
+	 * @throws IllegalStateException If the validator's store cannot accept more outstanding requests.
+	 */
+	public void startLogin(HttpServletResponse res, String requestId) {
+		var secret = validator.rememberAuthnRequest(requestId);
+		var c = new Cookie(bindingCookieName, secret);
+		c.setSecure(true);
+		c.setHttpOnly(true);
+		c.setPath("/");
+		c.setMaxAge((int)Math.min(Integer.MAX_VALUE, validator.getAuthnRequestTtl().toSeconds()));
+		c.setAttribute("SameSite", "None");
+		res.addCookie(c);
+	}
+
+	// The POST binding is delivered by a form post and the REDIRECT binding by a GET; other methods are not accepted.
+	private boolean matchesMethod(HttpServletRequest req) {
+		return binding == SamlBinding.POST ? eq("POST", req.getMethod()) : eq("GET", req.getMethod());
+	}
+
+	private String bindingCookie(HttpServletRequest req) {
+		var cookies = req.getCookies();
+		if (cookies != null)
+			for (var c : cookies)
+				if (eq(bindingCookieName, c.getName()))
+					return c.getValue();
+		return null;
 	}
 
 	private boolean matchesPath(HttpServletRequest req) {
 		var p = req.getPathInfo();
 		var s = p != null ? p : req.getServletPath();
-		return s != null && s.equals(consumerPath);
+		return s != null && eq(s, consumerPath);
 	}
 
 	private String decodeSamlResponse(String raw) throws AuthenticationException {
@@ -280,7 +361,7 @@ public class SamlAuthFilter extends AuthFilter {
 			return switch (binding) {
 				// Per SAML 2.0 Redirect binding: raw DEFLATE (no zlib wrapper), decompressed under a hard
 				// output-size cap and ratio guard so a compressible payload cannot force an unbounded allocation.
-				case REDIRECT -> new String(IoUtils.inflate(decoded, true, maxInflatedBytes, maxInflateRatio), StandardCharsets.UTF_8);
+				case REDIRECT -> new String(inflate(decoded, true, maxInflatedBytes, maxInflateRatio), StandardCharsets.UTF_8);
 				// Per SAML 2.0 POST binding: the base64-decoded bytes are the raw XML document.
 				case POST -> new String(decoded, StandardCharsets.UTF_8);
 			};
@@ -293,9 +374,9 @@ public class SamlAuthFilter extends AuthFilter {
 		}
 	}
 
-	private Principal runValidator(String xml) throws AuthenticationException {
+	private Principal runValidator(String xml, String browserBinding) throws AuthenticationException {
 		try {
-			var p = validator.validate(xml);
+			var p = validator.validate(xml, browserBinding);
 			if (p == null)
 				throw new AuthenticationException("SAML validator returned null").wwwAuthenticate(challenge);
 			return p;

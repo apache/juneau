@@ -17,11 +17,14 @@
 package org.apache.juneau.microservice.examples;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.FileUtils.isSafeFileName;
+import static org.apache.juneau.commons.utils.FileUtils.resolveSafely;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
+import java.net.URI;
 import java.nio.file.*;
 import java.time.*;
 import java.util.*;
@@ -76,7 +79,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * verbs {@code VIEW} and {@code DOWNLOAD}, so a link can view or download a file but never change one.  A subclass that
  * widens {@code allowedMethodParams} still can't turn a {@code GET} into a write: the router refuses any override of a
  * {@code GET} to a method that is not a read.  Uploads and deletes still change files, so put the resource behind a
- * CSRF boundary before mounting it anywhere a browser can reach.  A boundary judges a {@code ?method=VIEW} or
+ * request-token boundary before mounting it anywhere a browser can reach.  A boundary judges a {@code ?method=VIEW} or
  * {@code ?method=DOWNLOAD} link as a write and refuses it, so behind one the listing's links stop working; send real
  * {@code VIEW} or {@code DOWNLOAD} requests instead.
  *
@@ -129,7 +132,7 @@ public class DirectoryResource extends BasicRestServlet {
 
 		/** {@inheritDoc} */
 		@Override /* Overridden from LinkString */
-		public Action setUri(java.net.URI value) {
+		public Action setUri(URI value) {
 			super.setUri(value);
 			return this;
 		}
@@ -278,7 +281,7 @@ public class DirectoryResource extends BasicRestServlet {
 	 * @param c The microservice configuration.
 	 */
 	public DirectoryResource(Config c) {
-		rootDir = new File(c.get("DirectoryResource.rootDir.s").orElse("."));
+		rootDir = new File(c.get("DirectoryResource.rootDir.s").orElse("shared-files"));
 		allowViews = c.get("DirectoryResource.allowViews.b").asBoolean().orElse(false);
 		allowDeletes = c.get("DirectoryResource.allowDeletes.b").asBoolean().orElse(false);
 		allowUploads = c.get("DirectoryResource.allowUploads.b").asBoolean().orElse(false);
@@ -446,7 +449,7 @@ public class DirectoryResource extends BasicRestServlet {
 	 */
 	private File getFile(String path) throws NotFound {
 		try {
-			return FileUtils.resolveSafely(rootDir, path)
+			return resolveSafely(rootDir, path)
 				.orElseThrow(() -> new NotFound("File not found."));
 		} catch (IllegalArgumentException e) {
 			throw new Forbidden(e.getMessage());
@@ -465,7 +468,7 @@ public class DirectoryResource extends BasicRestServlet {
 	 */
 	private File getFileForUpload(String path) throws NotFound {
 		try {
-			var existing = FileUtils.resolveSafely(rootDir, path);
+			var existing = resolveSafely(rootDir, path);
 			if (existing.isPresent())
 				return existing.get();
 			var parentPath = "";
@@ -478,9 +481,9 @@ public class DirectoryResource extends BasicRestServlet {
 			if (name.isEmpty())
 				throw new NotFound("File not found.");
 			// The final segment must be a plain name: no separators, no "." / "..", no NUL.
-			if (name.equals(".") || name.equals("..") || name.indexOf('\\') >= 0 || name.indexOf('\0') >= 0)
+			if (! isSafeFileName(name))
 				throw new Forbidden("Invalid file name.");
-			var parent = FileUtils.resolveSafely(rootDir, parentPath)
+			var parent = resolveSafely(rootDir, parentPath)
 				.orElseThrow(() -> new NotFound("File not found."));
 			var target = new File(parent, name);
 			// A dangling symlink reports exists()==false but writing through it would create its (possibly outside) target.

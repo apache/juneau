@@ -26,6 +26,7 @@ import java.nio.*;
 import java.nio.channels.*;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -534,7 +535,7 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	static void ensureDone(Path events, int exitCode) throws IOException {
 		var text = "";
 		if (Files.exists(events)) {
-			try (var ch = FileChannel.open(events, StandardOpenOption.READ)) {
+			try (var ch = FileChannel.open(events, StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS)) {
 				var from = Math.max(0, ch.size() - TAIL_BYTES);
 				var buf = ByteBuffer.allocate((int)(ch.size() - from));
 				while (buf.hasRemaining() && ch.read(buf, from + buf.position()) >= 0) {
@@ -803,7 +804,7 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	 *
 	 * @param grace How long to wait for the process to exit after SIGTERM; not <jk>null</jk>, zero or negative kills at once.
 	 */
-	public void terminate(java.time.Duration grace) {
+	public void terminate(Duration grace) {
 		Objects.requireNonNull(grace, "grace");
 		if (! process.isAlive())
 			return;

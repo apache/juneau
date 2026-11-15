@@ -74,6 +74,22 @@ public interface McpSubscriptionBroker extends McpSubscriptions {
 	Optional<McpSubscription> registerIfUnder(int max, String subscriptionId, McpSubscriptionFilter honoredFilter);
 
 	/**
+	 * Same as {@link #registerIfUnder(int, String, McpSubscriptionFilter)}, additionally limiting the number of
+	 * concurrently active subscriptions attributed to one owner.
+	 *
+	 * <p>
+	 * The admission check and the registration must be one atomic step, as for the global-only variant.
+	 *
+	 * @param max The global cap.
+	 * @param maxPerOwner The cap for subscriptions registered with the same non-{@code null} owner.
+	 * @param owner The caller identity the subscription is attributed to.  Can be {@code null} (no per-owner limit).
+	 * @param subscriptionId The subscription identifier.  Must not be {@code null} or empty.
+	 * @param honoredFilter The capability-gated filter this subscription honors.  Must not be {@code null}.
+	 * @return The new subscription handle, or {@link Optional#empty()} if a cap was reached and this was not a same-id replacement.
+	 */
+	Optional<McpSubscription> registerIfUnder(int max, int maxPerOwner, String owner, String subscriptionId, McpSubscriptionFilter honoredFilter);
+
+	/**
 	 * Deregisters and closes the subscription with the given id, if present.
 	 *
 	 * @param subscriptionId The subscription identifier. A missing id is a no-op.

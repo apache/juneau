@@ -57,6 +57,7 @@ public class McpServerConfig {
 	private McpCursor cursor = McpCursor.SINGLE_PAGE;
 	private TokenValidator tokenValidator;
 	private boolean allowUnauthenticated;
+	private boolean trustProxy;
 
 	/**
 	 * Server name reported in {@code initialize}.
@@ -424,7 +425,7 @@ public class McpServerConfig {
 	 */
 	private void ensureResourceTemplatesValid() {
 		var current = resourceTemplates;
-		if (validatedResourceTemplatesSnapshot.equals(current))
+		if (eq(validatedResourceTemplatesSnapshot, current))
 			return;
 		var compiled = validateResourceTemplates(current);
 		validatedResourceTemplatesSnapshot = List.copyOf(current);
@@ -643,7 +644,7 @@ public class McpServerConfig {
 			if (handler == null)
 				continue;
 			var descriptor = handler.descriptor();
-			if (descriptor == null || ! uriTemplate.equals(descriptor.getUriTemplate()))
+			if (descriptor == null || neq(uriTemplate, descriptor.getUriTemplate()))
 				continue;
 			var matcher = matchers.get(handler);
 			return matcher != null ? resourceTemplateCompleter(handler, variableName, matcher) : resourceTemplateCompleter(handler, variableName);
@@ -778,6 +779,29 @@ public class McpServerConfig {
 	 */
 	public McpServerConfig allowUnauthenticated(boolean value) {
 		allowUnauthenticated = value;
+		return this;
+	}
+
+	/**
+	 * Whether loopback callers are admitted when the request carries forwarding headers.
+	 *
+	 * @return {@code true} if forwarding headers do not prevent loopback admission.  Defaults to {@code false}.
+	 */
+	public boolean isTrustProxy() {
+		return trustProxy;
+	}
+
+	/**
+	 * Admits loopback callers even when the request carries <c>Forwarded</c>, <c>X-Forwarded-For</c> or <c>X-Forwarded-Host</c> headers.
+	 *
+	 * <p>
+	 * Set this only when a reverse proxy on the same host fronts the endpoint and is trusted to authenticate or restrict its callers.
+	 *
+	 * @param value The new value.
+	 * @return This object (for method chaining).
+	 */
+	public McpServerConfig trustProxy(boolean value) {
+		trustProxy = value;
 		return this;
 	}
 }

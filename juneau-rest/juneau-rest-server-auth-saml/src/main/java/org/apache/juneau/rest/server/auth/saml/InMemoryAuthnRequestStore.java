@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.auth.saml;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.security.MessageDigest;
 import java.util.*;
 
 /**
@@ -35,7 +36,9 @@ public class InMemoryAuthnRequestStore implements AuthnRequestStore {
 	public static final int DEFAULT_MAX_ENTRIES = 10_000;
 
 	private final int maxEntries;
-	private final Map<String,Long> pending = new HashMap<>();
+	private final Map<String,Pending> pending = new HashMap<>();
+
+	private record Pending(byte[] bindingDigest, long expiresAtMs) {}
 
 	/** Constructor using {@link #DEFAULT_MAX_ENTRIES}. */
 	public InMemoryAuthnRequestStore() {
@@ -54,23 +57,24 @@ public class InMemoryAuthnRequestStore implements AuthnRequestStore {
 	}
 
 	@Override /* Overridden from AuthnRequestStore */
-	public void remember(String id, long expiresAtMs, long nowMs) {
+	public void remember(String id, byte[] bindingDigest, long expiresAtMs, long nowMs) {
 		reqnb("id", id);
+		reqnn("bindingDigest", bindingDigest);
 		synchronized (pending) {
 			if (pending.size() >= maxEntries)
-				pending.values().removeIf(exp -> exp <= nowMs);
+				pending.values().removeIf(p -> p.expiresAtMs() <= nowMs);
 			if (pending.size() >= maxEntries)
 				throw new IllegalStateException("Too many outstanding SAML authentication requests");
-			pending.put(id, expiresAtMs);
+			pending.put(id, new Pending(bindingDigest, expiresAtMs));
 		}
 	}
 
 	@Override /* Overridden from AuthnRequestStore */
-	public boolean consume(String id, long nowMs) {
+	public boolean consume(String id, byte[] bindingDigest, long nowMs) {
 		reqnb("id", id);
 		synchronized (pending) {
-			var exp = pending.remove(id);
-			return exp != null && exp > nowMs;
+			var p = pending.remove(id);
+			return p != null && p.expiresAtMs() > nowMs && bindingDigest != null && MessageDigest.isEqual(p.bindingDigest(), bindingDigest);
 		}
 	}
 }

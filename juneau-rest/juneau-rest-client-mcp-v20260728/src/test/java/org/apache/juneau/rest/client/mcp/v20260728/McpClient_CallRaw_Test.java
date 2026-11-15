@@ -49,7 +49,7 @@ class McpClient_CallRaw_Test extends TestBase {
 	}
 
 	private static McpClient client(HttpTransport transport) {
-		return McpClient.builder().endpoint("http://x/mcp").transport(transport).build();
+		return McpClient.builder().endpoint("https://x/mcp").transport(transport).build();
 	}
 
 	@Test
@@ -115,7 +115,7 @@ class McpClient_CallRaw_Test extends TestBase {
 				.build();
 		};
 		try (var c = McpClient.builder()
-			.endpoint("http://x/mcp")
+			.endpoint("https://x/mcp")
 			.transport(transport)
 			.responseCache(new InMemoryMcpResponseCache())
 			.build()) {

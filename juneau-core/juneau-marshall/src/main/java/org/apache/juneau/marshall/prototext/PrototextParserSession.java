@@ -113,6 +113,15 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 	}
 
 	private Map<String,Object> readMessage(PrototextTokenizer t, boolean requireBraces) throws IOException, ParseException {
+		enterParseDepth();
+		try {
+			return readMessageImpl(t, requireBraces);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	private Map<String,Object> readMessageImpl(PrototextTokenizer t, boolean requireBraces) throws IOException, ParseException {
 		PrototextToken.TokenType closeBrace = null;
 		if (requireBraces) {
 			var tok = t.read();
@@ -201,6 +210,15 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 	}
 
 	private List<Object> readList(PrototextTokenizer t) throws IOException, ParseException {
+		enterParseDepth();
+		try {
+			return readListImpl(t);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	private List<Object> readListImpl(PrototextTokenizer t) throws IOException, ParseException {
 		var tok = t.read();
 		if (tok.type() != PrototextToken.TokenType.LBRACKET)
 			throw t.parseException("Expected '['");
@@ -307,7 +325,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 		var typePropName = getBeanTypePropertyName((ClassMeta<?>) bm.getBeanInfo());
 		for (Entry<String,Object> e : map.entrySet()) {
 			var key = e.getKey();
-			if (key.equals(typePropName))
+			if (eq(key, typePropName))
 				continue;
 			var val = e.getValue();
 			var pMeta = bm.getMeta().getProperties().get(key);

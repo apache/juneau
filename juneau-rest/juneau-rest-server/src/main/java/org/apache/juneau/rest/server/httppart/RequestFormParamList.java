@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.httppart;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.Shorts.ie;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
@@ -207,11 +208,14 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 *
 	 * @param maxInput The effective {@code @Rest(maxInput)} ceiling in bytes. Values {@code <= 0} disable the check.
 	 * @param declaredContentLength The request's declared {@code Content-Length}, as returned by
-	 * 	{@code HttpServletRequest.getContentLengthLong()}. Values {@code < 0} (absent/unparsable) are ignored;
-	 * 	the post-parse {@link #checkMultipartLength(long, Collection)} check still applies.
+	 * 	{@code HttpServletRequest.getContentLengthLong()}. A value {@code < 0} (absent, e.g. chunked) is refused when
+	 * 	{@code maxInput} is enabled, since the size cannot be checked before parsing.
 	 * @throws PayloadTooLarge If {@code declaredContentLength} exceeds {@code maxInput}.
+	 * @throws LengthRequired If {@code maxInput} is enabled and no content length was declared.
 	 */
 	static void checkMultipartLength(long maxInput, long declaredContentLength) {
+		if (maxInput > 0 && declaredContentLength < 0)
+			throw new LengthRequired("Multipart request content requires a declared Content-Length.");
 		if (maxInput > 0 && declaredContentLength > maxInput)
 			throw new PayloadTooLarge("Multipart request content exceeds the maximum allowed input size of %d bytes.", maxInput);
 	}
@@ -330,7 +334,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);
-			var hasAllBlanks = l.allMatch(x -> Shorts.ie(x.getValue()));  // NOAI
+			var hasAllBlanks = l.allMatch(x -> ie(x.getValue()));  // NOAI
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestFormParam(req, name, vs.resolve(p.getValue())));

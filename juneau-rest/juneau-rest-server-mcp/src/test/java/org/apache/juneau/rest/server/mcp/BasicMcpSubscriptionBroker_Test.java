@@ -291,4 +291,15 @@ class BasicMcpSubscriptionBroker_Test {
 		assertEquals(1, accepted.get(), "exactly one racer should have been admitted to fill the last slot");
 		assertEquals(threadCount - 1, rejected.get(), "every other racer must be rejected, not silently over-admitted");
 	}
+
+	@Test void z01_registerIfUnder_perOwnerCap() {
+		var broker = new BasicMcpSubscriptionBroker(8);
+		var f = new McpSubscriptionFilter(true, true, true, Set.of());
+		assertTrue(broker.registerIfUnder(10, 2, "alice", "s1", f).isPresent());
+		assertTrue(broker.registerIfUnder(10, 2, "alice", "s2", f).isPresent());
+		assertTrue(broker.registerIfUnder(10, 2, "alice", "s3", f).isEmpty());
+		assertTrue(broker.registerIfUnder(10, 2, "bob", "s4", f).isPresent());
+		assertTrue(broker.registerIfUnder(10, 2, "alice", "s1", f).isPresent(), "same-id replacement is not counted");
+		assertEquals(3, broker.activeCount());
+	}
 }

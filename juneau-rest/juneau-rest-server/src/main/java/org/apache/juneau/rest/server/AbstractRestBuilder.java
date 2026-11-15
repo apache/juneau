@@ -316,6 +316,9 @@ public abstract class AbstractRestBuilder<R,SELF extends AbstractRestBuilder<R,S
 	public SELF problemDetails(String value) { anno.problemDetails(value); return self(); }
 
 	@Override /* RestBuilder<?> */
+	public SELF showCauseMessages(String value) { anno.showCauseMessages(value); return self(); }
+
+	@Override /* RestBuilder<?> */
 	public SELF debugMarshalling(String value) { anno.debugMarshalling(value); return self(); }
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.filter;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.UriUtils.parseIpv4;
 
 import java.net.*;
 import java.util.*;
@@ -162,27 +163,6 @@ final class PeerRanges {
 			network[i] &= (byte)(0xff00 >> keep);
 		}
 		return new Range(network, bits);
-	}
-
-	// A strict dotted quad: four decimal octets 0-255, no signs and no leading zeros.  Null if it is not one.
-	@SuppressWarnings({
-		"java:S1168" // null signals an unparseable address; callers test for it
-	})
-	private static byte[] parseIpv4(String s) {
-		var parts = s.split("\\.", -1);
-		if (parts.length != 4)
-			return null;
-		var out = new byte[4];
-		for (var i = 0; i < 4; i++) {
-			var p = parts[i];
-			if (! (p.equals("0") || p.matches("[1-9]\\d{0,2}")))
-				return null;
-			var v = Integer.parseInt(p);
-			if (v > 255)
-				return null;
-			out[i] = (byte)v;
-		}
-		return out;
 	}
 
 	// Only hex digits, colons and dots reach getByName, which then parses a literal and never asks a resolver.  Returns

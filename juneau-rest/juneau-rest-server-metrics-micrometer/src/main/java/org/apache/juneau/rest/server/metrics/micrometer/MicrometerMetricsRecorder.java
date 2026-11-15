@@ -20,6 +20,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.time.*;
+import java.util.Locale;
+import java.util.Set;
 
 import org.apache.juneau.rest.server.metrics.*;
 
@@ -146,11 +148,21 @@ public class MicrometerMetricsRecorder implements MetricsRecorder {
 	 */
 	public String getTimerName() { return timerName; }
 
+	private static final Set<String> STANDARD_METHODS = Set.of("GET", "HEAD", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "TRACE", "CONNECT");
+
+	/** Buckets non-standard request methods so the number of distinct meters stays bounded. */
+	private static String methodTag(String httpMethod) {
+		if (httpMethod == null || httpMethod.isBlank())
+			return "";
+		var m = httpMethod.toUpperCase(Locale.ROOT);
+		return STANDARD_METHODS.contains(m) ? m : "OTHER";
+	}
+
 	@Override /* MetricsRecorder */
 	public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
 		var effectiveName = ine(metricName) ? metricName : timerName;
 		var builder = Timer.builder(effectiveName)
-			.tag("method", defaultIfBlank(httpMethod, ""))
+			.tag("method", methodTag(httpMethod))
 			.tag("uri", defaultIfBlank(uriTemplate, ""))
 			.tag("status", Integer.toString(statusCode))
 			.tag("exception", exceptionTag(error));

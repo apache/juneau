@@ -86,6 +86,18 @@ class FreemarkerDispatcher_Test extends TestBase {
 		assertSame(registered, dispatcher.resolveConfiguration(mockRequest(beanStore)));
 	}
 
+	@Test void a01b_resolveConfiguration_hardensRegisteredBean() {
+		var dispatcher = FreemarkerDispatcher.create().build();
+		var beanStore = new BasicBeanStore();
+		var registered = stringLoaderConfig("hello.ftlh", "Hi!");
+		beanStore.addBean(Configuration.class, registered);
+
+		dispatcher.resolveConfiguration(mockRequest(beanStore));
+
+		assertSame(freemarker.core.TemplateClassResolver.ALLOWS_NOTHING_RESOLVER, registered.getNewBuiltinClassResolver());
+		assertFalse(registered.isAPIBuiltinEnabled());
+	}
+
 	@Test void a02_resolveConfiguration_secondCallReusesCachedDefault() {
 		var dispatcher = FreemarkerDispatcher.create().build();
 		var req = mockRequest(new BasicBeanStore());

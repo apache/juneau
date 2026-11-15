@@ -52,7 +52,7 @@ class McpClient_MetaHeaders_Test extends TestBase {
 				.body(new ByteArrayInputStream("{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"resultType\":\"complete\",\"_meta\":{\"io.modelcontextprotocol/serverInfo\":{\"name\":\"s\",\"version\":\"1\"}},\"contents\":[]}}".getBytes(StandardCharsets.UTF_8)))
 				.build();
 		};
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			c.readResource("file:///a.txt");
 		}
 		assertEquals("resources/read", seenMethod.get());

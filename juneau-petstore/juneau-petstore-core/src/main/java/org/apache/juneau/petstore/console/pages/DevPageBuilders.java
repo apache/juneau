@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.petstore.console.pages;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
@@ -29,6 +30,7 @@ import org.apache.juneau.console.TopicDecl.*;
 import org.apache.juneau.console.freemarker.*;
 import org.apache.juneau.console.freemarker.DataSourceDef.*;
 import org.apache.juneau.console.views.*;
+import org.apache.juneau.console.views.RowAction;
 import org.apache.juneau.console.views.TableSpec.*;
 
 /**
@@ -73,7 +75,7 @@ public final class DevPageBuilders {
 				.view("gauge", "Dog inventory", v -> v.section(gauge))
 				.view("bands", "Stock by species", v -> v.section(bands))
 				.view("prices", "Prices by pet", v -> v.section(prices))
-				.view("toolbar", "Card API", v -> v.section(CardSpec.html("toolbar").title("Card API").src("/console/dev/cards/fragments/toolbar")))
+				.view("toolbar", "Card API", v -> v.section(CardSpec.html("toolbar").title("Card API").src("/console/dev/cards/fragments/toolbar").sanitize(false)))
 				.view("how", "Writing a card type", v -> v.section(CardSpec.html("how").title("Writing a card type").src("/console/dev/cards/fragments/how")))
 				.toCardSpec());
 	}
@@ -91,7 +93,7 @@ public final class DevPageBuilders {
 		if (flavor == Flavor.REACT)
 			return p.html("flavor", "React app",
 				"<iframe src=\"/petstore-ui\" title=\"Petstore React app\" class=\"petstore-flavor-frame\" width=\"100%\" height=\"640\"></iframe>");
-		return p.htmlSrc("flavor", "Pets", "/console/dev/flavors/" + flavor.id() + "/fragment");
+		return p.htmlSrc("flavor", "Pets", "/console/dev/flavors/" + flavor.id() + "/fragment", false); // Server-owned fragment that escapes its data and relies on class/data attributes the sanitizer drops.
 	}
 
 	/**
@@ -195,8 +197,8 @@ public final class DevPageBuilders {
 			.table(TableSpec.create("dialogs").dataMode(DataMode.CLIENT).dataUrl(base + "/rows")
 				.columns(Column.create("style").label("Style"), Column.create("steps").label("Parts"))
 				.ribbon(
-					RibbonItem.dialog("wizard").title("Wizard").form(base + "/wizard-form").endpoint(base + "/submit").method(org.apache.juneau.console.views.RowAction.Method.POST).group("entity"),
-					RibbonItem.dialog("folder").title("Folder tabs").form(base + "/folder-form").endpoint(base + "/submit").method(org.apache.juneau.console.views.RowAction.Method.POST).group("entity"),
+					RibbonItem.dialog("wizard").title("Wizard").form(base + "/wizard-form").endpoint(base + "/submit").method(RowAction.Method.POST).group("entity"),
+					RibbonItem.dialog("folder").title("Folder tabs").form(base + "/folder-form").endpoint(base + "/submit").method(RowAction.Method.POST).group("entity"),
 					RibbonItem.refresh()),
 				"Dialogs");
 	}
@@ -240,7 +242,7 @@ public final class DevPageBuilders {
 					Subscription.to(Topics.filter("late")).as("params").map("lateOnly", "options.lateOnly"))
 				.chunk(Chunking.none()).cache(Cache.none()))
 			.dashboard(DashboardSpec.create("overview").title("Order issues")
-				.rail(("right".equals(variant) ? Rail.right() : Rail.left()).sections(
+				.rail((eq("right", variant) ? Rail.right() : Rail.left()).sections(
 					RangeSection.quick("7d", "30d", "ytd").custom(true).defaultPreset("30d").publishes(Topics.filter("range")),
 					SearchSection.create().placeholder("Reason contains").publishes(Topics.filter("q")),
 					ChoiceSection.fromDim("orders", "reason").label("Reasons").publishes(Topics.filter("reasons")),

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.console.views;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -27,6 +28,7 @@ import org.apache.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.sse.*;
+import org.apache.juneau.rest.client.classic.RestResponse;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -74,6 +76,13 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 			lastJob = job;
 			return AsyncJobRef.of(job);
 		}
+
+		/** Test-only: starts a job bound to the calling principal. */
+		@RestPost(path="/start-owned") public AsyncJobRef startOwned(RestRequest req) {
+			var job = REGISTRY.create().owner(req.getUserPrincipal().getName());
+			lastJob = job;
+			return AsyncJobRef.of(job);
+		}
 	}
 
 	private static final MockRestClient c = MockRestClient.buildLax(R.class);
@@ -94,7 +103,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 	}
 
 	/** GETs the stream with an optional Last-Event-ID header and lastEventId query value (null = not sent). */
-	private static org.apache.juneau.rest.client.classic.RestResponse stream(String jobId, String header, String query) throws Exception {
+	private static RestResponse stream(String jobId, String header, String query) throws Exception {
 		var req = c.get(AsyncJobsMixin.streamPath(jobId)).header("Accept", "text/event-stream");
 		if (header != null)
 			req.header(new BasicHeader("Last-Event-ID", header));
@@ -112,7 +121,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 	/** Each event as {@code type#id=data} ({@code #id} omitted when the event has no id), result data dropped. */
 	private static List<String> events(String body) throws IOException {
 		return parse(body).stream()
-			.map(e -> e.getEvent() + (e.getId() == null ? "" : "#" + e.getId()) + ("result".equals(e.getEvent()) ? "" : "=" + e.getData()))
+			.map(e -> e.getEvent() + (e.getId() == null ? "" : "#" + e.getId()) + (eq("result", e.getEvent()) ? "" : "=" + e.getData()))
 			.toList();
 	}
 
@@ -297,7 +306,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 		var buffered = R.lastJob.eventsFrom(0);
 		for (var k = 0; k <= n; k++) {
 			var body = stream(jobId, String.valueOf(k), null).assertStatus(200).getContent().asString();
-			var progress = parse(body).stream().filter(e -> "progress".equals(e.getEvent())).toList();
+			var progress = parse(body).stream().filter(e -> eq("progress", e.getEvent())).toList();
 			assertEquals(n - k, progress.size(), body);
 			for (var i = 0; i < progress.size(); i++) {
 				var e = progress.get(i);
@@ -399,5 +408,31 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 			.header("Accept", "application/json").run().assertStatus(404).getContent().asString();
 		assertTrue(body.contains("\"outcome\":\"refusal\""), body);
 		assertTrue(body.contains("app:unknown-job"), body);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// f) A job bound to its starting principal is served to that principal only
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static String startOwnedJob(String user) throws Exception {
+		var body = c.post("/start-owned", "").userPrincipal(() -> user).header("Accept", "application/json").run()
+			.assertStatus(200).getContent().asString();
+		return String.valueOf(Json.to(body, Map.class).get("jobId"));
+	}
+
+	@Test void f01_ownedJob_streamAndCancelRefuseAnotherPrincipal() throws Exception {
+		var jobId = startOwnedJob("alice");
+		R.lastJob.complete(ActionResult.success(Map.of("id", "INC-1")));
+		c.get(AsyncJobsMixin.streamPath(jobId)).userPrincipal(() -> "bob").header("Accept", "text/event-stream").run().assertStatus(404);
+		c.get(AsyncJobsMixin.streamPath(jobId)).header("Accept", "text/event-stream").run().assertStatus(404);
+		c.post(AsyncJobsMixin.cancelPath(jobId), "").userPrincipal(() -> "bob").header("Accept", "application/json").run().assertStatus(404);
+		c.get(AsyncJobsMixin.streamPath(jobId)).userPrincipal(() -> "alice").header("Accept", "text/event-stream").run().assertStatus(200);
+	}
+
+	@Test void f02_ownedJob_cancelByOwnerSucceeds() throws Exception {
+		var jobId = startOwnedJob("alice");
+		var body = c.post(AsyncJobsMixin.cancelPath(jobId), "").userPrincipal(() -> "alice").header("Accept", "application/json").run()
+			.assertStatus(200).getContent().asString();
+		assertTrue(body.contains("\"outcome\":\"cancelled\""), body);
 	}
 }

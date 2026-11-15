@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.auth.oidc.rp.OidcTestSupport.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -211,7 +212,7 @@ class OidcRelyingParty_Test extends TestBase {
 
 	@Test void a05_openRedirect_isBlocked() throws Exception {
 		var rp = rp(InMemorySessionStore.create());
-		var req1 = MockServletRequest.create("GET", "/auth/login?redirect=https://evil.example.com");
+		var req1 = MockServletRequest.create("GET", "/auth/login?redirect=https://other.example.com");
 		var res1 = MockServletResponse.create();
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
@@ -280,7 +281,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
 		var req = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state)
-			.cookies(new Cookie[]{ new Cookie(rp.cookieName() + "_LOGIN", "some-other-value") });
+			.cookies(new Cookie[]{ new Cookie("__Host-" + rp.cookieName() + "_LOGIN", "some-other-value") });
 		assertThrows(AuthenticationException.class, () -> rp.completeLogin(req, MockServletResponse.create()));
 	}
 
@@ -288,8 +289,62 @@ class OidcRelyingParty_Test extends TestBase {
 		var rp = rp(InMemorySessionStore.create());
 		var res1 = MockServletResponse.create();
 		rp.startLogin(MockServletRequest.create("GET", "/auth/login"), res1);
-		var c = res1.getHeaders("Set-Cookie").stream().filter(h -> h.startsWith(rp.cookieName() + "_LOGIN=")).findFirst().orElseThrow();
+		var c = res1.getHeaders("Set-Cookie").stream().filter(h -> h.startsWith("__Host-" + rp.cookieName() + "_LOGIN=")).findFirst().orElseThrow();
 		assertTrue(c.contains("HttpOnly") && c.contains("SameSite=Lax") && c.contains("Secure"), c);
+	}
+
+	@Test void b08_bindingCookie_hostPrefixedWhenSecure() throws Exception {
+		var rp = rp(InMemorySessionStore.create());
+		var res1 = MockServletResponse.create();
+		rp.startLogin(MockServletRequest.create("GET", "/auth/login"), res1);
+		assertTrue(res1.getHeaders("Set-Cookie").stream().anyMatch(h -> h.startsWith("__Host-" + rp.cookieName() + "_LOGIN=")));
+	}
+
+	@Test void b09_duplicateBindingCookies_areRejected() throws Exception {
+		var rp = rp(InMemorySessionStore.create());
+		var res1 = MockServletResponse.create();
+		rp.startLogin(MockServletRequest.create("GET", "/auth/login"), res1);
+		var state = queryParam(res1.getHeader("Location"), "state");
+		var nonce = queryParam(res1.getHeader("Location"), "nonce");
+		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		var good = callbackReq(res1, "abc", state);
+		var dup = new ArrayList<>(Arrays.asList(good.getCookies()));
+		dup.add(0, new Cookie(dup.get(0).getName(), "other-value"));
+		var req = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state).cookies(dup.toArray(new Cookie[0]));
+		assertThrows(AuthenticationException.class, () -> rp.completeLogin(req, MockServletResponse.create()));
+	}
+
+	@Test void b10_callbackWithoutBinding_doesNotConsumeState() throws Exception {
+		var rp = rp(InMemorySessionStore.create());
+		var res1 = MockServletResponse.create();
+		rp.startLogin(MockServletRequest.create("GET", "/auth/login"), res1);
+		var state = queryParam(res1.getHeader("Location"), "state");
+		var nonce = queryParam(res1.getHeader("Location"), "nonce");
+		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		var bare = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		assertThrows(AuthenticationException.class, () -> rp.completeLogin(bare, MockServletResponse.create()));
+		var res2 = MockServletResponse.create();
+		rp.completeLogin(callbackReq(res1, "abc", state), res2);
+		assertNotNull(res2.getHeader("Location"));
+	}
+
+	@Test void b11_completeLogin_expiresBindingCookie() throws Exception {
+		var rp = rp(InMemorySessionStore.create());
+		var res1 = MockServletResponse.create();
+		rp.startLogin(MockServletRequest.create("GET", "/auth/login"), res1);
+		var state = queryParam(res1.getHeader("Location"), "state");
+		var nonce = queryParam(res1.getHeader("Location"), "nonce");
+		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		var cookies = new ArrayList<String>();
+		var res2 = new MockServletResponse() {
+			@Override public void addHeader(String name, String value) {
+				if (eq("Set-Cookie", name))
+					cookies.add(value);
+				super.addHeader(name, value);
+			}
+		};
+		rp.completeLogin(callbackReq(res1, "abc", state), res2);
+		assertTrue(cookies.stream().anyMatch(h -> h.startsWith("__Host-" + rp.cookieName() + "_LOGIN=;") && h.contains("Max-Age=0")), cookies.toString());
 	}
 
 	@Test void b07_redirectWithControlCharacters_fallsBackToDefault() throws Exception {
@@ -389,8 +444,8 @@ class OidcRelyingParty_Test extends TestBase {
 	@Test void e03_backChannelLogout_badSignature_isRejected() throws Exception {
 		var rp = rp(new InMemorySessionStore(InMemorySessionStore.DEFAULT_MAX_ENTRIES, FIXED_CLOCK), FIXED_CLOCK);
 		login(rp, "alice", "sess-1", null);
-		var attacker = generateRsa("k1");
-		var forged = signLogoutToken(attacker, idp.issuer, CID, null, "sess-1", FIXED_NOW);
+		var otherKey = generateRsa("k1");
+		var forged = signLogoutToken(otherKey, idp.issuer, CID, null, "sess-1", FIXED_NOW);
 		assertThrows(AuthenticationException.class, () -> rp.backChannelLogout(forged));
 	}
 
@@ -1014,7 +1069,7 @@ class OidcRelyingParty_Test extends TestBase {
 	/** redirect starts with "//" — protocol-relative open-redirect detected → null → default. */
 	@Test void l03_safeRelativePath_doubleSlash_blocked() throws Exception {
 		var rp = rp(InMemorySessionStore.create());
-		var req1 = MockServletRequest.create("GET", "/auth/login?redirect=//evil.example.com/x");
+		var req1 = MockServletRequest.create("GET", "/auth/login?redirect=//other.example.com/x");
 		var res1 = MockServletResponse.create();
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
@@ -1029,7 +1084,7 @@ class OidcRelyingParty_Test extends TestBase {
 	/** redirect contains "\\" — backslash open-redirect → null → default (line 1070 contains("\\") branch). */
 	@Test void l04_safeRelativePath_backslash_blocked() throws Exception {
 		var rp = rp(InMemorySessionStore.create());
-		var req1 = MockServletRequest.create("GET", "/auth/login?redirect=/evil\\x");
+		var req1 = MockServletRequest.create("GET", "/auth/login?redirect=/other\\x");
 		var res1 = MockServletResponse.create();
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
@@ -1044,7 +1099,7 @@ class OidcRelyingParty_Test extends TestBase {
 	/** redirect contains "://" — scheme in path open-redirect → null → default. */
 	@Test void l05_safeRelativePath_schemeInPath_blocked() throws Exception {
 		var rp = rp(InMemorySessionStore.create());
-		var req1 = MockServletRequest.create("GET", "/auth/login?redirect=/evil://x");
+		var req1 = MockServletRequest.create("GET", "/auth/login?redirect=/other://x");
 		var res1 = MockServletResponse.create();
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");

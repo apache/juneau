@@ -52,7 +52,7 @@ class McpClient_TraceContext_Test extends TestBase {
 				.build();
 		};
 		try (var c = McpClient.builder()
-			.endpoint("http://x/mcp")
+			.endpoint("https://x/mcp")
 			.transport(transport)
 			.traceFieldsSupplier(() -> Map.of(
 				RequestMeta.KEY_TRACEPARENT, "00-parent-01",
@@ -80,7 +80,7 @@ class McpClient_TraceContext_Test extends TestBase {
 				.build();
 		};
 		try (var c = McpClient.builder()
-			.endpoint("http://x/mcp")
+			.endpoint("https://x/mcp")
 			.transport(transport)
 			.responseCache(new InMemoryMcpResponseCache())
 			.traceFieldsSupplier(() -> Map.of(RequestMeta.KEY_TRACEPARENT, "00-parent-" + traceparentSeq.incrementAndGet()))

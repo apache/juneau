@@ -83,7 +83,7 @@ import org.apache.juneau.rest.server.auth.ClaimsPrincipal;
  * <p>
  * {@link #unseal} is wired to untrusted, client-supplied {@code requestState} strings, so it applies defensive
  * length guards (a plausibly-sized token, and a bounded {@code keyId} segment) before any base64 decode; an
- * out-of-bounds input returns {@link Optional#empty()} rather than allocating from an attacker-controlled
+ * out-of-bounds input returns {@link Optional#empty()} rather than allocating from an untrusted
  * length.
  */
 public class AeadRequestStateCodec implements RequestStateCodec {
@@ -104,7 +104,7 @@ public class AeadRequestStateCodec implements RequestStateCodec {
 	// Derived from KeyedSecret's MAX_KEY_ID_CHARS=128 producer limit (measured in UTF-16 code units, no
 	// charset restriction) at the worst case of 3 UTF-8 bytes/char: 128*3=384 bytes, whose unpadded base64url
 	// encoding is ceil(384/3)*4=512 chars. Set to that worst case so it dominates any legitimately-issued
-	// keyId while still capping an attacker-inflated segment before base64 decode.
+	// keyId while still capping an oversized segment before base64 decode.
 	private static final int MAX_KEY_ID_B64_CHARS = 512;
 
 	// Defensive floor on the untrusted, client-supplied token string as a whole (see unseal). The real floor of
@@ -244,7 +244,7 @@ public class AeadRequestStateCodec implements RequestStateCodec {
 			if (sub.isEmpty())
 				sub = ein(cp.getName());
 		} else {
-			iss = "";
+			iss = principal.getClass().getName();
 			sub = ein(principal.getName());
 		}
 		return lengthPrefixJoin(iss, sub);

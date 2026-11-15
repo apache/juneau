@@ -44,7 +44,7 @@ public class FileUtils {
 	 */
 	private FileUtils() {}
 
-	// Shared message text — kept identical across the two boundary-check sites so attackers
+	// Shared message text — kept identical across the two boundary-check sites so callers
 	// cannot distinguish "rejected by pre-existence check" from "rejected by symlink check".
 	private static final String MSG_pathEscape = "Path escapes configured root directory.";
 
@@ -207,6 +207,42 @@ public class FileUtils {
 		if (name == null || ext == null)
 			return false;
 		return eq(ext, getFileExtension(name));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified name is a single plain file name.
+	 *
+	 * <p>
+	 * A plain file name is non-empty, contains no {@code /}, {@code \} or NUL characters, and is not
+	 * {@code "."} or {@code ".."}.
+	 *
+	 * @param name The name to check.  Can be <jk>null</jk> (returns <jk>false</jk>).
+	 * @return <jk>true</jk> if the specified name is a single plain file name.
+	 */
+	public static boolean isSafeFileName(String name) {
+		if (isEmpty(name) || eq(name, ".") || eq(name, ".."))
+			return false;
+		return name.indexOf('/') == -1 && name.indexOf('\\') == -1 && name.indexOf('\0') == -1;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified forward-slash separated path stays relative to its base.
+	 *
+	 * <p>
+	 * The path is rejected when it starts with {@code /}, contains a {@code \} or NUL character, or has a
+	 * {@code ".."} segment.  Empty paths and {@code "."} segments are accepted.  No URL decoding is done, so
+	 * callers that take input from URLs should decode first.
+	 *
+	 * @param path The path to check.  Can be <jk>null</jk> (returns <jk>false</jk>).
+	 * @return <jk>true</jk> if the specified path stays relative to its base.
+	 */
+	public static boolean isSafeRelativePath(String path) {
+		if (path == null || path.startsWith("/") || path.indexOf('\\') != -1 || path.indexOf('\0') != -1)
+			return false;
+		for (var seg : path.split("/"))
+			if (eq(seg, ".."))
+				return false;
+		return true;
 	}
 
 	/**

@@ -69,7 +69,7 @@ public class MisdirectedRequest extends BasicHttpException {
 	 * @param cause The cause. May be <jk>null</jk>.
 	 */
 	public MisdirectedRequest(Throwable cause) {
-		super(STATUS_CODE, REASON_PHRASE, cause, cause != null ? cause.getMessage() : null);
+		super(STATUS_CODE, REASON_PHRASE, cause);
 	}
 
 	/**

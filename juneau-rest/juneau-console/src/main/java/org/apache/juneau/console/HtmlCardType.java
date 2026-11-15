@@ -30,17 +30,17 @@ import org.apache.juneau.marshall.collections.*;
  * An {@code html} card in a page contract may instead name a {@code src} endpoint. The {@code src} must be a
  * same-origin path (checked at page build, by {@code PageCapture.addCard} for FreeMarker and {@code PageSpec} cards
  * and by {@code CardTypeRegistry.toCard} for lifted ones; the shell checks it again before the fetch). The shell
- * fetches it and inserts the returned HTML as-is, <b>unsanitized</b>, the same trust level as
- * {@code footer.text}. The endpoint must therefore be a trusted first-party route, must never be derived from request
- * data, and must escape any data it embeds in the fragment.
+ * fetches it and, by default, rebuilds the returned fragment through the views attribute-allowlist
+ * sanitizer, the one behind the {@code SANITIZED_HTML} detail format, so script, {@code on*} handlers, unsafe URLs and
+ * unlisted attributes are dropped. The page must load the views toolkit; without it the card fails closed with E-JS-8
+ * and paints nothing. A response that redirected to another origin is refused.
  *
  * <p>
- * A card that cannot guarantee that can opt in with {@code "sanitize": true} (or {@code sanitize=true} on
- * {@code <@card>}, or {@code CardSpec.sanitize(true)}). The shell then rebuilds the fetched fragment through the views
- * attribute-allowlist sanitizer, the one behind the {@code SANITIZED_HTML} detail format, so script, {@code on*}
- * handlers, unsafe URLs and unlisted attributes are dropped. The page must load the views toolkit; without it the
- * card fails closed with E-JS-8 and paints nothing. The flag only affects {@code src} cards, and the default is
- * unchanged (unsanitized).
+ * A card whose fragment needs markup the allowlist drops can opt out with {@code "sanitize": false} (or
+ * {@code sanitize=false} on {@code <@card>}, or {@code CardSpec.sanitize(false)}). The shell then inserts the
+ * returned HTML as-is, <b>unsanitized</b>, the same trust level as {@code footer.text}: the endpoint must be a trusted
+ * first-party route, must never be derived from request data, and must escape any data it embeds in the fragment.
+ * The flag only affects {@code src} cards.
  *
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>

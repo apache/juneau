@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
+import java.util.function.*;
 
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
@@ -286,10 +287,6 @@ class ClassFormat_Test {
 		}
 	}
 
-	@AfterEach void resetGuard() {
-		ClassFormat.setClassNameGuard(null);
-	}
-
 	@Test void h01_parse_doesNotInitializeResolvedClass() {
 		// Referencing the class literal / getName() does not initialize the class; parse must not either.
 		assertFalse(PROBE_INITIALIZED.get());
@@ -300,29 +297,73 @@ class ClassFormat_Test {
 	}
 
 	@Test void h02_classNameGuard_blocksDisallowedName() {
-		ClassFormat.setClassNameGuard("java.lang.String"::equals);
-		assertEquals(String.class, ClassFormat.parse("java.lang.String", ClassFormat.FQCN, null));
-		assertThrows(IllegalArgumentException.class, () -> ClassFormat.parse("java.util.Date", ClassFormat.FQCN, null));
+		Predicate<String> g = "java.lang.String"::equals;
+		assertEquals(String.class, ClassFormat.parse("java.lang.String", ClassFormat.FQCN, null, g));
+		assertThrows(IllegalArgumentException.class, () -> ClassFormat.parse("java.util.Date", ClassFormat.FQCN, null, g));
 	}
 
 	@Test void h03_classNameGuard_blocksNestedRewrite() {
 		// The dotted FQCN nested form only resolves via the $-rewritten candidate, which the guard blocks.
-		ClassFormat.setClassNameGuard(n -> ! n.contains("$"));
-		assertThrows(IllegalArgumentException.class, () -> ClassFormat.parse("java.util.Map.Entry", ClassFormat.FQCN, null));
-		assertEquals(String.class, ClassFormat.parse("java.lang.String", ClassFormat.FQCN, null));
+		Predicate<String> g = n -> ! n.contains("$");
+		assertThrows(IllegalArgumentException.class, () -> ClassFormat.parse("java.util.Map.Entry", ClassFormat.FQCN, null, g));
+		assertEquals(String.class, ClassFormat.parse("java.lang.String", ClassFormat.FQCN, null, g));
 	}
 
 	@Test void h04_classNameGuard_nullAllowsAll() {
-		ClassFormat.setClassNameGuard(null);
-		assertEquals(String.class, ClassFormat.parse("java.lang.String", ClassFormat.FQCN, null));
+		assertEquals(String.class, ClassFormat.parse("java.lang.String", ClassFormat.FQCN, null, null));
+		assertEquals(Map.Entry.class, ClassFormat.parse("java.util.Map.Entry", ClassFormat.FQCN, null, null));
 		assertEquals(Map.Entry.class, ClassFormat.parse("java.util.Map.Entry", ClassFormat.FQCN, null));
 	}
 
 	@Test void h05_classNameGuard_appliesToClassTypedParse() throws Exception {
-		var p = JsonParser.DEFAULT;
-		assertEquals(String.class, p.read("\"java.lang.String\"", Class.class));
-		ClassFormat.setClassNameGuard("java.lang.String"::equals);
+		var p = JsonParser.create().classNameGuard("java.lang.String"::equals).build();
 		assertEquals(String.class, p.read("\"java.lang.String\"", Class.class));
 		assertThrows(Exception.class, () -> p.read("\"java.util.Date\"", Class.class));
+	}
+
+	@Test void h06_classNameGuard_scopedToContext() throws Exception {
+		// A guard on one parser does not affect another parser in the same JVM.
+		var guarded = JsonParser.create().classNameGuard("java.lang.String"::equals).build();
+		assertThrows(Exception.class, () -> guarded.read("\"java.util.Date\"", Class.class));
+		assertEquals(Date.class, JsonParser.DEFAULT.read("\"java.util.Date\"", Class.class));
+		assertEquals(Date.class, JsonParser.create().build().read("\"java.util.Date\"", Class.class));
+	}
+
+	@Test void h07_classNameGuard_appliesToBeanProperty() throws Exception {
+		var p = JsonParser.create().classNameGuard("java.lang.String"::equals).build();
+		assertEquals(String.class, p.read("{\"c\":\"java.lang.String\"}", H07Bean.class).c);
+		assertThrows(Exception.class, () -> p.read("{\"c\":\"java.util.Date\"}", H07Bean.class));
+		assertEquals(Date.class, JsonParser.DEFAULT.read("{\"c\":\"java.util.Date\"}", H07Bean.class).c);
+	}
+
+	public static class H07Bean {
+		public Class<?> c;
+	}
+
+	@Test void h08_classNameGuard_appliesToAnnotatedClassFormatProperty() throws Exception {
+		var p = JsonParser.create().classNameGuard("java.lang.String"::equals).build();
+		assertEquals(String.class, p.read("{\"c\":\"java.lang.String\"}", H08Bean.class).c);
+		assertThrows(Exception.class, () -> p.read("{\"c\":\"java.util.Date\"}", H08Bean.class));
+	}
+
+	public static class H08Bean {
+		@MarshalledProp(classFormat = ClassFormat.BINARY_NAME)
+		public Class<?> c;
+	}
+
+	@Test void h09_classNameGuard_appliesToContextConverter() {
+		var ctx = MarshallingContext.create().classNameGuard("java.lang.String"::equals).build();
+		assertEquals(String.class, ctx.getConverter().to("java.lang.String", Class.class));
+		assertThrows(RuntimeException.class, () -> ctx.getConverter().to("java.util.Date", Class.class));
+		assertThrows(RuntimeException.class, () -> ctx.getBasicConverter().to("java.util.Date", Class.class));
+		assertEquals(Date.class, MarshallingContext.DEFAULT.getConverter().to("java.util.Date", Class.class));
+	}
+
+	@Test void h10_classNameGuard_copiedByCopyBuilder() throws Exception {
+		var p1 = JsonParser.create().classNameGuard("java.lang.String"::equals).build();
+		var p2 = p1.copy().build();
+		assertThrows(Exception.class, () -> p2.read("\"java.util.Date\"", Class.class));
+		var p3 = p1.copy().classNameGuard(null).build();
+		assertEquals(Date.class, p3.read("\"java.util.Date\"", Class.class));
 	}
 }

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.console.views;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.time.*;
 
@@ -42,9 +44,9 @@ import org.apache.juneau.rest.server.*;
  * <h2 class='section'>Authorization: the stream URL is the capability</h2>
  * <p>
  * The stream is a held-open <b>GET</b>, so {@link org.apache.juneau.rest.server.filter.LoopbackBoundary} applies only
- * its <b>Host</b> check (DNS-rebinding stays covered on every request); the Origin/CSRF/JSON checks apply to non-safe
+ * its <b>Host</b> check (DNS-rebinding stays covered on every request); the Origin/token/JSON checks apply to non-safe
  * methods only.  A browser {@code EventSource} cannot set an {@code X-Csrf-Token} header and cookies are unsound on a
- * loopback port, so CSRF-on-GET is not an available control.  Access is therefore gated by the <b>unguessability of
+ * loopback port, so token-on-GET is not an available control.  Access is therefore gated by the <b>unguessability of
  * the {@code jobId}</b> path segment &mdash; an {@value AsyncJobRegistry#CAPABILITY_BITS}-bit
  * {@link java.security.SecureRandom} capability &mdash; and nothing else.  An unknown id answers {@code 404} (a miss
  * is indistinguishable, so the id space cannot be enumerated); a job already at its subscriber cap answers
@@ -133,7 +135,7 @@ public interface AsyncJobsMixin {
 	 */
 	@RestGet(path=STREAM_PATH, summary="Async job SSE progress stream", swagger=@OpSwagger(ignore=true))
 	default void streamJob(@Path("jobId") String jobId, RestRequest req, RestResponse res) throws IOException {
-		var job = asyncJobRegistry().get(jobId).orElse(null);
+		var job = asyncJobRegistry().get(jobId).filter(j -> ownedBy(j, req)).orElse(null);
 		if (job == null) {
 			res.setStatus(404);
 			return;
@@ -175,6 +177,14 @@ public interface AsyncJobsMixin {
 	 * @param req The REST request.
 	 * @return The raw value, or <jk>null</jk> if neither source supplied one.
 	 */
+	private static boolean ownedBy(AsyncJob job, RestRequest req) {
+		var owner = job.owner();
+		if (owner == null)
+			return true;
+		var p = req.getUserPrincipal();
+		return p != null && eq(owner, p.getName());
+	}
+
 	private static String resumeValue(RestRequest req) {
 		var header = req.getHeaderParam("Last-Event-ID").orElse(null);
 		if (header != null && ! AsyncJob.trimOws(header).isEmpty())
@@ -189,7 +199,7 @@ public interface AsyncJobsMixin {
 	 * [POST /juneau-jobs/{jobId}/cancel] &mdash; cancel a job and return its terminal result.
 	 *
 	 * <p>
-	 * A non-safe POST, so the boundary applies its full Origin/CSRF/JSON checks.  Cancellation is enforced
+	 * A non-safe POST, so the boundary applies its full Origin/token/JSON checks.  Cancellation is enforced
 	 * server-side (a client cannot be trusted to stop the work); the returned outcome distinguishes {@code cancelled}
 	 * from {@code cancelled-after-effect}.  An unknown id is a {@code 404} carrying a named refusal.
 	 *
@@ -198,8 +208,8 @@ public interface AsyncJobsMixin {
 	 * @return The job's terminal {@link ActionResult}.
 	 */
 	@RestPost(path=CANCEL_PATH, summary="Cancel an async job", swagger=@OpSwagger(ignore=true))
-	default ActionResult cancelJob(@Path("jobId") String jobId, RestResponse res) {
-		var job = asyncJobRegistry().get(jobId).orElse(null);
+	default ActionResult cancelJob(@Path("jobId") String jobId, RestRequest req, RestResponse res) {
+		var job = asyncJobRegistry().get(jobId).filter(j -> ownedBy(j, req)).orElse(null);
 		if (job == null) {
 			res.setStatus(404);
 			return ActionResult.refusal("app:unknown-job");

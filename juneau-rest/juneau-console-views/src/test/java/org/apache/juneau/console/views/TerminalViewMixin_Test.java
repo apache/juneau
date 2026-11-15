@@ -42,6 +42,13 @@ class TerminalViewMixin_Test extends TestBase {
 		static final Map<String,TerminalViewSource> SOURCES = new ConcurrentHashMap<>();
 		static final List<String> RESOLVED = new CopyOnWriteArrayList<>();
 
+		static final Set<String> DENIED = ConcurrentHashMap.newKeySet();
+
+		@Override
+		public TerminalViewAccess terminalViewAccess() {
+			return (req, runId) -> ! DENIED.contains(runId);
+		}
+
 		@Override
 		public Optional<TerminalViewSource> terminalViewSource(String runId, RestRequest req) {
 			RESOLVED.add(runId);
@@ -60,6 +67,7 @@ class TerminalViewMixin_Test extends TestBase {
 
 	@BeforeEach void clear() {
 		R.RESOLVED.clear();
+		R.DENIED.clear();
 	}
 
 	@SuppressWarnings({
@@ -95,6 +103,12 @@ class TerminalViewMixin_Test extends TestBase {
 	@Test void b04_badRunIdIs400BeforeResolver() throws Exception {
 		c.get("/juneau-terminal-view/a%20b/events").run().assertStatus(400);
 		c.get("/juneau-terminal-view/a.b/events").run().assertStatus(400);
+		assertList(R.RESOLVED);
+	}
+
+	@Test void b03a_deniedRunIs404WithoutResolving() throws Exception {
+		R.DENIED.add("r1");
+		c.get("/juneau-terminal-view/r1/events").run().assertStatus(404);
 		assertList(R.RESOLVED);
 	}
 

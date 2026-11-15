@@ -29,6 +29,7 @@ import static org.apache.juneau.rest.client.classic.RestOperation.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -207,7 +208,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	private boolean ignoreErrors;
 	private boolean suppressLogging;
 	private HttpContext context;
-	// Set for the request of an SSRF-guard-active @Remote call (by RestClient, or by run() while the calling thread runs
+	// Set for the request of an outbound-URL-guard-active @Remote call (by RestClient, or by run() while the calling thread runs
 	// a guarded call); it then sends every hop with the SsrfGuardMarker on its context.  Volatile: the request's
 	// HttpClient may run on another thread.
 	private volatile boolean ssrfGuarded;
@@ -2172,7 +2173,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				var className = thrownPart.getClassName();
 				var message = thrownPart.getMessage();
 				for (var t : rethrow) {
-					if (t.getName().equals(className)) {
+					if (eq(t.getName(), className)) {
 						ConstructorInfo c = null;
 						var ci = ClassInfo.of(t);
 						Throwable thrownInstance = null;
@@ -2224,15 +2225,15 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// SSRF-guard redirect revalidation (active only for a guarded request -- see SsrfGuardMarker)
+	// outbound-URL-guard redirect revalidation (active only for a guarded request -- see SsrfGuardMarker)
 	// -----------------------------------------------------------------------------------------------------------------
 
-	// Marks this as the request of an SSRF-guard-active @Remote call.
+	// Marks this as the request of an outbound-URL-guard-active @Remote call.
 	void ssrfGuard() {
 		ssrfGuarded = true;
 	}
 
-	// Whether this is the request of an SSRF-guard-active @Remote call.
+	// Whether this is the request of an outbound-URL-guard-active @Remote call.
 	boolean isSsrfGuarded() { return ssrfGuarded; }
 
 	/**
@@ -2242,7 +2243,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * sent with the {@code SsrfGuardMarker} on its context, every hop leases its connection from the client's dedicated
 	 * pinned pool ({@code SsrfGuardConnectionManager}), which pin-on-connects each hop's resolved address and never hands
 	 * out a connection an ordinary request opened, on whichever thread the client runs it.  Only called for a guarded
-	 * request, i.e. for a {@code @Remote} call with the SSRF guard in effect.
+	 * request, i.e. for a {@code @Remote} call with the outbound-URL guard in effect.
 	 */
 	private HttpResponse runWithPolicyRedirects() throws IOException {
 		// A context set with context(...) carries the marker, and the redirect credential guard's origin, for the call only.
@@ -2385,7 +2386,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		next.setURI(target2);
 		var strip = crossesOrigin(current.getURI(), target2);
 		for (var h : current.getAllHeaders())
-			if (! (rewriteToGet && (eqic(h.getName(), "Content-Length") || eqic(h.getName(), HEADER_CONTENT_TYPE))) && ! (strip && isCredentialHeader(h.getName())))
+			if (! (rewriteToGet && (eqic(h.getName(), "Content-Length") || eqic(h.getName(), HEADER_CONTENT_TYPE))) && ! (strip && (isCredentialHeader(h.getName()) || eqic(h.getName(), "Host"))))
 				next.addHeader(h);
 		return next;
 	}
@@ -3132,7 +3133,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 
 			var buf = new ByteArrayOutputStream();
 			Object output = serializer.isWriterSerializer()
-				? new OutputStreamWriter(buf, java.nio.charset.StandardCharsets.UTF_8)
+				? new OutputStreamWriter(buf, StandardCharsets.UTF_8)
 				: buf;
 
 			writeCursor(serializer, writerKind, consumer, output);

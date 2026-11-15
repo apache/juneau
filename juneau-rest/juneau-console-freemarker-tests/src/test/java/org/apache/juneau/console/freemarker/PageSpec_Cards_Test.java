@@ -22,8 +22,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.console.CardTypeRegistry;
+import org.apache.juneau.console.Subscription;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.console.views.*;
+import org.apache.juneau.console.views.VisibilityRule;
 import org.junit.jupiter.api.*;
 
 /**
@@ -35,12 +38,12 @@ import org.junit.jupiter.api.*;
 class PageSpec_Cards_Test extends TestBase {
 
 	private static final CardDirectiveModel MODEL = new CardDirectiveModel(
-		CardRequirements.create().build(new ToolkitPackRegistry()), org.apache.juneau.console.CardTypeRegistry.standard());
+		CardRequirements.create().build(new ToolkitPackRegistry()), CardTypeRegistry.standard());
 
 	/** A host registry with the adopter type {@code meter} on top of the standard handlers. */
 	private static final CardDirectiveModel CUSTOM = new CardDirectiveModel(
 		CardRequirements.create().build(new ToolkitPackRegistry()),
-		org.apache.juneau.console.CardTypeRegistry.standard().copy().add(new MeterCardType()).build());
+		CardTypeRegistry.standard().copy().add(new MeterCardType()).build());
 
 	private static TableSpec table(String id) {
 		return TableSpec.create(id).dataUrl("/rest/" + id + "/data").columns(Column.create("pod"));
@@ -173,13 +176,13 @@ class PageSpec_Cards_Test extends TestBase {
 		assertTrue(spec.card("nope").isEmpty());
 	}
 
-	@Test void a20_csrf_setsBothAttrs() throws Exception {
+	@Test void a20_requestToken_setsBothAttrs() throws Exception {
 		var cap = new PageCapture();
-		PageSpec.create().csrf("t\"1", "X-CSRF").applyTo(cap, null);
-		assertEquals("data-juneau-csrf=\"t&quot;1\" data-juneau-csrf-header=\"X-CSRF\"", cap.bodyAttrs);
+		PageSpec.create().csrf("t\"1", "X-Request-Token").applyTo(cap, null);
+		assertEquals("data-juneau-csrf=\"t&quot;1\" data-juneau-csrf-header=\"X-Request-Token\"", cap.bodyAttrs);
 	}
 
-	@Test void a21_csrf_blankHeaderName_omitsHeaderAttr() throws Exception {
+	@Test void a21_requestToken_blankHeaderName_omitsHeaderAttr() throws Exception {
 		var cap = new PageCapture();
 		PageSpec.create().csrf("tok", " ").applyTo(cap, null);
 		assertEquals("data-juneau-csrf=\"tok\"", cap.bodyAttrs);
@@ -231,7 +234,7 @@ class PageSpec_Cards_Test extends TestBase {
 		}
 	}
 
-	@Test void a28_csrf_nullToken_rejected() {
+	@Test void a28_requestToken_nullToken_rejected() {
 		var target10 = PageSpec.create();
 		var ex = assertThrows(IllegalArgumentException.class, () -> target10.csrf(null, "X"));
 		assertEquals("PageSpec.csrf requires a non-null token.", ex.getMessage());
@@ -314,8 +317,8 @@ class PageSpec_Cards_Test extends TestBase {
 		var cap = new PageCapture();
 		PageSpec.create().card(ChartDef.line("trend").title("Orders").src("/s").x("day").series("placed", "Placed").toCardSpec()
 			.cssClass("wide").bare(true)
-			.visibleWhen(org.apache.juneau.console.views.VisibilityRule.when("a").present())
-			.subscribes(org.apache.juneau.console.Subscription.to("ops.jobs").as("params").map("q", "search"))).applyTo(cap, MODEL);
+			.visibleWhen(VisibilityRule.when("a").present())
+			.subscribes(Subscription.to("ops.jobs").as("params").map("q", "search"))).applyTo(cap, MODEL);
 		var card = cap.unplacedCards().get(0).toMap();
 		assertEquals("chart", card.get("type"));
 		assertEquals("Orders", card.get("title"));
@@ -384,9 +387,9 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a42_applyTo_jobLogCard_crossOriginEndpoint_rejected() {
 		var arg15 = new PageCapture();
-		var spec = PageSpec.create().card(CardSpec.of("job-log", "rebuild").body("submit", Map.of("endpoint", "//evil.test/x")));
+		var spec = PageSpec.create().card(CardSpec.of("job-log", "rebuild").body("submit", Map.of("endpoint", "//other.test/x")));
 		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg15, MODEL));
-		assertTrue(ex.getMessage().contains("type='job-log' submit.endpoint must be a same-origin path; got '//evil.test/x'."), ex.getMessage());
+		assertTrue(ex.getMessage().contains("type='job-log' submit.endpoint must be a same-origin path; got '//other.test/x'."), ex.getMessage());
 	}
 
 	@Test void a43_applyTo_jobLogCardWithTemplate_rejected() {
@@ -404,7 +407,7 @@ class PageSpec_Cards_Test extends TestBase {
 	}
 
 	@Test void a45_applyTo_unsafeCardSrc_rejectedForNonLiftedType() {
-		var spec = PageSpec.create().card(CardSpec.of("my-widget", "w").src("\\\\evil.test/x"));
+		var spec = PageSpec.create().card(CardSpec.of("my-widget", "w").src("\\\\other.test/x"));
 		var arg18 = new PageCapture();
 		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg18, MODEL));
 		assertTrue(ex.getMessage().contains("<@card id='w'> type='my-widget' src must be a same-origin path"), ex::getMessage);
@@ -412,7 +415,7 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a46_addCard_unsafeSrc_rejected() {
 		var target20 = new PageCapture();
-		var arg19 = CardSpec.html("h").src("//evil.test/x");
+		var arg19 = CardSpec.html("h").src("//other.test/x");
 		var ex = assertThrows(freemarker.template.TemplateModelException.class,
 			() -> target20.addCard(arg19, null));
 		assertTrue(ex.getMessage().contains("<@card id='h'> type='html' src must be a same-origin path"), ex::getMessage);
@@ -445,7 +448,7 @@ class PageSpec_Cards_Test extends TestBase {
 	}
 
 	@Test void a50_htmlSrc_unsafeSrc_refusedAtApplyTo() {
-		for (var src : new String[]{"//evil.test/x", "https://evil.test/x", "javascript:alert(1)", "/a/../b", "\\\\evil.test/x"}) {
+		for (var src : new String[]{"//other.test/x", "https://other.test/x", "javascript:alert(1)", "/a/../b", "\\\\other.test/x"}) {
 			var spec = PageSpec.create().htmlSrc("h", "H", src);
 			var arg20 = new PageCapture();
 			var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg20, MODEL), src);
@@ -455,7 +458,7 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a50b_htmlSrc_sanitizeWithUnsafeSrc_srcRefusalWins() {
 		var arg21 = new PageCapture();
-		var spec = PageSpec.create().htmlSrc("h", "H", "//evil.test/x", true);
+		var spec = PageSpec.create().htmlSrc("h", "H", "//other.test/x", true);
 		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg21, MODEL));
 		assertTrue(ex.getMessage().contains("src must be a same-origin path"), ex::getMessage);
 	}
@@ -475,10 +478,12 @@ class PageSpec_Cards_Test extends TestBase {
 		assertEquals(true, card.toMap().get("sanitize"));
 	}
 
-	@Test void a53_htmlSrc_sanitizeFalse_matchesThreeArgForm() {
+	@Test void a53_htmlSrc_threeArgForm_sanitizes_andFalseOptsOut() {
 		var off = PageSpec.create().htmlSrc("h", "H", "/x", false).card("h").orElseThrow().toMap();
-		assertEquals(PageSpec.create().htmlSrc("h", "H", "/x").card("h").orElseThrow().toMap(), off);
-		assertFalse(off.containsKey("sanitize"));
+		var dflt = PageSpec.create().htmlSrc("h", "H", "/x").card("h").orElseThrow().toMap();
+		assertEquals(PageSpec.create().htmlSrc("h", "H", "/x", true).card("h").orElseThrow().toMap(), dflt);
+		assertEquals(true, dflt.get("sanitize"));
+		assertEquals(false, off.get("sanitize"));
 	}
 
 	@Test void a54_htmlSrc_sanitize_carriedToApplyTo() throws Exception {
@@ -525,8 +530,8 @@ class PageSpec_Cards_Test extends TestBase {
 	@Test void a59_applyTo_customCard_liftKeepsClassBareAndWiring() throws Exception {
 		var cap = new PageCapture();
 		PageSpec.create().card(CardSpec.of("meter", "load").body("value", 1).cssClass("wide").bare(true)
-			.visibleWhen(org.apache.juneau.console.views.VisibilityRule.when("a").present())
-			.subscribes(org.apache.juneau.console.Subscription.to("ops.jobs").as("refresh"))).applyTo(cap, CUSTOM);
+			.visibleWhen(VisibilityRule.when("a").present())
+			.subscribes(Subscription.to("ops.jobs").as("refresh"))).applyTo(cap, CUSTOM);
 		var card = cap.unplacedCards().get(0).toMap();
 		assertEquals("wide", card.get("class"));
 		assertEquals(true, card.get("bare"));
@@ -616,7 +621,7 @@ class PageSpec_Cards_Test extends TestBase {
 	}
 
 	@Test void a71_applyTo_customCardJsonMarkupBusKeys_withSpecWiring_refusedWithTheTemplateMessage() {
-		var spec = PageSpec.create().card(CardSpec.of("my-widget", "w").subscribes(org.apache.juneau.console.Subscription.to("ops.jobs").as("refresh")),
+		var spec = PageSpec.create().card(CardSpec.of("my-widget", "w").subscribes(Subscription.to("ops.jobs").as("refresh")),
 			"{k: 1, subscribes: [ { topic: 'ssc.focus', as: 'refresh' } ]}");
 		var arg30 = new PageCapture();
 		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg30, MODEL));

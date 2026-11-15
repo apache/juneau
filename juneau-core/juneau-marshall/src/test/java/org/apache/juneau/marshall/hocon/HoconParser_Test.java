@@ -323,4 +323,12 @@ class HoconParser_Test {
 		assertEquals(1, ((Number) ((Map<String,Object>) items.get(0)).get("id")).intValue());
 		assertEquals(2, ((Number) ((Map<String,Object>) items.get(1)).get("id")).intValue());
 	}
+
+	@Test void z01_deepNestingRejected() {
+		var sb = new StringBuilder();
+		for (var i = 0; i < 5000; i++) sb.append("a{");
+		for (var i = 0; i < 5000; i++) sb.append("}");
+		var e = assertThrows(Exception.class, () -> HoconParser.DEFAULT.read(sb.toString(), Object.class));
+		assertTrue(e.getMessage().contains("depth"), e.getMessage());
+	}
 }

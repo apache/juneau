@@ -49,7 +49,7 @@ class McpClient_Complete_Test extends TestBase {
 				.body(new ByteArrayInputStream("{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{}}".getBytes(StandardCharsets.UTF_8)))
 				.build();
 		};
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			c.complete(new PromptReference().setName("p"), "argName", "argVal", null);
 		}
 

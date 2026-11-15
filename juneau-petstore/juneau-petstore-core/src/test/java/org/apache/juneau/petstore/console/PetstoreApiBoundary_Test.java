@@ -31,7 +31,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
 /**
- * The {@code /petstore} API's CSRF boundary, and the console boundary publishing the API's token on console pages.
+ * The {@code /petstore} API's request-token boundary, and the console boundary publishing the API's token on console pages.
  *
  * <p>
  * Every test drives the filter itself with mock servlet objects and a counting chain.  A mock REST client would not
@@ -41,7 +41,7 @@ class PetstoreApiBoundary_Test extends TestBase {
 
 	private static final String HOST = "localhost:8080";
 	private static final String SELF = "http://localhost:8080";
-	private static final String EVIL = "http://evil.example";
+	private static final String OTHER_ORIGIN = "http://other.example";
 	private static final String JSON = "application/json";
 	private static final String FORM = "application/x-www-form-urlencoded";
 	private static final String REASON = "X-Request-Boundary";
@@ -124,7 +124,7 @@ class PetstoreApiBoundary_Test extends TestBase {
 	}
 
 	@Test void a04_crossOriginFormPostIsRefused() throws Exception {
-		var req = req("POST", "/petstore/pets", HOST).h("Origin", EVIL).h("Content-Type", FORM);
+		var req = req("POST", "/petstore/pets", HOST).h("Origin", OTHER_ORIGIN).h("Content-Type", FORM);
 		assertRefused(new PetstoreApiBoundary(), req, 403, BoundaryReason.ORIGIN_MISMATCH);
 	}
 
@@ -137,8 +137,8 @@ class PetstoreApiBoundary_Test extends TestBase {
 		assertPasses(new PetstoreApiBoundary(), req("POST", "/petstore/pets", HOST).h("Content-Type", JSON));
 	}
 
-	@Test void a07_safeReadIsAdmittedOnAnyHost() throws Exception {
-		assertPasses(new PetstoreApiBoundary(), req("GET", "/petstore/pets", "192.0.2.7:1"));
+	@Test void a07_readOnAnotherHostIsRefusedByDefault() throws Exception {
+		assertRefused(new PetstoreApiBoundary(), req("GET", "/petstore/pets", "192.0.2.7:1"), 421, BoundaryReason.HOST_NOT_ALLOWED);
 	}
 
 	@Test void a08_nullOriginIsRefused() throws Exception {
@@ -148,9 +148,9 @@ class PetstoreApiBoundary_Test extends TestBase {
 
 	@Test void a09_forwardedHostIsIgnored() throws Exception {
 		var api = new PetstoreApiBoundary();
-		var req = photoPut().h("X-Forwarded-Host", "evil.example");
+		var req = photoPut().h("X-Forwarded-Host", "other.example");
 		assertPasses(api, req.h("X-Csrf-Token", api.tokenFor(req)));
-		var req2 = req("PUT", "/petstore/pets/1/photo", HOST).h("Origin", EVIL).h("X-Forwarded-Host", "evil.example").h("Content-Type", "image/png");
+		var req2 = req("PUT", "/petstore/pets/1/photo", HOST).h("Origin", OTHER_ORIGIN).h("X-Forwarded-Host", "other.example").h("Content-Type", "image/png");
 		assertRefused(api, req2.h("X-Csrf-Token", api.tokenFor(req2)), 403, BoundaryReason.ORIGIN_MISMATCH);
 	}
 
@@ -174,6 +174,13 @@ class PetstoreApiBoundary_Test extends TestBase {
 		}
 		assertRefused(api, req("GET", "/petstore/pets", "127.0.0.1:8080"), 421, BoundaryReason.HOST_NOT_ALLOWED);
 		assertPasses(api, req("GET", "/petstore/pets", "shop.example:8080"));
+	}
+
+	@Test void b03_unsetSettingAnswersOnlyLoopbackHosts() throws Exception {
+		var api = new PetstoreApiBoundary();
+		assertPasses(api, req("GET", "/petstore/pets", "localhost:8080"));
+		assertPasses(api, req("GET", "/petstore/pets", "127.0.0.1:8080"));
+		assertRefused(api, req("GET", "/petstore/pets", "shop.example:8080"), 421, BoundaryReason.HOST_NOT_ALLOWED);
 	}
 
 	@Test void b02_malformedAllowedHostsFailsAtConstruction() {

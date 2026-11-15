@@ -264,7 +264,7 @@ public class OAuthAuthorizationCodeFlow {
 	/**
 	 * Builds the {@code authorize?...} URL the user-agent should be redirected to.
 	 *
-	 * @param state The opaque {@code state} parameter (CSRF protection).  Must not be <jk>null</jk> or
+	 * @param state The opaque {@code state} parameter (cross-site request protection).  Must not be <jk>null</jk> or
 	 * 	blank.
 	 * @param codeChallenge The PKCE code challenge.  Must not be <jk>null</jk>.  Always uses S256.
 	 * @return The authorization URL.
@@ -300,7 +300,7 @@ public class OAuthAuthorizationCodeFlow {
 	 * callers can set OIDC-specific parameters (e.g. {@code prompt}, {@code max_age}, {@code acr_values})
 	 * without this module needing to surface each one.
 	 *
-	 * @param state The opaque {@code state} parameter (CSRF protection).  Must not be <jk>null</jk> or
+	 * @param state The opaque {@code state} parameter (cross-site request protection).  Must not be <jk>null</jk> or
 	 * 	blank.
 	 * @param codeChallenge The PKCE code challenge.  Must not be <jk>null</jk>.  Always uses S256.
 	 * @param nonce The OIDC {@code nonce} value.  Must not be <jk>null</jk> or blank.
@@ -318,6 +318,8 @@ public class OAuthAuthorizationCodeFlow {
 			.state(new State(state))
 			.nonce(new Nonce(nonce))
 			.codeChallenge(codeChallenge, CodeChallengeMethod.S256);
+		if (resource != null)
+			builder.resource(resource);
 		if (customizer != null)
 			customizer.accept(builder);
 		return builder.build().toURI();

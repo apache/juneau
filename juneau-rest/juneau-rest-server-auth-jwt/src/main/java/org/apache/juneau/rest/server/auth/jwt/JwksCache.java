@@ -85,7 +85,11 @@ final class JwksCache implements JWKSource<SecurityContext> {
 	 */
 	private static final long IN_FLIGHT_TIMEOUT_SECONDS = 10;
 
+	/** Default maximum time past the TTL that the last-known-good key set is served while the source is failing. */
+	static final Duration DEFAULT_MAX_STALE = Duration.ofMinutes(15);
+
 	private final JWKSource<SecurityContext> delegate;
+	private final Duration maxStale;
 	private final Duration ttl;
 	private final Clock clock;
 	private final boolean eagerRefreshOnKidMiss;
@@ -103,6 +107,12 @@ final class JwksCache implements JWKSource<SecurityContext> {
 
 	JwksCache(JWKSource<SecurityContext> delegate, Duration ttl, Clock clock,
 			boolean eagerRefreshOnKidMiss, Duration eagerRefreshCooldown) {
+		this(delegate, ttl, clock, eagerRefreshOnKidMiss, eagerRefreshCooldown, DEFAULT_MAX_STALE);
+	}
+
+	JwksCache(JWKSource<SecurityContext> delegate, Duration ttl, Clock clock,
+			boolean eagerRefreshOnKidMiss, Duration eagerRefreshCooldown, Duration maxStale) {
+		this.maxStale = maxStale;
 		this.delegate = delegate;
 		this.ttl = ttl;
 		this.clock = clock;
@@ -127,7 +137,7 @@ final class JwksCache implements JWKSource<SecurityContext> {
 			slot.set(new Entry(refreshed, now));
 			return selector.select(refreshed);
 		} catch (KeySourceException | RuntimeException e) {
-			if (current != null) {
+			if (current != null && current.fetchedAt.plus(ttl).plus(maxStale).isAfter(now)) {
 				LOG.log(Level.WARNING, e,
 					() -> "JWKS refresh failed; serving cached keys past TTL.  Underlying error: " + e.getMessage());
 				return selector.select(current.jwkSet);

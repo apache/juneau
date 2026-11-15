@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client.mcp;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.UriUtils.isSecureOrLoopback;
 
 import java.io.*;
 import java.net.URI;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.juneau.bean.jsonrpc.*;
+import org.apache.juneau.commons.utils.UriUtils;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.client.*;
@@ -85,8 +87,9 @@ public abstract class AbstractMcpClient implements Closeable {
 	 */
 	protected AbstractMcpClient(Builder<?> builder) {
 		reqnn("builder", builder);
-		this.endpoint = validateEndpoint(builder.endpoint);
+		this.endpoint = validateEndpoint(builder.endpoint, builder.allowInsecureHttp);
 		this.restClient = builder.restClientBuilder
+			.interceptors(new RedirectRefusingInterceptor())
 			.defaultSerializer(JsonSerializer.DEFAULT)
 			.defaultParser(JsonParser.DEFAULT)
 			.build();
@@ -103,9 +106,10 @@ public abstract class AbstractMcpClient implements Closeable {
 	 * @param value The candidate endpoint. Must not be <jk>null</jk>/blank.
 	 * @return {@code value}, unchanged, once validated.
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>/blank, is not a syntactically valid URI,
-	 * 	has no scheme, or has a scheme other than {@code http}/{@code https} (case-insensitive).
+	 * 	has no scheme, has a scheme other than {@code http}/{@code https} (case-insensitive), or uses plain
+	 * 	{@code http} for a non-loopback host while {@code allowInsecureHttp} is off.
 	 */
-	private static String validateEndpoint(String value) {
+	private static String validateEndpoint(String value, boolean allowInsecureHttp) {
 		var endpointValue = reqnb("endpoint", value);
 		URI uri;
 		try {
@@ -117,6 +121,9 @@ public abstract class AbstractMcpClient implements Closeable {
 		if (scheme == null || ! (eqic(scheme, "http") || eqic(scheme, "https")))
 			throw new IllegalArgumentException(
 				"Invalid MCP endpoint URL '" + endpointValue + "': must be an absolute http or https URL, but scheme was '" + scheme + "'.");
+		if (! allowInsecureHttp && ! isSecureOrLoopback(uri))
+			throw new IllegalArgumentException(
+				"Invalid MCP endpoint URL '" + endpointValue + "': must use https unless it targets a loopback host.");
 		return endpointValue;
 	}
 
@@ -207,6 +214,16 @@ public abstract class AbstractMcpClient implements Closeable {
 				req.header(e.getKey(), e.getValue());
 		}
 		return req.run();
+	}
+
+	/** Fails any call whose response is a redirect, so a request body and its credentials are never re-sent elsewhere. */
+	private static final class RedirectRefusingInterceptor implements RestCallInterceptor {
+		@Override /* Overridden from RestCallInterceptor */
+		public void onConnect(RestRequest req, RestResponse res) throws IOException {
+			var sc = res.getStatusCode();
+			if (sc >= 300 && sc < 400)
+				throw new IOException("MCP server responded with a redirect (HTTP " + sc + "), which is not followed.");
+		}
 	}
 
 	private static boolean isRetryableMethod(String method) {
@@ -329,6 +346,7 @@ public abstract class AbstractMcpClient implements Closeable {
 
 		String endpoint;
 		RestClient.Builder restClientBuilder = RestClient.builder();
+		boolean allowInsecureHttp;
 
 		/**
 		 * Sets the MCP server endpoint URL.
@@ -338,6 +356,21 @@ public abstract class AbstractMcpClient implements Closeable {
 		 */
 		public SELF endpoint(String value) {
 			endpoint = reqnb("endpoint", value);
+			return self();
+		}
+
+		/**
+		 * Allows the endpoint to use plain {@code http} for a non-loopback host.
+		 *
+		 * <p>
+		 * By default the endpoint must use {@code https} unless it targets a loopback host ({@code localhost},
+		 * {@code 127.0.0.1} or {@code [::1]}).
+		 *
+		 * @param value <jk>true</jk> to allow plain {@code http} to any host.
+		 * @return This object.
+		 */
+		public SELF allowInsecureHttp(boolean value) {
+			allowInsecureHttp = value;
 			return self();
 		}
 

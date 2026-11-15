@@ -227,7 +227,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	// still received the divergent subtree. Configuring an unbounded max-depth here makes the hash cover the
 	// full subtree, and enabling recursion detection fails fast, rather than looping, on a pathological cyclic
 	// structure. The complementary JSON value-safety check performed as part of the arguments-hash step is what
-	// actually bounds attacker-controlled depth, size, and CPU: this canonicalizer only guarantees that whatever
+	// actually bounds untrusted depth, size, and CPU: this canonicalizer only guarantees that whatever
 	// passes that guard is hashed in full.
 	private static final Jcs JCS = new Jcs(
 		JcsSerializer.create().maxDepth(Integer.MAX_VALUE).detectRecursions().build(), JsonParser.DEFAULT);
@@ -293,7 +293,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		try {
 			validateHeaders(exchange, req);
 			validateMeta(req.getParams());
-			if (McpMethods.SUBSCRIPTIONS_LISTEN.equals(method))
+			if (eq(McpMethods.SUBSCRIPTIONS_LISTEN, method))
 				return JsonRpcResponse.notification(id) ? null
 					: new McpStreamResult(dispatchSubscriptionsListen(exchange, id, req.getParams(), config, ctx));
 			var result = finalizeResult(invoke(method, req.getParams(), config, ctx), config, ctx);
@@ -423,7 +423,9 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		// open for concurrent listen requests racing the same per-binding broker (see
 		// McpOptions#resolveSubscriptionBroker()). The registry key is a server-minted UUID, deliberately
 		// NOT String.valueOf(id): see the javadoc above.
-		var subscription = broker.registerIfUnder(subscriptionsConfig.getMaxConcurrentSubscriptions(), UUID.randomUUID().toString(), honoredFilter)
+		var caller = principal(ctx);
+		var owner = caller == null ? null : caller.getClass().getName() + "|" + caller.getName();
+		var subscription = broker.registerIfUnder(subscriptionsConfig.getMaxConcurrentSubscriptions(), subscriptionsConfig.getMaxSubscriptionsPerPrincipal(), owner, UUID.randomUUID().toString(), honoredFilter)
 			.orElseThrow(() -> new McpException(CODE_TOO_MANY_SUBSCRIPTIONS, "Maximum concurrent subscriptions exceeded"));
 		var honoredWireFilter = SubscriptionCapabilityGate.toWireFilter(honoredFilter);
 		return new SubscriptionsListenPublisher(id, honoredWireFilter, subscription, subscriptionsConfig.getHeartbeatIntervalMs(), subscriptionsConfig.getIdleTimeoutMs());
@@ -502,10 +504,10 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		if (headerName == null)
 			throw new McpException(CODE_INVALID_REQUEST, "Missing required header: Mcp-Name");
 		var method = req.getMethod();
-		if (! headerMethod.equals(method))
+		if (neq(headerMethod, method))
 			throw new McpException(CODE_INVALID_REQUEST, "Mcp-Method header '" + headerMethod + "' does not match request method '" + method + "'");
 		var name = McpRoutingNames.routingName(method, req.getParams());
-		if (! headerName.equals(name))
+		if (neq(headerName, name))
 			throw new McpException(CODE_INVALID_REQUEST, "Mcp-Name header '" + headerName + "' does not match request name '" + name + "'");
 	}
 
@@ -531,7 +533,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		var protocolVersion = str(m.get(RequestMeta.KEY_PROTOCOL_VERSION));
 		if (isEmpty(protocolVersion))
 			throw new McpException(CODE_INVALID_REQUEST, "Missing required params._meta." + RequestMeta.KEY_PROTOCOL_VERSION);
-		if (! McpProtocol.VERSION_2026_07_28.equals(protocolVersion))
+		if (neq(McpProtocol.VERSION_2026_07_28, protocolVersion))
 			throw new McpException(CODE_INVALID_REQUEST, "Unsupported protocol version: " + protocolVersion);
 		var clientInfo = m.get(RequestMeta.KEY_CLIENT_INFO);
 		if (clientInfo != null && (! (clientInfo instanceof Map<?,?> ci) || isEmpty(str(ci.get("name"))) || isEmpty(str(ci.get("version")))))
@@ -677,7 +679,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		if (name == null)
 			throw new McpException(errorCode(McpErrorKind.INVALID_PARAMS), "Missing tool name");
 		var handler = config.getTools().stream()
-			.filter(h -> name.equals(h.descriptor().getName()))
+			.filter(h -> eq(name, h.descriptor().getName()))
 			.findFirst()
 			.orElseThrow(() -> new McpException(errorCode(McpErrorKind.TOOL_NOT_FOUND), "Tool not found: " + name));
 		var args = McpParamUtils.mapParam(p, PARAM_ARGUMENTS);
@@ -718,7 +720,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		if (name == null)
 			throw new McpException(errorCode(McpErrorKind.INVALID_PARAMS), "Missing prompt name");
 		var handler = config.getPrompts().stream()
-			.filter(h -> name.equals(h.descriptor().getName()))
+			.filter(h -> eq(name, h.descriptor().getName()))
 			.findFirst()
 			.orElseThrow(() -> new McpException(errorCode(McpErrorKind.PROMPT_NOT_FOUND), "Prompt not found: " + name));
 		var args = McpParamUtils.mapParam(p, PARAM_ARGUMENTS);
@@ -745,7 +747,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		if (uri == null)
 			throw new McpException(errorCode(McpErrorKind.INVALID_PARAMS), "Missing resource uri");
 		var exact = config.getResources().stream()
-			.filter(h -> uri.equals(h.descriptor().getUri()))
+			.filter(h -> eq(uri, h.descriptor().getUri()))
 			.findFirst();
 		if (exact.isPresent()) {
 			// MRTR PAUSE/RESUME applies only to the exact-resource path; C4's resource-template branch below is
@@ -864,7 +866,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * <p>
 	 * <b>Check ordering is deliberate.</b> The stateless argument-hash comparison runs <i>before</i> the
 	 * (stateful) replay {@code checkAndRecord}, so a submission carrying the wrong {@code arguments} is rejected
-	 * without ever consuming the token's {@code jti} &mdash; an attacker holding only a leaked token (but not the
+	 * without ever consuming the token's {@code jti} &mdash; a caller holding only a leaked token (but not the
 	 * arguments) cannot burn a victim's in-flight resume, and an honest client that sends slightly-wrong arguments
 	 * does not destroy its own token. The argument hash is also computed <i>once</i> here, before the handler
 	 * runs, and threaded to {@link #pause} (see {@link MrtrContext}).
@@ -879,7 +881,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		// comparison below and (threaded through MrtrContext) for the hash pause(...) seals into the next token,
 		// so a handler that mutates the live arguments map in place cannot make the next token seal a hash the
 		// client can no longer reproduce. Also applies the bounded-traversal + canonicalization guards (see
-		// argumentsHash), so structurally-hostile arguments become a -32602 here on both first-round and RESUME.
+		// argumentsHash), so pathological arguments become a -32602 here on both first-round and RESUME.
 		var argumentsHash = argumentsHash(McpParamUtils.mapParam(params, PARAM_ARGUMENTS));
 		// Captured once, up front, alongside argumentsHash and for the same reason: threaded through MrtrContext
 		// to pause(...) so the AAD sealed into the next token binds the target actually resolved for THIS
@@ -897,7 +899,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		// closed (java:S2095). Deferring construction until validation succeeds means no path leaks it.
 		var sealed = mrtrConfig.getCodec().unseal(requestState, aad(method, target), principal(ctx))
 			.orElseThrow(() -> new McpException(CODE_INVALID_PARAMS, "Invalid or tampered requestState"));
-		if (! method.equals(sealed.method()))
+		if (neq(method, sealed.method()))
 			throw new McpException(CODE_INVALID_PARAMS, "requestState method mismatch");
 		if (sealed.expiresAtMs() <= mrtrConfig.getClock().millis())
 			throw new McpException(CODE_REQUEST_STATE_EXPIRED, "requestState has expired");
@@ -1043,7 +1045,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 *
 	 * <p>
 	 * First runs the module's shared bounded-traversal guard ({@link JsonValueSafety#check(Object, String)}:
-	 * {@code MAX_DEPTH=64}, {@code MAX_NODES}, a traversal-time deadline) so structurally-hostile {@code arguments}
+	 * {@code MAX_DEPTH=64}, {@code MAX_NODES}, a traversal-time deadline) so pathological {@code arguments}
 	 * (excessive depth or node count &mdash; reachable via {@code prompts/get}, which has no other input-shape
 	 * guard, and schemaless {@code tools/call}) become a deterministic {@link #CODE_INVALID_PARAMS} rejection on
 	 * BOTH PAUSE and RESUME, rather than a silent hash collision (the JCS canonicalizer's inherited depth limit
@@ -1058,7 +1060,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * <p>
 	 * By design, RFC 8785 canonical equivalences are treated as equal &mdash; for example {@code 1} and
 	 * {@code 1.0} canonicalize identically, so they hash the same and a resume switching between them is not a
-	 * mismatch. A canonicalization failure on a hostile-but-syntactically-legal value (a non-finite number such
+	 * mismatch. A canonicalization failure on a pathological-but-syntactically-legal value (a non-finite number such
 	 * as {@code 1e999}, a lone UTF-16 surrogate, or a {@code BigDecimal}/{@code BigInteger} outside IEEE-754
 	 * range) is mapped to {@link #CODE_INVALID_PARAMS} rather than surfacing as a generic internal error.
 	 *
@@ -1083,7 +1085,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			canonical = JCS.write(arguments);
 		} catch (SerializeException e) {
 			// Message deliberately generic (no echo of the offending value), mirroring the other MRTR "don't leak"
-			// messages: a hostile-but-legal input (non-finite number, lone surrogate, out-of-IEEE BigDecimal) must
+			// messages: a pathological-but-legal input (non-finite number, lone surrogate, out-of-IEEE BigDecimal) must
 			// not surface as a -32603 internal error.
 			throw new McpException(CODE_INVALID_PARAMS, "Invalid arguments: not canonicalizable");
 		}

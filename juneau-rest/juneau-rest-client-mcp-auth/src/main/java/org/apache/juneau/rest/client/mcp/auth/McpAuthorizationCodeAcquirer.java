@@ -44,7 +44,7 @@ import com.nimbusds.oauth2.sdk.pkce.*;
  * <p>
  * Security checks on the callback:
  * <ul>
- * 	<li><b>CSRF</b> &mdash; the returned {@code state} must match the one that was issued (single-use via
+ * 	<li><b>Request forgery</b> &mdash; the returned {@code state} must match the one that was issued (single-use via
  * 		{@link EphemeralStore}).
  * 	<li><b>SEP-2468 ({@code iss}, RFC 9207)</b> &mdash; the callback {@code iss} parameter must equal the
  * 		discovered/expected issuer; a mismatch is rejected.  The check gates BOTH the success and error paths (a client
@@ -97,6 +97,7 @@ public class McpAuthorizationCodeAcquirer {
 		private EphemeralStore store;
 		private Duration httpTimeout = DEFAULT_HTTP_TIMEOUT;
 		private Consumer<HTTPRequest> httpRequestConfigurator;
+		private boolean allowPrivateUrls;
 
 		/** Constructor. */
 		protected Builder() {}
@@ -234,7 +235,7 @@ public class McpAuthorizationCodeAcquirer {
 		 * <p>
 		 * Set automatically by {@link #authorizationServer(OidcMetadata)}; set explicitly when the discovered authorization-server metadata advertises
 		 * {@code authorization_response_iss_parameter_supported} (RFC 9207); see
-		 * {@link org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata#authorizationResponseIssParameterSupported()}.
+		 * {@link OidcMetadata#authorizationResponseIssParameterSupported()}.
 		 *
 		 * @param value <jk>true</jk> to reject a response with no {@code iss} parameter.
 		 * @return This object.
@@ -311,7 +312,22 @@ public class McpAuthorizationCodeAcquirer {
 		}
 
 		/**
-		 * Sets a callback that customizes the Nimbus {@link HTTPRequest} for the token exchange.
+		 * Allows the token endpoint to be a private, link-local or otherwise reserved address.
+		 *
+		 * <p>
+		 * By default the endpoint must be an <c>https</c> URL whose host is not a private or reserved address (literal
+		 * loopback hosts are accepted), redirects are refused, and the resolved address is checked.
+		 *
+		 * @param value <jk>true</jk> to allow private targets.
+		 * @return This object.
+		 */
+		public Builder allowPrivateUrls(boolean value) {
+			allowPrivateUrls = value;
+			return this;
+		}
+
+		/**
+		 * Sets a callback that customizes the Nimbus {@link HTTPRequest} before it is sent.
 		 *
 		 * @param value The callback.  Must not be <jk>null</jk>.
 		 * @return This object.
@@ -375,6 +391,7 @@ public class McpAuthorizationCodeAcquirer {
 	private final EphemeralStore store;
 	private final Duration httpTimeout;
 	private final Consumer<HTTPRequest> httpRequestConfigurator;
+	private final boolean allowPrivateUrls;
 
 	/**
 	 * Constructor.
@@ -400,6 +417,7 @@ public class McpAuthorizationCodeAcquirer {
 		this.store = b.store;
 		this.httpTimeout = b.httpTimeout;
 		this.httpRequestConfigurator = b.httpRequestConfigurator;
+		this.allowPrivateUrls = b.allowPrivateUrls;
 	}
 
 	/**
@@ -493,10 +511,10 @@ public class McpAuthorizationCodeAcquirer {
 	 * state-store interaction.
 	 *
 	 * <p>
-	 * This is the pure SEP-2468 / CSRF validation step.  The {@code iss} comparison gates BOTH success and error
+	 * This is the pure SEP-2468 / state validation step.  The {@code iss} comparison gates BOTH success and error
 	 * responses (per the MCP spec a client MUST NOT act on an {@code error}/{@code error_description}/{@code error_uri}
 	 * from a response whose {@code iss} does not match), so an error response with a mismatched issuer is reported as
-	 * an issuer mismatch rather than a denial.  A missing/mismatched {@code state} is rejected as CSRF.  When
+	 * an issuer mismatch rather than a denial.  A missing/mismatched {@code state} is rejected as a forged callback.  When
 	 * {@code iss} is absent it is accepted (future-proofed for the eventual "reject if absent" MUST); use
 	 * {@link #validateAuthorizationResponse(URI, String, URI, boolean)} to require it.
 	 *
@@ -529,7 +547,7 @@ public class McpAuthorizationCodeAcquirer {
 		var resp = parse(callbackUri);
 		var state = resp.getState() == null ? null : resp.getState().getValue();
 		if (neq(expectedState, state))
-			throw new McpAuthException("Authorization callback state mismatch (possible CSRF)");
+			throw new McpAuthException("Authorization callback state mismatch");
 		return extractCode(resp, expectedIssuer, false, requireIssuerParameter);
 	}
 
@@ -549,7 +567,7 @@ public class McpAuthorizationCodeAcquirer {
 			if (iss == null) {
 				if (requireIssuerParameter)
 					throw new McpAuthException("Authorization response is missing the required iss parameter (SEP-2468 / RFC 9207)");
-			} else if (expectedIssuer == null || ! iss.getValue().equals(expectedIssuer.toString())) {
+			} else if (expectedIssuer == null || neq(iss.getValue(), expectedIssuer.toString())) {
 				throw new McpAuthException("Authorization response issuer mismatch (SEP-2468): expected '"
 					+ expectedIssuer + "' but got '" + iss.getValue() + "'");
 			}
@@ -571,8 +589,7 @@ public class McpAuthorizationCodeAcquirer {
 			b.clientSecretSupplier(clientSecretSupplier);
 		scopes.forEach(b::scope);
 		b.resource(resource);
-		if (httpRequestConfigurator != null)
-			b.httpRequestConfigurator(httpRequestConfigurator);
+		b.httpRequestConfigurator(policy().wrap(httpRequestConfigurator));
 		return b.build();
 	}
 
@@ -584,5 +601,9 @@ public class McpAuthorizationCodeAcquirer {
 	 */
 	int redirectPort() {
 		return redirectPort;
+	}
+
+	private OAuthHttpPolicy policy() {
+		return allowPrivateUrls ? OAuthHttpPolicy.of(true, false) : OAuthHttpPolicy.DEFAULT;
 	}
 }

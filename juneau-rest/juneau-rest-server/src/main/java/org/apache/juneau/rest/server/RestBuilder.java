@@ -468,6 +468,17 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	SELF problemDetails(String value);
 
 	/**
+	 * Specifies the {@link Rest#showCauseMessages() showCauseMessages} flag for this resource.
+	 *
+	 * <p>
+	 * Overrides the <c>RestContext.showCauseMessages</c> system-property / environment default.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	SELF showCauseMessages(String value);
+
+	/**
 	 * Specifies the {@link Rest#debugMarshalling() debugMarshalling} flag for this resource.
 	 *
 	 * @param value The new value for this property.

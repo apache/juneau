@@ -23,6 +23,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.Collections;
 import java.util.logging.*;
 
 import org.apache.juneau.commons.collections.*;
@@ -34,6 +35,7 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.logging.*;
+import org.apache.juneau.rest.server.processor.AsyncResponseProcessor;
 import org.apache.juneau.rest.server.util.*;
 
 import jakarta.servlet.http.*;
@@ -325,7 +327,7 @@ public class RestSession extends ContextSession {
 	 *
 	 * <p>
 	 * Called by the two-phase debug pipeline when the resolved logger is loggable at
-	 * {@link java.util.logging.Level#FINEST FINEST}. Idempotent — the wrappers no-op if already installed.
+	 * {@link Level#FINEST FINEST}. Idempotent — the wrappers no-op if already installed.
 	 *
 	 * <p>
 	 * The capture cap is snapshotted from {@link RestContext#getRestDebugFormatter()}<c>.bodyCap()</c> at install
@@ -416,7 +418,7 @@ public class RestSession extends ContextSession {
 		// record carries the structured id), then always closes in the finally — on the request thread, even on the
 		// async path (where the snapshot was already captured during run()) — so a pooled thread never leaks the scope.
 		try {
-			var asyncOwned = org.apache.juneau.rest.server.processor.AsyncResponseProcessor.isAsyncDispatchOwned(req);
+			var asyncOwned = AsyncResponseProcessor.isAsyncDispatchOwned(req);
 			try {
 				if (! asyncOwned)
 					setFinishTimeAttributes();
@@ -562,7 +564,7 @@ public class RestSession extends ContextSession {
 				for (var h : MethodSafety.overrideHeaders()) {
 					var e = req.getHeaders(h);
 					if (nn(e) && e.hasMoreElements())
-						headerClaims.put(h, java.util.Collections.list(e));
+						headerClaims.put(h, Collections.list(e));
 				}
 			}
 
@@ -608,7 +610,7 @@ public class RestSession extends ContextSession {
 
 	/** An allow-list is enabled when it admits at least one method: non-empty, and not just the {@code NONE} placeholder. */
 	private static boolean isEnabled(Set<String> allowed) {
-		return allowed.stream().anyMatch(x -> ! "NONE".equalsIgnoreCase(x));
+		return allowed.stream().anyMatch(x -> neqic("NONE", x));
 	}
 
 	/** Adds the claims, trimmed and upper-cased as {@link MethodSafety} judges them, skipping blanks. */
@@ -757,24 +759,27 @@ public class RestSession extends ContextSession {
 	 * Rejects an unsafe-method request that a browser marks as cross-site, unless the resource allows it.
 	 *
 	 * <p>
-	 * A request is refused when <c>Sec-Fetch-Site</c> is <c>cross-site</c>, or when an <c>Origin</c> header is
+	 * A request is refused when <c>Sec-Fetch-Site</c> is <c>cross-site</c>, when it is <c>same-site</c> and no matching
+	 * <c>Origin</c> accompanies it, or when an <c>Origin</c> header is
 	 * present (without <c>Sec-Fetch-Site</c>) and neither matches the <c>Host</c> header nor is listed in {@link Rest#allowedOrigins()}.  Requests with neither header pass.
 	 */
 	private void checkCrossSite() {
 		if (context.isAllowCrossSite())
 			return;
 		var m = req.getMethod();
-		if ("GET".equalsIgnoreCase(m) || "HEAD".equalsIgnoreCase(m) || "OPTIONS".equalsIgnoreCase(m) || "TRACE".equalsIgnoreCase(m))
+		if (eqic("GET", m) || eqic("HEAD", m) || eqic("OPTIONS", m) || eqic("TRACE", m))
 			return;
 		var site = req.getHeader("Sec-Fetch-Site");
 		var origin = req.getHeader("Origin");
-		var cross = "cross-site".equalsIgnoreCase(site);
-		// A browser-supplied Sec-Fetch-Site is authoritative; Origin is only compared to Host when it is absent.
-		if (! cross && site == null && origin != null) {
+		var cross = eqic("cross-site", site);
+		// A browser-supplied Sec-Fetch-Site is authoritative, except that same-site is only accepted together with a
+		// matching Origin.  Origin is compared to Host when Sec-Fetch-Site is absent.
+		var sameSite = eqic("same-site", site);
+		if (! cross && (site == null || sameSite) && (origin != null || sameSite)) {
 			var host = req.getHeader("Host");
-			cross = host == null || ! originMatchesHost(origin, host);
+			cross = origin == null || host == null || ! originMatchesHost(origin, host);
 			if (cross)
-				cross = ! isTrustedOrigin(origin);
+				cross = origin == null || ! isTrustedOrigin(origin);
 		}
 		if (cross)
 			throw new Forbidden("Cross-site request refused.");
@@ -793,7 +798,7 @@ public class RestSession extends ContextSession {
 		for (var t : trusted) {
 			try {
 				var u = URI.create(t);
-				if (u.getAuthority() != null && u.getAuthority().equalsIgnoreCase(fwd.trim()))
+				if (u.getAuthority() != null && eqic(u.getAuthority(), fwd.trim()))
 					return originMatchesHost(origin, fwd.trim());
 			} catch (IllegalArgumentException e) {
 				// Ignore malformed entry.
@@ -809,10 +814,10 @@ public class RestSession extends ContextSession {
 			if (h == null || u.getScheme() == null)
 				return false;
 			var port = u.getPort();
-			var defaultPort = "https".equalsIgnoreCase(u.getScheme()) ? 443 : 80;
+			var defaultPort = eqic("https", u.getScheme()) ? 443 : 80;
 			var authority = port < 0 || port == defaultPort ? h : h + ":" + port;
 			var hostNorm = host.endsWith(":" + defaultPort) ? host.substring(0, host.length() - (":" + defaultPort).length()) : host;
-			return authority.equalsIgnoreCase(hostNorm);
+			return eqic(authority, hostNorm);
 		} catch (IllegalArgumentException e) {
 			return false;
 		}

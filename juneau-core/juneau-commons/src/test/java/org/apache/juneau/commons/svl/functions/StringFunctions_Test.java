@@ -68,4 +68,19 @@ class StringFunctions_Test extends TestBase {
 	@Test void a32_compose_join_split() {
 		assertEquals("X-Y-Z", vr.resolve("#{join('-', 'X', 'Y', 'Z')}"));
 	}
+
+	@Test void z01_pathToken_dropsTraversal() {
+		assertEquals("a/b", vr.resolve("#{pathToken('../a/./b')}"));
+		assertEquals("WEB-INF/web.xml", vr.resolve("#{pathToken('../WEB-INF/web.xml')}"));
+		assertEquals("a/b", vr.resolve("#{pathToken('a\\\\..\\\\b')}"));
+		assertEquals("", vr.resolve("#{pathToken('..')}"));
+	}
+
+	@Test void z02_format_hugeWidthRejected() {
+		assertThrows(RuntimeException.class, () -> vr.resolve("#{format('%2000000000s', 'x')}"));
+	}
+
+	@Test void z03_format_hugePrecisionRejected() {
+		assertThrows(RuntimeException.class, () -> vr.resolve("#{format('%.999999999f', 1.5)}"));
+	}
 }

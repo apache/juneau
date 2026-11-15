@@ -30,7 +30,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
 /**
- * {@link AdminBoundary}: the registration's mapping, and the CSRF decisions its filter makes for the admin resources.
+ * {@link AdminBoundary}: the registration's mapping, and the request-token decisions its filter makes for the admin resources.
  *
  * <p>
  * The decision tests drive the filter itself with mock servlet objects and a counting chain.  A mock REST client would
@@ -43,7 +43,7 @@ class AdminBoundary_Test extends TestBase {
 
 	private static final String HOST = "localhost:10000";
 	private static final String SELF = "http://localhost:10000";
-	private static final String EVIL = "http://evil.example";
+	private static final String OTHER_ORIGIN = "http://other.example";
 	private static final String JSON = "application/json";
 	private static final String FORM = "application/x-www-form-urlencoded";
 	private static final String REASON = RequestBoundaryFilter.REJECTION_HEADER;
@@ -87,14 +87,14 @@ class AdminBoundary_Test extends TestBase {
 	// a - the registration's mapping
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_rootPrefixMapsSixPatterns() {
+	@Test void a01_rootPrefixMapsEightPatterns() {
 		var r = AdminBoundary.registration("");
-		assertEquals(List.of("/config", "/config/*", "/logs", "/logs/*", "/shutdown", "/shutdown/*"), r.getUrlPatterns());
+		assertEquals(List.of("/config", "/config/*", "/debug", "/debug/*", "/logs", "/logs/*", "/shutdown", "/shutdown/*"), r.getUrlPatterns());
 	}
 
 	@Test void a02_prefixIsPrepended() {
 		var r = AdminBoundary.registration("/admin");
-		assertEquals(List.of("/admin/config", "/admin/config/*", "/admin/logs", "/admin/logs/*", "/admin/shutdown", "/admin/shutdown/*"), r.getUrlPatterns());
+		assertEquals(List.of("/admin/config", "/admin/config/*", "/admin/debug", "/admin/debug/*", "/admin/logs", "/admin/logs/*", "/admin/shutdown", "/admin/shutdown/*"), r.getUrlPatterns());
 	}
 
 	@Test void a03_requestDispatchOnlyAtItsOrder() {
@@ -134,7 +134,7 @@ class AdminBoundary_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_crossSiteShutdownIsRefused() throws Exception {
-		assertRefused(filter(), req("POST", "/shutdown").header("Origin", EVIL).header("Content-Type", FORM), 403, BoundaryReason.ORIGIN_MISMATCH);
+		assertRefused(filter(), req("POST", "/shutdown").header("Origin", OTHER_ORIGIN).header("Content-Type", FORM), 403, BoundaryReason.ORIGIN_MISMATCH);
 	}
 
 	@Test void b02_sameOriginBrowserWriteHasNoTokenAndIsRefused() throws Exception {
@@ -166,7 +166,7 @@ class AdminBoundary_Test extends TestBase {
 	}
 
 	@Test void b09_readsPass() throws Exception {
-		assertPasses(filter(), req("GET", "/logs/view/app.log").header("Origin", EVIL));
+		assertPasses(filter(), req("GET", "/logs/view/app.log").header("Origin", OTHER_ORIGIN));
 		assertPasses(filter(), req("GET", "/config"));
 	}
 

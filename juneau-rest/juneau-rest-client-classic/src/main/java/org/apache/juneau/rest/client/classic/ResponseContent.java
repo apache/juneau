@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.abbreviate;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
@@ -30,7 +31,6 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.http.conn.*;
-import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.reflect.ConstructorInfo;
 import org.apache.juneau.commons.reflect.ExecutableException;
@@ -274,16 +274,16 @@ public class ResponseContent implements HttpEntity {
 			var mt = MediaType.of(ct);
 
 			if ((parser == null || (mt.toString().contains(CONTENT_TYPE_TEXT_PLAIN) && ! parser.canHandle(ct))) && type.hasStringMutater())
-				return BasicConverter.INSTANCE.to(asString(), type.inner());
+				return type.basicConverter().to(asString(), type.inner());
 
 			if (nn(parser))
 				return parse(type, mt);
 
 			if (type.hasReaderMutater())
-				return BasicConverter.INSTANCE.to(asReader(), type.inner());
+				return type.basicConverter().to(asReader(), type.inner());
 
 			if (type.hasInputStreamMutater())
-				return BasicConverter.INSTANCE.to(asInputStream(), type.inner());
+				return type.basicConverter().to(asInputStream(), type.inner());
 
 			ct = response.getStringHeader(HEADER_ContentType).orElse(null);
 
@@ -498,7 +498,7 @@ public class ResponseContent implements HttpEntity {
 	 * @throws RestCallException If a problem occurred trying to read from the reader.
 	 */
 	public String asAbbreviatedString(int length) throws RestCallException {
-		return StringUtils.abbreviate(asString(), length);
+		return abbreviate(asString(), length);
 	}
 
 	/**

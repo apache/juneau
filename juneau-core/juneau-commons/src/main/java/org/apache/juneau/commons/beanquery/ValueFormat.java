@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.beanquery;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.math.*;
 import java.time.*;
@@ -99,7 +100,7 @@ final class ValueFormat {
 	/** Renders a {@code Double}/{@code Float}/{@code BigDecimal}/other {@code Number} as a plain decimal string. */
 	private static String decimal(Object v) {
 		try {
-			return new BigDecimal(v.toString()).stripTrailingZeros().toPlainString();
+			return parseBigDecimal(v.toString()).stripTrailingZeros().toPlainString();
 		} catch (NumberFormatException e) {
 			return fail(v);
 		}

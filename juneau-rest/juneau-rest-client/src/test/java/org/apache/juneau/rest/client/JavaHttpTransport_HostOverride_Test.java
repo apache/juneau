@@ -20,7 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
 import java.net.http.*;
+import java.util.logging.Level;
 
+import org.apache.juneau.commons.logging.LogRecordCapture;
 import org.junit.jupiter.api.*;
 
 /**
@@ -53,6 +55,11 @@ class JavaHttpTransport_HostOverride_Test {
 	@Test void a02_optIn_addsHost() {
 		JavaHttpTransport.builder().allowHostHeaderOverride().build();
 		assertEquals("host", System.getProperty(PROP));
+	}
+
+	@Test void a06_optIn_logsAWarning() {
+		var records = LogRecordCapture.quietly(JavaHttpTransport.class, () -> JavaHttpTransport.builder().allowHostHeaderOverride().build());
+		assertTrue(records.stream().anyMatch(r -> r.getLevel() == Level.WARNING && r.getMessage().contains(PROP)));
 	}
 
 	@Test void a03_optIn_appendsToExistingValue() {

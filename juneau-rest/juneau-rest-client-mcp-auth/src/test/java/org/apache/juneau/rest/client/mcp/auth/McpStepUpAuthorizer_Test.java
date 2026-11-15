@@ -53,6 +53,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS)
 			.previouslyRequestedScopes("read")
+			.allowAnyScope()
 			.reauthorizer(reauthScopes::add)
 			.build();
 		var calls = new AtomicInteger();
@@ -73,6 +74,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 			.resource(RES).issuer(ISS)
 			.previouslyRequestedScopes("read")
 			.maxAttempts(5)
+			.allowAnyScope()
 			.reauthorizer(reauthScopes::add)
 			.build();
 		var calls = new AtomicInteger();
@@ -95,6 +97,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS)
 			.previouslyRequestedScopes("read", "write")
+			.allowAnyScope()
 			.reauthorizer(last::set)
 			.build();
 		var calls = new AtomicInteger();
@@ -110,6 +113,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS)
 			.maxAttempts(2)
+			.allowAnyScope()
 			.reauthorizer(s -> {})
 			.build();
 		assertThrowsWithMessage(McpAuthException.class, "permanent authorization failure", () ->
@@ -123,6 +127,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS)
 			.maxAttempts(2)
+			.allowAnyScope()
 			.reauthorizer(s -> reauths.incrementAndGet())
 			.build();
 		assertThrows(McpAuthException.class, () -> authorizer.execute("op", () -> { throw challenge("write"); }));
@@ -138,6 +143,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS)
 			.maxAttempts(1)
+			.allowAnyScope()
 			.reauthorizer(s -> {})
 			.build();
 		var calls = new AtomicInteger();
@@ -154,6 +160,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS)
 			.maxAttempts(1)
+			.allowAnyScope()
 			.reauthorizer(s -> {})
 			.build();
 		assertThrows(McpAuthException.class, () -> authorizer.execute("op", () -> { throw challenge("write"); }));
@@ -169,6 +176,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS)
 			.maxAttempts(1)
+			.allowAnyScope()
 			.reauthorizer(s -> {})
 			.build();
 		assertThrows(McpAuthException.class, () -> authorizer.execute("op1", () -> { throw challenge("write"); }));
@@ -183,6 +191,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS)
 			.attemptStepUp(false)
+			.allowAnyScope()
 			.reauthorizer(s -> reauths.incrementAndGet())
 			.build();
 		assertThrowsWithMessage(McpAuthException.class, "aborted", () ->
@@ -203,6 +212,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		var reauths = new AtomicInteger();
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS)
+			.allowAnyScope()
 			.reauthorizer(s -> reauths.incrementAndGet())
 			.build();
 		assertEquals("immediate", authorizer.execute("op", () -> "immediate"));
@@ -232,6 +242,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		var acc = new McpScopeAccumulator();
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS).accumulator(acc)
+			.allowAnyScope()
 			.reauthorizer(scopes -> { /* accept */ })
 			.build();
 		var calls = new AtomicInteger();
@@ -273,6 +284,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS)
 			.maxScopes(2)
+			.allowAnyScope()
 			.reauthorizer(u -> {})
 			.build();
 		assertThrowsWithMessage(McpAuthException.class, "maximum of 2", () -> authorizer.execute("op", () -> raise("a b c")));
@@ -284,9 +296,35 @@ class McpStepUpAuthorizer_Test extends TestBase {
 			.resource(RES).issuer(ISS)
 			.accumulator(accumulator)
 			.maxScopes(2)
+			.allowAnyScope()
 			.reauthorizer(u -> {})
 			.build();
 		assertThrows(McpAuthException.class, () -> authorizer.execute("op", () -> raise("a b c")));
 		assertTrue(accumulator.current(RES, ISS).isEmpty());
+	}
+
+	@Test void z05_defaultRefusesScopeNotAlreadyHeld() {
+		var reauthCalls = new AtomicInteger();
+		var authorizer = McpStepUpAuthorizer.create()
+			.resource(RES).issuer(ISS)
+			.previouslyRequestedScopes("read")
+			.reauthorizer(u -> reauthCalls.incrementAndGet())
+			.build();
+		assertThrowsWithMessage(McpAuthException.class, "allow-list", () -> authorizer.execute("op", () -> raise("admin")));
+		assertEquals(0, reauthCalls.get());
+	}
+
+	@Test void z06_defaultPermitsScopeAlreadyHeld() {
+		var authorizer = McpStepUpAuthorizer.create()
+			.resource(RES).issuer(ISS)
+			.previouslyRequestedScopes("read")
+			.reauthorizer(u -> {})
+			.build();
+		var calls = new AtomicInteger();
+		assertEquals("ok", authorizer.execute("op", () -> {
+			if (calls.incrementAndGet() == 1)
+				throw challenge("read");
+			return "ok";
+		}));
 	}
 }

@@ -62,10 +62,10 @@ class BusStream_Test extends TestBase {
 		assertEquals("1;2;", out.toString());
 	}
 
-	@Test void b01_readCappedAcceptsTheCapAndRefusesOneByteMore() throws Exception {
+	@Test void b01_readSessionBodyAcceptsTheCapAndRefusesOneByteMore() throws Exception {
 		var max = BusStream.MAX_SESSION_BODY_BYTES;
-		assertEquals(max, BusStream.readCapped(new ByteArrayInputStream(new byte[max])).length());
-		var e = assertThrows(BusRefusal.class, () -> BusStream.readCapped(new ByteArrayInputStream(new byte[max + 1])));
+		assertEquals(max, BusStream.readSessionBody(new ByteArrayInputStream(new byte[max])).length());
+		var e = assertThrows(BusRefusal.class, () -> BusStream.readSessionBody(new ByteArrayInputStream(new byte[max + 1])));
 		assertEquals(400, e.status());
 		assertEquals("bus:bad-request", e.code());
 	}

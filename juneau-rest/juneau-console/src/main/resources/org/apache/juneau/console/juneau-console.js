@@ -878,7 +878,7 @@
 	// Built-in card types
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// The opt-in `sanitize: true` path of an html card's `src` fragment: the markup is rebuilt node by node through the
+	// The default (`sanitize` not false) path of an html card's `src` fragment: the markup is rebuilt node by node through the
 	// views attribute-allowlist sanitizer (JuneauViews.init.fillSanitizedHtmlSlot, the one the SANITIZED_HTML detail
 	// format uses) instead of being inserted as served.  The sanitizer clears the element it fills, so it fills a scratch
 	// div whose children are then moved onto the card, which keeps the card title.  Without the views toolkit there is
@@ -886,7 +886,7 @@
 	function paintSanitizedFragment(doc, host, text) {
 		const fill = window.JuneauViews?.init?.fillSanitizedHtmlSlot;
 		if (typeof fill !== "function")
-			throw new Error("html card sanitize:true needs JuneauViews; load the views toolkit");
+			throw new Error("html card sanitizing needs JuneauViews; load the views toolkit");
 		const scratch = doc.createElement("div");
 		fill(scratch, text);
 		while (scratch.firstChild) host.appendChild(scratch.firstChild);
@@ -908,6 +908,11 @@
 		return paint(el0);
 	}
 
+	// Whether a fetched response's final URL is on the page's own origin.
+	function isFinalUrlSameOrigin(url) {
+		return typeof url === "string" && url.startsWith(window.location.origin + "/");
+	}
+
 	class HtmlCard extends ShellCard {
 		render() {
 			const card = this.spec, el0 = this.el;
@@ -921,10 +926,14 @@
 			if (!isSafeHref(card.src) || /^https?:/i.test(card.src) && !card.src.startsWith(window.location.origin + "/"))
 				this.fail("src '" + card.src + "' is not same-origin");
 			const doc = this.document;
-			fetch(card.src, { credentials: "same-origin" })
-				.then(r => r.ok ? r.text() : Promise.reject(new Error("HTTP " + r.status)))
+			// A response that was redirected, or whose final URL is off this origin, is refused: the same-origin check above is on the requested URL only.
+			fetch(card.src, { credentials: "same-origin", redirect: "follow" })
+				.then(r => {
+					if (r.redirected && !isFinalUrlSameOrigin(r.url)) return Promise.reject(new Error("src '" + card.src + "' redirected off this origin"));
+					return r.ok ? r.text() : Promise.reject(new Error("HTTP " + r.status));
+				})
 				.then(text => {
-					if (card.sanitize === true) {
+					if (card.sanitize !== false) {
 						// The fragment can arrive while the views scripts further down the page have not run yet; wait for the
 						// page to be ready before looking for the sanitizer.
 						this.onReady(function () {

@@ -23,7 +23,7 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.remote.*;
+import org.apache.juneau.rest.auth.oauth.flow.*;
 import org.apache.juneau.rest.auth.oauth.oidc.*;
 
 import com.nimbusds.oauth2.sdk.*;
@@ -48,7 +48,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * When an expected resource identifier is supplied ({@link Builder#expectedResource(URI)} or the {@code expectedResource}
  * argument of {@link #fetch(URI, URI)} / {@link #parse(String, URI, URI)}), the PRM document's {@code resource} field is
  * validated against it per RFC 9728 &sect;3.3 (exact string match, mirroring the issuer-identity posture) and a mismatch
- * is rejected &mdash; this defends against a malicious server pointing the client at a PRM document minted for a
+ * is rejected &mdash; this defends against an untrusted server pointing the client at a PRM document minted for a
  * different resource.  An expected resource is required unless {@link Builder#skipResourceValidation(boolean)} is set.
  *
  * <p>
@@ -235,7 +235,10 @@ public class McpProtectedResourceMetadataClient {
 			req.setAccept("application/json");
 			if (httpRequestConfigurator != null)
 				httpRequestConfigurator.accept(req);
+			policy().apply(req);
 			resp = req.send();
+		} catch (IllegalArgumentException e) {
+			throw new McpAuthException("Protected-resource-metadata URL is not permitted (was '" + prmUrl + "'): " + e.getMessage(), e);
 		} catch (IOException e) {
 			throw new McpAuthException("Protected-resource-metadata fetch failed for " + prmUrl, e);
 		}
@@ -317,7 +320,7 @@ public class McpProtectedResourceMetadataClient {
 			var md = OidcDiscoveryClient.create()
 				.issuer(as)
 				.httpTimeout(httpTimeout)
-				.httpRequestConfigurator(httpRequestConfigurator == null ? h -> {} : httpRequestConfigurator)
+				.httpRequestConfigurator(policy().wrap(httpRequestConfigurator))
 				.build()
 				.discover();
 			requireSecure(md.tokenEndpoint(), "Token endpoint");
@@ -325,8 +328,15 @@ public class McpProtectedResourceMetadataClient {
 			var reg = md.extras().get("registration_endpoint");
 			if (reg != null)
 				requireSecure(URI.create(reg.toString()), "Registration endpoint");
+			requireSecure(md.jwksUri(), "JWKS URI");
+			requireSecure(md.introspectionEndpoint(), "Introspection endpoint");
+			requireSecure(md.userinfoEndpoint(), "Userinfo endpoint");
+			requireSecure(md.endSessionEndpoint(), "End-session endpoint");
+			var rev = md.extras().get("revocation_endpoint");
+			if (rev != null)
+				requireSecure(URI.create(rev.toString()), "Revocation endpoint");
 			return md;
-		} catch (IOException | OidcDiscoveryException e) {
+		} catch (IOException | OidcDiscoveryException | IllegalArgumentException e) {
 			throw new McpAuthException("Authorization-server discovery/issuer validation failed for " + as, e);
 		}
 	}
@@ -341,29 +351,23 @@ public class McpProtectedResourceMetadataClient {
 				return;
 			throw new McpAuthException("Protected-resource-metadata validation requires an expected resource identifier (RFC 9728 3.3); call expectedResource(...)");
 		}
-		if (!expectedResource.toString().equals(prm.resource().toString()))
+		if (neq(expectedResource.toString(), prm.resource().toString()))
 			throw new McpAuthException("Protected-resource-metadata resource identity mismatch (RFC 9728 3.3): expected '"
 				+ expectedResource + "' but document declared '" + prm.resource() + "'");
+	}
+
+	private OAuthHttpPolicy policy() {
+		return OAuthHttpPolicy.of(allowPrivateUrls, allowInsecureHttp);
 	}
 
 	private void requireSecure(URI uri, String what) {
 		if (uri == null)
 			return;
 		try {
-			RemoteUrlPolicy.requireAllowedUrl(uri.toString(), allowPrivateUrls);
+			policy().requireAllowed(uri);
 		} catch (IllegalArgumentException e) {
 			throw new McpAuthException(what + " is not permitted (was '" + uri + "'): " + e.getMessage(), e);
 		}
-		if (allowInsecureHttp || eqic("https", uri.getScheme()) || (allowPrivateUrls && isLoopback(uri)))
-			return;
-		throw new McpAuthException(what + " must use https (was '" + uri + "'); enable allowInsecureHttp for non-loopback http");
-	}
-
-	private static boolean isLoopback(URI uri) {
-		var host = uri.getHost();
-		if (host == null)
-			return false;
-		return eqic("localhost", host) || eqa(host, "127.0.0.1", "[::1]", "::1");
 	}
 
 	private static final Set<String> STANDARD_FIELDS = Set.of(

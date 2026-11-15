@@ -342,4 +342,32 @@ class ConfigYamlFormat_Test extends TestBase {
 
 		assertJson("{'':{},'foo/bar':{k1:'v1'},foo:{k2:'v2'}}", c.toMap());
 	}
+
+	@Test void z01_valueWithLineBreaksRoundTrips() throws Exception {
+		var s = MemoryStore.create().build();
+		var c = Config.create().store(s).name("Z1.yaml").build();
+		var v = "x\nadmin: true\r\n  z: z\t\"q\" \\";
+		c.set("sec/k", v);
+		c.commit();
+
+		var c2 = Config.create().store(s).name("Z1.yaml").build();
+		assertEquals(v, c2.getString("sec/k"));
+		assertFalse(c2.exists("admin"));
+		assertFalse(c2.exists("sec/admin"));
+	}
+
+	@Test void z02_keyWithLineBreakRejected() throws Exception {
+		var s = MemoryStore.create().build();
+		var c = Config.create().store(s).name("Z2.yaml").build();
+		assertThrows(IllegalArgumentException.class, () -> c.set("sec/a\nb", "v"));
+		assertThrows(IllegalArgumentException.class, () -> c.set("se\nc/k", "v"));
+	}
+
+	@Test void z03_selfReferencingValueFailsCleanly() throws Exception {
+		var s = MemoryStore.create().build();
+		s.update("Z3.cfg", "[S]", "a = ${C:S/a}", "b = ${C:S/c}", "c = ${C:S/b}");
+		var c = Config.create().store(s).name("Z3.cfg").build();
+		assertThrows(RuntimeException.class, () -> c.getString("S/a"));
+		assertThrows(RuntimeException.class, () -> c.getString("S/b"));
+	}
 }

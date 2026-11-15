@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.mcp.spring;
 
+import java.util.*;
+
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.web.servlet.*;
@@ -26,7 +28,8 @@ import org.springframework.context.annotation.*;
  *
  * <p>
  * Run {@link #main(String[]) main} and the MCP endpoint is available at {@code http://localhost:8080/mcp}
- * (default Spring Boot port). Point {@link org.apache.juneau.examples.mcp.ExampleClient ExampleClient} at
+ * (default Spring Boot port). The server listens on the loopback interface only; set the {@code MCP_BIND}
+ * environment variable (e.g. {@code 0.0.0.0}) to listen elsewhere. Point {@link org.apache.juneau.examples.mcp.ExampleClient ExampleClient} at
  * that URL, or drive it with any MCP client. The three {@code @Bean} methods are the entire integration:
  *
  * <ul>
@@ -78,6 +81,9 @@ public class SpringExampleApplication {
 		"resource" // the returned application context intentionally lives for the app's lifetime.
 	})
 	public static void main(String[] args) {
-		SpringApplication.run(SpringExampleApplication.class, args);
+		var app = new SpringApplication(SpringExampleApplication.class);
+		// Binds to the loopback interface by default; set MCP_BIND (e.g. 0.0.0.0) to listen elsewhere.
+		app.setDefaultProperties(Map.of("server.address", "${MCP_BIND:127.0.0.1}"));
+		app.run(args);
 	}
 }

@@ -101,6 +101,7 @@ public interface FileFinder {
 		private final BeanStore beanStore;
 		final Set<LocalDir> roots;
 		long cachingLimit;
+		int maxCachedLocales;
 		Pattern[] include;
 		Pattern[] exclude;
 
@@ -113,6 +114,7 @@ public interface FileFinder {
 			this.beanStore = beanStore;
 			roots = set();
 			cachingLimit = -1;
+			maxCachedLocales = 32;
 			include = a(Pattern.compile(".*"));
 			exclude = a();
 		}
@@ -134,6 +136,23 @@ public interface FileFinder {
 		 */
 		public Builder caching(long cachingLimit) {
 			this.cachingLimit = cachingLimit;
+			return this;
+		}
+
+		/**
+		 * Specifies the maximum number of locales that keep their own name cache.
+		 *
+		 * <p>
+		 * Lookups in locales beyond this limit still resolve, but without a per-locale name cache.
+		 * <br>The default is <c>32</c>.
+		 *
+		 * @param value The maximum number of locales.  Must not be negative.
+		 * @return This object.
+		 */
+		public Builder maxCachedLocales(int value) {
+			if (value < 0)
+				throw iaex("maxCachedLocales must not be negative: {0}", value);
+			this.maxCachedLocales = value;
 			return this;
 		}
 

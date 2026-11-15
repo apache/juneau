@@ -23,6 +23,7 @@ import java.time.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.junit.jupiter.api.*;
+import org.opensaml.security.credential.BasicCredential;
 import org.opensaml.xmlsec.encryption.support.*;
 
 /**
@@ -60,10 +61,10 @@ class SamlAssertionValidator_EncryptedRoundTrip_Test extends TestBase {
 	@Test void a02_encryptedAssertionSignedByWrongKey_rejected() throws Exception {
 		// Decryption succeeds (it is encrypted to the SP's key), but the signer is not the trusted IdP.
 		var idp = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
-		var attacker = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var otherCredential = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
 		var sp = SamlTestKeys.credential();
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "mallory", NOW.minusSeconds(60), NOW.plusSeconds(300));
-		var xml = SamlTestSupport.signEncryptAndBuildResponse(attacker, sp, ISSUER, assertion);
+		var xml = SamlTestSupport.signEncryptAndBuildResponse(otherCredential, sp, ISSUER, assertion);
 		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
@@ -90,5 +91,50 @@ class SamlAssertionValidator_EncryptedRoundTrip_Test extends TestBase {
 			.build();
 		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertEquals("SAML response could not be decrypted", ex.getMessage());
+	}
+
+	private static String plaintextSigned(BasicCredentialHolder h) throws Exception {
+		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NOW.minusSeconds(60), NOW.plusSeconds(300));
+		return SamlTestSupport.signAndBuildResponse(h.idp, ISSUER, assertion);
+	}
+
+	private record BasicCredentialHolder(BasicCredential idp) {}
+
+	@Test void a04_plaintextAssertion_rejectedWhenDecryptionCredentialConfigured() throws Exception {
+		var idp = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var xml = plaintextSigned(new BasicCredentialHolder(idp));
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
+			.spEntityId(AUDIENCE)
+			.expectedIssuer(ISSUER)
+			.signingCredential(idp)
+			.decryptionCredential(SamlTestKeys.credential())
+			.clock(CLOCK)
+			.build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
+		assertEquals("SAML assertion must be encrypted", ex.getMessage());
+	}
+
+	@Test void a05_plaintextAssertion_acceptedWhenEncryptionNotRequired() throws Exception {
+		var idp = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var xml = plaintextSigned(new BasicCredentialHolder(idp));
+		var v = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS).allowIdpInitiated()
+			.spEntityId(AUDIENCE)
+			.expectedIssuer(ISSUER)
+			.signingCredential(idp)
+			.decryptionCredential(SamlTestKeys.credential())
+			.requireEncryptedAssertions(false)
+			.clock(CLOCK)
+			.build();
+		assertEquals("alice", v.validate(xml).getName());
+	}
+
+	@Test void a06_requireEncrypted_withoutDecryptionCredential_failsBuild() throws Exception {
+		var idp = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var b = SamlAssertionValidator.create().recipient(SamlTestSupport.ACS)
+			.spEntityId(AUDIENCE)
+			.expectedIssuer(ISSUER)
+			.signingCredential(idp)
+			.requireEncryptedAssertions(true);
+		assertThrows(IllegalStateException.class, b::build);
 	}
 }

@@ -19,6 +19,7 @@ package org.apache.juneau.bean.atom;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.xml.*;
 import org.junit.jupiter.api.*;
 
 class Content_Test extends TestBase {
@@ -84,5 +85,45 @@ class Content_Test extends TestBase {
 
 		assertEquals("video/mp4", x.getType());
 		assertEquals("http://example.org/movie.mp4", x.getSrc().toString());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Text escaping
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void c01_text_markupCharactersEscaped() throws Exception {
+		var x = new Text("text").setText("a <b> & c");
+		var xml = XmlSerializer.create().sq().build().write(x);
+		assertTrue(xml.contains("a &lt;b&gt; &amp; c"), xml);
+		assertFalse(xml.contains("<b>"), xml);
+		assertEquals("a <b> & c", XmlParser.DEFAULT.read(xml, Text.class).getText());
+	}
+
+	@Test void c02_html_markupCharactersEscaped() throws Exception {
+		var x = new Content("html").setText("<p>Hi &amp; bye</p>");
+		var xml = XmlSerializer.create().sq().build().write(x);
+		assertFalse(xml.contains("<p>"), xml);
+		assertTrue(xml.contains("&lt;p&gt;Hi &amp;amp; bye&lt;/p&gt;"), xml);
+		assertEquals("<p>Hi &amp; bye</p>", XmlParser.DEFAULT.read(xml, Content.class).getText());
+	}
+
+	@Test void c03_defaultType_escaped() throws Exception {
+		var x = new Text().setText("<i>x</i>");
+		var xml = XmlSerializer.create().sq().build().write(x);
+		assertFalse(xml.contains("<i>"), xml);
+		assertEquals("<i>x</i>", XmlParser.DEFAULT.read(xml, Text.class).getText());
+	}
+
+	@Test void c04_xhtml_passesThrough() throws Exception {
+		var x = new Content("xhtml").setText("<div><p>ok</p></div>");
+		var xml = XmlSerializer.create().sq().build().write(x);
+		assertTrue(xml.contains("<div><p>ok</p></div>"), xml);
+		assertEquals("<div><p>ok</p></div>", XmlParser.DEFAULT.read(xml, Content.class).getText());
+	}
+
+	@Test void c05_plainText_roundTrips() throws Exception {
+		var x = new Text("text").setText("plain");
+		var xml = XmlSerializer.create().sq().build().write(x);
+		assertEquals("plain", XmlParser.DEFAULT.read(xml, Text.class).getText());
 	}
 }

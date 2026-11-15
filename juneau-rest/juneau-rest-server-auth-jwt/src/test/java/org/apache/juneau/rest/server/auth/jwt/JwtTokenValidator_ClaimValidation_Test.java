@@ -178,4 +178,51 @@ class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 		var principal = validator.validate(token);
 		assertEquals("alice", principal.getName());
 	}
+
+	// ---- token type ----------------------------------------------------------------------------
+
+	private static String signWithTyp(com.nimbusds.jose.jwk.RSAKey rsa, String typ, com.nimbusds.jwt.JWTClaimsSet claims) throws Exception {
+		var hb = new com.nimbusds.jose.JWSHeader.Builder(com.nimbusds.jose.JWSAlgorithm.RS256).keyID(rsa.getKeyID());
+		if (typ != null)
+			hb.type(new com.nimbusds.jose.JOSEObjectType(typ));
+		var jwt = new com.nimbusds.jwt.SignedJWT(hb.build(), claims);
+		jwt.sign(new com.nimbusds.jose.crypto.RSASSASigner(rsa));
+		return jwt.serialize();
+	}
+
+	@Test void c01_idTokenShapes_rejectedByDefault() throws Exception {
+		var rsa = generateRsa("kid-1");
+		var validator = newValidator(fixed(rsa));
+		var withNonce = defaultClaims(CLOCK).claim("nonce", "n").build();
+		assertThrows(AuthenticationException.class, () -> validator.validate(signRsa(rsa, withNonce)));
+		var withAtHash = defaultClaims(CLOCK).claim("at_hash", "h").build();
+		assertThrows(AuthenticationException.class, () -> validator.validate(signRsa(rsa, withAtHash)));
+		var tokenUse = defaultClaims(CLOCK).claim("token_use", "id").build();
+		assertThrows(AuthenticationException.class, () -> validator.validate(signRsa(rsa, tokenUse)));
+		assertThrows(AuthenticationException.class, () -> validator.validate(signWithTyp(rsa, "id_token", defaultClaims(CLOCK).build())));
+	}
+
+	@Test void c02_accessTokenShapes_acceptedByDefault() throws Exception {
+		var rsa = generateRsa("kid-1");
+		var validator = newValidator(fixed(rsa));
+		assertDoesNotThrow(() -> validator.validate(signRsa(rsa, defaultClaims(CLOCK).build())));
+		assertDoesNotThrow(() -> validator.validate(signWithTyp(rsa, "JWT", defaultClaims(CLOCK).build())));
+		assertDoesNotThrow(() -> validator.validate(signWithTyp(rsa, "at+jwt", defaultClaims(CLOCK).build())));
+		assertDoesNotThrow(() -> validator.validate(signRsa(rsa, defaultClaims(CLOCK).claim("token_use", "access").build())));
+	}
+
+	@Test void c03_requireAccessTokenType_strict() throws Exception {
+		var rsa = generateRsa("kid-1");
+		var validator = JwtTokenValidator.create()
+			.issuer(DEFAULT_ISSUER)
+			.audience(DEFAULT_AUDIENCE)
+			.jwkSource(fixed(rsa))
+			.clock(CLOCK)
+			.requireAccessTokenType(true)
+			.build();
+		assertThrows(AuthenticationException.class, () -> validator.validate(signRsa(rsa, defaultClaims(CLOCK).build())));
+		assertThrows(AuthenticationException.class, () -> validator.validate(signWithTyp(rsa, "JWT", defaultClaims(CLOCK).build())));
+		assertDoesNotThrow(() -> validator.validate(signWithTyp(rsa, "at+jwt", defaultClaims(CLOCK).build())));
+		assertDoesNotThrow(() -> validator.validate(signWithTyp(rsa, "application/at+jwt", defaultClaims(CLOCK).build())));
+	}
 }

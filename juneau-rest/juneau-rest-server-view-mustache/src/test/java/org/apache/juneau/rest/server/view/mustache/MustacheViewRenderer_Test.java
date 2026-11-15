@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.view.mustache;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.response.InternalServerError;
 import org.junit.jupiter.api.*;
 
 /**
@@ -29,6 +30,11 @@ class MustacheViewRenderer_Test extends TestBase {
 	/* ---------------------------------------------------------------------------------------- *
 	 * Section A: NO_ENGINE_DIAGNOSTIC text
 	 * ---------------------------------------------------------------------------------------- */
+
+	@Test void b00_extensionGate() {
+		assertDoesNotThrow(() -> MustacheViewRenderer.requireAllowedExtension("a.mustache", ".mustache"));
+		assertThrows(InternalServerError.class, () -> MustacheViewRenderer.requireAllowedExtension("a.properties", ".mustache"));
+	}
 
 	@Test void a01_diagnosticNamesMustacheJavaCompiler() {
 		assertTrue(MustacheViewRenderer.NO_ENGINE_DIAGNOSTIC.contains("com.github.spullara.mustache.java:compiler"),

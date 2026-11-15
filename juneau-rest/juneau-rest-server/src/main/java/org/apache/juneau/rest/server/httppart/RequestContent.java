@@ -25,7 +25,6 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.io.*;
@@ -611,7 +610,7 @@ public class RequestContent {
 		var mt = getMediaType();
 
 		if ((isEmpty(s(mt)) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
-			return BasicConverter.INSTANCE.to(asString(), cm.inner());
+			return cm.basicConverter().to(asString(), cm.inner());
 
 		throw unsupportedMediaType(null);
 	}
@@ -623,7 +622,7 @@ public class RequestContent {
 	// reported as 415 rather than as a 500.  Without a Content-Type the failure propagates as before.
 	private <T> T convertUnparsed(Object in, ClassMeta<T> cm) throws UnsupportedMediaType {
 		try {
-			return BasicConverter.INSTANCE.to(in, cm.inner());
+			return cm.basicConverter().to(in, cm.inner());
 		} catch (RuntimeException e) {
 			if (isEmpty(s(req.getHeader(ContentType.class).flatMap(ContentType::asMediaType).orElse(null))))
 				throw e;

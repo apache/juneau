@@ -18,7 +18,6 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 /**
@@ -85,6 +84,13 @@ import java.util.function.*;
  * — so {@code "int[]"} resolves to {@code int[].class} and {@code "java.lang.String[][]"} resolves to
  * {@code String[][].class}.
  *
+ * <h2 class='topic'>Class-name guard</h2>
+ *
+ * <p>
+ * Parsed names are resolved without running static initializers.  To restrict which types may be resolved at all, set
+ * {@link MarshallingContext.Builder#classNameGuard(Predicate)} on the serializer or parser; the parse path then vets
+ * every candidate name with that guard through {@link #parse(String, ClassFormat, ClassLoader, Predicate)}.
+ *
  * <h2 class='topic'>Binary serializers</h2>
  *
  * <p>
@@ -145,45 +151,6 @@ public enum ClassFormat {
 	 * to a unique {@link Class} without a registry hint, and adding such a hint is out of scope.
 	 */
 	SIMPLE_NAME;
-
-	// Optional global guard vetting class names before the parser path resolves them.  null == allow all.
-	private static final AtomicReference<Predicate<String>> classNameGuard = new AtomicReference<>();
-
-	/**
-	 * Installs a global guard that vets class names before the parser path resolves them to a {@link Class}.
-	 *
-	 * <p>
-	 * The guard is consulted for every candidate name (including the nested-type <c>$</c>-rewritten forms)
-	 * before it is passed to {@link Class#forName(String, boolean, ClassLoader)}.  Names the guard rejects are
-	 * treated as unresolvable.  This lets a deployment restrict which types may be materialized from parsed
-	 * input to an explicit allow-list.
-	 *
-	 * <p>
-	 * No guard is installed by default.  Deployments that parse input from untrusted sources and materialize
-	 * {@link Class} values from it should install one that permits only the expected types.  Classes are
-	 * resolved without running their static initializers either way, but an allow-list additionally bounds
-	 * which classes the input may load or name.
-	 *
-	 * @param value The guard predicate returning <jk>true</jk> for permitted class names, or <jk>null</jk> to
-	 * 	allow all names (the default).
-	 */
-	@SuppressWarnings({
-		"java:S3066" // Public setter is the documented deployment-configuration entry point (see Javadoc above); it is also exercised directly from ClassFormat_Test in another package, so visibility cannot be narrowed without breaking that call site.
-	})
-	public static void setClassNameGuard(Predicate<String> value) {
-		classNameGuard.set(value);
-	}
-
-	/**
-	 * Returns whether the specified candidate class name is permitted by the installed guard.
-	 *
-	 * @param name The candidate class name.
-	 * @return <jk>true</jk> if no guard is installed or the guard permits the name.
-	 */
-	static boolean isClassNameAllowed(String name) {
-		var g = classNameGuard.get();
-		return g == null || g.test(name);
-	}
 
 	/**
 	 * Formats the specified {@link Class} using this format.
@@ -252,6 +219,32 @@ public enum ClassFormat {
 	 * @throws UnsupportedOperationException If {@code format} is {@link #SIMPLE_NAME}.
 	 */
 	public static Class<?> parse(String value, ClassFormat format, ClassLoader classLoader) {
+		return parse(value, format, classLoader, null);
+	}
+
+	/**
+	 * Parses the specified wire value into a {@link Class}, vetting each candidate name with a guard.
+	 *
+	 * <p>
+	 * Same as {@link #parse(String, ClassFormat, ClassLoader)}, except that every candidate class name (including the
+	 * nested-type <c>$</c>-rewritten forms) is passed to {@code classNameGuard} before it is given to
+	 * {@link Class#forName(String, boolean, ClassLoader)}.  Names the guard rejects are treated as unresolvable.
+	 * Primitive names such as {@code "int"} are not vetted.
+	 *
+	 * <p>
+	 * Serializers and parsers pass the guard set with {@link MarshallingContext.Builder#classNameGuard(Predicate)}.
+	 *
+	 * @param value The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).
+	 * @param format The configured format hint. Can be <jk>null</jk> (treated as {@link #FQCN}).
+	 * @param classLoader The class loader. Can be <jk>null</jk> (uses
+	 *   {@link Thread#getContextClassLoader() context class loader}).
+	 * @param classNameGuard The guard returning <jk>true</jk> for permitted class names.
+	 * 	<br>Can be <jk>null</jk> (all names allowed).
+	 * @return The parsed {@link Class}, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
+	 * @throws IllegalArgumentException If the value cannot be resolved or the guard rejects it.
+	 * @throws UnsupportedOperationException If {@code format} is {@link #SIMPLE_NAME}.
+	 */
+	public static Class<?> parse(String value, ClassFormat format, ClassLoader classLoader, Predicate<String> classNameGuard) {
 		if (value == null)
 			return null;
 		var s = value.trim();
@@ -262,7 +255,7 @@ public enum ClassFormat {
 			throw new UnsupportedOperationException("SIMPLE_NAME is serialize-only — use FQCN or BINARY_NAME for round-trippable wires");
 		var cl = classLoader != null ? classLoader : Thread.currentThread().getContextClassLoader();
 		try {
-			return resolveWithArraySuffix(s, cl);
+			return resolveWithArraySuffix(s, cl, classNameGuard);
 		} catch (ClassNotFoundException firstAttempt) {
 			throw iaex("Could not resolve class '%s' for format %s: %s", value, format, firstAttempt.getMessage());
 		}
@@ -274,9 +267,9 @@ public enum ClassFormat {
 	 *
 	 * <p>
 	 * Inputs that don't end in {@code []} (top-level classes and JVM-descriptor array forms like
-	 * {@code "[I"}) pass straight through to {@link #resolveLeaf(String, ClassLoader)}.
+	 * {@code "[I"}) pass straight through to {@link #resolveLeaf(String, ClassLoader, Predicate)}.
 	 */
-	private static Class<?> resolveWithArraySuffix(String s, ClassLoader cl) throws ClassNotFoundException {
+	private static Class<?> resolveWithArraySuffix(String s, ClassLoader cl, Predicate<String> guard) throws ClassNotFoundException {
 		var dims = 0;
 		var leaf = s;
 		while (leaf.endsWith("[]")) {
@@ -284,10 +277,10 @@ public enum ClassFormat {
 			leaf = leaf.substring(0, leaf.length() - 2);
 		}
 		if (dims == 0)
-			return resolveLeaf(s, cl);
+			return resolveLeaf(s, cl, guard);
 		if (leaf.isEmpty())
 			throw new ClassNotFoundException(s);
-		var result = resolveLeaf(leaf, cl);
+		var result = resolveLeaf(leaf, cl, guard);
 		for (var i = 0; i < dims; i++)
 			result = result.arrayType();
 		return result;
@@ -301,17 +294,17 @@ public enum ClassFormat {
 	 * etc. for primitive array leafs), then falls through to {@link Class#forName(String, boolean,
 	 * ClassLoader)} with a multi-level nested-type fallback heuristic.
 	 */
-	private static Class<?> resolveLeaf(String s, ClassLoader cl) throws ClassNotFoundException {
+	private static Class<?> resolveLeaf(String s, ClassLoader cl, Predicate<String> guard) throws ClassNotFoundException {
 		var prim = primitiveByName(s);
 		if (prim != null)
 			return prim;
-		if (! isClassNameAllowed(s))
+		if (! isAllowed(guard, s))
 			throw new ClassNotFoundException(s);
 		try {
 			// Resolve without initializing — a parsed name must never trigger a target type's static initializer.
 			return Class.forName(s, false, cl);
 		} catch (ClassNotFoundException firstAttempt) {
-			var nested = nestedTypeFallback(s, cl);
+			var nested = nestedTypeFallback(s, cl, guard);
 			if (nested != null)
 				return nested;
 			throw firstAttempt;
@@ -328,13 +321,13 @@ public enum ClassFormat {
 	 * Returns <jk>null</jk> if no rewrite resolves to a loadable class.  Dots whose trailing segment
 	 * starts with a lowercase letter are treated as package boundaries and left alone.
 	 */
-	private static Class<?> nestedTypeFallback(String s, ClassLoader cl) {
+	private static Class<?> nestedTypeFallback(String s, ClassLoader cl, Predicate<String> guard) {
 		var chars = s.toCharArray();
 		for (var i = chars.length - 1; i > 0; i--) {
 			if (chars[i] == '.' && i + 1 < chars.length && Character.isUpperCase(chars[i + 1])) {
 				chars[i] = '$';
 				var candidate = new String(chars);
-				if (! isClassNameAllowed(candidate))
+				if (! isAllowed(guard, candidate))
 					continue;
 				try {
 					return Class.forName(candidate, false, cl);
@@ -344,6 +337,10 @@ public enum ClassFormat {
 			}
 		}
 		return null;
+	}
+
+	private static boolean isAllowed(Predicate<String> guard, String name) {
+		return guard == null || guard.test(name);
 	}
 
 	private static Class<?> primitiveByName(String s) {

@@ -48,7 +48,7 @@ public final class CardSpec implements Handled<CardSpec> {
 	private String src;
 	private String template;
 	private boolean bare;
-	private boolean sanitize;
+	private Boolean sanitize;
 	private String cssClass;
 	private final Map<String,Object> body = new LinkedHashMap<>();
 	private final List<Map<String,Object>> publishes = new ArrayList<>();
@@ -110,18 +110,18 @@ public final class CardSpec implements Handled<CardSpec> {
 	/** @return Whether this card declares any {@code subscribes} entries. */
 	boolean hasSubscribes() { return ! subscribes.isEmpty(); }
 
-	/** @param v Whether an html card's fetched {@code src} fragment is rebuilt through the views attribute-allowlist sanitizer instead of being inserted as-is. @return This object. */
+	/** @param v Whether an html card's fetched {@code src} fragment is rebuilt through the views attribute-allowlist sanitizer (the default when never set) or inserted as-is ({@code false}). @return This object. */
 	public CardSpec sanitize(boolean v) { sanitize = v; return this; }
 
-	/** @return Whether this card asks for its {@code src} fragment to be sanitized. */
-	boolean sanitize() { return sanitize; }
+	/** @return Whether this card states a sanitize choice, either way. */
+	boolean sanitizeStated() { return nn(sanitize); }
 
 	/** @param v Space-separated CSS class names stamped on the card wrapper element. @return This object. */
 	public CardSpec cssClass(String v) { cssClass = v; return this; }
 
 	/** @param key A type-specific field. @param value Its value. @return This object. */
 	public CardSpec body(String key, Object value) {
-		if ("publishes".equals(key) || "subscribes".equals(key) || "model".equals(key))
+		if (eq("publishes", key) || eq("subscribes", key) || eq("model", key))
 			throw iaex("card '%s': '%s' is a base key; use %s(...)", id, key, key);
 		body.put(key, value);
 		return this;
@@ -233,10 +233,10 @@ public final class CardSpec implements Handled<CardSpec> {
 		if (nn(src)) m.put("src", src);
 		if (nn(template)) m.put("template", template);
 		if (bare) m.put("bare", true);
-		if (sanitize) {
+		if (nn(sanitize)) {
 			if (neq(type, "html") || ! nn(src))
 				throw iaex("card '%s': sanitize applies only to an html card with src.", id);
-			m.put("sanitize", true);
+			m.put("sanitize", sanitize);
 		}
 		if (nn(cssClass)) m.put("class", cssClass);
 		if (! visibleWhen.isEmpty()) m.put("visibleWhen", visibleWhen.stream().map(VisibilityRule::toMap).toList());

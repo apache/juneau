@@ -53,12 +53,12 @@ class CardSpec_Test extends TestBase {
 		assertBean(c, "type,id", "datatables,releases");
 	}
 
-	@Test void a04_sanitizeOnlyWhenTrue() {
+	@Test void a04_sanitizeOnlyWhenStated() {
 		var c = CardSpec.html("frag").src("/rest/frag").sanitize(true);
 		assertEquals("{id=frag, type=html, src=/rest/frag, sanitize=true}", c.toMap().toString());
 		assertEquals("{id=frag, type=html, src=/rest/frag, sanitize=true}", c.copy().toMap().toString());
 		assertFalse(CardSpec.html("frag").src("/rest/frag").toMap().containsKey("sanitize"));
-		assertFalse(CardSpec.html("frag").src("/rest/frag").sanitize(true).sanitize(false).toMap().containsKey("sanitize"));
+		assertEquals("{id=frag, type=html, src=/rest/frag, sanitize=false}", CardSpec.html("frag").src("/rest/frag").sanitize(true).sanitize(false).toMap().toString());
 	}
 
 	@Test void a05_sanitizeNeedsAnHtmlCardWithSrc() {

@@ -50,6 +50,40 @@ import org.apache.juneau.marshall.swap.spi.*;
 public @interface MarshalledConfig {
 
 	/**
+	 * Class-name allow-list.
+	 *
+	 * <p>
+	 * A comma-separated list of class-name entries.  When non-empty, only class names matching at least one entry are
+	 * resolved when converting <c>String</c> values to {@link Class} objects; other names are treated as unresolvable.
+	 *
+	 * <p>
+	 * An entry matches as follows:
+	 * <ul class='spaced-list'>
+	 * 	<li>An entry ending in <js>"."</js> or <js>"$"</js> is a prefix:  it matches every name that starts with the entry.
+	 * 	<li>Any other entry matches that exact name, and every name inside it as a package (the entry followed by <js>"."</js>).
+	 * </ul>
+	 * Blank entries are ignored.  Whitespace around entries is trimmed.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>""</js> (default) - No guard is set; any loadable class name is accepted.
+	 * 	<li><js>"com.example.model."</js> - Everything under <c>com.example.model</c>.
+	 * 	<li><js>"com.example.model.Person,java.util.Date"</js> - Exactly those two classes.
+	 * </ul>
+	 *
+	 * <h4 class='section'>Notes:</h4><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h4 class='section'>See Also:</h4><ul>
+	 * 	<li class='jm'>{@link MarshallingContext.Builder#classNameGuard(java.util.function.Predicate)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String classNameAllow() default "";
+
+	/**
 	 * Debug mode.
 	 *
 	 * <p>

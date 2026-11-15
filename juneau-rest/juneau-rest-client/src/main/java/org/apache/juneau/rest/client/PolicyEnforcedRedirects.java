@@ -24,11 +24,11 @@ import java.net.*;
 import org.apache.juneau.http.remote.*;
 
 /**
- * Shared Juneau-controlled redirect loop for SSRF-guard-active ({@link TransportRequest#isSsrfGuardActive()})
+ * Shared Juneau-controlled redirect loop for outbound-URL-guard-active ({@link TransportRequest#isSsrfGuardActive()})
  * {@code @Remote} requests.
  *
  * <p>
- * Every first-party transport that supports the SSRF guardrail's connect-time contract (see
+ * Every first-party transport that supports the outbound-URL guardrail's connect-time contract (see
  * {@link HttpTransport#supportsUrlPolicy()}) disables its own automatic redirect-following for policy-covered
  * requests and instead routes each hop through {@link #execute(TransportRequest, HopExecutor)}, which re-runs the
  * {@link RemoteUrlPolicy} pre-check &mdash; and, via the supplied {@link HopExecutor}, pin-on-connect &mdash; on
@@ -181,7 +181,8 @@ public final class PolicyEnforcedRedirects {
 			var stripCredentials = RedirectSecurity.shouldStripCredentials(initial.getUri(), target)
 				|| (left && ! safeMethod(rewriteToGet ? "GET" : current.getMethod()));
 			for (var h : initial.getHeaders())
-				if (! (stripCredentials && RedirectSecurity.mustStrip(h.name(), initial.getRedirectForwardHeaders())))
+				// A Host header names the first origin, so it is never replayed against another one.
+				if (! (stripCredentials && (RedirectSecurity.mustStrip(h.name(), initial.getRedirectForwardHeaders()) || eqic("host", h.name()))))
 					builder.header(h.name(), h.value());
 			if (! rewriteToGet) {
 				var body = current.getBody();

@@ -20,6 +20,8 @@ import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.firstNonWhitespaceChar;
+import static org.apache.juneau.commons.utils.StringUtils.lastNonWhitespaceChar;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import java.io.*;
@@ -99,7 +101,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 			for (var i = 0; i < lines.size(); i++) {
 				var l = lines.get(i);
-				var c = StringUtils.firstNonWhitespaceChar(l);
+				var c = firstNonWhitespaceChar(l);
 				if (state == S1) {
 					if (c == '[') {
 						var i1 = l.indexOf('[');
@@ -184,7 +186,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 		@Override
 		public boolean equals(Object o) {
-			return o instanceof Import ir && ir.getConfigName().equals(getConfigName()); // HTT - Import.equals() only called via imports.contains() in findDiffs, which requires active import listeners
+			return o instanceof Import ir && eq(ir.getConfigName(), getConfigName()); // HTT - Import.equals() only called via imports.contains() in findDiffs, which requires active import listeners
 		}
 
 		@Override
@@ -282,7 +284,7 @@ public class ConfigMap implements ConfigStoreListener {
 			return false;
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
-			if (c == '/' || c == '\\' || c == '[' || c == ']' || c == '=' || c == '#')
+			if (c == '/' || c == '\\' || c == '[' || c == ']' || c == '=' || c == '#' || Character.isISOControl(c))
 				return false;
 		}
 		return true;
@@ -298,7 +300,7 @@ public class ConfigMap implements ConfigStoreListener {
 			return false;
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
-			if (c == '\\' || c == '[' || c == ']')
+			if (c == '\\' || c == '[' || c == ']' || Character.isISOControl(c))
 				return false;
 		}
 		return true;
@@ -617,7 +619,7 @@ public class ConfigMap implements ConfigStoreListener {
 		checkSectionName(section);
 		try (var x = lock.write()) {
 			var st = state;
-			st.imports().stream().filter(y -> y.getConfigName().equals(importName)).findFirst().ifPresent(y -> {
+			st.imports().stream().filter(y -> eq(y.getConfigName(), importName)).findFirst().ifPresent(y -> {
 				y.unregisterAll();
 				var newImports = new ArrayList<>(st.imports());
 				newImports.remove(y);
@@ -714,7 +716,7 @@ public class ConfigMap implements ConfigStoreListener {
 			throw iaex("Invalid import config name: '%s'", importName);
 		try (var x = lock.write()) {
 			var st = state;
-			if (st.imports().stream().noneMatch(y -> y.getConfigName().equals(importName))) {
+			if (st.imports().stream().noneMatch(y -> eq(y.getConfigName(), importName))) {
 				var newImports = new ArrayList<>(st.imports());
 				newImports.add(new Import(store.getMap(importName, format)).register(listeners));
 				state = st.withImports(u(newImports));
@@ -936,7 +938,7 @@ public class ConfigMap implements ConfigStoreListener {
 			while (scanner.hasNextLine()) {
 				var line = scanner.nextLine();
 				var c = firstChar(line);
-				var c2 = StringUtils.lastNonWhitespaceChar(line);
+				var c2 = lastNonWhitespaceChar(line);
 				if (c == '[') {
 					var l = line.trim();
 					if (c2 != ']' || ! isValidNewSectionName(l.substring(1, l.length() - 1)))

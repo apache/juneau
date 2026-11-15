@@ -45,6 +45,7 @@ import org.eclipse.jetty.ee11.servlet.*;
 import org.eclipse.jetty.server.*;
 
 import jakarta.servlet.*;
+import jakarta.servlet.Filter;
 
 /**
  * Drives the Jetty server lifecycle on behalf of the microservice via the {@link MicroserviceListener} fan-out.
@@ -135,6 +136,61 @@ public class JettyServerComponent implements MicroserviceListener {
 				Files.setPosixFilePermissions(p, PosixFilePermissions.fromString("rwx------"));
 		} catch (IOException | InvalidPathException e) {
 			logger.warning("Could not create log directory '" + dir + "': " + e);
+		}
+	}
+
+	/**
+	 * Locates the <c>jetty.xml</c> contents.
+	 *
+	 * <p>
+	 * The classpath is searched first.  The file system (working directory, then <c>files</c>) is searched only when the
+	 * location was named explicitly through <c>Jetty/config</c> or the <c>Jetty-Config</c> manifest entry; an unnamed lookup
+	 * never reads a file from the working directory.  A file found on the file system that other users can write to is
+	 * reported as a warning.
+	 *
+	 * @param name The file name or path.
+	 * @param explicit <jk>true</jk> if the name was supplied by configuration rather than defaulted.
+	 * @param logger The logger to report warnings to.
+	 * @return The file contents, or <jk>null</jk> if not found.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	static String loadJettyXml(String name, boolean explicit, Logger logger) throws IOException {
+		var cl = Thread.currentThread().getContextClassLoader();
+		if (cl == null)
+			cl = ClassLoader.getSystemClassLoader();
+		try (var is = cl.getResourceAsStream(name)) {
+			if (nn(is))
+				return read(is);
+		}
+		if (! explicit)
+			return null;
+		var f = new File(name);
+		if (! f.isAbsolute()) {
+			f = null;
+			for (var dir : new String[] {".", "files"}) {
+				var c = new File(dir, name);
+				if (c.isFile() && c.canRead()) {
+					f = c;
+					break;
+				}
+			}
+		}
+		if (f == null || ! f.isFile() || ! f.canRead())
+			return null;
+		warnIfWritableByOthers(f, logger);
+		return read(f);
+	}
+
+	private static void warnIfWritableByOthers(File f, Logger logger) {
+		try {
+			var p = f.toPath();
+			if (! p.getFileSystem().supportedFileAttributeViews().contains("posix"))
+				return;
+			var perms = Files.getPosixFilePermissions(p);
+			if (perms.contains(PosixFilePermission.OTHERS_WRITE) || perms.contains(PosixFilePermission.GROUP_WRITE))
+				logger.warning("Server configuration file '" + f + "' is writable by users other than its owner.");
+		} catch (IOException | UnsupportedOperationException e) {
+			// Permissions could not be read; nothing to report.
 		}
 	}
 
@@ -253,19 +309,21 @@ public class JettyServerComponent implements MicroserviceListener {
 			} else {
 				var factory = store.getBean(JettyServerFactory.class).orElseGet(BasicJettyServerFactory::new);
 				var jettyXml = settings.getJettyXml();
-				var jettyConfig = cf.get("Jetty/config").orElseGet(() -> mf.get("Jetty-Config").orElse("jetty.xml"));
+				var explicitConfig = cf.get("Jetty/config").asString().or(() -> mf.get("Jetty-Config")).orElse(null);
+				var jettyConfig = explicitConfig == null ? "jetty.xml" : explicitConfig;
 				var resolveVars = coalesce(settings.getJettyXmlResolveVars(), cf.get("Jetty/resolveVars").asBoolean().orElse(false));
 				boolean resolveVars2 = isTrue(resolveVars);
 
 				if (jettyXml == null)
-					jettyXml = loadSystemResourceAsString(jettyConfig, ".", "files");
+					jettyXml = loadJettyXml(jettyConfig, explicitConfig != null, ms.getLogger());
 				if (jettyXml == null)
-					throw rex("jetty.xml file '%s' was not found on the file system or classpath.", jettyConfig);
+					throw rex("jetty.xml file '%s' was not found on the classpath%s.", jettyConfig, explicitConfig == null ? "" : " or file system");
+
+				// Log the text before variable resolution so resolved values never reach the log.
+				ms.getLogger().config(jettyXml);
 
 				if (resolveVars2)
 					jettyXml = vr.resolve(jettyXml);
-
-				ms.getLogger().config(jettyXml);
 
 				createLogDir(cf.get("Logging/logDir").orElse("logs"), ms.getLogger());
 
@@ -459,7 +517,7 @@ public class JettyServerComponent implements MicroserviceListener {
 	 * @param urlPattern The URL pattern the filter applies to (e.g. {@code "/*"}, {@code "/api/*"}).
 	 * @return This object.
 	 */
-	public JettyServerComponent addFilter(jakarta.servlet.Filter filter, String urlPattern) {
+	public JettyServerComponent addFilter(Filter filter, String urlPattern) {
 		return addFilter(filter, new String[]{urlPattern});
 	}
 
@@ -470,7 +528,7 @@ public class JettyServerComponent implements MicroserviceListener {
 	 * @param urlPatterns The URL patterns the filter applies to.
 	 * @return This object.
 	 */
-	public JettyServerComponent addFilter(jakarta.servlet.Filter filter, String... urlPatterns) {
+	public JettyServerComponent addFilter(Filter filter, String... urlPatterns) {
 		var fh = new FilterHolder(filter);
 		for (var urlPattern : urlPatterns)
 			getServletContextHandler().addFilter(fh, urlPattern, EnumSet.of(DispatcherType.REQUEST));
@@ -527,7 +585,7 @@ public class JettyServerComponent implements MicroserviceListener {
 	 * @throws IllegalArgumentException If an argument is invalid.
 	 * @throws IllegalStateException If the server has already started.
 	 */
-	public JettyServerComponent addFilter(jakarta.servlet.Filter filter, Set<DispatcherType> dispatcherTypes, String... urlPatterns) {
+	public JettyServerComponent addFilter(Filter filter, Set<DispatcherType> dispatcherTypes, String... urlPatterns) {
 		if (dispatcherTypes == null)
 			throw iaex("dispatcherTypes must not be null.");
 		return addFilter(ServletFilterRegistration.create(filter).urlPatterns(urlPatterns).dispatcherTypes(dispatcherTypes.toArray(DispatcherType[]::new)).build());

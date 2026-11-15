@@ -104,6 +104,7 @@ public class McpStepUpAuthorizer {
 		boolean attemptStepUp = true;
 		int maxScopes = DEFAULT_MAX_SCOPES;
 		Set<String> allowedScopes;
+		boolean allowAnyScope;
 		final Set<String> previouslyRequestedScopes = st();
 
 		/** Constructor. */
@@ -183,8 +184,9 @@ public class McpStepUpAuthorizer {
 		 *
 		 * <p>
 		 * When set, a challenge naming any scope outside this set (and outside the previously-requested scopes) aborts
-		 * the step-up with an {@link McpAuthException} instead of re-authorizing.  When unset, only the
-		 * {@link #maxScopes(int) scope-count cap} applies.
+		 * the step-up with an {@link McpAuthException} instead of re-authorizing.  When unset, the allow-list defaults to
+		 * the scopes passed to {@link #previouslyRequestedScopes(String...)}; call {@link #allowAnyScope()} to accept
+		 * any scope the server names (subject to the {@link #maxScopes(int) scope-count cap}).
 		 *
 		 * @param values The permitted scopes.  Must not be <jk>null</jk>.
 		 * @return This object.
@@ -195,6 +197,20 @@ public class McpStepUpAuthorizer {
 			for (var v : values)
 				set.add(reqnb("scope", v));
 			allowedScopes = set;
+			return this;
+		}
+
+		/**
+		 * Accepts any scope a server challenge names, bounded only by the {@link #maxScopes(int) scope-count cap}.
+		 *
+		 * <p>
+		 * Without this and without {@link #allowedScopes(String...)}, a step-up may only re-request scopes the client
+		 * already holds.
+		 *
+		 * @return This object.
+		 */
+		public Builder allowAnyScope() {
+			allowAnyScope = true;
 			return this;
 		}
 
@@ -241,6 +257,8 @@ public class McpStepUpAuthorizer {
 				accumulator = new McpScopeAccumulator();
 			if (! previouslyRequestedScopes.isEmpty())
 				accumulator.seed(resource, issuer, previouslyRequestedScopes);
+			if (allowedScopes == null && ! allowAnyScope)
+				allowedScopes = new LinkedHashSet<>(previouslyRequestedScopes);
 			return new McpStepUpAuthorizer(this);
 		}
 	}

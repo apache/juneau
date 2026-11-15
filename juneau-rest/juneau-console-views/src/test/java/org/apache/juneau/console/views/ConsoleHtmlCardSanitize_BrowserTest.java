@@ -26,17 +26,17 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * An {@code html} card with {@code src} and {@code sanitize:true} paints the fetched fragment through the views
+ * An {@code html} card with {@code src} (and {@code sanitize} absent or {@code true}) paints the fetched fragment through the views
  * attribute-allowlist sanitizer: script, {@code on*} handlers, unsafe URLs and other unlisted attributes are dropped
- * while benign markup survives.  Without the flag the fragment is inserted as served.
+ * while benign markup survives.  With {@code sanitize:false} the fragment is inserted as served.
  */
 @EnabledIfSystemProperty(named=ConsoleBrowserFixture.GATE, matches="true",
 	disabledReason="JS-execution harness is opt-in; run with `mvn -Pjs-tests -f juneau-rest/juneau-console-views/pom.xml test`")
 class ConsoleHtmlCardSanitize_BrowserTest extends TestBase {
 
-	private static final String HOSTILE = """
+	private static final String UNSAFE_HTML = """
 		<script>window.__fired = 1;</script>\
-		<img src="x" alt="pic" onerror="window.__fired = 1" onclick="window.__fired = 1" style="width:1px" class="c" id="evil">\
+		<img src="x" alt="pic" onerror="window.__fired = 1" onclick="window.__fired = 1" style="width:1px" class="c" id="other">\
 		<a href="javascript:window.__fired=1" onclick="window.__fired = 1">js-link</a>\
 		<a href="data:text/html,x">data-link</a>\
 		<a href="/ok" target="_blank" onmouseover="window.__fired = 1" title="t">ok-link</a>\
@@ -76,16 +76,26 @@ class ConsoleHtmlCardSanitize_BrowserTest extends TestBase {
 		</script>
 		""";
 
+	// Answers the fragment fetch as a response that was redirected to another origin.
+	private static final String REDIRECTED_FETCH = """
+		<script>
+		window.fetch = function () {
+			return Promise.resolve({ redirected: true, url: 'http://other.test/moved', ok: true, status: 200, text: function () { return Promise.resolve('<b>moved</b>'); } });
+		};
+		</script>
+		""";
+
 	private static Map<String,Map<String,Object>> report;
 	private static Map<String,Map<String,Object>> benignReport;
 	private static Map<String,Map<String,Object>> lateReport;
 	private static Map<String,Map<String,Object>> strayReport;
+	private static Map<String,Map<String,Object>> redirectReport;
 
 	@BeforeAll
 	static void load() throws Exception {
 		var views = viewsPack();
 		report = ConsoleBrowserFixture.create("html-sanitize")
-			.asset("/frag", HOSTILE, "text/html")
+			.asset("/frag", UNSAFE_HTML, "text/html")
 			.page("on", ORIGIN + "/on", contractPage(CONTRACT_TRUE, "", PROBE, views)).waitFor("#h b")
 			.page("absent", ORIGIN + "/absent", contractPage(CONTRACT_ABSENT, "", PROBE, views)).waitFor("#h b")
 			.page("false", ORIGIN + "/false", contractPage(CONTRACT_FALSE, "", PROBE, views)).waitFor("#h b")
@@ -108,6 +118,10 @@ class ConsoleHtmlCardSanitize_BrowserTest extends TestBase {
 		strayReport = ConsoleBrowserFixture.create("html-sanitize-stray")
 			.asset("/frag", STRAY, "text/html")
 			.page("on", ORIGIN + "/on", contractPage(CONTRACT_TRUE, "", PROBE, views)).waitFor("#h p")
+			.run();
+		redirectReport = ConsoleBrowserFixture.create("html-sanitize-redirect")
+			.asset("/frag", BENIGN, "text/html")
+			.page("on", ORIGIN + "/on", contractPage(CONTRACT_FALSE, "", PROBE + REDIRECTED_FETCH, views)).waitFor(".jc-console-error-item")
 			.run();
 	}
 
@@ -135,22 +149,30 @@ class ConsoleHtmlCardSanitize_BrowserTest extends TestBase {
 		assertEquals(List.of("P", "B", "TABLE", "TBODY", "TR", "TD", "TD", "A"), b.get("tags"), b::toString);
 	}
 
-	@Test void a03_flagAbsent_fragmentIsInsertedAsServed() {
-		for (var name : List.of("absent", "false")) {
-			var r = report.get(name);
-			assertNoShellErrors(r);
-			var p = probe(r);
-			assertTrue(((List<?>)p.get("tags")).contains("SCRIPT"), () -> name + ": script element kept: " + p);
-			assertTrue(((List<?>)p.get("tags")).contains("IFRAME"), () -> name + ": iframe kept: " + p);
-			assertTrue(((List<?>)p.get("attrs")).stream().anyMatch(a -> String.valueOf(a).startsWith("IMG:") && String.valueOf(a).contains("onerror")),
-				() -> name + ": onerror kept: " + p);
-		}
+	@Test void a03_flagAbsent_isSanitizedLikeTrue_falseInsertsAsServed() {
+		var absent = probe(report.get("absent"));
+		assertFalse(((List<?>)absent.get("tags")).contains("SCRIPT"), () -> "absent: script dropped: " + absent);
+		assertFalse(((List<?>)absent.get("tags")).contains("IFRAME"), () -> "absent: iframe dropped: " + absent);
+		assertEquals(0, ((Number)absent.get("fired")).intValue(), () -> "absent: nothing executed: " + absent);
+		var r = report.get("false");
+		assertNoShellErrors(r);
+		var p = probe(r);
+		assertTrue(((List<?>)p.get("tags")).contains("SCRIPT"), () -> "false: script element kept: " + p);
+		assertTrue(((List<?>)p.get("tags")).contains("IFRAME"), () -> "false: iframe kept: " + p);
+		assertTrue(((List<?>)p.get("attrs")).stream().anyMatch(a -> String.valueOf(a).startsWith("IMG:") && String.valueOf(a).contains("onerror")),
+			() -> "false: onerror kept: " + p);
+	}
+
+	@Test void a05_redirectOffOrigin_isRefused() {
+		var r = redirectReport.get("on");
+		assertNull(queries(r).get("fragment"), () -> "nothing painted from a redirected fetch: " + r);
+		assertFailure(r, "E-JS-8", "card 'h' (type 'html') handler threw: 'src '/frag' redirected off this origin'");
 	}
 
 	@Test void a04_sanitizeTrue_withoutViews_failsClosedWithE_JS_8() {
 		var r = report.get("on-no-views");
 		assertNull(queries(r).get("fragment"), () -> "nothing painted unsanitized: " + r);
-		assertFailure(r, "E-JS-8", "card 'h' (type 'html') handler threw: 'html card sanitize:true needs JuneauViews; load the views toolkit'");
+		assertFailure(r, "E-JS-8", "card 'h' (type 'html') handler threw: 'html card sanitizing needs JuneauViews; load the views toolkit'");
 	}
 
 	@Test void a05_viewsArrivingAfterTheFragment_stillPaintsSanitized() {

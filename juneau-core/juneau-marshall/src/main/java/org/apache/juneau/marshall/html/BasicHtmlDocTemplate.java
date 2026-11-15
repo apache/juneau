@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.html.AsideFloat.*;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import org.apache.juneau.commons.lang.*;
@@ -56,7 +57,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		if (o instanceof Map<?,?> o2)
 			return o2.isEmpty();
 		if (isArray(o))
-			return (java.lang.reflect.Array.getLength(o) == 0);
+			return (Array.getLength(o) == 0);
 		return o.toString().isEmpty();
 	}
 
@@ -362,8 +363,10 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 						if (i2 != -1)
 							encoded = encoded.substring(i2 + 1).trim();
 						w.nl(4).appendln(5, encoded);
-					} else
+					} else if (session.isAllowedUri(val))
 						w.oTag("a").attr("href", session.resolveUri(val), true).cTag().text(key, true).eTag("a");
+					else
+						w.text(key, true);
 					w.eTag("li").nl(4);
 				} else {
 					w.nl(4).appendln(5, session.resolveHtmlDoc(original));
@@ -432,7 +435,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		var slash = uri.indexOf('/');
 		if (colon > 0 && (slash == -1 || colon < slash)) {
 			var scheme = uri.substring(0, colon);
-			return "http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme);
+			return eqic("http", scheme) || eqic("https", scheme);
 		}
 		return true;
 	}

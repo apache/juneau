@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
 import java.time.*;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
@@ -94,6 +96,20 @@ class OAuthFlowBranch_Test extends TestBase {
 		assertTrue(called.get());
 	}
 
+	@Test void a04b_buildAuthenticationUrl_includesResource() {
+		var f = OAuthAuthorizationCodeFlow.create()
+			.authorizationEndpoint(URI.create("https://idp.example.com/authorize"))
+			.tokenEndpoint(URI.create("https://idp.example.com/token"))
+			.clientId("client-id")
+			.redirectUri(URI.create("https://app.example.com/cb"))
+			.scope("openid")
+			.resource(URI.create("https://api.example.com"))
+			.build();
+		var challenge = CodeChallenge.compute(CodeChallengeMethod.S256, new CodeVerifier());
+		var url = f.buildAuthenticationUrl("st8", challenge, "nonce-3", null);
+		assertTrue(url.getRawQuery().contains("resource=https%3A%2F%2Fapi.example.com"), url.toString());
+	}
+
 	@Test void a05_exchange_withoutClientSecret_usesPublicClientId() {
 		// exchange() when clientSecretSupplier == null routes through the public-client branch.
 		// No live IdP — just verify OAuthFlowException is thrown (not IAE/NPE from null secret).
@@ -146,9 +162,35 @@ class OAuthFlowBranch_Test extends TestBase {
 			.scope("read")
 			.tokenCache(cache)
 			.build();
-		cache.putToken("cc|id|read", seeded);
+		cache.putToken("cc|http://127.0.0.1:1/token|id||read", seeded);
 		var result = f.acquire();
 		assertSame(seeded, result);
+	}
+
+	@Test void b03b_cacheKey_separatesEndpointAndResource() {
+		var cache = BoundedLruTokenCache.create();
+		var seeded = new OAuthToken("at", "Bearer", Instant.parse("2099-01-01T00:00:00Z"),
+			oe(), oe(), oe());
+		cache.putToken("cc|http://127.0.0.1:1/token|id|https://api-a.example.com|read", seeded);
+		var base = CachingClientCredentialsFlow.create()
+			.tokenEndpoint(URI.create("http://127.0.0.1:1/token"))
+			.clientId("id")
+			.clientSecret("s")
+			.scope("read")
+			.tokenCache(cache);
+		assertSame(seeded, base.resource(URI.create("https://api-a.example.com")).build().acquire());
+		// Different resource: no cache hit.
+		assertThrows(OAuthFlowException.class, base.resource(URI.create("https://api-b.example.com")).build()::acquire);
+		// Different endpoint: no cache hit.
+		var other = CachingClientCredentialsFlow.create()
+			.tokenEndpoint(URI.create("http://127.0.0.1:2/token"))
+			.clientId("id")
+			.clientSecret("s")
+			.scope("read")
+			.resource(URI.create("https://api-a.example.com"))
+			.tokenCache(cache)
+			.build();
+		assertThrows(OAuthFlowException.class, other::acquire);
 	}
 
 	@Test void b04_acquire_cacheMiss_attemptsNetwork() {
@@ -298,7 +340,7 @@ class OAuthFlowBranch_Test extends TestBase {
 		var md = new OidcMetadata(
 			URI.create("https://idp.example.com"),
 			null, null, null, null, null, null,
-			null, java.util.Map.of());
+			null, Map.of());
 		assertTrue(md.supportedScopes().isEmpty());
 	}
 
@@ -306,7 +348,7 @@ class OAuthFlowBranch_Test extends TestBase {
 		var md = new OidcMetadata(
 			URI.create("https://idp.example.com"),
 			null, null, null, null, null, null,
-			java.util.Set.of(), null);
+			Set.of(), null);
 		assertTrue(md.extras().isEmpty());
 	}
 }

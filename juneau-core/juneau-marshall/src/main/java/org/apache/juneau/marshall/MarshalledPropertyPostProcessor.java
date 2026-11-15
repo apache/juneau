@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
+import java.lang.reflect.Array;
 import java.math.*;
 import java.time.*;
 import java.time.Duration;
@@ -113,7 +114,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		var perPropertyNulls = Nulls.NOT_SET;
 
 		// XMLGregorianCalendar always uses XML format regardless of any CalendarFormat setting.
-		if (b.swap == null && XMLGregorianCalendar.class.equals(propertyClass))
+		if (b.swap == null && eq(XMLGregorianCalendar.class, propertyClass))
 			b.swap = xmlGregorianCalendarSwap();
 
 		// innerField, getter, setter — same order as the original validate() loop.
@@ -371,13 +372,13 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	 * the property metadata is unavailable, falls back to a single-level {@code Optional.empty()}.
 	 */
 	private static Object emptyOptional(Class<?> propertyClass, ClassMeta<?> propertyMeta) {
-		if (Optional.class.equals(propertyClass))
+		if (eq(Optional.class, propertyClass))
 			return (propertyMeta != null && propertyMeta.isOptional()) ? propertyMeta.getOptionalDefault() : oe();
-		if (OptionalInt.class.equals(propertyClass))
+		if (eq(OptionalInt.class, propertyClass))
 			return OptionalInt.empty();
-		if (OptionalLong.class.equals(propertyClass))
+		if (eq(OptionalLong.class, propertyClass))
 			return OptionalLong.empty();
-		if (OptionalDouble.class.equals(propertyClass))
+		if (eq(OptionalDouble.class, propertyClass))
 			return OptionalDouble.empty();
 		return null;
 	}
@@ -388,12 +389,12 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		var emptyOpt = emptyOptional(propertyClass, propertyMeta);
 		if (emptyOpt != null)
 			return emptyOpt;
-		if (String.class.equals(propertyClass) || CharSequence.class.equals(propertyClass))
+		if (eq(String.class, propertyClass) || eq(CharSequence.class, propertyClass))
 			return "";
 		if (propertyClass.isArray())
-			return java.lang.reflect.Array.newInstance(propertyClass.getComponentType(), 0);
-		if (List.class.isAssignableFrom(propertyClass) || Collection.class.equals(propertyClass)
-				|| Iterable.class.equals(propertyClass))
+			return Array.newInstance(propertyClass.getComponentType(), 0);
+		if (List.class.isAssignableFrom(propertyClass) || eq(Collection.class, propertyClass)
+				|| eq(Iterable.class, propertyClass))
 			return l();
 		if (Set.class.isAssignableFrom(propertyClass))
 			return new LinkedHashSet<>();
@@ -401,14 +402,14 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			return m();
 		// Primitive defaults — Java auto-unbox handles boxed-type assignment.
 		if (propertyClass.isPrimitive()) {
-			if (boolean.class.equals(propertyClass)) return Boolean.FALSE;
-			if (byte.class.equals(propertyClass))    return Byte.valueOf((byte) 0);
-			if (short.class.equals(propertyClass))   return Short.valueOf((short) 0);
-			if (char.class.equals(propertyClass))    return Character.valueOf((char) 0);
-			if (int.class.equals(propertyClass))     return Integer.valueOf(0);
-			if (long.class.equals(propertyClass))    return Long.valueOf(0L);
-			if (float.class.equals(propertyClass))   return Float.valueOf(0f);
-			if (double.class.equals(propertyClass))  return Double.valueOf(0d);
+			if (eq(boolean.class, propertyClass)) return Boolean.FALSE;
+			if (eq(byte.class, propertyClass))    return Byte.valueOf((byte) 0);
+			if (eq(short.class, propertyClass))   return Short.valueOf((short) 0);
+			if (eq(char.class, propertyClass))    return Character.valueOf((char) 0);
+			if (eq(int.class, propertyClass))     return Integer.valueOf(0);
+			if (eq(long.class, propertyClass))    return Long.valueOf(0L);
+			if (eq(float.class, propertyClass))   return Float.valueOf(0f);
+			if (eq(double.class, propertyClass))  return Double.valueOf(0d);
 		}
 		// Other reference types — no canonical empty sentinel; fall back to null (the LEAVE behavior).
 		return null;
@@ -605,13 +606,13 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	}
 
 	private static void applyPropertyFormats(BeanPropertyMeta.Builder b, MarshalledProp mp, Class<?> propertyClass) {
-		if (Duration.class.equals(propertyClass) && mp.durationFormat() != DurationFormat.NOT_SET)
+		if (eq(Duration.class, propertyClass) && mp.durationFormat() != DurationFormat.NOT_SET)
 			b.swap = durationSwap(mp.durationFormat());
-		if (Period.class.equals(propertyClass) && mp.periodFormat() != PeriodFormat.NOT_SET)
+		if (eq(Period.class, propertyClass) && mp.periodFormat() != PeriodFormat.NOT_SET)
 			b.swap = periodSwap(mp.periodFormat());
 		if (isCalendarType(propertyClass) && mp.calendarFormat() != CalendarFormat.NOT_SET)
 			b.swap = calendarSwap(mp.calendarFormat());
-		if (Date.class.equals(propertyClass) && mp.dateFormat() != DateFormat.NOT_SET)
+		if (eq(Date.class, propertyClass) && mp.dateFormat() != DateFormat.NOT_SET)
 			b.swap = dateSwap(mp.dateFormat());
 		if (isTemporalType(propertyClass) && mp.temporalFormat() != TemporalFormat.NOT_SET)
 			b.swap = temporalSwap(mp.temporalFormat(), propertyClass);
@@ -619,15 +620,15 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			b.swap = temporalAccessorSwap(mp.temporalFormat(), propertyClass);
 		if (isTimeZoneType(propertyClass) && mp.timeZoneFormat() != TimeZoneFormat.NOT_SET)
 			b.swap = timeZoneSwap(mp.timeZoneFormat(), propertyClass);
-		if (Locale.class.equals(propertyClass) && mp.localeFormat() != LocaleFormat.NOT_SET)
+		if (eq(Locale.class, propertyClass) && mp.localeFormat() != LocaleFormat.NOT_SET)
 			b.swap = localeSwap(mp.localeFormat());
-		if (byte[].class.equals(propertyClass) && mp.binaryFormat() != BinaryFormat.NOT_SET)
+		if (eq(byte[].class, propertyClass) && mp.binaryFormat() != BinaryFormat.NOT_SET)
 			b.swap = binarySwap(mp.binaryFormat());
 		if (isEnumType(propertyClass) && mp.enumFormat() != EnumFormat.NOT_SET)
 			b.swap = enumSwap(mp.enumFormat(), propertyClass);
-		if (UUID.class.equals(propertyClass) && mp.uuidFormat() != UuidFormat.NOT_SET)
+		if (eq(UUID.class, propertyClass) && mp.uuidFormat() != UuidFormat.NOT_SET)
 			b.swap = uuidSwap(mp.uuidFormat());
-		if (BitSet.class.equals(propertyClass) && mp.bitSetFormat() != BitSetFormat.NOT_SET)
+		if (eq(BitSet.class, propertyClass) && mp.bitSetFormat() != BitSetFormat.NOT_SET)
 			b.swap = bitSetSwap(mp.bitSetFormat());
 		if (isBigNumberType(propertyClass) && mp.bigNumberFormat() != BigNumberFormat.NOT_SET)
 			b.swap = bigNumberSwap(mp.bigNumberFormat(), propertyClass);
@@ -635,22 +636,22 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			b.swap = booleanSwap(mp.booleanFormat());
 		if (isFloatType(propertyClass) && mp.floatFormat() != FloatFormat.NOT_SET)
 			b.swap = floatSwap(mp.floatFormat(), propertyClass);
-		if (Currency.class.equals(propertyClass) && mp.currencyFormat() != CurrencyFormat.NOT_SET)
+		if (eq(Currency.class, propertyClass) && mp.currencyFormat() != CurrencyFormat.NOT_SET)
 			b.swap = currencySwap(mp.currencyFormat());
-		if (Class.class.equals(propertyClass) && mp.classFormat() != ClassFormat.NOT_SET)
+		if (eq(Class.class, propertyClass) && mp.classFormat() != ClassFormat.NOT_SET)
 			b.swap = classSwap(mp.classFormat());
 	}
 
 	private static void applyClassFormats(BeanPropertyMeta.Builder b, Marshalled m, Class<?> propertyClass) {
 		if (b.swap != null)
 			return;
-		if (Duration.class.equals(propertyClass) && m.durationFormat() != DurationFormat.NOT_SET)
+		if (eq(Duration.class, propertyClass) && m.durationFormat() != DurationFormat.NOT_SET)
 			b.swap = durationSwap(m.durationFormat());
-		else if (Period.class.equals(propertyClass) && m.periodFormat() != PeriodFormat.NOT_SET)
+		else if (eq(Period.class, propertyClass) && m.periodFormat() != PeriodFormat.NOT_SET)
 			b.swap = periodSwap(m.periodFormat());
 		else if (isCalendarType(propertyClass) && m.calendarFormat() != CalendarFormat.NOT_SET)
 			b.swap = calendarSwap(m.calendarFormat());
-		else if (Date.class.equals(propertyClass) && m.dateFormat() != DateFormat.NOT_SET)
+		else if (eq(Date.class, propertyClass) && m.dateFormat() != DateFormat.NOT_SET)
 			b.swap = dateSwap(m.dateFormat());
 		else if (isTemporalType(propertyClass) && m.temporalFormat() != TemporalFormat.NOT_SET)
 			b.swap = temporalSwap(m.temporalFormat(), propertyClass);
@@ -658,15 +659,15 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			b.swap = temporalAccessorSwap(m.temporalFormat(), propertyClass);
 		else if (isTimeZoneType(propertyClass) && m.timeZoneFormat() != TimeZoneFormat.NOT_SET)
 			b.swap = timeZoneSwap(m.timeZoneFormat(), propertyClass);
-		else if (Locale.class.equals(propertyClass) && m.localeFormat() != LocaleFormat.NOT_SET)
+		else if (eq(Locale.class, propertyClass) && m.localeFormat() != LocaleFormat.NOT_SET)
 			b.swap = localeSwap(m.localeFormat());
-		else if (byte[].class.equals(propertyClass) && m.binaryFormat() != BinaryFormat.NOT_SET)
+		else if (eq(byte[].class, propertyClass) && m.binaryFormat() != BinaryFormat.NOT_SET)
 			b.swap = binarySwap(m.binaryFormat());
 		else if (isEnumType(propertyClass) && m.enumFormat() != EnumFormat.NOT_SET)
 			b.swap = enumSwap(m.enumFormat(), propertyClass);
-		else if (UUID.class.equals(propertyClass) && m.uuidFormat() != UuidFormat.NOT_SET)
+		else if (eq(UUID.class, propertyClass) && m.uuidFormat() != UuidFormat.NOT_SET)
 			b.swap = uuidSwap(m.uuidFormat());
-		else if (BitSet.class.equals(propertyClass) && m.bitSetFormat() != BitSetFormat.NOT_SET)
+		else if (eq(BitSet.class, propertyClass) && m.bitSetFormat() != BitSetFormat.NOT_SET)
 			b.swap = bitSetSwap(m.bitSetFormat());
 		else if (isBigNumberType(propertyClass) && m.bigNumberFormat() != BigNumberFormat.NOT_SET)
 			b.swap = bigNumberSwap(m.bigNumberFormat(), propertyClass);
@@ -674,20 +675,20 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			b.swap = booleanSwap(m.booleanFormat());
 		else if (isFloatType(propertyClass) && m.floatFormat() != FloatFormat.NOT_SET)
 			b.swap = floatSwap(m.floatFormat(), propertyClass);
-		else if (Currency.class.equals(propertyClass) && m.currencyFormat() != CurrencyFormat.NOT_SET)
+		else if (eq(Currency.class, propertyClass) && m.currencyFormat() != CurrencyFormat.NOT_SET)
 			b.swap = currencySwap(m.currencyFormat());
-		else if (Class.class.equals(propertyClass) && m.classFormat() != ClassFormat.NOT_SET)
+		else if (eq(Class.class, propertyClass) && m.classFormat() != ClassFormat.NOT_SET)
 			b.swap = classSwap(m.classFormat());
 	}
 
 	private static void applyContextFormats(BeanPropertyMeta.Builder b, MarshallingContext bc, Class<?> propertyClass) {
-		if (Duration.class.equals(propertyClass))
+		if (eq(Duration.class, propertyClass))
 			b.swap = durationSwap(bc.getDurationFormat());
-		else if (Period.class.equals(propertyClass))
+		else if (eq(Period.class, propertyClass))
 			b.swap = periodSwap(bc.getPeriodFormat());
 		else if (isCalendarType(propertyClass))
 			b.swap = calendarSwap(bc.getCalendarFormat());
-		else if (Date.class.equals(propertyClass))
+		else if (eq(Date.class, propertyClass))
 			b.swap = dateSwap(bc.getDateFormat());
 		else if (isTemporalType(propertyClass))
 			b.swap = temporalSwap(bc.getTemporalFormat(), propertyClass);
@@ -695,13 +696,13 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			b.swap = temporalAccessorSwap(bc.getTemporalFormat(), propertyClass);
 		else if (isTimeZoneType(propertyClass))
 			b.swap = timeZoneSwap(bc.getTimeZoneFormat(), propertyClass);
-		else if (Locale.class.equals(propertyClass))
+		else if (eq(Locale.class, propertyClass))
 			b.swap = localeSwap(bc.getLocaleFormat());
 		// byte[] context default: install a per-property swap only when an explicit BinaryFormat is configured
 		// (i.e. != NOT_SET).  The per-property swap drives both the marshalling-side serializer path AND the
 		// {@link BeanMap} property-level read/write path.  When the context is at NOT_SET we leave byte[]
 		// untouched so it falls back to the surrounding serializer's native array handling (e.g. JSON array).
-		else if (byte[].class.equals(propertyClass) && bc.getBinaryFormat() != BinaryFormat.NOT_SET)
+		else if (eq(byte[].class, propertyClass) && bc.getBinaryFormat() != BinaryFormat.NOT_SET)
 			b.swap = binarySwap(bc.getBinaryFormat());
 		else if (isEnumType(propertyClass) && bc.getEnumFormat() == EnumFormat.ORDINAL)
 			// Only install context-level swap for ORDINAL so binary serializers emit a native number.
@@ -709,12 +710,12 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			// MarshallingContext.getEnumFormat() — installing a String-producing swap on every enum property
 			// would mask reflection-driven enum handling for no behavioural benefit.
 			b.swap = enumSwap(bc.getEnumFormat(), propertyClass);
-		else if (UUID.class.equals(propertyClass) && bc.getUuidFormat() != UuidFormat.STANDARD && bc.getUuidFormat() != UuidFormat.NOT_SET)
+		else if (eq(UUID.class, propertyClass) && bc.getUuidFormat() != UuidFormat.STANDARD && bc.getUuidFormat() != UuidFormat.NOT_SET)
 			// Install context-level swap only when the configured format diverges from STANDARD (today's
 			// default — UUID.toString()).  At STANDARD / NOT_SET, the serializer's natural String-conversion
 			// path already produces the right wire form.
 			b.swap = uuidSwap(bc.getUuidFormat());
-		else if (BitSet.class.equals(propertyClass))
+		else if (eq(BitSet.class, propertyClass))
 			// BitSet has no natural String round-trip (BitSet.toString() is not parseable), so install the
 			// context-level swap unconditionally — every configured format (INDICES default included)
 			// produces a parseable textual wire form.
@@ -735,7 +736,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			// native emit handle NaN/Infinity directly.  Explicit per-property or per-class @MarshalledProp /
 			// @Marshalled overrides still install via the applyPropertyFormats / applyClassFormats branches.
 			b.swap = floatSwap(bc.getFloatFormat(), propertyClass);
-		else if (Currency.class.equals(propertyClass) && bc.getCurrencyFormat() != CurrencyFormat.ISO_CODE && bc.getCurrencyFormat() != CurrencyFormat.NOT_SET)
+		else if (eq(Currency.class, propertyClass) && bc.getCurrencyFormat() != CurrencyFormat.ISO_CODE && bc.getCurrencyFormat() != CurrencyFormat.NOT_SET)
 			// Install context-level swap only when format diverges from ISO_CODE (today's default —
 			// Currency.toString()).  At ISO_CODE / NOT_SET, the serializer's natural String-conversion
 			// path already produces the right wire form.
@@ -762,7 +763,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	}
 
 	private static boolean isTimeZoneType(Class<?> c) {
-		return TimeZone.class.equals(c) || (c != null && ZoneId.class.isAssignableFrom(c));
+		return eq(TimeZone.class, c) || (c != null && ZoneId.class.isAssignableFrom(c));
 	}
 
 	private static boolean isEnumType(Class<?> c) {
@@ -770,21 +771,21 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	}
 
 	private static boolean isBigNumberType(Class<?> c) {
-		return BigInteger.class.equals(c) || BigDecimal.class.equals(c);
+		return eq(BigInteger.class, c) || eq(BigDecimal.class, c);
 	}
 
 	private static boolean isBooleanType(Class<?> c) {
-		return Boolean.class.equals(c) || boolean.class.equals(c);
+		return eq(Boolean.class, c) || eq(boolean.class, c);
 	}
 
 	private static boolean isFloatType(Class<?> c) {
-		return Float.class.equals(c) || float.class.equals(c) || Double.class.equals(c) || double.class.equals(c);
+		return eq(Float.class, c) || eq(float.class, c) || eq(Double.class, c) || eq(double.class, c);
 	}
 
 	private static boolean requiresFloatSwap(FloatFormat format, Class<?> propertyClass) {
 		// Primitives can't hold a String or null transform result without breaking Juneau's
 		// null-to-primitive-default convention.  Only install for boxed Float/Double here.
-		if (float.class.equals(propertyClass) || double.class.equals(propertyClass))
+		if (eq(float.class, propertyClass) || eq(double.class, propertyClass))
 			return false;
 		return format == FloatFormat.NaN_AS_NULL || format == FloatFormat.NaN_AS_STRING || format == FloatFormat.NaN_AS_ERROR;
 	}
@@ -954,7 +955,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	}
 
 	private static ObjectSwap<?,?> timeZoneSwap(TimeZoneFormat format, Class<?> propertyClass) {
-		if (TimeZone.class.equals(propertyClass))
+		if (eq(TimeZone.class, propertyClass))
 			return new ObjectSwap<TimeZone,String>(TimeZone.class, String.class) {
 				@Override /* ObjectSwap */
 				public String swap(MarshallingSession session, TimeZone o) {
@@ -1096,7 +1097,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		// Variant swap class (Object) — text serializers may receive either a Number (for NUMBER / AUTO-safe
 		// values) or a String (for STRING / AUTO-out-of-range values); binary serializers always receive the
 		// native BigInteger / BigDecimal so they can emit native numeric types.
-		if (BigInteger.class.equals(propertyClass)) {
+		if (eq(BigInteger.class, propertyClass)) {
 			return new ObjectSwap<>(BigInteger.class, Object.class) {
 				@Override /* ObjectSwap */
 				public Object swap(MarshallingSession session, BigInteger o) {
@@ -1178,7 +1179,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	private static ObjectSwap<?,?> floatSwap(FloatFormat format, Class<?> propertyClass) {
 		// Variant swap class (Object) — binary serializers receive native IEEE-754; textual sessions
 		// receive a boxed Float / Double, a String, or null depending on the format and value.
-		var isFloatType = Float.class.equals(propertyClass) || float.class.equals(propertyClass);
+		var isFloatType = eq(Float.class, propertyClass) || eq(float.class, propertyClass);
 		var swapNormal = numberClass(isFloatType ? Float.class : Double.class);
 		return new ObjectSwap<>(swapNormal, Object.class) {
 			@Override /* ObjectSwap */
@@ -1209,7 +1210,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				// receiving the original null, not a swap-synthesized NaN.
 				if (o == null)
 					return null;
-				if (o instanceof Number o2 && Float.class.equals(propertyClass))
+				if (o instanceof Number o2 && eq(Float.class, propertyClass))
 					return o2.floatValue();
 				if (o instanceof Number o2)
 					return o2.doubleValue();
@@ -1258,7 +1259,9 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				ClassLoader cl = session != null ? session.getClassLoader() : null;
 				if (cl == null)
 					cl = Thread.currentThread().getContextClassLoader();
-				return ClassFormat.parse(o, format, cl);
+				// Conversions made without a session still carry the context through the hint.
+				var mc = session != null ? session.getMarshallingContext() : hint != null ? hint.getMarshallingContext() : null;
+				return ClassFormat.parse(o, format, cl, mc != null ? mc.getClassNameGuard() : null);
 			}
 		};
 	}

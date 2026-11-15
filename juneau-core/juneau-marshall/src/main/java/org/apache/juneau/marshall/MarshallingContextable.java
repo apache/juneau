@@ -3052,6 +3052,19 @@ public abstract class MarshallingContextable extends Context {
 		}
 
 		/**
+		 * Class-name guard.
+		 *
+		 * @see MarshallingContext.Builder#classNameGuard(Predicate)
+		 * @param value The guard returning <jk>true</jk> for permitted class names.
+		 * 	<br>Can be <jk>null</jk> (all names allowed, the default).
+		 * @return This object.
+		 */
+		public SELF classNameGuard(Predicate<String> value) {
+			bcBuilder.classNameGuard(value);
+			return self();
+		}
+
+		/**
 		 * An identifying name for this class.
 		 *
 		 * <p>

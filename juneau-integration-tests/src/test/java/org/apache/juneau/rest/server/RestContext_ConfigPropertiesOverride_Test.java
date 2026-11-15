@@ -151,6 +151,36 @@ class RestContext_ConfigPropertiesOverride_Test extends TestBase {
 	}
 
 	@Rest
+	public static class B03b {}
+
+	@Rest(showCauseMessages="false")
+	public static class B03c {}
+
+	@Test void b03b_sysPropertyShowCauseMessagesFlowsIntoGetter() throws Exception {
+		System.setProperty("RestContext.showCauseMessages", "true");
+		try {
+			var ctx = build(B03b.class, new B03b());
+			assertEquals("true", ctx.getRestContextProperties().getShowCauseMessagesRaw());
+			assertTrue(ctx.isShowCauseMessages());
+		} finally {
+			System.clearProperty("RestContext.showCauseMessages");
+		}
+	}
+
+	@Test void b03c_showCauseMessagesDefaultsToFalse() throws Exception {
+		assertFalse(build(B03b.class, new B03b()).isShowCauseMessages());
+	}
+
+	@Test void b03d_annotationWinsOverSysProperty() throws Exception {
+		System.setProperty("RestContext.showCauseMessages", "true");
+		try {
+			assertFalse(build(B03c.class, new B03c()).isShowCauseMessages());
+		} finally {
+			System.clearProperty("RestContext.showCauseMessages");
+		}
+	}
+
+	@Rest
 	public static class B04 {}
 
 	@Test void b04_sysPropertyEnumFlowsIntoGetter() throws Exception {

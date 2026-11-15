@@ -100,4 +100,18 @@ class RedactedHeaders_Test {
 		assertEquals("[REDACTED]", RedactedHeaders.redact("X-INTERNAL-TRACE", "abc-trace-id", names));
 		assertEquals("Bearer abc123", RedactedHeaders.redact("Authorization", "Bearer abc123", names));
 	}
+
+	@Test void d01_isCredentialLike_defaultSetAndNameHeuristic() {
+		assertTrue(RedactedHeaders.isCredentialLike("Authorization"));
+		assertTrue(RedactedHeaders.isCredentialLike("set-cookie"));
+		assertTrue(RedactedHeaders.isCredentialLike("X-Auth-Token"));
+		assertTrue(RedactedHeaders.isCredentialLike("X-Client-Secret"));
+		assertTrue(RedactedHeaders.isCredentialLike("X-SESSION-ID"));
+		assertTrue(RedactedHeaders.isCredentialLike("X-Credential"));
+		assertTrue(RedactedHeaders.isCredentialLike("My-Api-Key"));
+		assertTrue(RedactedHeaders.isCredentialLike("apikey"));
+		assertFalse(RedactedHeaders.isCredentialLike("User-Agent"));
+		assertFalse(RedactedHeaders.isCredentialLike("Accept"));
+		assertFalse(RedactedHeaders.isCredentialLike(null));
+	}
 }

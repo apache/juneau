@@ -2168,6 +2168,24 @@ class StringUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// hasUriScheme(String)
+	//====================================================================================================
+	@Test
+	void a076a_hasUriScheme() {
+		assertFalse(hasUriScheme(null));
+		assertFalse(hasUriScheme(""));
+		assertFalse(hasUriScheme("foo"));
+		assertFalse(hasUriScheme("/a:b"));
+		assertFalse(hasUriScheme("foo/bar:baz"));
+		assertFalse(hasUriScheme("?a=b:c"));
+		assertFalse(hasUriScheme("#a:b"));
+		assertTrue(hasUriScheme("http://foo"));
+		assertTrue(hasUriScheme("http:foo"));
+		assertTrue(hasUriScheme("mailto:x@y"));
+		assertTrue(hasUriScheme(":x"));
+	}
+
+	//====================================================================================================
 	// isAbsoluteUri(String)
 	//====================================================================================================
 	@Test
@@ -5336,7 +5354,7 @@ class StringUtils_Test extends TestBase {
 		assertNull(sanitize(null));
 		assertEquals("", sanitize(""));
 		assertEquals("Hello World", sanitize("Hello World"));
-		assertEquals("&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;", sanitize("<script>alert('xss')</script>"));
+		assertEquals("&lt;script&gt;alert(&#39;x&#39;)&lt;/script&gt;", sanitize("<script>alert('x')</script>"));
 		assertEquals("Hello &lt;b&gt;World&lt;/b&gt;", sanitize("Hello <b>World</b>"));
 		assertEquals("&lt;img src=&quot;x&quot; onerror=&quot;alert(1)&quot;&gt;", sanitize("<img src=\"x\" onerror=\"alert(1)\">"));
 	}

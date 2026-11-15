@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.server.converter;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.*;
@@ -108,8 +107,11 @@ public class Introspectable implements RestConverter {
 				o = swap.swap(bs, o);
 			var settings = req.getContext().getBeanStore().getBean(IntrospectableSettings.class).orElse(IntrospectableSettings.DEFAULT);
 			return ObjectIntrospector.create(o, Json5Parser.DEFAULT).allow(settings.asFilter()).invokeMethod(method, args);
+		} catch (MethodNotAllowlistedException e) {
+			// Fixed text; the refused method and the allow-list rules are not echoed to the caller.
+			return new InternalServerError(e, "The requested method is not available.");
 		} catch (Exception e) {
-			return new InternalServerError(e, "Error occurred trying to invoke method: %s", localizedMessage(e));
+			return new InternalServerError(e, "Error occurred trying to invoke method.");
 		}
 	}
 }

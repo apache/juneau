@@ -87,7 +87,7 @@ class AbstractMcpClient_StaleConnectionRetry_Test extends TestBase {
 				throw staleFailure();
 			return okEnvelope("1");
 		};
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var res = client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("1").setMethod("resources/read"));
 			assertNotNull(res);
 			assertEquals("1", res.getId());
@@ -108,7 +108,7 @@ class AbstractMcpClient_StaleConnectionRetry_Test extends TestBase {
 			calls.incrementAndGet();
 			throw staleFailure();
 		};
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			assertThrows(TransportException.class, () -> client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("2").setMethod("tools/call")));
 		}
 		// Only the initial attempt — a mutating method must not be replayed.
@@ -122,7 +122,7 @@ class AbstractMcpClient_StaleConnectionRetry_Test extends TestBase {
 			calls.incrementAndGet();
 			throw new TransportException("HTTP transport error: Connection refused", new ConnectException("Connection refused"));
 		};
-		try (var client = TestClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var client = TestClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			assertThrows(TransportException.class, () -> client.send(new JsonRpcRequest().setJsonrpc("2.0").setId("3").setMethod("resources/read")));
 		}
 		// A non-stale transport failure is not a retry trigger, even for a read-only method.

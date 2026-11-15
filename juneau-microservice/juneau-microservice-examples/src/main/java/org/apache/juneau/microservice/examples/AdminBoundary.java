@@ -27,7 +27,7 @@ import org.apache.juneau.rest.server.filter.*;
 import jakarta.servlet.*;
 
 /**
- * The CSRF boundary for the admin resources {@link ConfigResource}, {@link LogsResource} and {@link ShutdownResource}.
+ * The cross-site request boundary for the admin resources {@link ConfigResource}, {@link DebugResource}, {@link LogsResource} and {@link ShutdownResource}.
  *
  * <p>
  * This boundary is not authentication.  It checks the {@code Host} and {@code Origin} headers a browser sends; it does
@@ -35,7 +35,7 @@ import jakarta.servlet.*;
  * of their own, so an application that mounts them must add its own, and must not expose them on an untrusted network.
  *
  * <p>
- * {@link #registration(String, String...)} returns a {@link ServletFilterRegistration} that puts the three resources
+ * {@link #registration(String, String...)} returns a {@link ServletFilterRegistration} that puts the four resources
  * behind their own {@link CsrfBoundary}.  A write from another site's page is refused with {@code 403} and an
  * {@value RequestBoundaryFilter#REJECTION_HEADER} header naming the reason.  So is a write that a browser could
  * have sent cross-site without a CORS preflight and that carries no {@code Origin}: a urlencoded, multipart or
@@ -59,7 +59,7 @@ import jakarta.servlet.*;
  * list that name.
  *
  * <p>
- * The boundary answers only CSRF and DNS rebinding.  It does not authenticate anyone, and a direct network caller
+ * The boundary answers only cross-site requests and DNS rebinding.  It does not authenticate anyone, and a direct network caller
  * passes it.  The admin resources have no authentication of their own, so do not expose them on an untrusted network.
  *
  * <p>
@@ -71,7 +71,7 @@ import jakarta.servlet.*;
  *
  * <h2 class='section'>Example:</h2>
  * <p>
- * In a Juneau microservice whose root resource mounts the three resources as children, contribute the registration
+ * In a Juneau microservice whose root resource mounts the four resources as children, contribute the registration
  * as a <c>@Bean</c>:
  * <p class='bjava'>
  * 	<ja>@Bean</ja>(name=<js>"adminBoundary"</js>)
@@ -95,7 +95,7 @@ public final class AdminBoundary {
 	/** The order the registration runs at: ahead of authentication, behind anything registered at the very front. */
 	public static final int ORDER = ServletFilterRegistration.HIGHEST_PRECEDENCE + 20;
 
-	private static final String[] PATHS = { "/config", "/logs", "/shutdown" };
+	private static final String[] PATHS = { "/config", "/debug", "/logs", "/shutdown" };
 
 	// One or more "/segment" parts of unreserved characters, so every pattern built on it is one the container matches.
 	private static final Pattern PREFIX = Pattern.compile("(?:/[A-Za-z0-9_~-][A-Za-z0-9._~-]*+)*+");
@@ -103,15 +103,15 @@ public final class AdminBoundary {
 	private AdminBoundary() {}
 
 	/**
-	 * A registration of a new CSRF boundary over the three admin resources.
+	 * A registration of a new cross-site request boundary over the four admin resources.
 	 *
 	 * <p>
 	 * The registration maps each resource's path both exactly and as a prefix ({@code /config} and
-	 * {@code /config/*}, and so on: six patterns), for {@code REQUEST} dispatches only, at {@link #ORDER}.  Each call
+	 * {@code /config/*}, and so on: eight patterns), for {@code REQUEST} dispatches only, at {@link #ORDER}.  Each call
 	 * builds its own filter, so the registration never shares an instance with another boundary.  The boundary's token
 	 * is per process; no admin page carries one.
 	 *
-	 * @param prefix The path the three resources are mounted under: <js>""</js> when they are children of the root
+	 * @param prefix The path the four resources are mounted under: <js>""</js> when they are children of the root
 	 * 	resource, otherwise a path such as <js>"/admin"</js>: one or more {@code /}-separated segments of letters,
 	 * 	digits, {@code .}, {@code _}, {@code ~} or {@code -}, none starting with {@code .}, and no trailing {@code /}.
 	 * 	A prefix the container would not match as written is refused, so the resources are never left uncovered.

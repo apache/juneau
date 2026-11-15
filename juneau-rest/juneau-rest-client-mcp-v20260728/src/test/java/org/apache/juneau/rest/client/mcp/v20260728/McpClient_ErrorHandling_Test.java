@@ -41,7 +41,7 @@ class McpClient_ErrorHandling_Test extends TestBase {
 				.body(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)))
 				.build();
 		};
-		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(transport).build()) {
+		try (var c = McpClient.builder().endpoint("https://x/mcp").transport(transport).build()) {
 			var ex = assertThrowsWithMessage(McpException.class, "Method not found", c::ping);
 			assertEquals(-32601, ex.getCode());
 		}

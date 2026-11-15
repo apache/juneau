@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.terminal.region;
 
+import static org.apache.juneau.commons.utils.IoUtils.readCapped;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.terminal.report.TerminalViewChecks.*;
 
@@ -303,26 +304,13 @@ public final class FileTerminalSource implements TerminalSource, AutoCloseable {
 		return new int[] { DEFAULT_COLS, DEFAULT_ROWS };
 	}
 
-	/** Reads a size sidecar of at most {@value #MAX_SIZE_BYTES} bytes, without following a symlink. */
-	private static String readCapped(Path p) throws IOException {
-		try (var ch = FileChannel.open(p, StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS)) {
-			var buf = ByteBuffer.allocate(MAX_SIZE_BYTES + 1);
-			while (buf.hasRemaining() && ch.read(buf) >= 0) {
-				// The condition does the reading; the loop has no body.
-			}
-			if (buf.position() > MAX_SIZE_BYTES)
-				throw new IOException("Size sidecar is over " + MAX_SIZE_BYTES + " bytes: '" + p + "'.");
-			return new String(buf.array(), 0, buf.position(), StandardCharsets.UTF_8);
-		}
-	}
-
 	/** Returns {cols, rows} from a {"cols":C,"rows":R} file, or null when it is missing or malformed. */
 	@SuppressWarnings({
 		"java:S1168" // null means the size sidecar is missing or malformed; callers test for it
 	})
 	static int[] parseSize(Path p) {
 		try {
-			var m = Json.to(readCapped(p), Map.class);
+			var m = Json.to(readCapped(p, MAX_SIZE_BYTES, StandardCharsets.UTF_8, LinkOption.NOFOLLOW_LINKS), Map.class);
 			if (m.get("cols") instanceof Number c && m.get("rows") instanceof Number r) {
 				var cols = c.doubleValue();
 				var rows = r.doubleValue();

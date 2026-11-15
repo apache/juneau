@@ -17,5 +17,5 @@
 <@card id="caption" title=label>
 <div class="jc-prose"><p>${caption}</p><p><a href="${source}">View source</a></p></div>
 </@card>
-<@card id="flavor" title="Pets" src="/console/dev/flavors/${engine}/fragment"/>
+<@card id="flavor" title="Pets" src="/console/dev/flavors/${engine}/fragment" sanitize=false/>
 </@page>
