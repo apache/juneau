@@ -52,14 +52,18 @@ COMPILE_NOISE = re.compile(
 
 DIAGNOSTIC = re.compile(r"^(?P<file>[^:]+\.java):(?P<line>\d+): (?P<kind>error|warning): (?P<msg>.*)$")
 UNKNOWN_TAG = re.compile(r"^unknown tag: (?P<name>\S+)$")
-GROUPS = ("html", "accessibility")
+GROUPS = ("html", "accessibility", "reference", "syntax")
+# Groups that resolve types, so they need the dependencies on the classpath. CI runs javadoc through Maven with them.
+RESOLVING_GROUPS = frozenset(("reference",))
+CLASSPATH_FILE = "javadoc-classpath.txt"
 
 
 def source_files(root: Path) -> list[Path]:
-    """Every Java file under a src/main/java tree, skipping target, docs and module-info."""
+    """Every Java file under a src/main/java tree, skipping target, the top-level docs site and module-info."""
     out = []
     for dirpath, dirnames, filenames in os.walk(root):
-        dirnames[:] = [d for d in dirnames if d not in ("target", "docs", ".git", "node_modules")]
+        at_root = Path(dirpath) == root
+        dirnames[:] = [d for d in dirnames if d not in ("target", ".git", "node_modules") and not (at_root and d == "docs")]
         if "/src/main/java/" in dirpath.replace(os.sep, "/") + "/":
             out.extend(Path(dirpath) / f for f in filenames if f.endswith(".java") and f != "module-info.java")
     return sorted(out)
@@ -101,14 +105,38 @@ def normalize(msg: str) -> str:
     return msg
 
 
-def run_javadoc(root: Path, groups: list[str], java_home: str | None) -> str:
+def dependency_classpath(root: Path, refresh: bool = False) -> str:
+    """The union of every module's compile classpath, minus Juneau's own artifacts (the sources are compiled directly).
+
+    Each module's classpath is cached at target/javadoc-classpath.txt by one offline `mvn dependency:build-classpath` run; delete
+    the files (or pass --refresh-classpath) after a dependency change.
+    """
+    def cached() -> list[Path]:
+        return sorted(p for p in root.glob("**/target/" + CLASSPATH_FILE) if "node_modules" not in p.parts)
+    if refresh or not cached():
+        for p in cached():
+            p.unlink()
+        cmd = ["mvn", "-o", "-q", "dependency:build-classpath", "-Dmdep.outputFile=target/" + CLASSPATH_FILE, "-Dmdep.includeScope=compile"]
+        proc = subprocess.run(cmd, cwd=root, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, check=False)
+        if proc.returncode != 0 or not cached():
+            raise RuntimeError("could not build the dependency classpath with mvn:\n" + proc.stdout[-2000:])
+    entries, seen = [], set()
+    for p in cached():
+        for e in p.read_text(encoding="utf-8").strip().split(os.pathsep):
+            if e and e not in seen and "/org/apache/juneau/" not in e.replace(os.sep, "/"):
+                seen.add(e)
+                entries.append(e)
+    return os.pathsep.join(entries)
+
+
+def run_javadoc(root: Path, groups: list[str], java_home: str | None, classpath: str | None = None) -> str:
     javadoc = str(Path(java_home) / "bin" / "javadoc") if java_home else (shutil.which("javadoc") or "javadoc")
     files = source_files(root)
     with tempfile.TemporaryDirectory(prefix="check-javadoc-html-") as tmp:
         argfile = Path(tmp) / "sources.txt"
         argfile.write_text("\n".join(str(f) for f in files) + "\n", encoding="utf-8")
         cmd = [javadoc, "-quiet", "-protected", "-Xdoclint:" + ",".join(groups), "-Xmaxerrs", "1000000", "-Xmaxwarns", "1000000",
-               "--ignore-source-errors", "-d", str(Path(tmp) / "out"), "@" + str(argfile)]
+               "--ignore-source-errors", *(("-cp", classpath) if classpath else ()), "-d", str(Path(tmp) / "out"), "@" + str(argfile)]
         proc = subprocess.run(cmd, cwd=root, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, check=False)
         return proc.stdout
 
@@ -140,6 +168,7 @@ def main(argv=None) -> int:
     ap.add_argument("--report-only", action="store_true", help="print the digest but always exit 0")
     ap.add_argument("--root", default=str(Path(__file__).resolve().parent.parent), help="repository root (default: this checkout)")
     ap.add_argument("--java-home", default=os.environ.get("JAVA_HOME"), help="JDK whose javadoc to run (default: $JAVA_HOME, else PATH)")
+    ap.add_argument("--refresh-classpath", action="store_true", help="rebuild the cached dependency classpath the reference group needs")
     ap.add_argument("--from-file", help="read javadoc output from this file instead of running javadoc (for tests)")
     args = ap.parse_args(argv)
     root = Path(args.root)
@@ -147,7 +176,15 @@ def main(argv=None) -> int:
     bad = [g for g in groups if g not in GROUPS]
     if bad:
         ap.error("unknown group(s): " + ", ".join(bad))
-    output = Path(args.from_file).read_text(encoding="utf-8") if args.from_file else run_javadoc(root, groups, args.java_home)
+    if args.from_file:
+        output = Path(args.from_file).read_text(encoding="utf-8")
+    else:
+        try:
+            classpath = dependency_classpath(root, args.refresh_classpath) if RESOLVING_GROUPS.intersection(groups) else None
+        except RuntimeError as e:
+            print(f"javadoc html check: {e}", file=sys.stderr)
+            return 2
+        output = run_javadoc(root, groups, args.java_home, classpath)
     remaining, custom, noise = classify(parse(output))
     digest(remaining, custom, noise, args.first, root)
     return 0 if args.report_only or not remaining else 1

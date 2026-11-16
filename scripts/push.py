@@ -1125,7 +1125,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
             step_num += 1
             print(f"  {step_num}. Verify BOM completeness: python3 scripts/check-bom-completeness.py")
             step_num += 1
-            print(f"  {step_num}. Verify Javadoc HTML: python3 scripts/check-javadoc-html.py")
+            print(f"  {step_num}. Verify Javadoc (html, accessibility, reference, syntax): python3 scripts/check-javadoc-html.py")
             step_num += 1
             print(f"  {step_num}. Run tests: python3 scripts/test.py --full (timings go to ~/.cache/juneau-terminal/history/<repo>-<sha8>/test.jsonl)")
             step_num += 1
@@ -1231,12 +1231,12 @@ def _push_steps_locked(s, args, run, console, script_dir, juneau_root, maven_loc
             if not run_marked(
                 "javadoc-html", "Javadoc HTML",
                 javadoc_html_command(check_javadoc_html),
-                f"🔎 Step {step_num}: Checking Javadoc HTML and accessibility...",
+                f"🔎 Step {step_num}: Checking Javadoc HTML, accessibility, references and syntax...",
                 juneau_root,
                 label="Javadoc HTML",
                 summarize=javadoc_html_summary
             ):
-                return aborted("\n❌ Build process aborted: Javadoc HTML/accessibility check found problems.")
+                return aborted("\n❌ Build process aborted: Javadoc check found problems.")
             step_num += 1
 
         test_script = script_dir / 'test.py'

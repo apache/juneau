@@ -73,3 +73,29 @@ def test_custom_list_covers_stylesheet_elements():
     for name in ("jk", "jv", "js", "jc", "jsm", "ja", "jsf", "jf", "xt", "c", "l", "property"):
         assert name in mod.CUSTOM_ELEMENTS
     assert "jk" in css
+
+
+def test_reference_error_is_reported(tmp_path, capsys):
+    code, out = run(tmp_path, "a/B.java:86: error: reference not found\n", capsys=capsys)
+    assert code == 1
+    assert "reference not found" in out
+
+
+def test_all_four_groups_are_accepted():
+    assert {"html", "accessibility", "reference", "syntax"} <= set(mod.GROUPS)
+
+
+def test_docs_dir_skipped_only_at_root(tmp_path):
+    for rel in ("docs/src/main/java/X.java", "m/src/main/java/p/docs/Y.java", "m/src/main/java/p/Z.java"):
+        f = tmp_path / rel
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text("", encoding="utf-8")
+    assert [p.name for p in mod.source_files(tmp_path)] == ["Z.java", "Y.java"]
+
+
+def test_classpath_union_drops_juneau_artifacts_and_dedupes(tmp_path):
+    for m, cp in (("a", "/r/x.jar:/r/org/apache/juneau/j.jar"), ("b", "/r/x.jar:/r/y.jar")):
+        t = tmp_path / m / "target"
+        t.mkdir(parents=True)
+        (t / mod.CLASSPATH_FILE).write_text(cp, encoding="utf-8")
+    assert mod.dependency_classpath(tmp_path) == "/r/x.jar:/r/y.jar"
