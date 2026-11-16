@@ -94,6 +94,11 @@ public class XmlReader implements XMLStreamReader, Positionable {
 		}
 	}
 
+	private static final String MAX_ELEMENT_DEPTH_PROPERTY = "http://www.oracle.com/xml/jaxp/properties/maxElementDepth";
+
+	// Finite bound well above the default shared maxParseDepth (500).
+	private static final int MAX_ELEMENT_DEPTH = 10_000;
+
 	/**
 	 * Creates and configures a hardened input factory.
 	 *
@@ -113,7 +118,24 @@ public class XmlReader implements XMLStreamReader, Positionable {
 			factory.setProperty(XMLInputFactory.RESOLVER, resolver);
 		if (factory.isPropertySupported(XMLInputFactory.ALLOCATOR) && nn(eventAllocator))
 			factory.setProperty(XMLInputFactory.ALLOCATOR, eventAllocator);
+		raiseMaxElementDepth(factory);
 		return factory;
+	}
+
+	/**
+	 * Raises the JAXP element-depth limit so that the shared parse-depth guard in {@link ParserSession} fires first.
+	 *
+	 * <p>
+	 * Newer JDKs cap element depth at 100 by default, which is below the shared limit and would otherwise surface a
+	 * JDK-specific error.  Implementations that don't support the property (e.g. Woodstox) are left alone; the shared
+	 * guard still applies to them.
+	 */
+	private static void raiseMaxElementDepth(XMLInputFactory factory) {
+		try {
+			factory.setProperty(MAX_ELEMENT_DEPTH_PROPERTY, MAX_ELEMENT_DEPTH);
+		} catch (IllegalArgumentException e) {
+			// Property not supported by this StAX implementation.
+		}
 	}
 
 	/**

@@ -64,10 +64,7 @@ class ParseDepth_Test extends TestBase {
 
 	@Test void a05_xmlDeepElements() {
 		var in = repeat("<array>", 5000) + repeat("</array>", 5000);
-		// Newer JDKs (25+) cap element depth at 100 inside the JAXP StAX reader, which fires before the shared guard; either is a graceful ParseException.
-		var e = assertThrows(ParseException.class, () -> XmlParser.DEFAULT.read(in, Object.class));
-		var msg = String.valueOf(e.getMessage());
-		assertTrue(msg.contains("Maximum parse depth exceeded") || msg.contains("jdk.xml.maxElementDepth"), msg);
+		assertDepthExceeded(() -> XmlParser.DEFAULT.read(in, Object.class));
 	}
 
 	@Test void a06_yamlDeepArrays() {
