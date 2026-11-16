@@ -24,6 +24,7 @@ import java.net.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
 import org.junit.jupiter.api.*;
@@ -56,16 +57,16 @@ class RemoteProxyParity_Test {
 	private static volatile int status = 200;
 	private static volatile int failsBeforeSuccess = 0;
 	private static volatile long sleepMs = 0;
-	private static volatile String responseBody = "OK";
-	private static volatile String responseContentType = "text/plain";
-	private static volatile String lastMethod;
-	private static volatile String lastPath;
-	private static volatile String lastQuery;
-	private static volatile String lastBody;
-	private static volatile String lastAccept;
-	private static volatile String lastContentType;
-	private static volatile String lastXFoo;
-	private static volatile String lastXBar;
+	private static final AtomicReference<String> responseBody = new AtomicReference<>("OK");
+	private static final AtomicReference<String> responseContentType = new AtomicReference<>("text/plain");
+	private static final AtomicReference<String> lastMethod = new AtomicReference<>();
+	private static final AtomicReference<String> lastPath = new AtomicReference<>();
+	private static final AtomicReference<String> lastQuery = new AtomicReference<>();
+	private static final AtomicReference<String> lastBody = new AtomicReference<>();
+	private static final AtomicReference<String> lastAccept = new AtomicReference<>();
+	private static final AtomicReference<String> lastContentType = new AtomicReference<>();
+	private static final AtomicReference<String> lastXFoo = new AtomicReference<>();
+	private static final AtomicReference<String> lastXBar = new AtomicReference<>();
 
 	@SuppressWarnings({
 		"java:S2925" // Thread.sleep deliberately simulates server latency in the stub handler to trigger client timeouts.
@@ -84,24 +85,24 @@ class RemoteProxyParity_Test {
 		server.setExecutor(executor);
 		server.createContext("/", exchange -> {
 			var n = ATTEMPTS.incrementAndGet();
-			lastMethod = exchange.getRequestMethod();
+			lastMethod.set(exchange.getRequestMethod());
 			var uri = exchange.getRequestURI();
-			lastPath = uri.getPath();
-			lastQuery = uri.getRawQuery();
+			lastPath.set(uri.getPath());
+			lastQuery.set(uri.getRawQuery());
 			var h = exchange.getRequestHeaders();
-			lastAccept = h.getFirst("Accept");
-			lastContentType = h.getFirst("Content-Type");
-			lastXFoo = h.getFirst("X-Foo");
-			lastXBar = h.getFirst("X-Bar");
-			lastBody = new String(exchange.getRequestBody().readAllBytes(), UTF_8);
+			lastAccept.set(h.getFirst("Accept"));
+			lastContentType.set(h.getFirst("Content-Type"));
+			lastXFoo.set(h.getFirst("X-Foo"));
+			lastXBar.set(h.getFirst("X-Bar"));
+			lastBody.set(new String(exchange.getRequestBody().readAllBytes(), UTF_8));
 			if (sleepMs > 0) {
 				try { Thread.sleep(sleepMs); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
 			}
 			var code = status;
 			if (failsBeforeSuccess > 0 && n <= failsBeforeSuccess)
 				code = 503;
-			var resp = responseBody.getBytes(UTF_8);
-			exchange.getResponseHeaders().set("Content-Type", responseContentType);
+			var resp = responseBody.get().getBytes(UTF_8);
+			exchange.getResponseHeaders().set("Content-Type", responseContentType.get());
 			exchange.sendResponseHeaders(code, resp.length == 0 ? -1 : resp.length);
 			try (var os = exchange.getResponseBody()) {
 				os.write(resp);
@@ -124,9 +125,16 @@ class RemoteProxyParity_Test {
 		status = 200;
 		failsBeforeSuccess = 0;
 		sleepMs = 0;
-		responseBody = "OK";
-		responseContentType = "text/plain";
-		lastMethod = lastPath = lastQuery = lastBody = lastAccept = lastContentType = lastXFoo = lastXBar = null;
+		responseBody.set("OK");
+		responseContentType.set("text/plain");
+		lastMethod.set(null);
+		lastPath.set(null);
+		lastQuery.set(null);
+		lastBody.set(null);
+		lastAccept.set(null);
+		lastContentType.set(null);
+		lastXFoo.set(null);
+		lastXBar.set(null);
 	}
 
 	private static String url() {
@@ -147,8 +155,8 @@ class RemoteProxyParity_Test {
 		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			c.getRemote(HeadersRemote.class, url()).call();
 		}
-		assertEquals("method", lastXFoo, "Method-level X-Foo should override interface-level");
-		assertEquals("bar-iface", lastXBar, "Interface-only X-Bar should pass through");
+		assertEquals("method", lastXFoo.get(), "Method-level X-Foo should override interface-level");
+		assertEquals("bar-iface", lastXBar.get(), "Interface-only X-Bar should pass through");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -165,10 +173,10 @@ class RemoteProxyParity_Test {
 		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			c.getRemote(QueryDataRemote.class, url()).call();
 		}
-		assertNotNull(lastQuery);
-		assertTrue(lastQuery.contains("q1=method"), "Actual query: " + lastQuery);
-		assertTrue(lastQuery.contains("q2=v2"), "Actual query: " + lastQuery);
-		assertFalse(lastQuery.contains("q1=iface"), "Method-level q1 should have overridden interface-level: " + lastQuery);
+		assertNotNull(lastQuery.get());
+		assertTrue(lastQuery.get().contains("q1=method"), "Actual query: " + lastQuery.get());
+		assertTrue(lastQuery.get().contains("q2=v2"), "Actual query: " + lastQuery.get());
+		assertFalse(lastQuery.get().contains("q1=iface"), "Method-level q1 should have overridden interface-level: " + lastQuery.get());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -185,10 +193,10 @@ class RemoteProxyParity_Test {
 		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			c.getRemote(FormDataRemote.class, url()).call();
 		}
-		assertEquals("POST", lastMethod);
-		assertNotNull(lastBody);
-		assertTrue(lastBody.contains("f1=method"), "Actual body: " + lastBody);
-		assertTrue(lastBody.contains("f2=v2"), "Actual body: " + lastBody);
+		assertEquals("POST", lastMethod.get());
+		assertNotNull(lastBody.get());
+		assertTrue(lastBody.get().contains("f1=method"), "Actual body: " + lastBody.get());
+		assertTrue(lastBody.get().contains("f2=v2"), "Actual body: " + lastBody.get());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -205,7 +213,7 @@ class RemoteProxyParity_Test {
 		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			c.getRemote(AcceptRemote.class, url()).call();
 		}
-		assertEquals("application/json", lastAccept);
+		assertEquals("application/json", lastAccept.get());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -222,9 +230,9 @@ class RemoteProxyParity_Test {
 		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			c.getRemote(ContentTypeRemote.class, url()).call("hello");
 		}
-		assertNotNull(lastContentType);
-		assertTrue(lastContentType.startsWith("text/custom"), "Actual Content-Type: " + lastContentType);
-		assertEquals("hello", lastBody);
+		assertNotNull(lastContentType.get());
+		assertTrue(lastContentType.get().startsWith("text/custom"), "Actual Content-Type: " + lastContentType.get());
+		assertEquals("hello", lastBody.get());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -244,7 +252,7 @@ class RemoteProxyParity_Test {
 		} finally {
 			System.clearProperty("juneau.test.baseUrl");
 		}
-		assertEquals("/base", lastPath);
+		assertEquals("/base", lastPath.get());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -261,7 +269,7 @@ class RemoteProxyParity_Test {
 		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			c.getRemote(UrlParamRemote.class).call(url() + "/fromparam");
 		}
-		assertEquals("/fromparam", lastPath);
+		assertEquals("/fromparam", lastPath.get());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -334,7 +342,7 @@ class RemoteProxyParity_Test {
 
 	@Test void t2g_retries_nonIdempotentPost_notRetriedByDefault() throws Exception {
 		failsBeforeSuccess = 2;
-		responseBody = "err";
+		responseBody.set("err");
 		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			// POST is not retried without retryNonIdempotent: the first 503 body flows through (throwOnError defaults false).
 			var result = c.getRemote(RetryPostRemote.class, url()).call("x");

@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.mcp.v20260728;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import org.apache.juneau.bean.mcp.v20260728.ServerCapabilities;
@@ -83,10 +84,7 @@ public class McpOptions {
 	private McpSubscriptionsConfig subscriptions = new McpSubscriptionsConfig();
 	private McpSubscriptionBroker subscriptionBroker;
 
-	@SuppressWarnings({
-		"java:S3077" // Volatile is required for correct double-checked locking in resolveSubscriptionBroker(): unlike a plain lazy read, two BasicMcpSubscriptionBroker instances are NOT equivalent (each holds distinct live per-connection subscription state), so exactly one derived broker must ever be created and published or a subscription registered against one instance would never be visible to a publish call against the other.
-	})
-	private volatile McpSubscriptionBroker derivedBroker;
+	private final AtomicReference<McpSubscriptionBroker> derivedBroker = new AtomicReference<>();
 
 	private final Object lock = new Object();
 
@@ -337,13 +335,13 @@ public class McpOptions {
 		var explicit = subscriptionBroker;
 		if (explicit != null)
 			return explicit;
-		var result = derivedBroker;
+		var result = derivedBroker.get();
 		if (result == null) {
 			synchronized (lock) {
-				result = derivedBroker;
+				result = derivedBroker.get();
 				if (result == null) {
 					result = new BasicMcpSubscriptionBroker(subscriptions.getQueueSize());
-					derivedBroker = result;
+					derivedBroker.set(result);
 				}
 			}
 		}

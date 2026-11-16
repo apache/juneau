@@ -27,6 +27,7 @@ import java.net.http.HttpResponse.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
@@ -258,13 +259,13 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 
 		/** Test-controlled gate future for the delayed endpoint; completed by the test to trigger completion-path emit. */
-		static volatile CompletableFuture<String> gate;
+		static final AtomicReference<CompletableFuture<String>> gate = new AtomicReference<>();
 
 		/** Test-controlled gate future for the ad-hoc-log endpoint (async-carry tripwire). */
-		static volatile CompletableFuture<String> adhocGate;
+		static final AtomicReference<CompletableFuture<String>> adhocGate = new AtomicReference<>();
 
 		/** Counted down by {@code @RestEndCall} on the request thread — i.e. AFTER {@code RestSession.finish()} returns. */
-		static volatile CountDownLatch finishLatch;
+		static final AtomicReference<CountDownLatch> finishLatch = new AtomicReference<>();
 
 		/**
 		 * When non-<jk>null</jk>, the async handlers open a {@link LogContext} scope carrying {@code corrId=carryValue} on
@@ -274,22 +275,22 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 		 * {@code RestDebugPipeline.captureAsyncSnapshot(...)} snapshots it) and is closed in {@link #endCall()} on the same
 		 * request thread — no thread-pool leak.
 		 */
-		static volatile String carryValue;
+		static final AtomicReference<String> carryValue = new AtomicReference<>();
 
 		/** The request-thread {@link LogContext} scope opened from {@link #carryValue}; closed in {@link #endCall()}. */
-		static volatile LogContext.Scope carryScope;
+		static final AtomicReference<LogContext.Scope> carryScope = new AtomicReference<>();
 
 		private void openCarryScopeIfRequested() {
-			var cv = carryValue;
+			var cv = carryValue.get();
 			if (cv != null)
-				carryScope = RichLogger.context().with("corrId", cv);
+				carryScope.set(RichLogger.context().with("corrId", cv));
 		}
 
 		@RestGet("/delayed")
 		public CompletableFuture<String> delayed(RestResponse res) {
 			openCarryScopeIfRequested();
 			var g = new CompletableFuture<String>();
-			gate = g;
+			gate.set(g);
 			// The header + content-type are set on the COMPLETION thread (inside thenApply), so a record that captured
 			// them proves rendering happened after async completion, not during synchronous finish().
 			return g.thenApply(body -> {
@@ -321,7 +322,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 		public CompletableFuture<String> adhoc(RestRequest req, RestResponse res) {
 			openCarryScopeIfRequested();
 			var g = new CompletableFuture<String>();
-			adhocGate = g;
+			adhocGate.set(g);
 			// The ad-hoc app log runs inside the completion callback (the COMPLETION thread), where the request-thread
 			// LogContext scope has already closed — documented async-carry edge.
 			return g.thenApply(body -> {
@@ -336,12 +337,12 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			// Close the request-thread carry scope here — on the request thread, AFTER captureAsyncSnapshot(...) has
 			// already snapshotted it during response processing — so the thread-local is restored and never leaks into a
 			// pooled Jetty worker.
-			var sc = carryScope;
+			var sc = carryScope.get();
 			if (sc != null) {
 				sc.close();
-				carryScope = null;
+				carryScope.set(null);
 			}
-			var l = finishLatch;
+			var l = finishLatch.get();
 			if (l != null)
 				l.countDown();
 		}
@@ -462,8 +463,8 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 		try {
 			forceOn();  // Body-dump gate (test-only seam) so the FINEST response body renders.
 			var handler = attach(opLogger, Level.FINEST);
-			AsyncCaptureServlet.gate = null;
-			AsyncCaptureServlet.finishLatch = new CountDownLatch(1);
+			AsyncCaptureServlet.gate.set(null);
+			AsyncCaptureServlet.finishLatch.set(new CountDownLatch(1));
 
 			var respFuture = HTTP.sendAsync(
 				HttpRequest.newBuilder()
@@ -474,7 +475,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 				BodyHandlers.ofString());
 
 			// Barrier: the request thread has returned from RestSession.finish() and run @RestEndCall.
-			assertTrue(AsyncCaptureServlet.finishLatch.await(10, TimeUnit.SECONDS),
+			assertTrue(AsyncCaptureServlet.finishLatch.get().await(10, TimeUnit.SECONDS),
 				"request thread did not reach @RestEndCall");
 
 			// RED on synchronous-finish emit: finish() would already have emitted an incomplete record here.
@@ -482,8 +483,8 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertSize(() -> "no debug record may be emitted between synchronous finish() and async completion", 0, handler.forLogger(opLogger.getName()));
 
 			// Complete on the completion thread with a non-empty body; the endpoint sets a late header there too.
-			assertNotNull(AsyncCaptureServlet.gate, "gate future should have been published by the handler");
-			AsyncCaptureServlet.gate.complete("delayed-body-value");
+			assertNotNull(AsyncCaptureServlet.gate.get(), "gate future should have been published by the handler");
+			AsyncCaptureServlet.gate.get().complete("delayed-body-value");
 
 			var resp = respFuture.get(15, TimeUnit.SECONDS);
 			assertEquals(200, resp.statusCode(), "body: " + resp.body());
@@ -500,11 +501,11 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 				"completion-path record must contain the body written during completion: " + rec.getMessage());
 		} finally {
 			reset();
-			AsyncCaptureServlet.finishLatch = null;
-			var g = AsyncCaptureServlet.gate;
+			AsyncCaptureServlet.finishLatch.set(null);
+			var g = AsyncCaptureServlet.gate.get();
 			if (g != null)
 				g.complete("cleanup");  // never leave a request hung if an assertion failed before completion
-			AsyncCaptureServlet.gate = null;
+			AsyncCaptureServlet.gate.set(null);
 			state.restore();
 		}
 	}
@@ -590,9 +591,9 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 		var state = new LoggerState(opLogger);
 		try {
 			var handler = attach(opLogger, Level.FINE);
-			AsyncCaptureServlet.gate = null;
-			AsyncCaptureServlet.carryValue = "async-corr-1";  // handler opens a request-thread LogContext scope from this
-			AsyncCaptureServlet.finishLatch = new CountDownLatch(1);
+			AsyncCaptureServlet.gate.set(null);
+			AsyncCaptureServlet.carryValue.set("async-corr-1");  // handler opens a request-thread LogContext scope from this
+			AsyncCaptureServlet.finishLatch.set(new CountDownLatch(1));
 
 			var respFuture = HTTP.sendAsync(
 				HttpRequest.newBuilder()
@@ -604,10 +605,10 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 
 			// The request thread has returned from finish() and @RestEndCall closed the carry scope — so the completion
 			// record can only carry corrId if it was snapshotted on the request thread and re-established at emit (carry).
-			assertTrue(AsyncCaptureServlet.finishLatch.await(10, TimeUnit.SECONDS),
+			assertTrue(AsyncCaptureServlet.finishLatch.get().await(10, TimeUnit.SECONDS),
 				"request thread did not reach @RestEndCall");
-			assertNotNull(AsyncCaptureServlet.gate, "gate future should have been published by the handler");
-			AsyncCaptureServlet.gate.complete("delayed-body-value");
+			assertNotNull(AsyncCaptureServlet.gate.get(), "gate future should have been published by the handler");
+			AsyncCaptureServlet.gate.get().complete("delayed-body-value");
 
 			var resp = respFuture.get(15, TimeUnit.SECONDS);
 			assertEquals(200, resp.statusCode(), "body: " + resp.body());
@@ -627,12 +628,12 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertTrue(rec.getMessage().contains("[requestId=" + rid + "] "),
 				"the async completion rendered message must carry the requestId prefix: " + rec.getMessage());
 		} finally {
-			AsyncCaptureServlet.carryValue = null;
-			AsyncCaptureServlet.finishLatch = null;
-			var g = AsyncCaptureServlet.gate;
+			AsyncCaptureServlet.carryValue.set(null);
+			AsyncCaptureServlet.finishLatch.set(null);
+			var g = AsyncCaptureServlet.gate.get();
 			if (g != null)
 				g.complete("cleanup");
-			AsyncCaptureServlet.gate = null;
+			AsyncCaptureServlet.gate.set(null);
 			state.restore();
 		}
 	}
@@ -643,9 +644,9 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 		try {
 			var handler = attach(opLogger, Level.FINE);
 			handler.setLevel(Level.ALL);  // also collect the FINE ad-hoc record, not just the INFO debug record
-			AsyncCaptureServlet.adhocGate = null;
-			AsyncCaptureServlet.carryValue = "async-corr-adhoc";  // handler opens a request-thread LogContext scope
-			AsyncCaptureServlet.finishLatch = new CountDownLatch(1);
+			AsyncCaptureServlet.adhocGate.set(null);
+			AsyncCaptureServlet.carryValue.set("async-corr-adhoc");  // handler opens a request-thread LogContext scope
+			AsyncCaptureServlet.finishLatch.set(new CountDownLatch(1));
 
 			var respFuture = HTTP.sendAsync(
 				HttpRequest.newBuilder()
@@ -655,10 +656,10 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 					.build(),
 				BodyHandlers.ofString());
 
-			assertTrue(AsyncCaptureServlet.finishLatch.await(10, TimeUnit.SECONDS),
+			assertTrue(AsyncCaptureServlet.finishLatch.get().await(10, TimeUnit.SECONDS),
 				"request thread did not reach @RestEndCall");
-			assertNotNull(AsyncCaptureServlet.adhocGate, "adhoc gate future should have been published by the handler");
-			AsyncCaptureServlet.adhocGate.complete("adhoc-body");
+			assertNotNull(AsyncCaptureServlet.adhocGate.get(), "adhoc gate future should have been published by the handler");
+			AsyncCaptureServlet.adhocGate.get().complete("adhoc-body");
 
 			var resp = respFuture.get(15, TimeUnit.SECONDS);
 			assertEquals(200, resp.statusCode(), "body: " + resp.body());
@@ -681,12 +682,12 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertEquals("async-corr-adhoc", LogRecordContext.of(debugRec).get("corrId"),
 				"the debug-pipeline completion record must still carry the context via the async carry");
 		} finally {
-			AsyncCaptureServlet.carryValue = null;
-			AsyncCaptureServlet.finishLatch = null;
-			var g = AsyncCaptureServlet.adhocGate;
+			AsyncCaptureServlet.carryValue.set(null);
+			AsyncCaptureServlet.finishLatch.set(null);
+			var g = AsyncCaptureServlet.adhocGate.get();
 			if (g != null)
 				g.complete("cleanup");
-			AsyncCaptureServlet.adhocGate = null;
+			AsyncCaptureServlet.adhocGate.set(null);
 			state.restore();
 		}
 	}

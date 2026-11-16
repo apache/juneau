@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
@@ -101,10 +102,7 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 	// the bridge-default Configuration and its template cache are built once instead of rebuilt per render.
 	// Created lazily (not eagerly) so a missing FreeMarker engine still surfaces at render time as
 	// NO_ENGINE_DIAGNOSTIC rather than during RestContext construction.
-	@SuppressWarnings({
-		"java:S3077" // volatile is required here for correct double-checked-locking safe-publication of the lazily-built fallback FreemarkerMixin in fallbackMixin(); the reference is publish-once (fully constructed before assignment, immutable thereafter) and never compound-mutated.
-	})
-	private volatile FreemarkerMixin fallbackMixin;
+	private final AtomicReference<FreemarkerMixin> fallbackMixin = new AtomicReference<>();
 
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException, BasicHttpException {
@@ -236,13 +234,13 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 
 	// Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.
 	private FreemarkerMixin fallbackMixin() {
-		var local = fallbackMixin;
+		var local = fallbackMixin.get();
 		if (local == null) {
 			synchronized (this) {
-				local = fallbackMixin;
+				local = fallbackMixin.get();
 				if (local == null) {
 					local = new FreemarkerMixin();
-					fallbackMixin = local;
+					fallbackMixin.set(local);
 				}
 			}
 		}

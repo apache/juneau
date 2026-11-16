@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.marshall.json.*;
@@ -89,14 +90,14 @@ class ReactiveResponseProcessor_Buffer_Test extends TestBase {
 
 	@Rest(serializers = JsonSerializer.class)
 	public static class A {
-		static volatile CountingPublisher pub;
-		static volatile SilentPublisher silent;
+		static final AtomicReference<CountingPublisher> pub = new AtomicReference<>();
+		static final AtomicReference<SilentPublisher> silent = new AtomicReference<>();
 
 		@RestGet("/counting")
-		public Flow.Publisher<Integer> counting() { return pub; }
+		public Flow.Publisher<Integer> counting() { return pub.get(); }
 
 		@RestOp(method = "GET", path = "/silent", asyncTimeoutMillis = "50")
-		public Flow.Publisher<Integer> silent() { return silent; }
+		public Flow.Publisher<Integer> silent() { return silent.get(); }
 	}
 
 	// MockRestClient caches one RestContext per resource class, so each cap value needs its own class.
@@ -121,53 +122,53 @@ class ReactiveResponseProcessor_Buffer_Test extends TestBase {
 	}
 
 	@Test void a01_underDefaultCap_serializesAsBefore() throws Exception {
-		A.pub = new CountingPublisher(3);
+		A.pub.set(new CountingPublisher(3));
 		client(null).get("/counting").accept("application/json").run()
 			.assertStatus(200)
 			.assertContent().is("[0,1,2]");
-		assertFalse(A.pub.cancelled.get());
+		assertFalse(A.pub.get().cancelled.get());
 	}
 
 	@Test void a02_exactlyAtCap_succeeds() throws Exception {
-		A.pub = new CountingPublisher(3);
+		A.pub.set(new CountingPublisher(3));
 		client("3").get("/counting").accept("application/json").run()
 			.assertStatus(200)
 			.assertContent().is("[0,1,2]");
 	}
 
 	@Test void a03_overCap_failsWith500AndCancels() throws Exception {
-		A.pub = new CountingPublisher(10);
+		A.pub.set(new CountingPublisher(10));
 		var r = client("3").get("/counting").accept("application/json").run();
 		r.assertStatus(500);
 		var body = r.getContent().asString();
 		assertTrue(body.contains("limit of 3 buffered elements"), body);
-		assertTrue(A.pub.cancelled.get());
-		assertEquals(4, A.pub.emitted.get());
+		assertTrue(A.pub.get().cancelled.get());
+		assertEquals(4, A.pub.get().emitted.get());
 	}
 
 	@Test void a04_infinitePublisher_isStoppedAtCap() throws Exception {
-		A.pub = new CountingPublisher(-1);
+		A.pub.set(new CountingPublisher(-1));
 		client("50").get("/counting").accept("application/json").run().assertStatus(500);
-		assertTrue(A.pub.cancelled.get());
-		assertEquals(51, A.pub.emitted.get());
+		assertTrue(A.pub.get().cancelled.get());
+		assertEquals(51, A.pub.get().emitted.get());
 	}
 
 	@Test void a05_infinitePublisher_defaultCapIsTenThousand() throws Exception {
-		A.pub = new CountingPublisher(-1);
+		A.pub.set(new CountingPublisher(-1));
 		client(null).get("/counting").accept("application/json").run().assertStatus(500);
-		assertTrue(A.pub.cancelled.get());
-		assertEquals(10_001, A.pub.emitted.get());
+		assertTrue(A.pub.get().cancelled.get());
+		assertEquals(10_001, A.pub.get().emitted.get());
 	}
 
 	@Test void a06_smallCapSetting_isHonored() throws Exception {
-		A.pub = new CountingPublisher(2);
+		A.pub.set(new CountingPublisher(2));
 		client("1").get("/counting").accept("application/json").run().assertStatus(500);
-		assertTrue(A.pub.cancelled.get());
+		assertTrue(A.pub.get().cancelled.get());
 	}
 
 	@Test void a07_timeout_cancelsSubscription() throws Exception {
-		A.silent = new SilentPublisher();
+		A.silent.set(new SilentPublisher());
 		client(null).get("/silent").accept("application/json").run().assertStatus(504);
-		assertTrue(A.silent.cancelled.get());
+		assertTrue(A.silent.get().cancelled.get());
 	}
 }

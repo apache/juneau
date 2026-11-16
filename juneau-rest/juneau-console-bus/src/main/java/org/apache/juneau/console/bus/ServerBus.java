@@ -23,6 +23,7 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 import java.util.logging.*;
 import java.util.stream.*;
@@ -95,7 +96,7 @@ public final class ServerBus implements AutoCloseable {
 	private final Map<String,SessionImpl> sessions = new LinkedHashMap<>();
 	private boolean closed;
 
-	private volatile String webSocketPrefix;
+	private final AtomicReference<String> webSocketPrefix = new AtomicReference<>();
 
 	ServerBus(BusPolicy policy, Clock clock, ScheduledExecutorService timer) {
 		this.policy = Objects.requireNonNull(policy, "policy");
@@ -283,7 +284,7 @@ public final class ServerBus implements AutoCloseable {
 			throw BusRefusal.badRequest("the session requests no topics");
 		if (! upstream.isEmpty() && ! "websocket".equals(transport))
 			throw BusRefusal.badRequest("upstream topics require the websocket transport");
-		if ("websocket".equals(transport) && webSocketPrefix == null)
+		if ("websocket".equals(transport) && webSocketPrefix.get() == null)
 			throw BusRefusal.transportUnavailable();
 
 		var authorizer = policy.authorizer();
@@ -463,7 +464,7 @@ public final class ServerBus implements AutoCloseable {
 		if (contextRelativePathPrefix == null || ! contextRelativePathPrefix.startsWith("/") || contextRelativePathPrefix.endsWith("/"))
 			throw new IllegalArgumentException(f(
 				"ServerBus.enableWebSocket: '%s' must start with '/' and must not end with '/'", contextRelativePathPrefix));
-		webSocketPrefix = contextRelativePathPrefix;
+		webSocketPrefix.set(contextRelativePathPrefix);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -472,7 +473,7 @@ public final class ServerBus implements AutoCloseable {
 
 	/** The WebSocket path prefix passed to {@link #enableWebSocket(String)}, or <jk>null</jk>. */
 	String webSocketPrefix() {
-		return webSocketPrefix;
+		return webSocketPrefix.get();
 	}
 
 	/** The capability id of a session of any {@code ServerBus}.  Only the session POST response may carry it. */
@@ -509,7 +510,7 @@ public final class ServerBus implements AutoCloseable {
 		var s = impl(session);
 		var down = s.downstream.stream().map(t -> JsonMap.of("topic", t, "retain", policy.downstreamRetain(t).orElse(false))).toList();
 		var paths = JsonMap.of("sse", busBase + "/stream/" + s.id);
-		var ws = webSocketPrefix;
+		var ws = webSocketPrefix.get();
 		if (ws != null)
 			paths.put("websocket", (contextPath == null ? "" : contextPath) + ws + "/" + s.id);
 		return JsonMap.of("v", BusFrames.VERSION, "sessionId", s.id, "heartbeatMs", policy.heartbeat().toMillis(),

@@ -23,6 +23,8 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.logging.*;
@@ -89,19 +91,10 @@ public class BasicBeanStore implements WritableBeanStore {
 	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<String,Supplier<?>>> entries;
 	private final BeanStore parent;
 	private final BeanStore overridingParent;
-	@SuppressWarnings({
-		"java:S3077" // volatile is required here for correct double-checked-locking safe-publication of the lazily-created StackOverlay in pushOverlay(); the reference is publish-once and never compound-mutated.
-	})
-	private volatile StackOverlay overlayStack;
-	@SuppressWarnings({
-		"java:S3077" // volatile is required for safe publication of the lazily-created holder; the reference is publish-once and never compound-mutated.
-	})
-	private volatile Extras extras;
-	@SuppressWarnings({
-		"java:S3077" // volatile is required for safe publication of the lazily-created holder; the reference is publish-once and never compound-mutated.
-	})
-	private volatile Tracking tracking;
-	private volatile boolean closed;
+	private final AtomicReference<StackOverlay> overlayStack = new AtomicReference<>();
+	private final AtomicReference<Extras> extras = new AtomicReference<>();
+	private final AtomicReference<Tracking> tracking = new AtomicReference<>();
+	private final AtomicBoolean closed = new AtomicBoolean();
 
 	/**
 	 * Rarely-used state, created on first write so a short-lived store that only holds a few entries (e.g. one per
@@ -122,13 +115,13 @@ public class BasicBeanStore implements WritableBeanStore {
 	}
 
 	private Extras extras() {
-		var x = extras;
+		var x = extras.get();
 		if (x == null) {
 			synchronized (this) {
-				x = extras;
+				x = extras.get();
 				if (x == null) {
 					x = new Extras();
-					extras = x;
+					extras.set(x);
 				}
 			}
 		}
@@ -136,14 +129,14 @@ public class BasicBeanStore implements WritableBeanStore {
 	}
 
 	private ConcurrentHashMap<String,Supplier<?>> defaultTypeMap(Class<?> beanType) {
-		var x = extras;
+		var x = extras.get();
 		return x == null ? null : x.defaults.get(beanType);
 	}
 
 	private void putEntryMeta(Class<?> beanType, String key, BeanSourceMeta meta) {
 		if (meta == BeanSourceMeta.DEFAULT) {
 			// Default metadata is represented by absence; drop any non-default value this key previously had.
-			var x = extras;
+			var x = extras.get();
 			if (x != null) {
 				var m = x.entryMetadata.get(beanType);
 				if (m != null)
@@ -359,7 +352,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 */
 	public BasicBeanStore promoteDefaultsToLocalSuppliers() {
 		checkOpen();
-		var x = extras;
+		var x = extras.get();
 		if (x != null)
 			x.defaults.forEach((beanType, typeMap) -> typeMap.forEach((name, supplier) ->
 				entries.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>()).putIfAbsent(name, supplier)));
@@ -370,13 +363,13 @@ public class BasicBeanStore implements WritableBeanStore {
 	public Snapshot pushOverlay(BeanStore overlay) {
 		Objects.requireNonNull(overlay, "overlay must not be null");
 		checkOpen();
-		var stack = overlayStack;
+		var stack = overlayStack.get();
 		if (stack == null) {
 			synchronized (this) {
-				stack = overlayStack;
+				stack = overlayStack.get();
 				if (stack == null) {
 					stack = new StackOverlay();
-					overlayStack = stack;
+					overlayStack.set(stack);
 				}
 			}
 		}
@@ -390,7 +383,7 @@ public class BasicBeanStore implements WritableBeanStore {
 		checkOpen();
 		if (snapshot.owner() != this)
 			throw new IllegalStateException("Snapshot does not belong to this BeanStore (foreign-snapshot pop).");
-		var stack = overlayStack;
+		var stack = overlayStack.get();
 		if (stack == null || stack.depth() == 0)
 			throw new IllegalStateException("popOverlay invoked on an empty overlay stack.");
 		// LIFO discipline — the snapshot must identify the current top-of-stack frame.
@@ -413,7 +406,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	public BasicBeanStore clear() {
 		checkOpen();
 		entries.clear();
-		var x = extras;
+		var x = extras.get();
 		if (x != null) {
 			x.defaults.clear();
 			x.entryMetadata.clear();
@@ -489,7 +482,7 @@ public class BasicBeanStore implements WritableBeanStore {
 			typeMap.forEach((name, supplier) -> result.put(name, (T)supplier.get()));
 		if (nn(overridingParent))
 			overridingParent.getBeansOfType(beanType).forEach(result::put);
-		var stack = overlayStack;
+		var stack = overlayStack.get();
 		if (nn(stack) && stack.depth() > 0)
 			stack.getBeansOfType(beanType).forEach(result::put);
 		if (result.isEmpty())
@@ -606,7 +599,7 @@ public class BasicBeanStore implements WritableBeanStore {
 
 	@Override
 	public <T> Optional<Class<? extends T>> getBeanType(Class<T> beanType) {
-		var x = extras;
+		var x = extras.get();
 		var v = x == null ? null : (Class<? extends T>) x.typeBindings.get(beanType);
 		if (nn(v))
 			return o(v);
@@ -644,7 +637,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	protected <T> Optional<Supplier<T>> resolve(Class<T> beanType, String name) {
 		// (0) Push/pop overlay stack — wins over the construction-time overridingParent slot because pushed
 		// frames are "more recent".  Lazily initialized; null until the first pushOverlay() call.
-		var stack = overlayStack;
+		var stack = overlayStack.get();
 		if (nn(stack) && stack.depth() > 0) {
 			var fromStack = stack.getBeanSupplier(beanType, name);
 			if (fromStack.isPresent())
@@ -806,7 +799,7 @@ public class BasicBeanStore implements WritableBeanStore {
 			.a("bean", id(supplier.get()))
 			.a("name", name))));
 		var defaultList = list();
-		var xd = extras;
+		var xd = extras.get();
 		if (xd != null)
 			xd.defaults.forEach((type, typeMap) -> typeMap.forEach((name, supplier) -> defaultList.add(filteredBeanPropertyMap()
 				.a("type", cns(type))
@@ -819,7 +812,7 @@ public class BasicBeanStore implements WritableBeanStore {
 			else
 				overridingParentValue = s(overridingParent);
 		}
-		var stack = overlayStack;
+		var stack = overlayStack.get();
 		Object overlayStackValue = (nn(stack) && stack.depth() > 0) ? s(stack) : null;
 		return filteredBeanPropertyMap()
 			.a("entries", entryList)
@@ -833,12 +826,11 @@ public class BasicBeanStore implements WritableBeanStore {
 
 	@Override
 	public void close() throws BeanCreationException {
-		if (closed)
+		if (! closed.compareAndSet(false, true))
 			return;
-		closed = true;
 		var errors = new BeanCreationException("Errors while invoking @PreDestroy callbacks.");
 		boolean hasErrors = false;
-		var t = tracking;
+		var t = tracking.get();
 		List<Object> beans = new ArrayList<>();
 		if (t != null)
 			synchronized (t) {
@@ -982,7 +974,7 @@ public class BasicBeanStore implements WritableBeanStore {
 
 	private boolean anyLocalBeanNamed(String name) {
 		var key = emptyIfNull(name);
-		var x = extras;
+		var x = extras.get();
 		return entries.values().stream().anyMatch(m -> m.containsKey(key))
 			|| (x != null && x.defaults.values().stream().anyMatch(m -> m.containsKey(key)));
 	}
@@ -1009,13 +1001,13 @@ public class BasicBeanStore implements WritableBeanStore {
 	private <T> T trackResolved(T bean) {
 		if (bean == null)
 			return null;
-		var t = tracking;
+		var t = tracking.get();
 		if (t == null) {
 			synchronized (this) {
-				t = tracking;
+				t = tracking.get();
 				if (t == null) {
 					t = new Tracking();
-					tracking = t;
+					tracking.set(t);
 				}
 			}
 		}
@@ -1033,7 +1025,7 @@ public class BasicBeanStore implements WritableBeanStore {
 		// overridingParent stores (including Spring-backed delegates) are similarly excluded because
 		// @Primary metadata only exists on beans this store registered itself.
 		Set<String> primaryNames = st();
-		var x = extras;
+		var x = extras.get();
 		var em = x == null ? null : x.entryMetadata.get(beanType);
 		if (nn(em))
 			em.forEach((name, meta) -> { if (meta.primary()) primaryNames.add(name); });
@@ -1050,7 +1042,7 @@ public class BasicBeanStore implements WritableBeanStore {
 		// BeanSourceMeta.DEFAULT (which already returns Integer.MAX_VALUE/2), so we fall through to
 		// the same constant rather than tracking default-supplier metadata.
 		var key = emptyIfNull(name);
-		var x = extras;
+		var x = extras.get();
 		var m = x == null ? null : x.entryMetadata.get(type);
 		if (m != null)
 			return m.getOrDefault(key, BeanSourceMeta.DEFAULT).orderValue();
@@ -1058,7 +1050,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	}
 
 	private void checkOpen() {
-		if (closed)
+		if (closed.get())
 			throw new IllegalStateException("BeanStore has been closed.");
 	}
 

@@ -25,6 +25,7 @@ import java.time.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.junit.jupiter.api.*;
@@ -39,7 +40,7 @@ import com.sun.net.httpserver.*;
 class OAuthIntrospectionValidator_Hardening_Test extends TestBase {
 
 	private HttpServer server;
-	private volatile String nextResponse = "{\"active\":false}";
+	private final AtomicReference<String> nextResponse = new AtomicReference<>("{\"active\":false}");
 	private volatile long delayMs;
 	private final AtomicInteger calls = new AtomicInteger();
 	private final CountDownLatch release = new CountDownLatch(1);
@@ -56,7 +57,7 @@ class OAuthIntrospectionValidator_Hardening_Test extends TestBase {
 					Thread.currentThread().interrupt();
 				}
 			}
-			var body = nextResponse.getBytes(StandardCharsets.UTF_8);
+			var body = nextResponse.get().getBytes(StandardCharsets.UTF_8);
 			ex.getResponseHeaders().add("Content-Type", "application/json");
 			ex.sendResponseHeaders(200, body.length);
 			try (var os = ex.getResponseBody()) {
@@ -90,43 +91,43 @@ class OAuthIntrospectionValidator_Hardening_Test extends TestBase {
 
 	@Test void b01_issuer_mismatchRejected_matchAccepted() throws Exception {
 		var v = builder().anyAudience().issuer("https://idp.example").build();
-		nextResponse = "{\"active\":true,\"sub\":\"a\",\"iss\":\"https://other.example\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\",\"iss\":\"https://other.example\"}");
 		assertThrows(AuthenticationException.class, () -> v.validate("t1"));
-		nextResponse = "{\"active\":true,\"sub\":\"a\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\"}");
 		assertThrows(AuthenticationException.class, () -> v.validate("t2"));
-		nextResponse = "{\"active\":true,\"sub\":\"a\",\"iss\":\"https://idp.example\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\",\"iss\":\"https://idp.example\"}");
 		assertEquals("a", v.validate("t3").getName());
 	}
 
 	@Test void b02_noIssuerConfigured_issuerIgnored() throws Exception {
 		var v = builder().anyAudience().build();
-		nextResponse = "{\"active\":true,\"sub\":\"a\",\"iss\":\"https://other.example\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\",\"iss\":\"https://other.example\"}");
 		assertEquals("a", v.validate("t1").getName());
 	}
 
 	@Test void e01_tokenType_refreshOrIdTokenRejected() {
 		var v = builder().anyAudience().build();
-		nextResponse = "{\"active\":true,\"sub\":\"a\",\"token_type\":\"refresh_token\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\",\"token_type\":\"refresh_token\"}");
 		assertThrows(AuthenticationException.class, () -> v.validate("r1"));
-		nextResponse = "{\"active\":true,\"sub\":\"a\",\"token_type\":\"id_token\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\",\"token_type\":\"id_token\"}");
 		assertThrows(AuthenticationException.class, () -> v.validate("r2"));
 	}
 
 	@Test void e02_tokenType_bearerAndAbsentAccepted() throws Exception {
 		var v = builder().anyAudience().build();
-		nextResponse = "{\"active\":true,\"sub\":\"a\",\"token_type\":\"bearer\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\",\"token_type\":\"bearer\"}");
 		assertEquals("a", v.validate("b1").getName());
-		nextResponse = "{\"active\":true,\"sub\":\"a\",\"token_type\":\"access_token\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\",\"token_type\":\"access_token\"}");
 		assertEquals("a", v.validate("b2").getName());
-		nextResponse = "{\"active\":true,\"sub\":\"a\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\"}");
 		assertEquals("a", v.validate("b3").getName());
 	}
 
 	@Test void e03_requireTokenType_absentRejected() {
 		var v = builder().anyAudience().requireTokenType(true).build();
-		nextResponse = "{\"active\":true,\"sub\":\"a\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\"}");
 		assertThrows(AuthenticationException.class, () -> v.validate("n1"));
-		nextResponse = "{\"active\":true,\"sub\":\"a\",\"token_type\":\"Bearer\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\",\"token_type\":\"Bearer\"}");
 		assertDoesNotThrow(() -> v.validate("n2"));
 	}
 
@@ -145,7 +146,7 @@ class OAuthIntrospectionValidator_Hardening_Test extends TestBase {
 
 	@Test void d01_negativeCache_inactiveTokenNotReintrospected() {
 		var v = builder().anyAudience().build();
-		nextResponse = "{\"active\":false}";
+		nextResponse.set("{\"active\":false}");
 		assertThrows(AuthenticationException.class, () -> v.validate("bad"));
 		assertThrows(AuthenticationException.class, () -> v.validate("bad"));
 		assertEquals(1, calls.get());
@@ -162,7 +163,7 @@ class OAuthIntrospectionValidator_Hardening_Test extends TestBase {
 
 	@Test void d03_negativeCache_audienceMismatchRemembered() {
 		var v = builder().audience("api").build();
-		nextResponse = "{\"active\":true,\"sub\":\"a\",\"aud\":\"x\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\",\"aud\":\"x\"}");
 		assertThrows(AuthenticationException.class, () -> v.validate("t"));
 		assertThrows(AuthenticationException.class, () -> v.validate("t"));
 		assertEquals(1, calls.get());
@@ -185,7 +186,7 @@ class OAuthIntrospectionValidator_Hardening_Test extends TestBase {
 
 	@Test void e01_cache_isPerValidator() throws Exception {
 		// Each validator owns its own default cache, so a token accepted under one policy is re-checked under another.
-		nextResponse = "{\"active\":true,\"sub\":\"a\",\"scope\":\"read\",\"aud\":\"api\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\",\"scope\":\"read\",\"aud\":\"api\"}");
 		var lax = builder().audience("api").build();
 		var strict = builder().audience("api").requiredScopes("admin").build();
 		assertEquals("a", lax.validate("shared").getName());
@@ -195,7 +196,7 @@ class OAuthIntrospectionValidator_Hardening_Test extends TestBase {
 
 	@Test void e02_sharedCache_eachValidatorReappliesOwnChecks() throws Exception {
 		// A cache shared by differently configured validators holds only the raw introspection result.
-		nextResponse = "{\"active\":true,\"sub\":\"a\",\"aud\":\"api-one\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\",\"aud\":\"api-one\"}");
 		var shared = BoundedLruTokenCache.create();
 		var one = builder().audience("api-one").tokenCache(shared).build();
 		var two = builder().audience("api-two").tokenCache(shared).build();
@@ -210,7 +211,7 @@ class OAuthIntrospectionValidator_Hardening_Test extends TestBase {
 	@Test void e03_cacheHit_expiredTokenRejected() throws Exception {
 		var clock = new MutableClock();
 		var exp = clock.instant().plusSeconds(60).getEpochSecond();
-		nextResponse = "{\"active\":true,\"sub\":\"a\",\"exp\":" + exp + "}";
+		nextResponse.set("{\"active\":true,\"sub\":\"a\",\"exp\":" + exp + "}");
 		var v = builder().anyAudience().clock(clock).build();
 		assertEquals("a", v.validate("t").getName());
 		clock.advance(Duration.ofSeconds(61));
@@ -219,7 +220,7 @@ class OAuthIntrospectionValidator_Hardening_Test extends TestBase {
 
 	@Test void f01_errorCode_withUnsafeCharacters_notReflected() {
 		var v = builder().anyAudience().build();
-		nextResponse = "{\"error\":\"bad\\\\code\"}";
+		nextResponse.set("{\"error\":\"bad\\\\code\"}");
 		var ex = assertThrows(AuthenticationException.class, () -> v.validate("t"));
 		assertFalse(String.valueOf(ex.getMessage()).contains("\\"));
 	}

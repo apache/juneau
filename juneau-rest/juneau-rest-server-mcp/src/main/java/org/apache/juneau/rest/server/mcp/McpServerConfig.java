@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.server.auth.TokenValidator;
 
@@ -39,7 +40,6 @@ import org.apache.juneau.rest.server.auth.TokenValidator;
  */
 @SuppressWarnings({
 	"java:S135", // Handler-validation and completer-lookup loops (validatePrompts, validateResourceTemplates, resolveResourceTemplate, completer*) use independent continue guard clauses
-	"java:S3077", // The volatile fields hold immutable List/Map snapshots that are replaced wholesale when resource templates are published, so volatile only publishes a fully-built reference
 	"java:S3776" // validateResourceTemplates(), resolveResourceTemplate() and the completer lookups each match handlers against several URI/argument rules in one pass
 })
 public class McpServerConfig {
@@ -52,8 +52,8 @@ public class McpServerConfig {
 	private List<McpResourceHandler> resources = l();
 	private List<McpResourceTemplateHandler> resourceTemplates = l();
 
-	private volatile List<McpResourceTemplateHandler> validatedResourceTemplatesSnapshot = List.of();
-	private volatile Map<McpResourceTemplateHandler, McpUriTemplateMatcher> compiledResourceTemplateMatchers = Map.of();
+	private final AtomicReference<List<McpResourceTemplateHandler>> validatedResourceTemplatesSnapshot = new AtomicReference<>(List.of());
+	private final AtomicReference<Map<McpResourceTemplateHandler, McpUriTemplateMatcher>> compiledResourceTemplateMatchers = new AtomicReference<>(Map.of());
 	private McpCursor cursor = McpCursor.SINGLE_PAGE;
 	private TokenValidator tokenValidator;
 	private boolean allowUnauthenticated;
@@ -413,8 +413,8 @@ public class McpServerConfig {
 	private void publishResourceTemplates(List<McpResourceTemplateHandler> candidate) {
 		var compiled = validateResourceTemplates(candidate);
 		resourceTemplates = candidate;
-		validatedResourceTemplatesSnapshot = List.copyOf(candidate);
-		compiledResourceTemplateMatchers = compiled;
+		validatedResourceTemplatesSnapshot.set(List.copyOf(candidate));
+		compiledResourceTemplateMatchers.set(compiled);
 	}
 
 	/**
@@ -425,11 +425,11 @@ public class McpServerConfig {
 	 */
 	private void ensureResourceTemplatesValid() {
 		var current = resourceTemplates;
-		if (eq(validatedResourceTemplatesSnapshot, current))
+		if (eq(validatedResourceTemplatesSnapshot.get(), current))
 			return;
 		var compiled = validateResourceTemplates(current);
-		validatedResourceTemplatesSnapshot = List.copyOf(current);
-		compiledResourceTemplateMatchers = compiled;
+		validatedResourceTemplatesSnapshot.set(List.copyOf(current));
+		compiledResourceTemplateMatchers.set(compiled);
 	}
 
 	/**
@@ -535,7 +535,7 @@ public class McpServerConfig {
 		Map<String,String> winnerVariables = null;
 		McpUriTemplateMatcher winnerMatcher = null;
 		var templates = getResourceTemplates();
-		var matchers = compiledResourceTemplateMatchers;
+		var matchers = compiledResourceTemplateMatchers.get();
 		for (var handler : templates) {
 			if (handler == null)
 				continue;
@@ -639,7 +639,7 @@ public class McpServerConfig {
 		if (uriTemplate == null || variableName == null)
 			return null;
 		var templates = getResourceTemplates();
-		var matchers = compiledResourceTemplateMatchers;
+		var matchers = compiledResourceTemplateMatchers.get();
 		for (var handler : templates) {
 			if (handler == null)
 				continue;
@@ -701,7 +701,7 @@ public class McpServerConfig {
 					return true;
 		}
 		var templates = getResourceTemplates();
-		var matchers = compiledResourceTemplateMatchers;
+		var matchers = compiledResourceTemplateMatchers.get();
 		for (var handler : templates) {
 			if (handler == null)
 				continue;

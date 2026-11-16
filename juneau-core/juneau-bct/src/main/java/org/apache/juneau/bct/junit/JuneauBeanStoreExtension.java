@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.extension.*;
 
@@ -156,10 +157,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 
 	private ExtensionContext currentClassContext;
 	private ExtensionContext currentMethodContext;
-	@SuppressWarnings({
-		"java:S3077" // Publish-once reference: only plain-assigned in attach()/detach() and read-once into a local; volatile suffices for safe publication. The referenced WritableBeanStore manages its own thread-safety.
-	})
-	private volatile WritableBeanStore attached;
+	private final AtomicReference<WritableBeanStore> attached = new AtomicReference<>();
 
 	/**
 	 * Constructor.
@@ -194,7 +192,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 */
 	public JuneauBeanStoreExtension attach(WritableBeanStore store) {
 		Objects.requireNonNull(store, "store must not be null");
-		attached = store;
+		attached.set(store);
 		return this;
 	}
 
@@ -209,7 +207,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * @since 10.0.0
 	 */
 	public JuneauBeanStoreExtension detach() {
-		attached = null;
+		attached.set(null);
 		return this;
 	}
 
@@ -223,7 +221,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * @since 10.0.0
 	 */
 	public Optional<WritableBeanStore> getAttachedStore() {
-		return o(attached);
+		return o(attached.get());
 	}
 
 	/**
@@ -317,7 +315,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	private PushedOverlay pushOverlayIfOverlayMode(ScopedStore scoped) {
 		if (scoped.mode() != Mode.OVERLAY || scoped.empty())
 			return null;
-		var store = attached;
+		var store = attached.get();
 		if (store == null)
 			throw new IllegalStateException(
 				"@TestBean(mode = Mode.OVERLAY) declared but JuneauBeanStoreExtension was not attached to a"

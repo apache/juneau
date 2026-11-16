@@ -23,6 +23,7 @@ import java.net.*;
 import java.nio.charset.*;
 import java.util.concurrent.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.stream.*;
@@ -62,7 +63,7 @@ class RestRequest_StreamBodyEntity_Coverage_Test {
 	private static HttpServer server;
 	private static ExecutorService executor;
 	private static int port;
-	private static volatile byte[] lastRequestBody = new byte[0];
+	private static final AtomicReference<byte[]> lastRequestBody = new AtomicReference<>(new byte[0]);
 
 	@BeforeAll
 	static void startServer() throws IOException {
@@ -77,7 +78,7 @@ class RestRequest_StreamBodyEntity_Coverage_Test {
 		executor = Executors.newCachedThreadPool();
 		server.setExecutor(executor);
 		server.createContext("/echo", exchange -> {
-			lastRequestBody = exchange.getRequestBody().readAllBytes();
+			lastRequestBody.set(exchange.getRequestBody().readAllBytes());
 			exchange.sendResponseHeaders(200, -1);
 			exchange.close();
 		});
@@ -117,7 +118,7 @@ class RestRequest_StreamBodyEntity_Coverage_Test {
 				var res = req.run()) {
 			assertEquals(200, res.getStatusCode());
 		}
-		assertTrue(new String(lastRequestBody, StandardCharsets.UTF_8).contains("hello"));
+		assertTrue(new String(lastRequestBody.get(), StandardCharsets.UTF_8).contains("hello"));
 	}
 
 	@Test void a02b_records_recordWritableOnlySerializer_writerBased_roundTrips() throws Exception {
@@ -139,7 +140,7 @@ class RestRequest_StreamBodyEntity_Coverage_Test {
 				var res = req.run()) {
 			assertEquals(200, res.getStatusCode());
 		}
-		var body = new String(lastRequestBody, StandardCharsets.UTF_8);
+		var body = new String(lastRequestBody.get(), StandardCharsets.UTF_8);
 		assertTrue(body.contains("hello"), "Unexpected body: " + body);
 	}
 
@@ -160,7 +161,7 @@ class RestRequest_StreamBodyEntity_Coverage_Test {
 				var res = req.run()) {
 			assertEquals(200, res.getStatusCode());
 		}
-		assertEquals("{\"name\":\"eve\"}", new String(lastRequestBody, StandardCharsets.UTF_8));
+		assertEquals("{\"name\":\"eve\"}", new String(lastRequestBody.get(), StandardCharsets.UTF_8));
 	}
 
 	// ==========================================================================

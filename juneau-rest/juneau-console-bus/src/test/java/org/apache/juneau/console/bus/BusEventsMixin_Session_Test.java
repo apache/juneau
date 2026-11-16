@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.JsonParser;
@@ -51,8 +52,8 @@ class BusEventsMixin_Session_Test extends TestBase {
 	@Rest(allowCrossSite="true")
 	public static class R extends BasicRestServlet implements BusEventsMixin {
 		private static final long serialVersionUID = 1L;
-		static volatile ServerBus bus;
-		@Override public ServerBus serverBus() { return bus; }
+		static final AtomicReference<ServerBus> bus = new AtomicReference<>();
+		@Override public ServerBus serverBus() { return bus.get(); }
 	}
 
 	private static final MockRestClient C = MockRestClient.buildLax(R.class);
@@ -67,7 +68,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 	}
 
 	private static void use(BusPolicy p) {
-		R.bus = ServerBus.create(p);
+		R.bus.set(ServerBus.create(p));
 	}
 
 	@BeforeEach void setUp() {
@@ -75,7 +76,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 	}
 
 	@AfterEach void tearDown() {
-		R.bus.close();
+		R.bus.get().close();
 	}
 
 	private static String body(String transport, String...downstream) {
@@ -109,14 +110,14 @@ class BusEventsMixin_Session_Test extends TestBase {
 		assertEquals(List.of(), g.get("upstream"));
 		assertEquals(JsonMap.of("sse", "/juneau-bus/stream/" + id), g.get("paths"), "no websocket path until enableWebSocket");
 
-		var s = R.bus.sessions();
+		var s = R.bus.get().sessions();
 		assertSize(1, s);
 		assertEquals("jb", s.get(0).principalName());
 		assertEquals(id, ServerBus.idOf(s.get(0)));
 	}
 
 	@Test void a02_theWebSocketPathIsContextRelative() throws Exception {
-		R.bus.enableWebSocket("/juneau-bus/ws");
+		R.bus.get().enableWebSocket("/juneau-bus/ws");
 		var g = post(JB, body("websocket", "ops.jobs"), 200);
 		var id = g.getString("sessionId");
 		assertEquals("/juneau-bus/ws/" + id, g.getMap("paths").getString("websocket"));
@@ -124,7 +125,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 	}
 
 	@Test void a02b_theSsePathIsRootRelativeAndTheWebSocketPathIsContextRelative() throws Exception {
-		R.bus.enableWebSocket("/juneau-bus/ws");
+		R.bus.get().enableWebSocket("/juneau-bus/ws");
 		var c = MockRestClient.create(R.class).contextPath("/ctx").ignoreErrors().noTrace().build();
 		var text = c.post(BusEventsMixin.SESSION_PATH).userPrincipal(JB).contentString(body("websocket", "ops.jobs"))
 			.contentType("application/json").header("Accept", "application/json").run().assertStatus(200).getContent().asString();
@@ -138,7 +139,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 		var r = post(JB, body("sse", "ops.jobs", "ops.secret"), 403);
 		assertEquals("bus:topic-denied", r.getString("code"));
 		assertEquals(List.of("ops.secret"), r.get("denied"));
-		assertTrue(R.bus.sessions().isEmpty());
+		assertTrue(R.bus.get().sessions().isEmpty());
 	}
 
 	@Test void a04_malformedBodiesAre400() throws Exception {
@@ -147,7 +148,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 	}
 
 	@Test void a05_atMaxSessionsIs429WithRetryAfter() throws Exception {
-		R.bus.close();
+		R.bus.get().close();
 		use(policy().maxSessions(1).build());
 		post(JB, body("sse", "ops.jobs"), 200);
 		var r = C.post(BusEventsMixin.SESSION_PATH).userPrincipal(JB).contentString(body("sse", "ops.jobs"))
@@ -164,7 +165,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 		// Otherwise a valid request: only its size is wrong.
 		var big = body("sse", "ops.jobs") + " ".repeat(BusStream.MAX_SESSION_BODY_BYTES);
 		assertEquals("bus:bad-request", post(JB, big, 400).getString("code"));
-		assertTrue(R.bus.sessions().isEmpty());
+		assertTrue(R.bus.get().sessions().isEmpty());
 		post(JB, body("sse", "ops.jobs"), 200);
 	}
 
@@ -176,7 +177,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 		"java:S2925" // Deadline-bounded poll for the stream to connect
 	})
 	@Test void b01_resyncThenLiveThenClose() throws Exception {
-		R.bus.publish("ops.jobs", JsonMap.of("n", 1));
+		R.bus.get().publish("ops.jobs", JsonMap.of("n", 1));
 		var id = post(JB, body("sse", "ops.jobs", "ops.alert:*"), 200).getString("sessionId");
 
 		// The GET holds the request thread until the stream ends, so a helper publishes and then closes the bus.
@@ -184,16 +185,16 @@ class BusEventsMixin_Session_Test extends TestBase {
 		var helper = new Thread(() -> {
 			try {
 				var deadline = System.nanoTime() + 10_000_000_000L;
-				while (! R.bus.sessions().get(0).isConnected()) {
+				while (! R.bus.get().sessions().get(0).isConnected()) {
 					if (System.nanoTime() > deadline)
 						throw new AssertionError("the stream never connected");
 					Thread.sleep(10);
 				}
-				R.bus.publish("ops.alert:east", JsonMap.of("msg", "live"));
-				R.bus.close();
+				R.bus.get().publish("ops.alert:east", JsonMap.of("msg", "live"));
+				R.bus.get().close();
 			} catch (Throwable t) {
 				failure.set(t);
-				R.bus.close();
+				R.bus.get().close();
 			}
 		});
 		helper.start();
@@ -225,14 +226,14 @@ class BusEventsMixin_Session_Test extends TestBase {
 		var id = post(JB, body("sse", "ops.jobs"), 200).getString("sessionId");
 		stream(EVE, id, 404);
 		stream(null, id, 404);
-		assertFalse(R.bus.sessions().get(0).isConnected());
+		assertFalse(R.bus.get().sessions().get(0).isConnected());
 	}
 
 	@Test void b04_aSlowConsumerGetsTheErrorFrameLastAndTheStreamEnds() throws Exception {
-		R.bus.close();
+		R.bus.get().close();
 		use(policy().downstream("ops.other", true).maxQueuedFrames(1).build());
-		R.bus.publish("ops.jobs", JsonMap.of("n", 1));
-		R.bus.publish("ops.other", JsonMap.of("n", 2));
+		R.bus.get().publish("ops.jobs", JsonMap.of("n", 1));
+		R.bus.get().publish("ops.other", JsonMap.of("n", 2));
 		var id = post(JB, body("sse", "ops.jobs", "ops.other"), 200).getString("sessionId");
 
 		// The resync (begin, two retained pubs, end) overflows a one-frame queue, so connect() closes the sink with 4429.
@@ -252,7 +253,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 		try {
 			var first = pool.submit(() -> stream(JB, id, 200).getContent().asString());
 			var deadline = System.nanoTime() + 10_000_000_000L;
-			while (! R.bus.sessions().get(0).isConnected()) {
+			while (! R.bus.get().sessions().get(0).isConnected()) {
 				assertTrue(System.nanoTime() < deadline, "the first stream never connected");
 				Thread.sleep(10);
 			}
@@ -262,10 +263,10 @@ class BusEventsMixin_Session_Test extends TestBase {
 			assertTrue(firstBody.contains("\"type\":\"resync-end\""), firstBody);
 			assertFalse(firstBody.contains("bus:slow-consumer"), firstBody);
 			assertFalse(second.isDone(), "the replacement keeps streaming");
-			R.bus.close();
+			R.bus.get().close();
 			assertTrue(second.get(10, TimeUnit.SECONDS).contains("\"type\":\"resync-end\""));
 		} finally {
-			R.bus.close();
+			R.bus.get().close();
 			pool.shutdownNow();
 		}
 	}
@@ -275,7 +276,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static void useBoundary() {
-		R.bus.close();
+		R.bus.get().close();
 		use(policy().boundary(LoopbackBoundary.create().authority(AUTHORITY).token(TOKEN).build()).build());
 	}
 
@@ -290,7 +291,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 		useBoundary();
 		var text = boundaryPost(false).run().assertStatus(403).getContent().asString();
 		assertTrue(text.contains("bus:refused"), text);
-		assertTrue(R.bus.sessions().isEmpty());
+		assertTrue(R.bus.get().sessions().isEmpty());
 	}
 
 	@Test void c02_aGoodPostIsGranted() throws Exception {
@@ -315,7 +316,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 			.header("Host", AUTHORITY).header("Origin", "http://" + AUTHORITY).header("Sec-Fetch-Site", "same-origin")
 			.run().assertStatus(403).getContent().asString();
 		assertTrue(text.contains("bus:refused"), text);
-		assertTrue(R.bus.sessions().isEmpty());
+		assertTrue(R.bus.get().sessions().isEmpty());
 		// A GET claiming DELETE on the stream is judged as the write it claims, so it needs an Origin.
 		C.get(BusEventsMixin.STREAM_PATH.replace("{sessionId}", "0".repeat(64)) + "?method=DELETE").userPrincipal(JB)
 			.header("Accept", "text/event-stream").header("Host", AUTHORITY).run().assertStatus(403);
@@ -325,7 +326,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 	private static final String APP_ORIGIN = "http://" + APP_HOST;
 
 	private static CsrfBoundary useCsrfBoundary() {
-		R.bus.close();
+		R.bus.get().close();
 		var b = CsrfBoundary.create().tokens(CsrfTokens.perProcess()).allowedHosts(APP_HOST).build();
 		use(policy().boundary(b).build());
 		return b;
@@ -347,7 +348,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 
 	@Test void c05_tokenBoundaryAcceptedAsPolicy() throws Exception {
 		var b = useCsrfBoundary();
-		assertSame(b, R.bus.policy().boundary());
+		assertSame(b, R.bus.get().policy().boundary());
 
 		var ok = tokenPost(APP_ORIGIN).header("X-Csrf-Token", tokenOf(b)).run().assertStatus(200).getContent().asString();
 		assertTrue(ok.contains("sessionId"), ok);
@@ -357,14 +358,14 @@ class BusEventsMixin_Session_Test extends TestBase {
 		assertEquals("bus:refused", refused.getString("code"));
 		assertEquals(Set.of("code", "message"), refused.keySet(), "the reason name is not part of the bus refusal");
 		assertFalse(refused.getString("message").contains("other.example"), "the presented Origin is never echoed");
-		assertSize(1, R.bus.sessions());
+		assertSize(1, R.bus.get().sessions());
 	}
 
 	@Test void c05b_sameOriginPostWithoutTokenRefused() throws Exception {
 		useCsrfBoundary();
 		var text = tokenPost(APP_ORIGIN).run().assertStatus(403).getContent().asString();
 		assertTrue(text.contains("bus:refused"), text);
-		assertTrue(R.bus.sessions().isEmpty());
+		assertTrue(R.bus.get().sessions().isEmpty());
 	}
 
 	@Test void c06_streamAppliesTokenBoundary() throws Exception {
@@ -393,7 +394,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 	@Test void d01_noBoundaryRefusesAMismatchedOriginOnPostAndStream() throws Exception {
 		var text = openWith("app.example", "http://other.example", 403).getContent().asString();
 		assertTrue(text.contains("bus:refused"), text);
-		assertTrue(R.bus.sessions().isEmpty());
+		assertTrue(R.bus.get().sessions().isEmpty());
 		var stream = BusEventsMixin.STREAM_PATH.replace("{sessionId}", "0".repeat(64));
 		C.get(stream).userPrincipal(JB).header("Accept", "text/event-stream").header("Host", "app.example")
 			.header("Origin", "http://other.example").run().assertStatus(403);
@@ -413,14 +414,14 @@ class BusEventsMixin_Session_Test extends TestBase {
 			.contentType("application/json").header("Accept", "application/json").header("Host", "app.example")
 			.header("Origin", "http://app.example");
 		req.header("Sec-Fetch-Site", "cross-site").run().assertStatus(403);
-		assertTrue(R.bus.sessions().isEmpty());
+		assertTrue(R.bus.get().sessions().isEmpty());
 		C.post(BusEventsMixin.SESSION_PATH).userPrincipal(JB).contentString(body("sse", "ops.jobs"))
 			.contentType("application/json").header("Accept", "application/json").header("Host", "app.example")
 			.header("Origin", "http://app.example").header("Sec-Fetch-Site", "same-origin").run().assertStatus(200);
 	}
 
 	@Test void d03_noSameOriginCheckOptsOut() throws Exception {
-		R.bus.close();
+		R.bus.get().close();
 		use(policy().noSameOriginCheck().build());
 		openWith("app.example", "http://other.example", 200);
 	}

@@ -28,6 +28,7 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
@@ -151,15 +152,15 @@ class ReactiveResponseProcessor_JettyMicroservice_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 
 		/** Gate future for the delayed stream; completed by the test to trigger termination + completion-path emit. */
-		static volatile CompletableFuture<Void> gate;
+		static final AtomicReference<CompletableFuture<Void>> gate = new AtomicReference<>();
 
 		/** Counted down by {@code @RestEndCall} on the request thread — i.e. AFTER {@code RestSession.finish()} returns. */
-		static volatile CountDownLatch finishLatch;
+		static final AtomicReference<CountDownLatch> finishLatch = new AtomicReference<>();
 
 		@RestGet("/delayed")
 		public Flow.Publisher<SseEvent> delayed(RestResponse res) {
 			res.setContentType("text/event-stream");
-			return new GatedPublisher<>(gate, new SseEvent("tick", "late-frame"));
+			return new GatedPublisher<>(gate.get(), new SseEvent("tick", "late-frame"));
 		}
 
 		@RestGet("/normal")
@@ -182,7 +183,7 @@ class ReactiveResponseProcessor_JettyMicroservice_Test extends TestBase {
 
 		@RestEndCall
 		public void endCall() {
-			var l = finishLatch;
+			var l = finishLatch.get();
 			if (l != null)
 				l.countDown();
 		}
@@ -286,8 +287,8 @@ class ReactiveResponseProcessor_JettyMicroservice_Test extends TestBase {
 		var state = new LoggerState(opLogger);
 		try {
 			var handler = attach(opLogger, Level.INFO);
-			ReactiveCaptureServlet.gate = new CompletableFuture<>();
-			ReactiveCaptureServlet.finishLatch = new CountDownLatch(1);
+			ReactiveCaptureServlet.gate.set(new CompletableFuture<>());
+			ReactiveCaptureServlet.finishLatch.set(new CountDownLatch(1));
 
 			var respFuture = HTTP.sendAsync(
 				HttpRequest.newBuilder()
@@ -298,14 +299,14 @@ class ReactiveResponseProcessor_JettyMicroservice_Test extends TestBase {
 				BodyHandlers.ofString());
 
 			// Barrier: the request thread has returned from RestSession.finish() and run @RestEndCall.
-			assertTrue(ReactiveCaptureServlet.finishLatch.await(10, TimeUnit.SECONDS),
+			assertTrue(ReactiveCaptureServlet.finishLatch.get().await(10, TimeUnit.SECONDS),
 				"request thread did not reach @RestEndCall");
 
 			// RED on synchronous-finish emit: finish() would already have emitted here.
 			// GREEN on completion-path emit: nothing is emitted until the stream terminates below.
 			assertSize(() -> "no debug record may be emitted between synchronous finish() and stream termination", 0, handler.forLogger(opLogger.getName()));
 
-			ReactiveCaptureServlet.gate.complete(null);  // fire the stream off the request thread
+			ReactiveCaptureServlet.gate.get().complete(null);  // fire the stream off the request thread
 
 			var resp = respFuture.get(15, TimeUnit.SECONDS);
 			assertEquals(200, resp.statusCode(), "body: " + resp.body());
@@ -316,11 +317,11 @@ class ReactiveResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertEquals(Level.INFO, recs.get(0).getLevel());
 			assertTrue(recs.get(0).getMessage().contains("[200]"), recs.get(0).getMessage());
 		} finally {
-			var g = ReactiveCaptureServlet.gate;
+			var g = ReactiveCaptureServlet.gate.get();
 			if (g != null)
 				g.complete(null);  // never leave a request hung if an assertion failed before termination
-			ReactiveCaptureServlet.gate = null;
-			ReactiveCaptureServlet.finishLatch = null;
+			ReactiveCaptureServlet.gate.set(null);
+			ReactiveCaptureServlet.finishLatch.set(null);
 			state.restore();
 		}
 	}

@@ -23,6 +23,7 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
 
@@ -44,8 +45,8 @@ class RestRequest_SessionOptions_Coverage_Test {
 	private static HttpServer server;
 	private static ExecutorService executor;
 	private static int port;
-	private static volatile String lastHeader;
-	private static volatile String lastQuery;
+	private static final AtomicReference<String> lastHeader = new AtomicReference<>();
+	private static final AtomicReference<String> lastQuery = new AtomicReference<>();
 
 	@BeforeAll
 	static void startServer() throws IOException {
@@ -60,10 +61,10 @@ class RestRequest_SessionOptions_Coverage_Test {
 		executor = Executors.newCachedThreadPool();
 		server.setExecutor(executor);
 		server.createContext("/x", exchange -> {
-			lastHeader = exchange.getRequestHeaders().getFirst("x-juneau-serializer-options");
-			if (lastHeader == null)
-				lastHeader = exchange.getRequestHeaders().getFirst("x-juneau-parser-options");
-			lastQuery = exchange.getRequestURI().getQuery();
+			lastHeader.set(exchange.getRequestHeaders().getFirst("x-juneau-serializer-options"));
+			if (lastHeader.get() == null)
+				lastHeader.set(exchange.getRequestHeaders().getFirst("x-juneau-parser-options"));
+			lastQuery.set(exchange.getRequestURI().getQuery());
 			exchange.sendResponseHeaders(200, -1);
 			exchange.close();
 		});
@@ -86,14 +87,14 @@ class RestRequest_SessionOptions_Coverage_Test {
 		try (var r = req()) {
 			assertSame(r, r.serializerSessionOptionsHeader(Map.of()));
 			try (var res = r.run()) {
-				assertNull(lastHeader);
+				assertNull(lastHeader.get());
 			}
 		}
 	}
 
 	@Test void a02_serializerSessionOptionsHeader_nonEmptyMap_setsHeader() throws Exception {
 		try (var r = req().serializerSessionOptionsHeader(Map.of("sortCollections", true)); var res = r.run()) {
-			assertNotNull(lastHeader);
+			assertNotNull(lastHeader.get());
 		}
 	}
 
@@ -101,14 +102,14 @@ class RestRequest_SessionOptions_Coverage_Test {
 		try (var r = req()) {
 			assertSame(r, r.parserSessionOptionsHeader(Map.of()));
 			try (var res = r.run()) {
-				assertNull(lastHeader);
+				assertNull(lastHeader.get());
 			}
 		}
 	}
 
 	@Test void a04_parserSessionOptionsHeader_nonEmptyMap_setsHeader() throws Exception {
 		try (var r = req().parserSessionOptionsHeader(Map.of("strict", true)); var res = r.run()) {
-			assertNotNull(lastHeader);
+			assertNotNull(lastHeader.get());
 		}
 	}
 
@@ -116,14 +117,14 @@ class RestRequest_SessionOptions_Coverage_Test {
 		try (var r = req()) {
 			assertSame(r, r.serializerSessionOptionsQuery(Map.of()));
 			try (var res = r.run()) {
-				assertTrue(lastQuery == null || !lastQuery.contains("juneauSerializerOptions"));
+				assertTrue(lastQuery.get() == null || !lastQuery.get().contains("juneauSerializerOptions"));
 			}
 		}
 	}
 
 	@Test void b02_serializerSessionOptionsQuery_nonEmptyMap_setsQuery() throws Exception {
 		try (var r = req().serializerSessionOptionsQuery(Map.of("sortCollections", true)); var res = r.run()) {
-			assertTrue(lastQuery != null && lastQuery.contains("juneauSerializerOptions"));
+			assertTrue(lastQuery.get() != null && lastQuery.get().contains("juneauSerializerOptions"));
 		}
 	}
 
@@ -131,14 +132,14 @@ class RestRequest_SessionOptions_Coverage_Test {
 		try (var r = req()) {
 			assertSame(r, r.parserSessionOptionsQuery(Map.of()));
 			try (var res = r.run()) {
-				assertTrue(lastQuery == null || !lastQuery.contains("juneauParserOptions"));
+				assertTrue(lastQuery.get() == null || !lastQuery.get().contains("juneauParserOptions"));
 			}
 		}
 	}
 
 	@Test void b04_parserSessionOptionsQuery_nonEmptyMap_setsQuery() throws Exception {
 		try (var r = req().parserSessionOptionsQuery(Map.of("strict", true)); var res = r.run()) {
-			assertTrue(lastQuery != null && lastQuery.contains("juneauParserOptions"));
+			assertTrue(lastQuery.get() != null && lastQuery.get().contains("juneauParserOptions"));
 		}
 	}
 

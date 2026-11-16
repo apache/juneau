@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
@@ -61,7 +62,7 @@ class ConfigMapListener_Test extends TestBase {
 		cm.setEntry("", "foo", "baz", null, null);
 		cm.commit();
 		wait(latch);
-		assertNull(l.error);
+		assertNull(l.error.get());
 		cm.unregister(l);
 
 		assertEquals("foo = baz|", pipedLines(cm));
@@ -87,7 +88,7 @@ class ConfigMapListener_Test extends TestBase {
 		cm.setEntry("S1", "foo", "baz", null, null);
 		cm.commit();
 		wait(latch);
-		assertNull(l.error);
+		assertNull(l.error.get());
 		cm.unregister(l);
 
 		assertEquals("[S1]|foo = baz|", pipedLines(cm));
@@ -115,7 +116,7 @@ class ConfigMapListener_Test extends TestBase {
 		cm.setEntry("S1", "k1", "v1b", null, null);
 		cm.commit();
 		wait(latch);
-		assertNull(l.error);
+		assertNull(l.error.get());
 		cm.unregister(l);
 
 		assertEquals("k = vb|[S1]|k1 = v1b|", pipedLines(cm));
@@ -139,7 +140,7 @@ class ConfigMapListener_Test extends TestBase {
 		cm.setEntry("S1", "k1", "k1b", "C1", l("#k1"));
 		cm.commit();
 		wait(latch);
-		assertNull(l.error);
+		assertNull(l.error.get());
 		cm.unregister(l);
 
 		assertEquals("#k|k = kb # C|[S1]|#k1|k1 = k1b # C1|", pipedLines(cm));
@@ -170,7 +171,7 @@ class ConfigMapListener_Test extends TestBase {
 		cm.setEntry("S1", "k1", "k1b", "Cb1", l("#k1b"));
 		cm.commit();
 		wait(latch);
-		assertNull(l.error);
+		assertNull(l.error.get());
 		cm.unregister(l);
 
 		assertEquals("#kb|k = kb # Cb|#S1|[S1]|#k1b|k1 = k1b # Cb1|", pipedLines(cm));
@@ -202,7 +203,7 @@ class ConfigMapListener_Test extends TestBase {
 		cm.removeEntry("S1", "k1");
 		cm.commit();
 		wait(latch);
-		assertNull(l.error);
+		assertNull(l.error.get());
 		cm.unregister(l);
 
 		assertEquals("[S1]|", pipedLines(cm));
@@ -233,7 +234,7 @@ class ConfigMapListener_Test extends TestBase {
 		cm.removeEntry("S1", "k1");
 		cm.commit();
 		wait(latch);
-		assertNull(l.error);
+		assertNull(l.error.get());
 		cm.unregister(l);
 
 		assertEquals("#S1|[S1]|", pipedLines(cm));
@@ -264,7 +265,7 @@ class ConfigMapListener_Test extends TestBase {
 		cm.setEntry("S3", "k3", "v3", null, null);
 		cm.commit();
 		wait(latch);
-		assertNull(l.error);
+		assertNull(l.error.get());
 		cm.unregister(l);
 
 		assertEquals("#D1||#S1|[S1]|[S2]|[S3]|k3 = v3|", pipedLines(cm));
@@ -298,7 +299,7 @@ class ConfigMapListener_Test extends TestBase {
 		cm.setEntry("S3", "k3", "v3", null, null);
 		cm.commit();
 		wait(latch);
-		assertNull(l.error);
+		assertNull(l.error.get());
 		cm.unregister(l);
 
 		assertEquals("#Db||#S1b|[S1]|[S2]|[S3]|k3 = v3|", pipedLines(cm));
@@ -341,7 +342,7 @@ class ConfigMapListener_Test extends TestBase {
 		cm.removeSection("S3");
 		cm.commit();
 		wait(latch);
-		assertNull(l.error);
+		assertNull(l.error.get());
 		cm.unregister(l);
 
 		assertEquals("", pipedLines(cm));
@@ -380,7 +381,7 @@ class ConfigMapListener_Test extends TestBase {
 			"[S3]"
 		);
 		wait(latch);
-		assertNull(l.error);
+		assertNull(l.error.get());
 		cm.unregister(l);
 
 		assertEquals("#Da||k = v # cv||#S1|[S1]|#k1|k1 = v1 # cv1|[S2]|#k2|k2 = v2 # cv2|[S3]|", pipedLines(cm));
@@ -417,7 +418,7 @@ class ConfigMapListener_Test extends TestBase {
 		);
 		cm.commit();
 		wait(latch);
-		assertNull(l.error);
+		assertNull(l.error.get());
 		cm.unregister(l);
 
 		assertEquals("[S1]|k1 = v1b|[S2]|k2 = v2b|", pipedLines(cm));
@@ -454,7 +455,7 @@ class ConfigMapListener_Test extends TestBase {
 		);
 		cm.commit();
 		wait(latch);
-		assertNull(l.error);
+		assertNull(l.error.get());
 		cm.unregister(l);
 
 		assertEquals("[S1]|k1 = v1c|", pipedLines(cm));
@@ -495,7 +496,7 @@ class ConfigMapListener_Test extends TestBase {
 			cm.setEntry("S1", "k1", "v1c", null, null);
 			cm.commit();
 			wait(latch);
-			assertNull(l.error);
+			assertNull(l.error.get());
 			cm.unregister(l);
 
 			assertEquals("[S1]|k1 = v1c|", pipedLines(cm));
@@ -536,7 +537,7 @@ class ConfigMapListener_Test extends TestBase {
 			cm.setEntry("S1", "k1", "v1c", null, null);
 			assertThrowsWithMessage(ConfigException.class, "Unable to store contents of config to store.", cm::commit);
 			wait(latch);
-			assertNull(l.error);
+			assertNull(l.error.get());
 			cm.unregister(l);
 
 			assertEquals("[S1]|k1 = v1c|", pipedLines(cm));
@@ -553,7 +554,7 @@ class ConfigMapListener_Test extends TestBase {
 
 	public static class LatchedListener implements ConfigEventListener {
 		private final CountDownLatch latch;
-		private volatile String error = null;
+		private final AtomicReference<String> error = new AtomicReference<>(null);
 		public LatchedListener(CountDownLatch latch) {
 			this.latch = latch;
 		}
@@ -563,7 +564,7 @@ class ConfigMapListener_Test extends TestBase {
 			try {
 				check(events);
 			} catch (Exception e) {
-				error = e.getLocalizedMessage();
+				error.set(e.getLocalizedMessage());
 			}
 			for (var i = 0; i < events.size(); i++)
 				latch.countDown();

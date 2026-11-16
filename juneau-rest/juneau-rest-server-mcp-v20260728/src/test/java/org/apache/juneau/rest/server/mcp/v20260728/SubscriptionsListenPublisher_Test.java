@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.marshall.sse.SseEvent;
 import org.apache.juneau.rest.server.mcp.*;
@@ -59,13 +60,13 @@ class SubscriptionsListenPublisher_Test {
 	private static final class RecordingSubscriber implements Flow.Subscriber<SseEvent> {
 		final BlockingQueue<SseEvent> events = new LinkedBlockingQueue<>();
 		final CountDownLatch completedOrErrored = new CountDownLatch(1);
-		volatile Throwable error;
+		final AtomicReference<Throwable> error = new AtomicReference<>();
 		Flow.Subscription subscription;
 
 		@Override public void onSubscribe(Flow.Subscription s) { subscription = s; }
 		@Override public void onNext(SseEvent item) { events.add(item); }
 		@Override public void onComplete() { completedOrErrored.countDown(); }
-		@Override public void onError(Throwable t) { error = t; completedOrErrored.countDown(); }
+		@Override public void onError(Throwable t) { error.set(t); completedOrErrored.countDown(); }
 
 		SseEvent nextWithin(Duration timeout) throws InterruptedException {
 			subscription.request(1);
@@ -90,7 +91,7 @@ class SubscriptionsListenPublisher_Test {
 		private final BlockingQueue<McpChangeEvent> queue = new LinkedBlockingQueue<>();
 		private final AtomicBoolean closed = new AtomicBoolean();
 		private final Object lock = new Object();
-		private volatile Thread taker;
+		private final AtomicReference<Thread> taker = new AtomicReference<>();
 
 		void offer(McpChangeEvent event) { queue.offer(event); }
 
@@ -102,12 +103,12 @@ class SubscriptionsListenPublisher_Test {
 			synchronized (lock) {
 				if (closed.get())
 					throw new InterruptedException("subscription closed");
-				taker = Thread.currentThread();
+				taker.set(Thread.currentThread());
 			}
 			try {
 				return queue.take();
 			} finally {
-				taker = null;
+				taker.set(null);
 			}
 		}
 
@@ -117,7 +118,7 @@ class SubscriptionsListenPublisher_Test {
 		public void close() {
 			if (closed.compareAndSet(false, true)) {
 				synchronized (lock) {
-					var t = taker;
+					var t = taker.get();
 					if (t != null)
 						t.interrupt();
 				}
@@ -210,13 +211,13 @@ class SubscriptionsListenPublisher_Test {
 	private static final class ThrowingSubscriber implements Flow.Subscriber<SseEvent> {
 		final RuntimeException boom = new RuntimeException("boom");
 		final CountDownLatch errored = new CountDownLatch(1);
-		volatile Throwable error;
+		final AtomicReference<Throwable> error = new AtomicReference<>();
 		Flow.Subscription subscription;
 
 		@Override public void onSubscribe(Flow.Subscription s) { subscription = s; }
 		@Override public void onNext(SseEvent item) { throw boom; }
 		@Override public void onComplete() { /* not expected on this path */ }
-		@Override public void onError(Throwable t) { error = t; errored.countDown(); }
+		@Override public void onError(Throwable t) { error.set(t); errored.countDown(); }
 	}
 
 	// C1: an unexpected RuntimeException from frame construction/onNext must route to onError exactly once,
@@ -231,7 +232,7 @@ class SubscriptionsListenPublisher_Test {
 		subscriber.subscription.request(1); // triggers the ack frame, which onNext() immediately rejects
 
 		assertTrue(subscriber.errored.await(2, TimeUnit.SECONDS), "expected onError after onNext threw");
-		assertSame(subscriber.boom, subscriber.error);
+		assertSame(subscriber.boom, subscriber.error.get());
 		// terminateWithError()'s cleanup (subscription.close(), executor shutdown) runs just after onError is
 		// delivered, not atomically with it, so poll briefly instead of asserting immediately on the latch.
 		assertTrue(awaitTrue(subscription::isClosed, Duration.ofSeconds(2)),
@@ -337,14 +338,14 @@ class SubscriptionsListenPublisher_Test {
 		subscriber.subscription.request(0);
 
 		assertTrue(subscriber.completedOrErrored.await(2, TimeUnit.SECONDS), "expected onError after request(0)");
-		assertInstanceOf(IllegalArgumentException.class, subscriber.error);
+		assertInstanceOf(IllegalArgumentException.class, subscriber.error.get());
 		assertTrue(subscriber.events.isEmpty(), "no frames should ever be emitted after an invalid request(n)");
 
 		// A second invalid call after termination must not deliver a second signal.
-		subscriber.error = null;
+		subscriber.error.set(null);
 		subscriber.subscription.request(-5);
 		Thread.sleep(50);
-		assertNull(subscriber.error, "onError must be delivered at most once, guarded like the other terminal paths");
+		assertNull(subscriber.error.get(), "onError must be delivered at most once, guarded like the other terminal paths");
 	}
 
 	// I5: if the client never grants further demand, awaitDemandThenComplete() must still terminate and
@@ -449,7 +450,7 @@ class SubscriptionsListenPublisher_Test {
 		publisher.subscribe(second);
 
 		assertTrue(second.completedOrErrored.await(2, TimeUnit.SECONDS), "expected the second subscriber to be rejected");
-		assertInstanceOf(IllegalStateException.class, second.error);
+		assertInstanceOf(IllegalStateException.class, second.error.get());
 		assertTrue(second.events.isEmpty(), "the second subscriber must never receive any frames");
 
 		// The first subscriber's stream must be unaffected by the rejected second subscribe() attempt.

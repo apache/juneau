@@ -23,6 +23,7 @@ import static org.apache.juneau.commons.utils.StringUtils.isNotEmpty;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 import java.util.logging.*;
 
@@ -38,7 +39,7 @@ import jakarta.servlet.*;
  * <p>
  * Holds a registry of {@link RestContext} instances keyed by {@link RestContext#getPath() composed path}.
  * Reads (request routing via {@link #findMatch(RestSession.Builder)} and the {@link #asMap()} accessor) are
- * lock-free against a volatile copy-on-write snapshot; mutations
+ * lock-free against an atomically-published copy-on-write snapshot; mutations
  * ({@link #addChild(Class) addChild} / {@link #removeChild(String) removeChild}) synchronize on an internal
  * write lock and atomically replace the snapshot. This makes runtime child management safe even while
  * requests are in flight on other threads.
@@ -52,9 +53,6 @@ import jakarta.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class</a>
  * </ul>
  */
-@SuppressWarnings({
-	"java:S3077" // The volatile Map snapshot and volatile RestContext are published immutable/fully built (copy-on-write).
-})
 public class RestChildren {
 
 	private static final Logger LOGGER = Logger.getLogger(RestChildren.class.getName());
@@ -82,8 +80,8 @@ public class RestChildren {
 		final BeanStore beanStore;
 		final ServletConfig servletConfig;
 
-		/** Written once under {@link #lock}; volatile for lock-free reads. */
-		volatile RestContext materialized;
+		/** Written once under {@link #lock}; atomic reference for lock-free reads. */
+		final AtomicReference<RestContext> materialized = new AtomicReference<>();
 
 		private final Object lock = new Object();
 
@@ -100,7 +98,7 @@ public class RestChildren {
 			this.servletConfig = servletConfig;
 		}
 
-		boolean isMaterialized() { return materialized != null; }
+		boolean isMaterialized() { return materialized.get() != null; }
 
 		/**
 		 * Returns the materialized {@link RestContext}, building it if this is the first call.
@@ -113,11 +111,11 @@ public class RestChildren {
 		 * @throws ServletException If context construction fails.
 		 */
 		RestContext materialize() throws ServletException {
-			RestContext rc = materialized;
+			RestContext rc = materialized.get();
 			if (rc != null)
 				return rc;
 			synchronized (lock) {
-				rc = materialized;
+				rc = materialized.get();
 				if (rc != null)
 					return rc;
 				LOGGER.info(() -> "Lazy REST child materializing: " + resourceClass.getName() + " at path '" + path + "'");
@@ -128,7 +126,7 @@ public class RestChildren {
 				} catch (Exception e) {
 					throw new ServletException("Failed to lazily materialize child REST context for " + resourceClass.getName(), unwrapThrowable(e));
 				}
-				materialized = rc;
+				materialized.set(rc);
 				LOGGER.info(() -> "Lazy REST child materialized: " + resourceClass.getName() + " at path '" + path + "'");
 				return rc;
 			}
@@ -283,8 +281,8 @@ public class RestChildren {
 	private final ServletConfig servletConfig;
 	private final Object writeLock = new Object();
 
-	/** Eager-init children keyed by composed path. Copy-on-write; volatile for lock-free reads. */
-	private volatile Map<String,RestContext> children;
+	/** Eager-init children keyed by composed path. Copy-on-write; atomic reference for lock-free reads. */
+	private final AtomicReference<Map<String,RestContext>> children = new AtomicReference<>();
 
 	/**
 	 * Lazy-init children keyed by path prefix.
@@ -292,7 +290,7 @@ public class RestChildren {
 	 * <p>
 	 * These entries are registered at parent startup for routing purposes; their {@link RestContext} bodies
 	 * are built on first use.  Once materialized, the entry's {@link LazyChildEntry#materialized} field is set
-	 * but the entry remains in this map so subsequent reads are lock-free (volatile field read on the entry).
+	 * but the entry remains in this map so subsequent reads are lock-free (atomic read on the entry).
 	 * This map itself is never mutated after construction, so no copy-on-write is needed.
 	 */
 	private final Map<String,LazyChildEntry> lazyEntries;
@@ -309,7 +307,7 @@ public class RestChildren {
 		var initial = new LinkedHashMap<String,RestContext>();
 		for (var rc : builder.list)
 			initial.put(rc.getPath(), rc);
-		this.children = u(initial);
+		this.children.set(u(initial));
 		var lazyMap = new LinkedHashMap<String,LazyChildEntry>();
 		for (var e : builder.lazyList)
 			lazyMap.put(e.path, e);
@@ -327,7 +325,7 @@ public class RestChildren {
 	 * @return The children as an unmodifiable map.
 	 */
 	public Map<String,RestContext> asMap() {
-		return children;
+		return children.get();
 	}
 
 	/**
@@ -337,10 +335,10 @@ public class RestChildren {
 	 * Lazy children that were never materialized are silently skipped (no context was ever built for them).
 	 */
 	public void destroy() {
-		for (var r : children.values())
+		for (var r : children.get().values())
 			destroyChild(r);
 		for (var e : lazyEntries.values()) {
-			var rc = e.materialized;  // volatile read — safe without lock
+			var rc = e.materialized.get();  // atomic read — safe without lock
 			if (rc != null)
 				destroyChild(rc);
 		}
@@ -350,7 +348,7 @@ public class RestChildren {
 	 * Looks through the registered children of this object and returns the best match.
 	 *
 	 * <p>
-	 * Eager children are checked first (lock-free volatile read), then lazy entries.  A matching lazy entry
+	 * Eager children are checked first (lock-free atomic read), then lazy entries.  A matching lazy entry
 	 * triggers {@link LazyChildEntry#materialize()} which builds the full {@link RestContext} on first call
 	 * (blocking concurrent first-requests until construction completes) and caches the result.
 	 *
@@ -362,7 +360,7 @@ public class RestChildren {
 		var pi = builder.getPathInfoUndecoded();
 		if (nn(pi) && neq(pi, "/")) {
 			// Check eager children first.
-			var snapshot = children;  // single volatile read
+			var snapshot = children.get();  // single atomic read
 			for (var rc : snapshot.values()) {
 				var pm = rc.getPathMatcher();  // Treated as nullable per RestContext's own usage (see RestContext.getPathMatcher() null-guards).
 				UrlPathMatch uppm = pm == null ? null : pm.match(builder.getUrlPath());
@@ -390,7 +388,7 @@ public class RestChildren {
 	 * @throws ServletException Error occurred.
 	 */
 	public void postInit() throws ServletException {
-		for (var childContext : children.values())
+		for (var childContext : children.get().values())
 			childContext.postInit();
 	}
 
@@ -403,7 +401,7 @@ public class RestChildren {
 	 * @throws ServletException Error occurred.
 	 */
 	public void postInitChildFirst() throws ServletException {
-		for (var childContext : children.values())
+		for (var childContext : children.get().values())
 			childContext.postInitChildFirst();
 	}
 
@@ -422,7 +420,7 @@ public class RestChildren {
 	//-------------------------------------------------------------------------------------------------------------
 	// Dynamic add/remove API.
 	//
-	// Routing reads (findMatch / asMap) are lock-free against the volatile `children` snapshot.
+	// Routing reads (findMatch / asMap) are lock-free against the atomic `children` snapshot.
 	// Mutations synchronize on writeLock and atomically swap in a new unmodifiable LinkedHashMap.
 	//-------------------------------------------------------------------------------------------------------------
 
@@ -523,12 +521,12 @@ public class RestChildren {
 	public RestContext removeChild(String path) {
 		RestContext removed;
 		synchronized (writeLock) {
-			removed = children.get(path);
+			removed = children.get().get(path);
 			if (removed == null)
 				return null;
-			var next = new LinkedHashMap<>(children);
+			var next = new LinkedHashMap<>(children.get());
 			next.remove(path);
-			children = u(next);
+			children.set(u(next));
 		}
 		destroyChild(removed);
 		return removed;
@@ -544,7 +542,7 @@ public class RestChildren {
 		String key = null;
 		RestContext removed = null;
 		synchronized (writeLock) {
-			for (var e : children.entrySet()) {
+			for (var e : children.get().entrySet()) {
 				if (e.getValue().getResourceClass() == resourceClass) {
 					key = e.getKey();
 					removed = e.getValue();
@@ -553,9 +551,9 @@ public class RestChildren {
 			}
 			if (removed == null)
 				return null;
-			var next = new LinkedHashMap<>(children);
+			var next = new LinkedHashMap<>(children.get());
 			next.remove(key);
-			children = u(next);
+			children.set(u(next));
 		}
 		destroyChild(removed);
 		return removed;
@@ -628,21 +626,21 @@ public class RestChildren {
 		var key = cc.getPath();
 		RestContext replaced = null;
 		synchronized (writeLock) {
-			if (children.containsKey(key)) {
+			if (children.get().containsKey(key)) {
 				if (! replace) {
 					destroyQuietly(cc);
 					throw isex("Child resource already registered at path '%s'.", key);
 				}
-				replaced = children.get(key);
-				var withoutExisting = new LinkedHashMap<>(children);
+				replaced = children.get().get(key);
+				var withoutExisting = new LinkedHashMap<>(children.get());
 				withoutExisting.remove(key);
 				// We don't publish the intermediate "without existing" snapshot — single atomic swap below.
 				withoutExisting.put(key, cc);
-				children = u(withoutExisting);
+				children.set(u(withoutExisting));
 			} else {
-				var next = new LinkedHashMap<>(children);
+				var next = new LinkedHashMap<>(children.get());
 				next.put(key, cc);
-				children = u(next);
+				children.set(u(next));
 			}
 		}
 		if (replaced != null)

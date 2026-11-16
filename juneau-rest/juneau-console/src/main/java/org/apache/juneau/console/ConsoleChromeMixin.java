@@ -23,6 +23,7 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.utils.*;
@@ -379,7 +380,7 @@ public class ConsoleChromeMixin {
 	}
 
 	/** The shipped static chrome.css bytes, read once from the classpath (shared - the static file never varies by theme). */
-	private static volatile String staticCss;
+	private static final AtomicReference<String> staticCss = new AtomicReference<>();
 
 	/**
 	 * Read+cache+hash+serve helper for the configured theme/chrome assets, anchored on this class so
@@ -965,17 +966,17 @@ public class ConsoleChromeMixin {
 
 	/** Returns the shipped static chrome.css text, reading (and caching, process-wide - the static file never varies) it from the classpath on first call. */
 	private static String staticCss() throws IOException {
-		var s = staticCss;
+		var s = staticCss.get();
 		if (s == null) {
 			synchronized (ConsoleChromeMixin.class) {
-				s = staticCss;
+				s = staticCss.get();
 				if (s == null) {  // HTT: the "already set" branch is only reachable under a lock-acquisition race - unhittable single-threaded.
 					try (var in = ConsoleChromeMixin.class.getResourceAsStream(CHROME_CSS_RESOURCE)) {
 						if (in == null)
 							throw new IOException("Classpath resource not found: " + CHROME_CSS_RESOURCE);
 						s = IoUtils.read(in);
 					}
-					staticCss = s;
+					staticCss.set(s);
 				}
 			}
 		}

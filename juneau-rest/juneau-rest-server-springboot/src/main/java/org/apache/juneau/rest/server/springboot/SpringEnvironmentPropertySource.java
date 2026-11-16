@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 
 import org.springframework.boot.context.properties.source.*;
@@ -90,10 +91,7 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 
 	// Written inside resolve() before resolved; readers read resolved first, so plain fields are safely published.
 	private volatile boolean resolved;
-	@SuppressWarnings({
-		"java:S3077" // Publish-once reference: env is assigned before resolved is set (constructor or resolve()) and is never compound-mutated, so volatile visibility is sufficient.
-	})
-	private volatile Environment env;
+	private final AtomicReference<Environment> env = new AtomicReference<>();
 	private boolean cacheEnabled;
 
 	// The miss set for the source list it was built from; replaced, never edited, when the list changes.
@@ -105,7 +103,7 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 	 * @param env The Spring environment to bridge.  Must not be <jk>null</jk>.
 	 */
 	public SpringEnvironmentPropertySource(Environment env) {
-		this.env = Objects.requireNonNull(env, "env");
+		this.env.set(Objects.requireNonNull(env, "env"));
 		this.envSupplier = null;
 	}
 
@@ -130,8 +128,8 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 			return;
 		// safeOpt swallows exceptions thrown by the supplier, e.g. a mocked ApplicationContext that returns null or
 		// throws during getEnvironment().
-		var e = nn(envSupplier) ? safeOpt(envSupplier::get).orElse(null) : env;
-		env = e;
+		var e = nn(envSupplier) ? safeOpt(envSupplier::get).orElse(null) : env.get();
+		env.set(e);
 		cacheEnabled = e instanceof ConfigurableEnvironment && ! safeOpt(() -> e.getProperty(MISS_CACHE_DISABLE_KEY)).map(Boolean::parseBoolean).orElse(false);
 		resolved = true;
 	}
@@ -144,7 +142,7 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 		if (! resolved)
 			resolve();
 		// Read env only after resolved: reading it first could see null, then resolved == true, and miss wrongly.
-		var e = env;
+		var e = env.get();
 		if (e == null)
 			return org.apache.juneau.commons.settings.PropertyLookupResult.missing();
 		// Profile piggyback: a Juneau config-profile activation lookup resolves to Spring's active profiles, so a

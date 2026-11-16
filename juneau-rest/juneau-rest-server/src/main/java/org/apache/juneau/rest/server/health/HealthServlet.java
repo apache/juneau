@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.health.HealthAggregator.*;
@@ -48,12 +49,10 @@ public class HealthServlet extends BasicRestServlet {
 	private final transient HealthAggregator aggregator = new HealthAggregator();
 
 	@SuppressWarnings({
-		"java:S2226", // Mutable by design: the embedded-server lifecycle publishes this post-construction, from a
-		              // thread other than the request-handling threads that read it via probe()/initReadinessState()
-		"java:S3077"  // volatile is used only to publish the reference itself (write-once, read-many); ReadinessState
-		              // is treated as an opaque handle here, never mutated through this field
+		"java:S2226" // Mutable by design: the embedded-server lifecycle publishes this post-construction, from a
+		             // thread other than the request-handling threads that read it via probe()/initReadinessState()
 	})
-	private transient volatile ReadinessState readinessState;
+	private final transient AtomicReference<ReadinessState> readinessState = new AtomicReference<>();
 
 	/**
 	 * Publishes the lifecycle-owned {@link ReadinessState} that this probe should observe.
@@ -69,7 +68,7 @@ public class HealthServlet extends BasicRestServlet {
 	 * @return This object.
 	 */
 	public HealthServlet publishReadinessState(ReadinessState state) {
-		this.readinessState = state;
+		this.readinessState.set(state);
 		return this;
 	}
 
@@ -85,8 +84,8 @@ public class HealthServlet extends BasicRestServlet {
 		"resource" // addBean returns this; the discarded return is the store the caller already holds
 	})
 	public void initReadinessState(WritableBeanStore beanStore) {
-		if (readinessState != null)
-			beanStore.addBean(ReadinessState.class, readinessState);
+		if (readinessState.get() != null)
+			beanStore.addBean(ReadinessState.class, readinessState.get());
 	}
 
 	/**

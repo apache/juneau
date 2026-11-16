@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
 
@@ -341,13 +342,13 @@ class McpResourceTemplateRegistry_Test {
 	@Nested class G_compiledMatcherCache {
 
 		@SuppressWarnings({
-			"unchecked" // The (Map<...>) cast of the reflectively-read compiledResourceTemplateMatchers field matches its declared type.
+			"unchecked" // The (AtomicReference<...>) cast of the reflectively-read compiledResourceTemplateMatchers field matches its declared type.
 		})
 		private Map<McpResourceTemplateHandler,McpUriTemplateMatcher> compiledMatchers(McpServerConfig config) {
 			try {
 				var f = McpServerConfig.class.getDeclaredField("compiledResourceTemplateMatchers");
 				f.setAccessible(true);
-				return (Map<McpResourceTemplateHandler,McpUriTemplateMatcher>) f.get(config);
+				return ((AtomicReference<Map<McpResourceTemplateHandler,McpUriTemplateMatcher>>) f.get(config)).get();
 			} catch (ReflectiveOperationException e) {
 				throw new RuntimeException(e);
 			}

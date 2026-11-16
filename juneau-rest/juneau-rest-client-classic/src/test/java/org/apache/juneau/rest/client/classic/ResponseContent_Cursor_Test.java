@@ -23,6 +23,7 @@ import java.net.*;
 import java.nio.charset.*;
 import java.util.concurrent.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.http.*;
 import org.apache.juneau.marshall.cbor.*;
 import org.apache.juneau.marshall.json.*;
@@ -53,8 +54,8 @@ class ResponseContent_Cursor_Test {
 	private static HttpServer server;
 	private static ExecutorService executor;
 	private static int port;
-	private static volatile byte[] responseBody = new byte[0];
-	private static volatile String responseContentType = "application/json";
+	private static final AtomicReference<byte[]> responseBody = new AtomicReference<>(new byte[0]);
+	private static final AtomicReference<String> responseContentType = new AtomicReference<>("application/json");
 	private static volatile int responseStatus = 200;
 
 	@BeforeAll
@@ -71,13 +72,13 @@ class ResponseContent_Cursor_Test {
 		server.setExecutor(executor);
 		server.createContext("/echo", exchange -> {
 			exchange.getRequestBody().readAllBytes();
-			if (responseContentType != null)
-				exchange.getResponseHeaders().add("Content-Type", responseContentType);
-			if (responseBody.length == 0 && responseStatus == 204) {
+			if (responseContentType.get() != null)
+				exchange.getResponseHeaders().add("Content-Type", responseContentType.get());
+			if (responseBody.get().length == 0 && responseStatus == 204) {
 				exchange.sendResponseHeaders(204, -1);
 			} else {
-				exchange.sendResponseHeaders(responseStatus, responseBody.length);
-				exchange.getResponseBody().write(responseBody);
+				exchange.sendResponseHeaders(responseStatus, responseBody.get().length);
+				exchange.getResponseBody().write(responseBody.get());
 			}
 			exchange.close();
 		});
@@ -97,8 +98,8 @@ class ResponseContent_Cursor_Test {
 	}
 
 	private static ResponseContent jsonContent(String json) throws Exception {
-		responseBody = json.getBytes(StandardCharsets.UTF_8);
-		responseContentType = "application/json";
+		responseBody.set(json.getBytes(StandardCharsets.UTF_8));
+		responseContentType.set("application/json");
 		responseStatus = 200;
 		var client = RestClient.create().json().build();
 		return client.get(url()).run().getContent();
@@ -154,8 +155,8 @@ class ResponseContent_Cursor_Test {
 		// IniParser implements RecordReadable but not TokenReadable, so a TokenReader cursor is unsupported
 		// (TokenReadable extends RecordReadable, so the reverse combination -- RecordReader from a TokenReadable
 		// parser -- is always supported and cannot exercise this branch).
-		responseBody = "a=1".getBytes(StandardCharsets.UTF_8);
-		responseContentType = "text/ini";
+		responseBody.set("a=1".getBytes(StandardCharsets.UTF_8));
+		responseContentType.set("text/ini");
 		responseStatus = 200;
 		try (var client = RestClient.create().build()) {
 			try (var req = client.get(url()); var res = req.run()) {
@@ -169,8 +170,8 @@ class ResponseContent_Cursor_Test {
 	@Test void b02b_recordCursorRequestedFromNeitherCapableParser_unsupported() throws Exception {
 		// ProtobufParser implements neither RecordReadable nor TokenReadable, covering the "record-reader" side
 		// of the exception message's isToken ternary (isToken==false here since RecordReader is requested).
-		responseBody = "a=1".getBytes(StandardCharsets.UTF_8);
-		responseContentType = "application/x-protobuf";
+		responseBody.set("a=1".getBytes(StandardCharsets.UTF_8));
+		responseContentType.set("application/x-protobuf");
 		responseStatus = 200;
 		try (var client = RestClient.create().build()) {
 			try (var req = client.get(url()); var res = req.run()) {
@@ -201,8 +202,8 @@ class ResponseContent_Cursor_Test {
 				});
 			}
 		};
-		responseBody = "{}".getBytes(StandardCharsets.UTF_8);
-		responseContentType = "application/json";
+		responseBody.set("{}".getBytes(StandardCharsets.UTF_8));
+		responseContentType.set("application/json");
 		responseStatus = 200;
 		try (var client = RestClient.create().interceptors(itcp).build()) {
 			try (var req = client.get(url()); var res = req.run()) {
@@ -214,8 +215,8 @@ class ResponseContent_Cursor_Test {
 	}
 
 	@Test void b03_noMatchingParser_throwsRestCallException() throws Exception {
-		responseBody = "{}".getBytes(StandardCharsets.UTF_8);
-		responseContentType = "application/x-no-such-type";
+		responseBody.set("{}".getBytes(StandardCharsets.UTF_8));
+		responseContentType.set("application/x-no-such-type");
 		responseStatus = 200;
 		try (var client = RestClient.create().build()) {
 			try (var req = client.get(url()); var res = req.run()) {
@@ -236,8 +237,8 @@ class ResponseContent_Cursor_Test {
 		var bean = new Bean();
 		bean.name = "eve";
 		bean.age = 70;
-		responseBody = CborSerializer.DEFAULT.write(bean);
-		responseContentType = "application/cbor";
+		responseBody.set(CborSerializer.DEFAULT.write(bean));
+		responseContentType.set("application/cbor");
 		responseStatus = 200;
 		try (var client = RestClient.create().build()) {
 			try (var req = client.get(url()); var res = req.run()) {

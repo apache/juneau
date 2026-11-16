@@ -18,6 +18,8 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * Resolves the {@code JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES} environment-variable master gate for REST client debug
  * body output.
@@ -37,7 +39,7 @@ public final class RestDebugBodyGate {
 	/** The environment variable that gates body dumping. */
 	public static final String ENV_ALLOW_DUMP_BODIES = "JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES";
 
-	private static volatile Boolean cache;
+	private static final AtomicReference<Boolean> cache = new AtomicReference<>();
 
 	private RestDebugBodyGate() {}
 
@@ -47,10 +49,10 @@ public final class RestDebugBodyGate {
 	 * @return <jk>true</jk> if body dumping is enabled.
 	 */
 	public static boolean isAllowDumpBodies() {
-		var v = cache;
+		var v = cache.get();
 		if (v == null) {
 			v = parse(System.getenv(ENV_ALLOW_DUMP_BODIES));
-			cache = v;
+			cache.set(v);
 		}
 		return v;
 	}
@@ -80,6 +82,6 @@ public final class RestDebugBodyGate {
 	 * 	non-<jk>null</jk> value is cached directly.
 	 */
 	public static void setAllowDumpBodiesForTest(Boolean override) {
-		cache = override;
+		cache.set(override);
 	}
 }

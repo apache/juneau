@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
@@ -309,11 +310,11 @@ class Rest_MethodOverrideGetHead_Test extends TestBase {
 	/** Records the request-line method as the servlet request carried it. */
 	@Rest(allowedMethodParams="*")
 	public static class RawLine extends Ops {
-		static volatile String seen;
+		static final AtomicReference<String> seen = new AtomicReference<>();
 
 		@RestGet("/raw")
 		public String raw(RestRequest req) {
-			seen = req.getHttpServletRequest().getMethod();
+			seen.set(req.getHttpServletRequest().getMethod());
 			return "GET";
 		}
 	}
@@ -322,11 +323,11 @@ class Rest_MethodOverrideGetHead_Test extends TestBase {
 		// The classic mock client upper-cases the line, so these go straight to RestContext.execute.
 		var ctx = new RestContext(new RestContext.Args(RawLine.class, null, null, RawLine::new, "", null, null, null, RestContext.ContextKind.ROOT)).postInit().postInitChildFirst();
 		for (var line : List.of("get", "Get")) {
-			RawLine.seen = null;
+			RawLine.seen.set(null);
 			var res = MockServletResponse.create();
 			ctx.execute(ctx.getResource(), MockServletRequest.create(line, "/raw").servletPath("").contextPath(""), res);
 			assertEquals(200, res.getStatus(), line);
-			assertEquals(line, RawLine.seen, "the line did not arrive in its original case");
+			assertEquals(line, RawLine.seen.get(), "the line did not arrive in its original case");
 
 			res = MockServletResponse.create();
 			ctx.execute(ctx.getResource(), MockServletRequest.create(line, "/x?method=DELETE").servletPath("").contextPath(""), res);

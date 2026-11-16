@@ -25,6 +25,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.console.datatables.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -53,7 +54,7 @@ class PollingError_BrowserTest extends TestBase {
 	/** System property the {@code js-tests} profile sets to enable this class. */
 	static final String GATE = "juneau.jsTests";
 
-	private volatile String mode = "ok";
+	private final AtomicReference<String> mode = new AtomicReference<>("ok");
 	private HttpServer server;
 	private int port;
 
@@ -63,7 +64,7 @@ class PollingError_BrowserTest extends TestBase {
 		port = server.getAddress().getPort();
 		server.createContext("/mode", ex -> {
 			var q = ex.getRequestURI().getRawQuery();
-			mode = q == null ? "ok" : q.substring(q.indexOf('=') + 1);
+			mode.set(q == null ? "ok" : q.substring(q.indexOf('=') + 1));
 			writeBody(ex, 200, "text/plain", "ok");
 		});
 		server.createContext("/query", ex -> {
@@ -102,7 +103,7 @@ class PollingError_BrowserTest extends TestBase {
 	}
 
 	private boolean failed(HttpExchange ex) throws IOException {
-		switch (mode) {
+		switch (mode.get()) {
 			case "json500":
 				writeBody(ex, 500, "application/json", "{\"message\":\"boom\"}");
 				return true;

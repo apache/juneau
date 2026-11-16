@@ -84,7 +84,8 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 	// double-checked-locking idiom is safe under concurrent first-request load.
 	private final AtomicReference<Configuration> defaultConfiguration = new AtomicReference<>();
 
-	private volatile Configuration hardenedConfiguration;
+	// Last user-supplied configuration that hardened(...) has applied its restrictions to.
+	private final AtomicReference<Configuration> hardenedConfiguration = new AtomicReference<>();
 
 	/**
 	 * Creates a new builder.
@@ -208,11 +209,11 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 
 	// Applies the built-in class resolver and API built-in restrictions to a user-supplied configuration (once per instance).
 	private Configuration hardened(Configuration cfg) {
-		if (hardenedConfiguration != cfg) {
+		if (hardenedConfiguration.get() != cfg) {
 			synchronized (this) {
 				cfg.setNewBuiltinClassResolver(TemplateClassResolver.ALLOWS_NOTHING_RESOLVER);
 				cfg.setAPIBuiltinEnabled(false);
-				hardenedConfiguration = cfg;
+				hardenedConfiguration.set(cfg);
 			}
 		}
 		return cfg;

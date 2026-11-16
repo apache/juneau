@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.*;
 
 import org.apache.juneau.console.views.ActionResult.*;
@@ -103,7 +104,7 @@ public final class AsyncJob {
 	private boolean effectStarted;
 	private int subscribers;
 	private ActionResult result;   // Non-null iff terminal; the single settled outcome.
-	private volatile String owner;   // The principal name bound to this job, or null when the job is not bound to a caller.
+	private final AtomicReference<String> owner = new AtomicReference<>();   // The principal name bound to this job, or null when the job is not bound to a caller.
 
 	/**
 	 * Constructor.
@@ -140,12 +141,12 @@ public final class AsyncJob {
 	 * @return This object.
 	 */
 	public AsyncJob owner(String principalName) {
-		owner = principalName;
+		owner.set(principalName);
 		return this;
 	}
 
 	/** @return The principal name this job is bound to, or <jk>null</jk> when it is not bound to a caller. */
-	public String owner() { return owner; }
+	public String owner() { return owner.get(); }
 
 	/** @return The instant this job was created. */
 	public Instant createdAt() { return createdAt; }

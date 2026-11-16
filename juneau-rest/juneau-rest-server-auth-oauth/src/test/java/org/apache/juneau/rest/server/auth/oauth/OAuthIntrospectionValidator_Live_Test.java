@@ -24,6 +24,7 @@ import java.nio.charset.*;
 import java.time.*;
 import java.util.concurrent.atomic.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.junit.jupiter.api.*;
@@ -42,14 +43,14 @@ import com.sun.net.httpserver.*;
 class OAuthIntrospectionValidator_Live_Test extends TestBase {
 
 	private HttpServer server;
-	private volatile String nextResponse;
+	private final AtomicReference<String> nextResponse = new AtomicReference<>();
 	private volatile int nextStatus = 200;
 
 	@BeforeEach
 	void startServer() throws IOException {
 		server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
 		server.createContext("/introspect", ex -> {
-			var body = nextResponse.getBytes(StandardCharsets.UTF_8);
+			var body = nextResponse.get().getBytes(StandardCharsets.UTF_8);
 			ex.getResponseHeaders().add("Content-Type", "application/json");
 			ex.sendResponseHeaders(nextStatus, body.length);
 			try (var os = ex.getResponseBody()) {
@@ -81,14 +82,14 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_configuratorNull_notInvoked() throws Exception {
-		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\"}");
 		var v = validatorBuilder().build();
 		var p = v.validate("tok-1");
 		assertEquals("alice", p.getName());
 	}
 
 	@Test void a02_configuratorNonNull_invoked() throws Exception {
-		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\"}");
 		var called = new AtomicBoolean();
 		var v = validatorBuilder()
 			.httpRequestConfigurator(req -> called.set(true))
@@ -102,7 +103,7 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_errorResponse_throws() {
-		nextResponse = "{\"error\":\"invalid_client\"}";
+		nextResponse.set("{\"error\":\"invalid_client\"}");
 		nextStatus = 400;
 		var v = validatorBuilder().build();
 		var ex = assertThrows(AuthenticationException.class, () -> v.validate("tok-err"));
@@ -115,7 +116,7 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_inactiveToken_throws() {
-		nextResponse = "{\"active\":false}";
+		nextResponse.set("{\"active\":false}");
 		var v = validatorBuilder().build();
 		var ex = assertThrows(AuthenticationException.class, () -> v.validate("tok-inactive"));
 		assertTrue(ex.getMessage().contains("inactive"));
@@ -126,7 +127,7 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_nullSubject_rejected() {
-		nextResponse = "{\"active\":true,\"scope\":\"read\"}";
+		nextResponse.set("{\"active\":true,\"scope\":\"read\"}");
 		var v = validatorBuilder().build();
 		assertThrows(AuthenticationException.class, () -> v.validate("tok-nosub"));
 	}
@@ -136,7 +137,7 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_nullScope_emptyRoles() throws Exception {
-		nextResponse = "{\"active\":true,\"sub\":\"alice\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"alice\"}");
 		var v = validatorBuilder().build();
 		var p = (ClaimsPrincipal) v.validate("tok-noscope");
 		var scope = p.getClaims().get("scope");
@@ -147,7 +148,7 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 		// Nimbus parses "scope" from the JSON via its own Scope class; we provide a
 		// raw JSON where the scope string produces a Nimbus Scope list that may include blank entries.
 		// Use a double-space in scope to test both non-null (line 370 false) and blank (lines 373/374).
-		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read  write\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"alice\",\"scope\":\"read  write\"}");
 		var v = validatorBuilder().build();
 		var p = (ClaimsPrincipal) v.validate("tok-blanks");
 		@SuppressWarnings({
@@ -164,14 +165,14 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void f01_requiredScopePresent_noThrow() throws Exception {
-		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read write\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"alice\",\"scope\":\"read write\"}");
 		var v = validatorBuilder().requiredScopes("read").build();
 		var p = v.validate("tok-scope-ok");
 		assertEquals("alice", p.getName());
 	}
 
 	@Test void f02_requiredScopeMissing_throws() {
-		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\"}");
 		var v = validatorBuilder().requiredScopes("write").build();
 		var ex = assertThrows(AuthenticationException.class, () -> v.validate("tok-scope-missing"));
 		assertTrue(ex.getMessage().contains("write") || ex.getMessage().contains("scope"));
@@ -182,7 +183,7 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_scopesNonEmpty_addedToClaims() throws Exception {
-		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\"}");
 		var v = validatorBuilder().build();
 		var p = (ClaimsPrincipal) v.validate("tok-claims");
 		assertNotNull(p.getClaims().get("scope"));
@@ -193,14 +194,14 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void h01_expNull_usesCacheTtl() throws Exception {
-		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\"}";
+		nextResponse.set("{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\"}");
 		var v = validatorBuilder().cacheTtl(Duration.ofMinutes(1)).build();
 		assertNotNull(v.validate("tok-noexp"));
 	}
 
 	@Test void h02_expInPast_ttlFlooredToOneSecond() throws Exception {
 		// Expired token but active=true — exp in the past triggers the floor (lines 399/400).
-		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\",\"exp\":1}";
+		nextResponse.set("{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\",\"exp\":1}");
 		var v = validatorBuilder()
 			.clock(Clock.fixed(Instant.parse("2030-01-01T00:00:00Z"), ZoneOffset.UTC))
 			.build();
@@ -211,7 +212,7 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 		// exp is 30 seconds from now, cacheTtl is 5 minutes → until(30s) < cacheTtl(5min) triggers line 401.
 		var nowFixed = Instant.parse("2030-01-01T00:00:00Z");
 		long expEpoch = nowFixed.plusSeconds(30).getEpochSecond();
-		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\",\"exp\":" + expEpoch + "}";
+		nextResponse.set("{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\",\"exp\":" + expEpoch + "}");
 		var v = validatorBuilder()
 			.clock(Clock.fixed(nowFixed, ZoneOffset.UTC))
 			.build();
@@ -222,7 +223,7 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 		// exp is 2 hours from now, cacheTtl is 5 minutes → until(2h) >= cacheTtl(5min) → line 401 false branch.
 		var nowFixed = Instant.parse("2030-01-01T00:00:00Z");
 		long expEpoch = nowFixed.plusSeconds(7200).getEpochSecond();
-		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\",\"exp\":" + expEpoch + "}";
+		nextResponse.set("{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\",\"exp\":" + expEpoch + "}");
 		var v = validatorBuilder()
 			.clock(Clock.fixed(nowFixed, ZoneOffset.UTC))
 			.build();
@@ -233,7 +234,7 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 		// exp == now → until.isZero() == true → line 399 isZero branch.
 		var nowFixed = Instant.parse("2030-01-01T00:00:00Z");
 		long expEpoch = nowFixed.getEpochSecond();
-		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\",\"exp\":" + expEpoch + "}";
+		nextResponse.set("{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\",\"exp\":" + expEpoch + "}");
 		var v = validatorBuilder()
 			.clock(Clock.fixed(nowFixed, ZoneOffset.UTC))
 			.build();

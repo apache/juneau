@@ -24,6 +24,7 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -66,21 +67,21 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 		static final AsyncJobRegistry REGISTRY = new AsyncJobRegistry(Clock.systemUTC(), Duration.ofSeconds(120),
 			AsyncJobRegistry.MAX_OUTPUT_BYTES, AsyncJobRegistry.MAX_SUBSCRIBERS_PER_JOB, null);
 
-		static volatile AsyncJob lastJob;
+		static final AtomicReference<AsyncJob> lastJob = new AtomicReference<>();
 
 		@Override public AsyncJobRegistry asyncJobRegistry() { return REGISTRY; }
 
 		/** Test-only: starts a job (as a consumer's async row-action POST would) and returns its AsyncJobRef pointer. */
 		@RestPost(path="/start") public AsyncJobRef start() {
 			var job = REGISTRY.create();
-			lastJob = job;
+			lastJob.set(job);
 			return AsyncJobRef.of(job);
 		}
 
 		/** Test-only: starts a job bound to the calling principal. */
 		@RestPost(path="/start-owned") public AsyncJobRef startOwned(RestRequest req) {
 			var job = REGISTRY.create().owner(req.getUserPrincipal().getName());
-			lastJob = job;
+			lastJob.set(job);
 			return AsyncJobRef.of(job);
 		}
 	}
@@ -95,7 +96,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 	/** Starts a job, buffers {@code e0..e(n-1)} and completes it. */
 	private static String endedJob(int n) throws Exception {
 		var jobId = startJob();
-		var job = R.lastJob;
+		var job = R.lastJob.get();
 		for (var i = 0; i < n; i++)
 			job.progress("e" + i);
 		job.complete(ActionResult.success(Map.of("id", "INC-1")));
@@ -184,7 +185,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 
 	@Test void b01_freshAttachToEndedJob_sendsOnlyResult() throws Exception {
 		var jobId = startJob();
-		var job = R.lastJob;
+		var job = R.lastJob.get();
 		job.progress("step 1 of 2");
 		job.progress("step 2 of 2");
 		job.complete(ActionResult.success(Map.of("id", "INC-1", "status", "acknowledged")));
@@ -200,8 +201,8 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 
 	@Test void b02_streamOfCancelledJobCarriesCancelledResult() throws Exception {
 		var jobId = startJob();
-		R.lastJob.progress("working");
-		R.lastJob.cancel();
+		R.lastJob.get().progress("working");
+		R.lastJob.get().cancel();
 		var body = c.get(AsyncJobsMixin.streamPath(jobId)).header("Accept", "text/event-stream").run()
 			.assertStatus(200).getContent().asString();
 		assertEquals(List.of("result"), events(body), body);   // fresh attach: the result only, no replay
@@ -248,7 +249,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 	void b08_badValue_is400_header(String value) throws Exception {
 		var jobId = endedJob(3);
 		assertEquals("", stream(jobId, value, null).assertStatus(400).getContent().asString());
-		assertEquals(0, R.lastJob.subscriberCount());
+		assertEquals(0, R.lastJob.get().subscriberCount());
 	}
 
 	@ParameterizedTest
@@ -258,7 +259,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 		assertEquals("", stream(jobId, null, value).assertStatus(400).getContent().asString());
 		// A bad query is still bad when a valid header is absent, and a bad header beats a valid query.
 		stream(jobId, value, "0").assertStatus(400);
-		assertEquals(0, R.lastJob.subscriberCount());
+		assertEquals(0, R.lastJob.get().subscriberCount());
 	}
 
 	@Test void b09_pastEnd_is400() throws Exception {
@@ -271,7 +272,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 
 	@Test void b10_400_doesNotConsumeASubscriberSlot() throws Exception {
 		var jobId = endedJob(3);
-		var job = R.lastJob;
+		var job = R.lastJob.get();
 		// Two 400s on a job with a cap of two would otherwise exhaust it.
 		stream(jobId, "abc", null).assertStatus(400);
 		stream(jobId, null, "99").assertStatus(400);
@@ -288,7 +289,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 
 	@Test void b11b_badValue_beats429() throws Exception {
 		var jobId = endedJob(3);
-		var job = R.lastJob;
+		var job = R.lastJob.get();
 		assertTrue(job.acquireSubscriber());
 		assertTrue(job.acquireSubscriber());
 		try {
@@ -303,7 +304,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 	@Test void b12_idIsIndexPlusOne_whateverTheStartCursor() throws Exception {
 		var n = 3;
 		var jobId = endedJob(n);
-		var buffered = R.lastJob.eventsFrom(0);
+		var buffered = R.lastJob.get().eventsFrom(0);
 		for (var k = 0; k <= n; k++) {
 			var body = stream(jobId, String.valueOf(k), null).assertStatus(200).getContent().asString();
 			var progress = parse(body).stream().filter(e -> eq("progress", e.getEvent())).toList();
@@ -320,7 +321,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 	@Test void b13_freshAttachToRunningJob_isLiveOnly() {
 		assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
 			var jobId = startJob();
-			var job = R.lastJob;
+			var job = R.lastJob.get();
 			job.progress("early");
 			var pool = Executors.newSingleThreadExecutor();
 			try {
@@ -339,7 +340,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 	@Test void b14_twoSubscribersAtDifferentCursors() {
 		assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
 			var jobId = startJob();
-			var job = R.lastJob;
+			var job = R.lastJob.get();
 			job.progress("early");
 			var pool = Executors.newFixedThreadPool(2);
 			try {
@@ -373,7 +374,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 
 	@Test void d01_subscriberCapReturns429() throws Exception {
 		var jobId = startJob();
-		var job = R.lastJob;
+		var job = R.lastJob.get();
 		// Pre-occupy both subscriber slots so the endpoint's own acquire fails; complete so the stream would drain.
 		assertTrue(job.acquireSubscriber());
 		assertTrue(job.acquireSubscriber());
@@ -397,7 +398,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 
 	@Test void e02_cancelAfterEffectReturnsCancelledAfterEffect() throws Exception {
 		var jobId = startJob();
-		R.lastJob.markEffectStarted();
+		R.lastJob.get().markEffectStarted();
 		var body = c.post(AsyncJobsMixin.cancelPath(jobId), "").header("Accept", "application/json").run()
 			.assertStatus(200).getContent().asString();
 		assertTrue(body.contains("\"outcome\":\"cancelled-after-effect\""), body);
@@ -422,7 +423,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 
 	@Test void f01_ownedJob_streamAndCancelRefuseAnotherPrincipal() throws Exception {
 		var jobId = startOwnedJob("alice");
-		R.lastJob.complete(ActionResult.success(Map.of("id", "INC-1")));
+		R.lastJob.get().complete(ActionResult.success(Map.of("id", "INC-1")));
 		c.get(AsyncJobsMixin.streamPath(jobId)).userPrincipal(() -> "bob").header("Accept", "text/event-stream").run().assertStatus(404);
 		c.get(AsyncJobsMixin.streamPath(jobId)).header("Accept", "text/event-stream").run().assertStatus(404);
 		c.post(AsyncJobsMixin.cancelPath(jobId), "").userPrincipal(() -> "bob").header("Accept", "application/json").run().assertStatus(404);

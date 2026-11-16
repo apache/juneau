@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.FileUtils.resolveVirtualPathSafely
 
 import java.io.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.processor.*;
@@ -99,10 +100,7 @@ public class MustacheViewRenderer implements ViewRenderer {
 	// the bridge-default MustacheFactory is built once instead of rebuilt per render.  Created lazily (not
 	// eagerly) so a missing Mustache engine still surfaces at render time as NO_ENGINE_DIAGNOSTIC rather
 	// than during RestContext construction.
-	@SuppressWarnings({
-		"java:S3077" // Publish-once cache: assigned once under double-checked locking in fallbackMixin(); MustacheMixin is fully built (effectively immutable — its only field is final) before assignment, so volatile safe-publication is sufficient.
-	})
-	private volatile MustacheMixin fallbackMixin;
+	private final AtomicReference<MustacheMixin> fallbackMixin = new AtomicReference<>();
 
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException, BasicHttpException {
@@ -169,13 +167,13 @@ public class MustacheViewRenderer implements ViewRenderer {
 
 	// Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.
 	private MustacheMixin fallbackMixin() {
-		var local = fallbackMixin;
+		var local = fallbackMixin.get();
 		if (local == null) {
 			synchronized (this) {
-				local = fallbackMixin;
+				local = fallbackMixin.get();
 				if (local == null) {
 					local = new MustacheMixin();
-					fallbackMixin = local;
+					fallbackMixin.set(local);
 				}
 			}
 		}

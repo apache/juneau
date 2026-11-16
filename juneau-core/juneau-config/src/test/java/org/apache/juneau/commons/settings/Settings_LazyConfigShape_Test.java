@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
@@ -42,12 +43,12 @@ class Settings_LazyConfigShape_Test extends TestBase {
 
 	/** Set by f01 before it runs its probe. Public, so a probe defined by a throwaway class loader can read it. */
 	public static final class Target {
-		public static volatile Settings value;
+		public static final AtomicReference<Settings> value = new AtomicReference<>();
 	}
 
 	/** f01's probe: reads {@code k} from {@link Target} inside its {@code <clinit>}. */
 	public static final class Probe1 {
-		public static final String SEEN = Target.value.get("k").orElse(null);
+		public static final String SEEN = Target.value.get().get("k").orElse(null);
 	}
 
 	/** f02's probe: reads a serializer setting from the singleton inside its {@code <clinit>}. */
@@ -111,12 +112,12 @@ class Settings_LazyConfigShape_Test extends TestBase {
 		var cfg = Config.create().store(MemoryStore.create().build()).build();
 		cfg.set("k", "v");
 		Config.setSystemDefault(cfg);
-		Target.value = Settings.defaultBuilder(List.of(new ConfigPropertySourceProvider())).build();
+		Target.value.set(Settings.defaultBuilder(List.of(new ConfigPropertySourceProvider())).build());
 		try {
 			assertNull(runProbe(Probe1.class), "the <clinit> guard answers missing()");
-			assertEquals("v", Target.value.get("k").orElse(null), "with a cache over the lazy source this second read would also be missing");
+			assertEquals("v", Target.value.get().get("k").orElse(null), "with a cache over the lazy source this second read would also be missing");
 		} finally {
-			Target.value = null;
+			Target.value.set(null);
 		}
 	}
 

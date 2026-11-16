@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
@@ -83,8 +84,8 @@ class McpTraceContext_Test extends TestBase {
 
 	static final class RecordingScope implements Scope {
 		final List<String> events = Collections.synchronizedList(new ArrayList<>());
-		volatile Integer lastErrorCode;
-		volatile String lastErrorMessage;
+		final AtomicReference<Integer> lastErrorCode = new AtomicReference<>();
+		final AtomicReference<String> lastErrorMessage = new AtomicReference<>();
 
 		@Override /* Scope */ public void setStatusCode(int statusCode) { events.add("status:" + statusCode); }
 		@Override /* Scope */ public void setError(Throwable error) { events.add("error:" + error.getClass().getSimpleName()); }
@@ -92,8 +93,8 @@ class McpTraceContext_Test extends TestBase {
 
 		@Override /* Scope */
 		public void recordRpcError(int code, String message) {
-			lastErrorCode = code;
-			lastErrorMessage = message;
+			lastErrorCode.set(code);
+			lastErrorMessage.set(message);
 			events.add("rpcError:" + code);
 		}
 	}
@@ -108,14 +109,14 @@ class McpTraceContext_Test extends TestBase {
 	static final class RecordingTracer implements TracerHook {
 		static final String ROOT_TRACEPARENT = "00-00000000000000000000000000000a-000000000000000a-01";
 
-		volatile TraceContextCarrier lastCarrier;
-		volatile TraceOperation lastOperation;
-		volatile RecordingScope lastScope;
+		final AtomicReference<TraceContextCarrier> lastCarrier = new AtomicReference<>();
+		final AtomicReference<TraceOperation> lastOperation = new AtomicReference<>();
+		final AtomicReference<RecordingScope> lastScope = new AtomicReference<>();
 
 		void reset() {
-			lastCarrier = null;
-			lastOperation = null;
-			lastScope = null;
+			lastCarrier.set(null);
+			lastOperation.set(null);
+			lastScope.set(null);
 		}
 
 		@Override /* TracerHook */
@@ -125,10 +126,10 @@ class McpTraceContext_Test extends TestBase {
 
 		@Override /* TracerHook */
 		public Scope startSpan(RestRequest request, TraceContextCarrier carrier, TraceOperation operation) {
-			lastCarrier = carrier;
-			lastOperation = operation;
+			lastCarrier.set(carrier);
+			lastOperation.set(operation);
 			var scope = new RecordingScope();
-			lastScope = scope;
+			lastScope.set(scope);
 			var traceparent = carrier == null ? null : carrier.get(RequestMeta.KEY_TRACEPARENT);
 			request.setAttribute(TraceContextResponseProcessor.ATTR_TRACEPARENT, traceparent != null ? traceparent : ROOT_TRACEPARENT);
 			var tracestate = carrier == null ? null : carrier.get(RequestMeta.KEY_TRACESTATE);
@@ -269,7 +270,7 @@ class McpTraceContext_Test extends TestBase {
 			.header("Mcp-Method", "tools/call").header("Mcp-Name", "echo")
 			.header(RequestMeta.KEY_TRACEPARENT, "00-headerloses0000000000000000-0000000000000002-01")
 			.run().assertStatus(200);
-		assertEquals("00-metawins00000000000000000000-0000000000000001-01", Traced.TRACER.lastCarrier.get(RequestMeta.KEY_TRACEPARENT));
+		assertEquals("00-metawins00000000000000000000-0000000000000001-01", Traced.TRACER.lastCarrier.get().get(RequestMeta.KEY_TRACEPARENT));
 	}
 
 	@Test void a02_noMetaTraceparent_fallsBackToHttpHeader() throws Exception {
@@ -277,14 +278,14 @@ class McpTraceContext_Test extends TestBase {
 			.header("Mcp-Method", "tools/call").header("Mcp-Name", "echo")
 			.header(RequestMeta.KEY_TRACEPARENT, "00-fromheader0000000000000000-0000000000000003-01")
 			.run().assertStatus(200);
-		assertEquals("00-fromheader0000000000000000-0000000000000003-01", Traced.TRACER.lastCarrier.get(RequestMeta.KEY_TRACEPARENT));
+		assertEquals("00-fromheader0000000000000000-0000000000000003-01", Traced.TRACER.lastCarrier.get().get(RequestMeta.KEY_TRACEPARENT));
 	}
 
 	@Test void a03_noMetaNoHeader_carrierResolvesToNull() throws Exception {
 		client(Traced.class).post("/").contentString(body(1, "tools/call", JsonMap.of("name", "echo", "arguments", JsonMap.of("text", "hi")), null))
 			.header("Mcp-Method", "tools/call").header("Mcp-Name", "echo")
 			.run().assertStatus(200);
-		assertNull(Traced.TRACER.lastCarrier.get(RequestMeta.KEY_TRACEPARENT));
+		assertNull(Traced.TRACER.lastCarrier.get().get(RequestMeta.KEY_TRACEPARENT));
 	}
 
 	@Test void a04_carrierKeys_unionsMetaAndHeaderNames() throws Exception {
@@ -294,7 +295,7 @@ class McpTraceContext_Test extends TestBase {
 			.header("tracestate", "vendor=x")
 			.run().assertStatus(200);
 		var keys = new HashSet<String>();
-		Traced.TRACER.lastCarrier.keys().forEach(keys::add);
+		Traced.TRACER.lastCarrier.get().keys().forEach(keys::add);
 		assertTrue(keys.contains(RequestMeta.KEY_TRACEPARENT), keys.toString());
 		assertTrue(keys.contains("tracestate"), keys.toString());
 	}
@@ -307,7 +308,7 @@ class McpTraceContext_Test extends TestBase {
 		client(Traced.class).post("/").contentString(body(7, "tools/call", JsonMap.of("name", "echo", "arguments", JsonMap.of("text", "hi")), null))
 			.header("Mcp-Method", "tools/call").header("Mcp-Name", "echo")
 			.run().assertStatus(200);
-		var op = Traced.TRACER.lastOperation;
+		var op = Traced.TRACER.lastOperation.get();
 		assertEquals("tools/call echo", op.getSpanName());
 		var attrs = op.getAttributes();
 		assertEquals("tools/call", attrs.get(TraceOperation.ATTR_MCP_METHOD_NAME));
@@ -321,7 +322,7 @@ class McpTraceContext_Test extends TestBase {
 		client(Traced.class).post("/").contentString(body(1, "prompts/get", JsonMap.of("name", "greet"), null))
 			.header("Mcp-Method", "prompts/get").header("Mcp-Name", "greet")
 			.run().assertStatus(200);
-		var op = Traced.TRACER.lastOperation;
+		var op = Traced.TRACER.lastOperation.get();
 		assertEquals("prompts/get greet", op.getSpanName());
 		assertEquals("greet", op.getAttributes().get(TraceOperation.ATTR_GEN_AI_PROMPT_NAME));
 	}
@@ -330,7 +331,7 @@ class McpTraceContext_Test extends TestBase {
 		client(Traced.class).post("/").contentString(body(1, "resources/read", JsonMap.of("uri", "file:///a.txt"), null))
 			.header("Mcp-Method", "resources/read").header("Mcp-Name", "file:///a.txt")
 			.run().assertStatus(200);
-		var op = Traced.TRACER.lastOperation;
+		var op = Traced.TRACER.lastOperation.get();
 		assertEquals("resources/read", op.getSpanName());
 		assertEquals("file:///a.txt", op.getAttributes().get(TraceOperation.ATTR_MCP_RESOURCE_URI));
 	}
@@ -339,7 +340,7 @@ class McpTraceContext_Test extends TestBase {
 		client(Traced.class).post("/").contentString(body(1, "server/discover", null, null))
 			.header("Mcp-Method", "server/discover").header("Mcp-Name", "")
 			.run().assertStatus(200);
-		var op = Traced.TRACER.lastOperation;
+		var op = Traced.TRACER.lastOperation.get();
 		assertEquals("server/discover", op.getSpanName());
 		assertFalse(op.getAttributes().containsKey(TraceOperation.ATTR_GEN_AI_TOOL_NAME));
 		assertFalse(op.getAttributes().containsKey(TraceOperation.ATTR_MCP_RESOURCE_URI));
@@ -392,7 +393,7 @@ class McpTraceContext_Test extends TestBase {
 			.header("Mcp-Method", "tools/call").header("Mcp-Name", "echo")
 			.run().assertStatus(200).getContent().asString();
 		assertContains("\"traceparent\":\"00-c05parent00000000000000000-0000000000000007-01\"", resp);
-		assertEquals("00-c05parent00000000000000000-0000000000000007-01", TracedMixin.TRACER.lastCarrier.get(RequestMeta.KEY_TRACEPARENT));
+		assertEquals("00-c05parent00000000000000000-0000000000000007-01", TracedMixin.TRACER.lastCarrier.get().get(RequestMeta.KEY_TRACEPARENT));
 	}
 
 	// =====================================================================================================================
@@ -403,9 +404,9 @@ class McpTraceContext_Test extends TestBase {
 		client(Traced.class).post("/").contentString(body(1, "mystery/method", null, null))
 			.header("Mcp-Method", "mystery/method").header("Mcp-Name", "")
 			.run().assertStatus(200);
-		var scope = Traced.TRACER.lastScope;
+		var scope = Traced.TRACER.lastScope.get();
 		assertNotNull(scope);
-		assertEquals(McpRevision.CODE_METHOD_NOT_FOUND, scope.lastErrorCode);
+		assertEquals(McpRevision.CODE_METHOD_NOT_FOUND, scope.lastErrorCode.get());
 		assertTrue(scope.events.contains("rpcError:" + McpRevision.CODE_METHOD_NOT_FOUND), scope.events.toString());
 	}
 
@@ -415,18 +416,18 @@ class McpTraceContext_Test extends TestBase {
 		client(Traced.class).post("/").contentString(badBody)
 			.header("Mcp-Method", "tools/call").header("Mcp-Name", "echo")
 			.run().assertStatus(200);
-		var scope = Traced.TRACER.lastScope;
+		var scope = Traced.TRACER.lastScope.get();
 		assertNotNull(scope);
-		assertEquals(McpRevision.CODE_INVALID_REQUEST, scope.lastErrorCode);
+		assertEquals(McpRevision.CODE_INVALID_REQUEST, scope.lastErrorCode.get());
 	}
 
 	@Test void d03_handlerThrows_recordsInternalErrorCode() throws Exception {
 		client(Traced.class).post("/").contentString(body(1, "tools/call", JsonMap.of("name", "boom", "arguments", JsonMap.of()), null))
 			.header("Mcp-Method", "tools/call").header("Mcp-Name", "boom")
 			.run().assertStatus(200);
-		var scope = Traced.TRACER.lastScope;
+		var scope = Traced.TRACER.lastScope.get();
 		assertNotNull(scope);
-		assertEquals(McpRevision.CODE_INTERNAL_ERROR, scope.lastErrorCode);
+		assertEquals(McpRevision.CODE_INTERNAL_ERROR, scope.lastErrorCode.get());
 	}
 
 	@Test void d04_errorResponse_hasNoResultMetaTraceKeys() throws Exception {

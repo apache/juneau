@@ -25,6 +25,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.server.*;
@@ -60,7 +61,7 @@ final class ConsoleBrowserFixture {
 		private static final long serialVersionUID = 1L;
 	}
 
-	private static volatile String servedChromeCss;
+	private static final AtomicReference<String> servedChromeCss = new AtomicReference<>();
 
 	private final String name;
 	private final Map<String,Map<String,Object>> assets = new LinkedHashMap<>();
@@ -86,13 +87,13 @@ final class ConsoleBrowserFixture {
 		"resource" // assertOk() returns the same response the try already closes.
 	})
 	static String servedChromeCss() throws IOException {
-		var s = servedChromeCss;
+		var s = servedChromeCss.get();
 		if (s == null) {
 			try (var c = MockRestClient.create(ChromeHost.class); var r = c.get(ConsoleChromeMixin.CHROME_CSS_PATH).run()) {
 				r.assertOk();
 				s = r.getBodyAsString();
 			}
-			servedChromeCss = s;
+			servedChromeCss.set(s);
 		}
 		return s;
 	}

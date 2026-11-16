@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.net.*;
 import java.util.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.rest.server.auth.TokenValidator;
 import org.apache.juneau.rest.server.auth.oauth.OAuthFilter;
 
@@ -84,10 +85,7 @@ public class McpResourceServerConfig {
 	private final Map<String,Set<String>> operationScopes = new LinkedHashMap<>();
 	private McpOperationScopeResolver operationScopeResolver;
 
-	@SuppressWarnings({
-		"java:S3077" // OAuthFilter is an effectively-immutable, thread-safe holder; volatile publication of the memoized instance is sufficient.
-	})
-	private volatile OAuthFilter oauthFilter;
+	private final AtomicReference<OAuthFilter> oauthFilter = new AtomicReference<>();
 
 	/**
 	 * Whether RS authentication is enabled for this binding.
@@ -426,14 +424,14 @@ public class McpResourceServerConfig {
 	 * @throws IllegalStateException If this config is enabled but misconfigured.
 	 */
 	OAuthFilter oauthFilter() {
-		var f = oauthFilter;
+		var f = oauthFilter.get();
 		if (f == null) {
 			synchronized (this) {
-				f = oauthFilter;
+				f = oauthFilter.get();
 				if (f == null) {
 					validateEnabled();
 					f = OAuthFilter.create().validator(tokenValidator).realm(realm).build();
-					oauthFilter = f;
+					oauthFilter.set(f);
 				}
 			}
 		}

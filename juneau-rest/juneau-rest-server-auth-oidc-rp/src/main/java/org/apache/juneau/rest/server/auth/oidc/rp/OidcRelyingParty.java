@@ -27,6 +27,7 @@ import java.security.*;
 import java.text.ParseException;
 import java.time.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 
 import org.apache.juneau.rest.server.auth.*;
@@ -116,7 +117,6 @@ import jakarta.servlet.http.*;
  */
 @SuppressWarnings({
 	"java:S1192", // Duplicate string literals are OIDC protocol parameter names and claim names; intentional
-	"java:S3077", // The lazily built metadata/code-flow/validator/JWK/logout-processor caches are volatile references to effectively immutable objects, published once without compound updates
 	"java:S9358" // Ternary chooses a different constructor/null vs value; moving it inside one call is not equivalent.
 })
 public class OidcRelyingParty {
@@ -564,12 +564,12 @@ public class OidcRelyingParty {
 	private final Duration stateNonceTtl;
 	private final LoginStateStore loginStateStore;
 
-	private volatile OidcMetadata metadataCache;
+	private final AtomicReference<OidcMetadata> metadataCache = new AtomicReference<>();
 	private final OidcMetadata explicitMetadata;
-	private volatile OAuthAuthorizationCodeFlow codeFlowCache;
-	private volatile IdTokenValidatorAdapter idTokenValidatorCache;
-	private volatile JWKSource<SecurityContext> jwkSourceCache;
-	private volatile ConfigurableJWTProcessor<SecurityContext> logoutTokenProcessorCache;
+	private final AtomicReference<OAuthAuthorizationCodeFlow> codeFlowCache = new AtomicReference<>();
+	private final AtomicReference<IdTokenValidatorAdapter> idTokenValidatorCache = new AtomicReference<>();
+	private final AtomicReference<JWKSource<SecurityContext>> jwkSourceCache = new AtomicReference<>();
+	private final AtomicReference<ConfigurableJWTProcessor<SecurityContext>> logoutTokenProcessorCache = new AtomicReference<>();
 
 	/**
 	 * Constructor.
@@ -927,25 +927,25 @@ public class OidcRelyingParty {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private OidcMetadata metadata() {
-		var m = metadataCache;
+		var m = metadataCache.get();
 		if (m != null)
 			return m;
 		synchronized (this) {
-			if (metadataCache != null) // HTT: DCL second-check; true branch requires concurrent initialization race
-				return metadataCache;
+			if (metadataCache.get() != null) // HTT: DCL second-check; true branch requires concurrent initialization race
+				return metadataCache.get();
 			if (explicitMetadata != null) { // HTT: false branch = discovery path; all tests inject .metadata(...) directly so explicitMetadata is always non-null
-				metadataCache = validateEndpoints(explicitMetadata);
-				return metadataCache;
+				metadataCache.set(validateEndpoints(explicitMetadata));
+				return metadataCache.get();
 			}
 			try {
 				var clientBuilder = OidcDiscoveryClient.create().issuer(issuer);
 				if (httpRequestConfigurator != null) // HTT: true branch requires discovery path (no explicit metadata) plus httpRequestConfigurator; all tests inject metadata directly
 					clientBuilder.httpRequestConfigurator(httpRequestConfigurator);
-				metadataCache = validateEndpoints(clientBuilder.build().discover());
+				metadataCache.set(validateEndpoints(clientBuilder.build().discover()));
 			} catch (IOException | OidcDiscoveryException e) {
 				throw isex(e, "OIDC discovery failed for issuer %s", issuer);
 			}
-			return metadataCache;
+			return metadataCache.get();
 		}
 	}
 
@@ -970,12 +970,12 @@ public class OidcRelyingParty {
 	}
 
 	private OAuthAuthorizationCodeFlow codeFlow() {
-		var f = codeFlowCache;
+		var f = codeFlowCache.get();
 		if (f != null)
 			return f;
 		synchronized (this) {
-			if (codeFlowCache != null) // HTT: DCL second-check; true branch requires concurrent initialization race
-				return codeFlowCache;
+			if (codeFlowCache.get() != null) // HTT: DCL second-check; true branch requires concurrent initialization race
+				return codeFlowCache.get();
 			var md = metadata();
 			var b = OAuthAuthorizationCodeFlow.create()
 				.authorizationEndpoint(md.authorizationEndpoint())
@@ -987,18 +987,18 @@ public class OidcRelyingParty {
 				b.clientSecretSupplier(clientSecretSupplier);
 			if (httpRequestConfigurator != null) // HTT: false branch not hit in codeFlow init; test RPs don't set an httpRequestConfigurator
 				b.httpRequestConfigurator(httpRequestConfigurator);
-			codeFlowCache = b.build();
-			return codeFlowCache;
+			codeFlowCache.set(b.build());
+			return codeFlowCache.get();
 		}
 	}
 
 	private IdTokenValidatorAdapter idTokenValidator() {
-		var v = idTokenValidatorCache;
+		var v = idTokenValidatorCache.get();
 		if (v != null)
 			return v;
 		synchronized (this) {
-			if (idTokenValidatorCache != null) // HTT: DCL second-check; true branch requires concurrent initialization race
-				return idTokenValidatorCache;
+			if (idTokenValidatorCache.get() != null) // HTT: DCL second-check; true branch requires concurrent initialization race
+				return idTokenValidatorCache.get();
 			var b = IdTokenValidatorAdapter.create()
 				.issuer(metadata().issuer().toString())
 				.clientId(clientId)
@@ -1006,30 +1006,30 @@ public class OidcRelyingParty {
 				.maxClockSkewSeconds(clockSkewSeconds);
 			if (idTokenAlgorithms != null) // HTT: false branch (custom algorithm list) not covered; test RPs use default RS256/ES256
 				b.algorithms(idTokenAlgorithms);
-			idTokenValidatorCache = b.build();
-			return idTokenValidatorCache;
+			idTokenValidatorCache.set(b.build());
+			return idTokenValidatorCache.get();
 		}
 	}
 
 	private JWKSource<SecurityContext> jwkSource() {
-		var s = jwkSourceCache;
+		var s = jwkSourceCache.get();
 		if (s != null)
 			return s;
 		synchronized (this) {
-			if (jwkSourceCache != null) // HTT: DCL second-check; true branch requires concurrent initialization race
-				return jwkSourceCache;
+			if (jwkSourceCache.get() != null) // HTT: DCL second-check; true branch requires concurrent initialization race
+				return jwkSourceCache.get();
 			if (injectedJwkSource != null) { // HTT: true branch requires jwkSource(JWKSource) builder call, which no current test uses (tests inject jwkSet instead)
-				jwkSourceCache = injectedJwkSource;
+				jwkSourceCache.set(injectedJwkSource);
 			} else if (jwkSet != null) { // HTT: false branch (no jwkSet → use JWKS URI from discovery) requires a live IdP and no injected jwkSet; all tests inject jwkSet
-				jwkSourceCache = new ImmutableJWKSet<>(jwkSet);
+				jwkSourceCache.set(new ImmutableJWKSet<>(jwkSet));
 			} else {
 				try {
-					jwkSourceCache = JWKSourceBuilder.<SecurityContext>create(metadata().jwksUri().toURL(), new JwksResourceRetriever()).outageTolerant(false).build();
+					jwkSourceCache.set(JWKSourceBuilder.<SecurityContext>create(metadata().jwksUri().toURL(), new JwksResourceRetriever()).outageTolerant(false).build());
 				} catch (MalformedURLException e) {
 					throw isex(e, "Invalid JWKS URI: %s", metadata().jwksUri());
 				}
 			}
-			return jwkSourceCache;
+			return jwkSourceCache.get();
 		}
 	}
 
@@ -1045,12 +1045,12 @@ public class OidcRelyingParty {
 	 * {@code LogoutTokenValidator}.
 	 */
 	private ConfigurableJWTProcessor<SecurityContext> logoutTokenProcessor() {
-		var p = logoutTokenProcessorCache;
+		var p = logoutTokenProcessorCache.get();
 		if (p != null)
 			return p;
 		synchronized (this) {
-			if (logoutTokenProcessorCache != null) // HTT: DCL second-check; true branch requires concurrent initialization race
-				return logoutTokenProcessorCache;
+			if (logoutTokenProcessorCache.get() != null) // HTT: DCL second-check; true branch requires concurrent initialization race
+				return logoutTokenProcessorCache.get();
 			Set<JWSAlgorithm> algs = idTokenAlgorithms != null
 				? new LinkedHashSet<>(Arrays.asList(idTokenAlgorithms))
 				: new LinkedHashSet<>(Arrays.asList(JWSAlgorithm.RS256, JWSAlgorithm.ES256));
@@ -1064,8 +1064,8 @@ public class OidcRelyingParty {
 			})
 			JWTClaimsSetVerifier<SecurityContext> claimsVerifier = new ClockAwareLogoutTokenClaimsVerifier(expectedIssuer, new ClientID(clientId), clock);
 			processor.setJWTClaimsSetVerifier(claimsVerifier);
-			logoutTokenProcessorCache = processor;
-			return logoutTokenProcessorCache;
+			logoutTokenProcessorCache.set(processor);
+			return logoutTokenProcessorCache.get();
 		}
 	}
 

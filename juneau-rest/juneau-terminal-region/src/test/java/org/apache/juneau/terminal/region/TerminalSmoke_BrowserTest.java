@@ -29,6 +29,7 @@ import java.nio.file.attribute.PosixFilePermissions;
 import java.util.*;
 import java.util.concurrent.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.mock.classic.*;
@@ -82,7 +83,7 @@ class TerminalSmoke_BrowserTest extends TestBase {
 	@Rest
 	public static class R extends BasicRestServlet implements TerminalMixin, TerminalViewMixin {
 		private static final long serialVersionUID = 1L;
-		static volatile TerminalProcess process;
+		static final AtomicReference<TerminalProcess> process = new AtomicReference<>();
 
 		@Override
 		public TerminalAccess terminalAccess() {
@@ -96,12 +97,12 @@ class TerminalSmoke_BrowserTest extends TestBase {
 
 		@Override
 		public Optional<TerminalSource> terminalSource(String id, RestRequest req) {
-			return eq(ID, id) ? Optional.of(process.terminal()) : Optional.empty();
+			return eq(ID, id) ? Optional.of(process.get().terminal()) : Optional.empty();
 		}
 
 		@Override
 		public Optional<TerminalViewSource> terminalViewSource(String runId, RestRequest req) {
-			return eq(ID, runId) ? Optional.of(process.events()) : Optional.empty();
+			return eq(ID, runId) ? Optional.of(process.get().events()) : Optional.empty();
 		}
 	}
 
@@ -134,8 +135,8 @@ class TerminalSmoke_BrowserTest extends TestBase {
 		Files.setPosixFilePermissions(tool, PosixFilePermissions.fromString("rwx------"));
 
 		var host = new Host(System.getProperty("os.name"), script.toString(), null, path);
-		R.process = TerminalProcess.start("maven", List.of(tool.toString()), 100, 30, dir.resolve("run"), host);
-		assertEquals(3, R.process.waitFor(60, TimeUnit.SECONDS));
+		R.process.set(TerminalProcess.start("maven", List.of(tool.toString()), 100, 30, dir.resolve("run"), host));
+		assertEquals(3, R.process.get().waitFor(60, TimeUnit.SECONDS));
 
 		mock = MockRestClient.buildLax(R.class);
 		server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
@@ -176,8 +177,8 @@ class TerminalSmoke_BrowserTest extends TestBase {
 					serverExecutor.shutdownNow();
 			} finally {
 				try {
-					if (R.process != null)
-						R.process.close();
+					if (R.process.get() != null)
+						R.process.get().close();
 				} finally {
 					if (dir != null) {
 						try (var s = Files.walk(dir)) {

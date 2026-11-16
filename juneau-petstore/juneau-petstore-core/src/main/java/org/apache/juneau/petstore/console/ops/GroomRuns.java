@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.petstore.console.data.*;
 import org.apache.juneau.terminal.region.*;
@@ -126,7 +127,7 @@ public final class GroomRuns implements AutoCloseable {
 		final AtomicInteger step = new AtomicInteger();
 		volatile boolean done;
 		final AtomicReference<ScheduledFuture<?>> task = new AtomicReference<>();
-		volatile String key;
+		final AtomicReference<String> key = new AtomicReference<>();
 
 		Run(String id, String pet, boolean verbose, Path file) {
 			this.id = id;
@@ -242,7 +243,7 @@ public final class GroomRuns implements AutoCloseable {
 			runs.put(r.id, r);
 			order.addFirst(r);
 			if (idempotencyKey != null) {
-				r.key = idempotencyKey;
+				r.key.set(idempotencyKey);
 				keys.put(idempotencyKey, r.id);
 			}
 			while (order.size() > MAX_RUNS)
@@ -326,8 +327,8 @@ public final class GroomRuns implements AutoCloseable {
 		if (t != null)
 			t.cancel(false);
 		runs.remove(r.id);
-		if (r.key != null)
-			keys.remove(r.key);
+		if (r.key.get() != null)
+			keys.remove(r.key.get());
 		try {
 			Files.deleteIfExists(r.file);
 			Files.deleteIfExists(r.sizeFile);

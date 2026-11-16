@@ -24,6 +24,7 @@ import java.net.*;
 import java.security.*;
 import java.util.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
@@ -51,8 +52,8 @@ class BusWebSocketConfigurator_Test extends TestBase {
 	@Rest(allowCrossSite="true")
 	public static class R extends BasicRestServlet implements BusEventsMixin {
 		private static final long serialVersionUID = 1L;
-		static volatile ServerBus bus;
-		@Override public ServerBus serverBus() { return bus; }
+		static final AtomicReference<ServerBus> bus = new AtomicReference<>();
+		@Override public ServerBus serverBus() { return bus.get(); }
 	}
 
 	private static final MockRestClient C = MockRestClient.buildLax(R.class);
@@ -73,7 +74,7 @@ class BusWebSocketConfigurator_Test extends TestBase {
 	private void use(BusPolicy p) {
 		bus = ServerBus.create(p);
 		bus.enableWebSocket(BusWebSockets.PREFIX);
-		R.bus = bus;
+		R.bus.set(bus);
 	}
 
 	@AfterEach void tearDown() {

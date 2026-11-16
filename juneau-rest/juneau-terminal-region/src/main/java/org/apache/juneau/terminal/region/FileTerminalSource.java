@@ -120,7 +120,7 @@ public final class FileTerminalSource implements TerminalSource, AutoCloseable {
 	private final AtomicReference<int[]> sizeRef = new AtomicReference<>();
 	private final AtomicReference<Object> fileKey = new AtomicReference<>();
 	private volatile boolean seen;
-	private volatile boolean warned;
+	private final AtomicBoolean warned = new AtomicBoolean();
 
 	// Nudges.  nudgeThread, nudgeSet and nudgeClosed are guarded by nudgeLock.
 	private final Object nudgeLock = new Object();
@@ -297,8 +297,7 @@ public final class FileTerminalSource implements TerminalSource, AutoCloseable {
 			sizeRef.set(s);
 			return s;
 		}
-		if (! warned) {
-			warned = true;
+		if (warned.compareAndSet(false, true)) {
 			LOG.warning(() -> "Terminal size sidecar '" + sizeFile + "' is missing or malformed; using " + DEFAULT_COLS + "x" + DEFAULT_ROWS + ".");
 		}
 		return new int[] { DEFAULT_COLS, DEFAULT_ROWS };

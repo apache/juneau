@@ -27,6 +27,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.concurrent.*;
@@ -42,7 +43,7 @@ import org.apache.juneau.marshall.collections.*;
  *
  * <h2 class='section'>Concurrency:</h2>
  * <p>
- * The parsed contents are held in a single immutable {@link State} snapshot published through a {@code volatile}
+ * The parsed contents are held in a single immutable {@link State} snapshot published through an {@code AtomicReference}
  * reference.  Reads ({@link #getEntry(String,String)}, {@link #getKeys(String)}, {@link #getSections()},
  * {@link #asMap()}, {@link #toString()}, etc.) are <b>lock-free</b>: they take a single snapshot of the current state
  * and operate entirely on immutable collections, so there is no live-view leak and no
@@ -231,7 +232,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 *
 	 * <p>
 	 * All collections held here are unmodifiable.  A new instance is built for every mutation and published atomically
-	 * through the {@code volatile} {@link ConfigMap#state} reference.
+	 * through the {@link ConfigMap#state} {@code AtomicReference}.
 	 */
 	private record State(
 		String contents,
@@ -315,10 +316,7 @@ public class ConfigMap implements ConfigStoreListener {
 	private final Set<ConfigEventListener> listeners = new CopyOnWriteArraySet<>();
 
 	// The immutable copy-on-write snapshot of this map's contents.  Published atomically; read lock-free.
-	@SuppressWarnings({
-		"java:S3077" // Copy-on-write snapshot: State is a deeply-immutable graph (unmodifiable collections of immutable ConfigSection/ConfigMapEntry records) replaced wholesale under writeLock and never compound-mutated, so volatile safe-publication is sufficient for lock-free reads.
-	})
-	private volatile State state = new State("", List.of(), Map.of(), Map.of(), List.of());
+	private final AtomicReference<State> state = new AtomicReference<>(new State("", List.of(), Map.of(), Map.of(), List.of()));
 
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock();
 
@@ -363,7 +361,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @return A copy of this config as a map of maps.
 	 */
 	public JsonMap asMap() {
-		var st = state;
+		var st = state.get();
 		var m = new JsonMap();
 		st.imports().forEach(y -> m.putAll(y.getConfigMap().asMap()));
 		st.entries().values().forEach(z -> {
@@ -397,12 +395,12 @@ public class ConfigMap implements ConfigStoreListener {
 			for (var i = 0; i <= 10; i++) {
 				if (i == 10)
 					throw new ConfigException("Unable to store contents of config to store.");
-			var currentContents = store.write(name, state.contents(), newContents);
+			var currentContents = store.write(name, state.get().contents(), newContents);
 			if (currentContents == null)
 				break;
 			onChange(currentContents); // HTT - retry loop requires concurrent write conflict causing store.write() to return non-null
 			}
-			state = state.withChanges(List.of());
+			state.set(state.get().withChanges(List.of()));
 		}
 		return this;
 	}
@@ -422,7 +420,7 @@ public class ConfigMap implements ConfigStoreListener {
 	public ConfigMapEntry getEntry(String section, String key) {
 		checkSectionName(section);
 		checkKeyName(key);
-		var st = state;
+		var st = state.get();
 		var cs = st.entries().get(section);
 		var ce = cs == null ? null : cs.entries.get(key);
 
@@ -444,7 +442,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public Set<String> getKeys(String section) {
 		checkSectionName(section);
-		var st = state;
+		var st = state.get();
 		var cs = st.entries().get(section);
 		Set<String> s = st.imports().isEmpty() && nn(cs) ? cs.entries.keySet() : set();
 		if (! st.imports().isEmpty()) {
@@ -478,7 +476,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public List<String> getPreLines(String section) {
 		checkSectionName(section);
-		var cs = state.entries().get(section);
+		var cs = state.get().entries().get(section);
 		return cs == null ? null : cs.preLines;
 	}
 
@@ -489,7 +487,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * 	An unmodifiable set of keys.
 	 */
 	public Set<String> getSections() {
-		var st = state;
+		var st = state.get();
 		if (st.imports().isEmpty())
 			return u(cp(st.entries().keySet()));
 		// Order-preserving immutable snapshot merging local + imported sections.
@@ -510,7 +508,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public boolean hasSection(String section) {
 		checkSectionName(section);
-		var st = state;
+		var st = state.get();
 		return nn(st.entries().get(section)) || st.imports().stream().anyMatch(x -> x.getConfigMap().hasSection(section)); // HTT - anyMatch() on imports requires active import listeners
 	}
 
@@ -555,12 +553,12 @@ public class ConfigMap implements ConfigStoreListener {
 	public void onChange(String newContents) {
 		ConfigEvents changes2 = null;
 		try (var x = lock.write()) {
-			if (neq(state.contents(), newContents)) {
+			if (neq(state.get().contents(), newContents)) {
 				changes2 = findDiffs(newContents);
 				load(newContents);
 
 				// Reapply our changes on top of the modifications.
-				state.changes().forEach(y -> applyChange(false, y));
+				state.get().changes().forEach(y -> applyChange(false, y));
 			}
 		} catch (IOException e) {
 			throw toRex(e); // HTT - IOException from findDiffs/load requires a failing store operation during onChange
@@ -577,7 +575,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public ConfigMap register(ConfigEventListener listener) {
 		listeners.add(listener);
-		state.imports().forEach(x -> x.register(listener));
+		state.get().imports().forEach(x -> x.register(listener));
 		return this;
 	}
 
@@ -618,12 +616,12 @@ public class ConfigMap implements ConfigStoreListener {
 	public ConfigMap removeImport(String section, String importName) {
 		checkSectionName(section);
 		try (var x = lock.write()) {
-			var st = state;
+			var st = state.get();
 			st.imports().stream().filter(y -> eq(y.getConfigName(), importName)).findFirst().ifPresent(y -> {
 				y.unregisterAll();
 				var newImports = new ArrayList<>(st.imports());
 				newImports.remove(y);
-				state = st.withImports(u(newImports));
+				state.set(st.withImports(u(newImports)));
 			});
 		}
 		return this;
@@ -652,10 +650,10 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @return This object.
 	 */
 	public ConfigMap rollback() {
-		if (! state.changes().isEmpty()) {
+		if (! state.get().changes().isEmpty()) {
 			try (var x = lock.write()) {
-				state = state.withChanges(List.of());
-				load(state.contents());
+				state.set(state.get().withChanges(List.of()));
+				load(state.get().contents());
 		} catch (IOException e) {
 			throw toRex(e); // HTT - IOException from private load() is not possible in normal operation (scanner/section parsing doesn't throw)
 		}
@@ -715,11 +713,11 @@ public class ConfigMap implements ConfigStoreListener {
 		if (! isValidConfigName(importName))
 			throw iaex("Invalid import config name: '%s'", importName);
 		try (var x = lock.write()) {
-			var st = state;
+			var st = state.get();
 			if (st.imports().stream().noneMatch(y -> eq(y.getConfigName(), importName))) {
 				var newImports = new ArrayList<>(st.imports());
 				newImports.add(new Import(store.getMap(importName, format)).register(listeners));
-				state = st.withImports(u(newImports));
+				state.set(st.withImports(u(newImports)));
 			}
 		} catch (IOException e) {
 			throw toRex(e);
@@ -757,7 +755,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public ConfigMap unregister(ConfigEventListener listener) {
 		listeners.remove(listener);
-		state.imports().forEach(x -> x.unregister(listener));
+		state.get().imports().forEach(x -> x.unregister(listener));
 		return this;
 	}
 
@@ -777,7 +775,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 	private ConfigMap applyChange(boolean addToChangeList, ConfigEvent ce) {
 		try (var x = lock.write()) {
-			var st = state;
+			var st = state.get();
 			var section = ce.getSection();
 			var cs = st.entries().get(section);
 			var newEntries = new LinkedHashMap<>(st.entries());
@@ -818,7 +816,7 @@ public class ConfigMap implements ConfigStoreListener {
 				c.add(ce);
 				newChanges = u(c);
 			}
-			state = new State(st.contents(), newChanges, u(newEntries), st.oentries(), st.imports());
+			state.set(new State(st.contents(), newChanges, u(newEntries), st.oentries(), st.imports()));
 		}
 		return this;
 	}
@@ -830,7 +828,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public String asIniString() {
 		try {
-			var st = state;
+			var st = state.get();
 			var sw = new StringWriter();
 			for (var cs : st.entries().values())
 				cs.writeTo(sw);
@@ -854,9 +852,9 @@ public class ConfigMap implements ConfigStoreListener {
 		var newMap = new ConfigMap(store, name, updatedContents, format);
 
 		// Imports added.
-		for (var i : newMap.state.imports()) { // HTT - requires active import listeners with actual ConfigMap imports registered
-			if (! state.imports().contains(i)) {
-				for (var s : i.getConfigMap().state.entries().values()) {
+		for (var i : newMap.state.get().imports()) { // HTT - requires active import listeners with actual ConfigMap imports registered
+			if (! state.get().imports().contains(i)) {
+				for (var s : i.getConfigMap().state.get().entries().values()) {
 					for (var e : s.oentries.values()) {
 						if (! newMap.hasEntry(s.name, e.key())) {
 							changes2.add(ConfigEvent.setEntry(name, s.name, e.key(), e.value(), e.comment(), e.preLines()));
@@ -867,9 +865,9 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		// Imports removed.
-		for (var i : state.imports()) { // HTT - requires active import listeners with actual ConfigMap imports registered
-			if (! newMap.state.imports().contains(i)) {
-				for (var s : i.getConfigMap().state.entries().values()) {
+		for (var i : state.get().imports()) { // HTT - requires active import listeners with actual ConfigMap imports registered
+			if (! newMap.state.get().imports().contains(i)) {
+				for (var s : i.getConfigMap().state.get().entries().values()) {
 					for (var e : s.oentries.values()) {
 						if (! newMap.hasEntry(s.name, e.key())) {
 							changes2.add(ConfigEvent.removeEntry(name, s.name, e.key()));
@@ -879,8 +877,8 @@ public class ConfigMap implements ConfigStoreListener {
 			}
 		}
 
-		for (var ns : newMap.state.oentries().values()) {
-			var s = state.oentries().get(ns.name);
+		for (var ns : newMap.state.get().oentries().values()) {
+			var s = state.get().oentries().get(ns.name);
 			if (s == null) {
 				for (var ne : ns.entries.values()) {
 					changes2.add(ConfigEvent.setEntry(name, ns.name, ne.key(), ne.value(), ne.comment(), ne.preLines()));
@@ -901,8 +899,8 @@ public class ConfigMap implements ConfigStoreListener {
 			}
 		}
 
-		for (var s : state.oentries().values()) {
-			var ns = newMap.state.oentries().get(s.name);
+		for (var s : state.get().oentries().values()) {
+			var ns = newMap.state.get().oentries().get(s.name);
 			if (ns == null) {
 				for (var e : s.oentries.values())
 					changes2.add(ConfigEvent.removeEntry(name, s.name, e.key()));
@@ -929,7 +927,7 @@ public class ConfigMap implements ConfigStoreListener {
 		var newContents = originalContents == null ? "" : originalContents;
 
 		// Detach any imports carried by the previous snapshot before rebuilding.
-		state.imports().forEach(Import::unregisterAll);
+		state.get().imports().forEach(Import::unregisterAll);
 
 		var imports2 = mapOfType(String.class, ConfigMap.class);
 
@@ -1044,7 +1042,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 		// entries and oentries start identical; the immutable snapshot is shared safely.  Changes carry over a reload.
 		var entriesU = u(newEntries);
-		state = new State(newContents, state.changes(), entriesU, entriesU, u(irl));
+		state.set(new State(newContents, state.get().changes(), entriesU, entriesU, u(irl)));
 		return this;
 	}
 
@@ -1053,7 +1051,7 @@ public class ConfigMap implements ConfigStoreListener {
 	}
 
 	boolean hasEntry(String section, String key) {
-		var cs = state.entries().get(section);
+		var cs = state.get().entries().get(section);
 		var ce = cs == null ? null : cs.entries.get(key);
 		return nn(ce);
 	}

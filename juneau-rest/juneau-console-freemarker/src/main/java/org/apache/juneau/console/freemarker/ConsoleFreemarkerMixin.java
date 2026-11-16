@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.UnaryOperator;
 
 import org.apache.juneau.rest.server.*;
@@ -170,10 +171,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	// here means "have I already stamped THIS exact object" is answered in O(1). Presence checks on the loader
 	// and shared-variable names still run on a cache miss so N Rest resources sharing one Spring singleton
 	// do not nest Multi(Multi(base, console), console).
-	@SuppressWarnings({
-		"java:S3077" // volatile is required here for correct double-checked-locking safe-publication; the reference is publish-once (fully constructed/wrapped before assignment) and never compound-mutated.
-	})
-	private volatile Configuration wrappedConfiguration;
+	private final AtomicReference<Configuration> wrappedConfiguration = new AtomicReference<>();
 
 	/**
 	 * Resolves the active {@link Configuration} and fill-missing-stamps console shared variables onto it.
@@ -200,13 +198,13 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	@Override
 	public Configuration resolveConfiguration(RestRequest req) {
 		var base = super.resolveConfiguration(req);
-		if (base == wrappedConfiguration)
+		if (base == wrappedConfiguration.get())
 			return base;
 		synchronized (this) {
-			if (base != wrappedConfiguration) {
+			if (base != wrappedConfiguration.get()) {
 				spliceConsoleLoaderIfNeeded(base);
 				fillMissingConsoleSharedVariables(base);
-				wrappedConfiguration = base;
+				wrappedConfiguration.set(base);
 			}
 		}
 		return base;

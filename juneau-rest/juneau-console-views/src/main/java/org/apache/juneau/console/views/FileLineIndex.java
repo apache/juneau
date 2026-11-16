@@ -26,6 +26,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.*;
 import java.util.zip.*;
 
@@ -137,7 +138,7 @@ public final class FileLineIndex {
 	private final int maxEntries;
 	private final ReentrantLock lock = new ReentrantLock();
 	private final AtomicReference<Snapshot> snapshot = new AtomicReference<>();
-	private volatile String earlyEpoch;
+	private final AtomicReference<String> earlyEpoch = new AtomicReference<>();
 
 	// Guarded by lock.
 	private Object fileKey;
@@ -280,7 +281,7 @@ public final class FileLineIndex {
 	 * @return <jk>true</jk> if tokens with this epoch are still valid.
 	 */
 	boolean acceptsEpoch(String epoch) {
-		return epoch != null && (eq(epoch, snapshot.get().epoch()) || eq(epoch, earlyEpoch));
+		return epoch != null && (eq(epoch, snapshot.get().epoch()) || eq(epoch, earlyEpoch.get()));
 	}
 
 	/** Current stride (grows when the entry cap is reached). */
@@ -312,7 +313,7 @@ public final class FileLineIndex {
 	private void reset(Object key) {
 		fileKey = key;
 		head = EMPTY;
-		earlyEpoch = null;
+		earlyEpoch.set(null);
 		indexedBytes = 0;
 		indexedLines = 0;
 		scannedBytes = 0;
@@ -388,7 +389,7 @@ public final class FileLineIndex {
 		var full = head.length >= FINGERPRINT_BYTES;
 		var epoch = epoch(fileKey, full ? head : EMPTY);
 		if (! full)
-			earlyEpoch = epoch;
+			earlyEpoch.set(epoch);
 		var s = new Snapshot(epoch, indexedBytes, indexedLines, size);
 		snapshot.set(s);
 		return s;

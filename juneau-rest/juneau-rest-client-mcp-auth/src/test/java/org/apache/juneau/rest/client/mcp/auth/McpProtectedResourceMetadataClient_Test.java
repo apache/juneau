@@ -24,6 +24,7 @@ import java.nio.charset.*;
 import java.time.*;
 import java.util.concurrent.atomic.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -38,7 +39,7 @@ import com.sun.net.httpserver.*;
 class McpProtectedResourceMetadataClient_Test extends TestBase {
 
 	private HttpServer server;
-	private volatile String issuerInDoc;
+	private final AtomicReference<String> issuerInDoc = new AtomicReference<>();
 
 	@BeforeEach
 	void startServer() throws IOException {
@@ -46,7 +47,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 		server.createContext("/.well-known/openid-configuration", ex -> respond(ex, oidcMetadataJson()));
 		server.createContext("/.well-known/oauth-protected-resource", ex -> respond(ex, prmJson()));
 		server.start();
-		issuerInDoc = base();
+		issuerInDoc.set(base());
 	}
 
 	@AfterEach
@@ -150,7 +151,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 
 	@Test void c02_issuerMismatchRejected() {
 		// AS metadata advertises a different issuer than requested -> RFC 8414 issuer check fails.
-		issuerInDoc = "https://other.example.com";
+		issuerInDoc.set("https://other.example.com");
 		var client = local().build();
 		var prm = client.parse(prmJson(), null);
 		assertThrows(McpAuthException.class, () -> client.discoverAuthorizationServer(prm));

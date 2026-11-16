@@ -70,7 +70,7 @@ class LazyChildren_ChildDefs_Test extends TestBase {
 		// (including its @Child seed) survived deferred construction, not just eager construction.
 		// (Materialized lazy children live on the LazyChildEntry itself, not in RestChildren.asMap() --
 		// that map holds only eagerly-built children.)
-		var childCtx = entry.materialized;
+		var childCtx = entry.materialized.get();
 		assertNotNull(childCtx);
 		assertInstanceOf(SeedPS.class, childCtx.getPartSerializer(),
 			"Lazily-materialized child must receive the host's seeded SeedPS, same as an eager child would");

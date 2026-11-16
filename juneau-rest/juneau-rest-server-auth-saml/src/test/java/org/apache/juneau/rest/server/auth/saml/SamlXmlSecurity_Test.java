@@ -27,6 +27,7 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.junit.jupiter.api.*;
@@ -58,7 +59,7 @@ class SamlXmlSecurity_Test extends TestBase {
 		+ "<OrganizationURL xml:lang='en'>https://idp.example.com</OrganizationURL></Organization></EntityDescriptor>";
 	private BasicCredential credential;
 	private String signedResponse;
-	private volatile String metadataBody;
+	private final AtomicReference<String> metadataBody = new AtomicReference<>();
 	private String metadataUrl;
 	private final AtomicInteger metadataRequests = new AtomicInteger();
 
@@ -78,7 +79,7 @@ class SamlXmlSecurity_Test extends TestBase {
 		});
 		server.createContext("/metadata", exchange -> {
 			metadataRequests.incrementAndGet();
-			var body = metadataBody.getBytes(StandardCharsets.UTF_8);
+			var body = metadataBody.get().getBytes(StandardCharsets.UTF_8);
 			exchange.sendResponseHeaders(200, body.length);
 			try (var stream = exchange.getResponseBody()) {
 				stream.write(body);
@@ -87,7 +88,7 @@ class SamlXmlSecurity_Test extends TestBase {
 		server.start();
 		external = "http://127.0.0.1:" + server.getAddress().getPort() + "/external";
 		metadataUrl = "http://127.0.0.1:" + server.getAddress().getPort() + "/metadata";
-		metadataBody = METADATA;
+		metadataBody.set(METADATA);
 		credential = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
 		signedResponse = SamlTestSupport.buildSignedResponse(credential, ISSUER, AUDIENCE, "alice",
 			NOW.minusSeconds(60), NOW.plusSeconds(300), Map.of());
@@ -159,7 +160,7 @@ class SamlXmlSecurity_Test extends TestBase {
 	@ValueSource(strings = {"general", "parameter", "systemDtd", "publicDtd", "xincludeXml", "xincludeText",
 		"schemaLocation", "noNamespaceSchemaLocation"})
 	void metadataReferencesNeverFetch(String vector) throws Exception {
-		metadataBody = attack(METADATA, vector, external, "safe");
+		metadataBody.set(attack(METADATA, vector, external, "safe"));
 		try {
 			readMetadata();
 		} catch (IOException expected) {
@@ -189,9 +190,9 @@ class SamlXmlSecurity_Test extends TestBase {
 		var file = directory.resolve("external.txt");
 		Files.writeString(file, eqa(vector, "general", "xincludeText")
 			? "PRIVATE_FILE_MARKER" : "<!ENTITY secret 'PRIVATE_FILE_MARKER'>");
-		metadataBody = attack(METADATA, vector, file.toUri().toString(), "safe");
+		metadataBody.set(attack(METADATA, vector, file.toUri().toString(), "safe"));
 		if (!eqa(vector, "general", "xincludeText"))
-			metadataBody = metadataBody.replace("safe", "&secret;");
+			metadataBody.set(metadataBody.get().replace("safe", "&secret;"));
 		try {
 			assertNotEquals("PRIVATE_FILE_MARKER", readMetadata());
 		} catch (IOException expected) {
@@ -226,7 +227,7 @@ class SamlXmlSecurity_Test extends TestBase {
 	@Test
 	@Timeout(10)
 	void metadataExpansionIsRejectedByXmlParser() {
-		metadataBody = expansion(METADATA, "safe");
+		metadataBody.set(expansion(METADATA, "safe"));
 		assertXmlRejection(assertThrows(IOException.class, () -> SamlMetadataResolvers.url(metadataUrl)));
 	}
 }

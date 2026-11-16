@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.inject.*;
@@ -116,7 +117,7 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 	 * Cached resolution of the body-dump master gate. {@code null} means "not yet resolved"; resolution reads the
 	 * environment exactly once. Not a system property, and there is no system-property fallback.
 	 */
-	private static volatile Boolean allowDumpBodiesCache;
+	private static final AtomicReference<Boolean> allowDumpBodiesCache = new AtomicReference<>();
 
 	/** The set of header names whose values are masked. Overridable via {@link #redactedHeaders(Collection)}. */
 	protected Set<String> redactedHeaders = DEFAULT_REDACTED_HEADERS;
@@ -508,10 +509,10 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 	 * @return <jk>true</jk> if body dumping is enabled.
 	 */
 	static boolean isAllowDumpBodies() {
-		var v = allowDumpBodiesCache;
+		var v = allowDumpBodiesCache.get();
 		if (v == null) {
 			v = parseAllowDumpBodies(System.getenv(ENV_ALLOW_DUMP_BODIES));
-			allowDumpBodiesCache = v;
+			allowDumpBodiesCache.set(v);
 		}
 		return v;
 	}
@@ -547,6 +548,6 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 	 * 	value is cached directly as the test gate state.
 	 */
 	static void resetAllowDumpBodiesForTest(Boolean override) {
-		allowDumpBodiesCache = override;
+		allowDumpBodiesCache.set(override);
 	}
 }

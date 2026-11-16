@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.http.tracing.TraceContextCarrier;
 import org.apache.juneau.rest.mock.classic.*;
@@ -257,8 +258,8 @@ class TracerHook_Contract_Test extends TestBase {
 	 */
 	public static final class F_TracerHook implements TracerHook {
 		public final List<RecordingScope> spans = new CopyOnWriteArrayList<>();
-		public volatile TraceContextCarrier lastCarrier;
-		public volatile TraceOperation lastOperation;
+		public final AtomicReference<TraceContextCarrier> lastCarrier = new AtomicReference<>();
+		public final AtomicReference<TraceOperation> lastOperation = new AtomicReference<>();
 
 		@Override
 		public Scope startSpan(RestRequest request) {
@@ -268,8 +269,8 @@ class TracerHook_Contract_Test extends TestBase {
 
 		@Override
 		public Scope startSpan(RestRequest request, TraceContextCarrier carrier, TraceOperation operation) {
-			lastCarrier = carrier;
-			lastOperation = operation;
+			lastCarrier.set(carrier);
+			lastOperation.set(operation);
 			var s = new RecordingScope(request.getMethod());
 			spans.add(s);
 			return s;
@@ -322,8 +323,8 @@ class TracerHook_Contract_Test extends TestBase {
 		assertEquals(2, seen.length, "extractor must see every resolved @RestOp argument, in declaration order");
 		assertEquals("ada", seen[0], "extractor must see the fully-resolved @Path argument, not the raw path segment");
 		assertSize(1, F_HOOK.spans);
-		assertSame(F_CARRIER, F_HOOK.lastCarrier);
-		assertEquals("custom-op", F_HOOK.lastOperation.getSpanName());
+		assertSame(F_CARRIER, F_HOOK.lastCarrier.get());
+		assertEquals("custom-op", F_HOOK.lastOperation.get().getSpanName());
 		assertSame(F_HOOK.last(), F_SCOPE_DURING_HANDLER.get(),
 			"the Scope stashed on the request attribute must be the same instance startSpan(...) returned, and set before the handler runs");
 	}

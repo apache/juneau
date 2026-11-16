@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import javax.xml.namespace.*;
 import javax.xml.stream.*;
 import javax.xml.stream.util.*;
@@ -44,7 +45,7 @@ import org.apache.juneau.marshall.parser.*;
 })
 public class XmlReader implements XMLStreamReader, Positionable {
 
-	private static volatile Boolean shareable;
+	private static final AtomicReference<Boolean> shareable = new AtomicReference<>();
 
 	private final ParserPipe pipe;
 	private final XMLStreamReader sr;
@@ -149,9 +150,9 @@ public class XmlReader implements XMLStreamReader, Positionable {
 	 * @return <jk>true</jk> if the factory can be shared between threads.
 	 */
 	static boolean isShareable() {
-		var b = shareable;
+		var b = shareable.get();
 		if (b == null)
-			shareable = b = isShareable(XMLInputFactory.newInstance());
+			shareable.set(b = isShareable(XMLInputFactory.newInstance()));
 		return b;
 	}
 

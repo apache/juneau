@@ -19,6 +19,7 @@ package org.apache.juneau.config;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.commons.settings.*;
 
 /**
@@ -118,10 +119,7 @@ public class ConfigPropertySourceProvider implements PropertySourceProvider {
 
 		// Guarded by the synchronized block in get(...); volatile reads cover the fast-path check.
 		private volatile boolean resolved;
-		@SuppressWarnings({
-			"java:S3077" // Publish-once reference: delegate is fully constructed before its single assignment inside the synchronized block, so volatile visibility is sufficient.
-		})
-		private volatile ConfigPropertySource delegate;
+		private final AtomicReference<ConfigPropertySource> delegate = new AtomicReference<>();
 
 		@Override
 		@SuppressWarnings({
@@ -166,12 +164,13 @@ public class ConfigPropertySourceProvider implements PropertySourceProvider {
 						}
 						// Silent when no juneau.cfg / default.cfg / etc. is discoverable — the
 						// SPI consumer sees missing() for every key but no log noise.
-						delegate = (cfg == null) ? null : new ConfigPropertySource(cfg);
+						delegate.set((cfg == null) ? null : new ConfigPropertySource(cfg));
 						resolved = true;
 					}
 				}
 			}
-			return delegate == null ? PropertyLookupResult.missing() : delegate.get(name);
+			var d = delegate.get();
+			return d == null ? PropertyLookupResult.missing() : d.get(name);
 		}
 
 		/**

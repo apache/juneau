@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
@@ -74,12 +75,9 @@ public class ThymeleafDispatcher implements RawTemplateDispatcher {
 	private final TemplateMode templateMode;
 
 	// Lazy bridge-default engine. Built on first call to resolveTemplateEngine(...) when no
-	// TemplateEngine bean is registered in the request's BeanStore. Volatile so the
+	// TemplateEngine bean is registered in the request's BeanStore. Held in an AtomicReference so the
 	// double-checked-locking idiom is safe under concurrent first-request load.
-	@SuppressWarnings({
-		"java:S3077" // volatile is required here for correct double-checked-locking safe-publication of the lazily-created defaultEngine in resolveTemplateEngine(); the reference is publish-once and never compound-mutated.
-	})
-	private volatile TemplateEngine defaultEngine;
+	private final AtomicReference<TemplateEngine> defaultEngine = new AtomicReference<>();
 
 	/**
 	 * Creates a new builder.
@@ -150,13 +148,13 @@ public class ThymeleafDispatcher implements RawTemplateDispatcher {
 		var bean = req.getContext().getBeanStore().getBean(TemplateEngine.class);
 		if (bean.isPresent())
 			return bean.get();
-		var local = defaultEngine;
+		var local = defaultEngine.get();
 		if (local == null) {
 			synchronized (this) {
-				local = defaultEngine;
+				local = defaultEngine.get();
 				if (local == null) {
 					local = buildDefaultEngine();
-					defaultEngine = local;
+					defaultEngine.set(local);
 				}
 			}
 		}

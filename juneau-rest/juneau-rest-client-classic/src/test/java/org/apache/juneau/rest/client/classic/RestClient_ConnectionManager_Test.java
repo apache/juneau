@@ -28,6 +28,7 @@ import java.security.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import javax.net.ssl.*;
 
 import org.apache.http.*;
@@ -589,16 +590,16 @@ class RestClient_ConnectionManager_Test {
 	@Test void e11_subclassCreatesRequestBoundToAnotherClient_guardedCall_refused() throws Exception {
 		try (var other = RestClient.create().connectionManager(new PoolingHttpClientConnectionManager()).build()) {
 			try (var c = RestClient.create().rootUrl(url).build(OtherClientRequestClient.class)) {
-				OtherClientRequestClient.other = other;
+				OtherClientRequestClient.other.set(other);
 				var ex = assertThrows(Exception.class, () -> c.getRemote(HelloRemote.class).call());
 				assertContains("bound to a different RestClient", messages(ex));
 			}
 			try (var c = RestClient.create().rootUrl(url).allowPrivateUrls(true).build(OtherClientRequestClient.class)) {
-				OtherClientRequestClient.other = other;
+				OtherClientRequestClient.other.set(other);
 				assertEquals("hi", c.getRemote(HelloRemote.class).call());
 			}
 		} finally {
-			OtherClientRequestClient.other = null;
+			OtherClientRequestClient.other.set(null);
 		}
 	}
 
@@ -607,7 +608,7 @@ class RestClient_ConnectionManager_Test {
 		@SuppressWarnings({
 			"resource" // A test fixture set and cleared by the test that closes it.
 		})
-		static volatile RestClient other;
+		static final AtomicReference<RestClient> other = new AtomicReference<>();
 		public OtherClientRequestClient(RestClient.Builder<?> builder) {
 			super(builder);
 		}
@@ -616,7 +617,7 @@ class RestClient_ConnectionManager_Test {
 			"resource" // The request is returned to the caller, which owns it.
 		})
 		protected RestRequest createRequest(URI uri, String method, boolean hasBody) throws RestCallException {
-			return new RestRequest(other, uri, method, hasBody);
+			return new RestRequest(other.get(), uri, method, hasBody);
 		}
 	}
 
@@ -1426,7 +1427,7 @@ class RestClient_ConnectionManager_Test {
 	})
 	private static List<RedirectingCallHandler.Hop> guardedRedirect(String location) throws Exception {
 		RedirectingCallHandler.HOPS.clear();
-		RedirectingCallHandler.location = location;
+		RedirectingCallHandler.location.set(location);
 		try (var c = RestClient.create().callHandler(RedirectingCallHandler.class).build();
 				var rc = c.get("http://93.184.216.34/start").header("Authorization", "Bearer secret").header("Cookie", "session=abc").header("x-api-key", "key")
 					.header("Proxy-Authorization", "Basic proxy")) {
@@ -1442,7 +1443,7 @@ class RestClient_ConnectionManager_Test {
 	public static class RedirectingCallHandler extends BasicRestCallHandler {
 		record Hop(String uri, String credentials, Object marker, HttpContext context) {}
 		static final List<Hop> HOPS = Collections.synchronizedList(new ArrayList<>());
-		static volatile String location;
+		static final AtomicReference<String> location = new AtomicReference<>();
 		public RedirectingCallHandler(RestClient client) {
 			super(client);
 		}
@@ -1455,7 +1456,7 @@ class RestClient_ConnectionManager_Test {
 			var path = URI.create(uri).getPath();
 			var response = new BasicHttpResponse(HttpVersion.HTTP_1_1, path.equals("/end") ? 200 : 302, "x");
 			if (path.equals("/start"))
-				response.addHeader("Location", location);
+				response.addHeader("Location", location.get());
 			else if (path.equals("/back"))
 				response.addHeader("Location", "http://93.184.216.34/end");
 			response.setEntity(new StringEntity("", ContentType.TEXT_PLAIN));

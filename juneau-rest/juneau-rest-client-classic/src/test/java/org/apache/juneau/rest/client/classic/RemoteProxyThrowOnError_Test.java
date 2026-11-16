@@ -23,6 +23,7 @@ import java.io.*;
 import java.net.*;
 import java.util.concurrent.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
 import org.junit.jupiter.api.*;
@@ -54,7 +55,7 @@ class RemoteProxyThrowOnError_Test {
 	private static ExecutorService executor;
 	private static int port;
 	private static volatile int status = 404;
-	private static volatile String responseBody = "not found";
+	private static final AtomicReference<String> responseBody = new AtomicReference<>("not found");
 
 	@BeforeAll
 	static void startServer() throws IOException {
@@ -70,7 +71,7 @@ class RemoteProxyThrowOnError_Test {
 		server.setExecutor(executor);
 		server.createContext("/", exchange -> {
 			exchange.getRequestBody().readAllBytes();
-			var resp = responseBody.getBytes(UTF_8);
+			var resp = responseBody.get().getBytes(UTF_8);
 			exchange.getResponseHeaders().set("Content-Type", "text/plain");
 			exchange.sendResponseHeaders(status, resp.length == 0 ? -1 : resp.length);
 			try (var os = exchange.getResponseBody()) {
@@ -91,7 +92,7 @@ class RemoteProxyThrowOnError_Test {
 	@BeforeEach
 	void reset() {
 		status = 404;
-		responseBody = "not found";
+		responseBody.set("not found");
 	}
 
 	private static String url() {
@@ -167,7 +168,7 @@ class RemoteProxyThrowOnError_Test {
 	@Test void a05_typedException_noMatch_bodyFlowsThrough() throws Exception {
 		// Server returns 500 but the method only declares NotFound (404) -> no typed match, throwOnError=false -> body flows through.
 		status = 500;
-		responseBody = "boom";
+		responseBody.set("boom");
 		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			var proxy = c.getRemote(TypedExceptionRemote.class, url());
 			assertEquals("boom", proxy.call());
@@ -180,7 +181,7 @@ class RemoteProxyThrowOnError_Test {
 
 	@Test void a06_successResponse_returnsBody_withThrowOnErrorTrue() throws Exception {
 		status = 200;
-		responseBody = "ok";
+		responseBody.set("ok");
 		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			var proxy = c.getRemote(ThrowOnErrorRemote.class, url());
 			assertEquals("ok", proxy.call());

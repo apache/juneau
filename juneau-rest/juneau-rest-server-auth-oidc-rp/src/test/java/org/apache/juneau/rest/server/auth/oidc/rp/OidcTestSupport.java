@@ -22,6 +22,7 @@ import java.nio.charset.*;
 import java.time.*;
 import java.util.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.rest.auth.oauth.oidc.*;
 
 import com.nimbusds.jose.*;
@@ -156,17 +157,17 @@ final class OidcTestSupport {
 		final String issuer = "https://stub-idp.example.com";
 
 		/** The ID token returned by the next {@code /token} call. */
-		volatile String idToken;
+		final AtomicReference<String> idToken = new AtomicReference<>();
 		/** The refresh token returned by an authorization-code {@code /token} call. */
-		volatile String refreshToken = "rt-1";
+		final AtomicReference<String> refreshToken = new AtomicReference<>("rt-1");
 		/** The refresh token returned by a refresh-grant {@code /token} call (rotation). */
-		volatile String rotatedRefreshToken = "rt-2";
+		final AtomicReference<String> rotatedRefreshToken = new AtomicReference<>("rt-2");
 		/** When true, the {@code /token} endpoint returns an error (simulates revoked / reused refresh token). */
 		volatile boolean failToken;
 		/** When true, the {@code /userinfo} endpoint returns 401 (simulates a non-success UserInfo response). */
 		volatile boolean userInfoFail;
 		/** Extra claims served by {@code /userinfo}. */
-		volatile Map<String,Object> userInfo = new LinkedHashMap<>();
+		final AtomicReference<Map<String,Object>> userInfo = new AtomicReference<>(new LinkedHashMap<>());
 		/**
 		 * Number of times {@code /token} was invoked.  An ordering proof for the expiry ceiling: a rejected {@code completeLogin}
 		 * that never reaches {@code codeFlow().exchange} leaves this at {@code 0}.
@@ -176,7 +177,7 @@ final class OidcTestSupport {
 		 * The PKCE {@code code_verifier} observed on the most recent {@code /token} call.  Record-only &mdash; the
 		 * stub still succeeds with any verifier; this only lets a test assert the injected verifier was exchanged.
 		 */
-		volatile String lastCodeVerifier;
+		final AtomicReference<String> lastCodeVerifier = new AtomicReference<>();
 
 		StubIdp() throws IOException {
 			server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
@@ -188,20 +189,20 @@ final class OidcTestSupport {
 		private void handleToken(HttpExchange ex) throws IOException {
 			tokenHits.incrementAndGet();
 			var body = new String(ex.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-			lastCodeVerifier = formField(body, "code_verifier");
+			lastCodeVerifier.set(formField(body, "code_verifier"));
 			if (failToken) {
 				writeJson(ex, 400, "{\"error\":\"invalid_grant\"}");
 				return;
 			}
 			var isRefresh = body.contains("grant_type=refresh_token");
-			var rt = isRefresh ? rotatedRefreshToken : refreshToken;
+			var rt = isRefresh ? rotatedRefreshToken.get() : refreshToken.get();
 			var json = new StringBuilder("{")
 				.append("\"access_token\":\"at-").append(isRefresh ? "refreshed" : "initial").append("\",")
 				.append("\"token_type\":\"Bearer\",")
 				.append("\"expires_in\":3600,");
 			if (rt != null)
 				json.append("\"refresh_token\":\"").append(rt).append("\",");
-			if (idToken != null)
+			if (idToken.get() != null)
 				json.append("\"id_token\":\"").append(idToken).append("\",");
 			json.append("\"scope\":\"openid profile\"}");
 			writeJson(ex, 200, json.toString());
@@ -213,7 +214,7 @@ final class OidcTestSupport {
 				return;
 			}
 			var sb = new StringBuilder("{\"sub\":\"alice\"");
-			userInfo.forEach((k, v) -> sb.append(",\"").append(k).append("\":\"").append(v).append("\""));
+			userInfo.get().forEach((k, v) -> sb.append(",\"").append(k).append("\":\"").append(v).append("\""));
 			sb.append("}");
 			writeJson(ex, 200, sb.toString());
 		}

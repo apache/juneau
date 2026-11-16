@@ -23,6 +23,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.io.*;
 import java.util.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.view.*;
@@ -74,12 +75,9 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 	private final boolean cacheTemplates;
 
 	// Lazy bridge-default factory. Built on first call to resolveMustacheFactory(...) when no
-	// MustacheFactory bean is registered in the request's BeanStore. Volatile so the
+	// MustacheFactory bean is registered in the request's BeanStore. Held in an AtomicReference so the
 	// double-checked-locking idiom is safe under concurrent first-request load.
-	@SuppressWarnings({
-		"java:S3077" // Publish-once cache: assigned once under double-checked locking in resolveMustacheFactory(); the MustacheFactory is fully built before assignment, so volatile safe-publication is sufficient.
-	})
-	private volatile MustacheFactory defaultFactory;
+	private final AtomicReference<MustacheFactory> defaultFactory = new AtomicReference<>();
 
 	/**
 	 * Creates a new builder.
@@ -178,13 +176,13 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 			return bean.get();
 		if (! cacheTemplates)
 			return buildDefaultFactory();
-		var local = defaultFactory;
+		var local = defaultFactory.get();
 		if (local == null) {
 			synchronized (this) {
-				local = defaultFactory;
+				local = defaultFactory.get();
 				if (local == null) {
 					local = buildDefaultFactory();
-					defaultFactory = local;
+					defaultFactory.set(local);
 				}
 			}
 		}

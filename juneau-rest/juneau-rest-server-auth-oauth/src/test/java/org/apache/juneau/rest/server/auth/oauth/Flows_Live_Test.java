@@ -24,6 +24,7 @@ import java.nio.charset.*;
 import java.time.*;
 import java.util.concurrent.atomic.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.auth.oauth.flow.*;
 import org.junit.jupiter.api.*;
@@ -44,14 +45,14 @@ import com.sun.net.httpserver.*;
 class Flows_Live_Test extends TestBase {
 
 	private HttpServer server;
-	private volatile String nextResponse;
+	private final AtomicReference<String> nextResponse = new AtomicReference<>();
 	private volatile int nextStatus = 200;
 
 	@BeforeEach
 	void startServer() throws IOException {
 		server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
 		server.createContext("/token", ex -> {
-			var body = nextResponse.getBytes(StandardCharsets.UTF_8);
+			var body = nextResponse.get().getBytes(StandardCharsets.UTF_8);
 			ex.getResponseHeaders().add("Content-Type", "application/json");
 			ex.sendResponseHeaders(nextStatus, body.length);
 			try (var os = ex.getResponseBody()) {
@@ -71,7 +72,7 @@ class Flows_Live_Test extends TestBase {
 	}
 
 	private OAuthToken acquire(String json) {
-		nextResponse = json;
+		nextResponse.set(json);
 		return OAuthClientCredentialsFlow.create()
 			.tokenEndpoint(tokenEndpoint())
 			.clientId("id")
@@ -166,7 +167,7 @@ class Flows_Live_Test extends TestBase {
 	}
 
 	@Test void i01_tokenCachePutAfterAcquire() {
-		nextResponse = "{\"access_token\":\"at-cached\",\"token_type\":\"Bearer\",\"expires_in\":3600}";
+		nextResponse.set("{\"access_token\":\"at-cached\",\"token_type\":\"Bearer\",\"expires_in\":3600}");
 		var cache = BoundedLruTokenCache.create();
 		var f = CachingClientCredentialsFlow.create()
 			.tokenEndpoint(tokenEndpoint())
@@ -186,7 +187,7 @@ class Flows_Live_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void j01_httpRequestConfigurator_invoked() {
-		nextResponse = "{\"access_token\":\"at\",\"token_type\":\"Bearer\",\"expires_in\":3600}";
+		nextResponse.set("{\"access_token\":\"at\",\"token_type\":\"Bearer\",\"expires_in\":3600}");
 		var called = new AtomicBoolean();
 		var f = OAuthClientCredentialsFlow.create()
 			.tokenEndpoint(tokenEndpoint())
@@ -203,7 +204,7 @@ class Flows_Live_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void k01_errorResponse_throwsOAuthFlowException() {
-		nextResponse = "{\"error\":\"invalid_client\",\"error_description\":\"bad credentials\"}";
+		nextResponse.set("{\"error\":\"invalid_client\",\"error_description\":\"bad credentials\"}");
 		nextStatus = 400;
 		var f = OAuthClientCredentialsFlow.create()
 			.tokenEndpoint(tokenEndpoint())

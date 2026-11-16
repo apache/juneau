@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.rest.mock.*;
@@ -122,8 +123,8 @@ class LoginStateStore_Test extends TestBase {
 	}
 
 	private void signIdTokenWith(String nonce) throws Exception {
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
-			Map.of("scope", "openid profile"));
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
+			Map.of("scope", "openid profile")));
 	}
 
 	private static PendingLogin pending(String redirect, Instant createdAt, Instant expiresAt) {
@@ -137,10 +138,10 @@ class LoginStateStore_Test extends TestBase {
 	static final class FakeStore implements LoginStateStore {
 		final IntegerHolder storeCount = IntegerHolder.create();
 		final IntegerHolder consumeCount = IntegerHolder.create();
-		volatile String lastStoreState;
-		volatile PendingLogin lastStored;
-		volatile String lastConsumeState;
-		volatile Optional<PendingLogin> lastConsumeReturned = Optional.empty();
+		final AtomicReference<String> lastStoreState = new AtomicReference<>();
+		final AtomicReference<PendingLogin> lastStored = new AtomicReference<>();
+		final AtomicReference<String> lastConsumeState = new AtomicReference<>();
+		final AtomicReference<Optional<PendingLogin>> lastConsumeReturned = new AtomicReference<>(Optional.empty());
 
 		RuntimeException storeThrows;
 		RuntimeException consumeThrows;
@@ -148,20 +149,20 @@ class LoginStateStore_Test extends TestBase {
 
 		@Override public void store(String state, PendingLogin p) {
 			storeCount.increment();
-			lastStoreState = state;
-			lastStored = p;
+			lastStoreState.set(state);
+			lastStored.set(p);
 			if (storeThrows != null)
 				throw storeThrows;
 		}
 
 		@Override public Optional<PendingLogin> consume(String state) {
 			consumeCount.increment();
-			lastConsumeState = state;
+			lastConsumeState.set(state);
 			if (consumeThrows != null)
 				throw consumeThrows;
 			// The fake returns its distinctive record but carries over the framework-minted binding hash.
-			var r = consumeResult.map(c -> new PendingLogin(c.nonce(), c.codeVerifier(), c.redirectTarget(), c.createdAt(), c.expiresAt(), lastStored == null ? null : lastStored.bindingHash()));
-			lastConsumeReturned = r;
+			var r = consumeResult.map(c -> new PendingLogin(c.nonce(), c.codeVerifier(), c.redirectTarget(), c.createdAt(), c.expiresAt(), lastStored.get() == null ? null : lastStored.get().bindingHash()));
+			lastConsumeReturned.set(r);
 			return r;
 		}
 	}
@@ -177,17 +178,17 @@ class LoginStateStore_Test extends TestBase {
 
 		var state = startLoginGetState(rp);
 		assertTrue(fake.storeCount.is(1), "store must be invoked once on the injected instance");
-		assertEquals(state, fake.lastStoreState, "store must receive the generated state");
+		assertEquals(state, fake.lastStoreState.get(), "store must receive the generated state");
 
 		signIdTokenWith(FAKE_NONCE);  // sign with the fake's distinctive nonce; a mismatch fails validation
 		var res = completeLogin(rp, state);
 
 		assertTrue(fake.consumeCount.is(1), "consume must be invoked once on the injected instance");
-		assertEquals(state, fake.lastConsumeState, "consume must receive the callback state");
+		assertEquals(state, fake.lastConsumeState.get(), "consume must receive the callback state");
 		assertNotNull(cookieValue(res.getHeader("Set-Cookie")), "login must succeed (session cookie set)");
 		assertEquals(FAKE_REDIRECT, res.getHeader("Location"), "Location must be the fake's distinctive redirectTarget");
 		// The verifier exchanged with the IdP is the fake's distinctive one (record-only capture on the stub).
-		assertEquals(FAKE_VERIFIER, idp.lastCodeVerifier, "the fake's distinctive code_verifier must be exchanged");
+		assertEquals(FAKE_VERIFIER, idp.lastCodeVerifier.get(), "the fake's distinctive code_verifier must be exchanged");
 		// Login succeeding with an ID token signed by FAKE_NONCE proves the fake's nonce was the one validated.
 	}
 
@@ -204,13 +205,13 @@ class LoginStateStore_Test extends TestBase {
 		// were ignored.  So a no-op setter is caught two ways below (consume count stays 0; no miss).
 		var state = startLoginGetState(rp);
 		assertTrue(fake.storeCount.is(1));
-		assertEquals(state, fake.lastStoreState);
+		assertEquals(state, fake.lastStoreState.get());
 
 		signIdTokenWith(FAKE_NONCE);
 		var ex = assertThrows(AuthenticationException.class, () -> completeLogin(rp, state));
 
 		assertTrue(fake.consumeCount.is(1), "the injected consume must be the CSRF/replay decision point");
-		assertEquals(state, fake.lastConsumeState);
+		assertEquals(state, fake.lastConsumeState.get());
 		assertTrue(ex.getMessage().contains("missing, expired, or already used"),
 			"must reject with the consume-miss message, got: " + ex.getMessage());
 		assertEquals(0, idp.tokenHits.get(), "a consume miss must not reach the token exchange");
@@ -296,9 +297,9 @@ class LoginStateStore_Test extends TestBase {
 		assertEquals(0, idp.tokenHits.get(), "the expiry re-check must run before the token exchange (code not burned)");
 		// consume-miss disambiguation — the present over-TTL record WAS consumed once, then rejected for age.
 		assertTrue(fake.consumeCount.is(1), "the injected consume must have been invoked once");
-		assertEquals(state, fake.lastConsumeState);
-		assertTrue(fake.lastConsumeReturned.isPresent(), "the record was present (not a consume miss)");
-		assertEquals(NOW.minus(Duration.ofMinutes(1)), fake.lastConsumeReturned.get().expiresAt(),
+		assertEquals(state, fake.lastConsumeState.get());
+		assertTrue(fake.lastConsumeReturned.get().isPresent(), "the record was present (not a consume miss)");
+		assertEquals(NOW.minus(Duration.ofMinutes(1)), fake.lastConsumeReturned.get().get().expiresAt(),
 			"the rejected record is the over-TTL one the fake returned");
 	}
 

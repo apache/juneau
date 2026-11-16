@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.io.*;
 import java.nio.charset.*;
 
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
@@ -144,10 +145,7 @@ public class DataTablesMixin {
 	static final String GLUE_CACHE_CONTROL = "max-age=86400, public";
 
 	/** The shipped glue script bytes, read once from the classpath on first request. */
-	@SuppressWarnings({
-		"java:S3077" // Double-checked-locking safe publication of one whole immutable array reference, not per-element mutation; AtomicReferenceArray solves a different problem.
-	})
-	private static volatile byte[] glueScript;
+	private static final AtomicReference<byte[]> glueScript = new AtomicReference<>();
 
 	/**
 	 * [GET /juneau-datatables.js] &mdash; serve the first-party DataTables glue script.
@@ -174,13 +172,13 @@ public class DataTablesMixin {
 		"resource" // IoUtils.read(InputStream) closes the stream; JDT can't see through the call.
 	})
 	private static byte[] glueScript() throws IOException {
-		var g = glueScript;
+		var g = glueScript.get();
 		if (g == null) {
 			synchronized (DataTablesMixin.class) {
-				g = glueScript;
+				g = glueScript.get();
 				if (g == null) {  // HTT: the "already set" branch is only reachable if another thread wins the race between the two reads - unhittable single-threaded.
 					g = IoUtils.read(DataTablesMixin.class.getResourceAsStream(GLUE_RESOURCE)).getBytes(StandardCharsets.UTF_8);
-					glueScript = g;
+					glueScript.set(g);
 				}
 			}
 		}

@@ -114,8 +114,8 @@ class OidcRelyingParty_Test extends TestBase {
 		var nonce = queryParam(loc, "nonce");
 		assertNotNull(state);
 		assertNotNull(nonce);
-		idp.idToken = signIdToken(key, idp.issuer, CID, sub, sid, nonce, Instant.now(), Duration.ofMinutes(5),
-			Map.of("scope", "openid profile"));
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, sub, sid, nonce, Instant.now(), Duration.ofMinutes(5),
+			Map.of("scope", "openid profile")));
 		var req2 = callbackReq(res1, "abc123", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -186,7 +186,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -203,7 +203,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -217,7 +217,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -235,7 +235,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null));
 		rp.completeLogin(callbackReq(res1, "abc", state), MockServletResponse.create());
 		// Second callback with the same (already-consumed) state must fail.
 		var replayReq = callbackReq(res1, "abc", state);
@@ -256,7 +256,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var res1 = MockServletResponse.create();
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", "WRONG-NONCE", Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", "WRONG-NONCE", Instant.now(), Duration.ofMinutes(5), null));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		assertThrows(AuthenticationException.class, () -> rp.completeLogin(req2, res2));
@@ -268,7 +268,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(MockServletRequest.create("GET", "/auth/login"), res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var req = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
 		assertThrows(AuthenticationException.class, () -> rp.completeLogin(req, MockServletResponse.create()));
 	}
@@ -279,7 +279,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(MockServletRequest.create("GET", "/auth/login"), res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var req = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state)
 			.cookies(new Cookie[]{ new Cookie("__Host-" + rp.cookieName() + "_LOGIN", "some-other-value") });
 		assertThrows(AuthenticationException.class, () -> rp.completeLogin(req, MockServletResponse.create()));
@@ -306,7 +306,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(MockServletRequest.create("GET", "/auth/login"), res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var good = callbackReq(res1, "abc", state);
 		var dup = new ArrayList<>(Arrays.asList(good.getCookies()));
 		dup.add(0, new Cookie(dup.get(0).getName(), "other-value"));
@@ -320,7 +320,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(MockServletRequest.create("GET", "/auth/login"), res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var bare = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
 		assertThrows(AuthenticationException.class, () -> rp.completeLogin(bare, MockServletResponse.create()));
 		var res2 = MockServletResponse.create();
@@ -334,7 +334,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(MockServletRequest.create("GET", "/auth/login"), res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var cookies = new ArrayList<String>();
 		var res2 = new MockServletResponse() {
 			@Override public void addHeader(String name, String value) {
@@ -354,7 +354,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(callbackReq(res1, "abc", state), res2);
 		assertEquals("/", res2.getHeader("Location"));
@@ -633,7 +633,7 @@ class OidcRelyingParty_Test extends TestBase {
 	 * InMemorySessionStore retains the full token so the session token is present but refreshToken is empty.
 	 */
 	@Test void h04_refresh_noRefreshToken_returnsEmpty() throws Exception {
-		idp.refreshToken = null;  // stub returns no refresh_token in the code-exchange response
+		idp.refreshToken.set(null);  // stub returns no refresh_token in the code-exchange response
 		var rp = rp(InMemorySessionStore.create());
 		var cookie = login(rp, "alice", "sess-1", null);
 		var req = MockServletRequest.create("GET", "/auth/refresh")
@@ -663,7 +663,7 @@ class OidcRelyingParty_Test extends TestBase {
 	@Test void i01b_backfill_userinfoErrorResponse_loginSucceeds() throws Exception {
 		// Replace the /userinfo handler with one that returns 401.
 		idp.userInfoFail = true;
-		idp.userInfo = new LinkedHashMap<>(Map.of("email", "alice@example.com"));
+		idp.userInfo.set(new LinkedHashMap<>(Map.of("email", "alice@example.com")));
 		var rp = OidcRelyingParty.create()
 			.metadata(idp.metadata(AUTHZ, END_SESSION))
 			.clientId(CID)
@@ -697,8 +697,8 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
-			Map.of("email", "alice@example.com", "scope", "openid profile"));
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
+			Map.of("email", "alice@example.com", "scope", "openid profile")));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -713,7 +713,7 @@ class OidcRelyingParty_Test extends TestBase {
 	 */
 	@Test void i02b_backfill_httpRequestConfigurator_applied() throws Exception {
 		var configuratorCalled = new boolean[]{false};
-		idp.userInfo = new LinkedHashMap<>(Map.of("email", "alice@example.com"));
+		idp.userInfo.set(new LinkedHashMap<>(Map.of("email", "alice@example.com")));
 		var rp = OidcRelyingParty.create()
 			.metadata(idp.metadata(AUTHZ, END_SESSION))
 			.clientId(CID)
@@ -732,7 +732,7 @@ class OidcRelyingParty_Test extends TestBase {
 
 	/** userInfoClaims non-empty, claim missing, UserInfo returns the extra claim — line 964 + 978 branches. */
 	@Test void i03_backfill_missingClaim_backfilledFromUserInfo() throws Exception {
-		idp.userInfo = new LinkedHashMap<>(Map.of("email", "alice@example.com"));
+		idp.userInfo.set(new LinkedHashMap<>(Map.of("email", "alice@example.com")));
 		var rp = OidcRelyingParty.create()
 			.metadata(idp.metadata(AUTHZ, END_SESSION))
 			.clientId(CID)
@@ -751,7 +751,7 @@ class OidcRelyingParty_Test extends TestBase {
 
 	/** A UserInfo response whose subject differs from the ID-token subject is not merged. */
 	@Test void i03b_backfill_subjectMismatch_notMerged() throws Exception {
-		idp.userInfo = new LinkedHashMap<>(Map.of("email", "alice@example.com"));
+		idp.userInfo.set(new LinkedHashMap<>(Map.of("email", "alice@example.com")));
 		var rp = OidcRelyingParty.create()
 			.metadata(idp.metadata(AUTHZ, END_SESSION))
 			.clientId(CID)
@@ -824,7 +824,7 @@ class OidcRelyingParty_Test extends TestBase {
 	 * {@code !merged.containsKey(c)} false branch when the id_token already carries the claim.
 	 */
 	@Test void i05_backfill_someClaimsAlreadyPresent_onlyMissingBackfilled() throws Exception {
-		idp.userInfo = new LinkedHashMap<>(Map.of("email", "alice@example.com"));
+		idp.userInfo.set(new LinkedHashMap<>(Map.of("email", "alice@example.com")));
 		var rp = OidcRelyingParty.create()
 			.metadata(idp.metadata(AUTHZ, END_SESSION))
 			.clientId(CID)
@@ -864,13 +864,13 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		// scope as a JSON array — Nimbus deserialises it to List<String> in the claims set.
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
-			Map.of("scope", List.of("read", "write")));
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
+			Map.of("scope", List.of("read", "write"))));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
 		// Use the cookie produced by this completeLogin directly — don't call login() again which would
-		// overwrite idp.idToken with a string-scope token.
+		// overwrite idp.idToken.get() with a string-scope token.
 		var cookie = cookieValue(res2.getHeader("Set-Cookie"));
 		var auth = authn(rp, cookie);
 		assertTrue(auth.isPresent());
@@ -886,8 +886,8 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		// Scope string with extra whitespace that produces blank split pieces.
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
-			Map.of("scope", "  read   write  "));
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
+			Map.of("scope", "  read   write  ")));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -914,8 +914,8 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		// Integer claim: serialised as JSON number, round-tripped back as Long — neither String nor Collection.
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
-			Map.of("scope", 42L));
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
+			Map.of("scope", 42L)));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -945,8 +945,8 @@ class OidcRelyingParty_Test extends TestBase {
 		var scopeList = new ArrayList<>();
 		scopeList.add("read");
 		scopeList.add(99L);
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
-			Map.of("scope", scopeList));
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),
+			Map.of("scope", scopeList)));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -977,7 +977,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -1001,7 +1001,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -1025,7 +1025,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -1044,7 +1044,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -1059,7 +1059,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -1074,7 +1074,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -1089,7 +1089,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);
@@ -1104,7 +1104,7 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
-		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null);
+		idp.idToken.set(signIdToken(key, idp.issuer, CID, "alice", null, nonce, Instant.now(), Duration.ofMinutes(5), null));
 		var req2 = callbackReq(res1, "abc", state);
 		var res2 = MockServletResponse.create();
 		rp.completeLogin(req2, res2);

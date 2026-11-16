@@ -44,6 +44,7 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 import java.util.logging.*;
 import java.util.logging.Logger;
@@ -1892,10 +1893,7 @@ public class RestContext extends Context {
 	 * {@code juneau-rest-server-reactive}) ships a
 	 * {@code META-INF/services/ResponseProcessor} provider file.
 	 */
-	@SuppressWarnings({
-		"java:S3077" // volatile is required for correct double-checked-locking safe-publication of this JVM-wide cache; the reference is publish-once and never compound-mutated.
-	})
-	private static volatile List<Class<? extends ResponseProcessor>> serviceLoaderResponseProcessors;
+	private static final AtomicReference<List<Class<? extends ResponseProcessor>>> serviceLoaderResponseProcessors = new AtomicReference<>();
 
 	/**
 	 * Returns the module-contributed {@link ResponseProcessor} classes discovered via {@link ServiceLoader},
@@ -1910,13 +1908,13 @@ public class RestContext extends Context {
 	 * @return The discovered processor classes (possibly empty, never {@code null}).
 	 */
 	private static List<Class<? extends ResponseProcessor>> discoverServiceLoaderResponseProcessors() {
-		var p = serviceLoaderResponseProcessors;
+		var p = serviceLoaderResponseProcessors.get();
 		if (p == null) {
 			synchronized (RestContext.class) {
-				p = serviceLoaderResponseProcessors;
+				p = serviceLoaderResponseProcessors.get();
 				if (p == null) {
 					p = loadServiceLoaderResponseProcessors();
-					serviceLoaderResponseProcessors = p;
+					serviceLoaderResponseProcessors.set(p);
 				}
 			}
 		}
