@@ -60,6 +60,9 @@ final class McpRequestPolicy {
 	 * @throws UnsupportedMediaType If the content type is not JSON.
 	 * @throws Forbidden If the origin, host or caller is not admitted.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Ordered admission checks read most clearly in one method
+	})
 	static void check(McpServerConfig config, RestRequest req) {
 		var ct = req.getHeader("Content-Type");
 		if (! isJson(ct))

@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
  */
 class SseSerializer_LineBreaks_Test extends TestBase {
 
-	private static String write(SseEvent e) throws Exception {
+	private static String write(SseEvent e) {
 		return SseSerializer.DEFAULT.write(e);
 	}
 

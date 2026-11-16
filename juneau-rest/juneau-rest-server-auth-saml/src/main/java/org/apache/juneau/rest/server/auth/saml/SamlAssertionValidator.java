@@ -888,6 +888,9 @@ public class SamlAssertionValidator {
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Nested attribute loops read most clearly in one method
+	})
 	private Map<String,Object> buildClaims(Response response, Assertion assertion) throws AuthenticationException {
 		validateConditions(assertion);
 		validateIssuer(response, assertion);

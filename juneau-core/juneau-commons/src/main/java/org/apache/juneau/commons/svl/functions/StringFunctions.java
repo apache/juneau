@@ -174,7 +174,7 @@ public final class StringFunctions {
 			for (var seg : t.replace('\\', '/').split("/")) {
 				if (seg.isEmpty() || eq(seg, ".") || eq(seg, ".."))
 					continue;
-				if (sb.length() > 0)
+				if (! sb.isEmpty())
 					sb.append('/');
 				sb.append(seg);
 			}

@@ -31,7 +31,6 @@ import java.util.function.*;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.Items;
-import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.logging.*;

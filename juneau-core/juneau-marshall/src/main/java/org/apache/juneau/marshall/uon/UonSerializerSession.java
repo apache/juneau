@@ -27,7 +27,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.*;

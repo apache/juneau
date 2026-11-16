@@ -70,18 +70,21 @@ class JwksResourceRetriever_Test {
 		assertEquals("{\"keys\":[]}", new JwksResourceRetriever().retrieveResource(url("/ok")).getContent());
 	}
 
-	@Test void a02_redirectNotFollowed() {
+	@Test void a02_redirectNotFollowed() throws IOException {
 		var r = new JwksResourceRetriever();
-		assertThrows(IOException.class, () -> r.retrieveResource(url("/redirect")));
+		var u = url("/redirect");
+		assertThrows(IOException.class, () -> r.retrieveResource(u));
 	}
 
-	@Test void a03_oversizedResponseRejected() {
+	@Test void a03_oversizedResponseRejected() throws IOException {
 		var r = new JwksResourceRetriever();
-		assertThrows(IOException.class, () -> r.retrieveResource(url("/big")));
+		var u = url("/big");
+		assertThrows(IOException.class, () -> r.retrieveResource(u));
 	}
 
-	@Test void a04_plainHttpNonLoopbackRejected() throws Exception {
+	@Test void a04_plainHttpNonLoopbackRejected() throws IOException {
 		var r = new JwksResourceRetriever();
-		assertThrows(IOException.class, () -> r.retrieveResource(URI.create("http://example.com/jwks").toURL()));
+		var u = URI.create("http://other.example/jwks").toURL();
+		assertThrows(IOException.class, () -> r.retrieveResource(u));
 	}
 }

@@ -380,9 +380,7 @@ class AeadRequestStateCodec_Test {
 
 	@Test void b03b_identity_barePrincipalsOfDifferentClassesDiffer() {
 		Principal a = () -> "alice";
-		Principal b = new Principal() {
-			@Override public String getName() { return "alice"; }
-		};
+		Principal b = () -> "alice";
 		assertNotEquals(AeadRequestStateCodec.principalIdentity(a), AeadRequestStateCodec.principalIdentity(b));
 	}
 

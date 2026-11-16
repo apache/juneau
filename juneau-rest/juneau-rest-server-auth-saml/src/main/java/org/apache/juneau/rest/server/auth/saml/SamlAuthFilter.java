@@ -26,7 +26,6 @@ import java.security.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.server.auth.*;
 
 import jakarta.servlet.http.*;
@@ -337,7 +336,7 @@ public class SamlAuthFilter extends AuthFilter {
 
 	// The POST binding is delivered by a form post and the REDIRECT binding by a GET; other methods are not accepted.
 	private boolean matchesMethod(HttpServletRequest req) {
-		return binding == SamlBinding.POST ? eq("POST", req.getMethod()) : eq("GET", req.getMethod());
+		return eq(binding == SamlBinding.POST ? "POST" : "GET", req.getMethod());
 	}
 
 	private String bindingCookie(HttpServletRequest req) {

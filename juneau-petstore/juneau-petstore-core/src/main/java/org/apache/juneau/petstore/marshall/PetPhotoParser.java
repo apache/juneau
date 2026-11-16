@@ -83,7 +83,8 @@ public class PetPhotoParser extends InputStreamParser {
 		var reader = readers.next();
 		try {
 			reader.setInput(iis, true, true);
-			long w = reader.getWidth(0), h = reader.getHeight(0);
+			long w = reader.getWidth(0);
+			long h = reader.getHeight(0);
 			if (w > MAX_DIMENSION || h > MAX_DIMENSION || w * h > MAX_PIXELS)
 				throw new ParseException(session, "Image dimensions exceed the {0} pixel limit", MAX_PIXELS);
 			return reader.read(0);

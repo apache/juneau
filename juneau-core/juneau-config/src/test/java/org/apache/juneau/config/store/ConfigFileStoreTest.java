@@ -436,7 +436,8 @@ class ConfigFileStoreTest extends TestBase {
 		System.setProperty("ConfigFileStore.allowAbsoluteNames", "true");
 		try {
 			var fs = FileStore.create().directory(DIR).build();
-			assertThrows(IllegalArgumentException.class, () -> fs.read(new File("./target/x.cfg").getAbsolutePath()));
+			var absolute = new File("./target/x.cfg").getAbsolutePath();
+			assertThrows(IllegalArgumentException.class, () -> fs.read(absolute));
 		} finally {
 			System.clearProperty("ConfigFileStore.allowAbsoluteNames");
 		}

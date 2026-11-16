@@ -1260,7 +1260,11 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				if (cl == null)
 					cl = Thread.currentThread().getContextClassLoader();
 				// Conversions made without a session still carry the context through the hint.
-				var mc = session != null ? session.getMarshallingContext() : hint != null ? hint.getMarshallingContext() : null;
+				MarshallingContext mc = null;
+				if (session != null)
+					mc = session.getMarshallingContext();
+				else if (hint != null)
+					mc = hint.getMarshallingContext();
 				return ClassFormat.parse(o, format, cl, mc != null ? mc.getClassNameGuard() : null);
 			}
 		};

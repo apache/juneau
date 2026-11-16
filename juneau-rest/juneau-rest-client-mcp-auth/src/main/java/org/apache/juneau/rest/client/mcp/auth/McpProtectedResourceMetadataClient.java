@@ -223,6 +223,9 @@ public class McpProtectedResourceMetadataClient {
 	 * @return The parsed metadata.
 	 * @throws McpAuthException If the fetch fails, the document cannot be parsed, or the resource identity check fails.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // False positive: prmUrl is verified non-null by reqnn() on the first line of the method.
+	})
 	public McpProtectedResourceMetadata fetch(URI prmUrl, URI expectedResource) {
 		reqnn("prmUrl", prmUrl);
 		requireSecure(prmUrl, "Protected-resource-metadata URL");

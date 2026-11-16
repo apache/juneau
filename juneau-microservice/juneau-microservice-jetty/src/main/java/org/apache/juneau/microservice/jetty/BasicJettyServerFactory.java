@@ -51,6 +51,9 @@ public class BasicJettyServerFactory implements JettyServerFactory {
 	}
 
 	@Override
+	@SuppressWarnings({
+		"java:S5443" // Files.createTempFile is owner-only on POSIX, and the file is deleted in the finally block
+	})
 	public Server create(String jettyXml) throws Exception {
 		Objects.requireNonNull(jettyXml,
 			"jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config) or found on the file system or classpath.");

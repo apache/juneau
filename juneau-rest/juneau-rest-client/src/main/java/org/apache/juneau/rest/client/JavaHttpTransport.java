@@ -29,7 +29,6 @@ import java.time.*;
 import java.util.*;
 import java.util.logging.Logger;
 
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
 
 /**

@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
  */
 class HtmlDocSerializer_Stylesheet_Test extends TestBase {
 
-	private static String serialize(String...stylesheet) throws Exception {
+	private static String serialize(String...stylesheet) {
 		return HtmlDocSerializer.create().stylesheet(stylesheet).build().getSession().writeToString("x");
 	}
 

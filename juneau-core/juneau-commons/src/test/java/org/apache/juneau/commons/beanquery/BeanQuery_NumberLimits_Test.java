@@ -90,14 +90,17 @@ class BeanQuery_NumberLimits_Test extends TestBase {
 
 	@Test
 	void b01_format_largeExponent_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ValueFormat.format(new BigDecimal(LARGE_EXPONENT)));
+		var largeExponent = new BigDecimal(LARGE_EXPONENT);
+		var e = assertThrows(IllegalArgumentException.class, () -> ValueFormat.format(largeExponent));
 		assertTrue(e.getMessage().contains("Unsupported search value type"), e.getMessage());
-		assertThrows(IllegalArgumentException.class, () -> ValueFormat.format(new BigDecimal("1e-100000")));
+		var smallExponent = new BigDecimal("1e-100000");
+		assertThrows(IllegalArgumentException.class, () -> ValueFormat.format(smallExponent));
 	}
 
 	@Test
 	void b02_format_tooLong_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> ValueFormat.format(new BigDecimal(LONG_DIGITS)));
+		var longDigits = new BigDecimal(LONG_DIGITS);
+		assertThrows(IllegalArgumentException.class, () -> ValueFormat.format(longDigits));
 	}
 
 	@Test

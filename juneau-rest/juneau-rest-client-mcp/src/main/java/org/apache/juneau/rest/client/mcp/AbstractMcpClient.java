@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.juneau.bean.jsonrpc.*;
-import org.apache.juneau.commons.utils.UriUtils;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.client.*;

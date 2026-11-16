@@ -332,7 +332,7 @@ public class VarResolverSession {
 		try {
 			return context.compile(s).resolve(this);
 		} finally {
-			st.resolveDepth--;
+			exitResolve(st);
 		}
 	}
 
@@ -346,6 +346,14 @@ public class VarResolverSession {
 			st.budgetSegments = 0;
 			st.budgetChars = 0;
 		}
+	}
+
+	/*
+	 * Closes a resolve opened by enterResolve(); the outermost exit releases this thread's state so pooled threads don't retain it.
+	 */
+	private void exitResolve(ResolveState st) {
+		if (--st.resolveDepth == 0)
+			state.remove();
 	}
 
 	/**
@@ -585,7 +593,7 @@ public class VarResolverSession {
 		try {
 			return context.compile(s).resolveTo(this, out);
 		} finally {
-			st.resolveDepth--;
+			exitResolve(st);
 		}
 	}
 

@@ -114,6 +114,9 @@ public class Text extends Common {
 	public static final class TextInterceptor extends BeanInterceptor<Text> {
 
 		@Override /* Overridden from BeanInterceptor */
+		@SuppressWarnings({
+			"java:S4973" // Identity check is intended: it recognizes the text property itself, not another property with equal content
+		})
 		public Object readProperty(Text bean, String name, Object value) {
 			// The property name is not supplied when values are read in bulk, so the text property is recognized by value.
 			if (value instanceof String s && s == bean.getText() && neq("xhtml", bean.getType()))

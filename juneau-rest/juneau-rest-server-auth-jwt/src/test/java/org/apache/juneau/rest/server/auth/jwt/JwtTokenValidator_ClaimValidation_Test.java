@@ -194,12 +194,16 @@ class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 		var rsa = generateRsa("kid-1");
 		var validator = newValidator(fixed(rsa));
 		var withNonce = defaultClaims(CLOCK).claim("nonce", "n").build();
-		assertThrows(AuthenticationException.class, () -> validator.validate(signRsa(rsa, withNonce)));
+		var nonceToken = signRsa(rsa, withNonce);
+		assertThrows(AuthenticationException.class, () -> validator.validate(nonceToken));
 		var withAtHash = defaultClaims(CLOCK).claim("at_hash", "h").build();
-		assertThrows(AuthenticationException.class, () -> validator.validate(signRsa(rsa, withAtHash)));
+		var atHashToken = signRsa(rsa, withAtHash);
+		assertThrows(AuthenticationException.class, () -> validator.validate(atHashToken));
 		var tokenUse = defaultClaims(CLOCK).claim("token_use", "id").build();
-		assertThrows(AuthenticationException.class, () -> validator.validate(signRsa(rsa, tokenUse)));
-		assertThrows(AuthenticationException.class, () -> validator.validate(signWithTyp(rsa, "id_token", defaultClaims(CLOCK).build())));
+		var tokenUseToken = signRsa(rsa, tokenUse);
+		assertThrows(AuthenticationException.class, () -> validator.validate(tokenUseToken));
+		var idTokenTyp = signWithTyp(rsa, "id_token", defaultClaims(CLOCK).build());
+		assertThrows(AuthenticationException.class, () -> validator.validate(idTokenTyp));
 	}
 
 	@Test void c02_accessTokenShapes_acceptedByDefault() throws Exception {
@@ -220,8 +224,10 @@ class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 			.clock(CLOCK)
 			.requireAccessTokenType(true)
 			.build();
-		assertThrows(AuthenticationException.class, () -> validator.validate(signRsa(rsa, defaultClaims(CLOCK).build())));
-		assertThrows(AuthenticationException.class, () -> validator.validate(signWithTyp(rsa, "JWT", defaultClaims(CLOCK).build())));
+		var plainToken = signRsa(rsa, defaultClaims(CLOCK).build());
+		assertThrows(AuthenticationException.class, () -> validator.validate(plainToken));
+		var jwtTypToken = signWithTyp(rsa, "JWT", defaultClaims(CLOCK).build());
+		assertThrows(AuthenticationException.class, () -> validator.validate(jwtTypToken));
 		assertDoesNotThrow(() -> validator.validate(signWithTyp(rsa, "at+jwt", defaultClaims(CLOCK).build())));
 		assertDoesNotThrow(() -> validator.validate(signWithTyp(rsa, "application/at+jwt", defaultClaims(CLOCK).build())));
 	}

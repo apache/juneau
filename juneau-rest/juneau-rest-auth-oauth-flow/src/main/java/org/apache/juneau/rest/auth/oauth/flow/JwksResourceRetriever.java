@@ -22,8 +22,6 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
 
-import org.apache.juneau.commons.utils.*;
-
 import com.nimbusds.jose.util.*;
 
 /**
@@ -54,7 +52,7 @@ public class JwksResourceRetriever implements ResourceRetriever {
 			throw new IOException("JWK set URL is not permitted: " + url, e);
 		}
 		var con = (HttpURLConnection)url.openConnection();
-		try {
+		try (var closer = (Closeable)con::disconnect) {
 			con.setInstanceFollowRedirects(false);
 			con.setConnectTimeout(TIMEOUT_MS);
 			con.setReadTimeout(TIMEOUT_MS);
@@ -72,8 +70,6 @@ public class JwksResourceRetriever implements ResourceRetriever {
 				}
 			}
 			return new Resource(out.toString(StandardCharsets.UTF_8), con.getContentType());
-		} finally {
-			con.disconnect();
 		}
 	}
 }

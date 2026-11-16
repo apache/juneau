@@ -199,20 +199,24 @@ public class YamlConfigFormat implements ConfigFormat {
 		if (s.indexOf('\\') == -1)
 			return s;
 		var sb = new StringBuilder(s.length());
-		for (var i = 0; i < s.length(); i++) {
+		var i = 0;
+		while (i < s.length()) {
 			var c = s.charAt(i);
 			if (c != '\\' || i == s.length() - 1) {
 				sb.append(c);
+				i++;
 				continue;
 			}
-			var n = s.charAt(++i);
+			var n = s.charAt(i + 1);
+			i += 2;
 			switch (n) {
 				case 'n' -> sb.append('\n');
 				case 'r' -> sb.append('\r');
 				case 't' -> sb.append('\t');
 				case 'u' -> {
-					if (i + 4 < s.length() + 0 && s.substring(i + 1, i + 5).matches("[0-9a-fA-F]{4}")) {
-						sb.append((char)Integer.parseInt(s.substring(i + 1, i + 5), 16));
+					// i is now the index just past the 'u'.
+					if (i + 3 < s.length() && s.substring(i, i + 4).matches("[0-9a-fA-F]{4}")) {
+						sb.append((char)Integer.parseInt(s.substring(i, i + 4), 16));
 						i += 4;
 					} else {
 						sb.append("\\u");

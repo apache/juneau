@@ -64,7 +64,9 @@ class SseEventReader_Limits_Test extends TestBase {
 	}
 
 	@Test void a07_nonPositiveLimitsRejected() {
-		assertThrows(IllegalArgumentException.class, () -> new SseEventReader(new StringReader(""), 0, 10));
-		assertThrows(IllegalArgumentException.class, () -> new SseEventReader(new StringReader(""), 10, 0));
+		var r1 = new StringReader("");
+		assertThrows(IllegalArgumentException.class, () -> new SseEventReader(r1, 0, 10));
+		var r2 = new StringReader("");
+		assertThrows(IllegalArgumentException.class, () -> new SseEventReader(r2, 10, 0));
 	}
 }

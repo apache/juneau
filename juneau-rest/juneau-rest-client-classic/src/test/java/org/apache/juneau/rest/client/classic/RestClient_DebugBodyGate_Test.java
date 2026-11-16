@@ -71,8 +71,8 @@ class RestClient_DebugBodyGate_Test {
 		logger.setLevel(Level.ALL);
 		logger.addHandler(new Handler() {
 			@Override public void publish(LogRecord r) { messages.add(r.getMessage()); }
-			@Override public void flush() {}
-			@Override public void close() {}
+			@Override public void flush() { /* Nothing buffered */ }
+			@Override public void close() { /* Nothing to release */ }
 		});
 		try (var c = RestClient.create().rootUrl(url).allowPrivateUrls(true).logger(logger).logRequests(DetailLevel.FULL, Level.INFO, null).build()) {
 			c.post("/echo", "request-body-text").run().getContent().asString();

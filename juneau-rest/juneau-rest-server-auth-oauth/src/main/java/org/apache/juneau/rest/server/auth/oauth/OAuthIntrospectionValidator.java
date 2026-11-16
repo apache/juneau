@@ -28,7 +28,6 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.server.auth.*;
 
 import com.nimbusds.oauth2.sdk.*;

@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.utils.FileUtils.resolveVirtualPathSafely
 
 import java.io.*;
 
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.processor.*;

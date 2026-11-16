@@ -952,21 +952,27 @@ class IoUtils_Test extends TestBase {
 		var utf8 = StandardCharsets.UTF_8;
 		assertEquals("abc", readCapped(new ByteArrayInputStream("abc".getBytes(utf8)), 3, utf8));
 		assertEquals("", readCapped(new ByteArrayInputStream(new byte[0]), 0, utf8));
-		var e = assertThrows(IOException.class, () -> readCapped(new ByteArrayInputStream("abcd".getBytes(utf8)), 3, utf8));
+		var abcd = new ByteArrayInputStream("abcd".getBytes(utf8));
+		var e = assertThrows(IOException.class, () -> readCapped(abcd, 3, utf8));
 		assertTrue(e.getMessage().contains("3 bytes"), e.getMessage());
-		assertThrows(IOException.class, () -> readCapped(new ByteArrayInputStream("a".getBytes(utf8)), 0, utf8));
-		assertThrows(IllegalArgumentException.class, () -> readCapped(new ByteArrayInputStream(new byte[0]), -1, utf8));
+		var a = new ByteArrayInputStream("a".getBytes(utf8));
+		assertThrows(IOException.class, () -> readCapped(a, 0, utf8));
+		var empty1 = new ByteArrayInputStream(new byte[0]);
+		assertThrows(IllegalArgumentException.class, () -> readCapped(empty1, -1, utf8));
 		assertThrows(IllegalArgumentException.class, () -> readCapped((InputStream)null, 3, utf8));
-		assertThrows(IllegalArgumentException.class, () -> readCapped(new ByteArrayInputStream(new byte[0]), 3, null));
+		var empty2 = new ByteArrayInputStream(new byte[0]);
+		assertThrows(IllegalArgumentException.class, () -> readCapped(empty2, 3, null));
 	}
 
 	@Test
 	void a042b_readCapped_InputStream_Supplier() throws Exception {
 		var utf8 = StandardCharsets.UTF_8;
 		assertEquals("ab", readCapped(new ByteArrayInputStream("ab".getBytes(utf8)), 2, utf8, () -> new IllegalStateException("over")));
-		var e = assertThrows(IllegalStateException.class, () -> readCapped(new ByteArrayInputStream("abc".getBytes(utf8)), 2, utf8, () -> new IllegalStateException("over")));
+		var abc = new ByteArrayInputStream("abc".getBytes(utf8));
+		var e = assertThrows(IllegalStateException.class, () -> readCapped(abc, 2, utf8, () -> new IllegalStateException("over")));
 		assertEquals("over", e.getMessage());
-		assertThrows(IllegalArgumentException.class, () -> readCapped(new ByteArrayInputStream(new byte[0]), 2, utf8, null));
+		var empty = new ByteArrayInputStream(new byte[0]);
+		assertThrows(IllegalArgumentException.class, () -> readCapped(empty, 2, utf8, null));
 	}
 
 	//====================================================================================================

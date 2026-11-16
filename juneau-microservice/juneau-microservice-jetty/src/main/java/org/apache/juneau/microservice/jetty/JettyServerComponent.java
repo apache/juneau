@@ -188,7 +188,7 @@ public class JettyServerComponent implements MicroserviceListener {
 				return;
 			var perms = Files.getPosixFilePermissions(p);
 			if (perms.contains(PosixFilePermission.OTHERS_WRITE) || perms.contains(PosixFilePermission.GROUP_WRITE))
-				logger.warning("Server configuration file '" + f + "' is writable by users other than its owner.");
+				logger.log(Level.WARNING, "Server configuration file ''{0}'' is writable by users other than its owner.", f);
 		} catch (IOException | UnsupportedOperationException e) {
 			// Permissions could not be read; nothing to report.
 		}

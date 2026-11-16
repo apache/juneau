@@ -398,13 +398,13 @@ public final class ConsoleTemplateValidator {
 		return out;
 	}
 
-	// The literal entries of one init=/css= match, or null when the value holds an expression (a call or ${...}).
+	// The literal entries of one init=/css= match, or empty when the value holds an expression (a call or ${...}).
 	private static List<String> literalPageAssetEntries(Matcher m) {
 		var entries = new ArrayList<String>();
 		if (nn(m.group(2))) {
 			var body = m.group(2);
 			if (body.contains("(") || body.contains("${"))
-				return null;
+				return List.of();
 			var q = QUOTED.matcher(body);
 			while (q.find())
 				entries.add(q.group(nn(q.group(1)) ? 1 : 2));
@@ -412,7 +412,7 @@ public final class ConsoleTemplateValidator {
 		}
 		var v = m.group(nn(m.group(3)) ? 3 : 4);
 		if (v.contains("${"))
-			return null;
+			return List.of();
 		for (var part : v.split(",")) {
 			var t = part.trim();
 			if (! t.isEmpty())
@@ -428,8 +428,6 @@ public final class ConsoleTemplateValidator {
 		while (m.find()) {
 			var attr = m.group(1);
 			var entries = literalPageAssetEntries(m);
-			if (entries == null)
-				continue;
 			for (var e : entries)
 				if (! FtlAttrLists.isAbsoluteAsset(e))
 					add(out, name, lines, at, "relative-page-asset", f(

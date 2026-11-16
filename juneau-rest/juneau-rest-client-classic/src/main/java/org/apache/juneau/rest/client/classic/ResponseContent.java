@@ -34,7 +34,6 @@ import org.apache.http.conn.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.reflect.ConstructorInfo;
 import org.apache.juneau.commons.reflect.ExecutableException;
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.resource.*;
 import org.apache.juneau.marshall.*;

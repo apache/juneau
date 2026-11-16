@@ -100,8 +100,10 @@ class RdfParser_NoNetwork_Test extends TestBase {
 	}
 
 	@Test void a05_rdfXml_externalParameterEntityAndPublicIdRejected() {
-		assertThrows(ParseException.class, () -> readXml("<!DOCTYPE rdf:RDF [<!ENTITY % p SYSTEM \"" + url() + "\"> %p;]>" + rdf("x")));
-		assertThrows(ParseException.class, () -> readXml("<!DOCTYPE rdf:RDF PUBLIC \"-//X//EN\" \"" + url() + "\">" + rdf("x")));
+		var parameterEntity = "<!DOCTYPE rdf:RDF [<!ENTITY % p SYSTEM \"" + url() + "\"> %p;]>" + rdf("x");
+		assertThrows(ParseException.class, () -> readXml(parameterEntity));
+		var publicId = "<!DOCTYPE rdf:RDF PUBLIC \"-//X//EN\" \"" + url() + "\">" + rdf("x");
+		assertThrows(ParseException.class, () -> readXml(publicId));
 		assertEquals(0, hits.get());
 	}
 

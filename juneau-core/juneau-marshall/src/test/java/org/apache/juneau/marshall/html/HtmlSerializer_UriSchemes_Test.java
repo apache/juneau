@@ -32,7 +32,7 @@ class HtmlSerializer_UriSchemes_Test extends TestBase {
 		A(String s) { link = s; }
 	}
 
-	private static String ser(HtmlSerializer s, Object o) throws Exception {
+	private static String ser(HtmlSerializer s, Object o) {
 		return s.write(o);
 	}
 

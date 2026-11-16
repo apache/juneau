@@ -41,7 +41,8 @@ class OAuthHttpPolicy_Test extends TestBase {
 	}
 
 	@Test void a02_plainHttpRefusedForRemoteHost() {
-		assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(URI.create("http://idp.example.com/token")));
+		var uri = URI.create("http://idp.example.com/token");
+		assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(uri));
 	}
 
 	@Test void a03_loopbackExemptOverPlainHttp() {
@@ -50,34 +51,45 @@ class OAuthHttpPolicy_Test extends TestBase {
 	}
 
 	@Test void a04_privateAndMetadataLiteralsRefused() {
-		assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(URI.create("https://10.0.0.5/token")));
-		assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(URI.create("https://169.254.169.254/token")));
+		var privateUri = URI.create("https://10.0.0.5/token");
+		var metadataUri = URI.create("https://169.254.169.254/token");
+		assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(privateUri));
+		assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(metadataUri));
 	}
 
 	@Test void a05_nonCanonicalNumericHostsRefused() {
-		for (var h : new String[]{"127.1", "2130706433", "0x7f000001", "0177.0.0.1", "0"})
-			assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(URI.create("https://" + h + "/token")), h);
+		for (var h : new String[]{"127.1", "2130706433", "0x7f000001", "0177.0.0.1", "0"}) {
+			var uri = URI.create("https://" + h + "/token");
+			assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(uri), h);
+		}
 	}
 
 	@Test void a06_trailingDotAndLocalhostSubdomainRefused() {
-		assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(URI.create("https://idp.example.com./token")));
-		assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(URI.create("https://foo.localhost/token")));
+		var trailingDot = URI.create("https://idp.example.com./token");
+		var subdomain = URI.create("https://foo.localhost/token");
+		assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(trailingDot));
+		assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(subdomain));
 	}
 
 	@Test void a07_userInfoRefused() {
-		assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(URI.create("https://u:p@idp.example.com/token")));
+		var uri = URI.create("https://u:p@idp.example.com/token");
+		assertThrows(IllegalArgumentException.class, () -> POLICY.requireAllowed(uri));
 	}
 
 	@Test void a08_insecureHttpOptIn() {
 		var p = OAuthHttpPolicy.of(false, true);
-		assertDoesNotThrow(() -> p.requireAllowed(URI.create("http://idp.example.com/token")));
+		var uri = URI.create("http://idp.example.com/token");
+		assertDoesNotThrow(() -> p.requireAllowed(uri));
 	}
 
 	@Test void a09_privateOptInAllowsPrivateHttpsAndLoopbackHttp() {
 		var p = OAuthHttpPolicy.of(true, false);
-		assertDoesNotThrow(() -> p.requireAllowed(URI.create("https://10.0.0.5/token")));
-		assertDoesNotThrow(() -> p.requireAllowed(URI.create("http://127.0.0.1:1/token")));
-		assertThrows(IllegalArgumentException.class, () -> p.requireAllowed(URI.create("http://10.0.0.5/token")));
+		var privateHttps = URI.create("https://10.0.0.5/token");
+		var loopbackHttp = URI.create("http://127.0.0.1:1/token");
+		var privateHttp = URI.create("http://10.0.0.5/token");
+		assertDoesNotThrow(() -> p.requireAllowed(privateHttps));
+		assertDoesNotThrow(() -> p.requireAllowed(loopbackHttp));
+		assertThrows(IllegalArgumentException.class, () -> p.requireAllowed(privateHttp));
 	}
 
 	@Test void b01_applyDisablesRedirects() throws Exception {
@@ -89,7 +101,8 @@ class OAuthHttpPolicy_Test extends TestBase {
 
 	@Test void b02_applyRefusesNameResolvingToPrivateAddress() throws Exception {
 		var p = POLICY.withResolver(h -> new InetAddress[]{InetAddress.getByAddress(new byte[]{10, 0, 0, 5})});
-		assertThrows(RuntimeException.class, () -> p.apply(get("https://idp.example.com/token")));
+		var http = get("https://idp.example.com/token");
+		assertThrows(RuntimeException.class, () -> p.apply(http));
 	}
 
 	@Test void b03_applyAcceptsNameResolvingToPublicAddress() throws Exception {
@@ -110,6 +123,7 @@ class OAuthHttpPolicy_Test extends TestBase {
 
 	@Test void b05_wrapRefusesUnpermittedUrlAfterCallerHook() throws Exception {
 		var http = get("http://idp.example.com/token");
-		assertThrows(IllegalArgumentException.class, () -> POLICY.wrap(h -> {}).accept(http));
+		var wrapped = POLICY.wrap(h -> {});
+		assertThrows(IllegalArgumentException.class, () -> wrapped.accept(http));
 	}
 }

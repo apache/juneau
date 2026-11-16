@@ -33,6 +33,7 @@ import java.util.concurrent.*;
  * {@code org.apache.juneau.rest.server.sse.SseBroadcaster#publish} does.
  */
 @SuppressWarnings({
+	"java:S1192", // Argument-validation messages repeat across the registration methods by design
 	"resource" // Registered subscriptions are closed by unregister() and when replaced; the caller owns the returned subscription
 })
 public class BasicMcpSubscriptionBroker implements McpSubscriptionBroker {

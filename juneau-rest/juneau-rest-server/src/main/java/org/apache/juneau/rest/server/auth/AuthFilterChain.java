@@ -301,6 +301,9 @@ public class AuthFilterChain implements Filter, Authenticator {
 	/**
 	 * Builds the canonical request path relative to the context root, or <jk>null</jk> if the path is malformed.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Path normalization steps read most clearly in one method
+	})
 	private static UrlPath toUrlPath(HttpServletRequest hreq) {
 		var contextPath = hreq.getContextPath();
 		var uri = hreq.getRequestURI();
@@ -322,15 +325,13 @@ public class AuthFilterChain implements Filter, Authenticator {
 			var decoded = urlDecode(seg);
 			if (decoded.indexOf('/') >= 0 || decoded.indexOf('\\') >= 0 || decoded.indexOf(';') >= 0)
 				return null;
-			if (eq(".", decoded))
-				continue;
 			if (eq("..", decoded)) {
 				if (out.isEmpty())
 					return null;
 				out.remove(out.size() - 1);
-				continue;
+			} else if (! eq(".", decoded)) {
+				out.add(seg);
 			}
-			out.add(seg);
 		}
 		return UrlPath.of("/" + String.join("/", out));
 	}

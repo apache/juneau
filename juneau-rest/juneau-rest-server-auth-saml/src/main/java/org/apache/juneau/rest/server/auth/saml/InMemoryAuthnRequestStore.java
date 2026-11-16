@@ -38,7 +38,23 @@ public class InMemoryAuthnRequestStore implements AuthnRequestStore {
 	private final int maxEntries;
 	private final Map<String,Pending> pending = new HashMap<>();
 
-	private record Pending(byte[] bindingDigest, long expiresAtMs) {}
+	private record Pending(byte[] bindingDigest, long expiresAtMs) {
+
+		@Override /* Overridden from Object */
+		public boolean equals(Object o) {
+			return o instanceof Pending x && Arrays.equals(bindingDigest, x.bindingDigest) && expiresAtMs == x.expiresAtMs;
+		}
+
+		@Override /* Overridden from Object */
+		public int hashCode() {
+			return 31 * Arrays.hashCode(bindingDigest) + Long.hashCode(expiresAtMs);
+		}
+
+		@Override /* Overridden from Object */
+		public String toString() {
+			return "Pending[bindingDigestLength=" + bindingDigest.length + ", expiresAtMs=" + expiresAtMs + "]";
+		}
+	}
 
 	/** Constructor using {@link #DEFAULT_MAX_ENTRIES}. */
 	public InMemoryAuthnRequestStore() {

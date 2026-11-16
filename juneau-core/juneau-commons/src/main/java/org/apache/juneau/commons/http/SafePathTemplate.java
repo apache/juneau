@@ -181,6 +181,9 @@ public final class SafePathTemplate {
 	 * 	Can be <jk>null</jk> or empty (no absolute target is accepted).
 	 * @return <jk>true</jk> if the URI is safe to redirect to.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Sequential validation guards read most clearly in one method
+	})
 	public static boolean isSafeRedirect(String uri, String...allowedHosts) {
 		if (ie(uri))
 			return true;

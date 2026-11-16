@@ -22,8 +22,8 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.view.*;
@@ -80,12 +80,9 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 	private final ObjectWrapper objectWrapper;
 
 	// Lazy bridge-default configuration. Built on first call to resolveConfiguration(...) when
-	// no Configuration bean is registered in the request's BeanStore. Volatile so the
+	// no Configuration bean is registered in the request's BeanStore. Held in an AtomicReference so the
 	// double-checked-locking idiom is safe under concurrent first-request load.
-	@SuppressWarnings({
-		"java:S3077" // volatile is required here for correct double-checked-locking safe-publication of the lazily-built default Configuration in resolveConfiguration(); the reference is publish-once (fully constructed before assignment) and never compound-mutated.
-	})
-	private volatile Configuration defaultConfiguration;
+	private final AtomicReference<Configuration> defaultConfiguration = new AtomicReference<>();
 
 	private volatile Configuration hardenedConfiguration;
 
@@ -196,13 +193,13 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 		var bean = req.getContext().getBeanStore().getBean(Configuration.class);
 		if (bean.isPresent())
 			return hardened(bean.get());
-		var local = defaultConfiguration;
+		var local = defaultConfiguration.get();
 		if (local == null) {
 			synchronized (this) {
-				local = defaultConfiguration;
+				local = defaultConfiguration.get();
 				if (local == null) {
 					local = buildDefaultConfiguration();
-					defaultConfiguration = local;
+					defaultConfiguration.set(local);
 				}
 			}
 		}

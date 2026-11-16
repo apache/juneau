@@ -316,8 +316,10 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 
 	@Test void g02_trailingDotAndLocalhostSubdomainRejected() {
 		var client = McpProtectedResourceMetadataClient.create().expectedResource(URI.create("https://mcp.example.com")).build();
-		assertThrows(McpAuthException.class, () -> client.fetch(URI.create("https://mcp.example.com./prm")));
-		assertThrows(McpAuthException.class, () -> client.fetch(URI.create("https://foo.localhost/prm")));
+		var trailingDot = URI.create("https://mcp.example.com./prm");
+		assertThrows(McpAuthException.class, () -> client.fetch(trailingDot));
+		var localhostSub = URI.create("https://foo.localhost/prm");
+		assertThrows(McpAuthException.class, () -> client.fetch(localhostSub));
 	}
 
 	@Test void g03_redirectResponseIsNotFollowed() {
@@ -332,7 +334,8 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 			respond(ex, prmJson());
 		});
 		var client = local().build();
-		var e = assertThrows(McpAuthException.class, () -> client.fetch(URI.create(base() + "/moved")));
+		var moved = URI.create(base() + "/moved");
+		var e = assertThrows(McpAuthException.class, () -> client.fetch(moved));
 		assertTrue(e.getMessage().contains("302"), e::getMessage);
 		assertEquals(0, hits.get());
 	}

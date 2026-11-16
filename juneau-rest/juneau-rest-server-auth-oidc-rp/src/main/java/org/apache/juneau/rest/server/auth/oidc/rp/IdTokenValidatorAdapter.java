@@ -23,7 +23,6 @@ import java.net.*;
 import java.text.*;
 import java.util.*;
 
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.auth.oauth.flow.*;
 import org.apache.juneau.rest.server.auth.*;
 

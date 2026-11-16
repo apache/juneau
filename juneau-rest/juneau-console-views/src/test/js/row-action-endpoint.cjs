@@ -164,7 +164,7 @@ out.multiToken_oneBlank = I.buildActionRequest(multiAction, TOKEN, null, null, {
 const offOrigin = ep => I.buildActionRequest({ id: 'ack', endpoint: ep, method: 'POST' }, TOKEN, null, null, { id: 'a1' });
 out.offOrigin_absolute = offOrigin('https://other.example/x/{id}');
 out.offOrigin_protocolRelative = offOrigin('//other.example/x/{id}');
-out.offOrigin_backslash = offOrigin('/\\other.example/x/{id}');
+out.offOrigin_backslash = offOrigin(String.raw`/\other.example/x/{id}`);
 out.offOrigin_scheme = offOrigin('ftp://other.example/x');
 out.sameOrigin_path = offOrigin('/x/{id}').url;
 

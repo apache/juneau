@@ -237,6 +237,9 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 	 *
 	 * @return The client-facing message.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // False positive: statusLine is assigned a non-null value by every constructor and setter, and the setters reject null.
+	})
 	public String getResponseMessage() {
 		return causeMessageHidden ? statusLine.getReasonPhrase() : getMessage();
 	}
