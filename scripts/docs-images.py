@@ -55,6 +55,7 @@ FIXED_NOW = 'seed'
 # A site-absolute image path: /topics/... or /developer-info/..., not part of a longer path such as /docs/topics/...
 IMAGE_REF_RE = re.compile(r'(?<![\w/.-])/((?:' + '|'.join(re.escape(d) for d in IMAGE_DIRS) + r')/[^\s)"\'#?]+?\.(?:'
                           + '|'.join(e[1:] for e in IMAGE_EXTS) + r'))(?=[\s)"\'#?]|$)', re.IGNORECASE)
+WEBP_QUALITY = '82'
 PETSTORE_CORE = Path('juneau-petstore') / 'juneau-petstore-core'
 HARNESS = PETSTORE_CORE / 'src' / 'test' / 'js' / 'petstore-browser.cjs'
 
@@ -152,15 +153,47 @@ def check(docs_root, cases, unmanaged):
         if not (static_dir / image).is_file():
             errors.append(f"MISSING static/{image}: case '{case['id']}' has not been generated")
     for image in image_files(static_dir):
+        if image.endswith('.webp') and image[:-5] + '.png' in produced:
+            continue    # a derived sibling of a generated PNG
         if image not in produced and not any(fnmatch.fnmatchcase(image, g) for g in unmanaged):
             errors.append(f"ORPHANED static/{image}: no case produces it and no 'unmanaged' glob exempts it")
     for image, places in sorted(refs.items()):
         if not (static_dir / image).is_file():
             errors.extend(f"DANGLING {place}: /{image} does not exist" for place in places)
+    errors.extend(f"STALE static/{webp}: older than its PNG sibling; regenerate it with cwebp -q {WEBP_QUALITY}"
+                  for webp in stale_webps(static_dir))
     for image, case in produced.items():
         if image not in refs:
             warnings.append(f"UNREFERENCED static/{image}: no page references case '{case['id']}'")
     return errors, warnings
+
+
+def stale_webps(static_dir):
+    """Every .webp under static/ (relative, forward slashes) that is older than its .png sibling."""
+    static_dir = Path(static_dir)
+    return sorted(w.relative_to(static_dir).as_posix() for w in static_dir.rglob('*.webp')
+                  if w.with_suffix('.png').is_file() and w.stat().st_mtime < w.with_suffix('.png').stat().st_mtime)
+
+
+def refresh_webp(png):
+    """
+    Regenerate the .webp beside a freshly written PNG, if one exists.
+
+    Returns:
+        The stale .webp's path when it could not be regenerated (cwebp missing or failed), else None.
+    """
+    webp = Path(png).with_suffix('.webp')
+    if not webp.is_file():
+        return None
+    if not shutil.which('cwebp'):
+        print(f"WARNING: cwebp is not on the PATH; {webp} is now stale")
+        return webp
+    r = subprocess.run(['cwebp', '-quiet', '-q', WEBP_QUALITY, str(png), '-o', str(webp)], capture_output=True, text=True)
+    if r.returncode != 0:
+        print(f"WARNING: cwebp failed ({r.returncode}); {webp} is now stale: {r.stderr.strip()}")
+        return webp
+    print(f"   {webp.name} (regenerated)")
+    return webp
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -268,6 +301,7 @@ def generate_ui(docs_root, juneau_root, cases, base_url):
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.move(str(snapshots / shot_name(c)), str(target))
             print(f"   static/{c['image']}")
+            refresh_webp(target)
 
 
 # ---------------------------------------------------------------------------------------------------------------------

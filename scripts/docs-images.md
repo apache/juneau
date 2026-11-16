@@ -23,7 +23,7 @@ python3 scripts/docs-images.py --juneau-root ~/git/apache/juneau
 
 | Option | Argument | Default | Meaning |
 |---|---|---|---|
-| `--check` | none | off | Write nothing. Report `MISSING`, `ORPHANED`, `DANGLING` and `UNREFERENCED` lines and exit 1 if any error was found. |
+| `--check` | none | off | Write nothing. Report `MISSING`, `ORPHANED`, `DANGLING`, `STALE` and `UNREFERENCED` lines and exit 1 if any error was found. |
 | `--only` | one or more patterns | all cases | Case ids or image names (globs, matched against the id, the image path or the image file name). It is an error if nothing matches. |
 | `--source` | `ui`, `terminal` | both | Regenerate one source only. |
 | `--port` | number | `10000` | Port of the petstore to reuse or start. Ignored with `--base-url`. |
@@ -38,10 +38,11 @@ python3 scripts/docs-images.py --juneau-root ~/git/apache/juneau
    - `MISSING`: a case whose image does not exist;
    - `ORPHANED`: an image under `static/topics` or `static/developer-info` that no case produces and the `unmanaged` globs do not exempt;
    - `DANGLING`: an image reference in `pages/` to a file that does not exist;
+   - `STALE`: a `.webp` under `static/` whose modification time is older than its `.png` sibling (a `.webp` with no `.png` is ignored); regenerate it with `cwebp -quiet -q 82 X.png -o X.webp`;
    - `UNREFERENCED`: a case whose image no page references (a warning; does not fail the check).
 3. **Terminal cases:** for each case, starts its `command` (the placeholders `{juneau_terminal}` and `{fixtures}` expand to the Juneau checkout's `juneau_terminal.py` and `scripts/docs-images/fixtures`) in a detached `tmux` session of fixed size on a private tmux server. It waits for the case's `waitFor` regex to appear and the pane to stop changing, captures it with `tmux capture-pane -e -p`, applies the `mask` regex replacements, and renders SVG text. A case with `panes` renders its panes side by side; a `panes` entry of the form `{"stack": [pane, pane]}` is a column of panes stacked top to bottom with a divider row between them (the column is as wide as its widest pane, and the image as tall as its tallest column). Defaults are 100 columns, 30 rows and a 60 second timeout.
 4. **UI cases:** reuses a petstore already answering on `http://localhost:<port>`, or starts `<juneau-root>/scripts/start-petstore-jetty.py --port <port>` with the clock fixed (`PETSTORE_FIXED_NOW=seed`) and stops it on exit. Installs Playwright and Chromium under `<juneau-root>/juneau-petstore/juneau-petstore-core/target/js` if missing, then runs the Juneau checkout's `petstore-browser.cjs` harness over the cases (`path`, `actions`, `selector`, `viewport`, `waitUntil`, `initScript`).
-5. Moves images into `static/` only after every case of the run succeeded.
+5. Moves images into `static/` only after every case of the run succeeded. After each UI image is written, if a `.webp` with the same name exists beside it, regenerates it with `cwebp -quiet -q 82` (`refresh_webp`). If `cwebp` is not on the path, or it fails, the script prints a `WARNING` naming the stale `.webp` and carries on; `--check` then reports it as `STALE`.
 
 ## Output and exit codes
 
@@ -55,6 +56,7 @@ Progress lines (`->` steps, then `static/<image>` for each image written) on std
 
 ## Gotchas
 
+- `cwebp` (Homebrew `webp`) is optional: without it, `.webp` siblings of regenerated PNGs are left stale with a warning.
 - Terminal cases need `tmux` on the path; UI cases need `node` and `npm`.
 - A petstore not started by this script does not run on the fixed clock, so shots showing the date or time of day may drift; the script warns and skips cases marked `freshServerOnly`.
 - If the port is occupied by something that is not the petstore, the run stops and names the process; pass `--port` or `--base-url`.

@@ -413,3 +413,78 @@ def test_capture_pane_waits_masks_and_cleans_up(tmp_path):
     assert text.startswith('\x1b[1mbold') and 'ready N' in text
     sock = docs_images.Path('/tmp') / f'tmux-{os.getuid()}' / f'docs-images-{os.getpid()}-unit'
     assert not sock.exists()
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# .webp siblings
+# ---------------------------------------------------------------------------------------------------------------------
+
+def set_mtime(path, t):
+    os.utime(path, (t, t))
+
+
+def test_refresh_webp_runs_cwebp_when_a_sibling_exists(tmp_path, monkeypatch, capsys):
+    png = write(tmp_path / 'a.png', 'png')
+    write(tmp_path / 'a.webp', 'old')
+    calls = []
+    monkeypatch.setattr(docs_images.shutil, 'which', lambda tool: '/usr/bin/cwebp')
+
+    def fake_run(cmd, **kwargs):
+        calls.append(cmd)
+        return docs_images.subprocess.CompletedProcess(cmd, 0, '', '')
+
+    monkeypatch.setattr(docs_images.subprocess, 'run', fake_run)
+    assert docs_images.refresh_webp(png) == tmp_path / 'a.webp'
+    assert calls == [['cwebp', '-quiet', '-q', '82', str(png), '-o', str(tmp_path / 'a.webp')]]
+    assert 'regenerated' in capsys.readouterr().out
+
+
+def test_refresh_webp_without_a_sibling_does_nothing(tmp_path, monkeypatch):
+    png = write(tmp_path / 'a.png', 'png')
+    monkeypatch.setattr(docs_images.subprocess, 'run', lambda *a, **k: pytest.fail('cwebp must not run'))
+    assert docs_images.refresh_webp(png) is None
+
+
+def test_refresh_webp_warns_when_cwebp_is_missing(tmp_path, monkeypatch, capsys):
+    png = write(tmp_path / 'a.png', 'png')
+    webp = write(tmp_path / 'a.webp', 'old')
+    monkeypatch.setattr(docs_images.shutil, 'which', lambda tool: None)
+    assert docs_images.refresh_webp(png) == webp
+    out = capsys.readouterr().out
+    assert 'WARNING' in out and str(webp) in out and 'stale' in out
+
+
+def test_refresh_webp_warns_when_cwebp_fails(tmp_path, monkeypatch, capsys):
+    png = write(tmp_path / 'a.png', 'png')
+    webp = write(tmp_path / 'a.webp', 'old')
+    monkeypatch.setattr(docs_images.shutil, 'which', lambda tool: '/usr/bin/cwebp')
+    monkeypatch.setattr(docs_images.subprocess, 'run',
+                        lambda cmd, **k: docs_images.subprocess.CompletedProcess(cmd, 1, '', 'boom'))
+    assert docs_images.refresh_webp(png) == webp
+    assert 'cwebp failed' in capsys.readouterr().out
+
+
+def test_check_flags_a_webp_older_than_its_png(clean_tree):
+    png = clean_tree / 'static' / 'topics' / 'Page.Shot.1.png'
+    webp = write(clean_tree / 'static' / 'topics' / 'Page.Shot.1.webp', 'webp')
+    set_mtime(webp, 1000)
+    set_mtime(png, 2000)
+    errors, _ = run_check(clean_tree)
+    assert any(e.startswith('STALE static/topics/Page.Shot.1.webp') for e in errors)
+
+
+def test_check_accepts_a_webp_newer_than_its_png_and_a_lone_webp(clean_tree):
+    png = clean_tree / 'static' / 'topics' / 'Page.Shot.1.png'
+    webp = write(clean_tree / 'static' / 'topics' / 'Page.Shot.1.webp', 'webp')
+    set_mtime(png, 1000)
+    set_mtime(webp, 2000)
+    assert docs_images.stale_webps(clean_tree / 'static') == []
+    write(clean_tree / 'static' / 'topics' / 'Lone.webp', 'webp')
+    assert docs_images.stale_webps(clean_tree / 'static') == []
+
+
+def test_webp_beside_a_generated_png_is_not_an_orphan(clean_tree):
+    write(clean_tree / 'static' / 'topics' / 'Page.Shot.1.webp', 'webp')
+    write(clean_tree / 'static' / 'topics' / 'Other.webp', 'webp')
+    errors, _ = run_check(clean_tree)
+    assert [e for e in errors if e.startswith('ORPHANED')] == ['ORPHANED static/topics/Other.webp: no case produces it and no \'unmanaged\' glob exempts it']
