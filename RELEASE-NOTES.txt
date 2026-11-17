@@ -11,7 +11,7 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
-Release Notes - Juneau - Version 10.0.0 - YYYY-MM-DD
+Release Notes - Juneau - Version 10.0.0 - 2026-11-17
 
 ** New Features - CBOR (Concise Binary Object Representation) Support
 
@@ -317,7 +317,7 @@ Release Notes - Juneau - Version 10.0.0 - YYYY-MM-DD
     * MarshallingContext.Builder.beanStore(BeanStore) - new builder method for injecting a BeanStore (e.g.
       SpringBeanStore) for factory resolution during bean creation.
 
-Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
+Release Notes - Juneau - Version 9.2.1 - 2026-11-03
 
 ** Security
 
