@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-petstore</artifactId>
-		<version>10.0.0-SNAPSHOT</version>
+		<version>10.0.0</version>
 	</parent>
 
 	<artifactId>juneau-petstore-core</artifactId>
@@ -238,7 +238,7 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<!-- Run the *_BrowserTest classes the default build excludes. -->
-							<excludes combine.self="override"/>
+							<excludes combine.self="override" />
 							<!-- Each *_BrowserTest class owns its server, port, store and target/js files (suite names are unique),
 							     so classes can run side by side.  Override with -Djuneau.jsTests.forks=N. -->
 							<forkCount>${juneau.jsTests.forks}</forkCount>

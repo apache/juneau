@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-rest</artifactId>
-		<version>10.0.0-SNAPSHOT</version>
+		<version>10.0.0</version>
 	</parent>
 
 	<artifactId>juneau-rest-server-springboot</artifactId>
@@ -160,8 +160,7 @@
 								<condition property="manifest.hasOptionalLogbackImport">
 									<matches string="${manifest.contents}" pattern="(?s).*ch\.qos\.logback\..*resolution:=optional.*" />
 								</condition>
-								<fail unless="manifest.hasOptionalLogbackImport"
-									message="Expected optional Logback import in generated MANIFEST.MF." />
+								<fail unless="manifest.hasOptionalLogbackImport" message="Expected optional Logback import in generated MANIFEST.MF." />
 							</target>
 						</configuration>
 					</execution>
