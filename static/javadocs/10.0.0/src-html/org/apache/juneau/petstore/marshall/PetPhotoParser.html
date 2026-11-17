@@ -96,15 +96,16 @@
 <span class="source-line-no">083</span><span id="line-83">      var reader = readers.next();</span>
 <span class="source-line-no">084</span><span id="line-84">      try {</span>
 <span class="source-line-no">085</span><span id="line-85">         reader.setInput(iis, true, true);</span>
-<span class="source-line-no">086</span><span id="line-86">         long w = reader.getWidth(0), h = reader.getHeight(0);</span>
-<span class="source-line-no">087</span><span id="line-87">         if (w &gt; MAX_DIMENSION || h &gt; MAX_DIMENSION || w * h &gt; MAX_PIXELS)</span>
-<span class="source-line-no">088</span><span id="line-88">            throw new ParseException(session, "Image dimensions exceed the {0} pixel limit", MAX_PIXELS);</span>
-<span class="source-line-no">089</span><span id="line-89">         return reader.read(0);</span>
-<span class="source-line-no">090</span><span id="line-90">      } finally {</span>
-<span class="source-line-no">091</span><span id="line-91">         reader.dispose();</span>
-<span class="source-line-no">092</span><span id="line-92">      }</span>
-<span class="source-line-no">093</span><span id="line-93">   }</span>
-<span class="source-line-no">094</span><span id="line-94">}</span>
+<span class="source-line-no">086</span><span id="line-86">         long w = reader.getWidth(0);</span>
+<span class="source-line-no">087</span><span id="line-87">         long h = reader.getHeight(0);</span>
+<span class="source-line-no">088</span><span id="line-88">         if (w &gt; MAX_DIMENSION || h &gt; MAX_DIMENSION || w * h &gt; MAX_PIXELS)</span>
+<span class="source-line-no">089</span><span id="line-89">            throw new ParseException(session, "Image dimensions exceed the {0} pixel limit", MAX_PIXELS);</span>
+<span class="source-line-no">090</span><span id="line-90">         return reader.read(0);</span>
+<span class="source-line-no">091</span><span id="line-91">      } finally {</span>
+<span class="source-line-no">092</span><span id="line-92">         reader.dispose();</span>
+<span class="source-line-no">093</span><span id="line-93">      }</span>
+<span class="source-line-no">094</span><span id="line-94">   }</span>
+<span class="source-line-no">095</span><span id="line-95">}</span>
 
 
 

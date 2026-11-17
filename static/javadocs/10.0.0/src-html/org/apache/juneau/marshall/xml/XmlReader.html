@@ -34,323 +34,346 @@
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">import javax.xml.namespace.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import javax.xml.stream.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import javax.xml.stream.util.*;</span>
-<span class="source-line-no">027</span><span id="line-27"></span>
-<span class="source-line-no">028</span><span id="line-28">import org.apache.commons.xml.secure.SecureXMLInputFactory;</span>
-<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.marshall.parser.*;</span>
-<span class="source-line-no">030</span><span id="line-30"></span>
-<span class="source-line-no">031</span><span id="line-31">/**</span>
-<span class="source-line-no">032</span><span id="line-32"> * Wrapper class around a {@link XMLStreamReader}.</span>
-<span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> * The purpose is to encapsulate the reader with the {@link ParserPipe} object so that it can be retrieved for</span>
-<span class="source-line-no">036</span><span id="line-36"> * debugging purposes.</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport"&gt;XML&lt;/a&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;/ul&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> */</span>
-<span class="source-line-no">042</span><span id="line-42">@SuppressWarnings({</span>
-<span class="source-line-no">043</span><span id="line-43">   "resource" // pipe field is owned by the caller's parser session; the Reader it supplies is consumed by XMLInputFactory and not owned here.</span>
-<span class="source-line-no">044</span><span id="line-44">})</span>
-<span class="source-line-no">045</span><span id="line-45">public class XmlReader implements XMLStreamReader, Positionable {</span>
-<span class="source-line-no">046</span><span id="line-46"></span>
-<span class="source-line-no">047</span><span id="line-47">   private static volatile Boolean shareable;</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   private final ParserPipe pipe;</span>
-<span class="source-line-no">050</span><span id="line-50">   private final XMLStreamReader sr;</span>
-<span class="source-line-no">051</span><span id="line-51"></span>
-<span class="source-line-no">052</span><span id="line-52">   /**</span>
-<span class="source-line-no">053</span><span id="line-53">    * Constructor.</span>
-<span class="source-line-no">054</span><span id="line-54">    *</span>
-<span class="source-line-no">055</span><span id="line-55">    * @param pipe The parser input.</span>
-<span class="source-line-no">056</span><span id="line-56">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">057</span><span id="line-57">    * @param validating The value for the {@link XMLInputFactory#IS_VALIDATING} setting.</span>
-<span class="source-line-no">058</span><span id="line-58">    * @param reporter The value for the {@link XMLInputFactory#REPORTER} setting.</span>
-<span class="source-line-no">059</span><span id="line-59">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the factory's default reporter is used).</span>
-<span class="source-line-no">060</span><span id="line-60">    * @param resolver The value for the {@link XMLInputFactory#RESOLVER} setting.</span>
-<span class="source-line-no">061</span><span id="line-61">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the factory's default resolver is used).</span>
-<span class="source-line-no">062</span><span id="line-62">    * @param eventAllocator The value for the {@link XMLInputFactory#ALLOCATOR} setting.</span>
-<span class="source-line-no">063</span><span id="line-63">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the factory's default event allocator is used).</span>
-<span class="source-line-no">064</span><span id="line-64">    * @throws IOException Thrown by underlying I/O.</span>
-<span class="source-line-no">065</span><span id="line-65">    * @throws XMLStreamException Thrown by underlying XML stream.</span>
-<span class="source-line-no">066</span><span id="line-66">    */</span>
-<span class="source-line-no">067</span><span id="line-67">   protected XmlReader(ParserPipe pipe, boolean validating, XMLReporter reporter, XMLResolver resolver, XMLEventAllocator eventAllocator) throws IOException, XMLStreamException {</span>
-<span class="source-line-no">068</span><span id="line-68">      this(pipe, () -&gt; newFactory(validating, reporter, resolver, eventAllocator));</span>
-<span class="source-line-no">069</span><span id="line-69">   }</span>
-<span class="source-line-no">070</span><span id="line-70"></span>
-<span class="source-line-no">071</span><span id="line-71">   /**</span>
-<span class="source-line-no">072</span><span id="line-72">    * Constructor that obtains a configured factory from the specified supplier.</span>
-<span class="source-line-no">073</span><span id="line-73">    *</span>
-<span class="source-line-no">074</span><span id="line-74">    * &lt;p&gt;</span>
-<span class="source-line-no">075</span><span id="line-75">    * The supplier is called inside the same exception handling as the stream creation, so a failure to build the</span>
-<span class="source-line-no">076</span><span id="line-76">    * factory is reported exactly as a failure to create the reader.  A shared factory must not be modified.</span>
-<span class="source-line-no">077</span><span id="line-77">    *</span>
-<span class="source-line-no">078</span><span id="line-78">    * @param pipe The parser input.</span>
-<span class="source-line-no">079</span><span id="line-79">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">080</span><span id="line-80">    * @param factory Supplies the fully-configured factory used to create the underlying stream reader.</span>
-<span class="source-line-no">081</span><span id="line-81">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">082</span><span id="line-82">    * @throws IOException Thrown by underlying I/O.</span>
-<span class="source-line-no">083</span><span id="line-83">    * @throws XMLStreamException Thrown by underlying XML stream.</span>
-<span class="source-line-no">084</span><span id="line-84">    */</span>
-<span class="source-line-no">085</span><span id="line-85">   XmlReader(ParserPipe pipe, java.util.function.Supplier&lt;XMLInputFactory&gt; factory) throws IOException, XMLStreamException {</span>
-<span class="source-line-no">086</span><span id="line-86">      this.pipe = pipe;</span>
-<span class="source-line-no">087</span><span id="line-87">      try {</span>
-<span class="source-line-no">088</span><span id="line-88">         Reader r = pipe.getBufferedReader();</span>
-<span class="source-line-no">089</span><span id="line-89">         sr = factory.get().createXMLStreamReader(r);</span>
-<span class="source-line-no">090</span><span id="line-90">         sr.nextTag();</span>
-<span class="source-line-no">091</span><span id="line-91">         pipe.setPositionable(this);</span>
-<span class="source-line-no">092</span><span id="line-92">      } catch (Exception e) {</span>
-<span class="source-line-no">093</span><span id="line-93">         throw castException(IOException.class, e);</span>
-<span class="source-line-no">094</span><span id="line-94">      }</span>
-<span class="source-line-no">095</span><span id="line-95">   }</span>
-<span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">   /**</span>
-<span class="source-line-no">098</span><span id="line-98">    * Creates and configures a hardened input factory.</span>
-<span class="source-line-no">099</span><span id="line-99">    *</span>
-<span class="source-line-no">100</span><span id="line-100">    * @param validating The value for the {@link XMLInputFactory#IS_VALIDATING} setting.</span>
-<span class="source-line-no">101</span><span id="line-101">    * @param reporter The value for the {@link XMLInputFactory#REPORTER} setting.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">102</span><span id="line-102">    * @param resolver The value for the {@link XMLInputFactory#RESOLVER} setting.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">103</span><span id="line-103">    * @param eventAllocator The value for the {@link XMLInputFactory#ALLOCATOR} setting.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">104</span><span id="line-104">    * @return A new factory.</span>
-<span class="source-line-no">105</span><span id="line-105">    */</span>
-<span class="source-line-no">106</span><span id="line-106">   static XMLInputFactory newFactory(boolean validating, XMLReporter reporter, XMLResolver resolver, XMLEventAllocator eventAllocator) {</span>
-<span class="source-line-no">107</span><span id="line-107">      var factory = SecureXMLInputFactory.newInstance();</span>
-<span class="source-line-no">108</span><span id="line-108">      factory.setProperty(XMLInputFactory.IS_VALIDATING, validating);</span>
-<span class="source-line-no">109</span><span id="line-109">      factory.setProperty(XMLInputFactory.IS_COALESCING, true);</span>
-<span class="source-line-no">110</span><span id="line-110">      if (factory.isPropertySupported(XMLInputFactory.REPORTER) &amp;&amp; nn(reporter))</span>
-<span class="source-line-no">111</span><span id="line-111">         factory.setProperty(XMLInputFactory.REPORTER, reporter);</span>
-<span class="source-line-no">112</span><span id="line-112">      if (factory.isPropertySupported(XMLInputFactory.RESOLVER) &amp;&amp; nn(resolver))</span>
-<span class="source-line-no">113</span><span id="line-113">         factory.setProperty(XMLInputFactory.RESOLVER, resolver);</span>
-<span class="source-line-no">114</span><span id="line-114">      if (factory.isPropertySupported(XMLInputFactory.ALLOCATOR) &amp;&amp; nn(eventAllocator))</span>
-<span class="source-line-no">115</span><span id="line-115">         factory.setProperty(XMLInputFactory.ALLOCATOR, eventAllocator);</span>
-<span class="source-line-no">116</span><span id="line-116">      return factory;</span>
-<span class="source-line-no">117</span><span id="line-117">   }</span>
-<span class="source-line-no">118</span><span id="line-118"></span>
-<span class="source-line-no">119</span><span id="line-119">   /**</span>
-<span class="source-line-no">120</span><span id="line-120">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the StAX implementation that {@link SecureXMLInputFactory} wraps is known to allow</span>
-<span class="source-line-no">121</span><span id="line-121">    * concurrent calls to &lt;c&gt;createXMLStreamReader&lt;/c&gt; once the factory has been configured.</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * &lt;p&gt;</span>
-<span class="source-line-no">124</span><span id="line-124">    * The secure factory hides the implementation behind a wrapper, so the check is made against the factory that</span>
-<span class="source-line-no">125</span><span id="line-125">    * {@link XMLInputFactory#newInstance()} returns, which is the one being wrapped.  The answer is computed once.</span>
-<span class="source-line-no">126</span><span id="line-126">    *</span>
-<span class="source-line-no">127</span><span id="line-127">    * @return &lt;jk&gt;true&lt;/jk&gt; if the factory can be shared between threads.</span>
-<span class="source-line-no">128</span><span id="line-128">    */</span>
-<span class="source-line-no">129</span><span id="line-129">   static boolean isShareable() {</span>
-<span class="source-line-no">130</span><span id="line-130">      var b = shareable;</span>
-<span class="source-line-no">131</span><span id="line-131">      if (b == null)</span>
-<span class="source-line-no">132</span><span id="line-132">         shareable = b = isShareable(XMLInputFactory.newInstance());</span>
-<span class="source-line-no">133</span><span id="line-133">      return b;</span>
-<span class="source-line-no">134</span><span id="line-134">   }</span>
-<span class="source-line-no">135</span><span id="line-135"></span>
-<span class="source-line-no">136</span><span id="line-136">   /**</span>
-<span class="source-line-no">137</span><span id="line-137">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified factory is a known thread-safe implementation.</span>
-<span class="source-line-no">138</span><span id="line-138">    *</span>
-<span class="source-line-no">139</span><span id="line-139">    * &lt;p&gt;</span>
-<span class="source-line-no">140</span><span id="line-140">    * Only the JDK's built-in implementation and Woodstox are known to be safe; any other StAX implementation is</span>
-<span class="source-line-no">141</span><span id="line-141">    * assumed not to be and gets a fresh factory per parse.</span>
-<span class="source-line-no">142</span><span id="line-142">    *</span>
-<span class="source-line-no">143</span><span id="line-143">    * @param factory The factory to check.</span>
-<span class="source-line-no">144</span><span id="line-144">    * @return &lt;jk&gt;true&lt;/jk&gt; if the factory can be shared between threads.</span>
-<span class="source-line-no">145</span><span id="line-145">    */</span>
-<span class="source-line-no">146</span><span id="line-146">   static boolean isShareable(XMLInputFactory factory) {</span>
-<span class="source-line-no">147</span><span id="line-147">      var n = factory.getClass().getName();</span>
-<span class="source-line-no">148</span><span id="line-148">      return n.startsWith("com.sun.xml.internal.stream.") || n.startsWith("com.ctc.wstx.");</span>
-<span class="source-line-no">149</span><span id="line-149">   }</span>
-<span class="source-line-no">150</span><span id="line-150"></span>
-<span class="source-line-no">151</span><span id="line-151">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">152</span><span id="line-152">   public void close() throws XMLStreamException {</span>
-<span class="source-line-no">153</span><span id="line-153">      sr.close();</span>
-<span class="source-line-no">154</span><span id="line-154">   }</span>
-<span class="source-line-no">155</span><span id="line-155"></span>
-<span class="source-line-no">156</span><span id="line-156">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">157</span><span id="line-157">   public int getAttributeCount() { return sr.getAttributeCount(); }</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.concurrent.atomic.AtomicReference;</span>
+<span class="source-line-no">025</span><span id="line-25">import javax.xml.namespace.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import javax.xml.stream.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import javax.xml.stream.util.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">import org.apache.commons.xml.secure.SecureXMLInputFactory;</span>
+<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.marshall.parser.*;</span>
+<span class="source-line-no">031</span><span id="line-31"></span>
+<span class="source-line-no">032</span><span id="line-32">/**</span>
+<span class="source-line-no">033</span><span id="line-33"> * Wrapper class around a {@link XMLStreamReader}.</span>
+<span class="source-line-no">034</span><span id="line-34"> *</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * The purpose is to encapsulate the reader with the {@link ParserPipe} object so that it can be retrieved for</span>
+<span class="source-line-no">037</span><span id="line-37"> * debugging purposes.</span>
+<span class="source-line-no">038</span><span id="line-38"> *</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport"&gt;XML&lt;/a&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;/ul&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> */</span>
+<span class="source-line-no">043</span><span id="line-43">@SuppressWarnings({</span>
+<span class="source-line-no">044</span><span id="line-44">   "resource" // pipe field is owned by the caller's parser session; the Reader it supplies is consumed by XMLInputFactory and not owned here.</span>
+<span class="source-line-no">045</span><span id="line-45">})</span>
+<span class="source-line-no">046</span><span id="line-46">public class XmlReader implements XMLStreamReader, Positionable {</span>
+<span class="source-line-no">047</span><span id="line-47"></span>
+<span class="source-line-no">048</span><span id="line-48">   private static final AtomicReference&lt;Boolean&gt; shareable = new AtomicReference&lt;&gt;();</span>
+<span class="source-line-no">049</span><span id="line-49"></span>
+<span class="source-line-no">050</span><span id="line-50">   private final ParserPipe pipe;</span>
+<span class="source-line-no">051</span><span id="line-51">   private final XMLStreamReader sr;</span>
+<span class="source-line-no">052</span><span id="line-52"></span>
+<span class="source-line-no">053</span><span id="line-53">   /**</span>
+<span class="source-line-no">054</span><span id="line-54">    * Constructor.</span>
+<span class="source-line-no">055</span><span id="line-55">    *</span>
+<span class="source-line-no">056</span><span id="line-56">    * @param pipe The parser input.</span>
+<span class="source-line-no">057</span><span id="line-57">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">058</span><span id="line-58">    * @param validating The value for the {@link XMLInputFactory#IS_VALIDATING} setting.</span>
+<span class="source-line-no">059</span><span id="line-59">    * @param reporter The value for the {@link XMLInputFactory#REPORTER} setting.</span>
+<span class="source-line-no">060</span><span id="line-60">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the factory's default reporter is used).</span>
+<span class="source-line-no">061</span><span id="line-61">    * @param resolver The value for the {@link XMLInputFactory#RESOLVER} setting.</span>
+<span class="source-line-no">062</span><span id="line-62">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the factory's default resolver is used).</span>
+<span class="source-line-no">063</span><span id="line-63">    * @param eventAllocator The value for the {@link XMLInputFactory#ALLOCATOR} setting.</span>
+<span class="source-line-no">064</span><span id="line-64">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the factory's default event allocator is used).</span>
+<span class="source-line-no">065</span><span id="line-65">    * @throws IOException Thrown by underlying I/O.</span>
+<span class="source-line-no">066</span><span id="line-66">    * @throws XMLStreamException Thrown by underlying XML stream.</span>
+<span class="source-line-no">067</span><span id="line-67">    */</span>
+<span class="source-line-no">068</span><span id="line-68">   protected XmlReader(ParserPipe pipe, boolean validating, XMLReporter reporter, XMLResolver resolver, XMLEventAllocator eventAllocator) throws IOException, XMLStreamException {</span>
+<span class="source-line-no">069</span><span id="line-69">      this(pipe, () -&gt; newFactory(validating, reporter, resolver, eventAllocator));</span>
+<span class="source-line-no">070</span><span id="line-70">   }</span>
+<span class="source-line-no">071</span><span id="line-71"></span>
+<span class="source-line-no">072</span><span id="line-72">   /**</span>
+<span class="source-line-no">073</span><span id="line-73">    * Constructor that obtains a configured factory from the specified supplier.</span>
+<span class="source-line-no">074</span><span id="line-74">    *</span>
+<span class="source-line-no">075</span><span id="line-75">    * &lt;p&gt;</span>
+<span class="source-line-no">076</span><span id="line-76">    * The supplier is called inside the same exception handling as the stream creation, so a failure to build the</span>
+<span class="source-line-no">077</span><span id="line-77">    * factory is reported exactly as a failure to create the reader.  A shared factory must not be modified.</span>
+<span class="source-line-no">078</span><span id="line-78">    *</span>
+<span class="source-line-no">079</span><span id="line-79">    * @param pipe The parser input.</span>
+<span class="source-line-no">080</span><span id="line-80">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">081</span><span id="line-81">    * @param factory Supplies the fully-configured factory used to create the underlying stream reader.</span>
+<span class="source-line-no">082</span><span id="line-82">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">083</span><span id="line-83">    * @throws IOException Thrown by underlying I/O.</span>
+<span class="source-line-no">084</span><span id="line-84">    * @throws XMLStreamException Thrown by underlying XML stream.</span>
+<span class="source-line-no">085</span><span id="line-85">    */</span>
+<span class="source-line-no">086</span><span id="line-86">   XmlReader(ParserPipe pipe, java.util.function.Supplier&lt;XMLInputFactory&gt; factory) throws IOException, XMLStreamException {</span>
+<span class="source-line-no">087</span><span id="line-87">      this.pipe = pipe;</span>
+<span class="source-line-no">088</span><span id="line-88">      try {</span>
+<span class="source-line-no">089</span><span id="line-89">         Reader r = pipe.getBufferedReader();</span>
+<span class="source-line-no">090</span><span id="line-90">         sr = factory.get().createXMLStreamReader(r);</span>
+<span class="source-line-no">091</span><span id="line-91">         sr.nextTag();</span>
+<span class="source-line-no">092</span><span id="line-92">         pipe.setPositionable(this);</span>
+<span class="source-line-no">093</span><span id="line-93">      } catch (Exception e) {</span>
+<span class="source-line-no">094</span><span id="line-94">         throw castException(IOException.class, e);</span>
+<span class="source-line-no">095</span><span id="line-95">      }</span>
+<span class="source-line-no">096</span><span id="line-96">   }</span>
+<span class="source-line-no">097</span><span id="line-97"></span>
+<span class="source-line-no">098</span><span id="line-98">   private static final String MAX_ELEMENT_DEPTH_PROPERTY = "http://www.oracle.com/xml/jaxp/properties/maxElementDepth";</span>
+<span class="source-line-no">099</span><span id="line-99"></span>
+<span class="source-line-no">100</span><span id="line-100">   // Finite bound well above the default shared maxParseDepth (500).</span>
+<span class="source-line-no">101</span><span id="line-101">   private static final int MAX_ELEMENT_DEPTH = 10_000;</span>
+<span class="source-line-no">102</span><span id="line-102"></span>
+<span class="source-line-no">103</span><span id="line-103">   /**</span>
+<span class="source-line-no">104</span><span id="line-104">    * Creates and configures a hardened input factory.</span>
+<span class="source-line-no">105</span><span id="line-105">    *</span>
+<span class="source-line-no">106</span><span id="line-106">    * @param validating The value for the {@link XMLInputFactory#IS_VALIDATING} setting.</span>
+<span class="source-line-no">107</span><span id="line-107">    * @param reporter The value for the {@link XMLInputFactory#REPORTER} setting.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">108</span><span id="line-108">    * @param resolver The value for the {@link XMLInputFactory#RESOLVER} setting.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">109</span><span id="line-109">    * @param eventAllocator The value for the {@link XMLInputFactory#ALLOCATOR} setting.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">110</span><span id="line-110">    * @return A new factory.</span>
+<span class="source-line-no">111</span><span id="line-111">    */</span>
+<span class="source-line-no">112</span><span id="line-112">   static XMLInputFactory newFactory(boolean validating, XMLReporter reporter, XMLResolver resolver, XMLEventAllocator eventAllocator) {</span>
+<span class="source-line-no">113</span><span id="line-113">      var factory = SecureXMLInputFactory.newInstance();</span>
+<span class="source-line-no">114</span><span id="line-114">      factory.setProperty(XMLInputFactory.IS_VALIDATING, validating);</span>
+<span class="source-line-no">115</span><span id="line-115">      factory.setProperty(XMLInputFactory.IS_COALESCING, true);</span>
+<span class="source-line-no">116</span><span id="line-116">      if (factory.isPropertySupported(XMLInputFactory.REPORTER) &amp;&amp; nn(reporter))</span>
+<span class="source-line-no">117</span><span id="line-117">         factory.setProperty(XMLInputFactory.REPORTER, reporter);</span>
+<span class="source-line-no">118</span><span id="line-118">      if (factory.isPropertySupported(XMLInputFactory.RESOLVER) &amp;&amp; nn(resolver))</span>
+<span class="source-line-no">119</span><span id="line-119">         factory.setProperty(XMLInputFactory.RESOLVER, resolver);</span>
+<span class="source-line-no">120</span><span id="line-120">      if (factory.isPropertySupported(XMLInputFactory.ALLOCATOR) &amp;&amp; nn(eventAllocator))</span>
+<span class="source-line-no">121</span><span id="line-121">         factory.setProperty(XMLInputFactory.ALLOCATOR, eventAllocator);</span>
+<span class="source-line-no">122</span><span id="line-122">      raiseMaxElementDepth(factory);</span>
+<span class="source-line-no">123</span><span id="line-123">      return factory;</span>
+<span class="source-line-no">124</span><span id="line-124">   }</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">   /**</span>
+<span class="source-line-no">127</span><span id="line-127">    * Raises the JAXP element-depth limit so that the shared parse-depth guard in {@link ParserSession} fires first.</span>
+<span class="source-line-no">128</span><span id="line-128">    *</span>
+<span class="source-line-no">129</span><span id="line-129">    * &lt;p&gt;</span>
+<span class="source-line-no">130</span><span id="line-130">    * Newer JDKs cap element depth at 100 by default, which is below the shared limit and would otherwise surface a</span>
+<span class="source-line-no">131</span><span id="line-131">    * JDK-specific error.  Implementations that don't support the property (e.g. Woodstox) are left alone; the shared</span>
+<span class="source-line-no">132</span><span id="line-132">    * guard still applies to them.</span>
+<span class="source-line-no">133</span><span id="line-133">    */</span>
+<span class="source-line-no">134</span><span id="line-134">   private static void raiseMaxElementDepth(XMLInputFactory factory) {</span>
+<span class="source-line-no">135</span><span id="line-135">      try {</span>
+<span class="source-line-no">136</span><span id="line-136">         factory.setProperty(MAX_ELEMENT_DEPTH_PROPERTY, MAX_ELEMENT_DEPTH);</span>
+<span class="source-line-no">137</span><span id="line-137">      } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">138</span><span id="line-138">         // Property not supported by this StAX implementation.</span>
+<span class="source-line-no">139</span><span id="line-139">      }</span>
+<span class="source-line-no">140</span><span id="line-140">   }</span>
+<span class="source-line-no">141</span><span id="line-141"></span>
+<span class="source-line-no">142</span><span id="line-142">   /**</span>
+<span class="source-line-no">143</span><span id="line-143">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the StAX implementation that {@link SecureXMLInputFactory} wraps is known to allow</span>
+<span class="source-line-no">144</span><span id="line-144">    * concurrent calls to &lt;c&gt;createXMLStreamReader&lt;/c&gt; once the factory has been configured.</span>
+<span class="source-line-no">145</span><span id="line-145">    *</span>
+<span class="source-line-no">146</span><span id="line-146">    * &lt;p&gt;</span>
+<span class="source-line-no">147</span><span id="line-147">    * The secure factory hides the implementation behind a wrapper, so the check is made against the factory that</span>
+<span class="source-line-no">148</span><span id="line-148">    * {@link XMLInputFactory#newInstance()} returns, which is the one being wrapped.  The answer is computed once.</span>
+<span class="source-line-no">149</span><span id="line-149">    *</span>
+<span class="source-line-no">150</span><span id="line-150">    * @return &lt;jk&gt;true&lt;/jk&gt; if the factory can be shared between threads.</span>
+<span class="source-line-no">151</span><span id="line-151">    */</span>
+<span class="source-line-no">152</span><span id="line-152">   static boolean isShareable() {</span>
+<span class="source-line-no">153</span><span id="line-153">      var b = shareable.get();</span>
+<span class="source-line-no">154</span><span id="line-154">      if (b == null)</span>
+<span class="source-line-no">155</span><span id="line-155">         shareable.set(b = isShareable(XMLInputFactory.newInstance()));</span>
+<span class="source-line-no">156</span><span id="line-156">      return b;</span>
+<span class="source-line-no">157</span><span id="line-157">   }</span>
 <span class="source-line-no">158</span><span id="line-158"></span>
-<span class="source-line-no">159</span><span id="line-159">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">160</span><span id="line-160">   public String getAttributeLocalName(int index) {</span>
-<span class="source-line-no">161</span><span id="line-161">      return sr.getAttributeLocalName(index);</span>
-<span class="source-line-no">162</span><span id="line-162">   }</span>
-<span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">165</span><span id="line-165">   public QName getAttributeName(int index) {</span>
-<span class="source-line-no">166</span><span id="line-166">      return sr.getAttributeName(index);</span>
-<span class="source-line-no">167</span><span id="line-167">   }</span>
-<span class="source-line-no">168</span><span id="line-168"></span>
-<span class="source-line-no">169</span><span id="line-169">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">170</span><span id="line-170">   public String getAttributeNamespace(int index) {</span>
-<span class="source-line-no">171</span><span id="line-171">      return sr.getAttributeNamespace(index);</span>
+<span class="source-line-no">159</span><span id="line-159">   /**</span>
+<span class="source-line-no">160</span><span id="line-160">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified factory is a known thread-safe implementation.</span>
+<span class="source-line-no">161</span><span id="line-161">    *</span>
+<span class="source-line-no">162</span><span id="line-162">    * &lt;p&gt;</span>
+<span class="source-line-no">163</span><span id="line-163">    * Only the JDK's built-in implementation and Woodstox are known to be safe; any other StAX implementation is</span>
+<span class="source-line-no">164</span><span id="line-164">    * assumed not to be and gets a fresh factory per parse.</span>
+<span class="source-line-no">165</span><span id="line-165">    *</span>
+<span class="source-line-no">166</span><span id="line-166">    * @param factory The factory to check.</span>
+<span class="source-line-no">167</span><span id="line-167">    * @return &lt;jk&gt;true&lt;/jk&gt; if the factory can be shared between threads.</span>
+<span class="source-line-no">168</span><span id="line-168">    */</span>
+<span class="source-line-no">169</span><span id="line-169">   static boolean isShareable(XMLInputFactory factory) {</span>
+<span class="source-line-no">170</span><span id="line-170">      var n = factory.getClass().getName();</span>
+<span class="source-line-no">171</span><span id="line-171">      return n.startsWith("com.sun.xml.internal.stream.") || n.startsWith("com.ctc.wstx.");</span>
 <span class="source-line-no">172</span><span id="line-172">   }</span>
 <span class="source-line-no">173</span><span id="line-173"></span>
 <span class="source-line-no">174</span><span id="line-174">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">175</span><span id="line-175">   public String getAttributePrefix(int index) {</span>
-<span class="source-line-no">176</span><span id="line-176">      return sr.getAttributePrefix(index);</span>
+<span class="source-line-no">175</span><span id="line-175">   public void close() throws XMLStreamException {</span>
+<span class="source-line-no">176</span><span id="line-176">      sr.close();</span>
 <span class="source-line-no">177</span><span id="line-177">   }</span>
 <span class="source-line-no">178</span><span id="line-178"></span>
 <span class="source-line-no">179</span><span id="line-179">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">180</span><span id="line-180">   public String getAttributeType(int index) {</span>
-<span class="source-line-no">181</span><span id="line-181">      return sr.getAttributeType(index);</span>
-<span class="source-line-no">182</span><span id="line-182">   }</span>
-<span class="source-line-no">183</span><span id="line-183"></span>
-<span class="source-line-no">184</span><span id="line-184">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">185</span><span id="line-185">   public String getAttributeValue(int index) {</span>
-<span class="source-line-no">186</span><span id="line-186">      return sr.getAttributeValue(index);</span>
-<span class="source-line-no">187</span><span id="line-187">   }</span>
-<span class="source-line-no">188</span><span id="line-188"></span>
-<span class="source-line-no">189</span><span id="line-189">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">190</span><span id="line-190">   public String getAttributeValue(String namespaceURI, String localName) {</span>
-<span class="source-line-no">191</span><span id="line-191">      return sr.getAttributeValue(namespaceURI, localName);</span>
-<span class="source-line-no">192</span><span id="line-192">   }</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">195</span><span id="line-195">   public String getCharacterEncodingScheme() { return sr.getCharacterEncodingScheme(); }</span>
+<span class="source-line-no">180</span><span id="line-180">   public int getAttributeCount() { return sr.getAttributeCount(); }</span>
+<span class="source-line-no">181</span><span id="line-181"></span>
+<span class="source-line-no">182</span><span id="line-182">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">183</span><span id="line-183">   public String getAttributeLocalName(int index) {</span>
+<span class="source-line-no">184</span><span id="line-184">      return sr.getAttributeLocalName(index);</span>
+<span class="source-line-no">185</span><span id="line-185">   }</span>
+<span class="source-line-no">186</span><span id="line-186"></span>
+<span class="source-line-no">187</span><span id="line-187">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">188</span><span id="line-188">   public QName getAttributeName(int index) {</span>
+<span class="source-line-no">189</span><span id="line-189">      return sr.getAttributeName(index);</span>
+<span class="source-line-no">190</span><span id="line-190">   }</span>
+<span class="source-line-no">191</span><span id="line-191"></span>
+<span class="source-line-no">192</span><span id="line-192">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">193</span><span id="line-193">   public String getAttributeNamespace(int index) {</span>
+<span class="source-line-no">194</span><span id="line-194">      return sr.getAttributeNamespace(index);</span>
+<span class="source-line-no">195</span><span id="line-195">   }</span>
 <span class="source-line-no">196</span><span id="line-196"></span>
 <span class="source-line-no">197</span><span id="line-197">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">198</span><span id="line-198">   public String getElementText() throws XMLStreamException { return sr.getElementText(); }</span>
-<span class="source-line-no">199</span><span id="line-199"></span>
-<span class="source-line-no">200</span><span id="line-200">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">201</span><span id="line-201">   public String getEncoding() { return sr.getEncoding(); }</span>
-<span class="source-line-no">202</span><span id="line-202"></span>
-<span class="source-line-no">203</span><span id="line-203">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">204</span><span id="line-204">   public int getEventType() { return sr.getEventType(); }</span>
-<span class="source-line-no">205</span><span id="line-205"></span>
-<span class="source-line-no">206</span><span id="line-206">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">207</span><span id="line-207">   public String getLocalName() { return sr.getLocalName(); }</span>
-<span class="source-line-no">208</span><span id="line-208"></span>
-<span class="source-line-no">209</span><span id="line-209">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">210</span><span id="line-210">   public Location getLocation() { return sr.getLocation(); }</span>
+<span class="source-line-no">198</span><span id="line-198">   public String getAttributePrefix(int index) {</span>
+<span class="source-line-no">199</span><span id="line-199">      return sr.getAttributePrefix(index);</span>
+<span class="source-line-no">200</span><span id="line-200">   }</span>
+<span class="source-line-no">201</span><span id="line-201"></span>
+<span class="source-line-no">202</span><span id="line-202">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">203</span><span id="line-203">   public String getAttributeType(int index) {</span>
+<span class="source-line-no">204</span><span id="line-204">      return sr.getAttributeType(index);</span>
+<span class="source-line-no">205</span><span id="line-205">   }</span>
+<span class="source-line-no">206</span><span id="line-206"></span>
+<span class="source-line-no">207</span><span id="line-207">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">208</span><span id="line-208">   public String getAttributeValue(int index) {</span>
+<span class="source-line-no">209</span><span id="line-209">      return sr.getAttributeValue(index);</span>
+<span class="source-line-no">210</span><span id="line-210">   }</span>
 <span class="source-line-no">211</span><span id="line-211"></span>
 <span class="source-line-no">212</span><span id="line-212">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">213</span><span id="line-213">   public QName getName() { return sr.getName(); }</span>
-<span class="source-line-no">214</span><span id="line-214"></span>
-<span class="source-line-no">215</span><span id="line-215">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">216</span><span id="line-216">   public NamespaceContext getNamespaceContext() { return sr.getNamespaceContext(); }</span>
-<span class="source-line-no">217</span><span id="line-217"></span>
-<span class="source-line-no">218</span><span id="line-218">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">219</span><span id="line-219">   public int getNamespaceCount() { return sr.getNamespaceCount(); }</span>
-<span class="source-line-no">220</span><span id="line-220"></span>
-<span class="source-line-no">221</span><span id="line-221">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">222</span><span id="line-222">   public String getNamespacePrefix(int index) {</span>
-<span class="source-line-no">223</span><span id="line-223">      return sr.getNamespacePrefix(index);</span>
-<span class="source-line-no">224</span><span id="line-224">   }</span>
+<span class="source-line-no">213</span><span id="line-213">   public String getAttributeValue(String namespaceURI, String localName) {</span>
+<span class="source-line-no">214</span><span id="line-214">      return sr.getAttributeValue(namespaceURI, localName);</span>
+<span class="source-line-no">215</span><span id="line-215">   }</span>
+<span class="source-line-no">216</span><span id="line-216"></span>
+<span class="source-line-no">217</span><span id="line-217">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">218</span><span id="line-218">   public String getCharacterEncodingScheme() { return sr.getCharacterEncodingScheme(); }</span>
+<span class="source-line-no">219</span><span id="line-219"></span>
+<span class="source-line-no">220</span><span id="line-220">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">221</span><span id="line-221">   public String getElementText() throws XMLStreamException { return sr.getElementText(); }</span>
+<span class="source-line-no">222</span><span id="line-222"></span>
+<span class="source-line-no">223</span><span id="line-223">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">224</span><span id="line-224">   public String getEncoding() { return sr.getEncoding(); }</span>
 <span class="source-line-no">225</span><span id="line-225"></span>
 <span class="source-line-no">226</span><span id="line-226">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">227</span><span id="line-227">   public String getNamespaceURI() { return sr.getNamespaceURI(); }</span>
+<span class="source-line-no">227</span><span id="line-227">   public int getEventType() { return sr.getEventType(); }</span>
 <span class="source-line-no">228</span><span id="line-228"></span>
 <span class="source-line-no">229</span><span id="line-229">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">230</span><span id="line-230">   public String getNamespaceURI(int index) {</span>
-<span class="source-line-no">231</span><span id="line-231">      return sr.getNamespaceURI(index);</span>
-<span class="source-line-no">232</span><span id="line-232">   }</span>
-<span class="source-line-no">233</span><span id="line-233"></span>
-<span class="source-line-no">234</span><span id="line-234">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">235</span><span id="line-235">   public String getNamespaceURI(String prefix) {</span>
-<span class="source-line-no">236</span><span id="line-236">      return sr.getNamespaceURI(prefix);</span>
-<span class="source-line-no">237</span><span id="line-237">   }</span>
-<span class="source-line-no">238</span><span id="line-238"></span>
-<span class="source-line-no">239</span><span id="line-239">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">240</span><span id="line-240">   public String getPIData() { return sr.getPIData(); }</span>
-<span class="source-line-no">241</span><span id="line-241"></span>
-<span class="source-line-no">242</span><span id="line-242">   /**</span>
-<span class="source-line-no">243</span><span id="line-243">    * Returns the pipe passed into the constructor.</span>
-<span class="source-line-no">244</span><span id="line-244">    *</span>
-<span class="source-line-no">245</span><span id="line-245">    * @return The pipe passed into the constructor.</span>
-<span class="source-line-no">246</span><span id="line-246">    */</span>
-<span class="source-line-no">247</span><span id="line-247">   public ParserPipe getPipe() { return pipe; }</span>
+<span class="source-line-no">230</span><span id="line-230">   public String getLocalName() { return sr.getLocalName(); }</span>
+<span class="source-line-no">231</span><span id="line-231"></span>
+<span class="source-line-no">232</span><span id="line-232">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">233</span><span id="line-233">   public Location getLocation() { return sr.getLocation(); }</span>
+<span class="source-line-no">234</span><span id="line-234"></span>
+<span class="source-line-no">235</span><span id="line-235">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">236</span><span id="line-236">   public QName getName() { return sr.getName(); }</span>
+<span class="source-line-no">237</span><span id="line-237"></span>
+<span class="source-line-no">238</span><span id="line-238">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">239</span><span id="line-239">   public NamespaceContext getNamespaceContext() { return sr.getNamespaceContext(); }</span>
+<span class="source-line-no">240</span><span id="line-240"></span>
+<span class="source-line-no">241</span><span id="line-241">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">242</span><span id="line-242">   public int getNamespaceCount() { return sr.getNamespaceCount(); }</span>
+<span class="source-line-no">243</span><span id="line-243"></span>
+<span class="source-line-no">244</span><span id="line-244">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">245</span><span id="line-245">   public String getNamespacePrefix(int index) {</span>
+<span class="source-line-no">246</span><span id="line-246">      return sr.getNamespacePrefix(index);</span>
+<span class="source-line-no">247</span><span id="line-247">   }</span>
 <span class="source-line-no">248</span><span id="line-248"></span>
 <span class="source-line-no">249</span><span id="line-249">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">250</span><span id="line-250">   public String getPITarget() { return sr.getPITarget(); }</span>
+<span class="source-line-no">250</span><span id="line-250">   public String getNamespaceURI() { return sr.getNamespaceURI(); }</span>
 <span class="source-line-no">251</span><span id="line-251"></span>
-<span class="source-line-no">252</span><span id="line-252">   @Override /* Overridden from Positionable */</span>
-<span class="source-line-no">253</span><span id="line-253">   public Position getPosition() {</span>
-<span class="source-line-no">254</span><span id="line-254">      var l = getLocation();</span>
-<span class="source-line-no">255</span><span id="line-255">      return new Position(l.getLineNumber(), l.getColumnNumber());</span>
-<span class="source-line-no">256</span><span id="line-256">   }</span>
-<span class="source-line-no">257</span><span id="line-257"></span>
-<span class="source-line-no">258</span><span id="line-258">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">259</span><span id="line-259">   public String getPrefix() { return sr.getPrefix(); }</span>
-<span class="source-line-no">260</span><span id="line-260"></span>
-<span class="source-line-no">261</span><span id="line-261">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">262</span><span id="line-262">   public Object getProperty(String name) throws IllegalArgumentException {</span>
-<span class="source-line-no">263</span><span id="line-263">      return sr.getProperty(name);</span>
-<span class="source-line-no">264</span><span id="line-264">   }</span>
-<span class="source-line-no">265</span><span id="line-265"></span>
-<span class="source-line-no">266</span><span id="line-266">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">267</span><span id="line-267">   public String getText() { return sr.getText(); }</span>
-<span class="source-line-no">268</span><span id="line-268"></span>
-<span class="source-line-no">269</span><span id="line-269">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">270</span><span id="line-270">   public char[] getTextCharacters() { return sr.getTextCharacters(); }</span>
+<span class="source-line-no">252</span><span id="line-252">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">253</span><span id="line-253">   public String getNamespaceURI(int index) {</span>
+<span class="source-line-no">254</span><span id="line-254">      return sr.getNamespaceURI(index);</span>
+<span class="source-line-no">255</span><span id="line-255">   }</span>
+<span class="source-line-no">256</span><span id="line-256"></span>
+<span class="source-line-no">257</span><span id="line-257">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">258</span><span id="line-258">   public String getNamespaceURI(String prefix) {</span>
+<span class="source-line-no">259</span><span id="line-259">      return sr.getNamespaceURI(prefix);</span>
+<span class="source-line-no">260</span><span id="line-260">   }</span>
+<span class="source-line-no">261</span><span id="line-261"></span>
+<span class="source-line-no">262</span><span id="line-262">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">263</span><span id="line-263">   public String getPIData() { return sr.getPIData(); }</span>
+<span class="source-line-no">264</span><span id="line-264"></span>
+<span class="source-line-no">265</span><span id="line-265">   /**</span>
+<span class="source-line-no">266</span><span id="line-266">    * Returns the pipe passed into the constructor.</span>
+<span class="source-line-no">267</span><span id="line-267">    *</span>
+<span class="source-line-no">268</span><span id="line-268">    * @return The pipe passed into the constructor.</span>
+<span class="source-line-no">269</span><span id="line-269">    */</span>
+<span class="source-line-no">270</span><span id="line-270">   public ParserPipe getPipe() { return pipe; }</span>
 <span class="source-line-no">271</span><span id="line-271"></span>
 <span class="source-line-no">272</span><span id="line-272">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">273</span><span id="line-273">   public int getTextCharacters(int sourceStart, char[] target, int targetStart, int length) throws XMLStreamException {</span>
-<span class="source-line-no">274</span><span id="line-274">      return sr.getTextCharacters(sourceStart, target, targetStart, length);</span>
-<span class="source-line-no">275</span><span id="line-275">   }</span>
-<span class="source-line-no">276</span><span id="line-276"></span>
-<span class="source-line-no">277</span><span id="line-277">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">278</span><span id="line-278">   public int getTextLength() { return sr.getTextLength(); }</span>
-<span class="source-line-no">279</span><span id="line-279"></span>
-<span class="source-line-no">280</span><span id="line-280">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">281</span><span id="line-281">   public int getTextStart() { return sr.getTextStart(); }</span>
-<span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">284</span><span id="line-284">   public String getVersion() { return sr.getVersion(); }</span>
-<span class="source-line-no">285</span><span id="line-285"></span>
-<span class="source-line-no">286</span><span id="line-286">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">287</span><span id="line-287">   public boolean hasName() {</span>
-<span class="source-line-no">288</span><span id="line-288">      return sr.hasName();</span>
-<span class="source-line-no">289</span><span id="line-289">   }</span>
-<span class="source-line-no">290</span><span id="line-290"></span>
-<span class="source-line-no">291</span><span id="line-291">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">292</span><span id="line-292">   public boolean hasNext() throws XMLStreamException {</span>
-<span class="source-line-no">293</span><span id="line-293">      return sr.hasNext();</span>
-<span class="source-line-no">294</span><span id="line-294">   }</span>
-<span class="source-line-no">295</span><span id="line-295"></span>
-<span class="source-line-no">296</span><span id="line-296">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">297</span><span id="line-297">   public boolean hasText() {</span>
-<span class="source-line-no">298</span><span id="line-298">      return sr.hasText();</span>
-<span class="source-line-no">299</span><span id="line-299">   }</span>
-<span class="source-line-no">300</span><span id="line-300"></span>
-<span class="source-line-no">301</span><span id="line-301">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">302</span><span id="line-302">   public boolean isAttributeSpecified(int index) {</span>
-<span class="source-line-no">303</span><span id="line-303">      return sr.isAttributeSpecified(index);</span>
-<span class="source-line-no">304</span><span id="line-304">   }</span>
+<span class="source-line-no">273</span><span id="line-273">   public String getPITarget() { return sr.getPITarget(); }</span>
+<span class="source-line-no">274</span><span id="line-274"></span>
+<span class="source-line-no">275</span><span id="line-275">   @Override /* Overridden from Positionable */</span>
+<span class="source-line-no">276</span><span id="line-276">   public Position getPosition() {</span>
+<span class="source-line-no">277</span><span id="line-277">      var l = getLocation();</span>
+<span class="source-line-no">278</span><span id="line-278">      return new Position(l.getLineNumber(), l.getColumnNumber());</span>
+<span class="source-line-no">279</span><span id="line-279">   }</span>
+<span class="source-line-no">280</span><span id="line-280"></span>
+<span class="source-line-no">281</span><span id="line-281">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">282</span><span id="line-282">   public String getPrefix() { return sr.getPrefix(); }</span>
+<span class="source-line-no">283</span><span id="line-283"></span>
+<span class="source-line-no">284</span><span id="line-284">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">285</span><span id="line-285">   public Object getProperty(String name) throws IllegalArgumentException {</span>
+<span class="source-line-no">286</span><span id="line-286">      return sr.getProperty(name);</span>
+<span class="source-line-no">287</span><span id="line-287">   }</span>
+<span class="source-line-no">288</span><span id="line-288"></span>
+<span class="source-line-no">289</span><span id="line-289">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">290</span><span id="line-290">   public String getText() { return sr.getText(); }</span>
+<span class="source-line-no">291</span><span id="line-291"></span>
+<span class="source-line-no">292</span><span id="line-292">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">293</span><span id="line-293">   public char[] getTextCharacters() { return sr.getTextCharacters(); }</span>
+<span class="source-line-no">294</span><span id="line-294"></span>
+<span class="source-line-no">295</span><span id="line-295">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">296</span><span id="line-296">   public int getTextCharacters(int sourceStart, char[] target, int targetStart, int length) throws XMLStreamException {</span>
+<span class="source-line-no">297</span><span id="line-297">      return sr.getTextCharacters(sourceStart, target, targetStart, length);</span>
+<span class="source-line-no">298</span><span id="line-298">   }</span>
+<span class="source-line-no">299</span><span id="line-299"></span>
+<span class="source-line-no">300</span><span id="line-300">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">301</span><span id="line-301">   public int getTextLength() { return sr.getTextLength(); }</span>
+<span class="source-line-no">302</span><span id="line-302"></span>
+<span class="source-line-no">303</span><span id="line-303">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">304</span><span id="line-304">   public int getTextStart() { return sr.getTextStart(); }</span>
 <span class="source-line-no">305</span><span id="line-305"></span>
 <span class="source-line-no">306</span><span id="line-306">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">307</span><span id="line-307">   public boolean isCharacters() { return sr.isCharacters(); }</span>
+<span class="source-line-no">307</span><span id="line-307">   public String getVersion() { return sr.getVersion(); }</span>
 <span class="source-line-no">308</span><span id="line-308"></span>
 <span class="source-line-no">309</span><span id="line-309">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">310</span><span id="line-310">   public boolean isEndElement() { return sr.isEndElement(); }</span>
-<span class="source-line-no">311</span><span id="line-311"></span>
-<span class="source-line-no">312</span><span id="line-312">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">313</span><span id="line-313">   public boolean isStandalone() { return sr.isStandalone(); }</span>
-<span class="source-line-no">314</span><span id="line-314"></span>
-<span class="source-line-no">315</span><span id="line-315">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">316</span><span id="line-316">   public boolean isStartElement() { return sr.isStartElement(); }</span>
-<span class="source-line-no">317</span><span id="line-317"></span>
-<span class="source-line-no">318</span><span id="line-318">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">319</span><span id="line-319">   public boolean isWhiteSpace() { return sr.isWhiteSpace(); }</span>
-<span class="source-line-no">320</span><span id="line-320"></span>
-<span class="source-line-no">321</span><span id="line-321">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">322</span><span id="line-322">   public int next() throws XMLStreamException {</span>
-<span class="source-line-no">323</span><span id="line-323">      return sr.next();</span>
-<span class="source-line-no">324</span><span id="line-324">   }</span>
-<span class="source-line-no">325</span><span id="line-325"></span>
-<span class="source-line-no">326</span><span id="line-326">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">327</span><span id="line-327">   public int nextTag() throws XMLStreamException {</span>
-<span class="source-line-no">328</span><span id="line-328">      return sr.nextTag();</span>
-<span class="source-line-no">329</span><span id="line-329">   }</span>
-<span class="source-line-no">330</span><span id="line-330"></span>
-<span class="source-line-no">331</span><span id="line-331">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">332</span><span id="line-332">   public void require(int type, String namespaceURI, String localName) throws XMLStreamException {</span>
-<span class="source-line-no">333</span><span id="line-333">      sr.require(type, namespaceURI, localName);</span>
-<span class="source-line-no">334</span><span id="line-334">   }</span>
-<span class="source-line-no">335</span><span id="line-335"></span>
-<span class="source-line-no">336</span><span id="line-336">   @Override /* Overridden from XMLStreamReader */</span>
-<span class="source-line-no">337</span><span id="line-337">   public boolean standaloneSet() {</span>
-<span class="source-line-no">338</span><span id="line-338">      return sr.standaloneSet();</span>
-<span class="source-line-no">339</span><span id="line-339">   }</span>
-<span class="source-line-no">340</span><span id="line-340">}</span>
+<span class="source-line-no">310</span><span id="line-310">   public boolean hasName() {</span>
+<span class="source-line-no">311</span><span id="line-311">      return sr.hasName();</span>
+<span class="source-line-no">312</span><span id="line-312">   }</span>
+<span class="source-line-no">313</span><span id="line-313"></span>
+<span class="source-line-no">314</span><span id="line-314">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">315</span><span id="line-315">   public boolean hasNext() throws XMLStreamException {</span>
+<span class="source-line-no">316</span><span id="line-316">      return sr.hasNext();</span>
+<span class="source-line-no">317</span><span id="line-317">   }</span>
+<span class="source-line-no">318</span><span id="line-318"></span>
+<span class="source-line-no">319</span><span id="line-319">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">320</span><span id="line-320">   public boolean hasText() {</span>
+<span class="source-line-no">321</span><span id="line-321">      return sr.hasText();</span>
+<span class="source-line-no">322</span><span id="line-322">   }</span>
+<span class="source-line-no">323</span><span id="line-323"></span>
+<span class="source-line-no">324</span><span id="line-324">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">325</span><span id="line-325">   public boolean isAttributeSpecified(int index) {</span>
+<span class="source-line-no">326</span><span id="line-326">      return sr.isAttributeSpecified(index);</span>
+<span class="source-line-no">327</span><span id="line-327">   }</span>
+<span class="source-line-no">328</span><span id="line-328"></span>
+<span class="source-line-no">329</span><span id="line-329">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">330</span><span id="line-330">   public boolean isCharacters() { return sr.isCharacters(); }</span>
+<span class="source-line-no">331</span><span id="line-331"></span>
+<span class="source-line-no">332</span><span id="line-332">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">333</span><span id="line-333">   public boolean isEndElement() { return sr.isEndElement(); }</span>
+<span class="source-line-no">334</span><span id="line-334"></span>
+<span class="source-line-no">335</span><span id="line-335">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">336</span><span id="line-336">   public boolean isStandalone() { return sr.isStandalone(); }</span>
+<span class="source-line-no">337</span><span id="line-337"></span>
+<span class="source-line-no">338</span><span id="line-338">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">339</span><span id="line-339">   public boolean isStartElement() { return sr.isStartElement(); }</span>
+<span class="source-line-no">340</span><span id="line-340"></span>
+<span class="source-line-no">341</span><span id="line-341">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">342</span><span id="line-342">   public boolean isWhiteSpace() { return sr.isWhiteSpace(); }</span>
+<span class="source-line-no">343</span><span id="line-343"></span>
+<span class="source-line-no">344</span><span id="line-344">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">345</span><span id="line-345">   public int next() throws XMLStreamException {</span>
+<span class="source-line-no">346</span><span id="line-346">      return sr.next();</span>
+<span class="source-line-no">347</span><span id="line-347">   }</span>
+<span class="source-line-no">348</span><span id="line-348"></span>
+<span class="source-line-no">349</span><span id="line-349">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">350</span><span id="line-350">   public int nextTag() throws XMLStreamException {</span>
+<span class="source-line-no">351</span><span id="line-351">      return sr.nextTag();</span>
+<span class="source-line-no">352</span><span id="line-352">   }</span>
+<span class="source-line-no">353</span><span id="line-353"></span>
+<span class="source-line-no">354</span><span id="line-354">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">355</span><span id="line-355">   public void require(int type, String namespaceURI, String localName) throws XMLStreamException {</span>
+<span class="source-line-no">356</span><span id="line-356">      sr.require(type, namespaceURI, localName);</span>
+<span class="source-line-no">357</span><span id="line-357">   }</span>
+<span class="source-line-no">358</span><span id="line-358"></span>
+<span class="source-line-no">359</span><span id="line-359">   @Override /* Overridden from XMLStreamReader */</span>
+<span class="source-line-no">360</span><span id="line-360">   public boolean standaloneSet() {</span>
+<span class="source-line-no">361</span><span id="line-361">      return sr.standaloneSet();</span>
+<span class="source-line-no">362</span><span id="line-362">   }</span>
+<span class="source-line-no">363</span><span id="line-363">}</span>
 
 
 

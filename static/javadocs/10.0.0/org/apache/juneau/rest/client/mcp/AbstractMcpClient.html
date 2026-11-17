@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="v20250618/McpClient.html" title="class in org.apache.juneau.rest.client.mcp.v20250618">McpClient</a></code>, <code><a href="v20260728/McpClient.html" title="class in org.apache.juneau.rest.client.mcp.v20260728">McpClient</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-56">AbstractMcpClient</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-55">AbstractMcpClient</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></span></div>
 <div class="block">Revision-neutral base class for Model Context Protocol (MCP) clients.
@@ -212,7 +212,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.client.mcp.AbstractMcpClient.Builder)">
 <h3>AbstractMcpClient</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-87">AbstractMcpClient</a></span><wbr><span class="parameters">(<a href="AbstractMcpClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp">AbstractMcpClient.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-86">AbstractMcpClient</a></span><wbr><span class="parameters">(<a href="AbstractMcpClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp">AbstractMcpClient.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -234,7 +234,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="send(org.apache.juneau.bean.jsonrpc.JsonRpcRequest)">
 <h3>send</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../bean/jsonrpc/JsonRpcResponse.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-141">send</a></span><wbr><span class="parameters">(<a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;request)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../bean/jsonrpc/JsonRpcResponse.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-140">send</a></span><wbr><span class="parameters">(<a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;request)</span>
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends a raw JSON-RPC request and returns the raw JSON-RPC response envelope.
 
@@ -255,7 +255,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="send(org.apache.juneau.bean.jsonrpc.JsonRpcRequest,java.util.Map)">
 <h3>send</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../bean/jsonrpc/JsonRpcResponse.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-165">send</a></span><wbr><span class="parameters">(<a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;request,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../bean/jsonrpc/JsonRpcResponse.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-164">send</a></span><wbr><span class="parameters">(<a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;request,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;httpHeaders)</span>
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends a raw JSON-RPC request and returns the raw JSON-RPC response envelope.
@@ -285,7 +285,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="openEventStream()">
 <h3>openEventStream</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-239">openEventStream</a></span>()
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-238">openEventStream</a></span>()
                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a Server-Sent-Events stream on the configured endpoint, for revision-specific facades that support a
  duplex (server-initiated) channel alongside the request/response <a href="#send(org.apache.juneau.bean.jsonrpc.JsonRpcRequest)"><code>send(org.apache.juneau.bean.jsonrpc.JsonRpcRequest)</code></a> calls.</div>
@@ -300,7 +300,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="openEventStream(org.apache.juneau.bean.jsonrpc.JsonRpcRequest)">
 <h3>openEventStream</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-253">openEventStream</a></span><wbr><span class="parameters">(<a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;request)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-252">openEventStream</a></span><wbr><span class="parameters">(<a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;request)</span>
                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a Server-Sent-Events stream on the configured endpoint by first POSTing <code>request</code> as the request
  body — for a revision-specific method (e.g. <code>subscriptions/listen</code>) whose held-open SSE response is
@@ -319,7 +319,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="openEventStream(org.apache.juneau.bean.jsonrpc.JsonRpcRequest,java.util.Map)">
 <h3>openEventStream</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-285">openEventStream</a></span><wbr><span class="parameters">(<a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;request,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-284">openEventStream</a></span><wbr><span class="parameters">(<a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;request,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;httpHeaders)</span>
                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a Server-Sent-Events stream on the configured endpoint by first POSTing <code>request</code> as the request
@@ -357,7 +357,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-325">close</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/AbstractMcpClient.html#line-324">close</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>

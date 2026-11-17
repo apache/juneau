@@ -69,17 +69,21 @@
 <span class="source-line-no">056</span><span id="line-56">      if (cl == null)</span>
 <span class="source-line-no">057</span><span id="line-57">         cl = Thread.currentThread().getContextClassLoader();</span>
 <span class="source-line-no">058</span><span id="line-58">      // Conversions made without a session still carry the context through the hint.</span>
-<span class="source-line-no">059</span><span id="line-59">      var mc = session != null ? session.getMarshallingContext() : hint != null ? hint.getMarshallingContext() : null;</span>
-<span class="source-line-no">060</span><span id="line-60">      return ClassFormat.parse(o, fmt, cl, mc != null ? mc.getClassNameGuard() : null);</span>
-<span class="source-line-no">061</span><span id="line-61">   }</span>
-<span class="source-line-no">062</span><span id="line-62"></span>
-<span class="source-line-no">063</span><span id="line-63">   private static ClassFormat resolveFormat(MarshallingSession session) {</span>
-<span class="source-line-no">064</span><span id="line-64">      if (session == null)</span>
-<span class="source-line-no">065</span><span id="line-65">         return ClassFormat.FQCN;</span>
-<span class="source-line-no">066</span><span id="line-66">      var fmt = session.getMarshallingContext().getClassFormat();</span>
-<span class="source-line-no">067</span><span id="line-67">      return (fmt == null || fmt == ClassFormat.NOT_SET) ? ClassFormat.FQCN : fmt;</span>
-<span class="source-line-no">068</span><span id="line-68">   }</span>
-<span class="source-line-no">069</span><span id="line-69">}</span>
+<span class="source-line-no">059</span><span id="line-59">      MarshallingContext mc = null;</span>
+<span class="source-line-no">060</span><span id="line-60">      if (session != null)</span>
+<span class="source-line-no">061</span><span id="line-61">         mc = session.getMarshallingContext();</span>
+<span class="source-line-no">062</span><span id="line-62">      else if (hint != null)</span>
+<span class="source-line-no">063</span><span id="line-63">         mc = hint.getMarshallingContext();</span>
+<span class="source-line-no">064</span><span id="line-64">      return ClassFormat.parse(o, fmt, cl, mc != null ? mc.getClassNameGuard() : null);</span>
+<span class="source-line-no">065</span><span id="line-65">   }</span>
+<span class="source-line-no">066</span><span id="line-66"></span>
+<span class="source-line-no">067</span><span id="line-67">   private static ClassFormat resolveFormat(MarshallingSession session) {</span>
+<span class="source-line-no">068</span><span id="line-68">      if (session == null)</span>
+<span class="source-line-no">069</span><span id="line-69">         return ClassFormat.FQCN;</span>
+<span class="source-line-no">070</span><span id="line-70">      var fmt = session.getMarshallingContext().getClassFormat();</span>
+<span class="source-line-no">071</span><span id="line-71">      return (fmt == null || fmt == ClassFormat.NOT_SET) ? ClassFormat.FQCN : fmt;</span>
+<span class="source-line-no">072</span><span id="line-72">   }</span>
+<span class="source-line-no">073</span><span id="line-73">}</span>
 
 
 

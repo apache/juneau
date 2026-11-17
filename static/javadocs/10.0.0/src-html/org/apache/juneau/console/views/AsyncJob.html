@@ -34,436 +34,437 @@
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.time.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import java.util.regex.*;</span>
-<span class="source-line-no">025</span><span id="line-25"></span>
-<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.console.views.ActionResult.*;</span>
-<span class="source-line-no">027</span><span id="line-27"></span>
-<span class="source-line-no">028</span><span id="line-28">/**</span>
-<span class="source-line-no">029</span><span id="line-29"> * A single in-memory, one-shot async job &amp;mdash; the streamed-progress + terminal-result unit of a future async write</span>
-<span class="source-line-no">030</span><span id="line-30"> * variant.</span>
-<span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='section'&gt;The stream URL IS the capability&lt;/h2&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
-<span class="source-line-no">034</span><span id="line-34"> * A job is addressed by its {@link #id() id}, an unguessable {@value AsyncJobRegistry#CAPABILITY_BITS}-bit</span>
-<span class="source-line-no">035</span><span id="line-35"> * {@link java.security.SecureRandom} token minted by the {@link AsyncJobRegistry}, matching</span>
-<span class="source-line-no">036</span><span id="line-36"> * {@link org.apache.juneau.rest.server.filter.SynchronizerToken}'s bar.  Because a browser {@code EventSource}</span>
-<span class="source-line-no">037</span><span id="line-37"> * constructor cannot set an {@code X-Csrf-Token} header and cookies are unsound on a loopback port, the SSE GET that</span>
-<span class="source-line-no">038</span><span id="line-38"> * streams a job's progress is Host-checked at the boundary and &lt;b&gt;capability-gated by the unguessability of the</span>
-<span class="source-line-no">039</span><span id="line-39"> * id&lt;/b&gt; &amp;mdash; there is no session cookie and no token-on-GET.  Consequently the id is a secret:</span>
-<span class="source-line-no">040</span><span id="line-40"> * {@link #toString()} never renders it.</span>
-<span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h2 class='section'&gt;Server-side hard limits (a data-egress disclosure bound)&lt;/h2&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> * A job caps its own streamed output at {@link #maxOutputBytes} bytes and terminates itself when that is exceeded,</span>
-<span class="source-line-no">045</span><span id="line-45"> * and it terminates itself once past its {@link #deadline() hard-timeout deadline}.  Both are enforced &lt;b&gt;here&lt;/b&gt;,</span>
-<span class="source-line-no">046</span><span id="line-46"> * server-side &amp;mdash; a client cannot be trusted to cancel &amp;mdash; and both are disclosure bounds, not only heap</span>
-<span class="source-line-no">047</span><span id="line-47"> * bounds: they cap how long, and how much, customer-adjacent triage content is streamed.  The number of concurrent</span>
-<span class="source-line-no">048</span><span id="line-48"> * subscribers is capped at {@link #maxSubscribers} (a browser reload plus one straggler), enforced through</span>
-<span class="source-line-no">049</span><span id="line-49"> * {@link #acquireSubscriber()} / {@link #releaseSubscriber()}.</span>
-<span class="source-line-no">050</span><span id="line-50"> *</span>
-<span class="source-line-no">051</span><span id="line-51"> * &lt;h2 class='section'&gt;Progress buffer and resume&lt;/h2&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;p&gt;</span>
-<span class="source-line-no">053</span><span id="line-53"> * Progress events are kept, in order, for the job's whole life (bounded by the output cap) and are never trimmed, so</span>
-<span class="source-line-no">054</span><span id="line-54"> * the position of an event never changes: {@code events[i]} is streamed with SSE id {@code i+1}.  A subscriber that</span>
-<span class="source-line-no">055</span><span id="line-55"> * reconnects with a {@code Last-Event-ID} resumes exactly after the last event it saw; a fresh subscriber is</span>
-<span class="source-line-no">056</span><span id="line-56"> * live-only (see {@link #resumeCursor(String)}).</span>
-<span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='section'&gt;Terminal outcomes reuse the frozen {@link ActionResult} contract&lt;/h2&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> * &lt;p&gt;</span>
-<span class="source-line-no">060</span><span id="line-60"> * A job settles exactly once, to an {@link ActionResult}: a producer-supplied {@link #complete(ActionResult)</span>
-<span class="source-line-no">061</span><span id="line-61"> * success/failure/refusal/unknown}, a {@link #cancel() cancellation} (distinguishing {@link Outcome#CANCELLED</span>
-<span class="source-line-no">062</span><span id="line-62"> * cancelled} from {@link Outcome#CANCELLED_AFTER_EFFECT cancelled-after-effect} via</span>
-<span class="source-line-no">063</span><span id="line-63"> * {@link #markEffectStarted()}), an output-limit termination, or a timeout.  The reserved async outcomes are read</span>
-<span class="source-line-no">064</span><span id="line-64"> * off the frozen {@link Outcome} enum via its public {@code outcome} field &amp;mdash; this contract is reused, never</span>
-<span class="source-line-no">065</span><span id="line-65"> * re-versioned.</span>
-<span class="source-line-no">066</span><span id="line-66"> *</span>
-<span class="source-line-no">067</span><span id="line-67"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> *    &lt;li class='note'&gt;This class is thread-safe: a producer thread appends progress and settles the job while</span>
-<span class="source-line-no">069</span><span id="line-69"> *       subscriber threads drain it through {@link #awaitUpdate(int, Duration)}.</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;/ul&gt;</span>
-<span class="source-line-no">071</span><span id="line-71"> *</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
-<span class="source-line-no">073</span><span id="line-73"> * &lt;ul&gt;</span>
-<span class="source-line-no">074</span><span id="line-74"> *    &lt;li class='jc'&gt;{@link AsyncJobRegistry}</span>
-<span class="source-line-no">075</span><span id="line-75"> *    &lt;li class='jc'&gt;{@link AsyncJobsMixin}</span>
-<span class="source-line-no">076</span><span id="line-76"> *    &lt;li class='jc'&gt;{@link ActionResult}</span>
-<span class="source-line-no">077</span><span id="line-77"> * &lt;/ul&gt;</span>
-<span class="source-line-no">078</span><span id="line-78"> *</span>
-<span class="source-line-no">079</span><span id="line-79"> * @since 10.0.0</span>
-<span class="source-line-no">080</span><span id="line-80"> */</span>
-<span class="source-line-no">081</span><span id="line-81">public final class AsyncJob {</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">   /** A resume value after trimming: 1 to 10 ASCII digits (so {@link Long#parseLong(String)} cannot overflow). */</span>
-<span class="source-line-no">084</span><span id="line-84">   private static final Pattern RESUME_VALUE = Pattern.compile("\\d{1,10}");</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   /**</span>
-<span class="source-line-no">087</span><span id="line-87">    * Bytes charged toward the output cap for every progress event, on top of its payload.  Without it an empty</span>
-<span class="source-line-no">088</span><span id="line-88">    * event would cost nothing and a producer could grow the event buffer without bound; with it the event count is</span>
-<span class="source-line-no">089</span><span id="line-89">    * bounded by {@link #maxOutputBytes} (roughly one event per byte at worst).</span>
-<span class="source-line-no">090</span><span id="line-90">    */</span>
-<span class="source-line-no">091</span><span id="line-91">   static final long EVENT_OVERHEAD_BYTES = 1;</span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   private final String id;</span>
-<span class="source-line-no">094</span><span id="line-94">   private final Instant createdAt;</span>
-<span class="source-line-no">095</span><span id="line-95">   private final Duration timeout;</span>
-<span class="source-line-no">096</span><span id="line-96">   private final long maxOutputBytes;</span>
-<span class="source-line-no">097</span><span id="line-97">   private final int maxSubscribers;</span>
-<span class="source-line-no">098</span><span id="line-98"></span>
-<span class="source-line-no">099</span><span id="line-99">   private final Object lock = new Object();</span>
-<span class="source-line-no">100</span><span id="line-100">   private final List&lt;String&gt; events = new ArrayList&lt;&gt;();</span>
-<span class="source-line-no">101</span><span id="line-101">   private long outputBytes;</span>
-<span class="source-line-no">102</span><span id="line-102">   private long chargedBytes;   // Payload plus per-event overhead; what the cap is enforced against.</span>
-<span class="source-line-no">103</span><span id="line-103">   private boolean effectStarted;</span>
-<span class="source-line-no">104</span><span id="line-104">   private int subscribers;</span>
-<span class="source-line-no">105</span><span id="line-105">   private ActionResult result;   // Non-null iff terminal; the single settled outcome.</span>
-<span class="source-line-no">106</span><span id="line-106">   private volatile String owner;   // The principal name bound to this job, or null when the job is not bound to a caller.</span>
-<span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108">   /**</span>
-<span class="source-line-no">109</span><span id="line-109">    * Constructor.</span>
-<span class="source-line-no">110</span><span id="line-110">    *</span>
-<span class="source-line-no">111</span><span id="line-111">    * @param id The unguessable capability id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">112</span><span id="line-112">    * @param createdAt The instant the job was created (for the hard-timeout deadline).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">113</span><span id="line-113">    * @param timeout The hard timeout after which the job self-terminates.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">114</span><span id="line-114">    * @param maxOutputBytes The maximum number of streamed output bytes before the job self-terminates.</span>
-<span class="source-line-no">115</span><span id="line-115">    * @param maxSubscribers The maximum number of concurrent subscribers.</span>
-<span class="source-line-no">116</span><span id="line-116">    */</span>
-<span class="source-line-no">117</span><span id="line-117">   AsyncJob(String id, Instant createdAt, Duration timeout, long maxOutputBytes, int maxSubscribers) {</span>
-<span class="source-line-no">118</span><span id="line-118">      this.id = reqnn("id", id);</span>
-<span class="source-line-no">119</span><span id="line-119">      this.createdAt = reqnn("createdAt", createdAt);</span>
-<span class="source-line-no">120</span><span id="line-120">      this.timeout = reqnn("timeout", timeout);</span>
-<span class="source-line-no">121</span><span id="line-121">      this.maxOutputBytes = maxOutputBytes;</span>
-<span class="source-line-no">122</span><span id="line-122">      this.maxSubscribers = maxSubscribers;</span>
-<span class="source-line-no">123</span><span id="line-123">   }</span>
-<span class="source-line-no">124</span><span id="line-124"></span>
-<span class="source-line-no">125</span><span id="line-125">   /**</span>
-<span class="source-line-no">126</span><span id="line-126">    * The unguessable capability id &amp;mdash; the whole of the job's access control (see the class javadoc).</span>
-<span class="source-line-no">127</span><span id="line-127">    *</span>
-<span class="source-line-no">128</span><span id="line-128">    * @return The id.  Never &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">129</span><span id="line-129">    */</span>
-<span class="source-line-no">130</span><span id="line-130">   public String id() { return id; }</span>
-<span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">   /**</span>
-<span class="source-line-no">133</span><span id="line-133">    * Binds the job to the principal that started it.</span>
-<span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * &lt;p&gt;</span>
-<span class="source-line-no">136</span><span id="line-136">    * Once bound, {@link AsyncJobsMixin} serves the stream and the cancel endpoint only to the same principal; any other</span>
-<span class="source-line-no">137</span><span id="line-137">    * caller is answered {@code 404}, the same as an unknown id.  A job with no owner stays reachable by its id alone.</span>
-<span class="source-line-no">138</span><span id="line-138">    *</span>
-<span class="source-line-no">139</span><span id="line-139">    * @param principalName The principal name.  &lt;jk&gt;null&lt;/jk&gt; leaves the job unbound.</span>
-<span class="source-line-no">140</span><span id="line-140">    * @return This object.</span>
-<span class="source-line-no">141</span><span id="line-141">    */</span>
-<span class="source-line-no">142</span><span id="line-142">   public AsyncJob owner(String principalName) {</span>
-<span class="source-line-no">143</span><span id="line-143">      owner = principalName;</span>
-<span class="source-line-no">144</span><span id="line-144">      return this;</span>
-<span class="source-line-no">145</span><span id="line-145">   }</span>
-<span class="source-line-no">146</span><span id="line-146"></span>
-<span class="source-line-no">147</span><span id="line-147">   /** @return The principal name this job is bound to, or &lt;jk&gt;null&lt;/jk&gt; when it is not bound to a caller. */</span>
-<span class="source-line-no">148</span><span id="line-148">   public String owner() { return owner; }</span>
-<span class="source-line-no">149</span><span id="line-149"></span>
-<span class="source-line-no">150</span><span id="line-150">   /** @return The instant this job was created. */</span>
-<span class="source-line-no">151</span><span id="line-151">   public Instant createdAt() { return createdAt; }</span>
-<span class="source-line-no">152</span><span id="line-152"></span>
-<span class="source-line-no">153</span><span id="line-153">   /** @return The instant past which this job self-terminates on the next timeout check. */</span>
-<span class="source-line-no">154</span><span id="line-154">   public Instant deadline() { return createdAt.plus(timeout); }</span>
-<span class="source-line-no">155</span><span id="line-155"></span>
-<span class="source-line-no">156</span><span id="line-156">   /** @return The total number of streamed output bytes so far. */</span>
-<span class="source-line-no">157</span><span id="line-157">   public long outputBytes() { synchronized (lock) { return outputBytes; } }</span>
-<span class="source-line-no">158</span><span id="line-158"></span>
-<span class="source-line-no">159</span><span id="line-159">   /** @return The maximum streamed output bytes before self-termination. */</span>
-<span class="source-line-no">160</span><span id="line-160">   public long maxOutputBytes() { return maxOutputBytes; }</span>
-<span class="source-line-no">161</span><span id="line-161"></span>
-<span class="source-line-no">162</span><span id="line-162">   /** @return The maximum number of concurrent subscribers. */</span>
-<span class="source-line-no">163</span><span id="line-163">   public int maxSubscribers() { return maxSubscribers; }</span>
-<span class="source-line-no">164</span><span id="line-164"></span>
-<span class="source-line-no">165</span><span id="line-165">   /**</span>
-<span class="source-line-no">166</span><span id="line-166">    * Appends a progress event.</span>
-<span class="source-line-no">167</span><span id="line-167">    *</span>
-<span class="source-line-no">168</span><span id="line-168">    * &lt;p&gt;</span>
-<span class="source-line-no">169</span><span id="line-169">    * A no-op once the job is terminal.  Enforces the server-side output cap: if this event would push the total</span>
-<span class="source-line-no">170</span><span id="line-170">    * over {@link #maxOutputBytes}, the job is instead terminated with a {@link Outcome#FAILURE failure} carrying an</span>
-<span class="source-line-no">171</span><span id="line-171">    * {@code app:output-limit-exceeded} message and the event is dropped &amp;mdash; the cap is a data-egress bound, so</span>
-<span class="source-line-no">172</span><span id="line-172">    * the excess content is never streamed.</span>
-<span class="source-line-no">173</span><span id="line-173">    *</span>
-<span class="source-line-no">174</span><span id="line-174">    * &lt;p&gt;</span>
-<span class="source-line-no">175</span><span id="line-175">    * Each event is charged its UTF-8 payload size plus a fixed {@value #EVENT_OVERHEAD_BYTES}-byte overhead toward</span>
-<span class="source-line-no">176</span><span id="line-176">    * the cap, so empty events cannot grow the buffer without bound.  {@link #outputBytes()} still reports payload</span>
-<span class="source-line-no">177</span><span id="line-177">    * bytes only.</span>
-<span class="source-line-no">178</span><span id="line-178">    *</span>
-<span class="source-line-no">179</span><span id="line-179">    * @param text The progress text.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">180</span><span id="line-180">    * @return &lt;jk&gt;true&lt;/jk&gt; if the event was appended; &lt;jk&gt;false&lt;/jk&gt; if the job was already terminal or the output</span>
-<span class="source-line-no">181</span><span id="line-181">    *    cap was hit (which itself terminates the job).</span>
-<span class="source-line-no">182</span><span id="line-182">    */</span>
-<span class="source-line-no">183</span><span id="line-183">   public boolean progress(String text) {</span>
-<span class="source-line-no">184</span><span id="line-184">      reqnn("text", text);</span>
-<span class="source-line-no">185</span><span id="line-185">      synchronized (lock) {</span>
-<span class="source-line-no">186</span><span id="line-186">         if (result != null)</span>
-<span class="source-line-no">187</span><span id="line-187">            return false;</span>
-<span class="source-line-no">188</span><span id="line-188">         var add = (long) text.getBytes(UTF_8).length;</span>
-<span class="source-line-no">189</span><span id="line-189">         var charge = add + EVENT_OVERHEAD_BYTES;</span>
-<span class="source-line-no">190</span><span id="line-190">         if (chargedBytes + charge &gt; maxOutputBytes) {</span>
-<span class="source-line-no">191</span><span id="line-191">            settle(ActionResult.failure().message("app:output-limit-exceeded"));</span>
-<span class="source-line-no">192</span><span id="line-192">            return false;</span>
-<span class="source-line-no">193</span><span id="line-193">         }</span>
-<span class="source-line-no">194</span><span id="line-194">         outputBytes += add;</span>
-<span class="source-line-no">195</span><span id="line-195">         chargedBytes += charge;</span>
-<span class="source-line-no">196</span><span id="line-196">         events.add(text);</span>
-<span class="source-line-no">197</span><span id="line-197">         lock.notifyAll();</span>
-<span class="source-line-no">198</span><span id="line-198">         return true;</span>
-<span class="source-line-no">199</span><span id="line-199">      }</span>
-<span class="source-line-no">200</span><span id="line-200">   }</span>
-<span class="source-line-no">201</span><span id="line-201"></span>
-<span class="source-line-no">202</span><span id="line-202">   /**</span>
-<span class="source-line-no">203</span><span id="line-203">    * Marks that this job's outbound effect has begun, so a subsequent {@link #cancel()} settles to</span>
-<span class="source-line-no">204</span><span id="line-204">    * {@link Outcome#CANCELLED_AFTER_EFFECT cancelled-after-effect} rather than {@link Outcome#CANCELLED cancelled}</span>
-<span class="source-line-no">205</span><span id="line-205">    * (the two are different outcomes and must not be collapsed).  A no-op once terminal.</span>
-<span class="source-line-no">206</span><span id="line-206">    *</span>
-<span class="source-line-no">207</span><span id="line-207">    * &lt;p&gt;</span>
-<span class="source-line-no">208</span><span id="line-208">    * The mark and the terminal check share one lock acquisition with {@link #cancel()} and</span>
-<span class="source-line-no">209</span><span id="line-209">    * {@link #enforceTimeout(Instant)}, so a producer that starts its effect only when this returns &lt;jk&gt;true&lt;/jk&gt; can</span>
-<span class="source-line-no">210</span><span id="line-210">    * never start it on a job that has already been cancelled or timed out.</span>
-<span class="source-line-no">211</span><span id="line-211">    *</span>
-<span class="source-line-no">212</span><span id="line-212">    * @return &lt;jk&gt;true&lt;/jk&gt; if the job is still running and is now marked; &lt;jk&gt;false&lt;/jk&gt; if it was already terminal, in</span>
-<span class="source-line-no">213</span><span id="line-213">    *    which case the producer must not start the effect.</span>
-<span class="source-line-no">214</span><span id="line-214">    */</span>
-<span class="source-line-no">215</span><span id="line-215">   public boolean markEffectStarted() {</span>
-<span class="source-line-no">216</span><span id="line-216">      synchronized (lock) {</span>
-<span class="source-line-no">217</span><span id="line-217">         if (result != null)</span>
-<span class="source-line-no">218</span><span id="line-218">            return false;</span>
-<span class="source-line-no">219</span><span id="line-219">         effectStarted = true;</span>
-<span class="source-line-no">220</span><span id="line-220">         return true;</span>
-<span class="source-line-no">221</span><span id="line-221">      }</span>
-<span class="source-line-no">222</span><span id="line-222">   }</span>
-<span class="source-line-no">223</span><span id="line-223"></span>
-<span class="source-line-no">224</span><span id="line-224">   /** @return Whether the outbound effect has begun (see {@link #markEffectStarted()}). */</span>
-<span class="source-line-no">225</span><span id="line-225">   public boolean effectStarted() { synchronized (lock) { return effectStarted; } }</span>
-<span class="source-line-no">226</span><span id="line-226"></span>
-<span class="source-line-no">227</span><span id="line-227">   /**</span>
-<span class="source-line-no">228</span><span id="line-228">    * Settles the job to a producer-supplied terminal result (success/failure/refusal/unknown).</span>
-<span class="source-line-no">229</span><span id="line-229">    *</span>
-<span class="source-line-no">230</span><span id="line-230">    * @param value The terminal result.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">231</span><span id="line-231">    * @return &lt;jk&gt;true&lt;/jk&gt; if this call settled the job; &lt;jk&gt;false&lt;/jk&gt; if it was already terminal (first settle</span>
-<span class="source-line-no">232</span><span id="line-232">    *    wins).</span>
-<span class="source-line-no">233</span><span id="line-233">    */</span>
-<span class="source-line-no">234</span><span id="line-234">   public boolean complete(ActionResult value) {</span>
-<span class="source-line-no">235</span><span id="line-235">      reqnn("value", value);</span>
-<span class="source-line-no">236</span><span id="line-236">      synchronized (lock) {</span>
-<span class="source-line-no">237</span><span id="line-237">         if (result != null)</span>
-<span class="source-line-no">238</span><span id="line-238">            return false;</span>
-<span class="source-line-no">239</span><span id="line-239">         settle(value);</span>
-<span class="source-line-no">240</span><span id="line-240">         return true;</span>
-<span class="source-line-no">241</span><span id="line-241">      }</span>
-<span class="source-line-no">242</span><span id="line-242">   }</span>
-<span class="source-line-no">243</span><span id="line-243"></span>
-<span class="source-line-no">244</span><span id="line-244">   /**</span>
-<span class="source-line-no">245</span><span id="line-245">    * Cancels the job, settling it to {@link Outcome#CANCELLED cancelled} &amp;mdash; or</span>
-<span class="source-line-no">246</span><span id="line-246">    * {@link Outcome#CANCELLED_AFTER_EFFECT cancelled-after-effect} when {@link #markEffectStarted()} was called</span>
-<span class="source-line-no">247</span><span id="line-247">    * first.  Enforced server-side; a client cannot be trusted to stop the work itself.</span>
-<span class="source-line-no">248</span><span id="line-248">    *</span>
-<span class="source-line-no">249</span><span id="line-249">    * @return &lt;jk&gt;true&lt;/jk&gt; if this call settled the job; &lt;jk&gt;false&lt;/jk&gt; if it was already terminal.</span>
-<span class="source-line-no">250</span><span id="line-250">    */</span>
-<span class="source-line-no">251</span><span id="line-251">   public boolean cancel() {</span>
-<span class="source-line-no">252</span><span id="line-252">      synchronized (lock) {</span>
-<span class="source-line-no">253</span><span id="line-253">         if (result != null)</span>
-<span class="source-line-no">254</span><span id="line-254">            return false;</span>
-<span class="source-line-no">255</span><span id="line-255">         settle(cancelledResult(effectStarted));</span>
-<span class="source-line-no">256</span><span id="line-256">         return true;</span>
-<span class="source-line-no">257</span><span id="line-257">      }</span>
-<span class="source-line-no">258</span><span id="line-258">   }</span>
-<span class="source-line-no">259</span><span id="line-259"></span>
-<span class="source-line-no">260</span><span id="line-260">   /**</span>
-<span class="source-line-no">261</span><span id="line-261">    * Terminates the job if it is past its {@link #deadline() hard-timeout deadline}, settling it to a non-optimistic</span>
-<span class="source-line-no">262</span><span id="line-262">    * {@link Outcome#UNKNOWN unknown} &amp;mdash; the effect may or may not have completed in the time cut off.  This is</span>
-<span class="source-line-no">263</span><span id="line-263">    * the server-side timeout enforcement: it bounds both heap and, as a data-egress disclosure bound, how</span>
-<span class="source-line-no">264</span><span id="line-264">    * long triage keeps streaming customer-adjacent content.</span>
-<span class="source-line-no">265</span><span id="line-265">    *</span>
-<span class="source-line-no">266</span><span id="line-266">    * @param now The current instant.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">267</span><span id="line-267">    * @return &lt;jk&gt;true&lt;/jk&gt; if this call timed the job out; &lt;jk&gt;false&lt;/jk&gt; if it was already terminal or not yet past</span>
-<span class="source-line-no">268</span><span id="line-268">    *    its deadline.</span>
-<span class="source-line-no">269</span><span id="line-269">    */</span>
-<span class="source-line-no">270</span><span id="line-270">   public boolean enforceTimeout(Instant now) {</span>
-<span class="source-line-no">271</span><span id="line-271">      reqnn("now", now);</span>
-<span class="source-line-no">272</span><span id="line-272">      synchronized (lock) {</span>
-<span class="source-line-no">273</span><span id="line-273">         if (result != null || ! now.isAfter(deadline()))</span>
-<span class="source-line-no">274</span><span id="line-274">            return false;</span>
-<span class="source-line-no">275</span><span id="line-275">         settle(ActionResult.unknown().message("app:hard-timeout-exceeded"));</span>
-<span class="source-line-no">276</span><span id="line-276">         return true;</span>
-<span class="source-line-no">277</span><span id="line-277">      }</span>
-<span class="source-line-no">278</span><span id="line-278">   }</span>
-<span class="source-line-no">279</span><span id="line-279"></span>
-<span class="source-line-no">280</span><span id="line-280">   /** @return Whether the job has settled to a terminal result. */</span>
-<span class="source-line-no">281</span><span id="line-281">   public boolean isTerminal() { synchronized (lock) { return result != null; } }</span>
-<span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">   /** @return The terminal result, or &lt;jk&gt;null&lt;/jk&gt; if the job is still running. */</span>
-<span class="source-line-no">284</span><span id="line-284">   public ActionResult result() { synchronized (lock) { return result; } }</span>
-<span class="source-line-no">285</span><span id="line-285"></span>
-<span class="source-line-no">286</span><span id="line-286">   /** @return The number of progress events buffered so far. */</span>
-<span class="source-line-no">287</span><span id="line-287">   public int eventCount() { synchronized (lock) { return events.size(); } }</span>
-<span class="source-line-no">288</span><span id="line-288"></span>
-<span class="source-line-no">289</span><span id="line-289">   /**</span>
-<span class="source-line-no">290</span><span id="line-290">    * Snapshots the progress events at or after {@code fromIndex}.</span>
-<span class="source-line-no">291</span><span id="line-291">    *</span>
-<span class="source-line-no">292</span><span id="line-292">    * &lt;p&gt;</span>
-<span class="source-line-no">293</span><span id="line-293">    * Not the stream's resume path: this answers empty for an out-of-range index, whereas a past-the-end resume value</span>
-<span class="source-line-no">294</span><span id="line-294">    * is refused (see {@link #resumeCursor(String)}).</span>
-<span class="source-line-no">295</span><span id="line-295">    *</span>
-<span class="source-line-no">296</span><span id="line-296">    * @param fromIndex The zero-based index to start from.</span>
-<span class="source-line-no">297</span><span id="line-297">    * @return A copy of the events from {@code fromIndex} onward (empty if none/out of range).</span>
-<span class="source-line-no">298</span><span id="line-298">    */</span>
-<span class="source-line-no">299</span><span id="line-299">   public List&lt;String&gt; eventsFrom(int fromIndex) {</span>
-<span class="source-line-no">300</span><span id="line-300">      synchronized (lock) {</span>
-<span class="source-line-no">301</span><span id="line-301">         if (fromIndex &lt; 0 || fromIndex &gt;= events.size())</span>
-<span class="source-line-no">302</span><span id="line-302">            return List.of();</span>
-<span class="source-line-no">303</span><span id="line-303">         return List.copyOf(events.subList(fromIndex, events.size()));</span>
-<span class="source-line-no">304</span><span id="line-304">      }</span>
-<span class="source-line-no">305</span><span id="line-305">   }</span>
-<span class="source-line-no">306</span><span id="line-306"></span>
-<span class="source-line-no">307</span><span id="line-307">   /**</span>
-<span class="source-line-no">308</span><span id="line-308">    * Resolves the zero-based stream start position from a raw resume value (an SSE {@code Last-Event-ID} or the</span>
-<span class="source-line-no">309</span><span id="line-309">    * {@code lastEventId} query parameter, already chosen by the caller).</span>
-<span class="source-line-no">310</span><span id="line-310">    *</span>
-<span class="source-line-no">311</span><span id="line-311">    * &lt;p&gt;</span>
-<span class="source-line-no">312</span><span id="line-312">    * Progress event {@code events[i]} is always streamed with SSE id {@code i+1}, so a resume value {@code k} means</span>
-<span class="source-line-no">313</span><span id="line-313">    * "events {@code 0..k-1} were delivered" and the stream continues at {@code events[k]}.  The value is trimmed of</span>
-<span class="source-line-no">314</span><span id="line-314">    * SP/HTAB, must then match {@code ^[0-9]{1,10}$} (so {@code +1}, {@code -1}, {@code 1e2}, {@code 0x2} and the</span>
-<span class="source-line-no">315</span><span id="line-315">    * like are refused before any parsing) and must not be past the end of the buffer.  A &lt;jk&gt;null&lt;/jk&gt; or empty value</span>
-<span class="source-line-no">316</span><span id="line-316">    * is a fresh attach: the current event count, so only progress produced from now on is streamed.</span>
-<span class="source-line-no">317</span><span id="line-317">    *</span>
-<span class="source-line-no">318</span><span id="line-318">    * &lt;p&gt;</span>
-<span class="source-line-no">319</span><span id="line-319">    * Runs under the job lock, so the bound cannot race {@link #progress(String)}.</span>
-<span class="source-line-no">320</span><span id="line-320">    *</span>
-<span class="source-line-no">321</span><span id="line-321">    * @param value The raw resume value, or &lt;jk&gt;null&lt;/jk&gt; if none was supplied.</span>
-<span class="source-line-no">322</span><span id="line-322">    * @return The cursor to pass to {@link #awaitUpdate(int, Duration)}.</span>
-<span class="source-line-no">323</span><span id="line-323">    * @throws IllegalArgumentException If the value is malformed or past the end of the buffered events.</span>
-<span class="source-line-no">324</span><span id="line-324">    */</span>
-<span class="source-line-no">325</span><span id="line-325">   int resumeCursor(String value) {</span>
-<span class="source-line-no">326</span><span id="line-326">      var v = value == null ? "" : trimOws(value);</span>
-<span class="source-line-no">327</span><span id="line-327">      synchronized (lock) {</span>
-<span class="source-line-no">328</span><span id="line-328">         var size = events.size();</span>
-<span class="source-line-no">329</span><span id="line-329">         if (v.isEmpty())</span>
-<span class="source-line-no">330</span><span id="line-330">            return size;</span>
-<span class="source-line-no">331</span><span id="line-331">         if (! RESUME_VALUE.matcher(v).matches())</span>
-<span class="source-line-no">332</span><span id="line-332">            throw iaex("Malformed resume value '%s'.", v);</span>
-<span class="source-line-no">333</span><span id="line-333">         var k = Long.parseLong(v);</span>
-<span class="source-line-no">334</span><span id="line-334">         if (k &gt; size)</span>
-<span class="source-line-no">335</span><span id="line-335">            throw iaex("Resume value %s is past the end of the job's %s buffered events.", v, size);</span>
-<span class="source-line-no">336</span><span id="line-336">         return (int) k;</span>
-<span class="source-line-no">337</span><span id="line-337">      }</span>
-<span class="source-line-no">338</span><span id="line-338">   }</span>
-<span class="source-line-no">339</span><span id="line-339"></span>
-<span class="source-line-no">340</span><span id="line-340">   /** Trims HTTP optional whitespace (SP and HTAB only) from both ends. */</span>
-<span class="source-line-no">341</span><span id="line-341">   static String trimOws(String value) {</span>
-<span class="source-line-no">342</span><span id="line-342">      var b = 0;</span>
-<span class="source-line-no">343</span><span id="line-343">      var e = value.length();</span>
-<span class="source-line-no">344</span><span id="line-344">      while (b &lt; e &amp;&amp; isOws(value.charAt(b)))</span>
-<span class="source-line-no">345</span><span id="line-345">         b++;</span>
-<span class="source-line-no">346</span><span id="line-346">      while (e &gt; b &amp;&amp; isOws(value.charAt(e - 1)))</span>
-<span class="source-line-no">347</span><span id="line-347">         e--;</span>
-<span class="source-line-no">348</span><span id="line-348">      return value.substring(b, e);</span>
-<span class="source-line-no">349</span><span id="line-349">   }</span>
-<span class="source-line-no">350</span><span id="line-350"></span>
-<span class="source-line-no">351</span><span id="line-351">   private static boolean isOws(char c) {</span>
-<span class="source-line-no">352</span><span id="line-352">      return c == ' ' || c == '\t';</span>
-<span class="source-line-no">353</span><span id="line-353">   }</span>
-<span class="source-line-no">354</span><span id="line-354"></span>
-<span class="source-line-no">355</span><span id="line-355">   /**</span>
-<span class="source-line-no">356</span><span id="line-356">    * Blocks until there is a progress event at or after {@code fromIndex}, or the job is terminal, or {@code timeout}</span>
-<span class="source-line-no">357</span><span id="line-357">    * elapses &amp;mdash; then returns whichever is available.</span>
-<span class="source-line-no">358</span><span id="line-358">    *</span>
-<span class="source-line-no">359</span><span id="line-359">    * &lt;p&gt;</span>
-<span class="source-line-no">360</span><span id="line-360">    * A terminal job returns immediately with any remaining buffered events plus its terminal result, so a single</span>
-<span class="source-line-no">361</span><span id="line-361">    * subscriber loop drains a completed (or re-attached) job in one pass.</span>
-<span class="source-line-no">362</span><span id="line-362">    *</span>
-<span class="source-line-no">363</span><span id="line-363">    * @param fromIndex The zero-based index the caller has already consumed up to.</span>
-<span class="source-line-no">364</span><span id="line-364">    * @param timeout The maximum time to wait for a new event.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">365</span><span id="line-365">    * @return The new events (possibly empty) and the terminal result (&lt;jk&gt;null&lt;/jk&gt; while still running).</span>
-<span class="source-line-no">366</span><span id="line-366">    */</span>
-<span class="source-line-no">367</span><span id="line-367">   public Update awaitUpdate(int fromIndex, Duration timeout) {</span>
-<span class="source-line-no">368</span><span id="line-368">      reqnn("timeout", timeout);</span>
-<span class="source-line-no">369</span><span id="line-369">      var deadlineNanos = System.nanoTime() + Math.max(0L, timeout.toNanos());</span>
-<span class="source-line-no">370</span><span id="line-370">      synchronized (lock) {</span>
-<span class="source-line-no">371</span><span id="line-371">         while (true) {</span>
-<span class="source-line-no">372</span><span id="line-372">            if (fromIndex &lt; events.size() || result != null) {</span>
-<span class="source-line-no">373</span><span id="line-373">               var newEvents = fromIndex &lt; events.size()</span>
-<span class="source-line-no">374</span><span id="line-374">                  ? List.copyOf(events.subList(Math.max(0, fromIndex), events.size()))</span>
-<span class="source-line-no">375</span><span id="line-375">                  : List.&lt;String&gt;of();</span>
-<span class="source-line-no">376</span><span id="line-376">               return new Update(newEvents, result);</span>
-<span class="source-line-no">377</span><span id="line-377">            }</span>
-<span class="source-line-no">378</span><span id="line-378">            var remaining = deadlineNanos - System.nanoTime();</span>
-<span class="source-line-no">379</span><span id="line-379">            if (remaining &lt;= 0L)</span>
-<span class="source-line-no">380</span><span id="line-380">               return new Update(List.of(), null);</span>
-<span class="source-line-no">381</span><span id="line-381">            try {</span>
-<span class="source-line-no">382</span><span id="line-382">               lock.wait(remaining / 1_000_000L, (int) (remaining % 1_000_000L));</span>
-<span class="source-line-no">383</span><span id="line-383">            } catch (InterruptedException e) {</span>
-<span class="source-line-no">384</span><span id="line-384">               Thread.currentThread().interrupt();</span>
-<span class="source-line-no">385</span><span id="line-385">               return new Update(List.of(), result);</span>
-<span class="source-line-no">386</span><span id="line-386">            }</span>
-<span class="source-line-no">387</span><span id="line-387">         }</span>
-<span class="source-line-no">388</span><span id="line-388">      }</span>
-<span class="source-line-no">389</span><span id="line-389">   }</span>
-<span class="source-line-no">390</span><span id="line-390"></span>
-<span class="source-line-no">391</span><span id="line-391">   /**</span>
-<span class="source-line-no">392</span><span id="line-392">    * Attempts to register a subscriber, enforcing the {@link #maxSubscribers} cap.</span>
-<span class="source-line-no">393</span><span id="line-393">    *</span>
-<span class="source-line-no">394</span><span id="line-394">    * @return &lt;jk&gt;true&lt;/jk&gt; if a subscriber slot was acquired; &lt;jk&gt;false&lt;/jk&gt; if the cap is already reached.</span>
-<span class="source-line-no">395</span><span id="line-395">    */</span>
-<span class="source-line-no">396</span><span id="line-396">   public boolean acquireSubscriber() {</span>
-<span class="source-line-no">397</span><span id="line-397">      synchronized (lock) {</span>
-<span class="source-line-no">398</span><span id="line-398">         if (subscribers &gt;= maxSubscribers)</span>
-<span class="source-line-no">399</span><span id="line-399">            return false;</span>
-<span class="source-line-no">400</span><span id="line-400">         subscribers++;</span>
-<span class="source-line-no">401</span><span id="line-401">         return true;</span>
-<span class="source-line-no">402</span><span id="line-402">      }</span>
-<span class="source-line-no">403</span><span id="line-403">   }</span>
-<span class="source-line-no">404</span><span id="line-404"></span>
-<span class="source-line-no">405</span><span id="line-405">   /** Releases a subscriber slot previously acquired via {@link #acquireSubscriber()}. */</span>
-<span class="source-line-no">406</span><span id="line-406">   public void releaseSubscriber() {</span>
-<span class="source-line-no">407</span><span id="line-407">      synchronized (lock) {</span>
-<span class="source-line-no">408</span><span id="line-408">         if (subscribers &gt; 0)</span>
-<span class="source-line-no">409</span><span id="line-409">            subscribers--;</span>
-<span class="source-line-no">410</span><span id="line-410">      }</span>
-<span class="source-line-no">411</span><span id="line-411">   }</span>
-<span class="source-line-no">412</span><span id="line-412"></span>
-<span class="source-line-no">413</span><span id="line-413">   /** @return The current number of registered subscribers. */</span>
-<span class="source-line-no">414</span><span id="line-414">   public int subscriberCount() { synchronized (lock) { return subscribers; } }</span>
-<span class="source-line-no">415</span><span id="line-415"></span>
-<span class="source-line-no">416</span><span id="line-416">   /** Settles the terminal result and wakes every waiting subscriber.  Caller must hold {@link #lock}. */</span>
-<span class="source-line-no">417</span><span id="line-417">   private void settle(ActionResult value) {</span>
-<span class="source-line-no">418</span><span id="line-418">      synchronized (lock) {</span>
-<span class="source-line-no">419</span><span id="line-419">         result = value;</span>
-<span class="source-line-no">420</span><span id="line-420">         lock.notifyAll();</span>
-<span class="source-line-no">421</span><span id="line-421">      }</span>
-<span class="source-line-no">422</span><span id="line-422">   }</span>
-<span class="source-line-no">423</span><span id="line-423"></span>
-<span class="source-line-no">424</span><span id="line-424">   /** Builds a terminal {@link ActionResult} for a cancellation, reusing the frozen contract's reserved outcomes. */</span>
-<span class="source-line-no">425</span><span id="line-425">   private static ActionResult cancelledResult(boolean afterEffect) {</span>
-<span class="source-line-no">426</span><span id="line-426">      var r = new ActionResult();</span>
-<span class="source-line-no">427</span><span id="line-427">      r.outcome = (afterEffect ? Outcome.CANCELLED_AFTER_EFFECT : Outcome.CANCELLED).wire();</span>
-<span class="source-line-no">428</span><span id="line-428">      return r;</span>
-<span class="source-line-no">429</span><span id="line-429">   }</span>
-<span class="source-line-no">430</span><span id="line-430"></span>
-<span class="source-line-no">431</span><span id="line-431">   /**</span>
-<span class="source-line-no">432</span><span id="line-432">    * Returns a description that does &lt;b&gt;not&lt;/b&gt; include the capability id.</span>
-<span class="source-line-no">433</span><span id="line-433">    *</span>
-<span class="source-line-no">434</span><span id="line-434">    * &lt;p&gt;</span>
-<span class="source-line-no">435</span><span id="line-435">    * The id is the stream's whole access control (see the class javadoc); a bean-dumping logger or debug view that</span>
-<span class="source-line-no">436</span><span id="line-436">    * stringified it would write a live capability somewhere it can be read back and used to attach to the stream.</span>
-<span class="source-line-no">437</span><span id="line-437">    *</span>
-<span class="source-line-no">438</span><span id="line-438">    * @return A value-free description.</span>
-<span class="source-line-no">439</span><span id="line-439">    */</span>
-<span class="source-line-no">440</span><span id="line-440">   @Override /* Object */</span>
-<span class="source-line-no">441</span><span id="line-441">   public String toString() {</span>
-<span class="source-line-no">442</span><span id="line-442">      return "AsyncJob(id=&lt;redacted&gt;,terminal=" + isTerminal() + ")";</span>
-<span class="source-line-no">443</span><span id="line-443">   }</span>
-<span class="source-line-no">444</span><span id="line-444"></span>
-<span class="source-line-no">445</span><span id="line-445">   /**</span>
-<span class="source-line-no">446</span><span id="line-446">    * The result of {@link AsyncJob#awaitUpdate(int, Duration)}: the newly-available progress events and the terminal</span>
-<span class="source-line-no">447</span><span id="line-447">    * result (&lt;jk&gt;null&lt;/jk&gt; while the job is still running).</span>
-<span class="source-line-no">448</span><span id="line-448">    *</span>
-<span class="source-line-no">449</span><span id="line-449">    * @param events The new progress events since the caller's cursor.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">450</span><span id="line-450">    * @param result The terminal result, or &lt;jk&gt;null&lt;/jk&gt; if the job is still running.</span>
-<span class="source-line-no">451</span><span id="line-451">    */</span>
-<span class="source-line-no">452</span><span id="line-452">   public record Update(List&lt;String&gt; events, ActionResult result) {}</span>
-<span class="source-line-no">453</span><span id="line-453">}</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.concurrent.atomic.AtomicReference;</span>
+<span class="source-line-no">025</span><span id="line-25">import java.util.regex.*;</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.console.views.ActionResult.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">/**</span>
+<span class="source-line-no">030</span><span id="line-30"> * A single in-memory, one-shot async job &amp;mdash; the streamed-progress + terminal-result unit of a future async write</span>
+<span class="source-line-no">031</span><span id="line-31"> * variant.</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='section'&gt;The stream URL IS the capability&lt;/h2&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * A job is addressed by its {@link #id() id}, an unguessable {@value AsyncJobRegistry#CAPABILITY_BITS}-bit</span>
+<span class="source-line-no">036</span><span id="line-36"> * {@link java.security.SecureRandom} token minted by the {@link AsyncJobRegistry}, matching</span>
+<span class="source-line-no">037</span><span id="line-37"> * {@link org.apache.juneau.rest.server.filter.SynchronizerToken}'s bar.  Because a browser {@code EventSource}</span>
+<span class="source-line-no">038</span><span id="line-38"> * constructor cannot set an {@code X-Csrf-Token} header and cookies are unsound on a loopback port, the SSE GET that</span>
+<span class="source-line-no">039</span><span id="line-39"> * streams a job's progress is Host-checked at the boundary and &lt;b&gt;capability-gated by the unguessability of the</span>
+<span class="source-line-no">040</span><span id="line-40"> * id&lt;/b&gt; &amp;mdash; there is no session cookie and no token-on-GET.  Consequently the id is a secret:</span>
+<span class="source-line-no">041</span><span id="line-41"> * {@link #toString()} never renders it.</span>
+<span class="source-line-no">042</span><span id="line-42"> *</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='section'&gt;Server-side hard limits (a data-egress disclosure bound)&lt;/h2&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;p&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * A job caps its own streamed output at {@link #maxOutputBytes} bytes and terminates itself when that is exceeded,</span>
+<span class="source-line-no">046</span><span id="line-46"> * and it terminates itself once past its {@link #deadline() hard-timeout deadline}.  Both are enforced &lt;b&gt;here&lt;/b&gt;,</span>
+<span class="source-line-no">047</span><span id="line-47"> * server-side &amp;mdash; a client cannot be trusted to cancel &amp;mdash; and both are disclosure bounds, not only heap</span>
+<span class="source-line-no">048</span><span id="line-48"> * bounds: they cap how long, and how much, customer-adjacent triage content is streamed.  The number of concurrent</span>
+<span class="source-line-no">049</span><span id="line-49"> * subscribers is capped at {@link #maxSubscribers} (a browser reload plus one straggler), enforced through</span>
+<span class="source-line-no">050</span><span id="line-50"> * {@link #acquireSubscriber()} / {@link #releaseSubscriber()}.</span>
+<span class="source-line-no">051</span><span id="line-51"> *</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;h2 class='section'&gt;Progress buffer and resume&lt;/h2&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;p&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> * Progress events are kept, in order, for the job's whole life (bounded by the output cap) and are never trimmed, so</span>
+<span class="source-line-no">055</span><span id="line-55"> * the position of an event never changes: {@code events[i]} is streamed with SSE id {@code i+1}.  A subscriber that</span>
+<span class="source-line-no">056</span><span id="line-56"> * reconnects with a {@code Last-Event-ID} resumes exactly after the last event it saw; a fresh subscriber is</span>
+<span class="source-line-no">057</span><span id="line-57"> * live-only (see {@link #resumeCursor(String)}).</span>
+<span class="source-line-no">058</span><span id="line-58"> *</span>
+<span class="source-line-no">059</span><span id="line-59"> * &lt;h2 class='section'&gt;Terminal outcomes reuse the frozen {@link ActionResult} contract&lt;/h2&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;p&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> * A job settles exactly once, to an {@link ActionResult}: a producer-supplied {@link #complete(ActionResult)</span>
+<span class="source-line-no">062</span><span id="line-62"> * success/failure/refusal/unknown}, a {@link #cancel() cancellation} (distinguishing {@link Outcome#CANCELLED</span>
+<span class="source-line-no">063</span><span id="line-63"> * cancelled} from {@link Outcome#CANCELLED_AFTER_EFFECT cancelled-after-effect} via</span>
+<span class="source-line-no">064</span><span id="line-64"> * {@link #markEffectStarted()}), an output-limit termination, or a timeout.  The reserved async outcomes are read</span>
+<span class="source-line-no">065</span><span id="line-65"> * off the frozen {@link Outcome} enum via its public {@code outcome} field &amp;mdash; this contract is reused, never</span>
+<span class="source-line-no">066</span><span id="line-66"> * re-versioned.</span>
+<span class="source-line-no">067</span><span id="line-67"> *</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> *    &lt;li class='note'&gt;This class is thread-safe: a producer thread appends progress and settles the job while</span>
+<span class="source-line-no">070</span><span id="line-70"> *       subscriber threads drain it through {@link #awaitUpdate(int, Duration)}.</span>
+<span class="source-line-no">071</span><span id="line-71"> * &lt;/ul&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> *</span>
+<span class="source-line-no">073</span><span id="line-73"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> * &lt;ul&gt;</span>
+<span class="source-line-no">075</span><span id="line-75"> *    &lt;li class='jc'&gt;{@link AsyncJobRegistry}</span>
+<span class="source-line-no">076</span><span id="line-76"> *    &lt;li class='jc'&gt;{@link AsyncJobsMixin}</span>
+<span class="source-line-no">077</span><span id="line-77"> *    &lt;li class='jc'&gt;{@link ActionResult}</span>
+<span class="source-line-no">078</span><span id="line-78"> * &lt;/ul&gt;</span>
+<span class="source-line-no">079</span><span id="line-79"> *</span>
+<span class="source-line-no">080</span><span id="line-80"> * @since 10.0.0</span>
+<span class="source-line-no">081</span><span id="line-81"> */</span>
+<span class="source-line-no">082</span><span id="line-82">public final class AsyncJob {</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">   /** A resume value after trimming: 1 to 10 ASCII digits (so {@link Long#parseLong(String)} cannot overflow). */</span>
+<span class="source-line-no">085</span><span id="line-85">   private static final Pattern RESUME_VALUE = Pattern.compile("\\d{1,10}");</span>
+<span class="source-line-no">086</span><span id="line-86"></span>
+<span class="source-line-no">087</span><span id="line-87">   /**</span>
+<span class="source-line-no">088</span><span id="line-88">    * Bytes charged toward the output cap for every progress event, on top of its payload.  Without it an empty</span>
+<span class="source-line-no">089</span><span id="line-89">    * event would cost nothing and a producer could grow the event buffer without bound; with it the event count is</span>
+<span class="source-line-no">090</span><span id="line-90">    * bounded by {@link #maxOutputBytes} (roughly one event per byte at worst).</span>
+<span class="source-line-no">091</span><span id="line-91">    */</span>
+<span class="source-line-no">092</span><span id="line-92">   static final long EVENT_OVERHEAD_BYTES = 1;</span>
+<span class="source-line-no">093</span><span id="line-93"></span>
+<span class="source-line-no">094</span><span id="line-94">   private final String id;</span>
+<span class="source-line-no">095</span><span id="line-95">   private final Instant createdAt;</span>
+<span class="source-line-no">096</span><span id="line-96">   private final Duration timeout;</span>
+<span class="source-line-no">097</span><span id="line-97">   private final long maxOutputBytes;</span>
+<span class="source-line-no">098</span><span id="line-98">   private final int maxSubscribers;</span>
+<span class="source-line-no">099</span><span id="line-99"></span>
+<span class="source-line-no">100</span><span id="line-100">   private final Object lock = new Object();</span>
+<span class="source-line-no">101</span><span id="line-101">   private final List&lt;String&gt; events = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">102</span><span id="line-102">   private long outputBytes;</span>
+<span class="source-line-no">103</span><span id="line-103">   private long chargedBytes;   // Payload plus per-event overhead; what the cap is enforced against.</span>
+<span class="source-line-no">104</span><span id="line-104">   private boolean effectStarted;</span>
+<span class="source-line-no">105</span><span id="line-105">   private int subscribers;</span>
+<span class="source-line-no">106</span><span id="line-106">   private ActionResult result;   // Non-null iff terminal; the single settled outcome.</span>
+<span class="source-line-no">107</span><span id="line-107">   private final AtomicReference&lt;String&gt; owner = new AtomicReference&lt;&gt;();   // The principal name bound to this job, or null when the job is not bound to a caller.</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   /**</span>
+<span class="source-line-no">110</span><span id="line-110">    * Constructor.</span>
+<span class="source-line-no">111</span><span id="line-111">    *</span>
+<span class="source-line-no">112</span><span id="line-112">    * @param id The unguessable capability id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">113</span><span id="line-113">    * @param createdAt The instant the job was created (for the hard-timeout deadline).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">114</span><span id="line-114">    * @param timeout The hard timeout after which the job self-terminates.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">115</span><span id="line-115">    * @param maxOutputBytes The maximum number of streamed output bytes before the job self-terminates.</span>
+<span class="source-line-no">116</span><span id="line-116">    * @param maxSubscribers The maximum number of concurrent subscribers.</span>
+<span class="source-line-no">117</span><span id="line-117">    */</span>
+<span class="source-line-no">118</span><span id="line-118">   AsyncJob(String id, Instant createdAt, Duration timeout, long maxOutputBytes, int maxSubscribers) {</span>
+<span class="source-line-no">119</span><span id="line-119">      this.id = reqnn("id", id);</span>
+<span class="source-line-no">120</span><span id="line-120">      this.createdAt = reqnn("createdAt", createdAt);</span>
+<span class="source-line-no">121</span><span id="line-121">      this.timeout = reqnn("timeout", timeout);</span>
+<span class="source-line-no">122</span><span id="line-122">      this.maxOutputBytes = maxOutputBytes;</span>
+<span class="source-line-no">123</span><span id="line-123">      this.maxSubscribers = maxSubscribers;</span>
+<span class="source-line-no">124</span><span id="line-124">   }</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">   /**</span>
+<span class="source-line-no">127</span><span id="line-127">    * The unguessable capability id &amp;mdash; the whole of the job's access control (see the class javadoc).</span>
+<span class="source-line-no">128</span><span id="line-128">    *</span>
+<span class="source-line-no">129</span><span id="line-129">    * @return The id.  Never &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">130</span><span id="line-130">    */</span>
+<span class="source-line-no">131</span><span id="line-131">   public String id() { return id; }</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">   /**</span>
+<span class="source-line-no">134</span><span id="line-134">    * Binds the job to the principal that started it.</span>
+<span class="source-line-no">135</span><span id="line-135">    *</span>
+<span class="source-line-no">136</span><span id="line-136">    * &lt;p&gt;</span>
+<span class="source-line-no">137</span><span id="line-137">    * Once bound, {@link AsyncJobsMixin} serves the stream and the cancel endpoint only to the same principal; any other</span>
+<span class="source-line-no">138</span><span id="line-138">    * caller is answered {@code 404}, the same as an unknown id.  A job with no owner stays reachable by its id alone.</span>
+<span class="source-line-no">139</span><span id="line-139">    *</span>
+<span class="source-line-no">140</span><span id="line-140">    * @param principalName The principal name.  &lt;jk&gt;null&lt;/jk&gt; leaves the job unbound.</span>
+<span class="source-line-no">141</span><span id="line-141">    * @return This object.</span>
+<span class="source-line-no">142</span><span id="line-142">    */</span>
+<span class="source-line-no">143</span><span id="line-143">   public AsyncJob owner(String principalName) {</span>
+<span class="source-line-no">144</span><span id="line-144">      owner.set(principalName);</span>
+<span class="source-line-no">145</span><span id="line-145">      return this;</span>
+<span class="source-line-no">146</span><span id="line-146">   }</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">   /** @return The principal name this job is bound to, or &lt;jk&gt;null&lt;/jk&gt; when it is not bound to a caller. */</span>
+<span class="source-line-no">149</span><span id="line-149">   public String owner() { return owner.get(); }</span>
+<span class="source-line-no">150</span><span id="line-150"></span>
+<span class="source-line-no">151</span><span id="line-151">   /** @return The instant this job was created. */</span>
+<span class="source-line-no">152</span><span id="line-152">   public Instant createdAt() { return createdAt; }</span>
+<span class="source-line-no">153</span><span id="line-153"></span>
+<span class="source-line-no">154</span><span id="line-154">   /** @return The instant past which this job self-terminates on the next timeout check. */</span>
+<span class="source-line-no">155</span><span id="line-155">   public Instant deadline() { return createdAt.plus(timeout); }</span>
+<span class="source-line-no">156</span><span id="line-156"></span>
+<span class="source-line-no">157</span><span id="line-157">   /** @return The total number of streamed output bytes so far. */</span>
+<span class="source-line-no">158</span><span id="line-158">   public long outputBytes() { synchronized (lock) { return outputBytes; } }</span>
+<span class="source-line-no">159</span><span id="line-159"></span>
+<span class="source-line-no">160</span><span id="line-160">   /** @return The maximum streamed output bytes before self-termination. */</span>
+<span class="source-line-no">161</span><span id="line-161">   public long maxOutputBytes() { return maxOutputBytes; }</span>
+<span class="source-line-no">162</span><span id="line-162"></span>
+<span class="source-line-no">163</span><span id="line-163">   /** @return The maximum number of concurrent subscribers. */</span>
+<span class="source-line-no">164</span><span id="line-164">   public int maxSubscribers() { return maxSubscribers; }</span>
+<span class="source-line-no">165</span><span id="line-165"></span>
+<span class="source-line-no">166</span><span id="line-166">   /**</span>
+<span class="source-line-no">167</span><span id="line-167">    * Appends a progress event.</span>
+<span class="source-line-no">168</span><span id="line-168">    *</span>
+<span class="source-line-no">169</span><span id="line-169">    * &lt;p&gt;</span>
+<span class="source-line-no">170</span><span id="line-170">    * A no-op once the job is terminal.  Enforces the server-side output cap: if this event would push the total</span>
+<span class="source-line-no">171</span><span id="line-171">    * over {@link #maxOutputBytes}, the job is instead terminated with a {@link Outcome#FAILURE failure} carrying an</span>
+<span class="source-line-no">172</span><span id="line-172">    * {@code app:output-limit-exceeded} message and the event is dropped &amp;mdash; the cap is a data-egress bound, so</span>
+<span class="source-line-no">173</span><span id="line-173">    * the excess content is never streamed.</span>
+<span class="source-line-no">174</span><span id="line-174">    *</span>
+<span class="source-line-no">175</span><span id="line-175">    * &lt;p&gt;</span>
+<span class="source-line-no">176</span><span id="line-176">    * Each event is charged its UTF-8 payload size plus a fixed {@value #EVENT_OVERHEAD_BYTES}-byte overhead toward</span>
+<span class="source-line-no">177</span><span id="line-177">    * the cap, so empty events cannot grow the buffer without bound.  {@link #outputBytes()} still reports payload</span>
+<span class="source-line-no">178</span><span id="line-178">    * bytes only.</span>
+<span class="source-line-no">179</span><span id="line-179">    *</span>
+<span class="source-line-no">180</span><span id="line-180">    * @param text The progress text.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">181</span><span id="line-181">    * @return &lt;jk&gt;true&lt;/jk&gt; if the event was appended; &lt;jk&gt;false&lt;/jk&gt; if the job was already terminal or the output</span>
+<span class="source-line-no">182</span><span id="line-182">    *    cap was hit (which itself terminates the job).</span>
+<span class="source-line-no">183</span><span id="line-183">    */</span>
+<span class="source-line-no">184</span><span id="line-184">   public boolean progress(String text) {</span>
+<span class="source-line-no">185</span><span id="line-185">      reqnn("text", text);</span>
+<span class="source-line-no">186</span><span id="line-186">      synchronized (lock) {</span>
+<span class="source-line-no">187</span><span id="line-187">         if (result != null)</span>
+<span class="source-line-no">188</span><span id="line-188">            return false;</span>
+<span class="source-line-no">189</span><span id="line-189">         var add = (long) text.getBytes(UTF_8).length;</span>
+<span class="source-line-no">190</span><span id="line-190">         var charge = add + EVENT_OVERHEAD_BYTES;</span>
+<span class="source-line-no">191</span><span id="line-191">         if (chargedBytes + charge &gt; maxOutputBytes) {</span>
+<span class="source-line-no">192</span><span id="line-192">            settle(ActionResult.failure().message("app:output-limit-exceeded"));</span>
+<span class="source-line-no">193</span><span id="line-193">            return false;</span>
+<span class="source-line-no">194</span><span id="line-194">         }</span>
+<span class="source-line-no">195</span><span id="line-195">         outputBytes += add;</span>
+<span class="source-line-no">196</span><span id="line-196">         chargedBytes += charge;</span>
+<span class="source-line-no">197</span><span id="line-197">         events.add(text);</span>
+<span class="source-line-no">198</span><span id="line-198">         lock.notifyAll();</span>
+<span class="source-line-no">199</span><span id="line-199">         return true;</span>
+<span class="source-line-no">200</span><span id="line-200">      }</span>
+<span class="source-line-no">201</span><span id="line-201">   }</span>
+<span class="source-line-no">202</span><span id="line-202"></span>
+<span class="source-line-no">203</span><span id="line-203">   /**</span>
+<span class="source-line-no">204</span><span id="line-204">    * Marks that this job's outbound effect has begun, so a subsequent {@link #cancel()} settles to</span>
+<span class="source-line-no">205</span><span id="line-205">    * {@link Outcome#CANCELLED_AFTER_EFFECT cancelled-after-effect} rather than {@link Outcome#CANCELLED cancelled}</span>
+<span class="source-line-no">206</span><span id="line-206">    * (the two are different outcomes and must not be collapsed).  A no-op once terminal.</span>
+<span class="source-line-no">207</span><span id="line-207">    *</span>
+<span class="source-line-no">208</span><span id="line-208">    * &lt;p&gt;</span>
+<span class="source-line-no">209</span><span id="line-209">    * The mark and the terminal check share one lock acquisition with {@link #cancel()} and</span>
+<span class="source-line-no">210</span><span id="line-210">    * {@link #enforceTimeout(Instant)}, so a producer that starts its effect only when this returns &lt;jk&gt;true&lt;/jk&gt; can</span>
+<span class="source-line-no">211</span><span id="line-211">    * never start it on a job that has already been cancelled or timed out.</span>
+<span class="source-line-no">212</span><span id="line-212">    *</span>
+<span class="source-line-no">213</span><span id="line-213">    * @return &lt;jk&gt;true&lt;/jk&gt; if the job is still running and is now marked; &lt;jk&gt;false&lt;/jk&gt; if it was already terminal, in</span>
+<span class="source-line-no">214</span><span id="line-214">    *    which case the producer must not start the effect.</span>
+<span class="source-line-no">215</span><span id="line-215">    */</span>
+<span class="source-line-no">216</span><span id="line-216">   public boolean markEffectStarted() {</span>
+<span class="source-line-no">217</span><span id="line-217">      synchronized (lock) {</span>
+<span class="source-line-no">218</span><span id="line-218">         if (result != null)</span>
+<span class="source-line-no">219</span><span id="line-219">            return false;</span>
+<span class="source-line-no">220</span><span id="line-220">         effectStarted = true;</span>
+<span class="source-line-no">221</span><span id="line-221">         return true;</span>
+<span class="source-line-no">222</span><span id="line-222">      }</span>
+<span class="source-line-no">223</span><span id="line-223">   }</span>
+<span class="source-line-no">224</span><span id="line-224"></span>
+<span class="source-line-no">225</span><span id="line-225">   /** @return Whether the outbound effect has begun (see {@link #markEffectStarted()}). */</span>
+<span class="source-line-no">226</span><span id="line-226">   public boolean effectStarted() { synchronized (lock) { return effectStarted; } }</span>
+<span class="source-line-no">227</span><span id="line-227"></span>
+<span class="source-line-no">228</span><span id="line-228">   /**</span>
+<span class="source-line-no">229</span><span id="line-229">    * Settles the job to a producer-supplied terminal result (success/failure/refusal/unknown).</span>
+<span class="source-line-no">230</span><span id="line-230">    *</span>
+<span class="source-line-no">231</span><span id="line-231">    * @param value The terminal result.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">232</span><span id="line-232">    * @return &lt;jk&gt;true&lt;/jk&gt; if this call settled the job; &lt;jk&gt;false&lt;/jk&gt; if it was already terminal (first settle</span>
+<span class="source-line-no">233</span><span id="line-233">    *    wins).</span>
+<span class="source-line-no">234</span><span id="line-234">    */</span>
+<span class="source-line-no">235</span><span id="line-235">   public boolean complete(ActionResult value) {</span>
+<span class="source-line-no">236</span><span id="line-236">      reqnn("value", value);</span>
+<span class="source-line-no">237</span><span id="line-237">      synchronized (lock) {</span>
+<span class="source-line-no">238</span><span id="line-238">         if (result != null)</span>
+<span class="source-line-no">239</span><span id="line-239">            return false;</span>
+<span class="source-line-no">240</span><span id="line-240">         settle(value);</span>
+<span class="source-line-no">241</span><span id="line-241">         return true;</span>
+<span class="source-line-no">242</span><span id="line-242">      }</span>
+<span class="source-line-no">243</span><span id="line-243">   }</span>
+<span class="source-line-no">244</span><span id="line-244"></span>
+<span class="source-line-no">245</span><span id="line-245">   /**</span>
+<span class="source-line-no">246</span><span id="line-246">    * Cancels the job, settling it to {@link Outcome#CANCELLED cancelled} &amp;mdash; or</span>
+<span class="source-line-no">247</span><span id="line-247">    * {@link Outcome#CANCELLED_AFTER_EFFECT cancelled-after-effect} when {@link #markEffectStarted()} was called</span>
+<span class="source-line-no">248</span><span id="line-248">    * first.  Enforced server-side; a client cannot be trusted to stop the work itself.</span>
+<span class="source-line-no">249</span><span id="line-249">    *</span>
+<span class="source-line-no">250</span><span id="line-250">    * @return &lt;jk&gt;true&lt;/jk&gt; if this call settled the job; &lt;jk&gt;false&lt;/jk&gt; if it was already terminal.</span>
+<span class="source-line-no">251</span><span id="line-251">    */</span>
+<span class="source-line-no">252</span><span id="line-252">   public boolean cancel() {</span>
+<span class="source-line-no">253</span><span id="line-253">      synchronized (lock) {</span>
+<span class="source-line-no">254</span><span id="line-254">         if (result != null)</span>
+<span class="source-line-no">255</span><span id="line-255">            return false;</span>
+<span class="source-line-no">256</span><span id="line-256">         settle(cancelledResult(effectStarted));</span>
+<span class="source-line-no">257</span><span id="line-257">         return true;</span>
+<span class="source-line-no">258</span><span id="line-258">      }</span>
+<span class="source-line-no">259</span><span id="line-259">   }</span>
+<span class="source-line-no">260</span><span id="line-260"></span>
+<span class="source-line-no">261</span><span id="line-261">   /**</span>
+<span class="source-line-no">262</span><span id="line-262">    * Terminates the job if it is past its {@link #deadline() hard-timeout deadline}, settling it to a non-optimistic</span>
+<span class="source-line-no">263</span><span id="line-263">    * {@link Outcome#UNKNOWN unknown} &amp;mdash; the effect may or may not have completed in the time cut off.  This is</span>
+<span class="source-line-no">264</span><span id="line-264">    * the server-side timeout enforcement: it bounds both heap and, as a data-egress disclosure bound, how</span>
+<span class="source-line-no">265</span><span id="line-265">    * long triage keeps streaming customer-adjacent content.</span>
+<span class="source-line-no">266</span><span id="line-266">    *</span>
+<span class="source-line-no">267</span><span id="line-267">    * @param now The current instant.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">268</span><span id="line-268">    * @return &lt;jk&gt;true&lt;/jk&gt; if this call timed the job out; &lt;jk&gt;false&lt;/jk&gt; if it was already terminal or not yet past</span>
+<span class="source-line-no">269</span><span id="line-269">    *    its deadline.</span>
+<span class="source-line-no">270</span><span id="line-270">    */</span>
+<span class="source-line-no">271</span><span id="line-271">   public boolean enforceTimeout(Instant now) {</span>
+<span class="source-line-no">272</span><span id="line-272">      reqnn("now", now);</span>
+<span class="source-line-no">273</span><span id="line-273">      synchronized (lock) {</span>
+<span class="source-line-no">274</span><span id="line-274">         if (result != null || ! now.isAfter(deadline()))</span>
+<span class="source-line-no">275</span><span id="line-275">            return false;</span>
+<span class="source-line-no">276</span><span id="line-276">         settle(ActionResult.unknown().message("app:hard-timeout-exceeded"));</span>
+<span class="source-line-no">277</span><span id="line-277">         return true;</span>
+<span class="source-line-no">278</span><span id="line-278">      }</span>
+<span class="source-line-no">279</span><span id="line-279">   }</span>
+<span class="source-line-no">280</span><span id="line-280"></span>
+<span class="source-line-no">281</span><span id="line-281">   /** @return Whether the job has settled to a terminal result. */</span>
+<span class="source-line-no">282</span><span id="line-282">   public boolean isTerminal() { synchronized (lock) { return result != null; } }</span>
+<span class="source-line-no">283</span><span id="line-283"></span>
+<span class="source-line-no">284</span><span id="line-284">   /** @return The terminal result, or &lt;jk&gt;null&lt;/jk&gt; if the job is still running. */</span>
+<span class="source-line-no">285</span><span id="line-285">   public ActionResult result() { synchronized (lock) { return result; } }</span>
+<span class="source-line-no">286</span><span id="line-286"></span>
+<span class="source-line-no">287</span><span id="line-287">   /** @return The number of progress events buffered so far. */</span>
+<span class="source-line-no">288</span><span id="line-288">   public int eventCount() { synchronized (lock) { return events.size(); } }</span>
+<span class="source-line-no">289</span><span id="line-289"></span>
+<span class="source-line-no">290</span><span id="line-290">   /**</span>
+<span class="source-line-no">291</span><span id="line-291">    * Snapshots the progress events at or after {@code fromIndex}.</span>
+<span class="source-line-no">292</span><span id="line-292">    *</span>
+<span class="source-line-no">293</span><span id="line-293">    * &lt;p&gt;</span>
+<span class="source-line-no">294</span><span id="line-294">    * Not the stream's resume path: this answers empty for an out-of-range index, whereas a past-the-end resume value</span>
+<span class="source-line-no">295</span><span id="line-295">    * is refused (see {@link #resumeCursor(String)}).</span>
+<span class="source-line-no">296</span><span id="line-296">    *</span>
+<span class="source-line-no">297</span><span id="line-297">    * @param fromIndex The zero-based index to start from.</span>
+<span class="source-line-no">298</span><span id="line-298">    * @return A copy of the events from {@code fromIndex} onward (empty if none/out of range).</span>
+<span class="source-line-no">299</span><span id="line-299">    */</span>
+<span class="source-line-no">300</span><span id="line-300">   public List&lt;String&gt; eventsFrom(int fromIndex) {</span>
+<span class="source-line-no">301</span><span id="line-301">      synchronized (lock) {</span>
+<span class="source-line-no">302</span><span id="line-302">         if (fromIndex &lt; 0 || fromIndex &gt;= events.size())</span>
+<span class="source-line-no">303</span><span id="line-303">            return List.of();</span>
+<span class="source-line-no">304</span><span id="line-304">         return List.copyOf(events.subList(fromIndex, events.size()));</span>
+<span class="source-line-no">305</span><span id="line-305">      }</span>
+<span class="source-line-no">306</span><span id="line-306">   }</span>
+<span class="source-line-no">307</span><span id="line-307"></span>
+<span class="source-line-no">308</span><span id="line-308">   /**</span>
+<span class="source-line-no">309</span><span id="line-309">    * Resolves the zero-based stream start position from a raw resume value (an SSE {@code Last-Event-ID} or the</span>
+<span class="source-line-no">310</span><span id="line-310">    * {@code lastEventId} query parameter, already chosen by the caller).</span>
+<span class="source-line-no">311</span><span id="line-311">    *</span>
+<span class="source-line-no">312</span><span id="line-312">    * &lt;p&gt;</span>
+<span class="source-line-no">313</span><span id="line-313">    * Progress event {@code events[i]} is always streamed with SSE id {@code i+1}, so a resume value {@code k} means</span>
+<span class="source-line-no">314</span><span id="line-314">    * "events {@code 0..k-1} were delivered" and the stream continues at {@code events[k]}.  The value is trimmed of</span>
+<span class="source-line-no">315</span><span id="line-315">    * SP/HTAB, must then match {@code ^[0-9]{1,10}$} (so {@code +1}, {@code -1}, {@code 1e2}, {@code 0x2} and the</span>
+<span class="source-line-no">316</span><span id="line-316">    * like are refused before any parsing) and must not be past the end of the buffer.  A &lt;jk&gt;null&lt;/jk&gt; or empty value</span>
+<span class="source-line-no">317</span><span id="line-317">    * is a fresh attach: the current event count, so only progress produced from now on is streamed.</span>
+<span class="source-line-no">318</span><span id="line-318">    *</span>
+<span class="source-line-no">319</span><span id="line-319">    * &lt;p&gt;</span>
+<span class="source-line-no">320</span><span id="line-320">    * Runs under the job lock, so the bound cannot race {@link #progress(String)}.</span>
+<span class="source-line-no">321</span><span id="line-321">    *</span>
+<span class="source-line-no">322</span><span id="line-322">    * @param value The raw resume value, or &lt;jk&gt;null&lt;/jk&gt; if none was supplied.</span>
+<span class="source-line-no">323</span><span id="line-323">    * @return The cursor to pass to {@link #awaitUpdate(int, Duration)}.</span>
+<span class="source-line-no">324</span><span id="line-324">    * @throws IllegalArgumentException If the value is malformed or past the end of the buffered events.</span>
+<span class="source-line-no">325</span><span id="line-325">    */</span>
+<span class="source-line-no">326</span><span id="line-326">   int resumeCursor(String value) {</span>
+<span class="source-line-no">327</span><span id="line-327">      var v = value == null ? "" : trimOws(value);</span>
+<span class="source-line-no">328</span><span id="line-328">      synchronized (lock) {</span>
+<span class="source-line-no">329</span><span id="line-329">         var size = events.size();</span>
+<span class="source-line-no">330</span><span id="line-330">         if (v.isEmpty())</span>
+<span class="source-line-no">331</span><span id="line-331">            return size;</span>
+<span class="source-line-no">332</span><span id="line-332">         if (! RESUME_VALUE.matcher(v).matches())</span>
+<span class="source-line-no">333</span><span id="line-333">            throw iaex("Malformed resume value '%s'.", v);</span>
+<span class="source-line-no">334</span><span id="line-334">         var k = Long.parseLong(v);</span>
+<span class="source-line-no">335</span><span id="line-335">         if (k &gt; size)</span>
+<span class="source-line-no">336</span><span id="line-336">            throw iaex("Resume value %s is past the end of the job's %s buffered events.", v, size);</span>
+<span class="source-line-no">337</span><span id="line-337">         return (int) k;</span>
+<span class="source-line-no">338</span><span id="line-338">      }</span>
+<span class="source-line-no">339</span><span id="line-339">   }</span>
+<span class="source-line-no">340</span><span id="line-340"></span>
+<span class="source-line-no">341</span><span id="line-341">   /** Trims HTTP optional whitespace (SP and HTAB only) from both ends. */</span>
+<span class="source-line-no">342</span><span id="line-342">   static String trimOws(String value) {</span>
+<span class="source-line-no">343</span><span id="line-343">      var b = 0;</span>
+<span class="source-line-no">344</span><span id="line-344">      var e = value.length();</span>
+<span class="source-line-no">345</span><span id="line-345">      while (b &lt; e &amp;&amp; isOws(value.charAt(b)))</span>
+<span class="source-line-no">346</span><span id="line-346">         b++;</span>
+<span class="source-line-no">347</span><span id="line-347">      while (e &gt; b &amp;&amp; isOws(value.charAt(e - 1)))</span>
+<span class="source-line-no">348</span><span id="line-348">         e--;</span>
+<span class="source-line-no">349</span><span id="line-349">      return value.substring(b, e);</span>
+<span class="source-line-no">350</span><span id="line-350">   }</span>
+<span class="source-line-no">351</span><span id="line-351"></span>
+<span class="source-line-no">352</span><span id="line-352">   private static boolean isOws(char c) {</span>
+<span class="source-line-no">353</span><span id="line-353">      return c == ' ' || c == '\t';</span>
+<span class="source-line-no">354</span><span id="line-354">   }</span>
+<span class="source-line-no">355</span><span id="line-355"></span>
+<span class="source-line-no">356</span><span id="line-356">   /**</span>
+<span class="source-line-no">357</span><span id="line-357">    * Blocks until there is a progress event at or after {@code fromIndex}, or the job is terminal, or {@code timeout}</span>
+<span class="source-line-no">358</span><span id="line-358">    * elapses &amp;mdash; then returns whichever is available.</span>
+<span class="source-line-no">359</span><span id="line-359">    *</span>
+<span class="source-line-no">360</span><span id="line-360">    * &lt;p&gt;</span>
+<span class="source-line-no">361</span><span id="line-361">    * A terminal job returns immediately with any remaining buffered events plus its terminal result, so a single</span>
+<span class="source-line-no">362</span><span id="line-362">    * subscriber loop drains a completed (or re-attached) job in one pass.</span>
+<span class="source-line-no">363</span><span id="line-363">    *</span>
+<span class="source-line-no">364</span><span id="line-364">    * @param fromIndex The zero-based index the caller has already consumed up to.</span>
+<span class="source-line-no">365</span><span id="line-365">    * @param timeout The maximum time to wait for a new event.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">366</span><span id="line-366">    * @return The new events (possibly empty) and the terminal result (&lt;jk&gt;null&lt;/jk&gt; while still running).</span>
+<span class="source-line-no">367</span><span id="line-367">    */</span>
+<span class="source-line-no">368</span><span id="line-368">   public Update awaitUpdate(int fromIndex, Duration timeout) {</span>
+<span class="source-line-no">369</span><span id="line-369">      reqnn("timeout", timeout);</span>
+<span class="source-line-no">370</span><span id="line-370">      var deadlineNanos = System.nanoTime() + Math.max(0L, timeout.toNanos());</span>
+<span class="source-line-no">371</span><span id="line-371">      synchronized (lock) {</span>
+<span class="source-line-no">372</span><span id="line-372">         while (true) {</span>
+<span class="source-line-no">373</span><span id="line-373">            if (fromIndex &lt; events.size() || result != null) {</span>
+<span class="source-line-no">374</span><span id="line-374">               var newEvents = fromIndex &lt; events.size()</span>
+<span class="source-line-no">375</span><span id="line-375">                  ? List.copyOf(events.subList(Math.max(0, fromIndex), events.size()))</span>
+<span class="source-line-no">376</span><span id="line-376">                  : List.&lt;String&gt;of();</span>
+<span class="source-line-no">377</span><span id="line-377">               return new Update(newEvents, result);</span>
+<span class="source-line-no">378</span><span id="line-378">            }</span>
+<span class="source-line-no">379</span><span id="line-379">            var remaining = deadlineNanos - System.nanoTime();</span>
+<span class="source-line-no">380</span><span id="line-380">            if (remaining &lt;= 0L)</span>
+<span class="source-line-no">381</span><span id="line-381">               return new Update(List.of(), null);</span>
+<span class="source-line-no">382</span><span id="line-382">            try {</span>
+<span class="source-line-no">383</span><span id="line-383">               lock.wait(remaining / 1_000_000L, (int) (remaining % 1_000_000L));</span>
+<span class="source-line-no">384</span><span id="line-384">            } catch (InterruptedException e) {</span>
+<span class="source-line-no">385</span><span id="line-385">               Thread.currentThread().interrupt();</span>
+<span class="source-line-no">386</span><span id="line-386">               return new Update(List.of(), result);</span>
+<span class="source-line-no">387</span><span id="line-387">            }</span>
+<span class="source-line-no">388</span><span id="line-388">         }</span>
+<span class="source-line-no">389</span><span id="line-389">      }</span>
+<span class="source-line-no">390</span><span id="line-390">   }</span>
+<span class="source-line-no">391</span><span id="line-391"></span>
+<span class="source-line-no">392</span><span id="line-392">   /**</span>
+<span class="source-line-no">393</span><span id="line-393">    * Attempts to register a subscriber, enforcing the {@link #maxSubscribers} cap.</span>
+<span class="source-line-no">394</span><span id="line-394">    *</span>
+<span class="source-line-no">395</span><span id="line-395">    * @return &lt;jk&gt;true&lt;/jk&gt; if a subscriber slot was acquired; &lt;jk&gt;false&lt;/jk&gt; if the cap is already reached.</span>
+<span class="source-line-no">396</span><span id="line-396">    */</span>
+<span class="source-line-no">397</span><span id="line-397">   public boolean acquireSubscriber() {</span>
+<span class="source-line-no">398</span><span id="line-398">      synchronized (lock) {</span>
+<span class="source-line-no">399</span><span id="line-399">         if (subscribers &gt;= maxSubscribers)</span>
+<span class="source-line-no">400</span><span id="line-400">            return false;</span>
+<span class="source-line-no">401</span><span id="line-401">         subscribers++;</span>
+<span class="source-line-no">402</span><span id="line-402">         return true;</span>
+<span class="source-line-no">403</span><span id="line-403">      }</span>
+<span class="source-line-no">404</span><span id="line-404">   }</span>
+<span class="source-line-no">405</span><span id="line-405"></span>
+<span class="source-line-no">406</span><span id="line-406">   /** Releases a subscriber slot previously acquired via {@link #acquireSubscriber()}. */</span>
+<span class="source-line-no">407</span><span id="line-407">   public void releaseSubscriber() {</span>
+<span class="source-line-no">408</span><span id="line-408">      synchronized (lock) {</span>
+<span class="source-line-no">409</span><span id="line-409">         if (subscribers &gt; 0)</span>
+<span class="source-line-no">410</span><span id="line-410">            subscribers--;</span>
+<span class="source-line-no">411</span><span id="line-411">      }</span>
+<span class="source-line-no">412</span><span id="line-412">   }</span>
+<span class="source-line-no">413</span><span id="line-413"></span>
+<span class="source-line-no">414</span><span id="line-414">   /** @return The current number of registered subscribers. */</span>
+<span class="source-line-no">415</span><span id="line-415">   public int subscriberCount() { synchronized (lock) { return subscribers; } }</span>
+<span class="source-line-no">416</span><span id="line-416"></span>
+<span class="source-line-no">417</span><span id="line-417">   /** Settles the terminal result and wakes every waiting subscriber.  Caller must hold {@link #lock}. */</span>
+<span class="source-line-no">418</span><span id="line-418">   private void settle(ActionResult value) {</span>
+<span class="source-line-no">419</span><span id="line-419">      synchronized (lock) {</span>
+<span class="source-line-no">420</span><span id="line-420">         result = value;</span>
+<span class="source-line-no">421</span><span id="line-421">         lock.notifyAll();</span>
+<span class="source-line-no">422</span><span id="line-422">      }</span>
+<span class="source-line-no">423</span><span id="line-423">   }</span>
+<span class="source-line-no">424</span><span id="line-424"></span>
+<span class="source-line-no">425</span><span id="line-425">   /** Builds a terminal {@link ActionResult} for a cancellation, reusing the frozen contract's reserved outcomes. */</span>
+<span class="source-line-no">426</span><span id="line-426">   private static ActionResult cancelledResult(boolean afterEffect) {</span>
+<span class="source-line-no">427</span><span id="line-427">      var r = new ActionResult();</span>
+<span class="source-line-no">428</span><span id="line-428">      r.outcome = (afterEffect ? Outcome.CANCELLED_AFTER_EFFECT : Outcome.CANCELLED).wire();</span>
+<span class="source-line-no">429</span><span id="line-429">      return r;</span>
+<span class="source-line-no">430</span><span id="line-430">   }</span>
+<span class="source-line-no">431</span><span id="line-431"></span>
+<span class="source-line-no">432</span><span id="line-432">   /**</span>
+<span class="source-line-no">433</span><span id="line-433">    * Returns a description that does &lt;b&gt;not&lt;/b&gt; include the capability id.</span>
+<span class="source-line-no">434</span><span id="line-434">    *</span>
+<span class="source-line-no">435</span><span id="line-435">    * &lt;p&gt;</span>
+<span class="source-line-no">436</span><span id="line-436">    * The id is the stream's whole access control (see the class javadoc); a bean-dumping logger or debug view that</span>
+<span class="source-line-no">437</span><span id="line-437">    * stringified it would write a live capability somewhere it can be read back and used to attach to the stream.</span>
+<span class="source-line-no">438</span><span id="line-438">    *</span>
+<span class="source-line-no">439</span><span id="line-439">    * @return A value-free description.</span>
+<span class="source-line-no">440</span><span id="line-440">    */</span>
+<span class="source-line-no">441</span><span id="line-441">   @Override /* Object */</span>
+<span class="source-line-no">442</span><span id="line-442">   public String toString() {</span>
+<span class="source-line-no">443</span><span id="line-443">      return "AsyncJob(id=&lt;redacted&gt;,terminal=" + isTerminal() + ")";</span>
+<span class="source-line-no">444</span><span id="line-444">   }</span>
+<span class="source-line-no">445</span><span id="line-445"></span>
+<span class="source-line-no">446</span><span id="line-446">   /**</span>
+<span class="source-line-no">447</span><span id="line-447">    * The result of {@link AsyncJob#awaitUpdate(int, Duration)}: the newly-available progress events and the terminal</span>
+<span class="source-line-no">448</span><span id="line-448">    * result (&lt;jk&gt;null&lt;/jk&gt; while the job is still running).</span>
+<span class="source-line-no">449</span><span id="line-449">    *</span>
+<span class="source-line-no">450</span><span id="line-450">    * @param events The new progress events since the caller's cursor.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">451</span><span id="line-451">    * @param result The terminal result, or &lt;jk&gt;null&lt;/jk&gt; if the job is still running.</span>
+<span class="source-line-no">452</span><span id="line-452">    */</span>
+<span class="source-line-no">453</span><span id="line-453">   public record Update(List&lt;String&gt; events, ActionResult result) {}</span>
+<span class="source-line-no">454</span><span id="line-454">}</span>
 
 
 

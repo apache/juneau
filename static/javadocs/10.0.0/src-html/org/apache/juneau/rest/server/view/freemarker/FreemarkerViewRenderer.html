@@ -34,8 +34,8 @@
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.commons.inject.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.commons.utils.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.concurrent.atomic.AtomicReference;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.commons.inject.*;</span>
 <span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.http.response.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.rest.server.*;</span>
 <span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.rest.server.processor.*;</span>
@@ -115,154 +115,151 @@
 <span class="source-line-no">102</span><span id="line-102">   // the bridge-default Configuration and its template cache are built once instead of rebuilt per render.</span>
 <span class="source-line-no">103</span><span id="line-103">   // Created lazily (not eagerly) so a missing FreeMarker engine still surfaces at render time as</span>
 <span class="source-line-no">104</span><span id="line-104">   // NO_ENGINE_DIAGNOSTIC rather than during RestContext construction.</span>
-<span class="source-line-no">105</span><span id="line-105">   @SuppressWarnings({</span>
-<span class="source-line-no">106</span><span id="line-106">      "java:S3077" // volatile is required here for correct double-checked-locking safe-publication of the lazily-built fallback FreemarkerMixin in fallbackMixin(); the reference is publish-once (fully constructed before assignment, immutable thereafter) and never compound-mutated.</span>
-<span class="source-line-no">107</span><span id="line-107">   })</span>
-<span class="source-line-no">108</span><span id="line-108">   private volatile FreemarkerMixin fallbackMixin;</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   @Override /* Overridden from ResponseProcessor */</span>
-<span class="source-line-no">111</span><span id="line-111">   public int process(RestOpSession opSession) throws IOException, BasicHttpException {</span>
-<span class="source-line-no">112</span><span id="line-112">      var req = opSession.getRequest();</span>
-<span class="source-line-no">113</span><span id="line-113">      var res = opSession.getResponse();</span>
-<span class="source-line-no">114</span><span id="line-114"></span>
-<span class="source-line-no">115</span><span id="line-115">      var content = res.getContent(Object.class);</span>
-<span class="source-line-no">116</span><span id="line-116">      if (! (content instanceof FreemarkerView content2))</span>
-<span class="source-line-no">117</span><span id="line-117">         return NEXT;</span>
-<span class="source-line-no">118</span><span id="line-118"></span>
-<span class="source-line-no">119</span><span id="line-119">      // Resolve the bridge resource (carries Configuration + cached default + templateSuffix).</span>
-<span class="source-line-no">120</span><span id="line-120">      // Fall back to a cached FreemarkerMixin when the renderer is used standalone</span>
-<span class="source-line-no">121</span><span id="line-121">      // without the mixin.</span>
-<span class="source-line-no">122</span><span id="line-122">      var bridge = findMixin(req.getContext().getBeanStore());</span>
-<span class="source-line-no">123</span><span id="line-123"></span>
-<span class="source-line-no">124</span><span id="line-124">      // Apply caller-supplied response headers first so a caller-provided Content-Type wins</span>
-<span class="source-line-no">125</span><span id="line-125">      // over the bridge's default below.</span>
-<span class="source-line-no">126</span><span id="line-126">      content2.getResponseHeaders().forEach(res::setHeader);</span>
-<span class="source-line-no">127</span><span id="line-127">      if (! res.containsHeader("Content-Type"))</span>
-<span class="source-line-no">128</span><span id="line-128">         res.setHeader("Content-Type", DEFAULT_CONTENT_TYPE);</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">      // Apply the same traversal gate the raw /freemarker/* mount uses so a typed-View template name</span>
-<span class="source-line-no">131</span><span id="line-131">      // assembled from user input (e.g. FreemarkerView.of(userInput)) cannot escape the configured base</span>
-<span class="source-line-no">132</span><span id="line-132">      // path via '../' segments.  Mirrors the JSP bridge's typed-View gate.</span>
-<span class="source-line-no">133</span><span id="line-133">      String safeName;</span>
-<span class="source-line-no">134</span><span id="line-134">      try {</span>
-<span class="source-line-no">135</span><span id="line-135">         safeName = gateTemplateName(bridge.getBasePath(), content2.getTemplateName());</span>
-<span class="source-line-no">136</span><span id="line-136">      } catch (IllegalArgumentException ex) {</span>
-<span class="source-line-no">137</span><span id="line-137">         throw new InternalServerError(ex, "FreeMarker template name escapes configured base path: '%s'", content2.getTemplateName());</span>
-<span class="source-line-no">138</span><span id="line-138">      }</span>
-<span class="source-line-no">139</span><span id="line-139"></span>
-<span class="source-line-no">140</span><span id="line-140">      var templateName = bridge.applyTemplateSuffix(safeName);</span>
-<span class="source-line-no">141</span><span id="line-141">      requireAllowedExtension(templateName);</span>
-<span class="source-line-no">142</span><span id="line-142">      try {</span>
-<span class="source-line-no">143</span><span id="line-143">         var cfg = bridge.resolveConfiguration(req);</span>
-<span class="source-line-no">144</span><span id="line-144">         var template = cfg.getTemplate(templateName);</span>
-<span class="source-line-no">145</span><span id="line-145">         // Expose the in-flight request to FreeMarker TemplateDirectiveModels (e.g. &lt;@page toolkit=...&gt;)</span>
-<span class="source-line-no">146</span><span id="line-146">         // for the duration of the render; always cleared so open() never leaks on the thread.</span>
-<span class="source-line-no">147</span><span id="line-147">         try {</span>
-<span class="source-line-no">148</span><span id="line-148">            FreemarkerRenderScope.open(req);</span>
-<span class="source-line-no">149</span><span id="line-149">            if (hasMustConsume(content2)) {</span>
-<span class="source-line-no">150</span><span id="line-150">               // Buffer first, so a failed adoption check can never follow output that is already committed.</span>
-<span class="source-line-no">151</span><span id="line-151">               var buffer = new StringWriter();</span>
-<span class="source-line-no">152</span><span id="line-152">               template.process(content2.getAttributes(), buffer);</span>
-<span class="source-line-no">153</span><span id="line-153">               checkConsumed(content2, templateName);</span>
-<span class="source-line-no">154</span><span id="line-154">               res.getWriter().write(buffer.toString());</span>
-<span class="source-line-no">155</span><span id="line-155">            } else {</span>
-<span class="source-line-no">156</span><span id="line-156">               template.process(content2.getAttributes(), res.getWriter());</span>
-<span class="source-line-no">157</span><span id="line-157">            }</span>
-<span class="source-line-no">158</span><span id="line-158">            res.getWriter().flush();</span>
-<span class="source-line-no">159</span><span id="line-159">            return FINISHED;</span>
-<span class="source-line-no">160</span><span id="line-160">         } finally {</span>
-<span class="source-line-no">161</span><span id="line-161">            FreemarkerRenderScope.close();</span>
-<span class="source-line-no">162</span><span id="line-162">         }</span>
-<span class="source-line-no">163</span><span id="line-163">      } catch (LinkageError ex) {</span>
-<span class="source-line-no">164</span><span id="line-164">         throw new InternalServerError(ex, NO_ENGINE_DIAGNOSTIC);</span>
-<span class="source-line-no">165</span><span id="line-165">      } catch (IOException ex) {</span>
-<span class="source-line-no">166</span><span id="line-166">         throw ex;</span>
-<span class="source-line-no">167</span><span id="line-167">      } catch (TemplateException | RuntimeException ex) {</span>
-<span class="source-line-no">168</span><span id="line-168">         // Surface the deepest cause's message in the response body.  FreeMarker's DEBUG exception handler only</span>
-<span class="source-line-no">169</span><span id="line-169">         // writes a diagnostic to the *output writer* it was rendering into; a directive that throws while a</span>
-<span class="source-line-no">170</span><span id="line-170">         // parent directive (e.g. &lt;@page&gt;) is capturing its body into a throwaway buffer therefore leaves no</span>
-<span class="source-line-no">171</span><span id="line-171">         // trace in the response.  Appending the root-cause message makes the diagnostic deterministic</span>
-<span class="source-line-no">172</span><span id="line-172">         // regardless of which buffer FreeMarker happened to be writing to.</span>
-<span class="source-line-no">173</span><span id="line-173">         throw new InternalServerError(ex, "FreeMarker render failed for '%s': %s", templateName, rootMessage(ex));</span>
-<span class="source-line-no">174</span><span id="line-174">      }</span>
-<span class="source-line-no">175</span><span id="line-175">   }</span>
-<span class="source-line-no">176</span><span id="line-176"></span>
-<span class="source-line-no">177</span><span id="line-177">   private static boolean hasMustConsume(FreemarkerView view) {</span>
-<span class="source-line-no">178</span><span id="line-178">      for (var v : view.getAttributes().values())</span>
-<span class="source-line-no">179</span><span id="line-179">         if (v instanceof FreemarkerView.MustConsume)</span>
-<span class="source-line-no">180</span><span id="line-180">            return true;</span>
-<span class="source-line-no">181</span><span id="line-181">      return false;</span>
-<span class="source-line-no">182</span><span id="line-182">   }</span>
-<span class="source-line-no">183</span><span id="line-183"></span>
-<span class="source-line-no">184</span><span id="line-184">   // A MustConsume attribute that was never adopted means the template never reached the directive meant to consume</span>
-<span class="source-line-no">185</span><span id="line-185">   // it, which would otherwise drop the attribute silently.  The message is carried as the deepest cause so it</span>
-<span class="source-line-no">186</span><span id="line-186">   // reaches the response body undecorated, as rootMessage() unwraps it.</span>
-<span class="source-line-no">187</span><span id="line-187">   private static void checkConsumed(FreemarkerView view, String templateName) throws TemplateModelException {</span>
-<span class="source-line-no">188</span><span id="line-188">      for (var v : view.getAttributes().values()) {</span>
-<span class="source-line-no">189</span><span id="line-189">         if (v instanceof FreemarkerView.MustConsume mc &amp;&amp; ! mc.consumed()) {</span>
-<span class="source-line-no">190</span><span id="line-190">            var msg = mc.notConsumedMessage(templateName);</span>
-<span class="source-line-no">191</span><span id="line-191">            throw new TemplateModelException(msg, new IllegalArgumentException(msg));</span>
-<span class="source-line-no">192</span><span id="line-192">         }</span>
-<span class="source-line-no">193</span><span id="line-193">      }</span>
-<span class="source-line-no">194</span><span id="line-194">   }</span>
-<span class="source-line-no">195</span><span id="line-195"></span>
-<span class="source-line-no">196</span><span id="line-196">   // Walks to the deepest cause and returns its message (falling back to the simple class name when the message</span>
-<span class="source-line-no">197</span><span id="line-197">   // is null), so a nested-directive diagnostic reaches the HTTP response body even when FreeMarker's exception</span>
-<span class="source-line-no">198</span><span id="line-198">   // handler wrote it into a discarded capture buffer.</span>
-<span class="source-line-no">199</span><span id="line-199">   static String rootMessage(Throwable t) {</span>
-<span class="source-line-no">200</span><span id="line-200">      var c = t;</span>
-<span class="source-line-no">201</span><span id="line-201">      while (c.getCause() != null &amp;&amp; c.getCause() != c)</span>
-<span class="source-line-no">202</span><span id="line-202">         c = c.getCause();</span>
-<span class="source-line-no">203</span><span id="line-203">      var m = c.getMessage();</span>
-<span class="source-line-no">204</span><span id="line-204">      return m == null ? c.getClass().getSimpleName() : m;</span>
-<span class="source-line-no">205</span><span id="line-205">   }</span>
-<span class="source-line-no">206</span><span id="line-206"></span>
-<span class="source-line-no">207</span><span id="line-207">   // Rejects a typed-View template name (after the configured suffix is applied) that lacks a FreeMarker template extension.</span>
-<span class="source-line-no">208</span><span id="line-208">   static void requireAllowedExtension(String templateName) {</span>
-<span class="source-line-no">209</span><span id="line-209">      if (! ViewTemplateNames.hasAllowedExtension(templateName, ".ftlh", ".ftl"))</span>
-<span class="source-line-no">210</span><span id="line-210">         throw new InternalServerError("FreeMarker template name does not have an allowed extension: '%s'", templateName);</span>
-<span class="source-line-no">211</span><span id="line-211">   }</span>
-<span class="source-line-no">212</span><span id="line-212"></span>
-<span class="source-line-no">213</span><span id="line-213">   // Rejects '../'-style traversal in a typed-View template name using the same virtual-path gate the raw</span>
-<span class="source-line-no">214</span><span id="line-214">   // mount applies, returning the configuration-relative template name.  Delegates to the shared</span>
-<span class="source-line-no">215</span><span id="line-215">   // FileUtils.resolveVirtualPathSafely + FreemarkerDispatcher.stripBasePath used by the raw render path.</span>
-<span class="source-line-no">216</span><span id="line-216">   static String gateTemplateName(String basePath, String templateName) {</span>
-<span class="source-line-no">217</span><span id="line-217">      ViewTemplateNames.requirePlainName(templateName);</span>
-<span class="source-line-no">218</span><span id="line-218">      var resolved = resolveVirtualPathSafely(basePath, templateName);</span>
-<span class="source-line-no">219</span><span id="line-219">      return FreemarkerDispatcher.stripBasePath(basePath, resolved);</span>
-<span class="source-line-no">220</span><span id="line-220">   }</span>
-<span class="source-line-no">221</span><span id="line-221"></span>
-<span class="source-line-no">222</span><span id="line-222">   // The exact FreemarkerMixin bean, else a bean of any registered subtype; two different beans fail loud.</span>
-<span class="source-line-no">223</span><span id="line-223">   private FreemarkerMixin findMixin(WritableBeanStore store) {</span>
-<span class="source-line-no">224</span><span id="line-224">      FreemarkerMixin found = store.getBean(FreemarkerMixin.class).orElse(null);</span>
-<span class="source-line-no">225</span><span id="line-225">      for (var t : FreemarkerMixin.registeredSubtypes()) {</span>
-<span class="source-line-no">226</span><span id="line-226">         var b = store.getBean(t).orElse(null);</span>
-<span class="source-line-no">227</span><span id="line-227">         if (b == null || b == found)</span>
-<span class="source-line-no">228</span><span id="line-228">            continue;</span>
-<span class="source-line-no">229</span><span id="line-229">         if (found != null)</span>
-<span class="source-line-no">230</span><span id="line-230">            throw new IllegalStateException(f(</span>
-<span class="source-line-no">231</span><span id="line-231">               "Found more than one FreemarkerMixin bean ('%s' and '%s'); declare exactly one.",</span>
-<span class="source-line-no">232</span><span id="line-232">               found.getClass().getSimpleName(), b.getClass().getSimpleName()));</span>
-<span class="source-line-no">233</span><span id="line-233">         found = b;</span>
-<span class="source-line-no">234</span><span id="line-234">      }</span>
-<span class="source-line-no">235</span><span id="line-235">      return found != null ? found : fallbackMixin();</span>
-<span class="source-line-no">236</span><span id="line-236">   }</span>
-<span class="source-line-no">237</span><span id="line-237"></span>
-<span class="source-line-no">238</span><span id="line-238">   // Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.</span>
-<span class="source-line-no">239</span><span id="line-239">   private FreemarkerMixin fallbackMixin() {</span>
-<span class="source-line-no">240</span><span id="line-240">      var local = fallbackMixin;</span>
-<span class="source-line-no">241</span><span id="line-241">      if (local == null) {</span>
-<span class="source-line-no">242</span><span id="line-242">         synchronized (this) {</span>
-<span class="source-line-no">243</span><span id="line-243">            local = fallbackMixin;</span>
-<span class="source-line-no">244</span><span id="line-244">            if (local == null) {</span>
-<span class="source-line-no">245</span><span id="line-245">               local = new FreemarkerMixin();</span>
-<span class="source-line-no">246</span><span id="line-246">               fallbackMixin = local;</span>
-<span class="source-line-no">247</span><span id="line-247">            }</span>
-<span class="source-line-no">248</span><span id="line-248">         }</span>
-<span class="source-line-no">249</span><span id="line-249">      }</span>
-<span class="source-line-no">250</span><span id="line-250">      return local;</span>
-<span class="source-line-no">251</span><span id="line-251">   }</span>
-<span class="source-line-no">252</span><span id="line-252">}</span>
+<span class="source-line-no">105</span><span id="line-105">   private final AtomicReference&lt;FreemarkerMixin&gt; fallbackMixin = new AtomicReference&lt;&gt;();</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">   @Override /* Overridden from ResponseProcessor */</span>
+<span class="source-line-no">108</span><span id="line-108">   public int process(RestOpSession opSession) throws IOException, BasicHttpException {</span>
+<span class="source-line-no">109</span><span id="line-109">      var req = opSession.getRequest();</span>
+<span class="source-line-no">110</span><span id="line-110">      var res = opSession.getResponse();</span>
+<span class="source-line-no">111</span><span id="line-111"></span>
+<span class="source-line-no">112</span><span id="line-112">      var content = res.getContent(Object.class);</span>
+<span class="source-line-no">113</span><span id="line-113">      if (! (content instanceof FreemarkerView content2))</span>
+<span class="source-line-no">114</span><span id="line-114">         return NEXT;</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">      // Resolve the bridge resource (carries Configuration + cached default + templateSuffix).</span>
+<span class="source-line-no">117</span><span id="line-117">      // Fall back to a cached FreemarkerMixin when the renderer is used standalone</span>
+<span class="source-line-no">118</span><span id="line-118">      // without the mixin.</span>
+<span class="source-line-no">119</span><span id="line-119">      var bridge = findMixin(req.getContext().getBeanStore());</span>
+<span class="source-line-no">120</span><span id="line-120"></span>
+<span class="source-line-no">121</span><span id="line-121">      // Apply caller-supplied response headers first so a caller-provided Content-Type wins</span>
+<span class="source-line-no">122</span><span id="line-122">      // over the bridge's default below.</span>
+<span class="source-line-no">123</span><span id="line-123">      content2.getResponseHeaders().forEach(res::setHeader);</span>
+<span class="source-line-no">124</span><span id="line-124">      if (! res.containsHeader("Content-Type"))</span>
+<span class="source-line-no">125</span><span id="line-125">         res.setHeader("Content-Type", DEFAULT_CONTENT_TYPE);</span>
+<span class="source-line-no">126</span><span id="line-126"></span>
+<span class="source-line-no">127</span><span id="line-127">      // Apply the same traversal gate the raw /freemarker/* mount uses so a typed-View template name</span>
+<span class="source-line-no">128</span><span id="line-128">      // assembled from user input (e.g. FreemarkerView.of(userInput)) cannot escape the configured base</span>
+<span class="source-line-no">129</span><span id="line-129">      // path via '../' segments.  Mirrors the JSP bridge's typed-View gate.</span>
+<span class="source-line-no">130</span><span id="line-130">      String safeName;</span>
+<span class="source-line-no">131</span><span id="line-131">      try {</span>
+<span class="source-line-no">132</span><span id="line-132">         safeName = gateTemplateName(bridge.getBasePath(), content2.getTemplateName());</span>
+<span class="source-line-no">133</span><span id="line-133">      } catch (IllegalArgumentException ex) {</span>
+<span class="source-line-no">134</span><span id="line-134">         throw new InternalServerError(ex, "FreeMarker template name escapes configured base path: '%s'", content2.getTemplateName());</span>
+<span class="source-line-no">135</span><span id="line-135">      }</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">      var templateName = bridge.applyTemplateSuffix(safeName);</span>
+<span class="source-line-no">138</span><span id="line-138">      requireAllowedExtension(templateName);</span>
+<span class="source-line-no">139</span><span id="line-139">      try {</span>
+<span class="source-line-no">140</span><span id="line-140">         var cfg = bridge.resolveConfiguration(req);</span>
+<span class="source-line-no">141</span><span id="line-141">         var template = cfg.getTemplate(templateName);</span>
+<span class="source-line-no">142</span><span id="line-142">         // Expose the in-flight request to FreeMarker TemplateDirectiveModels (e.g. &lt;@page toolkit=...&gt;)</span>
+<span class="source-line-no">143</span><span id="line-143">         // for the duration of the render; always cleared so open() never leaks on the thread.</span>
+<span class="source-line-no">144</span><span id="line-144">         try {</span>
+<span class="source-line-no">145</span><span id="line-145">            FreemarkerRenderScope.open(req);</span>
+<span class="source-line-no">146</span><span id="line-146">            if (hasMustConsume(content2)) {</span>
+<span class="source-line-no">147</span><span id="line-147">               // Buffer first, so a failed adoption check can never follow output that is already committed.</span>
+<span class="source-line-no">148</span><span id="line-148">               var buffer = new StringWriter();</span>
+<span class="source-line-no">149</span><span id="line-149">               template.process(content2.getAttributes(), buffer);</span>
+<span class="source-line-no">150</span><span id="line-150">               checkConsumed(content2, templateName);</span>
+<span class="source-line-no">151</span><span id="line-151">               res.getWriter().write(buffer.toString());</span>
+<span class="source-line-no">152</span><span id="line-152">            } else {</span>
+<span class="source-line-no">153</span><span id="line-153">               template.process(content2.getAttributes(), res.getWriter());</span>
+<span class="source-line-no">154</span><span id="line-154">            }</span>
+<span class="source-line-no">155</span><span id="line-155">            res.getWriter().flush();</span>
+<span class="source-line-no">156</span><span id="line-156">            return FINISHED;</span>
+<span class="source-line-no">157</span><span id="line-157">         } finally {</span>
+<span class="source-line-no">158</span><span id="line-158">            FreemarkerRenderScope.close();</span>
+<span class="source-line-no">159</span><span id="line-159">         }</span>
+<span class="source-line-no">160</span><span id="line-160">      } catch (LinkageError ex) {</span>
+<span class="source-line-no">161</span><span id="line-161">         throw new InternalServerError(ex, NO_ENGINE_DIAGNOSTIC);</span>
+<span class="source-line-no">162</span><span id="line-162">      } catch (IOException ex) {</span>
+<span class="source-line-no">163</span><span id="line-163">         throw ex;</span>
+<span class="source-line-no">164</span><span id="line-164">      } catch (TemplateException | RuntimeException ex) {</span>
+<span class="source-line-no">165</span><span id="line-165">         // Surface the deepest cause's message in the response body.  FreeMarker's DEBUG exception handler only</span>
+<span class="source-line-no">166</span><span id="line-166">         // writes a diagnostic to the *output writer* it was rendering into; a directive that throws while a</span>
+<span class="source-line-no">167</span><span id="line-167">         // parent directive (e.g. &lt;@page&gt;) is capturing its body into a throwaway buffer therefore leaves no</span>
+<span class="source-line-no">168</span><span id="line-168">         // trace in the response.  Appending the root-cause message makes the diagnostic deterministic</span>
+<span class="source-line-no">169</span><span id="line-169">         // regardless of which buffer FreeMarker happened to be writing to.</span>
+<span class="source-line-no">170</span><span id="line-170">         throw new InternalServerError(ex, "FreeMarker render failed for '%s': %s", templateName, rootMessage(ex));</span>
+<span class="source-line-no">171</span><span id="line-171">      }</span>
+<span class="source-line-no">172</span><span id="line-172">   }</span>
+<span class="source-line-no">173</span><span id="line-173"></span>
+<span class="source-line-no">174</span><span id="line-174">   private static boolean hasMustConsume(FreemarkerView view) {</span>
+<span class="source-line-no">175</span><span id="line-175">      for (var v : view.getAttributes().values())</span>
+<span class="source-line-no">176</span><span id="line-176">         if (v instanceof FreemarkerView.MustConsume)</span>
+<span class="source-line-no">177</span><span id="line-177">            return true;</span>
+<span class="source-line-no">178</span><span id="line-178">      return false;</span>
+<span class="source-line-no">179</span><span id="line-179">   }</span>
+<span class="source-line-no">180</span><span id="line-180"></span>
+<span class="source-line-no">181</span><span id="line-181">   // A MustConsume attribute that was never adopted means the template never reached the directive meant to consume</span>
+<span class="source-line-no">182</span><span id="line-182">   // it, which would otherwise drop the attribute silently.  The message is carried as the deepest cause so it</span>
+<span class="source-line-no">183</span><span id="line-183">   // reaches the response body undecorated, as rootMessage() unwraps it.</span>
+<span class="source-line-no">184</span><span id="line-184">   private static void checkConsumed(FreemarkerView view, String templateName) throws TemplateModelException {</span>
+<span class="source-line-no">185</span><span id="line-185">      for (var v : view.getAttributes().values()) {</span>
+<span class="source-line-no">186</span><span id="line-186">         if (v instanceof FreemarkerView.MustConsume mc &amp;&amp; ! mc.consumed()) {</span>
+<span class="source-line-no">187</span><span id="line-187">            var msg = mc.notConsumedMessage(templateName);</span>
+<span class="source-line-no">188</span><span id="line-188">            throw new TemplateModelException(msg, new IllegalArgumentException(msg));</span>
+<span class="source-line-no">189</span><span id="line-189">         }</span>
+<span class="source-line-no">190</span><span id="line-190">      }</span>
+<span class="source-line-no">191</span><span id="line-191">   }</span>
+<span class="source-line-no">192</span><span id="line-192"></span>
+<span class="source-line-no">193</span><span id="line-193">   // Walks to the deepest cause and returns its message (falling back to the simple class name when the message</span>
+<span class="source-line-no">194</span><span id="line-194">   // is null), so a nested-directive diagnostic reaches the HTTP response body even when FreeMarker's exception</span>
+<span class="source-line-no">195</span><span id="line-195">   // handler wrote it into a discarded capture buffer.</span>
+<span class="source-line-no">196</span><span id="line-196">   static String rootMessage(Throwable t) {</span>
+<span class="source-line-no">197</span><span id="line-197">      var c = t;</span>
+<span class="source-line-no">198</span><span id="line-198">      while (c.getCause() != null &amp;&amp; c.getCause() != c)</span>
+<span class="source-line-no">199</span><span id="line-199">         c = c.getCause();</span>
+<span class="source-line-no">200</span><span id="line-200">      var m = c.getMessage();</span>
+<span class="source-line-no">201</span><span id="line-201">      return m == null ? c.getClass().getSimpleName() : m;</span>
+<span class="source-line-no">202</span><span id="line-202">   }</span>
+<span class="source-line-no">203</span><span id="line-203"></span>
+<span class="source-line-no">204</span><span id="line-204">   // Rejects a typed-View template name (after the configured suffix is applied) that lacks a FreeMarker template extension.</span>
+<span class="source-line-no">205</span><span id="line-205">   static void requireAllowedExtension(String templateName) {</span>
+<span class="source-line-no">206</span><span id="line-206">      if (! ViewTemplateNames.hasAllowedExtension(templateName, ".ftlh", ".ftl"))</span>
+<span class="source-line-no">207</span><span id="line-207">         throw new InternalServerError("FreeMarker template name does not have an allowed extension: '%s'", templateName);</span>
+<span class="source-line-no">208</span><span id="line-208">   }</span>
+<span class="source-line-no">209</span><span id="line-209"></span>
+<span class="source-line-no">210</span><span id="line-210">   // Rejects '../'-style traversal in a typed-View template name using the same virtual-path gate the raw</span>
+<span class="source-line-no">211</span><span id="line-211">   // mount applies, returning the configuration-relative template name.  Delegates to the shared</span>
+<span class="source-line-no">212</span><span id="line-212">   // FileUtils.resolveVirtualPathSafely + FreemarkerDispatcher.stripBasePath used by the raw render path.</span>
+<span class="source-line-no">213</span><span id="line-213">   static String gateTemplateName(String basePath, String templateName) {</span>
+<span class="source-line-no">214</span><span id="line-214">      ViewTemplateNames.requirePlainName(templateName);</span>
+<span class="source-line-no">215</span><span id="line-215">      var resolved = resolveVirtualPathSafely(basePath, templateName);</span>
+<span class="source-line-no">216</span><span id="line-216">      return FreemarkerDispatcher.stripBasePath(basePath, resolved);</span>
+<span class="source-line-no">217</span><span id="line-217">   }</span>
+<span class="source-line-no">218</span><span id="line-218"></span>
+<span class="source-line-no">219</span><span id="line-219">   // The exact FreemarkerMixin bean, else a bean of any registered subtype; two different beans fail loud.</span>
+<span class="source-line-no">220</span><span id="line-220">   private FreemarkerMixin findMixin(WritableBeanStore store) {</span>
+<span class="source-line-no">221</span><span id="line-221">      FreemarkerMixin found = store.getBean(FreemarkerMixin.class).orElse(null);</span>
+<span class="source-line-no">222</span><span id="line-222">      for (var t : FreemarkerMixin.registeredSubtypes()) {</span>
+<span class="source-line-no">223</span><span id="line-223">         var b = store.getBean(t).orElse(null);</span>
+<span class="source-line-no">224</span><span id="line-224">         if (b == null || b == found)</span>
+<span class="source-line-no">225</span><span id="line-225">            continue;</span>
+<span class="source-line-no">226</span><span id="line-226">         if (found != null)</span>
+<span class="source-line-no">227</span><span id="line-227">            throw new IllegalStateException(f(</span>
+<span class="source-line-no">228</span><span id="line-228">               "Found more than one FreemarkerMixin bean ('%s' and '%s'); declare exactly one.",</span>
+<span class="source-line-no">229</span><span id="line-229">               found.getClass().getSimpleName(), b.getClass().getSimpleName()));</span>
+<span class="source-line-no">230</span><span id="line-230">         found = b;</span>
+<span class="source-line-no">231</span><span id="line-231">      }</span>
+<span class="source-line-no">232</span><span id="line-232">      return found != null ? found : fallbackMixin();</span>
+<span class="source-line-no">233</span><span id="line-233">   }</span>
+<span class="source-line-no">234</span><span id="line-234"></span>
+<span class="source-line-no">235</span><span id="line-235">   // Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.</span>
+<span class="source-line-no">236</span><span id="line-236">   private FreemarkerMixin fallbackMixin() {</span>
+<span class="source-line-no">237</span><span id="line-237">      var local = fallbackMixin.get();</span>
+<span class="source-line-no">238</span><span id="line-238">      if (local == null) {</span>
+<span class="source-line-no">239</span><span id="line-239">         synchronized (this) {</span>
+<span class="source-line-no">240</span><span id="line-240">            local = fallbackMixin.get();</span>
+<span class="source-line-no">241</span><span id="line-241">            if (local == null) {</span>
+<span class="source-line-no">242</span><span id="line-242">               local = new FreemarkerMixin();</span>
+<span class="source-line-no">243</span><span id="line-243">               fallbackMixin.set(local);</span>
+<span class="source-line-no">244</span><span id="line-244">            }</span>
+<span class="source-line-no">245</span><span id="line-245">         }</span>
+<span class="source-line-no">246</span><span id="line-246">      }</span>
+<span class="source-line-no">247</span><span id="line-247">      return local;</span>
+<span class="source-line-no">248</span><span id="line-248">   }</span>
+<span class="source-line-no">249</span><span id="line-249">}</span>
 
 
 

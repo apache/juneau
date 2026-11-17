@@ -187,7 +187,7 @@
 <span class="source-line-no">174</span><span id="line-174">         for (var seg : t.replace('\\', '/').split("/")) {</span>
 <span class="source-line-no">175</span><span id="line-175">            if (seg.isEmpty() || eq(seg, ".") || eq(seg, ".."))</span>
 <span class="source-line-no">176</span><span id="line-176">               continue;</span>
-<span class="source-line-no">177</span><span id="line-177">            if (sb.length() &gt; 0)</span>
+<span class="source-line-no">177</span><span id="line-177">            if (! sb.isEmpty())</span>
 <span class="source-line-no">178</span><span id="line-178">               sb.append('/');</span>
 <span class="source-line-no">179</span><span id="line-179">            sb.append(seg);</span>
 <span class="source-line-no">180</span><span id="line-180">         }</span>

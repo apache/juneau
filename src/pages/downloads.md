@@ -2,12 +2,12 @@
 
 ## Current Release
 
-**9.2.1 (Nov 3, 2026)**
+**9.2.3 (Nov 17, 2026)**
 
-- [Release Notes](/docs/release-notes/9.2.1)
-- [GitHub Release](https://github.com/apache/juneau/releases/tag/juneau-9.2.1)
-- [Binaries](https://www.apache.org/dyn/closer.lua/juneau/9.2.1/apache-juneau-9.2.1-bin.zip) ([ASC](https://downloads.apache.org/juneau/9.2.1/apache-juneau-9.2.1-bin.zip.asc), [SHA512](https://downloads.apache.org/juneau/9.2.1/apache-juneau-9.2.1-bin.zip.sha512))
-- [Source](https://www.apache.org/dyn/closer.lua/juneau/9.2.1/apache-juneau-9.2.1-src.zip) ([ASC](https://downloads.apache.org/juneau/9.2.1/apache-juneau-9.2.1-src.zip.asc), [SHA512](https://downloads.apache.org/juneau/9.2.1/apache-juneau-9.2.1-src.zip.sha512))
+- [Release Notes](/docs/release-notes/9.2.3)
+- [GitHub Release](https://github.com/apache/juneau/releases/tag/juneau-9.2.3)
+- [Binaries](https://www.apache.org/dyn/closer.lua/juneau/9.2.3/apache-juneau-9.2.3-bin.zip) ([ASC](https://downloads.apache.org/juneau/9.2.3/apache-juneau-9.2.3-bin.zip.asc), [SHA512](https://downloads.apache.org/juneau/9.2.3/apache-juneau-9.2.3-bin.zip.sha512))
+- [Source](https://www.apache.org/dyn/closer.lua/juneau/9.2.3/apache-juneau-9.2.3-src.zip) ([ASC](https://downloads.apache.org/juneau/9.2.3/apache-juneau-9.2.3-src.zip.asc), [SHA512](https://downloads.apache.org/juneau/9.2.3/apache-juneau-9.2.3-src.zip.sha512))
 
 ### What's Included
 
@@ -58,21 +58,21 @@
 
 ### Maven and Gradle
 
-Add the module you need from Maven Central. The artifact ids are the ones published for 9.2.1; the full list is in the "What's Included" section above. These docs describe 10.0 (`10.0.0-SNAPSHOT`), which is not on Maven Central, so to use 10.0 snapshots see [Install Juneau](/docs/topics/GettingStartedInstall#set-the-version).
+Add the module you need from Maven Central. The artifact ids are the ones published for 9.2.3; the full list is in the "What's Included" section above. These docs describe 10.0 (`10.0.0-SNAPSHOT`), which is not on Maven Central, so to use 10.0 snapshots see [Install Juneau](/docs/topics/GettingStartedInstall#set-the-version).
 
 ```xml
 <dependency>
 	<groupId>org.apache.juneau</groupId>
 	<artifactId>juneau-marshall</artifactId>
-	<version>9.2.1</version>
+	<version>9.2.3</version>
 </dependency>
 ```
 
 ```groovy
-implementation 'org.apache.juneau:juneau-marshall:9.2.1'
+implementation 'org.apache.juneau:juneau-marshall:9.2.3'
 ```
 
-For a single JAR that bundles everything, use `juneau-shaded-all`. The 9.2.1 Maven artifacts do not include `juneau-marshall-rdf`; for the 10.0 module list, see the [Juneau Ecosystem](/docs/topics/JuneauEcosystemOverview) overview.
+For a single JAR that bundles everything, use `juneau-shaded-all`. The 9.2.3 Maven artifacts do not include `juneau-marshall-rdf`; for the 10.0 module list, see the [Juneau Ecosystem](/docs/topics/JuneauEcosystemOverview) overview.
 
 ## Verifying File Integrity
 

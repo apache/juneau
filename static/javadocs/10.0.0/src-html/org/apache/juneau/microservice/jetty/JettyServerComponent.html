@@ -201,7 +201,7 @@
 <span class="source-line-no">188</span><span id="line-188">            return;</span>
 <span class="source-line-no">189</span><span id="line-189">         var perms = Files.getPosixFilePermissions(p);</span>
 <span class="source-line-no">190</span><span id="line-190">         if (perms.contains(PosixFilePermission.OTHERS_WRITE) || perms.contains(PosixFilePermission.GROUP_WRITE))</span>
-<span class="source-line-no">191</span><span id="line-191">            logger.warning("Server configuration file '" + f + "' is writable by users other than its owner.");</span>
+<span class="source-line-no">191</span><span id="line-191">            logger.log(Level.WARNING, "Server configuration file ''{0}'' is writable by users other than its owner.", f);</span>
 <span class="source-line-no">192</span><span id="line-192">      } catch (IOException | UnsupportedOperationException e) {</span>
 <span class="source-line-no">193</span><span id="line-193">         // Permissions could not be read; nothing to report.</span>
 <span class="source-line-no">194</span><span id="line-194">      }</span>

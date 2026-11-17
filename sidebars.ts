@@ -3133,6 +3133,16 @@ const sidebars: SidebarsConfig = {
 				},
 				{
 					type: 'doc',
+					id: 'release-notes/9.2.3',
+					label: '9.2.3',
+				},
+				{
+					type: 'doc',
+					id: 'release-notes/9.2.2',
+					label: '9.2.2',
+				},
+				{
+					type: 'doc',
 					id: 'release-notes/9.2.1',
 					label: '9.2.1',
 				},

@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Filter</code>, <code><a href="../Authenticator.html" title="interface in org.apache.juneau.rest.server.auth">Authenticator</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-95">SamlAuthFilter</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-94">SamlAuthFilter</a></span>
 <span class="extends-implements">extends <a href="../AuthFilter.html" title="class in org.apache.juneau.rest.server.auth">AuthFilter</a></span></div>
 <div class="block"><a href="../AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a> that authenticates requests carrying a SAML 2.0 <code>&lt;samlp:Response&gt;</code> delivered via
  the <a href="SamlBinding.html#POST"><code>SamlBinding.POST</code></a> or <a href="SamlBinding.html#REDIRECT"><code>SamlBinding.REDIRECT</code></a> HTTP binding.
@@ -259,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_MAX_INFLATED_BYTES">
 <h3>DEFAULT_MAX_INFLATED_BYTES</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-109">DEFAULT_MAX_INFLATED_BYTES</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-108">DEFAULT_MAX_INFLATED_BYTES</a></span></div>
 <div class="block">Default ceiling on the number of decompressed bytes accepted from a REDIRECT-binding
  <code>SAMLResponse</code> (1 MiB).</div>
 <dl class="notes">
@@ -275,7 +275,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_MAX_INFLATE_RATIO">
 <h3>DEFAULT_MAX_INFLATE_RATIO</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-115">DEFAULT_MAX_INFLATE_RATIO</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-114">DEFAULT_MAX_INFLATE_RATIO</a></span></div>
 <div class="block">Default ceiling on the decompressed-to-compressed size ratio accepted from a REDIRECT-binding
  <code>SAMLResponse</code>.</div>
 <dl class="notes">
@@ -299,7 +299,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.auth.saml.SamlAuthFilter.Builder)">
 <h3>SamlAuthFilter</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-274">SamlAuthFilter</a></span><wbr><span class="parameters">(<a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-273">SamlAuthFilter</a></span><wbr><span class="parameters">(<a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -318,7 +318,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-122">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-121">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -329,7 +329,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="authenticate(jakarta.servlet.http.HttpServletRequest)">
 <h3>authenticate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-285">authenticate</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-284">authenticate</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span>
                                   throws <span class="exceptions"><a href="../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Authenticator.html#authenticate(jakarta.servlet.http.HttpServletRequest)">Authenticator</a></code></span></div>
 <div class="block">Inspects the request and returns the authentication result.</div>
@@ -346,7 +346,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="startLogin(jakarta.servlet.http.HttpServletResponse,java.lang.String)">
 <h3>startLogin</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-327">startLogin</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletResponse&nbsp;res,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-326">startLogin</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletResponse&nbsp;res,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;requestId)</span></div>
 <div class="block">Registers an outgoing authentication request and sends the browser-binding cookie that this filter checks on
  the response.
