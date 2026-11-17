@@ -212,78 +212,82 @@
 <span class="source-line-no">199</span><span id="line-199">      if (s.indexOf('\\') == -1)</span>
 <span class="source-line-no">200</span><span id="line-200">         return s;</span>
 <span class="source-line-no">201</span><span id="line-201">      var sb = new StringBuilder(s.length());</span>
-<span class="source-line-no">202</span><span id="line-202">      for (var i = 0; i &lt; s.length(); i++) {</span>
-<span class="source-line-no">203</span><span id="line-203">         var c = s.charAt(i);</span>
-<span class="source-line-no">204</span><span id="line-204">         if (c != '\\' || i == s.length() - 1) {</span>
-<span class="source-line-no">205</span><span id="line-205">            sb.append(c);</span>
-<span class="source-line-no">206</span><span id="line-206">            continue;</span>
-<span class="source-line-no">207</span><span id="line-207">         }</span>
-<span class="source-line-no">208</span><span id="line-208">         var n = s.charAt(++i);</span>
-<span class="source-line-no">209</span><span id="line-209">         switch (n) {</span>
-<span class="source-line-no">210</span><span id="line-210">            case 'n' -&gt; sb.append('\n');</span>
-<span class="source-line-no">211</span><span id="line-211">            case 'r' -&gt; sb.append('\r');</span>
-<span class="source-line-no">212</span><span id="line-212">            case 't' -&gt; sb.append('\t');</span>
-<span class="source-line-no">213</span><span id="line-213">            case 'u' -&gt; {</span>
-<span class="source-line-no">214</span><span id="line-214">               if (i + 4 &lt; s.length() + 0 &amp;&amp; s.substring(i + 1, i + 5).matches("[0-9a-fA-F]{4}")) {</span>
-<span class="source-line-no">215</span><span id="line-215">                  sb.append((char)Integer.parseInt(s.substring(i + 1, i + 5), 16));</span>
-<span class="source-line-no">216</span><span id="line-216">                  i += 4;</span>
-<span class="source-line-no">217</span><span id="line-217">               } else {</span>
-<span class="source-line-no">218</span><span id="line-218">                  sb.append("\\u");</span>
-<span class="source-line-no">219</span><span id="line-219">               }</span>
-<span class="source-line-no">220</span><span id="line-220">            }</span>
-<span class="source-line-no">221</span><span id="line-221">            case '\\', '"' -&gt; sb.append(n);</span>
-<span class="source-line-no">222</span><span id="line-222">            default -&gt; sb.append('\\').append(n);</span>
-<span class="source-line-no">223</span><span id="line-223">         }</span>
-<span class="source-line-no">224</span><span id="line-224">      }</span>
-<span class="source-line-no">225</span><span id="line-225">      return sb.toString();</span>
-<span class="source-line-no">226</span><span id="line-226">   }</span>
-<span class="source-line-no">227</span><span id="line-227"></span>
-<span class="source-line-no">228</span><span id="line-228">   private String quoteIfNeeded(String value) {</span>
-<span class="source-line-no">229</span><span id="line-229">      if (value.isEmpty())</span>
-<span class="source-line-no">230</span><span id="line-230">         return "\"\"";</span>
-<span class="source-line-no">231</span><span id="line-231">      if (needsQuotes(value)) {</span>
-<span class="source-line-no">232</span><span id="line-232">         var sb = new StringBuilder("\"");</span>
-<span class="source-line-no">233</span><span id="line-233">         for (var i = 0; i &lt; value.length(); i++) {</span>
-<span class="source-line-no">234</span><span id="line-234">            var c = value.charAt(i);</span>
-<span class="source-line-no">235</span><span id="line-235">            switch (c) {</span>
-<span class="source-line-no">236</span><span id="line-236">               case '\\' -&gt; sb.append("\\\\");</span>
-<span class="source-line-no">237</span><span id="line-237">               case '"' -&gt; sb.append("\\\"");</span>
-<span class="source-line-no">238</span><span id="line-238">               case '\n' -&gt; sb.append("\\n");</span>
-<span class="source-line-no">239</span><span id="line-239">               case '\r' -&gt; sb.append("\\r");</span>
-<span class="source-line-no">240</span><span id="line-240">               case '\t' -&gt; sb.append("\\t");</span>
-<span class="source-line-no">241</span><span id="line-241">               default -&gt; {</span>
-<span class="source-line-no">242</span><span id="line-242">                  if (Character.isISOControl(c))</span>
-<span class="source-line-no">243</span><span id="line-243">                     sb.append(String.format("\\u%04x", (int)c));</span>
-<span class="source-line-no">244</span><span id="line-244">                  else</span>
-<span class="source-line-no">245</span><span id="line-245">                     sb.append(c);</span>
-<span class="source-line-no">246</span><span id="line-246">               }</span>
-<span class="source-line-no">247</span><span id="line-247">            }</span>
-<span class="source-line-no">248</span><span id="line-248">         }</span>
-<span class="source-line-no">249</span><span id="line-249">         return sb.append('"').toString();</span>
-<span class="source-line-no">250</span><span id="line-250">      }</span>
-<span class="source-line-no">251</span><span id="line-251">      return value;</span>
-<span class="source-line-no">252</span><span id="line-252">   }</span>
-<span class="source-line-no">253</span><span id="line-253"></span>
-<span class="source-line-no">254</span><span id="line-254">   private static boolean needsQuotes(String value) {</span>
-<span class="source-line-no">255</span><span id="line-255">      if (value.indexOf(':') != -1 || value.indexOf('#') != -1 || value.startsWith(" ") || value.endsWith(" "))</span>
-<span class="source-line-no">256</span><span id="line-256">         return true;</span>
-<span class="source-line-no">257</span><span id="line-257">      for (var i = 0; i &lt; value.length(); i++)</span>
-<span class="source-line-no">258</span><span id="line-258">         if (Character.isISOControl(value.charAt(i)))</span>
-<span class="source-line-no">259</span><span id="line-259">            return true;</span>
-<span class="source-line-no">260</span><span id="line-260">      // A leading quote would otherwise be taken as a quoted scalar on reload.</span>
-<span class="source-line-no">261</span><span id="line-261">      return value.startsWith("\"") || value.startsWith("'");</span>
-<span class="source-line-no">262</span><span id="line-262">   }</span>
-<span class="source-line-no">263</span><span id="line-263"></span>
-<span class="source-line-no">264</span><span id="line-264">   private static class Node {</span>
-<span class="source-line-no">265</span><span id="line-265">      final String name;</span>
-<span class="source-line-no">266</span><span id="line-266">      final int indent;</span>
+<span class="source-line-no">202</span><span id="line-202">      var i = 0;</span>
+<span class="source-line-no">203</span><span id="line-203">      while (i &lt; s.length()) {</span>
+<span class="source-line-no">204</span><span id="line-204">         var c = s.charAt(i);</span>
+<span class="source-line-no">205</span><span id="line-205">         if (c != '\\' || i == s.length() - 1) {</span>
+<span class="source-line-no">206</span><span id="line-206">            sb.append(c);</span>
+<span class="source-line-no">207</span><span id="line-207">            i++;</span>
+<span class="source-line-no">208</span><span id="line-208">            continue;</span>
+<span class="source-line-no">209</span><span id="line-209">         }</span>
+<span class="source-line-no">210</span><span id="line-210">         var n = s.charAt(i + 1);</span>
+<span class="source-line-no">211</span><span id="line-211">         i += 2;</span>
+<span class="source-line-no">212</span><span id="line-212">         switch (n) {</span>
+<span class="source-line-no">213</span><span id="line-213">            case 'n' -&gt; sb.append('\n');</span>
+<span class="source-line-no">214</span><span id="line-214">            case 'r' -&gt; sb.append('\r');</span>
+<span class="source-line-no">215</span><span id="line-215">            case 't' -&gt; sb.append('\t');</span>
+<span class="source-line-no">216</span><span id="line-216">            case 'u' -&gt; {</span>
+<span class="source-line-no">217</span><span id="line-217">               // i is now the index just past the 'u'.</span>
+<span class="source-line-no">218</span><span id="line-218">               if (i + 3 &lt; s.length() &amp;&amp; s.substring(i, i + 4).matches("[0-9a-fA-F]{4}")) {</span>
+<span class="source-line-no">219</span><span id="line-219">                  sb.append((char)Integer.parseInt(s.substring(i, i + 4), 16));</span>
+<span class="source-line-no">220</span><span id="line-220">                  i += 4;</span>
+<span class="source-line-no">221</span><span id="line-221">               } else {</span>
+<span class="source-line-no">222</span><span id="line-222">                  sb.append("\\u");</span>
+<span class="source-line-no">223</span><span id="line-223">               }</span>
+<span class="source-line-no">224</span><span id="line-224">            }</span>
+<span class="source-line-no">225</span><span id="line-225">            case '\\', '"' -&gt; sb.append(n);</span>
+<span class="source-line-no">226</span><span id="line-226">            default -&gt; sb.append('\\').append(n);</span>
+<span class="source-line-no">227</span><span id="line-227">         }</span>
+<span class="source-line-no">228</span><span id="line-228">      }</span>
+<span class="source-line-no">229</span><span id="line-229">      return sb.toString();</span>
+<span class="source-line-no">230</span><span id="line-230">   }</span>
+<span class="source-line-no">231</span><span id="line-231"></span>
+<span class="source-line-no">232</span><span id="line-232">   private String quoteIfNeeded(String value) {</span>
+<span class="source-line-no">233</span><span id="line-233">      if (value.isEmpty())</span>
+<span class="source-line-no">234</span><span id="line-234">         return "\"\"";</span>
+<span class="source-line-no">235</span><span id="line-235">      if (needsQuotes(value)) {</span>
+<span class="source-line-no">236</span><span id="line-236">         var sb = new StringBuilder("\"");</span>
+<span class="source-line-no">237</span><span id="line-237">         for (var i = 0; i &lt; value.length(); i++) {</span>
+<span class="source-line-no">238</span><span id="line-238">            var c = value.charAt(i);</span>
+<span class="source-line-no">239</span><span id="line-239">            switch (c) {</span>
+<span class="source-line-no">240</span><span id="line-240">               case '\\' -&gt; sb.append("\\\\");</span>
+<span class="source-line-no">241</span><span id="line-241">               case '"' -&gt; sb.append("\\\"");</span>
+<span class="source-line-no">242</span><span id="line-242">               case '\n' -&gt; sb.append("\\n");</span>
+<span class="source-line-no">243</span><span id="line-243">               case '\r' -&gt; sb.append("\\r");</span>
+<span class="source-line-no">244</span><span id="line-244">               case '\t' -&gt; sb.append("\\t");</span>
+<span class="source-line-no">245</span><span id="line-245">               default -&gt; {</span>
+<span class="source-line-no">246</span><span id="line-246">                  if (Character.isISOControl(c))</span>
+<span class="source-line-no">247</span><span id="line-247">                     sb.append(String.format("\\u%04x", (int)c));</span>
+<span class="source-line-no">248</span><span id="line-248">                  else</span>
+<span class="source-line-no">249</span><span id="line-249">                     sb.append(c);</span>
+<span class="source-line-no">250</span><span id="line-250">               }</span>
+<span class="source-line-no">251</span><span id="line-251">            }</span>
+<span class="source-line-no">252</span><span id="line-252">         }</span>
+<span class="source-line-no">253</span><span id="line-253">         return sb.append('"').toString();</span>
+<span class="source-line-no">254</span><span id="line-254">      }</span>
+<span class="source-line-no">255</span><span id="line-255">      return value;</span>
+<span class="source-line-no">256</span><span id="line-256">   }</span>
+<span class="source-line-no">257</span><span id="line-257"></span>
+<span class="source-line-no">258</span><span id="line-258">   private static boolean needsQuotes(String value) {</span>
+<span class="source-line-no">259</span><span id="line-259">      if (value.indexOf(':') != -1 || value.indexOf('#') != -1 || value.startsWith(" ") || value.endsWith(" "))</span>
+<span class="source-line-no">260</span><span id="line-260">         return true;</span>
+<span class="source-line-no">261</span><span id="line-261">      for (var i = 0; i &lt; value.length(); i++)</span>
+<span class="source-line-no">262</span><span id="line-262">         if (Character.isISOControl(value.charAt(i)))</span>
+<span class="source-line-no">263</span><span id="line-263">            return true;</span>
+<span class="source-line-no">264</span><span id="line-264">      // A leading quote would otherwise be taken as a quoted scalar on reload.</span>
+<span class="source-line-no">265</span><span id="line-265">      return value.startsWith("\"") || value.startsWith("'");</span>
+<span class="source-line-no">266</span><span id="line-266">   }</span>
 <span class="source-line-no">267</span><span id="line-267"></span>
-<span class="source-line-no">268</span><span id="line-268">      Node(String name, int indent) {</span>
-<span class="source-line-no">269</span><span id="line-269">         this.name = name;</span>
-<span class="source-line-no">270</span><span id="line-270">         this.indent = indent;</span>
-<span class="source-line-no">271</span><span id="line-271">      }</span>
-<span class="source-line-no">272</span><span id="line-272">   }</span>
-<span class="source-line-no">273</span><span id="line-273">}</span>
+<span class="source-line-no">268</span><span id="line-268">   private static class Node {</span>
+<span class="source-line-no">269</span><span id="line-269">      final String name;</span>
+<span class="source-line-no">270</span><span id="line-270">      final int indent;</span>
+<span class="source-line-no">271</span><span id="line-271"></span>
+<span class="source-line-no">272</span><span id="line-272">      Node(String name, int indent) {</span>
+<span class="source-line-no">273</span><span id="line-273">         this.name = name;</span>
+<span class="source-line-no">274</span><span id="line-274">         this.indent = indent;</span>
+<span class="source-line-no">275</span><span id="line-275">      }</span>
+<span class="source-line-no">276</span><span id="line-276">   }</span>
+<span class="source-line-no">277</span><span id="line-277">}</span>
 
 
 

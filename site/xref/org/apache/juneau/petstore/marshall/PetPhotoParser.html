@@ -91,15 +91,16 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> reader = readers.next();
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  			reader.setInput(iis, <strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">long</strong> w = reader.getWidth(0), h = reader.getHeight(0);
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">if</strong> (w &gt; MAX_DIMENSION || h &gt; MAX_DIMENSION || w * h &gt; MAX_PIXELS)
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ParseException(session, <span class="jxr_string">"Image dimensions exceed the {0} pixel limit"</span>, MAX_PIXELS);
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			<strong class="jxr_keyword">return</strong> reader.read(0);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			reader.dispose();
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		}
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  }
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">long</strong> w = reader.getWidth(0);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">long</strong> h = reader.getHeight(0);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">if</strong> (w &gt; MAX_DIMENSION || h &gt; MAX_DIMENSION || w * h &gt; MAX_PIXELS)
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ParseException(session, <span class="jxr_string">"Image dimensions exceed the {0} pixel limit"</span>, MAX_PIXELS);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<strong class="jxr_keyword">return</strong> reader.read(0);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			reader.dispose();
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		}
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

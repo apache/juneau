@@ -236,157 +236,160 @@
 <span class="source-line-no">223</span><span id="line-223">    * @return The parsed metadata.</span>
 <span class="source-line-no">224</span><span id="line-224">    * @throws McpAuthException If the fetch fails, the document cannot be parsed, or the resource identity check fails.</span>
 <span class="source-line-no">225</span><span id="line-225">    */</span>
-<span class="source-line-no">226</span><span id="line-226">   public McpProtectedResourceMetadata fetch(URI prmUrl, URI expectedResource) {</span>
-<span class="source-line-no">227</span><span id="line-227">      reqnn("prmUrl", prmUrl);</span>
-<span class="source-line-no">228</span><span id="line-228">      requireSecure(prmUrl, "Protected-resource-metadata URL");</span>
-<span class="source-line-no">229</span><span id="line-229">      HTTPResponse resp;</span>
-<span class="source-line-no">230</span><span id="line-230">      try {</span>
-<span class="source-line-no">231</span><span id="line-231">         var req = new HTTPRequest(HTTPRequest.Method.GET, prmUrl.toURL());</span>
-<span class="source-line-no">232</span><span id="line-232">         req.setConnectTimeout((int) httpTimeout.toMillis());</span>
-<span class="source-line-no">233</span><span id="line-233">         req.setReadTimeout((int) httpTimeout.toMillis());</span>
-<span class="source-line-no">234</span><span id="line-234">         req.setFollowRedirects(false);</span>
-<span class="source-line-no">235</span><span id="line-235">         req.setAccept("application/json");</span>
-<span class="source-line-no">236</span><span id="line-236">         if (httpRequestConfigurator != null)</span>
-<span class="source-line-no">237</span><span id="line-237">            httpRequestConfigurator.accept(req);</span>
-<span class="source-line-no">238</span><span id="line-238">         policy().apply(req);</span>
-<span class="source-line-no">239</span><span id="line-239">         resp = req.send();</span>
-<span class="source-line-no">240</span><span id="line-240">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">241</span><span id="line-241">         throw new McpAuthException("Protected-resource-metadata URL is not permitted (was '" + prmUrl + "'): " + e.getMessage(), e);</span>
-<span class="source-line-no">242</span><span id="line-242">      } catch (IOException e) {</span>
-<span class="source-line-no">243</span><span id="line-243">         throw new McpAuthException("Protected-resource-metadata fetch failed for " + prmUrl, e);</span>
-<span class="source-line-no">244</span><span id="line-244">      }</span>
-<span class="source-line-no">245</span><span id="line-245">      if (!resp.indicatesSuccess())</span>
-<span class="source-line-no">246</span><span id="line-246">         throw new McpAuthException("Protected-resource-metadata fetch returned HTTP " + resp.getStatusCode() + " for " + prmUrl);</span>
-<span class="source-line-no">247</span><span id="line-247">      return parse(resp.getBody(), prmUrl, expectedResource);</span>
-<span class="source-line-no">248</span><span id="line-248">   }</span>
-<span class="source-line-no">249</span><span id="line-249"></span>
-<span class="source-line-no">250</span><span id="line-250">   /**</span>
-<span class="source-line-no">251</span><span id="line-251">    * Parses a PRM JSON document body, validating its {@code resource} field against the builder-configured</span>
-<span class="source-line-no">252</span><span id="line-252">    * {@link Builder#expectedResource(URI)} (if any).</span>
-<span class="source-line-no">253</span><span id="line-253">    *</span>
-<span class="source-line-no">254</span><span id="line-254">    * @param json The JSON document body.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">255</span><span id="line-255">    * @param source The source URI, used only for error messages.  May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">256</span><span id="line-256">    * @return The parsed metadata.</span>
-<span class="source-line-no">257</span><span id="line-257">    * @throws McpAuthException If the document cannot be parsed, is missing the required {@code resource} field, or</span>
-<span class="source-line-no">258</span><span id="line-258">    *    fails the resource identity check.</span>
-<span class="source-line-no">259</span><span id="line-259">    */</span>
-<span class="source-line-no">260</span><span id="line-260">   public McpProtectedResourceMetadata parse(String json, URI source) {</span>
-<span class="source-line-no">261</span><span id="line-261">      return parse(json, source, expectedResource);</span>
-<span class="source-line-no">262</span><span id="line-262">   }</span>
-<span class="source-line-no">263</span><span id="line-263"></span>
-<span class="source-line-no">264</span><span id="line-264">   /**</span>
-<span class="source-line-no">265</span><span id="line-265">    * Parses a PRM JSON document body, validating its {@code resource} field against the supplied expected resource</span>
-<span class="source-line-no">266</span><span id="line-266">    * identifier (RFC 9728 &amp;sect;3.3).</span>
-<span class="source-line-no">267</span><span id="line-267">    *</span>
-<span class="source-line-no">268</span><span id="line-268">    * @param json The JSON document body.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">269</span><span id="line-269">    * @param source The source URI, used only for error messages.  May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">270</span><span id="line-270">    * @param expectedResource The resource identifier the client was actually talking to.  May be &lt;jk&gt;null&lt;/jk&gt; only</span>
-<span class="source-line-no">271</span><span id="line-271">    *    when {@link Builder#skipResourceValidation(boolean)} is set.</span>
-<span class="source-line-no">272</span><span id="line-272">    * @return The parsed metadata.</span>
-<span class="source-line-no">273</span><span id="line-273">    * @throws McpAuthException If the document cannot be parsed, is missing the required {@code resource} field, or</span>
-<span class="source-line-no">274</span><span id="line-274">    *    fails the resource identity check.</span>
-<span class="source-line-no">275</span><span id="line-275">    */</span>
-<span class="source-line-no">276</span><span id="line-276">   public McpProtectedResourceMetadata parse(String json, URI source, URI expectedResource) {</span>
-<span class="source-line-no">277</span><span id="line-277">      reqnn("json", json);</span>
-<span class="source-line-no">278</span><span id="line-278">      JSONObject o;</span>
-<span class="source-line-no">279</span><span id="line-279">      try {</span>
-<span class="source-line-no">280</span><span id="line-280">         o = JSONObjectUtils.parse(json);</span>
-<span class="source-line-no">281</span><span id="line-281">      } catch (ParseException e) {</span>
-<span class="source-line-no">282</span><span id="line-282">         throw new McpAuthException("Protected-resource-metadata document could not be parsed for " + source, e);</span>
-<span class="source-line-no">283</span><span id="line-283">      }</span>
-<span class="source-line-no">284</span><span id="line-284">      McpProtectedResourceMetadata prm;</span>
-<span class="source-line-no">285</span><span id="line-285">      try {</span>
-<span class="source-line-no">286</span><span id="line-286">         var resource = JSONObjectUtils.getURI(o, "resource");</span>
-<span class="source-line-no">287</span><span id="line-287">         var authServers = new ArrayList&lt;URI&gt;();</span>
-<span class="source-line-no">288</span><span id="line-288">         if (o.containsKey("authorization_servers"))</span>
-<span class="source-line-no">289</span><span id="line-289">            for (var v : JSONObjectUtils.getStringList(o, "authorization_servers"))</span>
-<span class="source-line-no">290</span><span id="line-290">               authServers.add(URI.create(v));</span>
-<span class="source-line-no">291</span><span id="line-291">         var scopes = new LinkedHashSet&lt;String&gt;();</span>
-<span class="source-line-no">292</span><span id="line-292">         if (o.containsKey("scopes_supported"))</span>
-<span class="source-line-no">293</span><span id="line-293">            scopes.addAll(JSONObjectUtils.getStringList(o, "scopes_supported"));</span>
-<span class="source-line-no">294</span><span id="line-294">         var extras = new LinkedHashMap&lt;String,Object&gt;();</span>
-<span class="source-line-no">295</span><span id="line-295">         for (var e : o.entrySet())</span>
-<span class="source-line-no">296</span><span id="line-296">            if (!STANDARD_FIELDS.contains(e.getKey()))</span>
-<span class="source-line-no">297</span><span id="line-297">               extras.put(e.getKey(), e.getValue());</span>
-<span class="source-line-no">298</span><span id="line-298">         prm = new McpProtectedResourceMetadata(resource, authServers, scopes, extras);</span>
-<span class="source-line-no">299</span><span id="line-299">      } catch (ParseException | IllegalArgumentException e) {</span>
-<span class="source-line-no">300</span><span id="line-300">         throw new McpAuthException("Protected-resource-metadata document was malformed for " + source, e);</span>
-<span class="source-line-no">301</span><span id="line-301">      }</span>
-<span class="source-line-no">302</span><span id="line-302">      validateResourceIdentity(prm, expectedResource);</span>
-<span class="source-line-no">303</span><span id="line-303">      return prm;</span>
-<span class="source-line-no">304</span><span id="line-304">   }</span>
-<span class="source-line-no">305</span><span id="line-305"></span>
-<span class="source-line-no">306</span><span id="line-306">   /**</span>
-<span class="source-line-no">307</span><span id="line-307">    * Selects the first authorization server from the PRM document and validates its issuer identity via RFC 8414 /</span>
-<span class="source-line-no">308</span><span id="line-308">    * OIDC discovery.</span>
-<span class="source-line-no">309</span><span id="line-309">    *</span>
-<span class="source-line-no">310</span><span id="line-310">    * @param prm The parsed PRM document.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">311</span><span id="line-311">    * @return The discovered authorization-server metadata (issuer validated).</span>
-<span class="source-line-no">312</span><span id="line-312">    * @throws McpAuthException If no authorization server is advertised or discovery/issuer validation fails.</span>
-<span class="source-line-no">313</span><span id="line-313">    */</span>
-<span class="source-line-no">314</span><span id="line-314">   public OidcMetadata discoverAuthorizationServer(McpProtectedResourceMetadata prm) {</span>
-<span class="source-line-no">315</span><span id="line-315">      reqnn("prm", prm);</span>
-<span class="source-line-no">316</span><span id="line-316">      var as = prm.firstAuthorizationServer()</span>
-<span class="source-line-no">317</span><span id="line-317">         .orElseThrow(() -&gt; new McpAuthException("Protected-resource-metadata for " + prm.resource() + " advertised no authorization_servers"));</span>
-<span class="source-line-no">318</span><span id="line-318">      requireSecure(as, "Authorization-server URL");</span>
-<span class="source-line-no">319</span><span id="line-319">      try {</span>
-<span class="source-line-no">320</span><span id="line-320">         var md = OidcDiscoveryClient.create()</span>
-<span class="source-line-no">321</span><span id="line-321">            .issuer(as)</span>
-<span class="source-line-no">322</span><span id="line-322">            .httpTimeout(httpTimeout)</span>
-<span class="source-line-no">323</span><span id="line-323">            .httpRequestConfigurator(policy().wrap(httpRequestConfigurator))</span>
-<span class="source-line-no">324</span><span id="line-324">            .build()</span>
-<span class="source-line-no">325</span><span id="line-325">            .discover();</span>
-<span class="source-line-no">326</span><span id="line-326">         requireSecure(md.tokenEndpoint(), "Token endpoint");</span>
-<span class="source-line-no">327</span><span id="line-327">         requireSecure(md.authorizationEndpoint(), "Authorization endpoint");</span>
-<span class="source-line-no">328</span><span id="line-328">         var reg = md.extras().get("registration_endpoint");</span>
-<span class="source-line-no">329</span><span id="line-329">         if (reg != null)</span>
-<span class="source-line-no">330</span><span id="line-330">            requireSecure(URI.create(reg.toString()), "Registration endpoint");</span>
-<span class="source-line-no">331</span><span id="line-331">         requireSecure(md.jwksUri(), "JWKS URI");</span>
-<span class="source-line-no">332</span><span id="line-332">         requireSecure(md.introspectionEndpoint(), "Introspection endpoint");</span>
-<span class="source-line-no">333</span><span id="line-333">         requireSecure(md.userinfoEndpoint(), "Userinfo endpoint");</span>
-<span class="source-line-no">334</span><span id="line-334">         requireSecure(md.endSessionEndpoint(), "End-session endpoint");</span>
-<span class="source-line-no">335</span><span id="line-335">         var rev = md.extras().get("revocation_endpoint");</span>
-<span class="source-line-no">336</span><span id="line-336">         if (rev != null)</span>
-<span class="source-line-no">337</span><span id="line-337">            requireSecure(URI.create(rev.toString()), "Revocation endpoint");</span>
-<span class="source-line-no">338</span><span id="line-338">         return md;</span>
-<span class="source-line-no">339</span><span id="line-339">      } catch (IOException | OidcDiscoveryException | IllegalArgumentException e) {</span>
-<span class="source-line-no">340</span><span id="line-340">         throw new McpAuthException("Authorization-server discovery/issuer validation failed for " + as, e);</span>
-<span class="source-line-no">341</span><span id="line-341">      }</span>
-<span class="source-line-no">342</span><span id="line-342">   }</span>
-<span class="source-line-no">343</span><span id="line-343"></span>
-<span class="source-line-no">344</span><span id="line-344">   /**</span>
-<span class="source-line-no">345</span><span id="line-345">    * Validates the PRM {@code resource} field against the expected resource identifier (RFC 9728 &amp;sect;3.3), using a</span>
-<span class="source-line-no">346</span><span id="line-346">    * normalization-free exact string comparison to match the issuer-identity posture.</span>
-<span class="source-line-no">347</span><span id="line-347">    */</span>
-<span class="source-line-no">348</span><span id="line-348">   private void validateResourceIdentity(McpProtectedResourceMetadata prm, URI expectedResource) {</span>
-<span class="source-line-no">349</span><span id="line-349">      if (expectedResource == null) {</span>
-<span class="source-line-no">350</span><span id="line-350">         if (skipResourceValidation)</span>
-<span class="source-line-no">351</span><span id="line-351">            return;</span>
-<span class="source-line-no">352</span><span id="line-352">         throw new McpAuthException("Protected-resource-metadata validation requires an expected resource identifier (RFC 9728 3.3); call expectedResource(...)");</span>
-<span class="source-line-no">353</span><span id="line-353">      }</span>
-<span class="source-line-no">354</span><span id="line-354">      if (neq(expectedResource.toString(), prm.resource().toString()))</span>
-<span class="source-line-no">355</span><span id="line-355">         throw new McpAuthException("Protected-resource-metadata resource identity mismatch (RFC 9728 3.3): expected '"</span>
-<span class="source-line-no">356</span><span id="line-356">            + expectedResource + "' but document declared '" + prm.resource() + "'");</span>
-<span class="source-line-no">357</span><span id="line-357">   }</span>
-<span class="source-line-no">358</span><span id="line-358"></span>
-<span class="source-line-no">359</span><span id="line-359">   private OAuthHttpPolicy policy() {</span>
-<span class="source-line-no">360</span><span id="line-360">      return OAuthHttpPolicy.of(allowPrivateUrls, allowInsecureHttp);</span>
-<span class="source-line-no">361</span><span id="line-361">   }</span>
-<span class="source-line-no">362</span><span id="line-362"></span>
-<span class="source-line-no">363</span><span id="line-363">   private void requireSecure(URI uri, String what) {</span>
-<span class="source-line-no">364</span><span id="line-364">      if (uri == null)</span>
-<span class="source-line-no">365</span><span id="line-365">         return;</span>
-<span class="source-line-no">366</span><span id="line-366">      try {</span>
-<span class="source-line-no">367</span><span id="line-367">         policy().requireAllowed(uri);</span>
-<span class="source-line-no">368</span><span id="line-368">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">369</span><span id="line-369">         throw new McpAuthException(what + " is not permitted (was '" + uri + "'): " + e.getMessage(), e);</span>
-<span class="source-line-no">370</span><span id="line-370">      }</span>
-<span class="source-line-no">371</span><span id="line-371">   }</span>
-<span class="source-line-no">372</span><span id="line-372"></span>
-<span class="source-line-no">373</span><span id="line-373">   private static final Set&lt;String&gt; STANDARD_FIELDS = Set.of(</span>
-<span class="source-line-no">374</span><span id="line-374">      "resource", "authorization_servers", "scopes_supported"</span>
-<span class="source-line-no">375</span><span id="line-375">   );</span>
-<span class="source-line-no">376</span><span id="line-376">}</span>
+<span class="source-line-no">226</span><span id="line-226">   @SuppressWarnings({</span>
+<span class="source-line-no">227</span><span id="line-227">      "javabugs:S2259" // False positive: prmUrl is verified non-null by reqnn() on the first line of the method.</span>
+<span class="source-line-no">228</span><span id="line-228">   })</span>
+<span class="source-line-no">229</span><span id="line-229">   public McpProtectedResourceMetadata fetch(URI prmUrl, URI expectedResource) {</span>
+<span class="source-line-no">230</span><span id="line-230">      reqnn("prmUrl", prmUrl);</span>
+<span class="source-line-no">231</span><span id="line-231">      requireSecure(prmUrl, "Protected-resource-metadata URL");</span>
+<span class="source-line-no">232</span><span id="line-232">      HTTPResponse resp;</span>
+<span class="source-line-no">233</span><span id="line-233">      try {</span>
+<span class="source-line-no">234</span><span id="line-234">         var req = new HTTPRequest(HTTPRequest.Method.GET, prmUrl.toURL());</span>
+<span class="source-line-no">235</span><span id="line-235">         req.setConnectTimeout((int) httpTimeout.toMillis());</span>
+<span class="source-line-no">236</span><span id="line-236">         req.setReadTimeout((int) httpTimeout.toMillis());</span>
+<span class="source-line-no">237</span><span id="line-237">         req.setFollowRedirects(false);</span>
+<span class="source-line-no">238</span><span id="line-238">         req.setAccept("application/json");</span>
+<span class="source-line-no">239</span><span id="line-239">         if (httpRequestConfigurator != null)</span>
+<span class="source-line-no">240</span><span id="line-240">            httpRequestConfigurator.accept(req);</span>
+<span class="source-line-no">241</span><span id="line-241">         policy().apply(req);</span>
+<span class="source-line-no">242</span><span id="line-242">         resp = req.send();</span>
+<span class="source-line-no">243</span><span id="line-243">      } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">244</span><span id="line-244">         throw new McpAuthException("Protected-resource-metadata URL is not permitted (was '" + prmUrl + "'): " + e.getMessage(), e);</span>
+<span class="source-line-no">245</span><span id="line-245">      } catch (IOException e) {</span>
+<span class="source-line-no">246</span><span id="line-246">         throw new McpAuthException("Protected-resource-metadata fetch failed for " + prmUrl, e);</span>
+<span class="source-line-no">247</span><span id="line-247">      }</span>
+<span class="source-line-no">248</span><span id="line-248">      if (!resp.indicatesSuccess())</span>
+<span class="source-line-no">249</span><span id="line-249">         throw new McpAuthException("Protected-resource-metadata fetch returned HTTP " + resp.getStatusCode() + " for " + prmUrl);</span>
+<span class="source-line-no">250</span><span id="line-250">      return parse(resp.getBody(), prmUrl, expectedResource);</span>
+<span class="source-line-no">251</span><span id="line-251">   }</span>
+<span class="source-line-no">252</span><span id="line-252"></span>
+<span class="source-line-no">253</span><span id="line-253">   /**</span>
+<span class="source-line-no">254</span><span id="line-254">    * Parses a PRM JSON document body, validating its {@code resource} field against the builder-configured</span>
+<span class="source-line-no">255</span><span id="line-255">    * {@link Builder#expectedResource(URI)} (if any).</span>
+<span class="source-line-no">256</span><span id="line-256">    *</span>
+<span class="source-line-no">257</span><span id="line-257">    * @param json The JSON document body.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">258</span><span id="line-258">    * @param source The source URI, used only for error messages.  May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">259</span><span id="line-259">    * @return The parsed metadata.</span>
+<span class="source-line-no">260</span><span id="line-260">    * @throws McpAuthException If the document cannot be parsed, is missing the required {@code resource} field, or</span>
+<span class="source-line-no">261</span><span id="line-261">    *    fails the resource identity check.</span>
+<span class="source-line-no">262</span><span id="line-262">    */</span>
+<span class="source-line-no">263</span><span id="line-263">   public McpProtectedResourceMetadata parse(String json, URI source) {</span>
+<span class="source-line-no">264</span><span id="line-264">      return parse(json, source, expectedResource);</span>
+<span class="source-line-no">265</span><span id="line-265">   }</span>
+<span class="source-line-no">266</span><span id="line-266"></span>
+<span class="source-line-no">267</span><span id="line-267">   /**</span>
+<span class="source-line-no">268</span><span id="line-268">    * Parses a PRM JSON document body, validating its {@code resource} field against the supplied expected resource</span>
+<span class="source-line-no">269</span><span id="line-269">    * identifier (RFC 9728 &amp;sect;3.3).</span>
+<span class="source-line-no">270</span><span id="line-270">    *</span>
+<span class="source-line-no">271</span><span id="line-271">    * @param json The JSON document body.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">272</span><span id="line-272">    * @param source The source URI, used only for error messages.  May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">273</span><span id="line-273">    * @param expectedResource The resource identifier the client was actually talking to.  May be &lt;jk&gt;null&lt;/jk&gt; only</span>
+<span class="source-line-no">274</span><span id="line-274">    *    when {@link Builder#skipResourceValidation(boolean)} is set.</span>
+<span class="source-line-no">275</span><span id="line-275">    * @return The parsed metadata.</span>
+<span class="source-line-no">276</span><span id="line-276">    * @throws McpAuthException If the document cannot be parsed, is missing the required {@code resource} field, or</span>
+<span class="source-line-no">277</span><span id="line-277">    *    fails the resource identity check.</span>
+<span class="source-line-no">278</span><span id="line-278">    */</span>
+<span class="source-line-no">279</span><span id="line-279">   public McpProtectedResourceMetadata parse(String json, URI source, URI expectedResource) {</span>
+<span class="source-line-no">280</span><span id="line-280">      reqnn("json", json);</span>
+<span class="source-line-no">281</span><span id="line-281">      JSONObject o;</span>
+<span class="source-line-no">282</span><span id="line-282">      try {</span>
+<span class="source-line-no">283</span><span id="line-283">         o = JSONObjectUtils.parse(json);</span>
+<span class="source-line-no">284</span><span id="line-284">      } catch (ParseException e) {</span>
+<span class="source-line-no">285</span><span id="line-285">         throw new McpAuthException("Protected-resource-metadata document could not be parsed for " + source, e);</span>
+<span class="source-line-no">286</span><span id="line-286">      }</span>
+<span class="source-line-no">287</span><span id="line-287">      McpProtectedResourceMetadata prm;</span>
+<span class="source-line-no">288</span><span id="line-288">      try {</span>
+<span class="source-line-no">289</span><span id="line-289">         var resource = JSONObjectUtils.getURI(o, "resource");</span>
+<span class="source-line-no">290</span><span id="line-290">         var authServers = new ArrayList&lt;URI&gt;();</span>
+<span class="source-line-no">291</span><span id="line-291">         if (o.containsKey("authorization_servers"))</span>
+<span class="source-line-no">292</span><span id="line-292">            for (var v : JSONObjectUtils.getStringList(o, "authorization_servers"))</span>
+<span class="source-line-no">293</span><span id="line-293">               authServers.add(URI.create(v));</span>
+<span class="source-line-no">294</span><span id="line-294">         var scopes = new LinkedHashSet&lt;String&gt;();</span>
+<span class="source-line-no">295</span><span id="line-295">         if (o.containsKey("scopes_supported"))</span>
+<span class="source-line-no">296</span><span id="line-296">            scopes.addAll(JSONObjectUtils.getStringList(o, "scopes_supported"));</span>
+<span class="source-line-no">297</span><span id="line-297">         var extras = new LinkedHashMap&lt;String,Object&gt;();</span>
+<span class="source-line-no">298</span><span id="line-298">         for (var e : o.entrySet())</span>
+<span class="source-line-no">299</span><span id="line-299">            if (!STANDARD_FIELDS.contains(e.getKey()))</span>
+<span class="source-line-no">300</span><span id="line-300">               extras.put(e.getKey(), e.getValue());</span>
+<span class="source-line-no">301</span><span id="line-301">         prm = new McpProtectedResourceMetadata(resource, authServers, scopes, extras);</span>
+<span class="source-line-no">302</span><span id="line-302">      } catch (ParseException | IllegalArgumentException e) {</span>
+<span class="source-line-no">303</span><span id="line-303">         throw new McpAuthException("Protected-resource-metadata document was malformed for " + source, e);</span>
+<span class="source-line-no">304</span><span id="line-304">      }</span>
+<span class="source-line-no">305</span><span id="line-305">      validateResourceIdentity(prm, expectedResource);</span>
+<span class="source-line-no">306</span><span id="line-306">      return prm;</span>
+<span class="source-line-no">307</span><span id="line-307">   }</span>
+<span class="source-line-no">308</span><span id="line-308"></span>
+<span class="source-line-no">309</span><span id="line-309">   /**</span>
+<span class="source-line-no">310</span><span id="line-310">    * Selects the first authorization server from the PRM document and validates its issuer identity via RFC 8414 /</span>
+<span class="source-line-no">311</span><span id="line-311">    * OIDC discovery.</span>
+<span class="source-line-no">312</span><span id="line-312">    *</span>
+<span class="source-line-no">313</span><span id="line-313">    * @param prm The parsed PRM document.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">314</span><span id="line-314">    * @return The discovered authorization-server metadata (issuer validated).</span>
+<span class="source-line-no">315</span><span id="line-315">    * @throws McpAuthException If no authorization server is advertised or discovery/issuer validation fails.</span>
+<span class="source-line-no">316</span><span id="line-316">    */</span>
+<span class="source-line-no">317</span><span id="line-317">   public OidcMetadata discoverAuthorizationServer(McpProtectedResourceMetadata prm) {</span>
+<span class="source-line-no">318</span><span id="line-318">      reqnn("prm", prm);</span>
+<span class="source-line-no">319</span><span id="line-319">      var as = prm.firstAuthorizationServer()</span>
+<span class="source-line-no">320</span><span id="line-320">         .orElseThrow(() -&gt; new McpAuthException("Protected-resource-metadata for " + prm.resource() + " advertised no authorization_servers"));</span>
+<span class="source-line-no">321</span><span id="line-321">      requireSecure(as, "Authorization-server URL");</span>
+<span class="source-line-no">322</span><span id="line-322">      try {</span>
+<span class="source-line-no">323</span><span id="line-323">         var md = OidcDiscoveryClient.create()</span>
+<span class="source-line-no">324</span><span id="line-324">            .issuer(as)</span>
+<span class="source-line-no">325</span><span id="line-325">            .httpTimeout(httpTimeout)</span>
+<span class="source-line-no">326</span><span id="line-326">            .httpRequestConfigurator(policy().wrap(httpRequestConfigurator))</span>
+<span class="source-line-no">327</span><span id="line-327">            .build()</span>
+<span class="source-line-no">328</span><span id="line-328">            .discover();</span>
+<span class="source-line-no">329</span><span id="line-329">         requireSecure(md.tokenEndpoint(), "Token endpoint");</span>
+<span class="source-line-no">330</span><span id="line-330">         requireSecure(md.authorizationEndpoint(), "Authorization endpoint");</span>
+<span class="source-line-no">331</span><span id="line-331">         var reg = md.extras().get("registration_endpoint");</span>
+<span class="source-line-no">332</span><span id="line-332">         if (reg != null)</span>
+<span class="source-line-no">333</span><span id="line-333">            requireSecure(URI.create(reg.toString()), "Registration endpoint");</span>
+<span class="source-line-no">334</span><span id="line-334">         requireSecure(md.jwksUri(), "JWKS URI");</span>
+<span class="source-line-no">335</span><span id="line-335">         requireSecure(md.introspectionEndpoint(), "Introspection endpoint");</span>
+<span class="source-line-no">336</span><span id="line-336">         requireSecure(md.userinfoEndpoint(), "Userinfo endpoint");</span>
+<span class="source-line-no">337</span><span id="line-337">         requireSecure(md.endSessionEndpoint(), "End-session endpoint");</span>
+<span class="source-line-no">338</span><span id="line-338">         var rev = md.extras().get("revocation_endpoint");</span>
+<span class="source-line-no">339</span><span id="line-339">         if (rev != null)</span>
+<span class="source-line-no">340</span><span id="line-340">            requireSecure(URI.create(rev.toString()), "Revocation endpoint");</span>
+<span class="source-line-no">341</span><span id="line-341">         return md;</span>
+<span class="source-line-no">342</span><span id="line-342">      } catch (IOException | OidcDiscoveryException | IllegalArgumentException e) {</span>
+<span class="source-line-no">343</span><span id="line-343">         throw new McpAuthException("Authorization-server discovery/issuer validation failed for " + as, e);</span>
+<span class="source-line-no">344</span><span id="line-344">      }</span>
+<span class="source-line-no">345</span><span id="line-345">   }</span>
+<span class="source-line-no">346</span><span id="line-346"></span>
+<span class="source-line-no">347</span><span id="line-347">   /**</span>
+<span class="source-line-no">348</span><span id="line-348">    * Validates the PRM {@code resource} field against the expected resource identifier (RFC 9728 &amp;sect;3.3), using a</span>
+<span class="source-line-no">349</span><span id="line-349">    * normalization-free exact string comparison to match the issuer-identity posture.</span>
+<span class="source-line-no">350</span><span id="line-350">    */</span>
+<span class="source-line-no">351</span><span id="line-351">   private void validateResourceIdentity(McpProtectedResourceMetadata prm, URI expectedResource) {</span>
+<span class="source-line-no">352</span><span id="line-352">      if (expectedResource == null) {</span>
+<span class="source-line-no">353</span><span id="line-353">         if (skipResourceValidation)</span>
+<span class="source-line-no">354</span><span id="line-354">            return;</span>
+<span class="source-line-no">355</span><span id="line-355">         throw new McpAuthException("Protected-resource-metadata validation requires an expected resource identifier (RFC 9728 3.3); call expectedResource(...)");</span>
+<span class="source-line-no">356</span><span id="line-356">      }</span>
+<span class="source-line-no">357</span><span id="line-357">      if (neq(expectedResource.toString(), prm.resource().toString()))</span>
+<span class="source-line-no">358</span><span id="line-358">         throw new McpAuthException("Protected-resource-metadata resource identity mismatch (RFC 9728 3.3): expected '"</span>
+<span class="source-line-no">359</span><span id="line-359">            + expectedResource + "' but document declared '" + prm.resource() + "'");</span>
+<span class="source-line-no">360</span><span id="line-360">   }</span>
+<span class="source-line-no">361</span><span id="line-361"></span>
+<span class="source-line-no">362</span><span id="line-362">   private OAuthHttpPolicy policy() {</span>
+<span class="source-line-no">363</span><span id="line-363">      return OAuthHttpPolicy.of(allowPrivateUrls, allowInsecureHttp);</span>
+<span class="source-line-no">364</span><span id="line-364">   }</span>
+<span class="source-line-no">365</span><span id="line-365"></span>
+<span class="source-line-no">366</span><span id="line-366">   private void requireSecure(URI uri, String what) {</span>
+<span class="source-line-no">367</span><span id="line-367">      if (uri == null)</span>
+<span class="source-line-no">368</span><span id="line-368">         return;</span>
+<span class="source-line-no">369</span><span id="line-369">      try {</span>
+<span class="source-line-no">370</span><span id="line-370">         policy().requireAllowed(uri);</span>
+<span class="source-line-no">371</span><span id="line-371">      } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">372</span><span id="line-372">         throw new McpAuthException(what + " is not permitted (was '" + uri + "'): " + e.getMessage(), e);</span>
+<span class="source-line-no">373</span><span id="line-373">      }</span>
+<span class="source-line-no">374</span><span id="line-374">   }</span>
+<span class="source-line-no">375</span><span id="line-375"></span>
+<span class="source-line-no">376</span><span id="line-376">   private static final Set&lt;String&gt; STANDARD_FIELDS = Set.of(</span>
+<span class="source-line-no">377</span><span id="line-377">      "resource", "authorization_servers", "scopes_supported"</span>
+<span class="source-line-no">378</span><span id="line-378">   );</span>
+<span class="source-line-no">379</span><span id="line-379">}</span>
 
 
 

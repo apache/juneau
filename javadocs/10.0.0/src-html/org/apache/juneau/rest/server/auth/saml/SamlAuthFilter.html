@@ -39,387 +39,386 @@
 <span class="source-line-no">026</span><span id="line-26">import java.util.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import java.util.stream.*;</span>
 <span class="source-line-no">028</span><span id="line-28"></span>
-<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.commons.utils.*;</span>
-<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.rest.server.auth.*;</span>
-<span class="source-line-no">031</span><span id="line-31"></span>
-<span class="source-line-no">032</span><span id="line-32">import jakarta.servlet.http.*;</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">/**</span>
-<span class="source-line-no">035</span><span id="line-35"> * {@link AuthFilter} that authenticates requests carrying a SAML 2.0 {@code &lt;samlp:Response&gt;} delivered via</span>
-<span class="source-line-no">036</span><span id="line-36"> * the {@link SamlBinding#POST} or {@link SamlBinding#REDIRECT} HTTP binding.</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> * The {@link SamlBinding#POST} binding is accepted only on a {@code POST} request and {@link SamlBinding#REDIRECT} only</span>
-<span class="source-line-no">040</span><span id="line-40"> * on a {@code GET}.  A response to a request this SP sent must also present the binding cookie (see</span>
-<span class="source-line-no">041</span><span id="line-41"> * {@link Builder#bindingCookieName(String)}).</span>
-<span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> * On each request this filter:</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;ol&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;Inspects the URL path against the configured {@code consumerPath} (default {@code /saml/acs}).  If the</span>
-<span class="source-line-no">047</span><span id="line-47"> *       request path does not match, returns {@link Optional#empty()} (filter does not apply).</span>
-<span class="source-line-no">048</span><span id="line-48"> *    &lt;li&gt;For the {@link SamlBinding#POST} binding: reads the {@code SAMLResponse} form parameter and</span>
-<span class="source-line-no">049</span><span id="line-49"> *       base64-decodes it.  For {@link SamlBinding#REDIRECT}: reads the {@code SAMLResponse} query parameter,</span>
-<span class="source-line-no">050</span><span id="line-50"> *       base64-decodes it, and then DEFLATE-inflates (RFC 1951) per OASIS SAML 2.0 Redirect binding rules.</span>
-<span class="source-line-no">051</span><span id="line-51"> *    &lt;li&gt;Delegates to {@link SamlAssertionValidator#validate(String)}, which binds the assertion's bearer</span>
-<span class="source-line-no">052</span><span id="line-52"> *       {@code &lt;SubjectConfirmation&gt;} to the ACS URL configured on the validator.  On success,</span>
-<span class="source-line-no">053</span><span id="line-53"> *       builds an {@link AuthResult} carrying the resolved {@link ClaimsPrincipal}.  On failure, re-throws as</span>
-<span class="source-line-no">054</span><span id="line-54"> *       an {@link AuthenticationException} with a {@code WWW-Authenticate: SAML ...} challenge.</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;/ol&gt;</span>
-<span class="source-line-no">056</span><span id="line-56"> *</span>
-<span class="source-line-no">057</span><span id="line-57"> * &lt;h2 class='topic'&gt;Roles&lt;/h2&gt;</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;p&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> * If the resolved {@link ClaimsPrincipal} contains a claim whose name equals the configured</span>
-<span class="source-line-no">060</span><span id="line-60"> * {@code rolesClaim} (default {@code "roles"}) and whose value is a {@link List} of {@link String}, those role</span>
-<span class="source-line-no">061</span><span id="line-61"> * names are populated on the {@link AuthResult}.  Otherwise the role set is empty.</span>
-<span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;h2 class='topic'&gt;Usage&lt;/h2&gt;</span>
-<span class="source-line-no">064</span><span id="line-64"> *</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;p&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> * The validator carries the ACS URL; the request's own URL is never used to decide the expected recipient.</span>
-<span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> *    &lt;jk&gt;var&lt;/jk&gt; validator = SamlAssertionValidator.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
-<span class="source-line-no">070</span><span id="line-70"> *       .metadataResolver(SamlMetadataResolvers.&lt;jsm&gt;url&lt;/jsm&gt;(&lt;js&gt;"https://idp.example.com/metadata"&lt;/js&gt;))</span>
-<span class="source-line-no">071</span><span id="line-71"> *       .spEntityId(&lt;js&gt;"https://sp.example.com"&lt;/js&gt;)</span>
-<span class="source-line-no">072</span><span id="line-72"> *       .expectedIssuer(&lt;js&gt;"https://idp.example.com"&lt;/js&gt;)</span>
-<span class="source-line-no">073</span><span id="line-73"> *       .recipient(&lt;js&gt;"https://sp.example.com/saml/acs"&lt;/js&gt;)</span>
-<span class="source-line-no">074</span><span id="line-74"> *       .build();</span>
-<span class="source-line-no">075</span><span id="line-75"> *</span>
-<span class="source-line-no">076</span><span id="line-76"> *    AuthFilterChain.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;bs&lt;/jv&gt;)</span>
-<span class="source-line-no">077</span><span id="line-77"> *       .append(SamlAuthFilter.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
-<span class="source-line-no">078</span><span id="line-78"> *          .consumerPath(&lt;js&gt;"/saml/acs"&lt;/js&gt;)</span>
-<span class="source-line-no">079</span><span id="line-79"> *          .binding(SamlBinding.&lt;jsf&gt;POST&lt;/jsf&gt;)</span>
-<span class="source-line-no">080</span><span id="line-80"> *          .validator(&lt;jv&gt;validator&lt;/jv&gt;)</span>
-<span class="source-line-no">081</span><span id="line-81"> *          .build())</span>
-<span class="source-line-no">082</span><span id="line-82"> *       .build();</span>
-<span class="source-line-no">083</span><span id="line-83"> * &lt;/p&gt;</span>
-<span class="source-line-no">084</span><span id="line-84"> *</span>
-<span class="source-line-no">085</span><span id="line-85"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
-<span class="source-line-no">086</span><span id="line-86"> * &lt;ul&gt;</span>
-<span class="source-line-no">087</span><span id="line-87"> *    &lt;li class='jc'&gt;{@link SamlAssertionValidator}</span>
-<span class="source-line-no">088</span><span id="line-88"> *    &lt;li class='jc'&gt;{@link SamlBinding}</span>
-<span class="source-line-no">089</span><span id="line-89"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://docs.oasis-open.org/security/saml/v2.0/saml-bindings-2.0-os.pdf"&gt;SAML 2.0 Bindings (OASIS)&lt;/a&gt;</span>
-<span class="source-line-no">090</span><span id="line-90"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework"&gt;AuthN Filter Framework — Servlet-Layer Authentication&lt;/a&gt;</span>
-<span class="source-line-no">091</span><span id="line-91"> * &lt;/ul&gt;</span>
-<span class="source-line-no">092</span><span id="line-92"> *</span>
-<span class="source-line-no">093</span><span id="line-93"> * @since 10.0.0</span>
-<span class="source-line-no">094</span><span id="line-94"> */</span>
-<span class="source-line-no">095</span><span id="line-95">@SuppressWarnings({</span>
-<span class="source-line-no">096</span><span id="line-96">   "java:S1192" // Duplicate string literals are SAML attribute names and HTTP header values; intentional</span>
-<span class="source-line-no">097</span><span id="line-97">})</span>
-<span class="source-line-no">098</span><span id="line-98">public class SamlAuthFilter extends AuthFilter {</span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">   private static final String DEFAULT_CONSUMER_PATH = "/saml/acs";</span>
-<span class="source-line-no">101</span><span id="line-101">   private static final String DEFAULT_ROLES_CLAIM = "roles";</span>
-<span class="source-line-no">102</span><span id="line-102">   private static final String DEFAULT_BINDING_COOKIE = "SAML_LOGIN";</span>
-<span class="source-line-no">103</span><span id="line-103">   private static final String SAML_RESPONSE_PARAM = "SAMLResponse";</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   /**</span>
-<span class="source-line-no">106</span><span id="line-106">    * Default ceiling on the number of decompressed bytes accepted from a REDIRECT-binding</span>
-<span class="source-line-no">107</span><span id="line-107">    * {@code SAMLResponse} (1 MiB).</span>
-<span class="source-line-no">108</span><span id="line-108">    */</span>
-<span class="source-line-no">109</span><span id="line-109">   public static final long DEFAULT_MAX_INFLATED_BYTES = 1L * 1024 * 1024;</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   /**</span>
-<span class="source-line-no">112</span><span id="line-112">    * Default ceiling on the decompressed-to-compressed size ratio accepted from a REDIRECT-binding</span>
-<span class="source-line-no">113</span><span id="line-113">    * {@code SAMLResponse}.</span>
-<span class="source-line-no">114</span><span id="line-114">    */</span>
-<span class="source-line-no">115</span><span id="line-115">   public static final int DEFAULT_MAX_INFLATE_RATIO = 100;</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   /**</span>
-<span class="source-line-no">118</span><span id="line-118">    * Static creator.</span>
-<span class="source-line-no">119</span><span id="line-119">    *</span>
-<span class="source-line-no">120</span><span id="line-120">    * @return A new builder.</span>
-<span class="source-line-no">121</span><span id="line-121">    */</span>
-<span class="source-line-no">122</span><span id="line-122">   public static Builder create() {</span>
-<span class="source-line-no">123</span><span id="line-123">      return new Builder();</span>
-<span class="source-line-no">124</span><span id="line-124">   }</span>
-<span class="source-line-no">125</span><span id="line-125"></span>
-<span class="source-line-no">126</span><span id="line-126">   /**</span>
-<span class="source-line-no">127</span><span id="line-127">    * Builder for {@link SamlAuthFilter}.</span>
-<span class="source-line-no">128</span><span id="line-128">    */</span>
-<span class="source-line-no">129</span><span id="line-129">   public static class Builder {</span>
-<span class="source-line-no">130</span><span id="line-130">      private SamlAssertionValidator validator;</span>
-<span class="source-line-no">131</span><span id="line-131">      private SamlBinding binding = SamlBinding.POST;</span>
-<span class="source-line-no">132</span><span id="line-132">      private String consumerPath = DEFAULT_CONSUMER_PATH;</span>
-<span class="source-line-no">133</span><span id="line-133">      private String rolesClaim = DEFAULT_ROLES_CLAIM;</span>
-<span class="source-line-no">134</span><span id="line-134">      private String realm = "saml";</span>
-<span class="source-line-no">135</span><span id="line-135">      private String bindingCookieName = DEFAULT_BINDING_COOKIE;</span>
-<span class="source-line-no">136</span><span id="line-136">      private long maxInflatedBytes = DEFAULT_MAX_INFLATED_BYTES;</span>
-<span class="source-line-no">137</span><span id="line-137">      private int maxInflateRatio = DEFAULT_MAX_INFLATE_RATIO;</span>
-<span class="source-line-no">138</span><span id="line-138"></span>
-<span class="source-line-no">139</span><span id="line-139">      /** Constructor. */</span>
-<span class="source-line-no">140</span><span id="line-140">      protected Builder() {}</span>
-<span class="source-line-no">141</span><span id="line-141"></span>
-<span class="source-line-no">142</span><span id="line-142">      /**</span>
-<span class="source-line-no">143</span><span id="line-143">       * Sets the SAML assertion validator.</span>
-<span class="source-line-no">144</span><span id="line-144">       *</span>
-<span class="source-line-no">145</span><span id="line-145">       * @param value The validator.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">146</span><span id="line-146">       * @return This object.</span>
-<span class="source-line-no">147</span><span id="line-147">       */</span>
-<span class="source-line-no">148</span><span id="line-148">      public Builder validator(SamlAssertionValidator value) {</span>
-<span class="source-line-no">149</span><span id="line-149">         validator = reqnn("value", value);</span>
-<span class="source-line-no">150</span><span id="line-150">         return this;</span>
-<span class="source-line-no">151</span><span id="line-151">      }</span>
-<span class="source-line-no">152</span><span id="line-152"></span>
-<span class="source-line-no">153</span><span id="line-153">      /**</span>
-<span class="source-line-no">154</span><span id="line-154">       * Sets the SAML binding the filter listens for.  Defaults to {@link SamlBinding#POST}.</span>
-<span class="source-line-no">155</span><span id="line-155">       *</span>
-<span class="source-line-no">156</span><span id="line-156">       * @param value The binding.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">157</span><span id="line-157">       * @return This object.</span>
-<span class="source-line-no">158</span><span id="line-158">       */</span>
-<span class="source-line-no">159</span><span id="line-159">      public Builder binding(SamlBinding value) {</span>
-<span class="source-line-no">160</span><span id="line-160">         binding = reqnn("value", value);</span>
-<span class="source-line-no">161</span><span id="line-161">         return this;</span>
-<span class="source-line-no">162</span><span id="line-162">      }</span>
-<span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">      /**</span>
-<span class="source-line-no">165</span><span id="line-165">       * Sets the request path that carries the SAML assertion.  Defaults to {@code /saml/acs}.</span>
-<span class="source-line-no">166</span><span id="line-166">       *</span>
-<span class="source-line-no">167</span><span id="line-167">       * @param value The request path.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">168</span><span id="line-168">       * @return This object.</span>
-<span class="source-line-no">169</span><span id="line-169">       */</span>
-<span class="source-line-no">170</span><span id="line-170">      public Builder consumerPath(String value) {</span>
-<span class="source-line-no">171</span><span id="line-171">         consumerPath = reqnb("value", value);</span>
-<span class="source-line-no">172</span><span id="line-172">         return this;</span>
-<span class="source-line-no">173</span><span id="line-173">      }</span>
-<span class="source-line-no">174</span><span id="line-174"></span>
-<span class="source-line-no">175</span><span id="line-175">      /**</span>
-<span class="source-line-no">176</span><span id="line-176">       * Sets the claim name used to extract roles from the resolved {@link ClaimsPrincipal}.</span>
-<span class="source-line-no">177</span><span id="line-177">       *</span>
-<span class="source-line-no">178</span><span id="line-178">       * @param value The claim name.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">179</span><span id="line-179">       * @return This object.</span>
-<span class="source-line-no">180</span><span id="line-180">       */</span>
-<span class="source-line-no">181</span><span id="line-181">      public Builder rolesClaim(String value) {</span>
-<span class="source-line-no">182</span><span id="line-182">         rolesClaim = reqnb("value", value);</span>
-<span class="source-line-no">183</span><span id="line-183">         return this;</span>
-<span class="source-line-no">184</span><span id="line-184">      }</span>
-<span class="source-line-no">185</span><span id="line-185"></span>
-<span class="source-line-no">186</span><span id="line-186">      /**</span>
-<span class="source-line-no">187</span><span id="line-187">       * Sets the {@code WWW-Authenticate: SAML realm="&lt;value&gt;"} challenge realm.</span>
-<span class="source-line-no">188</span><span id="line-188">       *</span>
-<span class="source-line-no">189</span><span id="line-189">       * @param value The realm.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">190</span><span id="line-190">       * @return This object.</span>
-<span class="source-line-no">191</span><span id="line-191">       */</span>
-<span class="source-line-no">192</span><span id="line-192">      public Builder realm(String value) {</span>
-<span class="source-line-no">193</span><span id="line-193">         realm = reqnb("value", value);</span>
-<span class="source-line-no">194</span><span id="line-194">         return this;</span>
-<span class="source-line-no">195</span><span id="line-195">      }</span>
-<span class="source-line-no">196</span><span id="line-196"></span>
-<span class="source-line-no">197</span><span id="line-197">      /**</span>
-<span class="source-line-no">198</span><span id="line-198">       * Sets the name of the cookie that carries the browser-binding secret returned by</span>
-<span class="source-line-no">199</span><span id="line-199">       * {@link SamlAssertionValidator#rememberAuthnRequest(String)}.  Defaults to {@code SAML_LOGIN}.</span>
-<span class="source-line-no">200</span><span id="line-200">       *</span>
-<span class="source-line-no">201</span><span id="line-201">       * &lt;p&gt;</span>
-<span class="source-line-no">202</span><span id="line-202">       * The application sets this cookie (see {@link SamlAuthFilter#startLogin(HttpServletResponse, String)}) when it</span>
-<span class="source-line-no">203</span><span id="line-203">       * starts a login, and the filter passes its value to the validator along with the response.</span>
-<span class="source-line-no">204</span><span id="line-204">       *</span>
-<span class="source-line-no">205</span><span id="line-205">       * @param value The cookie name.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">206</span><span id="line-206">       * @return This object.</span>
-<span class="source-line-no">207</span><span id="line-207">       */</span>
-<span class="source-line-no">208</span><span id="line-208">      public Builder bindingCookieName(String value) {</span>
-<span class="source-line-no">209</span><span id="line-209">         bindingCookieName = reqnb("value", value);</span>
-<span class="source-line-no">210</span><span id="line-210">         return this;</span>
-<span class="source-line-no">211</span><span id="line-211">      }</span>
-<span class="source-line-no">212</span><span id="line-212"></span>
-<span class="source-line-no">213</span><span id="line-213">      /**</span>
-<span class="source-line-no">214</span><span id="line-214">       * Sets the ceiling on the number of decompressed bytes accepted from a {@link SamlBinding#REDIRECT}</span>
-<span class="source-line-no">215</span><span id="line-215">       * {@code SAMLResponse}.  Defaults to {@link SamlAuthFilter#DEFAULT_MAX_INFLATED_BYTES}.</span>
-<span class="source-line-no">216</span><span id="line-216">       *</span>
-<span class="source-line-no">217</span><span id="line-217">       * &lt;p&gt;</span>
-<span class="source-line-no">218</span><span id="line-218">       * A REDIRECT-binding {@code SAMLResponse} is DEFLATE-compressed in transit, so a small query-string</span>
-<span class="source-line-no">219</span><span id="line-219">       * payload can expand to a much larger document.  Decompression stops and the request is rejected once</span>
-<span class="source-line-no">220</span><span id="line-220">       * the running output exceeds this cap, so a highly-compressible payload cannot drive an unbounded</span>
-<span class="source-line-no">221</span><span id="line-221">       * allocation.  A value {@code &lt;= 0} disables the absolute cap (the ratio guard still applies).</span>
-<span class="source-line-no">222</span><span id="line-222">       *</span>
-<span class="source-line-no">223</span><span id="line-223">       * @param value The maximum decompressed size in bytes.</span>
-<span class="source-line-no">224</span><span id="line-224">       * @return This object.</span>
-<span class="source-line-no">225</span><span id="line-225">       */</span>
-<span class="source-line-no">226</span><span id="line-226">      public Builder maxInflatedBytes(long value) {</span>
-<span class="source-line-no">227</span><span id="line-227">         maxInflatedBytes = value;</span>
-<span class="source-line-no">228</span><span id="line-228">         return this;</span>
-<span class="source-line-no">229</span><span id="line-229">      }</span>
-<span class="source-line-no">230</span><span id="line-230"></span>
-<span class="source-line-no">231</span><span id="line-231">      /**</span>
-<span class="source-line-no">232</span><span id="line-232">       * Sets the ceiling on the decompressed-to-compressed size ratio accepted from a</span>
-<span class="source-line-no">233</span><span id="line-233">       * {@link SamlBinding#REDIRECT} {@code SAMLResponse}.  Defaults to</span>
-<span class="source-line-no">234</span><span id="line-234">       * {@link SamlAuthFilter#DEFAULT_MAX_INFLATE_RATIO}.</span>
-<span class="source-line-no">235</span><span id="line-235">       *</span>
-<span class="source-line-no">236</span><span id="line-236">       * &lt;p&gt;</span>
-<span class="source-line-no">237</span><span id="line-237">       * This guard catches a highly-compressible payload even when the absolute</span>
-<span class="source-line-no">238</span><span id="line-238">       * {@link #maxInflatedBytes(long) byte cap} is generous.  A value {@code &lt;= 0} disables the ratio guard.</span>
-<span class="source-line-no">239</span><span id="line-239">       *</span>
-<span class="source-line-no">240</span><span id="line-240">       * @param value The maximum output-to-input ratio.</span>
-<span class="source-line-no">241</span><span id="line-241">       * @return This object.</span>
-<span class="source-line-no">242</span><span id="line-242">       */</span>
-<span class="source-line-no">243</span><span id="line-243">      public Builder maxInflateRatio(int value) {</span>
-<span class="source-line-no">244</span><span id="line-244">         maxInflateRatio = value;</span>
-<span class="source-line-no">245</span><span id="line-245">         return this;</span>
-<span class="source-line-no">246</span><span id="line-246">      }</span>
-<span class="source-line-no">247</span><span id="line-247"></span>
-<span class="source-line-no">248</span><span id="line-248">      /**</span>
-<span class="source-line-no">249</span><span id="line-249">       * Builds the filter.</span>
-<span class="source-line-no">250</span><span id="line-250">       *</span>
-<span class="source-line-no">251</span><span id="line-251">       * @return A new {@link SamlAuthFilter}.</span>
-<span class="source-line-no">252</span><span id="line-252">       */</span>
-<span class="source-line-no">253</span><span id="line-253">      public SamlAuthFilter build() {</span>
-<span class="source-line-no">254</span><span id="line-254">         if (validator == null)</span>
-<span class="source-line-no">255</span><span id="line-255">            throw new IllegalStateException("SamlAuthFilter requires a SamlAssertionValidator");</span>
-<span class="source-line-no">256</span><span id="line-256">         return new SamlAuthFilter(this);</span>
-<span class="source-line-no">257</span><span id="line-257">      }</span>
-<span class="source-line-no">258</span><span id="line-258">   }</span>
-<span class="source-line-no">259</span><span id="line-259"></span>
-<span class="source-line-no">260</span><span id="line-260">   private final SamlAssertionValidator validator;</span>
-<span class="source-line-no">261</span><span id="line-261">   private final SamlBinding binding;</span>
-<span class="source-line-no">262</span><span id="line-262">   private final String consumerPath;</span>
-<span class="source-line-no">263</span><span id="line-263">   private final String rolesClaim;</span>
-<span class="source-line-no">264</span><span id="line-264">   private final String challenge;</span>
-<span class="source-line-no">265</span><span id="line-265">   private final String bindingCookieName;</span>
-<span class="source-line-no">266</span><span id="line-266">   private final long maxInflatedBytes;</span>
-<span class="source-line-no">267</span><span id="line-267">   private final int maxInflateRatio;</span>
-<span class="source-line-no">268</span><span id="line-268"></span>
-<span class="source-line-no">269</span><span id="line-269">   /**</span>
-<span class="source-line-no">270</span><span id="line-270">    * Constructor.</span>
-<span class="source-line-no">271</span><span id="line-271">    *</span>
-<span class="source-line-no">272</span><span id="line-272">    * @param b The builder to read configuration from.</span>
-<span class="source-line-no">273</span><span id="line-273">    */</span>
-<span class="source-line-no">274</span><span id="line-274">   protected SamlAuthFilter(Builder b) {</span>
-<span class="source-line-no">275</span><span id="line-275">      this.validator = b.validator;</span>
-<span class="source-line-no">276</span><span id="line-276">      this.binding = b.binding;</span>
-<span class="source-line-no">277</span><span id="line-277">      this.consumerPath = b.consumerPath;</span>
-<span class="source-line-no">278</span><span id="line-278">      this.rolesClaim = b.rolesClaim;</span>
-<span class="source-line-no">279</span><span id="line-279">      this.bindingCookieName = b.bindingCookieName;</span>
-<span class="source-line-no">280</span><span id="line-280">      this.challenge = "SAML realm=\"" + b.realm + "\"";</span>
-<span class="source-line-no">281</span><span id="line-281">      this.maxInflatedBytes = b.maxInflatedBytes;</span>
-<span class="source-line-no">282</span><span id="line-282">      this.maxInflateRatio = b.maxInflateRatio;</span>
-<span class="source-line-no">283</span><span id="line-283">   }</span>
-<span class="source-line-no">284</span><span id="line-284"></span>
-<span class="source-line-no">285</span><span id="line-285">   @Override /* Overridden from AuthFilter */</span>
-<span class="source-line-no">286</span><span id="line-286">   public Optional&lt;AuthResult&gt; authenticate(HttpServletRequest req) throws AuthenticationException {</span>
-<span class="source-line-no">287</span><span id="line-287">      if (!matchesPath(req) || !matchesMethod(req))</span>
-<span class="source-line-no">288</span><span id="line-288">         return oe();</span>
-<span class="source-line-no">289</span><span id="line-289">      var raw = req.getParameter(SAML_RESPONSE_PARAM);</span>
-<span class="source-line-no">290</span><span id="line-290">      if (isEmpty(raw))</span>
-<span class="source-line-no">291</span><span id="line-291">         return oe();</span>
-<span class="source-line-no">292</span><span id="line-292">      var xml = decodeSamlResponse(raw);</span>
-<span class="source-line-no">293</span><span id="line-293">      var principal = runValidator(xml, bindingCookie(req));</span>
-<span class="source-line-no">294</span><span id="line-294">      return o(AuthResult.of(principal, extractRoles(principal)));</span>
-<span class="source-line-no">295</span><span id="line-295">   }</span>
-<span class="source-line-no">296</span><span id="line-296"></span>
-<span class="source-line-no">297</span><span id="line-297">   /**</span>
-<span class="source-line-no">298</span><span id="line-298">    * Registers an outgoing authentication request and sends the browser-binding cookie that this filter checks on</span>
-<span class="source-line-no">299</span><span id="line-299">    * the response.</span>
-<span class="source-line-no">300</span><span id="line-300">    *</span>
-<span class="source-line-no">301</span><span id="line-301">    * &lt;p&gt;</span>
-<span class="source-line-no">302</span><span id="line-302">    * Call this when redirecting the browser to the identity provider, passing the {@code ID} attribute of the</span>
-<span class="source-line-no">303</span><span id="line-303">    * {@code &lt;AuthnRequest&gt;} being sent.  The method calls {@link SamlAssertionValidator#rememberAuthnRequest(String)}</span>
-<span class="source-line-no">304</span><span id="line-304">    * and adds a cookie named by {@link Builder#bindingCookieName(String)} carrying the returned secret.</span>
-<span class="source-line-no">305</span><span id="line-305">    *</span>
-<span class="source-line-no">306</span><span id="line-306">    * &lt;p&gt;</span>
-<span class="source-line-no">307</span><span id="line-307">    * Cookie attributes:</span>
-<span class="source-line-no">308</span><span id="line-308">    * &lt;ul&gt;</span>
-<span class="source-line-no">309</span><span id="line-309">    *    &lt;li&gt;{@code Secure} and {@code HttpOnly}: the value is never needed by page scripts and is sent only over HTTPS.</span>
-<span class="source-line-no">310</span><span id="line-310">    *    &lt;li&gt;{@code SameSite=None}: the POST binding delivers the response as a cross-site form post from the identity</span>
-<span class="source-line-no">311</span><span id="line-311">    *       provider, and browsers omit {@code Lax} and {@code Strict} cookies on that request.  {@code None} requires</span>
-<span class="source-line-no">312</span><span id="line-312">    *       {@code Secure}.</span>
-<span class="source-line-no">313</span><span id="line-313">    *    &lt;li&gt;{@code Path=/}: the ACS URL as seen by the browser includes the context and servlet paths, which this filter</span>
-<span class="source-line-no">314</span><span id="line-314">    *       does not know, so the cookie is scoped to the whole site.</span>
-<span class="source-line-no">315</span><span id="line-315">    *    &lt;li&gt;{@code Max-Age}: the validator's request lifetime, see {@link SamlAssertionValidator.Builder#authnRequestTtl(java.time.Duration)}.</span>
-<span class="source-line-no">316</span><span id="line-316">    * &lt;/ul&gt;</span>
-<span class="source-line-no">317</span><span id="line-317">    *</span>
-<span class="source-line-no">318</span><span id="line-318">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">319</span><span id="line-319">    *    &lt;jv&gt;filter&lt;/jv&gt;.startLogin(&lt;jv&gt;res&lt;/jv&gt;, &lt;jv&gt;authnRequestId&lt;/jv&gt;);</span>
-<span class="source-line-no">320</span><span id="line-320">    *    &lt;jv&gt;res&lt;/jv&gt;.sendRedirect(&lt;jv&gt;idpUrlCarryingTheRequest&lt;/jv&gt;);</span>
-<span class="source-line-no">321</span><span id="line-321">    * &lt;/p&gt;</span>
-<span class="source-line-no">322</span><span id="line-322">    *</span>
-<span class="source-line-no">323</span><span id="line-323">    * @param res The response being sent to the browser.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">324</span><span id="line-324">    * @param requestId The {@code ID} attribute of the outgoing {@code &lt;AuthnRequest&gt;}.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">325</span><span id="line-325">    * @throws IllegalStateException If the validator's store cannot accept more outstanding requests.</span>
-<span class="source-line-no">326</span><span id="line-326">    */</span>
-<span class="source-line-no">327</span><span id="line-327">   public void startLogin(HttpServletResponse res, String requestId) {</span>
-<span class="source-line-no">328</span><span id="line-328">      var secret = validator.rememberAuthnRequest(requestId);</span>
-<span class="source-line-no">329</span><span id="line-329">      var c = new Cookie(bindingCookieName, secret);</span>
-<span class="source-line-no">330</span><span id="line-330">      c.setSecure(true);</span>
-<span class="source-line-no">331</span><span id="line-331">      c.setHttpOnly(true);</span>
-<span class="source-line-no">332</span><span id="line-332">      c.setPath("/");</span>
-<span class="source-line-no">333</span><span id="line-333">      c.setMaxAge((int)Math.min(Integer.MAX_VALUE, validator.getAuthnRequestTtl().toSeconds()));</span>
-<span class="source-line-no">334</span><span id="line-334">      c.setAttribute("SameSite", "None");</span>
-<span class="source-line-no">335</span><span id="line-335">      res.addCookie(c);</span>
-<span class="source-line-no">336</span><span id="line-336">   }</span>
-<span class="source-line-no">337</span><span id="line-337"></span>
-<span class="source-line-no">338</span><span id="line-338">   // The POST binding is delivered by a form post and the REDIRECT binding by a GET; other methods are not accepted.</span>
-<span class="source-line-no">339</span><span id="line-339">   private boolean matchesMethod(HttpServletRequest req) {</span>
-<span class="source-line-no">340</span><span id="line-340">      return binding == SamlBinding.POST ? eq("POST", req.getMethod()) : eq("GET", req.getMethod());</span>
-<span class="source-line-no">341</span><span id="line-341">   }</span>
-<span class="source-line-no">342</span><span id="line-342"></span>
-<span class="source-line-no">343</span><span id="line-343">   private String bindingCookie(HttpServletRequest req) {</span>
-<span class="source-line-no">344</span><span id="line-344">      var cookies = req.getCookies();</span>
-<span class="source-line-no">345</span><span id="line-345">      if (cookies != null)</span>
-<span class="source-line-no">346</span><span id="line-346">         for (var c : cookies)</span>
-<span class="source-line-no">347</span><span id="line-347">            if (eq(bindingCookieName, c.getName()))</span>
-<span class="source-line-no">348</span><span id="line-348">               return c.getValue();</span>
-<span class="source-line-no">349</span><span id="line-349">      return null;</span>
-<span class="source-line-no">350</span><span id="line-350">   }</span>
-<span class="source-line-no">351</span><span id="line-351"></span>
-<span class="source-line-no">352</span><span id="line-352">   private boolean matchesPath(HttpServletRequest req) {</span>
-<span class="source-line-no">353</span><span id="line-353">      var p = req.getPathInfo();</span>
-<span class="source-line-no">354</span><span id="line-354">      var s = p != null ? p : req.getServletPath();</span>
-<span class="source-line-no">355</span><span id="line-355">      return s != null &amp;&amp; eq(s, consumerPath);</span>
-<span class="source-line-no">356</span><span id="line-356">   }</span>
-<span class="source-line-no">357</span><span id="line-357"></span>
-<span class="source-line-no">358</span><span id="line-358">   private String decodeSamlResponse(String raw) throws AuthenticationException {</span>
-<span class="source-line-no">359</span><span id="line-359">      try {</span>
-<span class="source-line-no">360</span><span id="line-360">         byte[] decoded = Base64.getMimeDecoder().decode(raw);</span>
-<span class="source-line-no">361</span><span id="line-361">         return switch (binding) {</span>
-<span class="source-line-no">362</span><span id="line-362">            // Per SAML 2.0 Redirect binding: raw DEFLATE (no zlib wrapper), decompressed under a hard</span>
-<span class="source-line-no">363</span><span id="line-363">            // output-size cap and ratio guard so a compressible payload cannot force an unbounded allocation.</span>
-<span class="source-line-no">364</span><span id="line-364">            case REDIRECT -&gt; new String(inflate(decoded, true, maxInflatedBytes, maxInflateRatio), StandardCharsets.UTF_8);</span>
-<span class="source-line-no">365</span><span id="line-365">            // Per SAML 2.0 POST binding: the base64-decoded bytes are the raw XML document.</span>
-<span class="source-line-no">366</span><span id="line-366">            case POST -&gt; new String(decoded, StandardCharsets.UTF_8);</span>
-<span class="source-line-no">367</span><span id="line-367">         };</span>
-<span class="source-line-no">368</span><span id="line-368">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">369</span><span id="line-369">         throw new AuthenticationException(e, "SAMLResponse parameter is not valid base64")</span>
-<span class="source-line-no">370</span><span id="line-370">            .wwwAuthenticate(challenge);</span>
-<span class="source-line-no">371</span><span id="line-371">      } catch (IOException e) {</span>
-<span class="source-line-no">372</span><span id="line-372">         throw new AuthenticationException(e, "SAMLResponse parameter could not be inflated (REDIRECT binding)")</span>
-<span class="source-line-no">373</span><span id="line-373">            .wwwAuthenticate(challenge);</span>
-<span class="source-line-no">374</span><span id="line-374">      }</span>
-<span class="source-line-no">375</span><span id="line-375">   }</span>
-<span class="source-line-no">376</span><span id="line-376"></span>
-<span class="source-line-no">377</span><span id="line-377">   private Principal runValidator(String xml, String browserBinding) throws AuthenticationException {</span>
-<span class="source-line-no">378</span><span id="line-378">      try {</span>
-<span class="source-line-no">379</span><span id="line-379">         var p = validator.validate(xml, browserBinding);</span>
-<span class="source-line-no">380</span><span id="line-380">         if (p == null)</span>
-<span class="source-line-no">381</span><span id="line-381">            throw new AuthenticationException("SAML validator returned null").wwwAuthenticate(challenge);</span>
-<span class="source-line-no">382</span><span id="line-382">         return p;</span>
-<span class="source-line-no">383</span><span id="line-383">      } catch (AuthenticationException e) {</span>
-<span class="source-line-no">384</span><span id="line-384">         var hasChallenge = e.getHeaders().stream()</span>
-<span class="source-line-no">385</span><span id="line-385">            .anyMatch(h -&gt; eqic("WWW-Authenticate", h.getName()));</span>
-<span class="source-line-no">386</span><span id="line-386">         if (!hasChallenge)</span>
-<span class="source-line-no">387</span><span id="line-387">            e.wwwAuthenticate(challenge);</span>
-<span class="source-line-no">388</span><span id="line-388">         throw e;</span>
-<span class="source-line-no">389</span><span id="line-389">      } catch (RuntimeException e) {</span>
-<span class="source-line-no">390</span><span id="line-390">         throw new AuthenticationException(e, "SAML validation failed").wwwAuthenticate(challenge);</span>
-<span class="source-line-no">391</span><span id="line-391">      }</span>
-<span class="source-line-no">392</span><span id="line-392">   }</span>
-<span class="source-line-no">393</span><span id="line-393"></span>
-<span class="source-line-no">394</span><span id="line-394">   @SuppressWarnings({</span>
-<span class="source-line-no">395</span><span id="line-395">      "unchecked" // Type erasure on reflective/generic cast; element type is verified at call site</span>
-<span class="source-line-no">396</span><span id="line-396">   })</span>
-<span class="source-line-no">397</span><span id="line-397">   private Set&lt;String&gt; extractRoles(Principal principal) {</span>
-<span class="source-line-no">398</span><span id="line-398">      if (principal instanceof ClaimsPrincipal principal2) {</span>
-<span class="source-line-no">399</span><span id="line-399">         var v = principal2.getClaims().get(rolesClaim);</span>
-<span class="source-line-no">400</span><span id="line-400">         if (v instanceof List&lt;?&gt; v2) {</span>
-<span class="source-line-no">401</span><span id="line-401">            return ((List&lt;Object&gt;) v2).stream()</span>
-<span class="source-line-no">402</span><span id="line-402">               .filter(String.class::isInstance)</span>
-<span class="source-line-no">403</span><span id="line-403">               .map(String.class::cast)</span>
-<span class="source-line-no">404</span><span id="line-404">               .collect(Collectors.toCollection(HashSet::new));</span>
-<span class="source-line-no">405</span><span id="line-405">         }</span>
-<span class="source-line-no">406</span><span id="line-406">      }</span>
-<span class="source-line-no">407</span><span id="line-407">      return Collections.emptySet();</span>
-<span class="source-line-no">408</span><span id="line-408">   }</span>
-<span class="source-line-no">409</span><span id="line-409">}</span>
+<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.rest.server.auth.*;</span>
+<span class="source-line-no">030</span><span id="line-30"></span>
+<span class="source-line-no">031</span><span id="line-31">import jakarta.servlet.http.*;</span>
+<span class="source-line-no">032</span><span id="line-32"></span>
+<span class="source-line-no">033</span><span id="line-33">/**</span>
+<span class="source-line-no">034</span><span id="line-34"> * {@link AuthFilter} that authenticates requests carrying a SAML 2.0 {@code &lt;samlp:Response&gt;} delivered via</span>
+<span class="source-line-no">035</span><span id="line-35"> * the {@link SamlBinding#POST} or {@link SamlBinding#REDIRECT} HTTP binding.</span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * The {@link SamlBinding#POST} binding is accepted only on a {@code POST} request and {@link SamlBinding#REDIRECT} only</span>
+<span class="source-line-no">039</span><span id="line-39"> * on a {@code GET}.  A response to a request this SP sent must also present the binding cookie (see</span>
+<span class="source-line-no">040</span><span id="line-40"> * {@link Builder#bindingCookieName(String)}).</span>
+<span class="source-line-no">041</span><span id="line-41"> *</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;p&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * On each request this filter:</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;ol&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;Inspects the URL path against the configured {@code consumerPath} (default {@code /saml/acs}).  If the</span>
+<span class="source-line-no">046</span><span id="line-46"> *       request path does not match, returns {@link Optional#empty()} (filter does not apply).</span>
+<span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;For the {@link SamlBinding#POST} binding: reads the {@code SAMLResponse} form parameter and</span>
+<span class="source-line-no">048</span><span id="line-48"> *       base64-decodes it.  For {@link SamlBinding#REDIRECT}: reads the {@code SAMLResponse} query parameter,</span>
+<span class="source-line-no">049</span><span id="line-49"> *       base64-decodes it, and then DEFLATE-inflates (RFC 1951) per OASIS SAML 2.0 Redirect binding rules.</span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;li&gt;Delegates to {@link SamlAssertionValidator#validate(String)}, which binds the assertion's bearer</span>
+<span class="source-line-no">051</span><span id="line-51"> *       {@code &lt;SubjectConfirmation&gt;} to the ACS URL configured on the validator.  On success,</span>
+<span class="source-line-no">052</span><span id="line-52"> *       builds an {@link AuthResult} carrying the resolved {@link ClaimsPrincipal}.  On failure, re-throws as</span>
+<span class="source-line-no">053</span><span id="line-53"> *       an {@link AuthenticationException} with a {@code WWW-Authenticate: SAML ...} challenge.</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;/ol&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> *</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;h2 class='topic'&gt;Roles&lt;/h2&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> * &lt;p&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * If the resolved {@link ClaimsPrincipal} contains a claim whose name equals the configured</span>
+<span class="source-line-no">059</span><span id="line-59"> * {@code rolesClaim} (default {@code "roles"}) and whose value is a {@link List} of {@link String}, those role</span>
+<span class="source-line-no">060</span><span id="line-60"> * names are populated on the {@link AuthResult}.  Otherwise the role set is empty.</span>
+<span class="source-line-no">061</span><span id="line-61"> *</span>
+<span class="source-line-no">062</span><span id="line-62"> * &lt;h2 class='topic'&gt;Usage&lt;/h2&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> *</span>
+<span class="source-line-no">064</span><span id="line-64"> * &lt;p&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> * The validator carries the ACS URL; the request's own URL is never used to decide the expected recipient.</span>
+<span class="source-line-no">066</span><span id="line-66"> *</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *    &lt;jk&gt;var&lt;/jk&gt; validator = SamlAssertionValidator.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
+<span class="source-line-no">069</span><span id="line-69"> *       .metadataResolver(SamlMetadataResolvers.&lt;jsm&gt;url&lt;/jsm&gt;(&lt;js&gt;"https://idp.example.com/metadata"&lt;/js&gt;))</span>
+<span class="source-line-no">070</span><span id="line-70"> *       .spEntityId(&lt;js&gt;"https://sp.example.com"&lt;/js&gt;)</span>
+<span class="source-line-no">071</span><span id="line-71"> *       .expectedIssuer(&lt;js&gt;"https://idp.example.com"&lt;/js&gt;)</span>
+<span class="source-line-no">072</span><span id="line-72"> *       .recipient(&lt;js&gt;"https://sp.example.com/saml/acs"&lt;/js&gt;)</span>
+<span class="source-line-no">073</span><span id="line-73"> *       .build();</span>
+<span class="source-line-no">074</span><span id="line-74"> *</span>
+<span class="source-line-no">075</span><span id="line-75"> *    AuthFilterChain.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;bs&lt;/jv&gt;)</span>
+<span class="source-line-no">076</span><span id="line-76"> *       .append(SamlAuthFilter.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
+<span class="source-line-no">077</span><span id="line-77"> *          .consumerPath(&lt;js&gt;"/saml/acs"&lt;/js&gt;)</span>
+<span class="source-line-no">078</span><span id="line-78"> *          .binding(SamlBinding.&lt;jsf&gt;POST&lt;/jsf&gt;)</span>
+<span class="source-line-no">079</span><span id="line-79"> *          .validator(&lt;jv&gt;validator&lt;/jv&gt;)</span>
+<span class="source-line-no">080</span><span id="line-80"> *          .build())</span>
+<span class="source-line-no">081</span><span id="line-81"> *       .build();</span>
+<span class="source-line-no">082</span><span id="line-82"> * &lt;/p&gt;</span>
+<span class="source-line-no">083</span><span id="line-83"> *</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;ul&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> *    &lt;li class='jc'&gt;{@link SamlAssertionValidator}</span>
+<span class="source-line-no">087</span><span id="line-87"> *    &lt;li class='jc'&gt;{@link SamlBinding}</span>
+<span class="source-line-no">088</span><span id="line-88"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://docs.oasis-open.org/security/saml/v2.0/saml-bindings-2.0-os.pdf"&gt;SAML 2.0 Bindings (OASIS)&lt;/a&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework"&gt;AuthN Filter Framework — Servlet-Layer Authentication&lt;/a&gt;</span>
+<span class="source-line-no">090</span><span id="line-90"> * &lt;/ul&gt;</span>
+<span class="source-line-no">091</span><span id="line-91"> *</span>
+<span class="source-line-no">092</span><span id="line-92"> * @since 10.0.0</span>
+<span class="source-line-no">093</span><span id="line-93"> */</span>
+<span class="source-line-no">094</span><span id="line-94">@SuppressWarnings({</span>
+<span class="source-line-no">095</span><span id="line-95">   "java:S1192" // Duplicate string literals are SAML attribute names and HTTP header values; intentional</span>
+<span class="source-line-no">096</span><span id="line-96">})</span>
+<span class="source-line-no">097</span><span id="line-97">public class SamlAuthFilter extends AuthFilter {</span>
+<span class="source-line-no">098</span><span id="line-98"></span>
+<span class="source-line-no">099</span><span id="line-99">   private static final String DEFAULT_CONSUMER_PATH = "/saml/acs";</span>
+<span class="source-line-no">100</span><span id="line-100">   private static final String DEFAULT_ROLES_CLAIM = "roles";</span>
+<span class="source-line-no">101</span><span id="line-101">   private static final String DEFAULT_BINDING_COOKIE = "SAML_LOGIN";</span>
+<span class="source-line-no">102</span><span id="line-102">   private static final String SAML_RESPONSE_PARAM = "SAMLResponse";</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">   /**</span>
+<span class="source-line-no">105</span><span id="line-105">    * Default ceiling on the number of decompressed bytes accepted from a REDIRECT-binding</span>
+<span class="source-line-no">106</span><span id="line-106">    * {@code SAMLResponse} (1 MiB).</span>
+<span class="source-line-no">107</span><span id="line-107">    */</span>
+<span class="source-line-no">108</span><span id="line-108">   public static final long DEFAULT_MAX_INFLATED_BYTES = 1L * 1024 * 1024;</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   /**</span>
+<span class="source-line-no">111</span><span id="line-111">    * Default ceiling on the decompressed-to-compressed size ratio accepted from a REDIRECT-binding</span>
+<span class="source-line-no">112</span><span id="line-112">    * {@code SAMLResponse}.</span>
+<span class="source-line-no">113</span><span id="line-113">    */</span>
+<span class="source-line-no">114</span><span id="line-114">   public static final int DEFAULT_MAX_INFLATE_RATIO = 100;</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   /**</span>
+<span class="source-line-no">117</span><span id="line-117">    * Static creator.</span>
+<span class="source-line-no">118</span><span id="line-118">    *</span>
+<span class="source-line-no">119</span><span id="line-119">    * @return A new builder.</span>
+<span class="source-line-no">120</span><span id="line-120">    */</span>
+<span class="source-line-no">121</span><span id="line-121">   public static Builder create() {</span>
+<span class="source-line-no">122</span><span id="line-122">      return new Builder();</span>
+<span class="source-line-no">123</span><span id="line-123">   }</span>
+<span class="source-line-no">124</span><span id="line-124"></span>
+<span class="source-line-no">125</span><span id="line-125">   /**</span>
+<span class="source-line-no">126</span><span id="line-126">    * Builder for {@link SamlAuthFilter}.</span>
+<span class="source-line-no">127</span><span id="line-127">    */</span>
+<span class="source-line-no">128</span><span id="line-128">   public static class Builder {</span>
+<span class="source-line-no">129</span><span id="line-129">      private SamlAssertionValidator validator;</span>
+<span class="source-line-no">130</span><span id="line-130">      private SamlBinding binding = SamlBinding.POST;</span>
+<span class="source-line-no">131</span><span id="line-131">      private String consumerPath = DEFAULT_CONSUMER_PATH;</span>
+<span class="source-line-no">132</span><span id="line-132">      private String rolesClaim = DEFAULT_ROLES_CLAIM;</span>
+<span class="source-line-no">133</span><span id="line-133">      private String realm = "saml";</span>
+<span class="source-line-no">134</span><span id="line-134">      private String bindingCookieName = DEFAULT_BINDING_COOKIE;</span>
+<span class="source-line-no">135</span><span id="line-135">      private long maxInflatedBytes = DEFAULT_MAX_INFLATED_BYTES;</span>
+<span class="source-line-no">136</span><span id="line-136">      private int maxInflateRatio = DEFAULT_MAX_INFLATE_RATIO;</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">      /** Constructor. */</span>
+<span class="source-line-no">139</span><span id="line-139">      protected Builder() {}</span>
+<span class="source-line-no">140</span><span id="line-140"></span>
+<span class="source-line-no">141</span><span id="line-141">      /**</span>
+<span class="source-line-no">142</span><span id="line-142">       * Sets the SAML assertion validator.</span>
+<span class="source-line-no">143</span><span id="line-143">       *</span>
+<span class="source-line-no">144</span><span id="line-144">       * @param value The validator.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">145</span><span id="line-145">       * @return This object.</span>
+<span class="source-line-no">146</span><span id="line-146">       */</span>
+<span class="source-line-no">147</span><span id="line-147">      public Builder validator(SamlAssertionValidator value) {</span>
+<span class="source-line-no">148</span><span id="line-148">         validator = reqnn("value", value);</span>
+<span class="source-line-no">149</span><span id="line-149">         return this;</span>
+<span class="source-line-no">150</span><span id="line-150">      }</span>
+<span class="source-line-no">151</span><span id="line-151"></span>
+<span class="source-line-no">152</span><span id="line-152">      /**</span>
+<span class="source-line-no">153</span><span id="line-153">       * Sets the SAML binding the filter listens for.  Defaults to {@link SamlBinding#POST}.</span>
+<span class="source-line-no">154</span><span id="line-154">       *</span>
+<span class="source-line-no">155</span><span id="line-155">       * @param value The binding.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">156</span><span id="line-156">       * @return This object.</span>
+<span class="source-line-no">157</span><span id="line-157">       */</span>
+<span class="source-line-no">158</span><span id="line-158">      public Builder binding(SamlBinding value) {</span>
+<span class="source-line-no">159</span><span id="line-159">         binding = reqnn("value", value);</span>
+<span class="source-line-no">160</span><span id="line-160">         return this;</span>
+<span class="source-line-no">161</span><span id="line-161">      }</span>
+<span class="source-line-no">162</span><span id="line-162"></span>
+<span class="source-line-no">163</span><span id="line-163">      /**</span>
+<span class="source-line-no">164</span><span id="line-164">       * Sets the request path that carries the SAML assertion.  Defaults to {@code /saml/acs}.</span>
+<span class="source-line-no">165</span><span id="line-165">       *</span>
+<span class="source-line-no">166</span><span id="line-166">       * @param value The request path.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">167</span><span id="line-167">       * @return This object.</span>
+<span class="source-line-no">168</span><span id="line-168">       */</span>
+<span class="source-line-no">169</span><span id="line-169">      public Builder consumerPath(String value) {</span>
+<span class="source-line-no">170</span><span id="line-170">         consumerPath = reqnb("value", value);</span>
+<span class="source-line-no">171</span><span id="line-171">         return this;</span>
+<span class="source-line-no">172</span><span id="line-172">      }</span>
+<span class="source-line-no">173</span><span id="line-173"></span>
+<span class="source-line-no">174</span><span id="line-174">      /**</span>
+<span class="source-line-no">175</span><span id="line-175">       * Sets the claim name used to extract roles from the resolved {@link ClaimsPrincipal}.</span>
+<span class="source-line-no">176</span><span id="line-176">       *</span>
+<span class="source-line-no">177</span><span id="line-177">       * @param value The claim name.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">178</span><span id="line-178">       * @return This object.</span>
+<span class="source-line-no">179</span><span id="line-179">       */</span>
+<span class="source-line-no">180</span><span id="line-180">      public Builder rolesClaim(String value) {</span>
+<span class="source-line-no">181</span><span id="line-181">         rolesClaim = reqnb("value", value);</span>
+<span class="source-line-no">182</span><span id="line-182">         return this;</span>
+<span class="source-line-no">183</span><span id="line-183">      }</span>
+<span class="source-line-no">184</span><span id="line-184"></span>
+<span class="source-line-no">185</span><span id="line-185">      /**</span>
+<span class="source-line-no">186</span><span id="line-186">       * Sets the {@code WWW-Authenticate: SAML realm="&lt;value&gt;"} challenge realm.</span>
+<span class="source-line-no">187</span><span id="line-187">       *</span>
+<span class="source-line-no">188</span><span id="line-188">       * @param value The realm.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">189</span><span id="line-189">       * @return This object.</span>
+<span class="source-line-no">190</span><span id="line-190">       */</span>
+<span class="source-line-no">191</span><span id="line-191">      public Builder realm(String value) {</span>
+<span class="source-line-no">192</span><span id="line-192">         realm = reqnb("value", value);</span>
+<span class="source-line-no">193</span><span id="line-193">         return this;</span>
+<span class="source-line-no">194</span><span id="line-194">      }</span>
+<span class="source-line-no">195</span><span id="line-195"></span>
+<span class="source-line-no">196</span><span id="line-196">      /**</span>
+<span class="source-line-no">197</span><span id="line-197">       * Sets the name of the cookie that carries the browser-binding secret returned by</span>
+<span class="source-line-no">198</span><span id="line-198">       * {@link SamlAssertionValidator#rememberAuthnRequest(String)}.  Defaults to {@code SAML_LOGIN}.</span>
+<span class="source-line-no">199</span><span id="line-199">       *</span>
+<span class="source-line-no">200</span><span id="line-200">       * &lt;p&gt;</span>
+<span class="source-line-no">201</span><span id="line-201">       * The application sets this cookie (see {@link SamlAuthFilter#startLogin(HttpServletResponse, String)}) when it</span>
+<span class="source-line-no">202</span><span id="line-202">       * starts a login, and the filter passes its value to the validator along with the response.</span>
+<span class="source-line-no">203</span><span id="line-203">       *</span>
+<span class="source-line-no">204</span><span id="line-204">       * @param value The cookie name.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">205</span><span id="line-205">       * @return This object.</span>
+<span class="source-line-no">206</span><span id="line-206">       */</span>
+<span class="source-line-no">207</span><span id="line-207">      public Builder bindingCookieName(String value) {</span>
+<span class="source-line-no">208</span><span id="line-208">         bindingCookieName = reqnb("value", value);</span>
+<span class="source-line-no">209</span><span id="line-209">         return this;</span>
+<span class="source-line-no">210</span><span id="line-210">      }</span>
+<span class="source-line-no">211</span><span id="line-211"></span>
+<span class="source-line-no">212</span><span id="line-212">      /**</span>
+<span class="source-line-no">213</span><span id="line-213">       * Sets the ceiling on the number of decompressed bytes accepted from a {@link SamlBinding#REDIRECT}</span>
+<span class="source-line-no">214</span><span id="line-214">       * {@code SAMLResponse}.  Defaults to {@link SamlAuthFilter#DEFAULT_MAX_INFLATED_BYTES}.</span>
+<span class="source-line-no">215</span><span id="line-215">       *</span>
+<span class="source-line-no">216</span><span id="line-216">       * &lt;p&gt;</span>
+<span class="source-line-no">217</span><span id="line-217">       * A REDIRECT-binding {@code SAMLResponse} is DEFLATE-compressed in transit, so a small query-string</span>
+<span class="source-line-no">218</span><span id="line-218">       * payload can expand to a much larger document.  Decompression stops and the request is rejected once</span>
+<span class="source-line-no">219</span><span id="line-219">       * the running output exceeds this cap, so a highly-compressible payload cannot drive an unbounded</span>
+<span class="source-line-no">220</span><span id="line-220">       * allocation.  A value {@code &lt;= 0} disables the absolute cap (the ratio guard still applies).</span>
+<span class="source-line-no">221</span><span id="line-221">       *</span>
+<span class="source-line-no">222</span><span id="line-222">       * @param value The maximum decompressed size in bytes.</span>
+<span class="source-line-no">223</span><span id="line-223">       * @return This object.</span>
+<span class="source-line-no">224</span><span id="line-224">       */</span>
+<span class="source-line-no">225</span><span id="line-225">      public Builder maxInflatedBytes(long value) {</span>
+<span class="source-line-no">226</span><span id="line-226">         maxInflatedBytes = value;</span>
+<span class="source-line-no">227</span><span id="line-227">         return this;</span>
+<span class="source-line-no">228</span><span id="line-228">      }</span>
+<span class="source-line-no">229</span><span id="line-229"></span>
+<span class="source-line-no">230</span><span id="line-230">      /**</span>
+<span class="source-line-no">231</span><span id="line-231">       * Sets the ceiling on the decompressed-to-compressed size ratio accepted from a</span>
+<span class="source-line-no">232</span><span id="line-232">       * {@link SamlBinding#REDIRECT} {@code SAMLResponse}.  Defaults to</span>
+<span class="source-line-no">233</span><span id="line-233">       * {@link SamlAuthFilter#DEFAULT_MAX_INFLATE_RATIO}.</span>
+<span class="source-line-no">234</span><span id="line-234">       *</span>
+<span class="source-line-no">235</span><span id="line-235">       * &lt;p&gt;</span>
+<span class="source-line-no">236</span><span id="line-236">       * This guard catches a highly-compressible payload even when the absolute</span>
+<span class="source-line-no">237</span><span id="line-237">       * {@link #maxInflatedBytes(long) byte cap} is generous.  A value {@code &lt;= 0} disables the ratio guard.</span>
+<span class="source-line-no">238</span><span id="line-238">       *</span>
+<span class="source-line-no">239</span><span id="line-239">       * @param value The maximum output-to-input ratio.</span>
+<span class="source-line-no">240</span><span id="line-240">       * @return This object.</span>
+<span class="source-line-no">241</span><span id="line-241">       */</span>
+<span class="source-line-no">242</span><span id="line-242">      public Builder maxInflateRatio(int value) {</span>
+<span class="source-line-no">243</span><span id="line-243">         maxInflateRatio = value;</span>
+<span class="source-line-no">244</span><span id="line-244">         return this;</span>
+<span class="source-line-no">245</span><span id="line-245">      }</span>
+<span class="source-line-no">246</span><span id="line-246"></span>
+<span class="source-line-no">247</span><span id="line-247">      /**</span>
+<span class="source-line-no">248</span><span id="line-248">       * Builds the filter.</span>
+<span class="source-line-no">249</span><span id="line-249">       *</span>
+<span class="source-line-no">250</span><span id="line-250">       * @return A new {@link SamlAuthFilter}.</span>
+<span class="source-line-no">251</span><span id="line-251">       */</span>
+<span class="source-line-no">252</span><span id="line-252">      public SamlAuthFilter build() {</span>
+<span class="source-line-no">253</span><span id="line-253">         if (validator == null)</span>
+<span class="source-line-no">254</span><span id="line-254">            throw new IllegalStateException("SamlAuthFilter requires a SamlAssertionValidator");</span>
+<span class="source-line-no">255</span><span id="line-255">         return new SamlAuthFilter(this);</span>
+<span class="source-line-no">256</span><span id="line-256">      }</span>
+<span class="source-line-no">257</span><span id="line-257">   }</span>
+<span class="source-line-no">258</span><span id="line-258"></span>
+<span class="source-line-no">259</span><span id="line-259">   private final SamlAssertionValidator validator;</span>
+<span class="source-line-no">260</span><span id="line-260">   private final SamlBinding binding;</span>
+<span class="source-line-no">261</span><span id="line-261">   private final String consumerPath;</span>
+<span class="source-line-no">262</span><span id="line-262">   private final String rolesClaim;</span>
+<span class="source-line-no">263</span><span id="line-263">   private final String challenge;</span>
+<span class="source-line-no">264</span><span id="line-264">   private final String bindingCookieName;</span>
+<span class="source-line-no">265</span><span id="line-265">   private final long maxInflatedBytes;</span>
+<span class="source-line-no">266</span><span id="line-266">   private final int maxInflateRatio;</span>
+<span class="source-line-no">267</span><span id="line-267"></span>
+<span class="source-line-no">268</span><span id="line-268">   /**</span>
+<span class="source-line-no">269</span><span id="line-269">    * Constructor.</span>
+<span class="source-line-no">270</span><span id="line-270">    *</span>
+<span class="source-line-no">271</span><span id="line-271">    * @param b The builder to read configuration from.</span>
+<span class="source-line-no">272</span><span id="line-272">    */</span>
+<span class="source-line-no">273</span><span id="line-273">   protected SamlAuthFilter(Builder b) {</span>
+<span class="source-line-no">274</span><span id="line-274">      this.validator = b.validator;</span>
+<span class="source-line-no">275</span><span id="line-275">      this.binding = b.binding;</span>
+<span class="source-line-no">276</span><span id="line-276">      this.consumerPath = b.consumerPath;</span>
+<span class="source-line-no">277</span><span id="line-277">      this.rolesClaim = b.rolesClaim;</span>
+<span class="source-line-no">278</span><span id="line-278">      this.bindingCookieName = b.bindingCookieName;</span>
+<span class="source-line-no">279</span><span id="line-279">      this.challenge = "SAML realm=\"" + b.realm + "\"";</span>
+<span class="source-line-no">280</span><span id="line-280">      this.maxInflatedBytes = b.maxInflatedBytes;</span>
+<span class="source-line-no">281</span><span id="line-281">      this.maxInflateRatio = b.maxInflateRatio;</span>
+<span class="source-line-no">282</span><span id="line-282">   }</span>
+<span class="source-line-no">283</span><span id="line-283"></span>
+<span class="source-line-no">284</span><span id="line-284">   @Override /* Overridden from AuthFilter */</span>
+<span class="source-line-no">285</span><span id="line-285">   public Optional&lt;AuthResult&gt; authenticate(HttpServletRequest req) throws AuthenticationException {</span>
+<span class="source-line-no">286</span><span id="line-286">      if (!matchesPath(req) || !matchesMethod(req))</span>
+<span class="source-line-no">287</span><span id="line-287">         return oe();</span>
+<span class="source-line-no">288</span><span id="line-288">      var raw = req.getParameter(SAML_RESPONSE_PARAM);</span>
+<span class="source-line-no">289</span><span id="line-289">      if (isEmpty(raw))</span>
+<span class="source-line-no">290</span><span id="line-290">         return oe();</span>
+<span class="source-line-no">291</span><span id="line-291">      var xml = decodeSamlResponse(raw);</span>
+<span class="source-line-no">292</span><span id="line-292">      var principal = runValidator(xml, bindingCookie(req));</span>
+<span class="source-line-no">293</span><span id="line-293">      return o(AuthResult.of(principal, extractRoles(principal)));</span>
+<span class="source-line-no">294</span><span id="line-294">   }</span>
+<span class="source-line-no">295</span><span id="line-295"></span>
+<span class="source-line-no">296</span><span id="line-296">   /**</span>
+<span class="source-line-no">297</span><span id="line-297">    * Registers an outgoing authentication request and sends the browser-binding cookie that this filter checks on</span>
+<span class="source-line-no">298</span><span id="line-298">    * the response.</span>
+<span class="source-line-no">299</span><span id="line-299">    *</span>
+<span class="source-line-no">300</span><span id="line-300">    * &lt;p&gt;</span>
+<span class="source-line-no">301</span><span id="line-301">    * Call this when redirecting the browser to the identity provider, passing the {@code ID} attribute of the</span>
+<span class="source-line-no">302</span><span id="line-302">    * {@code &lt;AuthnRequest&gt;} being sent.  The method calls {@link SamlAssertionValidator#rememberAuthnRequest(String)}</span>
+<span class="source-line-no">303</span><span id="line-303">    * and adds a cookie named by {@link Builder#bindingCookieName(String)} carrying the returned secret.</span>
+<span class="source-line-no">304</span><span id="line-304">    *</span>
+<span class="source-line-no">305</span><span id="line-305">    * &lt;p&gt;</span>
+<span class="source-line-no">306</span><span id="line-306">    * Cookie attributes:</span>
+<span class="source-line-no">307</span><span id="line-307">    * &lt;ul&gt;</span>
+<span class="source-line-no">308</span><span id="line-308">    *    &lt;li&gt;{@code Secure} and {@code HttpOnly}: the value is never needed by page scripts and is sent only over HTTPS.</span>
+<span class="source-line-no">309</span><span id="line-309">    *    &lt;li&gt;{@code SameSite=None}: the POST binding delivers the response as a cross-site form post from the identity</span>
+<span class="source-line-no">310</span><span id="line-310">    *       provider, and browsers omit {@code Lax} and {@code Strict} cookies on that request.  {@code None} requires</span>
+<span class="source-line-no">311</span><span id="line-311">    *       {@code Secure}.</span>
+<span class="source-line-no">312</span><span id="line-312">    *    &lt;li&gt;{@code Path=/}: the ACS URL as seen by the browser includes the context and servlet paths, which this filter</span>
+<span class="source-line-no">313</span><span id="line-313">    *       does not know, so the cookie is scoped to the whole site.</span>
+<span class="source-line-no">314</span><span id="line-314">    *    &lt;li&gt;{@code Max-Age}: the validator's request lifetime, see {@link SamlAssertionValidator.Builder#authnRequestTtl(java.time.Duration)}.</span>
+<span class="source-line-no">315</span><span id="line-315">    * &lt;/ul&gt;</span>
+<span class="source-line-no">316</span><span id="line-316">    *</span>
+<span class="source-line-no">317</span><span id="line-317">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">318</span><span id="line-318">    *    &lt;jv&gt;filter&lt;/jv&gt;.startLogin(&lt;jv&gt;res&lt;/jv&gt;, &lt;jv&gt;authnRequestId&lt;/jv&gt;);</span>
+<span class="source-line-no">319</span><span id="line-319">    *    &lt;jv&gt;res&lt;/jv&gt;.sendRedirect(&lt;jv&gt;idpUrlCarryingTheRequest&lt;/jv&gt;);</span>
+<span class="source-line-no">320</span><span id="line-320">    * &lt;/p&gt;</span>
+<span class="source-line-no">321</span><span id="line-321">    *</span>
+<span class="source-line-no">322</span><span id="line-322">    * @param res The response being sent to the browser.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">323</span><span id="line-323">    * @param requestId The {@code ID} attribute of the outgoing {@code &lt;AuthnRequest&gt;}.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">324</span><span id="line-324">    * @throws IllegalStateException If the validator's store cannot accept more outstanding requests.</span>
+<span class="source-line-no">325</span><span id="line-325">    */</span>
+<span class="source-line-no">326</span><span id="line-326">   public void startLogin(HttpServletResponse res, String requestId) {</span>
+<span class="source-line-no">327</span><span id="line-327">      var secret = validator.rememberAuthnRequest(requestId);</span>
+<span class="source-line-no">328</span><span id="line-328">      var c = new Cookie(bindingCookieName, secret);</span>
+<span class="source-line-no">329</span><span id="line-329">      c.setSecure(true);</span>
+<span class="source-line-no">330</span><span id="line-330">      c.setHttpOnly(true);</span>
+<span class="source-line-no">331</span><span id="line-331">      c.setPath("/");</span>
+<span class="source-line-no">332</span><span id="line-332">      c.setMaxAge((int)Math.min(Integer.MAX_VALUE, validator.getAuthnRequestTtl().toSeconds()));</span>
+<span class="source-line-no">333</span><span id="line-333">      c.setAttribute("SameSite", "None");</span>
+<span class="source-line-no">334</span><span id="line-334">      res.addCookie(c);</span>
+<span class="source-line-no">335</span><span id="line-335">   }</span>
+<span class="source-line-no">336</span><span id="line-336"></span>
+<span class="source-line-no">337</span><span id="line-337">   // The POST binding is delivered by a form post and the REDIRECT binding by a GET; other methods are not accepted.</span>
+<span class="source-line-no">338</span><span id="line-338">   private boolean matchesMethod(HttpServletRequest req) {</span>
+<span class="source-line-no">339</span><span id="line-339">      return eq(binding == SamlBinding.POST ? "POST" : "GET", req.getMethod());</span>
+<span class="source-line-no">340</span><span id="line-340">   }</span>
+<span class="source-line-no">341</span><span id="line-341"></span>
+<span class="source-line-no">342</span><span id="line-342">   private String bindingCookie(HttpServletRequest req) {</span>
+<span class="source-line-no">343</span><span id="line-343">      var cookies = req.getCookies();</span>
+<span class="source-line-no">344</span><span id="line-344">      if (cookies != null)</span>
+<span class="source-line-no">345</span><span id="line-345">         for (var c : cookies)</span>
+<span class="source-line-no">346</span><span id="line-346">            if (eq(bindingCookieName, c.getName()))</span>
+<span class="source-line-no">347</span><span id="line-347">               return c.getValue();</span>
+<span class="source-line-no">348</span><span id="line-348">      return null;</span>
+<span class="source-line-no">349</span><span id="line-349">   }</span>
+<span class="source-line-no">350</span><span id="line-350"></span>
+<span class="source-line-no">351</span><span id="line-351">   private boolean matchesPath(HttpServletRequest req) {</span>
+<span class="source-line-no">352</span><span id="line-352">      var p = req.getPathInfo();</span>
+<span class="source-line-no">353</span><span id="line-353">      var s = p != null ? p : req.getServletPath();</span>
+<span class="source-line-no">354</span><span id="line-354">      return s != null &amp;&amp; eq(s, consumerPath);</span>
+<span class="source-line-no">355</span><span id="line-355">   }</span>
+<span class="source-line-no">356</span><span id="line-356"></span>
+<span class="source-line-no">357</span><span id="line-357">   private String decodeSamlResponse(String raw) throws AuthenticationException {</span>
+<span class="source-line-no">358</span><span id="line-358">      try {</span>
+<span class="source-line-no">359</span><span id="line-359">         byte[] decoded = Base64.getMimeDecoder().decode(raw);</span>
+<span class="source-line-no">360</span><span id="line-360">         return switch (binding) {</span>
+<span class="source-line-no">361</span><span id="line-361">            // Per SAML 2.0 Redirect binding: raw DEFLATE (no zlib wrapper), decompressed under a hard</span>
+<span class="source-line-no">362</span><span id="line-362">            // output-size cap and ratio guard so a compressible payload cannot force an unbounded allocation.</span>
+<span class="source-line-no">363</span><span id="line-363">            case REDIRECT -&gt; new String(inflate(decoded, true, maxInflatedBytes, maxInflateRatio), StandardCharsets.UTF_8);</span>
+<span class="source-line-no">364</span><span id="line-364">            // Per SAML 2.0 POST binding: the base64-decoded bytes are the raw XML document.</span>
+<span class="source-line-no">365</span><span id="line-365">            case POST -&gt; new String(decoded, StandardCharsets.UTF_8);</span>
+<span class="source-line-no">366</span><span id="line-366">         };</span>
+<span class="source-line-no">367</span><span id="line-367">      } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">368</span><span id="line-368">         throw new AuthenticationException(e, "SAMLResponse parameter is not valid base64")</span>
+<span class="source-line-no">369</span><span id="line-369">            .wwwAuthenticate(challenge);</span>
+<span class="source-line-no">370</span><span id="line-370">      } catch (IOException e) {</span>
+<span class="source-line-no">371</span><span id="line-371">         throw new AuthenticationException(e, "SAMLResponse parameter could not be inflated (REDIRECT binding)")</span>
+<span class="source-line-no">372</span><span id="line-372">            .wwwAuthenticate(challenge);</span>
+<span class="source-line-no">373</span><span id="line-373">      }</span>
+<span class="source-line-no">374</span><span id="line-374">   }</span>
+<span class="source-line-no">375</span><span id="line-375"></span>
+<span class="source-line-no">376</span><span id="line-376">   private Principal runValidator(String xml, String browserBinding) throws AuthenticationException {</span>
+<span class="source-line-no">377</span><span id="line-377">      try {</span>
+<span class="source-line-no">378</span><span id="line-378">         var p = validator.validate(xml, browserBinding);</span>
+<span class="source-line-no">379</span><span id="line-379">         if (p == null)</span>
+<span class="source-line-no">380</span><span id="line-380">            throw new AuthenticationException("SAML validator returned null").wwwAuthenticate(challenge);</span>
+<span class="source-line-no">381</span><span id="line-381">         return p;</span>
+<span class="source-line-no">382</span><span id="line-382">      } catch (AuthenticationException e) {</span>
+<span class="source-line-no">383</span><span id="line-383">         var hasChallenge = e.getHeaders().stream()</span>
+<span class="source-line-no">384</span><span id="line-384">            .anyMatch(h -&gt; eqic("WWW-Authenticate", h.getName()));</span>
+<span class="source-line-no">385</span><span id="line-385">         if (!hasChallenge)</span>
+<span class="source-line-no">386</span><span id="line-386">            e.wwwAuthenticate(challenge);</span>
+<span class="source-line-no">387</span><span id="line-387">         throw e;</span>
+<span class="source-line-no">388</span><span id="line-388">      } catch (RuntimeException e) {</span>
+<span class="source-line-no">389</span><span id="line-389">         throw new AuthenticationException(e, "SAML validation failed").wwwAuthenticate(challenge);</span>
+<span class="source-line-no">390</span><span id="line-390">      }</span>
+<span class="source-line-no">391</span><span id="line-391">   }</span>
+<span class="source-line-no">392</span><span id="line-392"></span>
+<span class="source-line-no">393</span><span id="line-393">   @SuppressWarnings({</span>
+<span class="source-line-no">394</span><span id="line-394">      "unchecked" // Type erasure on reflective/generic cast; element type is verified at call site</span>
+<span class="source-line-no">395</span><span id="line-395">   })</span>
+<span class="source-line-no">396</span><span id="line-396">   private Set&lt;String&gt; extractRoles(Principal principal) {</span>
+<span class="source-line-no">397</span><span id="line-397">      if (principal instanceof ClaimsPrincipal principal2) {</span>
+<span class="source-line-no">398</span><span id="line-398">         var v = principal2.getClaims().get(rolesClaim);</span>
+<span class="source-line-no">399</span><span id="line-399">         if (v instanceof List&lt;?&gt; v2) {</span>
+<span class="source-line-no">400</span><span id="line-400">            return ((List&lt;Object&gt;) v2).stream()</span>
+<span class="source-line-no">401</span><span id="line-401">               .filter(String.class::isInstance)</span>
+<span class="source-line-no">402</span><span id="line-402">               .map(String.class::cast)</span>
+<span class="source-line-no">403</span><span id="line-403">               .collect(Collectors.toCollection(HashSet::new));</span>
+<span class="source-line-no">404</span><span id="line-404">         }</span>
+<span class="source-line-no">405</span><span id="line-405">      }</span>
+<span class="source-line-no">406</span><span id="line-406">      return Collections.emptySet();</span>
+<span class="source-line-no">407</span><span id="line-407">   }</span>
+<span class="source-line-no">408</span><span id="line-408">}</span>
 
 
 

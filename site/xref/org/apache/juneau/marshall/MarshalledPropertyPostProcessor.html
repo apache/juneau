@@ -1268,59 +1268,63 @@
 <a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 				<strong class="jxr_keyword">if</strong> (cl == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 					cl = Thread.currentThread().getContextClassLoader();
 <a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 				<em class="jxr_comment">// Conversions made without a session still carry the context through the hint.</em>
-<a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 				<strong class="jxr_keyword">var</strong> mc = session != <strong class="jxr_keyword">null</strong> ? session.getMarshallingContext() : hint != <strong class="jxr_keyword">null</strong> ? hint.getMarshallingContext() : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 				<strong class="jxr_keyword">return</strong> ClassFormat.parse(o, format, cl, mc != <strong class="jxr_keyword">null</strong> ? mc.getClassNameGuard() : <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 			}
-<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 		};
-<a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 	}
-<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 
-<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Class&lt;Class&lt;?&gt;&gt; asClassWildcard() {
-<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 		<strong class="jxr_keyword">return</strong> (Class) Class.<strong class="jxr_keyword">class</strong>;
+<a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 				MarshallingContext mc = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 				<strong class="jxr_keyword">if</strong> (session != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 					mc = session.getMarshallingContext();
+<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (hint != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 					mc = hint.getMarshallingContext();
+<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 				<strong class="jxr_keyword">return</strong> ClassFormat.parse(o, format, cl, mc != <strong class="jxr_keyword">null</strong> ? mc.getClassNameGuard() : <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 			}
+<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 		};
 <a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 	}
 <a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 
-<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> <em class="jxr_javadoccomment">	 * Accumulates non-empty view names into a set, creating it lazily on first use.</em>
-<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> <em class="jxr_javadoccomment">	 * @param acc The current accumulator (may be null on first call).</em>
-<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> <em class="jxr_javadoccomment">	 * @param views The view names to add (may be empty array).</em>
-<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> <em class="jxr_javadoccomment">	 * @return The updated accumulator (non-null if any names were added).</em>
-<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; addViews(Set&lt;String&gt; acc, String[] views) {
-<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 		<strong class="jxr_keyword">if</strong> (views.length == 0)
-<a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 			<strong class="jxr_keyword">return</strong> acc;
-<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : views) {
-<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 			<strong class="jxr_keyword">if</strong> (! v.isEmpty()) {
-<a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> 				<strong class="jxr_keyword">if</strong> (acc == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> 					acc = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;();
-<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> 				acc.add(v);
-<a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> 			}
-<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> 		}
-<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 		<strong class="jxr_keyword">return</strong> acc;
-<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 	}
-<a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 
-<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ObjectSwap&lt;?,?&gt; xmlGregorianCalendarSwap() {
-<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 		<strong class="jxr_keyword">final</strong> DatatypeFactory df;
-<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 			df = DatatypeFactory.newInstance();
-<a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 		} <strong class="jxr_keyword">catch</strong> (DatatypeConfigurationException e) {
-<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
-<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 		}
-<a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ObjectSwap&lt;XMLGregorianCalendar,String&gt;(XMLGregorianCalendar.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>) {
-<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 			@Override <em class="jxr_comment">/* ObjectSwap */</em>
-<a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 			<strong class="jxr_keyword">public</strong> String swap(MarshallingSession session, XMLGregorianCalendar o) {
-<a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 				<strong class="jxr_keyword">return</strong> o == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : o.toXMLFormat();
-<a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 			}
-<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> 
-<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 			@Override <em class="jxr_comment">/* ObjectSwap */</em>
-<a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 			<strong class="jxr_keyword">public</strong> XMLGregorianCalendar unswap(MarshallingSession session, String o, ClassMeta&lt;?&gt; hint) {
-<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 				<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> 				<strong class="jxr_keyword">var</strong> s = o.trim();
-<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> 				<strong class="jxr_keyword">return</strong> s.isEmpty() ? <strong class="jxr_keyword">null</strong> : df.newXMLGregorianCalendar(s);
-<a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> 			}
-<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 		};
-<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 	}
-<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> }
+<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Class&lt;Class&lt;?&gt;&gt; asClassWildcard() {
+<a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 		<strong class="jxr_keyword">return</strong> (Class) Class.<strong class="jxr_keyword">class</strong>;
+<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 	}
+<a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 
+<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> <em class="jxr_javadoccomment">	 * Accumulates non-empty view names into a set, creating it lazily on first use.</em>
+<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> <em class="jxr_javadoccomment">	 * @param acc The current accumulator (may be null on first call).</em>
+<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> <em class="jxr_javadoccomment">	 * @param views The view names to add (may be empty array).</em>
+<a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> <em class="jxr_javadoccomment">	 * @return The updated accumulator (non-null if any names were added).</em>
+<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; addViews(Set&lt;String&gt; acc, String[] views) {
+<a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> 		<strong class="jxr_keyword">if</strong> (views.length == 0)
+<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> 			<strong class="jxr_keyword">return</strong> acc;
+<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : views) {
+<a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> 			<strong class="jxr_keyword">if</strong> (! v.isEmpty()) {
+<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> 				<strong class="jxr_keyword">if</strong> (acc == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 					acc = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;();
+<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 				acc.add(v);
+<a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 			}
+<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 		}
+<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 		<strong class="jxr_keyword">return</strong> acc;
+<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 	}
+<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 
+<a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ObjectSwap&lt;?,?&gt; xmlGregorianCalendarSwap() {
+<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 		<strong class="jxr_keyword">final</strong> DatatypeFactory df;
+<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> 			df = DatatypeFactory.newInstance();
+<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 		} <strong class="jxr_keyword">catch</strong> (DatatypeConfigurationException e) {
+<a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
+<a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 		}
+<a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ObjectSwap&lt;XMLGregorianCalendar,String&gt;(XMLGregorianCalendar.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>) {
+<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> 			@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 			<strong class="jxr_keyword">public</strong> String swap(MarshallingSession session, XMLGregorianCalendar o) {
+<a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 				<strong class="jxr_keyword">return</strong> o == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : o.toXMLFormat();
+<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 			}
+<a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 
+<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> 			@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> 			<strong class="jxr_keyword">public</strong> XMLGregorianCalendar unswap(MarshallingSession session, String o, ClassMeta&lt;?&gt; hint) {
+<a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> 				<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 				<strong class="jxr_keyword">var</strong> s = o.trim();
+<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> 				<strong class="jxr_keyword">return</strong> s.isEmpty() ? <strong class="jxr_keyword">null</strong> : df.newXMLGregorianCalendar(s);
+<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 			}
+<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 		};
+<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 	}
+<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

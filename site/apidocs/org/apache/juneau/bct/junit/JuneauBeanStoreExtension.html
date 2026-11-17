@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code>org.junit.jupiter.api.extension.AfterAllCallback</code>, <code>org.junit.jupiter.api.extension.AfterEachCallback</code>, <code>org.junit.jupiter.api.extension.BeforeAllCallback</code>, <code>org.junit.jupiter.api.extension.BeforeEachCallback</code>, <code>org.junit.jupiter.api.extension.Extension</code>, <code>org.junit.jupiter.api.extension.ParameterResolver</code>, <code>org.junit.jupiter.api.extension.TestInstantiationAwareExtension</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-125">JuneauBeanStoreExtension</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-126">JuneauBeanStoreExtension</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.api.extension.AfterAllCallback, org.junit.jupiter.api.extension.BeforeEachCallback, org.junit.jupiter.api.extension.AfterEachCallback, org.junit.jupiter.api.extension.ParameterResolver</span></div>
 <div class="block">JUnit 5 extension that discovers <a href="TestBean.html" title="annotation interface in org.apache.juneau.bct.junit"><code>@TestBean</code></a>-annotated members on a test class and exposes them as
@@ -314,7 +314,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>JuneauBeanStoreExtension</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-167">JuneauBeanStoreExtension</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-165">JuneauBeanStoreExtension</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -329,7 +329,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JuneauBeanStoreExtension.html" title="class in org.apache.juneau.bct.junit">JuneauBeanStoreExtension</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-153">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JuneauBeanStoreExtension.html" title="class in org.apache.juneau.bct.junit">JuneauBeanStoreExtension</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-154">create</a></span>()</div>
 <div class="block">Creates a new, unconfigured extension instance for programmatic registration via <code>@RegisterExtension</code>.
 
  <p>
@@ -350,7 +350,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="attach(org.apache.juneau.commons.inject.WritableBeanStore)">
 <h3>attach</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JuneauBeanStoreExtension.html" title="class in org.apache.juneau.bct.junit">JuneauBeanStoreExtension</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-195">attach</a></span><wbr><span class="parameters">(<a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&nbsp;store)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JuneauBeanStoreExtension.html" title="class in org.apache.juneau.bct.junit">JuneauBeanStoreExtension</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-193">attach</a></span><wbr><span class="parameters">(<a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&nbsp;store)</span></div>
 <div class="block">Points this extension at a long-lived SUT's <a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>WritableBeanStore</code></a> for Mode OVERLAY push/pop wiring.
 
  <p>
@@ -381,7 +381,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="detach()">
 <h3>detach</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JuneauBeanStoreExtension.html" title="class in org.apache.juneau.bct.junit">JuneauBeanStoreExtension</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-211">detach</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JuneauBeanStoreExtension.html" title="class in org.apache.juneau.bct.junit">JuneauBeanStoreExtension</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-209">detach</a></span>()</div>
 <div class="block">Clears the <a href="#attach(org.apache.juneau.commons.inject.WritableBeanStore)"><code>attached</code></a> bean store reference.
 
  <p>
@@ -398,7 +398,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="getAttachedStore()">
 <h3>getAttachedStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-225">getAttachedStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-223">getAttachedStore</a></span>()</div>
 <div class="block">Returns the <a href="#attach(org.apache.juneau.commons.inject.WritableBeanStore)"><code>attached</code></a> bean store, or empty if none.
 
  <p>
@@ -414,7 +414,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="getStore()">
 <h3>getStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TestBeanStore.html" title="class in org.apache.juneau.bct.junit">TestBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-242">getStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TestBeanStore.html" title="class in org.apache.juneau.bct.junit">TestBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-240">getStore</a></span>()</div>
 <div class="block">Returns the current effective overlay &mdash; method-scope if a test method is executing, otherwise the
  class-scope overlay.
 
@@ -435,7 +435,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="getStore(org.apache.juneau.bct.junit.Scope)">
 <h3>getStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="TestBeanStore.html" title="class in org.apache.juneau.bct.junit">TestBeanStore</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-264">getStore</a></span><wbr><span class="parameters">(<a href="Scope.html" title="enum class in org.apache.juneau.bct.junit">Scope</a>&nbsp;scope)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="TestBeanStore.html" title="class in org.apache.juneau.bct.junit">TestBeanStore</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-262">getStore</a></span><wbr><span class="parameters">(<a href="Scope.html" title="enum class in org.apache.juneau.bct.junit">Scope</a>&nbsp;scope)</span></div>
 <div class="block">Returns the overlay for the specified scope, if one is currently active.
 
  <p>
@@ -455,7 +455,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="beforeAll(org.junit.jupiter.api.extension.ExtensionContext)">
 <h3>beforeAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-273">beforeAll</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ExtensionContext&nbsp;context)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-271">beforeAll</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ExtensionContext&nbsp;context)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>beforeAll</code>&nbsp;in interface&nbsp;<code>org.junit.jupiter.api.extension.BeforeAllCallback</code></dd>
@@ -465,7 +465,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="afterAll(org.junit.jupiter.api.extension.ExtensionContext)">
 <h3>afterAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-287">afterAll</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ExtensionContext&nbsp;context)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-285">afterAll</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ExtensionContext&nbsp;context)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>afterAll</code>&nbsp;in interface&nbsp;<code>org.junit.jupiter.api.extension.AfterAllCallback</code></dd>
@@ -475,7 +475,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="beforeEach(org.junit.jupiter.api.extension.ExtensionContext)">
 <h3>beforeEach</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-294">beforeEach</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ExtensionContext&nbsp;context)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-292">beforeEach</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ExtensionContext&nbsp;context)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>beforeEach</code>&nbsp;in interface&nbsp;<code>org.junit.jupiter.api.extension.BeforeEachCallback</code></dd>
@@ -485,7 +485,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="afterEach(org.junit.jupiter.api.extension.ExtensionContext)">
 <h3>afterEach</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-306">afterEach</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ExtensionContext&nbsp;context)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-304">afterEach</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ExtensionContext&nbsp;context)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>afterEach</code>&nbsp;in interface&nbsp;<code>org.junit.jupiter.api.extension.AfterEachCallback</code></dd>
@@ -495,7 +495,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="supportsParameter(org.junit.jupiter.api.extension.ParameterContext,org.junit.jupiter.api.extension.ExtensionContext)">
 <h3>supportsParameter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-342">supportsParameter</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ParameterContext&nbsp;parameterContext,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-340">supportsParameter</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ParameterContext&nbsp;parameterContext,
  org.junit.jupiter.api.extension.ExtensionContext&nbsp;extensionContext)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -506,7 +506,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="resolveParameter(org.junit.jupiter.api.extension.ParameterContext,org.junit.jupiter.api.extension.ExtensionContext)">
 <h3>resolveParameter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-347">resolveParameter</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ParameterContext&nbsp;parameterContext,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-345">resolveParameter</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ParameterContext&nbsp;parameterContext,
  org.junit.jupiter.api.extension.ExtensionContext&nbsp;extensionContext)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -517,7 +517,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="discoverOverrides(java.lang.Object)">
 <h3>discoverOverrides</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JuneauBeanStoreExtension.OverrideSet.html" title="class in org.apache.juneau.bct.junit">JuneauBeanStoreExtension.OverrideSet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-440">discoverOverrides</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;testInstance)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JuneauBeanStoreExtension.OverrideSet.html" title="class in org.apache.juneau.bct.junit">JuneauBeanStoreExtension.OverrideSet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/junit/JuneauBeanStoreExtension.html#line-438">discoverOverrides</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;testInstance)</span></div>
 <div class="block">Discovers the <code>@TestBean</code> overrides declared on a test instance (and its class hierarchy) and returns
  them as a single <a href="JuneauBeanStoreExtension.OverrideSet.html" title="class in org.apache.juneau.bct.junit"><code>JuneauBeanStoreExtension.OverrideSet</code></a> &mdash; the public composition entry point for other JUnit 5 extensions
  (e.g. <code>@MicroserviceTest</code>) that need the <code>@TestBean</code> substrate without driving this extension's

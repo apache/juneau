@@ -901,209 +901,212 @@
 <span class="source-line-no">888</span><span id="line-888">      }</span>
 <span class="source-line-no">889</span><span id="line-889">   }</span>
 <span class="source-line-no">890</span><span id="line-890"></span>
-<span class="source-line-no">891</span><span id="line-891">   private Map&lt;String,Object&gt; buildClaims(Response response, Assertion assertion) throws AuthenticationException {</span>
-<span class="source-line-no">892</span><span id="line-892">      validateConditions(assertion);</span>
-<span class="source-line-no">893</span><span id="line-893">      validateIssuer(response, assertion);</span>
-<span class="source-line-no">894</span><span id="line-894"></span>
-<span class="source-line-no">895</span><span id="line-895">      Map&lt;String,Object&gt; claims = m(ISSUER_TYPE_CLAIM, ISSUER_TYPE_SAML, "iss", expectedIssuer, "aud", spEntityId);</span>
-<span class="source-line-no">896</span><span id="line-896"></span>
-<span class="source-line-no">897</span><span id="line-897">      for (var stmt : assertion.getAttributeStatements()) {</span>
-<span class="source-line-no">898</span><span id="line-898">         for (var attr : stmt.getAttributes()) {</span>
-<span class="source-line-no">899</span><span id="line-899">            var name = attr.getName();</span>
-<span class="source-line-no">900</span><span id="line-900">            if (name == null || RESERVED_CLAIMS.contains(name))</span>
-<span class="source-line-no">901</span><span id="line-901">               continue;</span>
-<span class="source-line-no">902</span><span id="line-902">            var values = l();</span>
-<span class="source-line-no">903</span><span id="line-903">            for (var av : attr.getAttributeValues())</span>
-<span class="source-line-no">904</span><span id="line-904">               values.add(extractStringValue(av));</span>
-<span class="source-line-no">905</span><span id="line-905">            if (values.size() == 1)</span>
-<span class="source-line-no">906</span><span id="line-906">               claims.put(name, values.get(0));</span>
-<span class="source-line-no">907</span><span id="line-907">            else if (!values.isEmpty())</span>
-<span class="source-line-no">908</span><span id="line-908">               claims.put(name, values);</span>
-<span class="source-line-no">909</span><span id="line-909">         }</span>
-<span class="source-line-no">910</span><span id="line-910">      }</span>
-<span class="source-line-no">911</span><span id="line-911">      return claims;</span>
-<span class="source-line-no">912</span><span id="line-912">   }</span>
-<span class="source-line-no">913</span><span id="line-913"></span>
-<span class="source-line-no">914</span><span id="line-914">   private void validateConditions(Assertion assertion) throws AuthenticationException {</span>
-<span class="source-line-no">915</span><span id="line-915">      var conditions = assertion.getConditions();</span>
-<span class="source-line-no">916</span><span id="line-916">      if (conditions == null)</span>
-<span class="source-line-no">917</span><span id="line-917">         throw rejectAssertion("missing &lt;Conditions&gt;");</span>
-<span class="source-line-no">918</span><span id="line-918"></span>
-<span class="source-line-no">919</span><span id="line-919">      var now = clock.instant();</span>
-<span class="source-line-no">920</span><span id="line-920">      var nbf = conditions.getNotBefore();</span>
-<span class="source-line-no">921</span><span id="line-921">      var noa = conditions.getNotOnOrAfter();</span>
-<span class="source-line-no">922</span><span id="line-922">      if (nbf != null &amp;&amp; nbf.minus(clockSkew).isAfter(now))</span>
-<span class="source-line-no">923</span><span id="line-923">         throw rejectAssertion("assertion not yet valid");</span>
-<span class="source-line-no">924</span><span id="line-924">      if (noa != null &amp;&amp; !noa.plus(clockSkew).isAfter(now))</span>
-<span class="source-line-no">925</span><span id="line-925">         throw rejectAssertion("assertion has expired");</span>
-<span class="source-line-no">926</span><span id="line-926"></span>
-<span class="source-line-no">927</span><span id="line-927">      boolean audienceOk = false;</span>
-<span class="source-line-no">928</span><span id="line-928">      for (var ar : conditions.getAudienceRestrictions()) {</span>
-<span class="source-line-no">929</span><span id="line-929">         for (var aud : ar.getAudiences()) {</span>
-<span class="source-line-no">930</span><span id="line-930">            if (eq(spEntityId, aud.getURI())) {</span>
-<span class="source-line-no">931</span><span id="line-931">               audienceOk = true;</span>
-<span class="source-line-no">932</span><span id="line-932">               break;</span>
-<span class="source-line-no">933</span><span id="line-933">            }</span>
-<span class="source-line-no">934</span><span id="line-934">         }</span>
-<span class="source-line-no">935</span><span id="line-935">      }</span>
-<span class="source-line-no">936</span><span id="line-936">      if (!audienceOk)</span>
-<span class="source-line-no">937</span><span id="line-937">         throw rejectAssertion("audience does not include SP entity ID: " + spEntityId);</span>
-<span class="source-line-no">938</span><span id="line-938">   }</span>
-<span class="source-line-no">939</span><span id="line-939"></span>
-<span class="source-line-no">940</span><span id="line-940">   private void validateIssuer(Response response, Assertion assertion) throws AuthenticationException {</span>
-<span class="source-line-no">941</span><span id="line-941">      var assertionIssuer = assertion.getIssuer();</span>
-<span class="source-line-no">942</span><span id="line-942">      if (assertionIssuer == null || neq(expectedIssuer, assertionIssuer.getValue()))</span>
-<span class="source-line-no">943</span><span id="line-943">         throw rejectAssertion("assertion &lt;Issuer&gt; does not match expected issuer");</span>
-<span class="source-line-no">944</span><span id="line-944">      var respIssuer = response.getIssuer();</span>
-<span class="source-line-no">945</span><span id="line-945">      if (respIssuer != null &amp;&amp; neq(expectedIssuer, respIssuer.getValue()))</span>
-<span class="source-line-no">946</span><span id="line-946">         throw rejectAssertion("response &lt;Issuer&gt; does not match expected issuer");</span>
-<span class="source-line-no">947</span><span id="line-947">   }</span>
-<span class="source-line-no">948</span><span id="line-948"></span>
-<span class="source-line-no">949</span><span id="line-949">   private void validateDigestAlgorithms(Signature signature) throws AuthenticationException {</span>
-<span class="source-line-no">950</span><span id="line-950">      var dom = signature.getDOM();</span>
-<span class="source-line-no">951</span><span id="line-951">      if (dom == null) // HTT: null DOM unreachable; a verifiable signature is always marshalled to DOM</span>
-<span class="source-line-no">952</span><span id="line-952">         return; // HTT: null DOM unreachable; a verifiable signature is always marshalled to DOM</span>
-<span class="source-line-no">953</span><span id="line-953">      var digestNodes = dom.getElementsByTagNameNS(XMLSIG_NS, "DigestMethod");</span>
-<span class="source-line-no">954</span><span id="line-954">      for (var i = 0; i &lt; digestNodes.getLength(); i++) {</span>
-<span class="source-line-no">955</span><span id="line-955">         var alg = ((Element) digestNodes.item(i)).getAttribute("Algorithm");</span>
-<span class="source-line-no">956</span><span id="line-956">         if (alg == null || alg.isEmpty() || alg.toLowerCase(Locale.ROOT).contains("sha1") || !digestAlgorithms.contains(alg)) // HTT: the alg==null clause is unreachable because Element.getAttribute never returns null; kept as a fail-closed guard</span>
-<span class="source-line-no">957</span><span id="line-957">            throw new AuthenticationException("SAML signature digest algorithm not allowlisted: " + alg)</span>
-<span class="source-line-no">958</span><span id="line-958">               .wwwAuthenticate("SAML error=\"signature_algorithm_rejected\"");</span>
-<span class="source-line-no">959</span><span id="line-959">      }</span>
-<span class="source-line-no">960</span><span id="line-960">   }</span>
-<span class="source-line-no">961</span><span id="line-961"></span>
-<span class="source-line-no">962</span><span id="line-962">   private void validateSubjectConfirmation(Assertion assertion, String browserBinding) throws AuthenticationException {</span>
-<span class="source-line-no">963</span><span id="line-963">      var subject = assertion.getSubject();</span>
-<span class="source-line-no">964</span><span id="line-964">      if (subject == null)</span>
-<span class="source-line-no">965</span><span id="line-965">         throw rejectAssertion("missing &lt;Subject&gt; for bearer confirmation");</span>
-<span class="source-line-no">966</span><span id="line-966">      String failure = null;</span>
-<span class="source-line-no">967</span><span id="line-967">      var sawBearer = false;</span>
-<span class="source-line-no">968</span><span id="line-968">      for (var sc : subject.getSubjectConfirmations()) {</span>
-<span class="source-line-no">969</span><span id="line-969">         if (neq(SubjectConfirmation.METHOD_BEARER, sc.getMethod()))</span>
-<span class="source-line-no">970</span><span id="line-970">            continue;</span>
-<span class="source-line-no">971</span><span id="line-971">         sawBearer = true;</span>
-<span class="source-line-no">972</span><span id="line-972">         var reason = confirmationFailureReason(sc, browserBinding);</span>
-<span class="source-line-no">973</span><span id="line-973">         if (reason == null)</span>
-<span class="source-line-no">974</span><span id="line-974">            return;  // A valid bearer confirmation was found.</span>
-<span class="source-line-no">975</span><span id="line-975">         failure = reason;</span>
-<span class="source-line-no">976</span><span id="line-976">      }</span>
-<span class="source-line-no">977</span><span id="line-977">      if (! sawBearer)</span>
-<span class="source-line-no">978</span><span id="line-978">         throw rejectAssertion("missing bearer &lt;SubjectConfirmation&gt;");</span>
-<span class="source-line-no">979</span><span id="line-979">      throw rejectAssertion(failure);</span>
-<span class="source-line-no">980</span><span id="line-980">   }</span>
-<span class="source-line-no">981</span><span id="line-981"></span>
-<span class="source-line-no">982</span><span id="line-982">   @SuppressWarnings({</span>
-<span class="source-line-no">983</span><span id="line-983">      "java:S3776" // Branching is inherent to the ordered bearer-confirmation checks.</span>
-<span class="source-line-no">984</span><span id="line-984">   })</span>
-<span class="source-line-no">985</span><span id="line-985">   private String confirmationFailureReason(SubjectConfirmation sc, String browserBinding) {</span>
-<span class="source-line-no">986</span><span id="line-986">      var data = sc.getSubjectConfirmationData();</span>
-<span class="source-line-no">987</span><span id="line-987">      if (data == null)</span>
-<span class="source-line-no">988</span><span id="line-988">         return "bearer &lt;SubjectConfirmationData&gt; is missing";</span>
-<span class="source-line-no">989</span><span id="line-989">      if (neq(recipient, data.getRecipient()))</span>
-<span class="source-line-no">990</span><span id="line-990">         return "bearer confirmation &lt;Recipient&gt; does not match the expected ACS URL";</span>
-<span class="source-line-no">991</span><span id="line-991">      var now = clock.instant();</span>
-<span class="source-line-no">992</span><span id="line-992">      var noa = data.getNotOnOrAfter();</span>
-<span class="source-line-no">993</span><span id="line-993">      if (noa == null)</span>
-<span class="source-line-no">994</span><span id="line-994">         return "bearer confirmation is missing NotOnOrAfter";</span>
-<span class="source-line-no">995</span><span id="line-995">      if (! noa.plus(clockSkew).isAfter(now))</span>
-<span class="source-line-no">996</span><span id="line-996">         return "bearer confirmation has expired";</span>
-<span class="source-line-no">997</span><span id="line-997">      var nbf = data.getNotBefore();</span>
-<span class="source-line-no">998</span><span id="line-998">      if (nbf != null &amp;&amp; nbf.minus(clockSkew).isAfter(now))</span>
-<span class="source-line-no">999</span><span id="line-999">         return "bearer confirmation is not yet valid";</span>
-<span class="source-line-no">1000</span><span id="line-1000">      var inResponseTo = data.getInResponseTo();</span>
-<span class="source-line-no">1001</span><span id="line-1001">      var hasInResponseTo = inResponseTo != null &amp;&amp; ! inResponseTo.isEmpty(); // HTT: OpenSAML trims an empty InResponseTo to null; kept as a fail-closed guard</span>
-<span class="source-line-no">1002</span><span id="line-1002">      if (expectedInResponseTo != null) {</span>
-<span class="source-line-no">1003</span><span id="line-1003">         if (neq(expectedInResponseTo, inResponseTo))</span>
-<span class="source-line-no">1004</span><span id="line-1004">            return "bearer confirmation &lt;InResponseTo&gt; does not match the expected request ID";</span>
-<span class="source-line-no">1005</span><span id="line-1005">      } else if (hasInResponseTo) {</span>
-<span class="source-line-no">1006</span><span id="line-1006">         if (! consumeAuthnRequest(inResponseTo, browserBinding))</span>
-<span class="source-line-no">1007</span><span id="line-1007">            return "bearer confirmation &lt;InResponseTo&gt; does not reference an outstanding request";</span>
-<span class="source-line-no">1008</span><span id="line-1008">      } else if (! allowIdpInitiated) {</span>
-<span class="source-line-no">1009</span><span id="line-1009">         return "unsolicited (IdP-initiated) responses are not allowed";</span>
-<span class="source-line-no">1010</span><span id="line-1010">      }</span>
-<span class="source-line-no">1011</span><span id="line-1011">      if (expectedAddress != null &amp;&amp; neq(expectedAddress, data.getAddress()))</span>
-<span class="source-line-no">1012</span><span id="line-1012">         return "bearer confirmation &lt;Address&gt; does not match the expected client address";</span>
-<span class="source-line-no">1013</span><span id="line-1013">      return null;</span>
-<span class="source-line-no">1014</span><span id="line-1014">   }</span>
-<span class="source-line-no">1015</span><span id="line-1015"></span>
-<span class="source-line-no">1016</span><span id="line-1016">   private void recordSingleUse(Assertion assertion) throws AuthenticationException {</span>
-<span class="source-line-no">1017</span><span id="line-1017">      var id = assertion.getID();</span>
-<span class="source-line-no">1018</span><span id="line-1018">      if (id == null || id.isEmpty()) // HTT: OpenSAML trims an empty ID to null, so the isEmpty() branch cannot run; kept as a fail-closed guard</span>
-<span class="source-line-no">1019</span><span id="line-1019">         throw rejectAssertion("assertion has no ID for single-use enforcement");</span>
-<span class="source-line-no">1020</span><span id="line-1020">      var notOnOrAfter = resolveNotOnOrAfter(assertion);</span>
-<span class="source-line-no">1021</span><span id="line-1021">      if (notOnOrAfter == null)</span>
-<span class="source-line-no">1022</span><span id="line-1022">         throw rejectAssertion("assertion has no NotOnOrAfter to bound one-time use");</span>
-<span class="source-line-no">1023</span><span id="line-1023">      var expiresAtMs = notOnOrAfter.plus(clockSkew).toEpochMilli();</span>
-<span class="source-line-no">1024</span><span id="line-1024">      var firstSeen = replayCache.checkAndRecord(id, expiresAtMs, ReplayCache.FailMode.FAIL_CLOSED,</span>
-<span class="source-line-no">1025</span><span id="line-1025">         e -&gt; LOG.log(Level.WARNING, e, () -&gt; "SAML assertion single-use check failed; rejecting (fail-closed)."));</span>
-<span class="source-line-no">1026</span><span id="line-1026">      if (! firstSeen)</span>
-<span class="source-line-no">1027</span><span id="line-1027">         throw new AuthenticationException("SAML assertion has already been presented")</span>
-<span class="source-line-no">1028</span><span id="line-1028">            .wwwAuthenticate("SAML error=\"assertion_replayed\"");</span>
-<span class="source-line-no">1029</span><span id="line-1029">   }</span>
-<span class="source-line-no">1030</span><span id="line-1030"></span>
-<span class="source-line-no">1031</span><span id="line-1031">   /**</span>
-<span class="source-line-no">1032</span><span id="line-1032">    * Resolves the effective {@code NotOnOrAfter} that bounds one-time use of the assertion.</span>
-<span class="source-line-no">1033</span><span id="line-1033">    *</span>
-<span class="source-line-no">1034</span><span id="line-1034">    * &lt;p&gt;</span>
-<span class="source-line-no">1035</span><span id="line-1035">    * The resolved value is the latest of the assertion's {@code Conditions/NotOnOrAfter} and any bearer</span>
-<span class="source-line-no">1036</span><span id="line-1036">    * {@code SubjectConfirmationData/NotOnOrAfter}.  Returns &lt;jk&gt;null&lt;/jk&gt; when the assertion carries neither</span>
-<span class="source-line-no">1037</span><span id="line-1037">    * &amp;mdash; in that case its validity window is unbounded, so single-use cannot be enforced past a cache</span>
-<span class="source-line-no">1038</span><span id="line-1038">    * eviction and the caller rejects the assertion rather than inventing a short fallback that later re-opens</span>
-<span class="source-line-no">1039</span><span id="line-1039">    * replay.  {@code &lt;Conditions&gt;} itself is guaranteed non-&lt;jk&gt;null&lt;/jk&gt; here (a null {@code &lt;Conditions&gt;} is</span>
-<span class="source-line-no">1040</span><span id="line-1040">    * rejected earlier by {@link #validateConditions(Assertion)}).</span>
-<span class="source-line-no">1041</span><span id="line-1041">    *</span>
-<span class="source-line-no">1042</span><span id="line-1042">    * @param assertion The assertion.</span>
-<span class="source-line-no">1043</span><span id="line-1043">    * @return The latest bounding instant, or &lt;jk&gt;null&lt;/jk&gt; if the assertion carries no {@code NotOnOrAfter}.</span>
-<span class="source-line-no">1044</span><span id="line-1044">    */</span>
-<span class="source-line-no">1045</span><span id="line-1045">   private static Instant resolveNotOnOrAfter(Assertion assertion) {</span>
-<span class="source-line-no">1046</span><span id="line-1046">      var result = assertion.getConditions().getNotOnOrAfter();</span>
-<span class="source-line-no">1047</span><span id="line-1047">      var subject = assertion.getSubject();</span>
-<span class="source-line-no">1048</span><span id="line-1048">      if (subject != null) {</span>
-<span class="source-line-no">1049</span><span id="line-1049">         for (var sc : subject.getSubjectConfirmations()) {</span>
-<span class="source-line-no">1050</span><span id="line-1050">            var noa = bearerNotOnOrAfter(sc);</span>
-<span class="source-line-no">1051</span><span id="line-1051">            if (noa != null &amp;&amp; (result == null || noa.isAfter(result)))</span>
-<span class="source-line-no">1052</span><span id="line-1052">               result = noa;</span>
-<span class="source-line-no">1053</span><span id="line-1053">         }</span>
-<span class="source-line-no">1054</span><span id="line-1054">      }</span>
-<span class="source-line-no">1055</span><span id="line-1055">      return result;</span>
-<span class="source-line-no">1056</span><span id="line-1056">   }</span>
-<span class="source-line-no">1057</span><span id="line-1057"></span>
-<span class="source-line-no">1058</span><span id="line-1058">   /**</span>
-<span class="source-line-no">1059</span><span id="line-1059">    * Returns the {@code NotOnOrAfter} of {@code sc}'s {@code &lt;SubjectConfirmationData&gt;} if {@code sc} is a</span>
-<span class="source-line-no">1060</span><span id="line-1060">    * bearer confirmation carrying one, or &lt;jk&gt;null&lt;/jk&gt; otherwise.</span>
-<span class="source-line-no">1061</span><span id="line-1061">    *</span>
-<span class="source-line-no">1062</span><span id="line-1062">    * @param sc The subject confirmation.</span>
-<span class="source-line-no">1063</span><span id="line-1063">    * @return The bearer confirmation's {@code NotOnOrAfter}, or &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1064</span><span id="line-1064">    */</span>
-<span class="source-line-no">1065</span><span id="line-1065">   private static Instant bearerNotOnOrAfter(SubjectConfirmation sc) {</span>
-<span class="source-line-no">1066</span><span id="line-1066">      if (neq(SubjectConfirmation.METHOD_BEARER, sc.getMethod()))</span>
-<span class="source-line-no">1067</span><span id="line-1067">         return null;</span>
-<span class="source-line-no">1068</span><span id="line-1068">      var data = sc.getSubjectConfirmationData();</span>
-<span class="source-line-no">1069</span><span id="line-1069">      return data == null ? null : data.getNotOnOrAfter();</span>
-<span class="source-line-no">1070</span><span id="line-1070">   }</span>
-<span class="source-line-no">1071</span><span id="line-1071"></span>
-<span class="source-line-no">1072</span><span id="line-1072">   private static String extractStringValue(XMLObject av) {</span>
-<span class="source-line-no">1073</span><span id="line-1073">      if (av == null) // HTT: null av unreachable; OpenSAML attribute value lists never contain null entries</span>
-<span class="source-line-no">1074</span><span id="line-1074">         return null; // HTT: null av unreachable; OpenSAML attribute value lists never contain null entries</span>
-<span class="source-line-no">1075</span><span id="line-1075">      var dom = av.getDOM();</span>
-<span class="source-line-no">1076</span><span id="line-1076">      if (dom != null) // HTT: the response is always parsed from XML, so every unmarshalled value carries its DOM</span>
-<span class="source-line-no">1077</span><span id="line-1077">         return dom.getTextContent();</span>
-<span class="source-line-no">1078</span><span id="line-1078">      return av.toString(); // HTT: the response is always parsed from XML, so every unmarshalled value carries its DOM</span>
-<span class="source-line-no">1079</span><span id="line-1079">   }</span>
-<span class="source-line-no">1080</span><span id="line-1080"></span>
-<span class="source-line-no">1081</span><span id="line-1081">   private static String nameId(Assertion assertion) throws AuthenticationException {</span>
-<span class="source-line-no">1082</span><span id="line-1082">      var subject = assertion.getSubject();</span>
-<span class="source-line-no">1083</span><span id="line-1083">      var nameID = subject == null ? null : subject.getNameID();</span>
-<span class="source-line-no">1084</span><span id="line-1084">      if (nameID == null || nameID.getValue() == null || nameID.getValue().isBlank())</span>
-<span class="source-line-no">1085</span><span id="line-1085">         throw rejectAssertion("missing &lt;NameID&gt; subject");</span>
-<span class="source-line-no">1086</span><span id="line-1086">      return nameID.getValue();</span>
-<span class="source-line-no">1087</span><span id="line-1087">   }</span>
-<span class="source-line-no">1088</span><span id="line-1088"></span>
-<span class="source-line-no">1089</span><span id="line-1089">   private static AuthenticationException rejectAssertion(String reason) {</span>
-<span class="source-line-no">1090</span><span id="line-1090">      return new AuthenticationException("SAML assertion rejected: " + reason)</span>
-<span class="source-line-no">1091</span><span id="line-1091">         .wwwAuthenticate("SAML error=\"invalid_assertion\"");</span>
-<span class="source-line-no">1092</span><span id="line-1092">   }</span>
-<span class="source-line-no">1093</span><span id="line-1093">}</span>
+<span class="source-line-no">891</span><span id="line-891">   @SuppressWarnings({</span>
+<span class="source-line-no">892</span><span id="line-892">      "java:S3776" // Nested attribute loops read most clearly in one method</span>
+<span class="source-line-no">893</span><span id="line-893">   })</span>
+<span class="source-line-no">894</span><span id="line-894">   private Map&lt;String,Object&gt; buildClaims(Response response, Assertion assertion) throws AuthenticationException {</span>
+<span class="source-line-no">895</span><span id="line-895">      validateConditions(assertion);</span>
+<span class="source-line-no">896</span><span id="line-896">      validateIssuer(response, assertion);</span>
+<span class="source-line-no">897</span><span id="line-897"></span>
+<span class="source-line-no">898</span><span id="line-898">      Map&lt;String,Object&gt; claims = m(ISSUER_TYPE_CLAIM, ISSUER_TYPE_SAML, "iss", expectedIssuer, "aud", spEntityId);</span>
+<span class="source-line-no">899</span><span id="line-899"></span>
+<span class="source-line-no">900</span><span id="line-900">      for (var stmt : assertion.getAttributeStatements()) {</span>
+<span class="source-line-no">901</span><span id="line-901">         for (var attr : stmt.getAttributes()) {</span>
+<span class="source-line-no">902</span><span id="line-902">            var name = attr.getName();</span>
+<span class="source-line-no">903</span><span id="line-903">            if (name == null || RESERVED_CLAIMS.contains(name))</span>
+<span class="source-line-no">904</span><span id="line-904">               continue;</span>
+<span class="source-line-no">905</span><span id="line-905">            var values = l();</span>
+<span class="source-line-no">906</span><span id="line-906">            for (var av : attr.getAttributeValues())</span>
+<span class="source-line-no">907</span><span id="line-907">               values.add(extractStringValue(av));</span>
+<span class="source-line-no">908</span><span id="line-908">            if (values.size() == 1)</span>
+<span class="source-line-no">909</span><span id="line-909">               claims.put(name, values.get(0));</span>
+<span class="source-line-no">910</span><span id="line-910">            else if (!values.isEmpty())</span>
+<span class="source-line-no">911</span><span id="line-911">               claims.put(name, values);</span>
+<span class="source-line-no">912</span><span id="line-912">         }</span>
+<span class="source-line-no">913</span><span id="line-913">      }</span>
+<span class="source-line-no">914</span><span id="line-914">      return claims;</span>
+<span class="source-line-no">915</span><span id="line-915">   }</span>
+<span class="source-line-no">916</span><span id="line-916"></span>
+<span class="source-line-no">917</span><span id="line-917">   private void validateConditions(Assertion assertion) throws AuthenticationException {</span>
+<span class="source-line-no">918</span><span id="line-918">      var conditions = assertion.getConditions();</span>
+<span class="source-line-no">919</span><span id="line-919">      if (conditions == null)</span>
+<span class="source-line-no">920</span><span id="line-920">         throw rejectAssertion("missing &lt;Conditions&gt;");</span>
+<span class="source-line-no">921</span><span id="line-921"></span>
+<span class="source-line-no">922</span><span id="line-922">      var now = clock.instant();</span>
+<span class="source-line-no">923</span><span id="line-923">      var nbf = conditions.getNotBefore();</span>
+<span class="source-line-no">924</span><span id="line-924">      var noa = conditions.getNotOnOrAfter();</span>
+<span class="source-line-no">925</span><span id="line-925">      if (nbf != null &amp;&amp; nbf.minus(clockSkew).isAfter(now))</span>
+<span class="source-line-no">926</span><span id="line-926">         throw rejectAssertion("assertion not yet valid");</span>
+<span class="source-line-no">927</span><span id="line-927">      if (noa != null &amp;&amp; !noa.plus(clockSkew).isAfter(now))</span>
+<span class="source-line-no">928</span><span id="line-928">         throw rejectAssertion("assertion has expired");</span>
+<span class="source-line-no">929</span><span id="line-929"></span>
+<span class="source-line-no">930</span><span id="line-930">      boolean audienceOk = false;</span>
+<span class="source-line-no">931</span><span id="line-931">      for (var ar : conditions.getAudienceRestrictions()) {</span>
+<span class="source-line-no">932</span><span id="line-932">         for (var aud : ar.getAudiences()) {</span>
+<span class="source-line-no">933</span><span id="line-933">            if (eq(spEntityId, aud.getURI())) {</span>
+<span class="source-line-no">934</span><span id="line-934">               audienceOk = true;</span>
+<span class="source-line-no">935</span><span id="line-935">               break;</span>
+<span class="source-line-no">936</span><span id="line-936">            }</span>
+<span class="source-line-no">937</span><span id="line-937">         }</span>
+<span class="source-line-no">938</span><span id="line-938">      }</span>
+<span class="source-line-no">939</span><span id="line-939">      if (!audienceOk)</span>
+<span class="source-line-no">940</span><span id="line-940">         throw rejectAssertion("audience does not include SP entity ID: " + spEntityId);</span>
+<span class="source-line-no">941</span><span id="line-941">   }</span>
+<span class="source-line-no">942</span><span id="line-942"></span>
+<span class="source-line-no">943</span><span id="line-943">   private void validateIssuer(Response response, Assertion assertion) throws AuthenticationException {</span>
+<span class="source-line-no">944</span><span id="line-944">      var assertionIssuer = assertion.getIssuer();</span>
+<span class="source-line-no">945</span><span id="line-945">      if (assertionIssuer == null || neq(expectedIssuer, assertionIssuer.getValue()))</span>
+<span class="source-line-no">946</span><span id="line-946">         throw rejectAssertion("assertion &lt;Issuer&gt; does not match expected issuer");</span>
+<span class="source-line-no">947</span><span id="line-947">      var respIssuer = response.getIssuer();</span>
+<span class="source-line-no">948</span><span id="line-948">      if (respIssuer != null &amp;&amp; neq(expectedIssuer, respIssuer.getValue()))</span>
+<span class="source-line-no">949</span><span id="line-949">         throw rejectAssertion("response &lt;Issuer&gt; does not match expected issuer");</span>
+<span class="source-line-no">950</span><span id="line-950">   }</span>
+<span class="source-line-no">951</span><span id="line-951"></span>
+<span class="source-line-no">952</span><span id="line-952">   private void validateDigestAlgorithms(Signature signature) throws AuthenticationException {</span>
+<span class="source-line-no">953</span><span id="line-953">      var dom = signature.getDOM();</span>
+<span class="source-line-no">954</span><span id="line-954">      if (dom == null) // HTT: null DOM unreachable; a verifiable signature is always marshalled to DOM</span>
+<span class="source-line-no">955</span><span id="line-955">         return; // HTT: null DOM unreachable; a verifiable signature is always marshalled to DOM</span>
+<span class="source-line-no">956</span><span id="line-956">      var digestNodes = dom.getElementsByTagNameNS(XMLSIG_NS, "DigestMethod");</span>
+<span class="source-line-no">957</span><span id="line-957">      for (var i = 0; i &lt; digestNodes.getLength(); i++) {</span>
+<span class="source-line-no">958</span><span id="line-958">         var alg = ((Element) digestNodes.item(i)).getAttribute("Algorithm");</span>
+<span class="source-line-no">959</span><span id="line-959">         if (alg == null || alg.isEmpty() || alg.toLowerCase(Locale.ROOT).contains("sha1") || !digestAlgorithms.contains(alg)) // HTT: the alg==null clause is unreachable because Element.getAttribute never returns null; kept as a fail-closed guard</span>
+<span class="source-line-no">960</span><span id="line-960">            throw new AuthenticationException("SAML signature digest algorithm not allowlisted: " + alg)</span>
+<span class="source-line-no">961</span><span id="line-961">               .wwwAuthenticate("SAML error=\"signature_algorithm_rejected\"");</span>
+<span class="source-line-no">962</span><span id="line-962">      }</span>
+<span class="source-line-no">963</span><span id="line-963">   }</span>
+<span class="source-line-no">964</span><span id="line-964"></span>
+<span class="source-line-no">965</span><span id="line-965">   private void validateSubjectConfirmation(Assertion assertion, String browserBinding) throws AuthenticationException {</span>
+<span class="source-line-no">966</span><span id="line-966">      var subject = assertion.getSubject();</span>
+<span class="source-line-no">967</span><span id="line-967">      if (subject == null)</span>
+<span class="source-line-no">968</span><span id="line-968">         throw rejectAssertion("missing &lt;Subject&gt; for bearer confirmation");</span>
+<span class="source-line-no">969</span><span id="line-969">      String failure = null;</span>
+<span class="source-line-no">970</span><span id="line-970">      var sawBearer = false;</span>
+<span class="source-line-no">971</span><span id="line-971">      for (var sc : subject.getSubjectConfirmations()) {</span>
+<span class="source-line-no">972</span><span id="line-972">         if (neq(SubjectConfirmation.METHOD_BEARER, sc.getMethod()))</span>
+<span class="source-line-no">973</span><span id="line-973">            continue;</span>
+<span class="source-line-no">974</span><span id="line-974">         sawBearer = true;</span>
+<span class="source-line-no">975</span><span id="line-975">         var reason = confirmationFailureReason(sc, browserBinding);</span>
+<span class="source-line-no">976</span><span id="line-976">         if (reason == null)</span>
+<span class="source-line-no">977</span><span id="line-977">            return;  // A valid bearer confirmation was found.</span>
+<span class="source-line-no">978</span><span id="line-978">         failure = reason;</span>
+<span class="source-line-no">979</span><span id="line-979">      }</span>
+<span class="source-line-no">980</span><span id="line-980">      if (! sawBearer)</span>
+<span class="source-line-no">981</span><span id="line-981">         throw rejectAssertion("missing bearer &lt;SubjectConfirmation&gt;");</span>
+<span class="source-line-no">982</span><span id="line-982">      throw rejectAssertion(failure);</span>
+<span class="source-line-no">983</span><span id="line-983">   }</span>
+<span class="source-line-no">984</span><span id="line-984"></span>
+<span class="source-line-no">985</span><span id="line-985">   @SuppressWarnings({</span>
+<span class="source-line-no">986</span><span id="line-986">      "java:S3776" // Branching is inherent to the ordered bearer-confirmation checks.</span>
+<span class="source-line-no">987</span><span id="line-987">   })</span>
+<span class="source-line-no">988</span><span id="line-988">   private String confirmationFailureReason(SubjectConfirmation sc, String browserBinding) {</span>
+<span class="source-line-no">989</span><span id="line-989">      var data = sc.getSubjectConfirmationData();</span>
+<span class="source-line-no">990</span><span id="line-990">      if (data == null)</span>
+<span class="source-line-no">991</span><span id="line-991">         return "bearer &lt;SubjectConfirmationData&gt; is missing";</span>
+<span class="source-line-no">992</span><span id="line-992">      if (neq(recipient, data.getRecipient()))</span>
+<span class="source-line-no">993</span><span id="line-993">         return "bearer confirmation &lt;Recipient&gt; does not match the expected ACS URL";</span>
+<span class="source-line-no">994</span><span id="line-994">      var now = clock.instant();</span>
+<span class="source-line-no">995</span><span id="line-995">      var noa = data.getNotOnOrAfter();</span>
+<span class="source-line-no">996</span><span id="line-996">      if (noa == null)</span>
+<span class="source-line-no">997</span><span id="line-997">         return "bearer confirmation is missing NotOnOrAfter";</span>
+<span class="source-line-no">998</span><span id="line-998">      if (! noa.plus(clockSkew).isAfter(now))</span>
+<span class="source-line-no">999</span><span id="line-999">         return "bearer confirmation has expired";</span>
+<span class="source-line-no">1000</span><span id="line-1000">      var nbf = data.getNotBefore();</span>
+<span class="source-line-no">1001</span><span id="line-1001">      if (nbf != null &amp;&amp; nbf.minus(clockSkew).isAfter(now))</span>
+<span class="source-line-no">1002</span><span id="line-1002">         return "bearer confirmation is not yet valid";</span>
+<span class="source-line-no">1003</span><span id="line-1003">      var inResponseTo = data.getInResponseTo();</span>
+<span class="source-line-no">1004</span><span id="line-1004">      var hasInResponseTo = inResponseTo != null &amp;&amp; ! inResponseTo.isEmpty(); // HTT: OpenSAML trims an empty InResponseTo to null; kept as a fail-closed guard</span>
+<span class="source-line-no">1005</span><span id="line-1005">      if (expectedInResponseTo != null) {</span>
+<span class="source-line-no">1006</span><span id="line-1006">         if (neq(expectedInResponseTo, inResponseTo))</span>
+<span class="source-line-no">1007</span><span id="line-1007">            return "bearer confirmation &lt;InResponseTo&gt; does not match the expected request ID";</span>
+<span class="source-line-no">1008</span><span id="line-1008">      } else if (hasInResponseTo) {</span>
+<span class="source-line-no">1009</span><span id="line-1009">         if (! consumeAuthnRequest(inResponseTo, browserBinding))</span>
+<span class="source-line-no">1010</span><span id="line-1010">            return "bearer confirmation &lt;InResponseTo&gt; does not reference an outstanding request";</span>
+<span class="source-line-no">1011</span><span id="line-1011">      } else if (! allowIdpInitiated) {</span>
+<span class="source-line-no">1012</span><span id="line-1012">         return "unsolicited (IdP-initiated) responses are not allowed";</span>
+<span class="source-line-no">1013</span><span id="line-1013">      }</span>
+<span class="source-line-no">1014</span><span id="line-1014">      if (expectedAddress != null &amp;&amp; neq(expectedAddress, data.getAddress()))</span>
+<span class="source-line-no">1015</span><span id="line-1015">         return "bearer confirmation &lt;Address&gt; does not match the expected client address";</span>
+<span class="source-line-no">1016</span><span id="line-1016">      return null;</span>
+<span class="source-line-no">1017</span><span id="line-1017">   }</span>
+<span class="source-line-no">1018</span><span id="line-1018"></span>
+<span class="source-line-no">1019</span><span id="line-1019">   private void recordSingleUse(Assertion assertion) throws AuthenticationException {</span>
+<span class="source-line-no">1020</span><span id="line-1020">      var id = assertion.getID();</span>
+<span class="source-line-no">1021</span><span id="line-1021">      if (id == null || id.isEmpty()) // HTT: OpenSAML trims an empty ID to null, so the isEmpty() branch cannot run; kept as a fail-closed guard</span>
+<span class="source-line-no">1022</span><span id="line-1022">         throw rejectAssertion("assertion has no ID for single-use enforcement");</span>
+<span class="source-line-no">1023</span><span id="line-1023">      var notOnOrAfter = resolveNotOnOrAfter(assertion);</span>
+<span class="source-line-no">1024</span><span id="line-1024">      if (notOnOrAfter == null)</span>
+<span class="source-line-no">1025</span><span id="line-1025">         throw rejectAssertion("assertion has no NotOnOrAfter to bound one-time use");</span>
+<span class="source-line-no">1026</span><span id="line-1026">      var expiresAtMs = notOnOrAfter.plus(clockSkew).toEpochMilli();</span>
+<span class="source-line-no">1027</span><span id="line-1027">      var firstSeen = replayCache.checkAndRecord(id, expiresAtMs, ReplayCache.FailMode.FAIL_CLOSED,</span>
+<span class="source-line-no">1028</span><span id="line-1028">         e -&gt; LOG.log(Level.WARNING, e, () -&gt; "SAML assertion single-use check failed; rejecting (fail-closed)."));</span>
+<span class="source-line-no">1029</span><span id="line-1029">      if (! firstSeen)</span>
+<span class="source-line-no">1030</span><span id="line-1030">         throw new AuthenticationException("SAML assertion has already been presented")</span>
+<span class="source-line-no">1031</span><span id="line-1031">            .wwwAuthenticate("SAML error=\"assertion_replayed\"");</span>
+<span class="source-line-no">1032</span><span id="line-1032">   }</span>
+<span class="source-line-no">1033</span><span id="line-1033"></span>
+<span class="source-line-no">1034</span><span id="line-1034">   /**</span>
+<span class="source-line-no">1035</span><span id="line-1035">    * Resolves the effective {@code NotOnOrAfter} that bounds one-time use of the assertion.</span>
+<span class="source-line-no">1036</span><span id="line-1036">    *</span>
+<span class="source-line-no">1037</span><span id="line-1037">    * &lt;p&gt;</span>
+<span class="source-line-no">1038</span><span id="line-1038">    * The resolved value is the latest of the assertion's {@code Conditions/NotOnOrAfter} and any bearer</span>
+<span class="source-line-no">1039</span><span id="line-1039">    * {@code SubjectConfirmationData/NotOnOrAfter}.  Returns &lt;jk&gt;null&lt;/jk&gt; when the assertion carries neither</span>
+<span class="source-line-no">1040</span><span id="line-1040">    * &amp;mdash; in that case its validity window is unbounded, so single-use cannot be enforced past a cache</span>
+<span class="source-line-no">1041</span><span id="line-1041">    * eviction and the caller rejects the assertion rather than inventing a short fallback that later re-opens</span>
+<span class="source-line-no">1042</span><span id="line-1042">    * replay.  {@code &lt;Conditions&gt;} itself is guaranteed non-&lt;jk&gt;null&lt;/jk&gt; here (a null {@code &lt;Conditions&gt;} is</span>
+<span class="source-line-no">1043</span><span id="line-1043">    * rejected earlier by {@link #validateConditions(Assertion)}).</span>
+<span class="source-line-no">1044</span><span id="line-1044">    *</span>
+<span class="source-line-no">1045</span><span id="line-1045">    * @param assertion The assertion.</span>
+<span class="source-line-no">1046</span><span id="line-1046">    * @return The latest bounding instant, or &lt;jk&gt;null&lt;/jk&gt; if the assertion carries no {@code NotOnOrAfter}.</span>
+<span class="source-line-no">1047</span><span id="line-1047">    */</span>
+<span class="source-line-no">1048</span><span id="line-1048">   private static Instant resolveNotOnOrAfter(Assertion assertion) {</span>
+<span class="source-line-no">1049</span><span id="line-1049">      var result = assertion.getConditions().getNotOnOrAfter();</span>
+<span class="source-line-no">1050</span><span id="line-1050">      var subject = assertion.getSubject();</span>
+<span class="source-line-no">1051</span><span id="line-1051">      if (subject != null) {</span>
+<span class="source-line-no">1052</span><span id="line-1052">         for (var sc : subject.getSubjectConfirmations()) {</span>
+<span class="source-line-no">1053</span><span id="line-1053">            var noa = bearerNotOnOrAfter(sc);</span>
+<span class="source-line-no">1054</span><span id="line-1054">            if (noa != null &amp;&amp; (result == null || noa.isAfter(result)))</span>
+<span class="source-line-no">1055</span><span id="line-1055">               result = noa;</span>
+<span class="source-line-no">1056</span><span id="line-1056">         }</span>
+<span class="source-line-no">1057</span><span id="line-1057">      }</span>
+<span class="source-line-no">1058</span><span id="line-1058">      return result;</span>
+<span class="source-line-no">1059</span><span id="line-1059">   }</span>
+<span class="source-line-no">1060</span><span id="line-1060"></span>
+<span class="source-line-no">1061</span><span id="line-1061">   /**</span>
+<span class="source-line-no">1062</span><span id="line-1062">    * Returns the {@code NotOnOrAfter} of {@code sc}'s {@code &lt;SubjectConfirmationData&gt;} if {@code sc} is a</span>
+<span class="source-line-no">1063</span><span id="line-1063">    * bearer confirmation carrying one, or &lt;jk&gt;null&lt;/jk&gt; otherwise.</span>
+<span class="source-line-no">1064</span><span id="line-1064">    *</span>
+<span class="source-line-no">1065</span><span id="line-1065">    * @param sc The subject confirmation.</span>
+<span class="source-line-no">1066</span><span id="line-1066">    * @return The bearer confirmation's {@code NotOnOrAfter}, or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1067</span><span id="line-1067">    */</span>
+<span class="source-line-no">1068</span><span id="line-1068">   private static Instant bearerNotOnOrAfter(SubjectConfirmation sc) {</span>
+<span class="source-line-no">1069</span><span id="line-1069">      if (neq(SubjectConfirmation.METHOD_BEARER, sc.getMethod()))</span>
+<span class="source-line-no">1070</span><span id="line-1070">         return null;</span>
+<span class="source-line-no">1071</span><span id="line-1071">      var data = sc.getSubjectConfirmationData();</span>
+<span class="source-line-no">1072</span><span id="line-1072">      return data == null ? null : data.getNotOnOrAfter();</span>
+<span class="source-line-no">1073</span><span id="line-1073">   }</span>
+<span class="source-line-no">1074</span><span id="line-1074"></span>
+<span class="source-line-no">1075</span><span id="line-1075">   private static String extractStringValue(XMLObject av) {</span>
+<span class="source-line-no">1076</span><span id="line-1076">      if (av == null) // HTT: null av unreachable; OpenSAML attribute value lists never contain null entries</span>
+<span class="source-line-no">1077</span><span id="line-1077">         return null; // HTT: null av unreachable; OpenSAML attribute value lists never contain null entries</span>
+<span class="source-line-no">1078</span><span id="line-1078">      var dom = av.getDOM();</span>
+<span class="source-line-no">1079</span><span id="line-1079">      if (dom != null) // HTT: the response is always parsed from XML, so every unmarshalled value carries its DOM</span>
+<span class="source-line-no">1080</span><span id="line-1080">         return dom.getTextContent();</span>
+<span class="source-line-no">1081</span><span id="line-1081">      return av.toString(); // HTT: the response is always parsed from XML, so every unmarshalled value carries its DOM</span>
+<span class="source-line-no">1082</span><span id="line-1082">   }</span>
+<span class="source-line-no">1083</span><span id="line-1083"></span>
+<span class="source-line-no">1084</span><span id="line-1084">   private static String nameId(Assertion assertion) throws AuthenticationException {</span>
+<span class="source-line-no">1085</span><span id="line-1085">      var subject = assertion.getSubject();</span>
+<span class="source-line-no">1086</span><span id="line-1086">      var nameID = subject == null ? null : subject.getNameID();</span>
+<span class="source-line-no">1087</span><span id="line-1087">      if (nameID == null || nameID.getValue() == null || nameID.getValue().isBlank())</span>
+<span class="source-line-no">1088</span><span id="line-1088">         throw rejectAssertion("missing &lt;NameID&gt; subject");</span>
+<span class="source-line-no">1089</span><span id="line-1089">      return nameID.getValue();</span>
+<span class="source-line-no">1090</span><span id="line-1090">   }</span>
+<span class="source-line-no">1091</span><span id="line-1091"></span>
+<span class="source-line-no">1092</span><span id="line-1092">   private static AuthenticationException rejectAssertion(String reason) {</span>
+<span class="source-line-no">1093</span><span id="line-1093">      return new AuthenticationException("SAML assertion rejected: " + reason)</span>
+<span class="source-line-no">1094</span><span id="line-1094">         .wwwAuthenticate("SAML error=\"invalid_assertion\"");</span>
+<span class="source-line-no">1095</span><span id="line-1095">   }</span>
+<span class="source-line-no">1096</span><span id="line-1096">}</span>
 
 
 

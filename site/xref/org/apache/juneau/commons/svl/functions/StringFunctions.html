@@ -182,7 +182,7 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> seg : t.replace('&#92;&#92;', '/').split(<span class="jxr_string">"/"</span>)) {
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 				<strong class="jxr_keyword">if</strong> (seg.isEmpty() || eq(seg, <span class="jxr_string">"."</span>) || eq(seg, <span class="jxr_string">".."</span>))
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 					<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				<strong class="jxr_keyword">if</strong> (sb.length() &gt; 0)
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				<strong class="jxr_keyword">if</strong> (! sb.isEmpty())
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 					sb.append('/');
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 				sb.append(seg);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			}

@@ -202,7 +202,7 @@ implements <a href="McpSubscriptionBroker.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="&lt;init&gt;(int)">
 <h3>BasicMcpSubscriptionBroker</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-52">BasicMcpSubscriptionBroker</a></span><wbr><span class="parameters">(int&nbsp;queueSize)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-53">BasicMcpSubscriptionBroker</a></span><wbr><span class="parameters">(int&nbsp;queueSize)</span></div>
 <div class="block">Creates a new broker.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -223,7 +223,7 @@ implements <a href="McpSubscriptionBroker.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="register(java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)">
 <h3>register</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-58">register</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-59">register</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId,
  <a href="McpSubscriptionFilter.html" title="class in org.apache.juneau.rest.server.mcp">McpSubscriptionFilter</a>&nbsp;honoredFilter)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="McpSubscriptionBroker.html#register(java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)">McpSubscriptionBroker</a></code></span></div>
 <div class="block">Registers a new subscription and returns its queue handle. Uncapped: never rejects.</div>
@@ -242,7 +242,7 @@ implements <a href="McpSubscriptionBroker.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="registerIfUnder(int,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)">
 <h3>registerIfUnder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-67">registerIfUnder</a></span><wbr><span class="parameters">(int&nbsp;max,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-68">registerIfUnder</a></span><wbr><span class="parameters">(int&nbsp;max,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId,
  <a href="McpSubscriptionFilter.html" title="class in org.apache.juneau.rest.server.mcp">McpSubscriptionFilter</a>&nbsp;honoredFilter)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="McpSubscriptionBroker.html#registerIfUnder(int,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)">McpSubscriptionBroker</a></code></span></div>
@@ -274,7 +274,7 @@ implements <a href="McpSubscriptionBroker.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="registerIfUnder(int,int,java.lang.String,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)">
 <h3>registerIfUnder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-83">registerIfUnder</a></span><wbr><span class="parameters">(int&nbsp;max,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-84">registerIfUnder</a></span><wbr><span class="parameters">(int&nbsp;max,
  int&nbsp;maxPerOwner,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;owner,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId,
@@ -302,7 +302,7 @@ implements <a href="McpSubscriptionBroker.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="unregister(java.lang.String)">
 <h3>unregister</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-118">unregister</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-119">unregister</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="McpSubscriptionBroker.html#unregister(java.lang.String)">McpSubscriptionBroker</a></code></span></div>
 <div class="block">Deregisters and closes the subscription with the given id, if present.</div>
 <dl class="notes">
@@ -316,7 +316,7 @@ implements <a href="McpSubscriptionBroker.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="activeCount()">
 <h3>activeCount</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-127">activeCount</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-128">activeCount</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="McpSubscriptionBroker.html#activeCount()">McpSubscriptionBroker</a></code></span></div>
 <div class="block">The number of currently registered (not yet closed) subscriptions.</div>
 <dl class="notes">
@@ -330,7 +330,7 @@ implements <a href="McpSubscriptionBroker.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="closeAll()">
 <h3>closeAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-132">closeAll</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-133">closeAll</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="McpSubscriptionBroker.html#closeAll()">McpSubscriptionBroker</a></code></span></div>
 <div class="block">Closes every currently registered subscription.
 
@@ -348,7 +348,7 @@ implements <a href="McpSubscriptionBroker.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="resourceUpdated(java.lang.String)">
 <h3>resourceUpdated</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-139">resourceUpdated</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-140">resourceUpdated</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="McpSubscriptions.html#resourceUpdated(java.lang.String)">McpSubscriptions</a></code></span></div>
 <div class="block">Announces that a specific subscribed resource's content changed.</div>
 <dl class="notes">
@@ -362,7 +362,7 @@ implements <a href="McpSubscriptionBroker.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="toolsListChanged()">
 <h3>toolsListChanged</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-146">toolsListChanged</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-147">toolsListChanged</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="McpSubscriptions.html#toolsListChanged()">McpSubscriptions</a></code></span></div>
 <div class="block">Announces that the tool list changed.</div>
 <dl class="notes">
@@ -374,7 +374,7 @@ implements <a href="McpSubscriptionBroker.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="promptsListChanged()">
 <h3>promptsListChanged</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-151">promptsListChanged</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-152">promptsListChanged</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="McpSubscriptions.html#promptsListChanged()">McpSubscriptions</a></code></span></div>
 <div class="block">Announces that the prompt list changed.</div>
 <dl class="notes">
@@ -386,7 +386,7 @@ implements <a href="McpSubscriptionBroker.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="resourcesListChanged()">
 <h3>resourcesListChanged</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-156">resourcesListChanged</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/BasicMcpSubscriptionBroker.html#line-157">resourcesListChanged</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="McpSubscriptions.html#resourcesListChanged()">McpSubscriptions</a></code></span></div>
 <div class="block">Announces that the resource list changed.</div>
 <dl class="notes">

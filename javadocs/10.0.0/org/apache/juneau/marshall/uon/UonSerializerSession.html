@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../oapi/OpenApiSerializerSession.html" title="class in org.apache.juneau.marshall.oapi">OpenApiSerializerSession</a></code>, <code><a href="../urlencoding/UrlEncodingSerializerSession.html" title="class in org.apache.juneau.marshall.urlencoding">UrlEncodingSerializerSession</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-50">UonSerializerSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-49">UonSerializerSession</a></span>
 <span class="extends-implements">extends <a href="../serializer/WriterSerializerSession.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializerSession</a>
 implements <a href="../httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializerSession</a>, <a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></span></div>
 <div class="block">Session object that lives for the duration of a single use of <a href="UonSerializer.html" title="class in org.apache.juneau.marshall.uon"><code>UonSerializer</code></a>.
@@ -268,7 +268,7 @@ implements <a href="../httppart/HttpPartSerializerSession.html" title="interface
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.uon.UonSerializerSession.Builder)">
 <h3>UonSerializerSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-158">UonSerializerSession</a></span><wbr><span class="parameters">(<a href="UonSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.uon">UonSerializerSession.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-157">UonSerializerSession</a></span><wbr><span class="parameters">(<a href="UonSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.uon">UonSerializerSession.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -287,7 +287,7 @@ implements <a href="../httppart/HttpPartSerializerSession.html" title="interface
 <li>
 <section class="detail" id="create(org.apache.juneau.marshall.uon.UonSerializer)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="UonSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.uon">UonSerializerSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-142">create</a></span><wbr><span class="parameters">(<a href="UonSerializer.html" title="class in org.apache.juneau.marshall.uon">UonSerializer</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="UonSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.uon">UonSerializerSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-141">create</a></span><wbr><span class="parameters">(<a href="UonSerializer.html" title="class in org.apache.juneau.marshall.uon">UonSerializer</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -301,7 +301,7 @@ implements <a href="../httppart/HttpPartSerializerSession.html" title="interface
 <li>
 <section class="detail" id="writeRecords(java.lang.Object)">
 <h3>writeRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-165">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-164">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/RecordWritable.html#writeRecords(java.lang.Object)">RecordWritable</a></code></span></div>
 <div class="block">Opens a low-level <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output.
@@ -328,7 +328,7 @@ implements <a href="../httppart/HttpPartSerializerSession.html" title="interface
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-170">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-169">isRecordStreaming</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/RecordWritable.html#isRecordStreaming()">RecordWritable</a></code></span></div>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 <dl class="notes">
@@ -344,7 +344,7 @@ implements <a href="../httppart/HttpPartSerializerSession.html" title="interface
 <li>
 <section class="detail" id="write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)">
 <h3>write</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-175">write</a></span><wbr><span class="parameters">(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-174">write</a></span><wbr><span class="parameters">(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;type,
  <a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
              throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a>,
@@ -375,7 +375,7 @@ implements <a href="../httppart/HttpPartSerializerSession.html" title="interface
 <li>
 <section class="detail" id="doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">
 <h3>doWrite</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-306">doWrite</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-305">doWrite</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
@@ -402,7 +402,7 @@ implements <a href="../httppart/HttpPartSerializerSession.html" title="interface
 <li>
 <section class="detail" id="getParamFormat()">
 <h3>getParamFormat</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ParamFormat.html" title="enum class in org.apache.juneau.marshall.uon">ParamFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-318">getParamFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ParamFormat.html" title="enum class in org.apache.juneau.marshall.uon">ParamFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-317">getParamFormat</a></span>()</div>
 <div class="block">Format to use for query/form-data/header values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -419,7 +419,7 @@ implements <a href="../httppart/HttpPartSerializerSession.html" title="interface
 <li>
 <section class="detail" id="getUonWriter(org.apache.juneau.marshall.serializer.SerializerPipe)">
 <h3>getUonWriter</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="UonWriter.html" title="class in org.apache.juneau.marshall.uon">UonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-327">getUonWriter</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="UonWriter.html" title="class in org.apache.juneau.marshall.uon">UonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-326">getUonWriter</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out)</span></div>
 <div class="block">Converts the specified output target object to an <a href="UonWriter.html" title="class in org.apache.juneau.marshall.uon"><code>UonWriter</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -433,7 +433,7 @@ implements <a href="../httppart/HttpPartSerializerSession.html" title="interface
 <li>
 <section class="detail" id="isAddBeanTypes()">
 <h3>isAddBeanTypes</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-336">isAddBeanTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-335">isAddBeanTypes</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerSession.html#isAddBeanTypes()">SerializerSession</a></code></span></div>
 <div class="block">Add <js>"_type"</js> properties when needed.</div>
 <dl class="notes">
@@ -454,7 +454,7 @@ implements <a href="../httppart/HttpPartSerializerSession.html" title="interface
 <li>
 <section class="detail" id="isEncoding()">
 <h3>isEncoding</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-346">isEncoding</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-345">isEncoding</a></span>()</div>
 <div class="block">Encode non-valid URI characters.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -471,7 +471,7 @@ implements <a href="../httppart/HttpPartSerializerSession.html" title="interface
 <li>
 <section class="detail" id="writeAnything(org.apache.juneau.marshall.uon.UonWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>writeAnything</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="UonWriter.html" title="class in org.apache.juneau.marshall.uon">UonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-368">writeAnything</a></span><wbr><span class="parameters">(<a href="UonWriter.html" title="class in org.apache.juneau.marshall.uon">UonWriter</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="UonWriter.html" title="class in org.apache.juneau.marshall.uon">UonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializerSession.html#line-367">writeAnything</a></span><wbr><span class="parameters">(<a href="UonWriter.html" title="class in org.apache.juneau.marshall.uon">UonWriter</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,

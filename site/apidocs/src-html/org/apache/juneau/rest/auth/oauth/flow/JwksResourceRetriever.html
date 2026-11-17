@@ -35,61 +35,57 @@
 <span class="source-line-no">022</span><span id="line-22">import java.net.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.nio.charset.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.commons.utils.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import com.nimbusds.jose.util.*;</span>
 <span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">import com.nimbusds.jose.util.*;</span>
-<span class="source-line-no">028</span><span id="line-28"></span>
-<span class="source-line-no">029</span><span id="line-29">/**</span>
-<span class="source-line-no">030</span><span id="line-30"> * HTTP retriever for remote JWK sets.</span>
-<span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * Differs from the default retriever in three ways:</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;ul&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;Redirects are never followed; a redirect response is an error.</span>
-<span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;The URL must use &lt;js&gt;"https"&lt;/js&gt; or target a loopback host.</span>
-<span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;The response body is capped at {@link #MAX_BYTES} bytes.</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;/ul&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * @since 10.0.0</span>
-<span class="source-line-no">041</span><span id="line-41"> */</span>
-<span class="source-line-no">042</span><span id="line-42">public class JwksResourceRetriever implements ResourceRetriever {</span>
-<span class="source-line-no">043</span><span id="line-43"></span>
-<span class="source-line-no">044</span><span id="line-44">   /** Maximum accepted response body size, in bytes. */</span>
-<span class="source-line-no">045</span><span id="line-45">   public static final int MAX_BYTES = 64 * 1024;</span>
+<span class="source-line-no">027</span><span id="line-27">/**</span>
+<span class="source-line-no">028</span><span id="line-28"> * HTTP retriever for remote JWK sets.</span>
+<span class="source-line-no">029</span><span id="line-29"> *</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * Differs from the default retriever in three ways:</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;ul&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;Redirects are never followed; a redirect response is an error.</span>
+<span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;The URL must use &lt;js&gt;"https"&lt;/js&gt; or target a loopback host.</span>
+<span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;The response body is capped at {@link #MAX_BYTES} bytes.</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;/ul&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> *</span>
+<span class="source-line-no">038</span><span id="line-38"> * @since 10.0.0</span>
+<span class="source-line-no">039</span><span id="line-39"> */</span>
+<span class="source-line-no">040</span><span id="line-40">public class JwksResourceRetriever implements ResourceRetriever {</span>
+<span class="source-line-no">041</span><span id="line-41"></span>
+<span class="source-line-no">042</span><span id="line-42">   /** Maximum accepted response body size, in bytes. */</span>
+<span class="source-line-no">043</span><span id="line-43">   public static final int MAX_BYTES = 64 * 1024;</span>
+<span class="source-line-no">044</span><span id="line-44"></span>
+<span class="source-line-no">045</span><span id="line-45">   private static final int TIMEOUT_MS = 5000;</span>
 <span class="source-line-no">046</span><span id="line-46"></span>
-<span class="source-line-no">047</span><span id="line-47">   private static final int TIMEOUT_MS = 5000;</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   @Override /* Overridden from ResourceRetriever */</span>
-<span class="source-line-no">050</span><span id="line-50">   public Resource retrieveResource(URL url) throws IOException {</span>
-<span class="source-line-no">051</span><span id="line-51">      try {</span>
-<span class="source-line-no">052</span><span id="line-52">         assertSecureOrLoopback(url.toURI());</span>
-<span class="source-line-no">053</span><span id="line-53">      } catch (URISyntaxException | IllegalArgumentException e) {</span>
-<span class="source-line-no">054</span><span id="line-54">         throw new IOException("JWK set URL is not permitted: " + url, e);</span>
-<span class="source-line-no">055</span><span id="line-55">      }</span>
-<span class="source-line-no">056</span><span id="line-56">      var con = (HttpURLConnection)url.openConnection();</span>
-<span class="source-line-no">057</span><span id="line-57">      try {</span>
-<span class="source-line-no">058</span><span id="line-58">         con.setInstanceFollowRedirects(false);</span>
-<span class="source-line-no">059</span><span id="line-59">         con.setConnectTimeout(TIMEOUT_MS);</span>
-<span class="source-line-no">060</span><span id="line-60">         con.setReadTimeout(TIMEOUT_MS);</span>
-<span class="source-line-no">061</span><span id="line-61">         var status = con.getResponseCode();</span>
-<span class="source-line-no">062</span><span id="line-62">         if (status != 200)</span>
-<span class="source-line-no">063</span><span id="line-63">            throw new IOException("JWK set fetch failed with HTTP status " + status);</span>
-<span class="source-line-no">064</span><span id="line-64">         var out = new ByteArrayOutputStream();</span>
-<span class="source-line-no">065</span><span id="line-65">         try (var in = con.getInputStream()) {</span>
-<span class="source-line-no">066</span><span id="line-66">            var buf = new byte[4096];</span>
-<span class="source-line-no">067</span><span id="line-67">            int n;</span>
-<span class="source-line-no">068</span><span id="line-68">            while ((n = in.read(buf)) &gt;= 0) {</span>
-<span class="source-line-no">069</span><span id="line-69">               out.write(buf, 0, n);</span>
-<span class="source-line-no">070</span><span id="line-70">               if (out.size() &gt; MAX_BYTES)</span>
-<span class="source-line-no">071</span><span id="line-71">                  throw new IOException("JWK set response exceeds " + MAX_BYTES + " bytes");</span>
-<span class="source-line-no">072</span><span id="line-72">            }</span>
-<span class="source-line-no">073</span><span id="line-73">         }</span>
-<span class="source-line-no">074</span><span id="line-74">         return new Resource(out.toString(StandardCharsets.UTF_8), con.getContentType());</span>
-<span class="source-line-no">075</span><span id="line-75">      } finally {</span>
-<span class="source-line-no">076</span><span id="line-76">         con.disconnect();</span>
-<span class="source-line-no">077</span><span id="line-77">      }</span>
-<span class="source-line-no">078</span><span id="line-78">   }</span>
-<span class="source-line-no">079</span><span id="line-79">}</span>
+<span class="source-line-no">047</span><span id="line-47">   @Override /* Overridden from ResourceRetriever */</span>
+<span class="source-line-no">048</span><span id="line-48">   public Resource retrieveResource(URL url) throws IOException {</span>
+<span class="source-line-no">049</span><span id="line-49">      try {</span>
+<span class="source-line-no">050</span><span id="line-50">         assertSecureOrLoopback(url.toURI());</span>
+<span class="source-line-no">051</span><span id="line-51">      } catch (URISyntaxException | IllegalArgumentException e) {</span>
+<span class="source-line-no">052</span><span id="line-52">         throw new IOException("JWK set URL is not permitted: " + url, e);</span>
+<span class="source-line-no">053</span><span id="line-53">      }</span>
+<span class="source-line-no">054</span><span id="line-54">      var con = (HttpURLConnection)url.openConnection();</span>
+<span class="source-line-no">055</span><span id="line-55">      try (var closer = (Closeable)con::disconnect) {</span>
+<span class="source-line-no">056</span><span id="line-56">         con.setInstanceFollowRedirects(false);</span>
+<span class="source-line-no">057</span><span id="line-57">         con.setConnectTimeout(TIMEOUT_MS);</span>
+<span class="source-line-no">058</span><span id="line-58">         con.setReadTimeout(TIMEOUT_MS);</span>
+<span class="source-line-no">059</span><span id="line-59">         var status = con.getResponseCode();</span>
+<span class="source-line-no">060</span><span id="line-60">         if (status != 200)</span>
+<span class="source-line-no">061</span><span id="line-61">            throw new IOException("JWK set fetch failed with HTTP status " + status);</span>
+<span class="source-line-no">062</span><span id="line-62">         var out = new ByteArrayOutputStream();</span>
+<span class="source-line-no">063</span><span id="line-63">         try (var in = con.getInputStream()) {</span>
+<span class="source-line-no">064</span><span id="line-64">            var buf = new byte[4096];</span>
+<span class="source-line-no">065</span><span id="line-65">            int n;</span>
+<span class="source-line-no">066</span><span id="line-66">            while ((n = in.read(buf)) &gt;= 0) {</span>
+<span class="source-line-no">067</span><span id="line-67">               out.write(buf, 0, n);</span>
+<span class="source-line-no">068</span><span id="line-68">               if (out.size() &gt; MAX_BYTES)</span>
+<span class="source-line-no">069</span><span id="line-69">                  throw new IOException("JWK set response exceeds " + MAX_BYTES + " bytes");</span>
+<span class="source-line-no">070</span><span id="line-70">            }</span>
+<span class="source-line-no">071</span><span id="line-71">         }</span>
+<span class="source-line-no">072</span><span id="line-72">         return new Resource(out.toString(StandardCharsets.UTF_8), con.getContentType());</span>
+<span class="source-line-no">073</span><span id="line-73">      }</span>
+<span class="source-line-no">074</span><span id="line-74">   }</span>
+<span class="source-line-no">075</span><span id="line-75">}</span>
 
 
 

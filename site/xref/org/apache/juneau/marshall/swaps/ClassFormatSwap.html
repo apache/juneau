@@ -64,17 +64,21 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">if</strong> (cl == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  			cl = Thread.currentThread().getContextClassLoader();
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<em class="jxr_comment">// Conversions made without a session still carry the context through the hint.</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">var</strong> mc = session != <strong class="jxr_keyword">null</strong> ? session.getMarshallingContext() : hint != <strong class="jxr_keyword">null</strong> ? hint.getMarshallingContext() : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">return</strong> ClassFormat.parse(o, fmt, cl, mc != <strong class="jxr_keyword">null</strong> ? mc.getClassNameGuard() : <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="ClassFormat" href="../../../../../org/apache/juneau/marshall/ClassFormat.html#ClassFormat">ClassFormat</a> resolveFormat(MarshallingSession session) {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">if</strong> (session == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">return</strong> ClassFormat.FQCN;
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> fmt = session.getMarshallingContext().getClassFormat();
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">return</strong> (fmt == <strong class="jxr_keyword">null</strong> || fmt == ClassFormat.NOT_SET) ? ClassFormat.FQCN : fmt;
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	}
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		MarshallingContext mc = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">if</strong> (session != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			mc = session.getMarshallingContext();
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (hint != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			mc = hint.getMarshallingContext();
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">return</strong> ClassFormat.parse(o, fmt, cl, mc != <strong class="jxr_keyword">null</strong> ? mc.getClassNameGuard() : <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	}
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="ClassFormat" href="../../../../../org/apache/juneau/marshall/ClassFormat.html#ClassFormat">ClassFormat</a> resolveFormat(MarshallingSession session) {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">if</strong> (session == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">return</strong> ClassFormat.FQCN;
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> fmt = session.getMarshallingContext().getClassFormat();
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">return</strong> (fmt == <strong class="jxr_keyword">null</strong> || fmt == ClassFormat.NOT_SET) ? ClassFormat.FQCN : fmt;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

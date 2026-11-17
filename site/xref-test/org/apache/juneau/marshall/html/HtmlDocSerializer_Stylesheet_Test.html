@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">class</strong> <a name="HtmlDocSerializer_Stylesheet_Test" href="../../../../../org/apache/juneau/marshall/html/HtmlDocSerializer_Stylesheet_Test.html#HtmlDocSerializer_Stylesheet_Test">HtmlDocSerializer_Stylesheet_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String serialize(String...stylesheet) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String serialize(String...stylesheet) {
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  		<strong class="jxr_keyword">return</strong> HtmlDocSerializer.create().stylesheet(stylesheet).build().getSession().writeToString(<span class="jxr_string">"x"</span>);
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  	}
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  

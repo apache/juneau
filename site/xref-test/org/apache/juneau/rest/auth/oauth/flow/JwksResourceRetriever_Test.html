@@ -78,21 +78,24 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertEquals(<span class="jxr_string">"{\&quot;keys\&quot;:[]}"</span>, <strong class="jxr_keyword">new</strong> JwksResourceRetriever().retrieveResource(url(<span class="jxr_string">"/ok"</span>)).getContent());
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Test <strong class="jxr_keyword">void</strong> a02_redirectNotFollowed() {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Test <strong class="jxr_keyword">void</strong> a02_redirectNotFollowed() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> JwksResourceRetriever();
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; r.retrieveResource(url(<span class="jxr_string">"/redirect"</span>)));
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	@Test <strong class="jxr_keyword">void</strong> a03_oversizedResponseRejected() {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> JwksResourceRetriever();
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; r.retrieveResource(url(<span class="jxr_string">"/big"</span>)));
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Test <strong class="jxr_keyword">void</strong> a04_plainHttpNonLoopbackRejected() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> JwksResourceRetriever();
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; r.retrieveResource(URI.create(<span class="jxr_string">"http://example.com/jwks"</span>).toURL()));
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  }
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> u = url(<span class="jxr_string">"/redirect"</span>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; r.retrieveResource(u));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Test <strong class="jxr_keyword">void</strong> a03_oversizedResponseRejected() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> JwksResourceRetriever();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> u = url(<span class="jxr_string">"/big"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; r.retrieveResource(u));
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> a04_plainHttpNonLoopbackRejected() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> JwksResourceRetriever();
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> u = URI.create(<span class="jxr_string">"http://other.example/jwks"</span>).toURL();
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; r.retrieveResource(u));
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

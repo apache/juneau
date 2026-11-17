@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-44">HealthServlet</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-45">HealthServlet</a></span>
 <span class="extends-implements">extends <a href="../servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a></span></div>
 <div class="block">Servlet flavor of the built-in health/readiness/liveness probe capability.
 
@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>HealthServlet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-45">HealthServlet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-46">HealthServlet</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -223,7 +223,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="publishReadinessState(org.apache.juneau.rest.server.health.ReadinessState)">
 <h3>publishReadinessState</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HealthServlet.html" title="class in org.apache.juneau.rest.server.health">HealthServlet</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-71">publishReadinessState</a></span><wbr><span class="parameters">(<a href="ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a>&nbsp;state)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HealthServlet.html" title="class in org.apache.juneau.rest.server.health">HealthServlet</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-70">publishReadinessState</a></span><wbr><span class="parameters">(<a href="ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a>&nbsp;state)</span></div>
 <div class="block">Publishes the lifecycle-owned <a href="ReadinessState.html" title="class in org.apache.juneau.rest.server.health"><code>ReadinessState</code></a> that this probe should observe.
 
  <p>
@@ -243,7 +243,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="initReadinessState(org.apache.juneau.commons.inject.WritableBeanStore)">
 <h3>initReadinessState</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-83">initReadinessState</a></span><wbr><span class="parameters">(<a href="../../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-82">initReadinessState</a></span><wbr><span class="parameters">(<a href="../../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Registers the <a href="#publishReadinessState(org.apache.juneau.rest.server.health.ReadinessState)">published</a> readiness state (if any) into
  this resource's own bean store, so <a href="HealthAggregator.html#aggregate(org.apache.juneau.rest.server.RestContext,java.util.Map,org.apache.juneau.rest.server.health.HealthProbe,org.apache.juneau.rest.server.RestResponse)"><code>HealthAggregator.aggregate(org.apache.juneau.rest.server.RestContext, java.util.Map&lt;java.lang.String, org.apache.juneau.rest.server.health.HealthIndicator&gt;, org.apache.juneau.rest.server.health.HealthProbe, org.apache.juneau.rest.server.RestResponse)</code></a> resolves the lifecycle-owned
  instance instead of falling back to <a href="ReadinessState.html#shared()"><code>ReadinessState.shared()</code></a>.</div>
@@ -256,7 +256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="probe(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>probe</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HealthAggregator.HealthResponse.html" title="class in org.apache.juneau.rest.server.health">HealthAggregator.HealthResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-112">probe</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HealthAggregator.HealthResponse.html" title="class in org.apache.juneau.rest.server.health">HealthAggregator.HealthResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-111">probe</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span></div>
 <div class="block">Health/readiness/liveness probe endpoint.
 
@@ -284,7 +284,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="probeFor(org.apache.juneau.rest.server.RestRequest)">
 <h3>probeFor</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="HealthProbe.html" title="enum class in org.apache.juneau.rest.server.health">HealthProbe</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-130">probeFor</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="HealthProbe.html" title="enum class in org.apache.juneau.rest.server.health">HealthProbe</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-129">probeFor</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Resolves which probe this request is for, keyed off the LAST PATH SEGMENT.
 
  <p>
@@ -303,7 +303,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="indicators()">
 <h3>indicators</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="HealthIndicator.html" title="interface in org.apache.juneau.rest.server.health">HealthIndicator</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-161">indicators</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="HealthIndicator.html" title="interface in org.apache.juneau.rest.server.health">HealthIndicator</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/health/HealthServlet.html#line-160">indicators</a></span>()</div>
 <div class="block">Returns the indicators to evaluate for this request.
 
  <p>

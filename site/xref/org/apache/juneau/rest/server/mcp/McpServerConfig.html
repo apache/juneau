@@ -28,26 +28,26 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.auth.TokenValidator;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Aggregate configuration consumed by the bound {@link McpRevision}.</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Applications register a single {@link McpServerConfig} (typically as a bean in their {@code RestContext}</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * bean store) listing the tools, prompts, resources, and resource templates to expose, plus optional server</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * metadata and a pagination strategy.</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * This type is revision-neutral: it holds no field typed with any protocol revision's wire beans, and</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * in particular holds no capabilities field in any form. The protocol version is owned by</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * {@link McpRevision#protocolVersion()}, and an explicit capabilities advertisement is owned by a</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * revision-specific hook on that revision's servlet or endpoint mixin.</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<span class="jxr_string">"java:S135"</span>, <em class="jxr_comment">// Handler-validation and completer-lookup loops (validatePrompts, validateResourceTemplates, resolveResourceTemplate, completer*) use independent continue guard clauses</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<span class="jxr_string">"java:S3077"</span>, <em class="jxr_comment">// The volatile fields hold immutable List/Map snapshots that are replaced wholesale when resource templates are published, so volatile only publishes a fully-built reference</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.AtomicReference;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.auth.TokenValidator;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Aggregate configuration consumed by the bound {@link McpRevision}.</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * Applications register a single {@link McpServerConfig} (typically as a bean in their {@code RestContext}</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * bean store) listing the tools, prompts, resources, and resource templates to expose, plus optional server</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * metadata and a pagination strategy.</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * This type is revision-neutral: it holds no field typed with any protocol revision's wire beans, and</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * in particular holds no capabilities field in any form. The protocol version is owned by</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * {@link McpRevision#protocolVersion()}, and an explicit capabilities advertisement is owned by a</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * revision-specific hook on that revision's servlet or endpoint mixin.</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<span class="jxr_string">"java:S135"</span>, <em class="jxr_comment">// Handler-validation and completer-lookup loops (validatePrompts, validateResourceTemplates, resolveResourceTemplate, completer*) use independent continue guard clauses</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<span class="jxr_string">"java:S3776"</span> <em class="jxr_comment">// validateResourceTemplates(), resolveResourceTemplate() and the completer lookups each match handlers against several URI/argument rules in one pass</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  })
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> McpServerConfig {
@@ -60,8 +60,8 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">private</strong> List&lt;McpResourceHandler&gt; resources = l();
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">private</strong> List&lt;McpResourceTemplateHandler&gt; resourceTemplates = l();
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> List&lt;McpResourceTemplateHandler&gt; validatedResourceTemplatesSnapshot = List.of();
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> Map&lt;McpResourceTemplateHandler, McpUriTemplateMatcher&gt; compiledResourceTemplateMatchers = Map.of();
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;List&lt;McpResourceTemplateHandler&gt;&gt; validatedResourceTemplatesSnapshot = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;(List.of());
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;Map&lt;McpResourceTemplateHandler, McpUriTemplateMatcher&gt;&gt; compiledResourceTemplateMatchers = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;(Map.of());
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <a name="McpCursor" href="../../../../../../org/apache/juneau/rest/server/mcp/McpCursor.html#McpCursor">McpCursor</a> cursor = McpCursor.SINGLE_PAGE;
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<strong class="jxr_keyword">private</strong> <a name="TokenValidator" href="../../../../../../org/apache/juneau/rest/server/auth/TokenValidator.html#TokenValidator">TokenValidator</a> tokenValidator;
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> allowUnauthenticated;
@@ -421,8 +421,8 @@
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> publishResourceTemplates(List&lt;McpResourceTemplateHandler&gt; candidate) {
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">var</strong> compiled = validateResourceTemplates(candidate);
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 		resourceTemplates = candidate;
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		validatedResourceTemplatesSnapshot = List.copyOf(candidate);
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		compiledResourceTemplateMatchers = compiled;
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		validatedResourceTemplatesSnapshot.set(List.copyOf(candidate));
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		compiledResourceTemplateMatchers.set(compiled);
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 	}
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -433,11 +433,11 @@
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> ensureResourceTemplatesValid() {
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">var</strong> current = resourceTemplates;
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">if</strong> (eq(validatedResourceTemplatesSnapshot, current))
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">if</strong> (eq(validatedResourceTemplatesSnapshot.get(), current))
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">var</strong> compiled = validateResourceTemplates(current);
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		validatedResourceTemplatesSnapshot = List.copyOf(current);
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		compiledResourceTemplateMatchers = compiled;
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		validatedResourceTemplatesSnapshot.set(List.copyOf(current));
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		compiledResourceTemplateMatchers.set(compiled);
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 	}
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -543,7 +543,7 @@
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 		Map&lt;String,String&gt; winnerVariables = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> 		McpUriTemplateMatcher winnerMatcher = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">var</strong> templates = getResourceTemplates();
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<strong class="jxr_keyword">var</strong> matchers = compiledResourceTemplateMatchers;
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<strong class="jxr_keyword">var</strong> matchers = compiledResourceTemplateMatchers.get();
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> handler : templates) {
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 			<strong class="jxr_keyword">if</strong> (handler == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 				<strong class="jxr_keyword">continue</strong>;
@@ -647,7 +647,7 @@
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 		<strong class="jxr_keyword">if</strong> (uriTemplate == <strong class="jxr_keyword">null</strong> || variableName == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<strong class="jxr_keyword">var</strong> templates = getResourceTemplates();
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">var</strong> matchers = compiledResourceTemplateMatchers;
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">var</strong> matchers = compiledResourceTemplateMatchers.get();
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> handler : templates) {
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 			<strong class="jxr_keyword">if</strong> (handler == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 				<strong class="jxr_keyword">continue</strong>;
@@ -709,7 +709,7 @@
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> 		}
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> 		<strong class="jxr_keyword">var</strong> templates = getResourceTemplates();
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		<strong class="jxr_keyword">var</strong> matchers = compiledResourceTemplateMatchers;
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		<strong class="jxr_keyword">var</strong> matchers = compiledResourceTemplateMatchers.get();
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> handler : templates) {
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 			<strong class="jxr_keyword">if</strong> (handler == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 				<strong class="jxr_keyword">continue</strong>;

@@ -64,21 +64,24 @@
 <span class="source-line-no">051</span><span id="line-51">   }</span>
 <span class="source-line-no">052</span><span id="line-52"></span>
 <span class="source-line-no">053</span><span id="line-53">   @Override</span>
-<span class="source-line-no">054</span><span id="line-54">   public Server create(String jettyXml) throws Exception {</span>
-<span class="source-line-no">055</span><span id="line-55">      Objects.requireNonNull(jettyXml,</span>
-<span class="source-line-no">056</span><span id="line-56">         "jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config) or found on the file system or classpath.");</span>
-<span class="source-line-no">057</span><span id="line-57">      disableXmlValidationByDefault();</span>
-<span class="source-line-no">058</span><span id="line-58">      // Files.createTempFile creates the file readable and writable by its owner only (where POSIX permissions are supported).</span>
-<span class="source-line-no">059</span><span id="line-59">      var f = Files.createTempFile("jetty", ".xml");</span>
-<span class="source-line-no">060</span><span id="line-60">      try {</span>
-<span class="source-line-no">061</span><span id="line-61">         Files.writeString(f, BLANK_HOST.matcher(jettyXml).replaceAll("&lt;Set name=\"host\"&gt;127.0.0.1&lt;/Set&gt;"));</span>
-<span class="source-line-no">062</span><span id="line-62">         var xmlConfiguration = new XmlConfiguration(new PathResourceFactory().newResource(f));</span>
-<span class="source-line-no">063</span><span id="line-63">         return (Server)xmlConfiguration.configure();</span>
-<span class="source-line-no">064</span><span id="line-64">      } finally {</span>
-<span class="source-line-no">065</span><span id="line-65">         Files.deleteIfExists(f);</span>
-<span class="source-line-no">066</span><span id="line-66">      }</span>
-<span class="source-line-no">067</span><span id="line-67">   }</span>
-<span class="source-line-no">068</span><span id="line-68">}</span>
+<span class="source-line-no">054</span><span id="line-54">   @SuppressWarnings({</span>
+<span class="source-line-no">055</span><span id="line-55">      "java:S5443" // Files.createTempFile is owner-only on POSIX, and the file is deleted in the finally block</span>
+<span class="source-line-no">056</span><span id="line-56">   })</span>
+<span class="source-line-no">057</span><span id="line-57">   public Server create(String jettyXml) throws Exception {</span>
+<span class="source-line-no">058</span><span id="line-58">      Objects.requireNonNull(jettyXml,</span>
+<span class="source-line-no">059</span><span id="line-59">         "jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config) or found on the file system or classpath.");</span>
+<span class="source-line-no">060</span><span id="line-60">      disableXmlValidationByDefault();</span>
+<span class="source-line-no">061</span><span id="line-61">      // Files.createTempFile creates the file readable and writable by its owner only (where POSIX permissions are supported).</span>
+<span class="source-line-no">062</span><span id="line-62">      var f = Files.createTempFile("jetty", ".xml");</span>
+<span class="source-line-no">063</span><span id="line-63">      try {</span>
+<span class="source-line-no">064</span><span id="line-64">         Files.writeString(f, BLANK_HOST.matcher(jettyXml).replaceAll("&lt;Set name=\"host\"&gt;127.0.0.1&lt;/Set&gt;"));</span>
+<span class="source-line-no">065</span><span id="line-65">         var xmlConfiguration = new XmlConfiguration(new PathResourceFactory().newResource(f));</span>
+<span class="source-line-no">066</span><span id="line-66">         return (Server)xmlConfiguration.configure();</span>
+<span class="source-line-no">067</span><span id="line-67">      } finally {</span>
+<span class="source-line-no">068</span><span id="line-68">         Files.deleteIfExists(f);</span>
+<span class="source-line-no">069</span><span id="line-69">      }</span>
+<span class="source-line-no">070</span><span id="line-70">   }</span>
+<span class="source-line-no">071</span><span id="line-71">}</span>
 
 
 

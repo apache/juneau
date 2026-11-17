@@ -196,7 +196,7 @@
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 				<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">var</strong> perms = Files.getPosixFilePermissions(p);
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<strong class="jxr_keyword">if</strong> (perms.contains(PosixFilePermission.OTHERS_WRITE) || perms.contains(PosixFilePermission.GROUP_WRITE))
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 				logger.warning(<span class="jxr_string">"Server configuration file '"</span> + f + <span class="jxr_string">"' is writable by users other than its owner."</span>);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 				logger.log(Level.WARNING, <span class="jxr_string">"Server configuration file ''{0}'' is writable by users other than its owner."</span>, f);
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		} <strong class="jxr_keyword">catch</strong> (IOException | UnsupportedOperationException e) {
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<em class="jxr_comment">// Permissions could not be read; nothing to report.</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		}

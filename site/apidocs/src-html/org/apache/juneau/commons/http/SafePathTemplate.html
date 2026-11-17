@@ -194,32 +194,35 @@
 <span class="source-line-no">181</span><span id="line-181">    *    Can be &lt;jk&gt;null&lt;/jk&gt; or empty (no absolute target is accepted).</span>
 <span class="source-line-no">182</span><span id="line-182">    * @return &lt;jk&gt;true&lt;/jk&gt; if the URI is safe to redirect to.</span>
 <span class="source-line-no">183</span><span id="line-183">    */</span>
-<span class="source-line-no">184</span><span id="line-184">   public static boolean isSafeRedirect(String uri, String...allowedHosts) {</span>
-<span class="source-line-no">185</span><span id="line-185">      if (ie(uri))</span>
-<span class="source-line-no">186</span><span id="line-186">         return true;</span>
-<span class="source-line-no">187</span><span id="line-187">      for (var i = 0; i &lt; uri.length(); i++) {</span>
-<span class="source-line-no">188</span><span id="line-188">         var c = uri.charAt(i);</span>
-<span class="source-line-no">189</span><span id="line-189">         if (c == '\\' || c &lt;= ' ' || c == 0x7f)</span>
-<span class="source-line-no">190</span><span id="line-190">            return false;</span>
-<span class="source-line-no">191</span><span id="line-191">      }</span>
-<span class="source-line-no">192</span><span id="line-192">      if (uri.charAt(0) == '/' &amp;&amp; ! uri.startsWith("//"))</span>
-<span class="source-line-no">193</span><span id="line-193">         return true;</span>
-<span class="source-line-no">194</span><span id="line-194">      if (uri.indexOf("://") == -1 &amp;&amp; ! uri.startsWith("//"))</span>
-<span class="source-line-no">195</span><span id="line-195">         return ! hasUriScheme(uri);</span>
-<span class="source-line-no">196</span><span id="line-196">      String host;</span>
-<span class="source-line-no">197</span><span id="line-197">      try {</span>
-<span class="source-line-no">198</span><span id="line-198">         host = new URI(uri.startsWith("//") ? "http:" + uri : uri).getHost();</span>
-<span class="source-line-no">199</span><span id="line-199">      } catch (@SuppressWarnings("unused") URISyntaxException e) {</span>
-<span class="source-line-no">200</span><span id="line-200">         return false;</span>
-<span class="source-line-no">201</span><span id="line-201">      }</span>
-<span class="source-line-no">202</span><span id="line-202">      if (host == null || allowedHosts == null)</span>
+<span class="source-line-no">184</span><span id="line-184">   @SuppressWarnings({</span>
+<span class="source-line-no">185</span><span id="line-185">      "java:S3776" // Sequential validation guards read most clearly in one method</span>
+<span class="source-line-no">186</span><span id="line-186">   })</span>
+<span class="source-line-no">187</span><span id="line-187">   public static boolean isSafeRedirect(String uri, String...allowedHosts) {</span>
+<span class="source-line-no">188</span><span id="line-188">      if (ie(uri))</span>
+<span class="source-line-no">189</span><span id="line-189">         return true;</span>
+<span class="source-line-no">190</span><span id="line-190">      for (var i = 0; i &lt; uri.length(); i++) {</span>
+<span class="source-line-no">191</span><span id="line-191">         var c = uri.charAt(i);</span>
+<span class="source-line-no">192</span><span id="line-192">         if (c == '\\' || c &lt;= ' ' || c == 0x7f)</span>
+<span class="source-line-no">193</span><span id="line-193">            return false;</span>
+<span class="source-line-no">194</span><span id="line-194">      }</span>
+<span class="source-line-no">195</span><span id="line-195">      if (uri.charAt(0) == '/' &amp;&amp; ! uri.startsWith("//"))</span>
+<span class="source-line-no">196</span><span id="line-196">         return true;</span>
+<span class="source-line-no">197</span><span id="line-197">      if (uri.indexOf("://") == -1 &amp;&amp; ! uri.startsWith("//"))</span>
+<span class="source-line-no">198</span><span id="line-198">         return ! hasUriScheme(uri);</span>
+<span class="source-line-no">199</span><span id="line-199">      String host;</span>
+<span class="source-line-no">200</span><span id="line-200">      try {</span>
+<span class="source-line-no">201</span><span id="line-201">         host = new URI(uri.startsWith("//") ? "http:" + uri : uri).getHost();</span>
+<span class="source-line-no">202</span><span id="line-202">      } catch (@SuppressWarnings("unused") URISyntaxException e) {</span>
 <span class="source-line-no">203</span><span id="line-203">         return false;</span>
-<span class="source-line-no">204</span><span id="line-204">      for (var h : allowedHosts)</span>
-<span class="source-line-no">205</span><span id="line-205">         if (eqic(host, h))</span>
-<span class="source-line-no">206</span><span id="line-206">            return true;</span>
-<span class="source-line-no">207</span><span id="line-207">      return false;</span>
-<span class="source-line-no">208</span><span id="line-208">   }</span>
-<span class="source-line-no">209</span><span id="line-209">}</span>
+<span class="source-line-no">204</span><span id="line-204">      }</span>
+<span class="source-line-no">205</span><span id="line-205">      if (host == null || allowedHosts == null)</span>
+<span class="source-line-no">206</span><span id="line-206">         return false;</span>
+<span class="source-line-no">207</span><span id="line-207">      for (var h : allowedHosts)</span>
+<span class="source-line-no">208</span><span id="line-208">         if (eqic(host, h))</span>
+<span class="source-line-no">209</span><span id="line-209">            return true;</span>
+<span class="source-line-no">210</span><span id="line-210">      return false;</span>
+<span class="source-line-no">211</span><span id="line-211">   }</span>
+<span class="source-line-no">212</span><span id="line-212">}</span>
 
 
 

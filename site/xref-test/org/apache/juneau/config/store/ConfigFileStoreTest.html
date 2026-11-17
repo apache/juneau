@@ -444,12 +444,13 @@
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 		System.setProperty(<span class="jxr_string">"ConfigFileStore.allowAbsoluteNames"</span>, <span class="jxr_string">"true"</span>);
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">var</strong> fs = FileStore.create().directory(DIR).build();
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; fs.read(<strong class="jxr_keyword">new</strong> File(<span class="jxr_string">"./target/x.cfg"</span>).getAbsolutePath()));
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			System.clearProperty(<span class="jxr_string">"ConfigFileStore.allowAbsoluteNames"</span>);
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		}
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	}
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> }
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			<strong class="jxr_keyword">var</strong> absolute = <strong class="jxr_keyword">new</strong> File(<span class="jxr_string">"./target/x.cfg"</span>).getAbsolutePath();
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; fs.read(absolute));
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			System.clearProperty(<span class="jxr_string">"ConfigFileStore.allowAbsoluteNames"</span>);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		}
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	}
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

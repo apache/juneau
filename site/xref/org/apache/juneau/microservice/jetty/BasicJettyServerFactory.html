@@ -59,21 +59,24 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	@Override
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">public</strong> Server create(String jettyXml) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		Objects.requireNonNull(jettyXml,
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			<span class="jxr_string">"jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config) or found on the file system or classpath."</span>);
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		disableXmlValidationByDefault();
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<em class="jxr_comment">// Files.createTempFile creates the file readable and writable by its owner only (where POSIX permissions are supported).</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">var</strong> f = Files.createTempFile(<span class="jxr_string">"jetty"</span>, <span class="jxr_string">".xml"</span>);
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			Files.writeString(f, BLANK_HOST.matcher(jettyXml).replaceAll(<span class="jxr_string">"&lt;Set name=\&quot;host\&quot;&gt;127.0.0.1&lt;/Set&gt;"</span>));
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">var</strong> xmlConfiguration = <strong class="jxr_keyword">new</strong> XmlConfiguration(<strong class="jxr_keyword">new</strong> PathResourceFactory().newResource(f));
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">return</strong> (Server)xmlConfiguration.configure();
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			Files.deleteIfExists(f);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		}
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	}
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	@SuppressWarnings({
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<span class="jxr_string">"java:S5443"</span> <em class="jxr_comment">// Files.createTempFile is owner-only on POSIX, and the file is deleted in the finally block</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	})
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">public</strong> Server create(String jettyXml) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		Objects.requireNonNull(jettyXml,
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			<span class="jxr_string">"jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config) or found on the file system or classpath."</span>);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		disableXmlValidationByDefault();
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<em class="jxr_comment">// Files.createTempFile creates the file readable and writable by its owner only (where POSIX permissions are supported).</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">var</strong> f = Files.createTempFile(<span class="jxr_string">"jetty"</span>, <span class="jxr_string">".xml"</span>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			Files.writeString(f, BLANK_HOST.matcher(jettyXml).replaceAll(<span class="jxr_string">"&lt;Set name=\&quot;host\&quot;&gt;127.0.0.1&lt;/Set&gt;"</span>));
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">var</strong> xmlConfiguration = <strong class="jxr_keyword">new</strong> XmlConfiguration(<strong class="jxr_keyword">new</strong> PathResourceFactory().newResource(f));
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">return</strong> (Server)xmlConfiguration.configure();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			Files.deleteIfExists(f);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		}
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

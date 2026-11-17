@@ -33,26 +33,26 @@
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.commons.inject.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.rest.server.auth.TokenValidator;</span>
-<span class="source-line-no">025</span><span id="line-25"></span>
-<span class="source-line-no">026</span><span id="line-26">/**</span>
-<span class="source-line-no">027</span><span id="line-27"> * Aggregate configuration consumed by the bound {@link McpRevision}.</span>
-<span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> * Applications register a single {@link McpServerConfig} (typically as a bean in their {@code RestContext}</span>
-<span class="source-line-no">031</span><span id="line-31"> * bean store) listing the tools, prompts, resources, and resource templates to expose, plus optional server</span>
-<span class="source-line-no">032</span><span id="line-32"> * metadata and a pagination strategy.</span>
-<span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> * This type is revision-neutral: it holds no field typed with any protocol revision's wire beans, and</span>
-<span class="source-line-no">036</span><span id="line-36"> * in particular holds no capabilities field in any form. The protocol version is owned by</span>
-<span class="source-line-no">037</span><span id="line-37"> * {@link McpRevision#protocolVersion()}, and an explicit capabilities advertisement is owned by a</span>
-<span class="source-line-no">038</span><span id="line-38"> * revision-specific hook on that revision's servlet or endpoint mixin.</span>
-<span class="source-line-no">039</span><span id="line-39"> */</span>
-<span class="source-line-no">040</span><span id="line-40">@SuppressWarnings({</span>
-<span class="source-line-no">041</span><span id="line-41">   "java:S135", // Handler-validation and completer-lookup loops (validatePrompts, validateResourceTemplates, resolveResourceTemplate, completer*) use independent continue guard clauses</span>
-<span class="source-line-no">042</span><span id="line-42">   "java:S3077", // The volatile fields hold immutable List/Map snapshots that are replaced wholesale when resource templates are published, so volatile only publishes a fully-built reference</span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.concurrent.atomic.AtomicReference;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.commons.inject.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.rest.server.auth.TokenValidator;</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">/**</span>
+<span class="source-line-no">028</span><span id="line-28"> * Aggregate configuration consumed by the bound {@link McpRevision}.</span>
+<span class="source-line-no">029</span><span id="line-29"> *</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * Applications register a single {@link McpServerConfig} (typically as a bean in their {@code RestContext}</span>
+<span class="source-line-no">032</span><span id="line-32"> * bean store) listing the tools, prompts, resources, and resource templates to expose, plus optional server</span>
+<span class="source-line-no">033</span><span id="line-33"> * metadata and a pagination strategy.</span>
+<span class="source-line-no">034</span><span id="line-34"> *</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * This type is revision-neutral: it holds no field typed with any protocol revision's wire beans, and</span>
+<span class="source-line-no">037</span><span id="line-37"> * in particular holds no capabilities field in any form. The protocol version is owned by</span>
+<span class="source-line-no">038</span><span id="line-38"> * {@link McpRevision#protocolVersion()}, and an explicit capabilities advertisement is owned by a</span>
+<span class="source-line-no">039</span><span id="line-39"> * revision-specific hook on that revision's servlet or endpoint mixin.</span>
+<span class="source-line-no">040</span><span id="line-40"> */</span>
+<span class="source-line-no">041</span><span id="line-41">@SuppressWarnings({</span>
+<span class="source-line-no">042</span><span id="line-42">   "java:S135", // Handler-validation and completer-lookup loops (validatePrompts, validateResourceTemplates, resolveResourceTemplate, completer*) use independent continue guard clauses</span>
 <span class="source-line-no">043</span><span id="line-43">   "java:S3776" // validateResourceTemplates(), resolveResourceTemplate() and the completer lookups each match handlers against several URI/argument rules in one pass</span>
 <span class="source-line-no">044</span><span id="line-44">})</span>
 <span class="source-line-no">045</span><span id="line-45">public class McpServerConfig {</span>
@@ -65,8 +65,8 @@
 <span class="source-line-no">052</span><span id="line-52">   private List&lt;McpResourceHandler&gt; resources = l();</span>
 <span class="source-line-no">053</span><span id="line-53">   private List&lt;McpResourceTemplateHandler&gt; resourceTemplates = l();</span>
 <span class="source-line-no">054</span><span id="line-54"></span>
-<span class="source-line-no">055</span><span id="line-55">   private volatile List&lt;McpResourceTemplateHandler&gt; validatedResourceTemplatesSnapshot = List.of();</span>
-<span class="source-line-no">056</span><span id="line-56">   private volatile Map&lt;McpResourceTemplateHandler, McpUriTemplateMatcher&gt; compiledResourceTemplateMatchers = Map.of();</span>
+<span class="source-line-no">055</span><span id="line-55">   private final AtomicReference&lt;List&lt;McpResourceTemplateHandler&gt;&gt; validatedResourceTemplatesSnapshot = new AtomicReference&lt;&gt;(List.of());</span>
+<span class="source-line-no">056</span><span id="line-56">   private final AtomicReference&lt;Map&lt;McpResourceTemplateHandler, McpUriTemplateMatcher&gt;&gt; compiledResourceTemplateMatchers = new AtomicReference&lt;&gt;(Map.of());</span>
 <span class="source-line-no">057</span><span id="line-57">   private McpCursor cursor = McpCursor.SINGLE_PAGE;</span>
 <span class="source-line-no">058</span><span id="line-58">   private TokenValidator tokenValidator;</span>
 <span class="source-line-no">059</span><span id="line-59">   private boolean allowUnauthenticated;</span>
@@ -426,8 +426,8 @@
 <span class="source-line-no">413</span><span id="line-413">   private void publishResourceTemplates(List&lt;McpResourceTemplateHandler&gt; candidate) {</span>
 <span class="source-line-no">414</span><span id="line-414">      var compiled = validateResourceTemplates(candidate);</span>
 <span class="source-line-no">415</span><span id="line-415">      resourceTemplates = candidate;</span>
-<span class="source-line-no">416</span><span id="line-416">      validatedResourceTemplatesSnapshot = List.copyOf(candidate);</span>
-<span class="source-line-no">417</span><span id="line-417">      compiledResourceTemplateMatchers = compiled;</span>
+<span class="source-line-no">416</span><span id="line-416">      validatedResourceTemplatesSnapshot.set(List.copyOf(candidate));</span>
+<span class="source-line-no">417</span><span id="line-417">      compiledResourceTemplateMatchers.set(compiled);</span>
 <span class="source-line-no">418</span><span id="line-418">   }</span>
 <span class="source-line-no">419</span><span id="line-419"></span>
 <span class="source-line-no">420</span><span id="line-420">   /**</span>
@@ -438,11 +438,11 @@
 <span class="source-line-no">425</span><span id="line-425">    */</span>
 <span class="source-line-no">426</span><span id="line-426">   private void ensureResourceTemplatesValid() {</span>
 <span class="source-line-no">427</span><span id="line-427">      var current = resourceTemplates;</span>
-<span class="source-line-no">428</span><span id="line-428">      if (eq(validatedResourceTemplatesSnapshot, current))</span>
+<span class="source-line-no">428</span><span id="line-428">      if (eq(validatedResourceTemplatesSnapshot.get(), current))</span>
 <span class="source-line-no">429</span><span id="line-429">         return;</span>
 <span class="source-line-no">430</span><span id="line-430">      var compiled = validateResourceTemplates(current);</span>
-<span class="source-line-no">431</span><span id="line-431">      validatedResourceTemplatesSnapshot = List.copyOf(current);</span>
-<span class="source-line-no">432</span><span id="line-432">      compiledResourceTemplateMatchers = compiled;</span>
+<span class="source-line-no">431</span><span id="line-431">      validatedResourceTemplatesSnapshot.set(List.copyOf(current));</span>
+<span class="source-line-no">432</span><span id="line-432">      compiledResourceTemplateMatchers.set(compiled);</span>
 <span class="source-line-no">433</span><span id="line-433">   }</span>
 <span class="source-line-no">434</span><span id="line-434"></span>
 <span class="source-line-no">435</span><span id="line-435">   /**</span>
@@ -548,7 +548,7 @@
 <span class="source-line-no">535</span><span id="line-535">      Map&lt;String,String&gt; winnerVariables = null;</span>
 <span class="source-line-no">536</span><span id="line-536">      McpUriTemplateMatcher winnerMatcher = null;</span>
 <span class="source-line-no">537</span><span id="line-537">      var templates = getResourceTemplates();</span>
-<span class="source-line-no">538</span><span id="line-538">      var matchers = compiledResourceTemplateMatchers;</span>
+<span class="source-line-no">538</span><span id="line-538">      var matchers = compiledResourceTemplateMatchers.get();</span>
 <span class="source-line-no">539</span><span id="line-539">      for (var handler : templates) {</span>
 <span class="source-line-no">540</span><span id="line-540">         if (handler == null)</span>
 <span class="source-line-no">541</span><span id="line-541">            continue;</span>
@@ -652,7 +652,7 @@
 <span class="source-line-no">639</span><span id="line-639">      if (uriTemplate == null || variableName == null)</span>
 <span class="source-line-no">640</span><span id="line-640">         return null;</span>
 <span class="source-line-no">641</span><span id="line-641">      var templates = getResourceTemplates();</span>
-<span class="source-line-no">642</span><span id="line-642">      var matchers = compiledResourceTemplateMatchers;</span>
+<span class="source-line-no">642</span><span id="line-642">      var matchers = compiledResourceTemplateMatchers.get();</span>
 <span class="source-line-no">643</span><span id="line-643">      for (var handler : templates) {</span>
 <span class="source-line-no">644</span><span id="line-644">         if (handler == null)</span>
 <span class="source-line-no">645</span><span id="line-645">            continue;</span>
@@ -714,7 +714,7 @@
 <span class="source-line-no">701</span><span id="line-701">               return true;</span>
 <span class="source-line-no">702</span><span id="line-702">      }</span>
 <span class="source-line-no">703</span><span id="line-703">      var templates = getResourceTemplates();</span>
-<span class="source-line-no">704</span><span id="line-704">      var matchers = compiledResourceTemplateMatchers;</span>
+<span class="source-line-no">704</span><span id="line-704">      var matchers = compiledResourceTemplateMatchers.get();</span>
 <span class="source-line-no">705</span><span id="line-705">      for (var handler : templates) {</span>
 <span class="source-line-no">706</span><span id="line-706">         if (handler == null)</span>
 <span class="source-line-no">707</span><span id="line-707">            continue;</span>

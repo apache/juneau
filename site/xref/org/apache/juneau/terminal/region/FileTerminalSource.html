@@ -128,7 +128,7 @@
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;<strong class="jxr_keyword">int</strong>[]&gt; sizeRef = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;();
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;Object&gt; fileKey = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;();
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> seen;
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> warned;
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicBoolean warned = <strong class="jxr_keyword">new</strong> AtomicBoolean();
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<em class="jxr_comment">// Nudges.  nudgeThread, nudgeSet and nudgeClosed are guarded by nudgeLock.</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Object nudgeLock = <strong class="jxr_keyword">new</strong> Object();
@@ -305,32 +305,31 @@
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 			sizeRef.set(s);
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 			<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		}
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">if</strong> (! warned) {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			warned = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			LOG.warning(() -&gt; <span class="jxr_string">"Terminal size sidecar '"</span> + sizeFile + <span class="jxr_string">"' is missing or malformed; using "</span> + DEFAULT_COLS + <span class="jxr_string">"x"</span> + DEFAULT_ROWS + <span class="jxr_string">"."</span>);
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		}
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] { DEFAULT_COLS, DEFAULT_ROWS };
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	}
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	<em class="jxr_javadoccomment">/** Returns {cols, rows} from a {"cols":C,"rows":R} file, or null when it is missing or malformed. */</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<span class="jxr_string">"java:S1168"</span> <em class="jxr_comment">// null means the size sidecar is missing or malformed; callers test for it</em>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	})
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] parseSize(Path p) {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			<strong class="jxr_keyword">var</strong> m = Json.to(readCapped(p, MAX_SIZE_BYTES, StandardCharsets.UTF_8, LinkOption.NOFOLLOW_LINKS), Map.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">if</strong> (m.get(<span class="jxr_string">"cols"</span>) instanceof Number c &amp;&amp; m.get(<span class="jxr_string">"rows"</span>) instanceof Number r) {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 				<strong class="jxr_keyword">var</strong> cols = c.doubleValue();
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 				<strong class="jxr_keyword">var</strong> rows = r.doubleValue();
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 				<strong class="jxr_keyword">if</strong> (cols == Math.rint(cols) &amp;&amp; rows == Math.rint(rows) &amp;&amp; cols &gt;= 1 &amp;&amp; cols &lt;= 9999 &amp;&amp; rows &gt;= 1 &amp;&amp; rows &lt;= 9999)
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] { (<strong class="jxr_keyword">int</strong>)cols, (<strong class="jxr_keyword">int</strong>)rows };
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			}
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		}
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	}
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> }
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">if</strong> (warned.compareAndSet(false, <strong class="jxr_keyword">true</strong>)) {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			LOG.warning(() -&gt; <span class="jxr_string">"Terminal size sidecar '"</span> + sizeFile + <span class="jxr_string">"' is missing or malformed; using "</span> + DEFAULT_COLS + <span class="jxr_string">"x"</span> + DEFAULT_ROWS + <span class="jxr_string">"."</span>);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		}
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] { DEFAULT_COLS, DEFAULT_ROWS };
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	}
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<em class="jxr_javadoccomment">/** Returns {cols, rows} from a {"cols":C,"rows":R} file, or null when it is missing or malformed. */</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<span class="jxr_string">"java:S1168"</span> <em class="jxr_comment">// null means the size sidecar is missing or malformed; callers test for it</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	})
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong>[] parseSize(Path p) {
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<strong class="jxr_keyword">var</strong> m = Json.to(readCapped(p, MAX_SIZE_BYTES, StandardCharsets.UTF_8, LinkOption.NOFOLLOW_LINKS), Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			<strong class="jxr_keyword">if</strong> (m.get(<span class="jxr_string">"cols"</span>) instanceof Number c &amp;&amp; m.get(<span class="jxr_string">"rows"</span>) instanceof Number r) {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 				<strong class="jxr_keyword">var</strong> cols = c.doubleValue();
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 				<strong class="jxr_keyword">var</strong> rows = r.doubleValue();
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 				<strong class="jxr_keyword">if</strong> (cols == Math.rint(cols) &amp;&amp; rows == Math.rint(rows) &amp;&amp; cols &gt;= 1 &amp;&amp; cols &lt;= 9999 &amp;&amp; rows &gt;= 1 &amp;&amp; rows &lt;= 9999)
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] { (<strong class="jxr_keyword">int</strong>)cols, (<strong class="jxr_keyword">int</strong>)rows };
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			}
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		}
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	}
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -250,345 +250,348 @@
 <span class="source-line-no">237</span><span id="line-237">    *</span>
 <span class="source-line-no">238</span><span id="line-238">    * @return The client-facing message.</span>
 <span class="source-line-no">239</span><span id="line-239">    */</span>
-<span class="source-line-no">240</span><span id="line-240">   public String getResponseMessage() {</span>
-<span class="source-line-no">241</span><span id="line-241">      return causeMessageHidden ? statusLine.getReasonPhrase() : getMessage();</span>
-<span class="source-line-no">242</span><span id="line-242">   }</span>
-<span class="source-line-no">243</span><span id="line-243"></span>
-<span class="source-line-no">244</span><span id="line-244">   /**</span>
-<span class="source-line-no">245</span><span id="line-245">    * Returns the HTTP status code.</span>
-<span class="source-line-no">246</span><span id="line-246">    *</span>
-<span class="source-line-no">247</span><span id="line-247">    * @return The status code.</span>
-<span class="source-line-no">248</span><span id="line-248">    */</span>
-<span class="source-line-no">249</span><span id="line-249">   public int getStatusCode() {</span>
-<span class="source-line-no">250</span><span id="line-250">      return statusLine.getStatusCode();</span>
-<span class="source-line-no">251</span><span id="line-251">   }</span>
-<span class="source-line-no">252</span><span id="line-252"></span>
-<span class="source-line-no">253</span><span id="line-253">   /**</span>
-<span class="source-line-no">254</span><span id="line-254">    * Returns the locale associated with this response, if any.</span>
-<span class="source-line-no">255</span><span id="line-255">    *</span>
-<span class="source-line-no">256</span><span id="line-256">    * @return The locale, possibly &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">257</span><span id="line-257">    */</span>
-<span class="source-line-no">258</span><span id="line-258">   public Locale getLocale() {</span>
-<span class="source-line-no">259</span><span id="line-259">      return locale;</span>
-<span class="source-line-no">260</span><span id="line-260">   }</span>
-<span class="source-line-no">261</span><span id="line-261"></span>
-<span class="source-line-no">262</span><span id="line-262">   // ------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">263</span><span id="line-263">   // Fluent setters (mutate this instance)</span>
-<span class="source-line-no">264</span><span id="line-264">   // ------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">265</span><span id="line-265"></span>
-<span class="source-line-no">266</span><span id="line-266">   /**</span>
-<span class="source-line-no">267</span><span id="line-267">    * Sets the status line.</span>
-<span class="source-line-no">268</span><span id="line-268">    *</span>
-<span class="source-line-no">269</span><span id="line-269">    * @param value New status line. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">270</span><span id="line-270">    * @return This object.</span>
-<span class="source-line-no">271</span><span id="line-271">    */</span>
-<span class="source-line-no">272</span><span id="line-272">   public BasicHttpException setStatusLine(HttpStatusLine value) {</span>
-<span class="source-line-no">273</span><span id="line-273">      return modify(() -&gt; statusLine = reqnn("value", value));</span>
-<span class="source-line-no">274</span><span id="line-274">   }</span>
-<span class="source-line-no">275</span><span id="line-275"></span>
-<span class="source-line-no">276</span><span id="line-276">   /**</span>
-<span class="source-line-no">277</span><span id="line-277">    * Sets the status code, preserving the existing protocol version and reason phrase.</span>
-<span class="source-line-no">278</span><span id="line-278">    *</span>
-<span class="source-line-no">279</span><span id="line-279">    * @param value New status code.</span>
-<span class="source-line-no">280</span><span id="line-280">    * @return This object.</span>
-<span class="source-line-no">281</span><span id="line-281">    */</span>
-<span class="source-line-no">282</span><span id="line-282">   public BasicHttpException setStatusCode(int value) {</span>
-<span class="source-line-no">283</span><span id="line-283">      return modify(() -&gt; statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), value, statusLine.getReasonPhrase()));</span>
-<span class="source-line-no">284</span><span id="line-284">   }</span>
-<span class="source-line-no">285</span><span id="line-285"></span>
-<span class="source-line-no">286</span><span id="line-286">   /**</span>
-<span class="source-line-no">287</span><span id="line-287">    * Sets the reason phrase, preserving the existing protocol version and status code.</span>
-<span class="source-line-no">288</span><span id="line-288">    *</span>
-<span class="source-line-no">289</span><span id="line-289">    * @param value New reason phrase. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">290</span><span id="line-290">    * @return This object.</span>
-<span class="source-line-no">291</span><span id="line-291">    */</span>
-<span class="source-line-no">292</span><span id="line-292">   public BasicHttpException setReasonPhrase(String value) {</span>
-<span class="source-line-no">293</span><span id="line-293">      return modify(() -&gt; statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), statusLine.getStatusCode(), value));</span>
-<span class="source-line-no">294</span><span id="line-294">   }</span>
-<span class="source-line-no">295</span><span id="line-295"></span>
-<span class="source-line-no">296</span><span id="line-296">   /**</span>
-<span class="source-line-no">297</span><span id="line-297">    * Sets the protocol version, preserving the existing status code and reason phrase.</span>
-<span class="source-line-no">298</span><span id="line-298">    *</span>
-<span class="source-line-no">299</span><span id="line-299">    * @param value New protocol version. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">300</span><span id="line-300">    * @return This object.</span>
-<span class="source-line-no">301</span><span id="line-301">    */</span>
-<span class="source-line-no">302</span><span id="line-302">   public BasicHttpException setProtocolVersion(HttpProtocolVersion value) {</span>
-<span class="source-line-no">303</span><span id="line-303">      return modify(() -&gt; {</span>
-<span class="source-line-no">304</span><span id="line-304">         reqnn("value", value);</span>
-<span class="source-line-no">305</span><span id="line-305">         statusLine = HttpStatusLineBean.of(value, statusLine.getStatusCode(), statusLine.getReasonPhrase());</span>
-<span class="source-line-no">306</span><span id="line-306">      });</span>
-<span class="source-line-no">307</span><span id="line-307">   }</span>
-<span class="source-line-no">308</span><span id="line-308"></span>
-<span class="source-line-no">309</span><span id="line-309">   /**</span>
-<span class="source-line-no">310</span><span id="line-310">    * Replaces all headers with the given list.</span>
-<span class="source-line-no">311</span><span id="line-311">    *</span>
-<span class="source-line-no">312</span><span id="line-312">    * @param values New headers. {@code null} is treated as an empty list.</span>
-<span class="source-line-no">313</span><span id="line-313">    * @return This object.</span>
-<span class="source-line-no">314</span><span id="line-314">    */</span>
-<span class="source-line-no">315</span><span id="line-315">   public BasicHttpException setHeaders(List&lt;HttpHeader&gt; values) {</span>
-<span class="source-line-no">316</span><span id="line-316">      return modify(() -&gt; {</span>
-<span class="source-line-no">317</span><span id="line-317">         headers.clear();</span>
-<span class="source-line-no">318</span><span id="line-318">         if (values != null)</span>
-<span class="source-line-no">319</span><span id="line-319">            headers.append(values);</span>
-<span class="source-line-no">320</span><span id="line-320">      });</span>
-<span class="source-line-no">321</span><span id="line-321">   }</span>
-<span class="source-line-no">322</span><span id="line-322"></span>
-<span class="source-line-no">323</span><span id="line-323">   /**</span>
-<span class="source-line-no">324</span><span id="line-324">    * Replaces all headers with the given array.</span>
-<span class="source-line-no">325</span><span id="line-325">    *</span>
-<span class="source-line-no">326</span><span id="line-326">    * @param values New headers. {@code null} is treated as an empty array.</span>
-<span class="source-line-no">327</span><span id="line-327">    * @return This object.</span>
-<span class="source-line-no">328</span><span id="line-328">    */</span>
-<span class="source-line-no">329</span><span id="line-329">   public BasicHttpException setHeaders(HttpHeader...values) {</span>
-<span class="source-line-no">330</span><span id="line-330">      return modify(() -&gt; {</span>
-<span class="source-line-no">331</span><span id="line-331">         headers.clear();</span>
-<span class="source-line-no">332</span><span id="line-332">         if (values != null)</span>
-<span class="source-line-no">333</span><span id="line-333">            headers.append(values);</span>
-<span class="source-line-no">334</span><span id="line-334">      });</span>
-<span class="source-line-no">335</span><span id="line-335">   }</span>
-<span class="source-line-no">336</span><span id="line-336"></span>
-<span class="source-line-no">337</span><span id="line-337">   /**</span>
-<span class="source-line-no">338</span><span id="line-338">    * Sets a single header, replacing any existing header with the same name.</span>
-<span class="source-line-no">339</span><span id="line-339">    *</span>
-<span class="source-line-no">340</span><span id="line-340">    * @param value The header to set. {@code null} is ignored.</span>
-<span class="source-line-no">341</span><span id="line-341">    * @return This object.</span>
-<span class="source-line-no">342</span><span id="line-342">    */</span>
-<span class="source-line-no">343</span><span id="line-343">   public BasicHttpException setHeader(HttpHeader value) {</span>
-<span class="source-line-no">344</span><span id="line-344">      return modify(() -&gt; headers.set(value));</span>
-<span class="source-line-no">345</span><span id="line-345">   }</span>
-<span class="source-line-no">346</span><span id="line-346"></span>
-<span class="source-line-no">347</span><span id="line-347">   /**</span>
-<span class="source-line-no">348</span><span id="line-348">    * Sets a single header, replacing any existing header with the same name.</span>
-<span class="source-line-no">349</span><span id="line-349">    *</span>
-<span class="source-line-no">350</span><span id="line-350">    * @param name Header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">351</span><span id="line-351">    * @param value Header value. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">352</span><span id="line-352">    * @return This object.</span>
-<span class="source-line-no">353</span><span id="line-353">    */</span>
-<span class="source-line-no">354</span><span id="line-354">   public BasicHttpException setHeader(String name, String value) {</span>
-<span class="source-line-no">355</span><span id="line-355">      return modify(() -&gt; headers.set(name, value));</span>
-<span class="source-line-no">356</span><span id="line-356">   }</span>
-<span class="source-line-no">357</span><span id="line-357"></span>
-<span class="source-line-no">358</span><span id="line-358">   /**</span>
-<span class="source-line-no">359</span><span id="line-359">    * Appends a header to the end of the header list.</span>
-<span class="source-line-no">360</span><span id="line-360">    *</span>
-<span class="source-line-no">361</span><span id="line-361">    * @param value The header to add. {@code null} is ignored.</span>
-<span class="source-line-no">362</span><span id="line-362">    * @return This object.</span>
-<span class="source-line-no">363</span><span id="line-363">    */</span>
-<span class="source-line-no">364</span><span id="line-364">   public BasicHttpException addHeader(HttpHeader value) {</span>
-<span class="source-line-no">365</span><span id="line-365">      return modify(() -&gt; headers.append(value));</span>
-<span class="source-line-no">366</span><span id="line-366">   }</span>
-<span class="source-line-no">367</span><span id="line-367"></span>
-<span class="source-line-no">368</span><span id="line-368">   /**</span>
-<span class="source-line-no">369</span><span id="line-369">    * Appends a header to the end of the header list.</span>
-<span class="source-line-no">370</span><span id="line-370">    *</span>
-<span class="source-line-no">371</span><span id="line-371">    * @param name Header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">372</span><span id="line-372">    * @param value Header value. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">373</span><span id="line-373">    * @return This object.</span>
-<span class="source-line-no">374</span><span id="line-374">    */</span>
-<span class="source-line-no">375</span><span id="line-375">   public BasicHttpException addHeader(String name, String value) {</span>
-<span class="source-line-no">376</span><span id="line-376">      return modify(() -&gt; headers.append(name, value));</span>
-<span class="source-line-no">377</span><span id="line-377">   }</span>
-<span class="source-line-no">378</span><span id="line-378"></span>
-<span class="source-line-no">379</span><span id="line-379">   /**</span>
-<span class="source-line-no">380</span><span id="line-380">    * Sets the response body.</span>
-<span class="source-line-no">381</span><span id="line-381">    *</span>
-<span class="source-line-no">382</span><span id="line-382">    * @param value New body. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">383</span><span id="line-383">    * @return This object.</span>
-<span class="source-line-no">384</span><span id="line-384">    */</span>
-<span class="source-line-no">385</span><span id="line-385">   public BasicHttpException setBody(HttpBody value) {</span>
-<span class="source-line-no">386</span><span id="line-386">      return modify(() -&gt; body = value);</span>
-<span class="source-line-no">387</span><span id="line-387">   }</span>
-<span class="source-line-no">388</span><span id="line-388"></span>
-<span class="source-line-no">389</span><span id="line-389">   /**</span>
-<span class="source-line-no">390</span><span id="line-390">    * Sets the response body to a plain-text string body (UTF-8, {@code text/plain}).</span>
-<span class="source-line-no">391</span><span id="line-391">    *</span>
-<span class="source-line-no">392</span><span id="line-392">    * @param value Body text. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">393</span><span id="line-393">    * @return This object.</span>
-<span class="source-line-no">394</span><span id="line-394">    */</span>
-<span class="source-line-no">395</span><span id="line-395">   public BasicHttpException setContent(String value) {</span>
-<span class="source-line-no">396</span><span id="line-396">      return setBody(value != null ? StringBody.of(value) : null);</span>
-<span class="source-line-no">397</span><span id="line-397">   }</span>
-<span class="source-line-no">398</span><span id="line-398"></span>
-<span class="source-line-no">399</span><span id="line-399">   /**</span>
-<span class="source-line-no">400</span><span id="line-400">    * Sets the response body.</span>
-<span class="source-line-no">401</span><span id="line-401">    *</span>
-<span class="source-line-no">402</span><span id="line-402">    * @param value New body. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">403</span><span id="line-403">    * @return This object.</span>
-<span class="source-line-no">404</span><span id="line-404">    */</span>
-<span class="source-line-no">405</span><span id="line-405">   public BasicHttpException setContent(HttpBody value) {</span>
-<span class="source-line-no">406</span><span id="line-406">      return setBody(value);</span>
-<span class="source-line-no">407</span><span id="line-407">   }</span>
-<span class="source-line-no">408</span><span id="line-408"></span>
-<span class="source-line-no">409</span><span id="line-409">   /**</span>
-<span class="source-line-no">410</span><span id="line-410">    * Sets the locale associated with this response.</span>
-<span class="source-line-no">411</span><span id="line-411">    *</span>
-<span class="source-line-no">412</span><span id="line-412">    * @param value New locale. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">413</span><span id="line-413">    * @return This object.</span>
-<span class="source-line-no">414</span><span id="line-414">    */</span>
-<span class="source-line-no">415</span><span id="line-415">   public BasicHttpException setLocale(Locale value) {</span>
-<span class="source-line-no">416</span><span id="line-416">      return modify(() -&gt; locale = value);</span>
-<span class="source-line-no">417</span><span id="line-417">   }</span>
-<span class="source-line-no">418</span><span id="line-418"></span>
-<span class="source-line-no">419</span><span id="line-419">   /**</span>
-<span class="source-line-no">420</span><span id="line-420">    * Returns whether this instance is an unmodifiable snapshot.</span>
-<span class="source-line-no">421</span><span id="line-421">    *</span>
-<span class="source-line-no">422</span><span id="line-422">    * @return &lt;jk&gt;true&lt;/jk&gt; if this bean is an {@link UnmodifiableBean} snapshot.</span>
-<span class="source-line-no">423</span><span id="line-423">    */</span>
-<span class="source-line-no">424</span><span id="line-424">   public boolean isUnmodifiable() {</span>
-<span class="source-line-no">425</span><span id="line-425">      return this instanceof UnmodifiableBean;</span>
-<span class="source-line-no">426</span><span id="line-426">   }</span>
-<span class="source-line-no">427</span><span id="line-427"></span>
-<span class="source-line-no">428</span><span id="line-428">   /**</span>
-<span class="source-line-no">429</span><span id="line-429">    * Returns an unmodifiable snapshot of this bean.</span>
-<span class="source-line-no">430</span><span id="line-430">    *</span>
-<span class="source-line-no">431</span><span id="line-431">    * &lt;p&gt;</span>
-<span class="source-line-no">432</span><span id="line-432">    * The returned instance is a point-in-time copy of the leaf's nested {@code Unmodifiable} type; any attempt to set a</span>
-<span class="source-line-no">433</span><span id="line-433">    * property on it throws an {@link UnsupportedOperationException}.  This method is idempotent: if this bean is already</span>
-<span class="source-line-no">434</span><span id="line-434">    * unmodifiable it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still</span>
-<span class="source-line-no">435</span><span id="line-435">    * modifiable unless it was already unmodifiable).</span>
-<span class="source-line-no">436</span><span id="line-436">    *</span>
-<span class="source-line-no">437</span><span id="line-437">    * @return An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.</span>
-<span class="source-line-no">438</span><span id="line-438">    */</span>
-<span class="source-line-no">439</span><span id="line-439">   public BasicHttpException unmodifiable() {</span>
-<span class="source-line-no">440</span><span id="line-440">      return this instanceof Unmodifiable ? this : new Unmodifiable(this);</span>
-<span class="source-line-no">441</span><span id="line-441">   }</span>
-<span class="source-line-no">442</span><span id="line-442"></span>
-<span class="source-line-no">443</span><span id="line-443">   // ------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">444</span><span id="line-444">   // Stack/cause helpers</span>
-<span class="source-line-no">445</span><span id="line-445">   // ------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">446</span><span id="line-446"></span>
-<span class="source-line-no">447</span><span id="line-447">   /**</span>
-<span class="source-line-no">448</span><span id="line-448">    * Returns the root cause of this exception.</span>
-<span class="source-line-no">449</span><span id="line-449">    *</span>
-<span class="source-line-no">450</span><span id="line-450">    * &lt;p&gt;</span>
-<span class="source-line-no">451</span><span id="line-451">    * The root cause is the first exception in the init-cause parent chain that's not one of the following:</span>
-<span class="source-line-no">452</span><span id="line-452">    * &lt;ul&gt;</span>
-<span class="source-line-no">453</span><span id="line-453">    *    &lt;li&gt;{@link BasicHttpException}</span>
-<span class="source-line-no">454</span><span id="line-454">    *    &lt;li&gt;{@link InvocationTargetException}</span>
-<span class="source-line-no">455</span><span id="line-455">    * &lt;/ul&gt;</span>
-<span class="source-line-no">456</span><span id="line-456">    *</span>
-<span class="source-line-no">457</span><span id="line-457">    * @return The root cause of this exception, or &lt;jk&gt;null&lt;/jk&gt; if no root cause was found.</span>
-<span class="source-line-no">458</span><span id="line-458">    */</span>
-<span class="source-line-no">459</span><span id="line-459">   public Throwable getRootCause() {</span>
-<span class="source-line-no">460</span><span id="line-460">      Throwable t = this;</span>
-<span class="source-line-no">461</span><span id="line-461">      while (nn(t)) {</span>
-<span class="source-line-no">462</span><span id="line-462">         if (! (t instanceof BasicHttpException || t instanceof InvocationTargetException))</span>
-<span class="source-line-no">463</span><span id="line-463">            return t;</span>
-<span class="source-line-no">464</span><span id="line-464">         t = t.getCause();</span>
-<span class="source-line-no">465</span><span id="line-465">      }</span>
-<span class="source-line-no">466</span><span id="line-466">      return null;</span>
-<span class="source-line-no">467</span><span id="line-467">   }</span>
-<span class="source-line-no">468</span><span id="line-468"></span>
-<span class="source-line-no">469</span><span id="line-469">   /**</span>
-<span class="source-line-no">470</span><span id="line-470">    * Returns all error messages from all errors in this exception's cause chain joined into a single string.</span>
-<span class="source-line-no">471</span><span id="line-471">    *</span>
-<span class="source-line-no">472</span><span id="line-472">    * @param scrubForXssVulnerabilities</span>
-<span class="source-line-no">473</span><span id="line-473">    *    If {@code true}, replaces {@code &lt;}, {@code &gt;}, and {@code &amp;} characters with spaces.</span>
-<span class="source-line-no">474</span><span id="line-474">    * @return A multi-line string of messages. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">475</span><span id="line-475">    */</span>
-<span class="source-line-no">476</span><span id="line-476">   public String getFullStackMessage(boolean scrubForXssVulnerabilities) {</span>
-<span class="source-line-no">477</span><span id="line-477">      var msg = getMessage();</span>
-<span class="source-line-no">478</span><span id="line-478">      var sb = new StringBuilder();</span>
-<span class="source-line-no">479</span><span id="line-479">      if (nn(msg)) {</span>
-<span class="source-line-no">480</span><span id="line-480">         if (scrubForXssVulnerabilities)</span>
-<span class="source-line-no">481</span><span id="line-481">            msg = msg.replace('&lt;', ' ').replace('&gt;', ' ').replace('&amp;', ' ');</span>
-<span class="source-line-no">482</span><span id="line-482">         sb.append(msg);</span>
-<span class="source-line-no">483</span><span id="line-483">      }</span>
-<span class="source-line-no">484</span><span id="line-484">      var e = getCause();</span>
-<span class="source-line-no">485</span><span id="line-485">      while (nn(e)) {</span>
-<span class="source-line-no">486</span><span id="line-486">         msg = e.getMessage();</span>
-<span class="source-line-no">487</span><span id="line-487">         if (nn(msg) &amp;&amp; scrubForXssVulnerabilities)</span>
-<span class="source-line-no">488</span><span id="line-488">            msg = msg.replace('&lt;', ' ').replace('&gt;', ' ').replace('&amp;', ' ');</span>
-<span class="source-line-no">489</span><span id="line-489">         var cls = cns(e);</span>
-<span class="source-line-no">490</span><span id="line-490">         if (msg == null)</span>
-<span class="source-line-no">491</span><span id="line-491">            sb.append(f("\nCaused by (%s)", cls));</span>
-<span class="source-line-no">492</span><span id="line-492">         else</span>
-<span class="source-line-no">493</span><span id="line-493">            sb.append(f("\nCaused by (%s): %s", cls, msg));</span>
-<span class="source-line-no">494</span><span id="line-494">         e = e.getCause();</span>
-<span class="source-line-no">495</span><span id="line-495">      }</span>
-<span class="source-line-no">496</span><span id="line-496">      return sb.toString();</span>
-<span class="source-line-no">497</span><span id="line-497">   }</span>
-<span class="source-line-no">498</span><span id="line-498"></span>
-<span class="source-line-no">499</span><span id="line-499">   // ------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">500</span><span id="line-500">   // Immutability paradigm plumbing</span>
-<span class="source-line-no">501</span><span id="line-501">   // ------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">502</span><span id="line-502"></span>
-<span class="source-line-no">503</span><span id="line-503">   /**</span>
-<span class="source-line-no">504</span><span id="line-504">    * Single mutation funnel — the only choke-point through which all state changes on this bean flow.</span>
-<span class="source-line-no">505</span><span id="line-505">    *</span>
-<span class="source-line-no">506</span><span id="line-506">    * &lt;p&gt;</span>
-<span class="source-line-no">507</span><span id="line-507">    * Every fluent setter routes through this method.  The nested {@code Unmodifiable} snapshot overrides only this</span>
-<span class="source-line-no">508</span><span id="line-508">    * method to throw, which freezes the entire mutation surface with a single override.  Because this is a</span>
-<span class="source-line-no">509</span><span id="line-509">    * {@link Throwable}-rooted hierarchy (no CRTP self-type), the funnel returns the base type.</span>
-<span class="source-line-no">510</span><span id="line-510">    *</span>
-<span class="source-line-no">511</span><span id="line-511">    * @param mutation The state change to apply.</span>
-<span class="source-line-no">512</span><span id="line-512">    * @return This object.</span>
-<span class="source-line-no">513</span><span id="line-513">    */</span>
-<span class="source-line-no">514</span><span id="line-514">   protected BasicHttpException modify(Runnable mutation) {</span>
-<span class="source-line-no">515</span><span id="line-515">      mutation.run();</span>
-<span class="source-line-no">516</span><span id="line-516">      return this;</span>
-<span class="source-line-no">517</span><span id="line-517">   }</span>
-<span class="source-line-no">518</span><span id="line-518"></span>
-<span class="source-line-no">519</span><span id="line-519">   /**</span>
-<span class="source-line-no">520</span><span id="line-520">    * Deep-freeze hook invoked from the nested {@code Unmodifiable} constructor after the snapshot copy completes.</span>
-<span class="source-line-no">521</span><span id="line-521">    *</span>
-<span class="source-line-no">522</span><span id="line-522">    * &lt;p&gt;</span>
-<span class="source-line-no">523</span><span id="line-523">    * The mutable sub-beans are frozen here by &lt;b&gt;direct field assignment&lt;/b&gt; (never via a setter, which would route</span>
-<span class="source-line-no">524</span><span id="line-524">    * through the throwing {@link #modify(Runnable)} and blow up during construction).  A leaf that adds its own mutable</span>
-<span class="source-line-no">525</span><span id="line-525">    * sub-bean overrides this method (calling {@code super.freeze()} first).</span>
-<span class="source-line-no">526</span><span id="line-526">    */</span>
-<span class="source-line-no">527</span><span id="line-527">   protected void freeze() {</span>
-<span class="source-line-no">528</span><span id="line-528">      headers = headers.unmodifiable();   // DIRECT field write — snapshot the copied HttpHeaderList.</span>
-<span class="source-line-no">529</span><span id="line-529">   }</span>
-<span class="source-line-no">530</span><span id="line-530"></span>
-<span class="source-line-no">531</span><span id="line-531">   @Override /* Object */</span>
-<span class="source-line-no">532</span><span id="line-532">   public boolean equals(Object o) {</span>
-<span class="source-line-no">533</span><span id="line-533">      // Content equality.  The 'body' HttpBody is deliberately excluded: it is a wrapper without value semantics</span>
-<span class="source-line-no">534</span><span id="line-534">      // and is derived from the message (getMessage()), which is already compared here.</span>
-<span class="source-line-no">535</span><span id="line-535">      return o instanceof BasicHttpException other &amp;&amp; eq(this, other, (x, y) -&gt;</span>
-<span class="source-line-no">536</span><span id="line-536">         eq(x.statusLine, y.statusLine) &amp;&amp; eq(x.headers, y.headers) &amp;&amp; eq(x.getMessage(), y.getMessage()));</span>
-<span class="source-line-no">537</span><span id="line-537">   }</span>
-<span class="source-line-no">538</span><span id="line-538"></span>
-<span class="source-line-no">539</span><span id="line-539">   @Override /* Object */</span>
-<span class="source-line-no">540</span><span id="line-540">   public int hashCode() {</span>
-<span class="source-line-no">541</span><span id="line-541">      return h(statusLine, headers, getMessage());</span>
-<span class="source-line-no">542</span><span id="line-542">   }</span>
-<span class="source-line-no">543</span><span id="line-543"></span>
-<span class="source-line-no">544</span><span id="line-544">   @Override /* Object */</span>
-<span class="source-line-no">545</span><span id="line-545">   public String toString() {</span>
-<span class="source-line-no">546</span><span id="line-546">      return statusLine.toString();</span>
-<span class="source-line-no">547</span><span id="line-547">   }</span>
-<span class="source-line-no">548</span><span id="line-548"></span>
-<span class="source-line-no">549</span><span id="line-549">   /**</span>
-<span class="source-line-no">550</span><span id="line-550">    * Unmodifiable point-in-time snapshot of the enclosing {@link BasicHttpException}.</span>
-<span class="source-line-no">551</span><span id="line-551">    *</span>
-<span class="source-line-no">552</span><span id="line-552">    * &lt;p&gt;</span>
-<span class="source-line-no">553</span><span id="line-553">    * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through</span>
-<span class="source-line-no">554</span><span id="line-554">    * {@code modify(...)}, this single override freezes the entire mutation surface.</span>
-<span class="source-line-no">555</span><span id="line-555">    */</span>
-<span class="source-line-no">556</span><span id="line-556">   public static class Unmodifiable extends BasicHttpException implements UnmodifiableBean {</span>
-<span class="source-line-no">557</span><span id="line-557"></span>
-<span class="source-line-no">558</span><span id="line-558">      private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">559</span><span id="line-559"></span>
-<span class="source-line-no">560</span><span id="line-560">      /**</span>
-<span class="source-line-no">561</span><span id="line-561">       * Constructor.</span>
-<span class="source-line-no">562</span><span id="line-562">       *</span>
-<span class="source-line-no">563</span><span id="line-563">       * @param copyFrom The exception to snapshot.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">564</span><span id="line-564">       */</span>
-<span class="source-line-no">565</span><span id="line-565">      @SuppressWarnings({</span>
-<span class="source-line-no">566</span><span id="line-566">         "java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.</span>
-<span class="source-line-no">567</span><span id="line-567">      })</span>
-<span class="source-line-no">568</span><span id="line-568">      protected Unmodifiable(BasicHttpException copyFrom) {</span>
-<span class="source-line-no">569</span><span id="line-569">         super(copyFrom);</span>
-<span class="source-line-no">570</span><span id="line-570">         freeze();</span>
-<span class="source-line-no">571</span><span id="line-571">      }</span>
-<span class="source-line-no">572</span><span id="line-572"></span>
-<span class="source-line-no">573</span><span id="line-573">      @Override /* Overridden from BasicHttpException */</span>
-<span class="source-line-no">574</span><span id="line-574">      protected BasicHttpException modify(Runnable mutation) {</span>
-<span class="source-line-no">575</span><span id="line-575">         throw uoex("Bean is unmodifiable.");</span>
-<span class="source-line-no">576</span><span id="line-576">      }</span>
-<span class="source-line-no">577</span><span id="line-577">   }</span>
-<span class="source-line-no">578</span><span id="line-578">}</span>
+<span class="source-line-no">240</span><span id="line-240">   @SuppressWarnings({</span>
+<span class="source-line-no">241</span><span id="line-241">      "javabugs:S2259" // False positive: statusLine is assigned a non-null value by every constructor and setter, and the setters reject null.</span>
+<span class="source-line-no">242</span><span id="line-242">   })</span>
+<span class="source-line-no">243</span><span id="line-243">   public String getResponseMessage() {</span>
+<span class="source-line-no">244</span><span id="line-244">      return causeMessageHidden ? statusLine.getReasonPhrase() : getMessage();</span>
+<span class="source-line-no">245</span><span id="line-245">   }</span>
+<span class="source-line-no">246</span><span id="line-246"></span>
+<span class="source-line-no">247</span><span id="line-247">   /**</span>
+<span class="source-line-no">248</span><span id="line-248">    * Returns the HTTP status code.</span>
+<span class="source-line-no">249</span><span id="line-249">    *</span>
+<span class="source-line-no">250</span><span id="line-250">    * @return The status code.</span>
+<span class="source-line-no">251</span><span id="line-251">    */</span>
+<span class="source-line-no">252</span><span id="line-252">   public int getStatusCode() {</span>
+<span class="source-line-no">253</span><span id="line-253">      return statusLine.getStatusCode();</span>
+<span class="source-line-no">254</span><span id="line-254">   }</span>
+<span class="source-line-no">255</span><span id="line-255"></span>
+<span class="source-line-no">256</span><span id="line-256">   /**</span>
+<span class="source-line-no">257</span><span id="line-257">    * Returns the locale associated with this response, if any.</span>
+<span class="source-line-no">258</span><span id="line-258">    *</span>
+<span class="source-line-no">259</span><span id="line-259">    * @return The locale, possibly &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">260</span><span id="line-260">    */</span>
+<span class="source-line-no">261</span><span id="line-261">   public Locale getLocale() {</span>
+<span class="source-line-no">262</span><span id="line-262">      return locale;</span>
+<span class="source-line-no">263</span><span id="line-263">   }</span>
+<span class="source-line-no">264</span><span id="line-264"></span>
+<span class="source-line-no">265</span><span id="line-265">   // ------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">266</span><span id="line-266">   // Fluent setters (mutate this instance)</span>
+<span class="source-line-no">267</span><span id="line-267">   // ------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">268</span><span id="line-268"></span>
+<span class="source-line-no">269</span><span id="line-269">   /**</span>
+<span class="source-line-no">270</span><span id="line-270">    * Sets the status line.</span>
+<span class="source-line-no">271</span><span id="line-271">    *</span>
+<span class="source-line-no">272</span><span id="line-272">    * @param value New status line. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">273</span><span id="line-273">    * @return This object.</span>
+<span class="source-line-no">274</span><span id="line-274">    */</span>
+<span class="source-line-no">275</span><span id="line-275">   public BasicHttpException setStatusLine(HttpStatusLine value) {</span>
+<span class="source-line-no">276</span><span id="line-276">      return modify(() -&gt; statusLine = reqnn("value", value));</span>
+<span class="source-line-no">277</span><span id="line-277">   }</span>
+<span class="source-line-no">278</span><span id="line-278"></span>
+<span class="source-line-no">279</span><span id="line-279">   /**</span>
+<span class="source-line-no">280</span><span id="line-280">    * Sets the status code, preserving the existing protocol version and reason phrase.</span>
+<span class="source-line-no">281</span><span id="line-281">    *</span>
+<span class="source-line-no">282</span><span id="line-282">    * @param value New status code.</span>
+<span class="source-line-no">283</span><span id="line-283">    * @return This object.</span>
+<span class="source-line-no">284</span><span id="line-284">    */</span>
+<span class="source-line-no">285</span><span id="line-285">   public BasicHttpException setStatusCode(int value) {</span>
+<span class="source-line-no">286</span><span id="line-286">      return modify(() -&gt; statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), value, statusLine.getReasonPhrase()));</span>
+<span class="source-line-no">287</span><span id="line-287">   }</span>
+<span class="source-line-no">288</span><span id="line-288"></span>
+<span class="source-line-no">289</span><span id="line-289">   /**</span>
+<span class="source-line-no">290</span><span id="line-290">    * Sets the reason phrase, preserving the existing protocol version and status code.</span>
+<span class="source-line-no">291</span><span id="line-291">    *</span>
+<span class="source-line-no">292</span><span id="line-292">    * @param value New reason phrase. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">293</span><span id="line-293">    * @return This object.</span>
+<span class="source-line-no">294</span><span id="line-294">    */</span>
+<span class="source-line-no">295</span><span id="line-295">   public BasicHttpException setReasonPhrase(String value) {</span>
+<span class="source-line-no">296</span><span id="line-296">      return modify(() -&gt; statusLine = HttpStatusLineBean.of(statusLine.getProtocolVersion(), statusLine.getStatusCode(), value));</span>
+<span class="source-line-no">297</span><span id="line-297">   }</span>
+<span class="source-line-no">298</span><span id="line-298"></span>
+<span class="source-line-no">299</span><span id="line-299">   /**</span>
+<span class="source-line-no">300</span><span id="line-300">    * Sets the protocol version, preserving the existing status code and reason phrase.</span>
+<span class="source-line-no">301</span><span id="line-301">    *</span>
+<span class="source-line-no">302</span><span id="line-302">    * @param value New protocol version. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">303</span><span id="line-303">    * @return This object.</span>
+<span class="source-line-no">304</span><span id="line-304">    */</span>
+<span class="source-line-no">305</span><span id="line-305">   public BasicHttpException setProtocolVersion(HttpProtocolVersion value) {</span>
+<span class="source-line-no">306</span><span id="line-306">      return modify(() -&gt; {</span>
+<span class="source-line-no">307</span><span id="line-307">         reqnn("value", value);</span>
+<span class="source-line-no">308</span><span id="line-308">         statusLine = HttpStatusLineBean.of(value, statusLine.getStatusCode(), statusLine.getReasonPhrase());</span>
+<span class="source-line-no">309</span><span id="line-309">      });</span>
+<span class="source-line-no">310</span><span id="line-310">   }</span>
+<span class="source-line-no">311</span><span id="line-311"></span>
+<span class="source-line-no">312</span><span id="line-312">   /**</span>
+<span class="source-line-no">313</span><span id="line-313">    * Replaces all headers with the given list.</span>
+<span class="source-line-no">314</span><span id="line-314">    *</span>
+<span class="source-line-no">315</span><span id="line-315">    * @param values New headers. {@code null} is treated as an empty list.</span>
+<span class="source-line-no">316</span><span id="line-316">    * @return This object.</span>
+<span class="source-line-no">317</span><span id="line-317">    */</span>
+<span class="source-line-no">318</span><span id="line-318">   public BasicHttpException setHeaders(List&lt;HttpHeader&gt; values) {</span>
+<span class="source-line-no">319</span><span id="line-319">      return modify(() -&gt; {</span>
+<span class="source-line-no">320</span><span id="line-320">         headers.clear();</span>
+<span class="source-line-no">321</span><span id="line-321">         if (values != null)</span>
+<span class="source-line-no">322</span><span id="line-322">            headers.append(values);</span>
+<span class="source-line-no">323</span><span id="line-323">      });</span>
+<span class="source-line-no">324</span><span id="line-324">   }</span>
+<span class="source-line-no">325</span><span id="line-325"></span>
+<span class="source-line-no">326</span><span id="line-326">   /**</span>
+<span class="source-line-no">327</span><span id="line-327">    * Replaces all headers with the given array.</span>
+<span class="source-line-no">328</span><span id="line-328">    *</span>
+<span class="source-line-no">329</span><span id="line-329">    * @param values New headers. {@code null} is treated as an empty array.</span>
+<span class="source-line-no">330</span><span id="line-330">    * @return This object.</span>
+<span class="source-line-no">331</span><span id="line-331">    */</span>
+<span class="source-line-no">332</span><span id="line-332">   public BasicHttpException setHeaders(HttpHeader...values) {</span>
+<span class="source-line-no">333</span><span id="line-333">      return modify(() -&gt; {</span>
+<span class="source-line-no">334</span><span id="line-334">         headers.clear();</span>
+<span class="source-line-no">335</span><span id="line-335">         if (values != null)</span>
+<span class="source-line-no">336</span><span id="line-336">            headers.append(values);</span>
+<span class="source-line-no">337</span><span id="line-337">      });</span>
+<span class="source-line-no">338</span><span id="line-338">   }</span>
+<span class="source-line-no">339</span><span id="line-339"></span>
+<span class="source-line-no">340</span><span id="line-340">   /**</span>
+<span class="source-line-no">341</span><span id="line-341">    * Sets a single header, replacing any existing header with the same name.</span>
+<span class="source-line-no">342</span><span id="line-342">    *</span>
+<span class="source-line-no">343</span><span id="line-343">    * @param value The header to set. {@code null} is ignored.</span>
+<span class="source-line-no">344</span><span id="line-344">    * @return This object.</span>
+<span class="source-line-no">345</span><span id="line-345">    */</span>
+<span class="source-line-no">346</span><span id="line-346">   public BasicHttpException setHeader(HttpHeader value) {</span>
+<span class="source-line-no">347</span><span id="line-347">      return modify(() -&gt; headers.set(value));</span>
+<span class="source-line-no">348</span><span id="line-348">   }</span>
+<span class="source-line-no">349</span><span id="line-349"></span>
+<span class="source-line-no">350</span><span id="line-350">   /**</span>
+<span class="source-line-no">351</span><span id="line-351">    * Sets a single header, replacing any existing header with the same name.</span>
+<span class="source-line-no">352</span><span id="line-352">    *</span>
+<span class="source-line-no">353</span><span id="line-353">    * @param name Header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">354</span><span id="line-354">    * @param value Header value. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">355</span><span id="line-355">    * @return This object.</span>
+<span class="source-line-no">356</span><span id="line-356">    */</span>
+<span class="source-line-no">357</span><span id="line-357">   public BasicHttpException setHeader(String name, String value) {</span>
+<span class="source-line-no">358</span><span id="line-358">      return modify(() -&gt; headers.set(name, value));</span>
+<span class="source-line-no">359</span><span id="line-359">   }</span>
+<span class="source-line-no">360</span><span id="line-360"></span>
+<span class="source-line-no">361</span><span id="line-361">   /**</span>
+<span class="source-line-no">362</span><span id="line-362">    * Appends a header to the end of the header list.</span>
+<span class="source-line-no">363</span><span id="line-363">    *</span>
+<span class="source-line-no">364</span><span id="line-364">    * @param value The header to add. {@code null} is ignored.</span>
+<span class="source-line-no">365</span><span id="line-365">    * @return This object.</span>
+<span class="source-line-no">366</span><span id="line-366">    */</span>
+<span class="source-line-no">367</span><span id="line-367">   public BasicHttpException addHeader(HttpHeader value) {</span>
+<span class="source-line-no">368</span><span id="line-368">      return modify(() -&gt; headers.append(value));</span>
+<span class="source-line-no">369</span><span id="line-369">   }</span>
+<span class="source-line-no">370</span><span id="line-370"></span>
+<span class="source-line-no">371</span><span id="line-371">   /**</span>
+<span class="source-line-no">372</span><span id="line-372">    * Appends a header to the end of the header list.</span>
+<span class="source-line-no">373</span><span id="line-373">    *</span>
+<span class="source-line-no">374</span><span id="line-374">    * @param name Header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">375</span><span id="line-375">    * @param value Header value. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">376</span><span id="line-376">    * @return This object.</span>
+<span class="source-line-no">377</span><span id="line-377">    */</span>
+<span class="source-line-no">378</span><span id="line-378">   public BasicHttpException addHeader(String name, String value) {</span>
+<span class="source-line-no">379</span><span id="line-379">      return modify(() -&gt; headers.append(name, value));</span>
+<span class="source-line-no">380</span><span id="line-380">   }</span>
+<span class="source-line-no">381</span><span id="line-381"></span>
+<span class="source-line-no">382</span><span id="line-382">   /**</span>
+<span class="source-line-no">383</span><span id="line-383">    * Sets the response body.</span>
+<span class="source-line-no">384</span><span id="line-384">    *</span>
+<span class="source-line-no">385</span><span id="line-385">    * @param value New body. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">386</span><span id="line-386">    * @return This object.</span>
+<span class="source-line-no">387</span><span id="line-387">    */</span>
+<span class="source-line-no">388</span><span id="line-388">   public BasicHttpException setBody(HttpBody value) {</span>
+<span class="source-line-no">389</span><span id="line-389">      return modify(() -&gt; body = value);</span>
+<span class="source-line-no">390</span><span id="line-390">   }</span>
+<span class="source-line-no">391</span><span id="line-391"></span>
+<span class="source-line-no">392</span><span id="line-392">   /**</span>
+<span class="source-line-no">393</span><span id="line-393">    * Sets the response body to a plain-text string body (UTF-8, {@code text/plain}).</span>
+<span class="source-line-no">394</span><span id="line-394">    *</span>
+<span class="source-line-no">395</span><span id="line-395">    * @param value Body text. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">396</span><span id="line-396">    * @return This object.</span>
+<span class="source-line-no">397</span><span id="line-397">    */</span>
+<span class="source-line-no">398</span><span id="line-398">   public BasicHttpException setContent(String value) {</span>
+<span class="source-line-no">399</span><span id="line-399">      return setBody(value != null ? StringBody.of(value) : null);</span>
+<span class="source-line-no">400</span><span id="line-400">   }</span>
+<span class="source-line-no">401</span><span id="line-401"></span>
+<span class="source-line-no">402</span><span id="line-402">   /**</span>
+<span class="source-line-no">403</span><span id="line-403">    * Sets the response body.</span>
+<span class="source-line-no">404</span><span id="line-404">    *</span>
+<span class="source-line-no">405</span><span id="line-405">    * @param value New body. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">406</span><span id="line-406">    * @return This object.</span>
+<span class="source-line-no">407</span><span id="line-407">    */</span>
+<span class="source-line-no">408</span><span id="line-408">   public BasicHttpException setContent(HttpBody value) {</span>
+<span class="source-line-no">409</span><span id="line-409">      return setBody(value);</span>
+<span class="source-line-no">410</span><span id="line-410">   }</span>
+<span class="source-line-no">411</span><span id="line-411"></span>
+<span class="source-line-no">412</span><span id="line-412">   /**</span>
+<span class="source-line-no">413</span><span id="line-413">    * Sets the locale associated with this response.</span>
+<span class="source-line-no">414</span><span id="line-414">    *</span>
+<span class="source-line-no">415</span><span id="line-415">    * @param value New locale. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">416</span><span id="line-416">    * @return This object.</span>
+<span class="source-line-no">417</span><span id="line-417">    */</span>
+<span class="source-line-no">418</span><span id="line-418">   public BasicHttpException setLocale(Locale value) {</span>
+<span class="source-line-no">419</span><span id="line-419">      return modify(() -&gt; locale = value);</span>
+<span class="source-line-no">420</span><span id="line-420">   }</span>
+<span class="source-line-no">421</span><span id="line-421"></span>
+<span class="source-line-no">422</span><span id="line-422">   /**</span>
+<span class="source-line-no">423</span><span id="line-423">    * Returns whether this instance is an unmodifiable snapshot.</span>
+<span class="source-line-no">424</span><span id="line-424">    *</span>
+<span class="source-line-no">425</span><span id="line-425">    * @return &lt;jk&gt;true&lt;/jk&gt; if this bean is an {@link UnmodifiableBean} snapshot.</span>
+<span class="source-line-no">426</span><span id="line-426">    */</span>
+<span class="source-line-no">427</span><span id="line-427">   public boolean isUnmodifiable() {</span>
+<span class="source-line-no">428</span><span id="line-428">      return this instanceof UnmodifiableBean;</span>
+<span class="source-line-no">429</span><span id="line-429">   }</span>
+<span class="source-line-no">430</span><span id="line-430"></span>
+<span class="source-line-no">431</span><span id="line-431">   /**</span>
+<span class="source-line-no">432</span><span id="line-432">    * Returns an unmodifiable snapshot of this bean.</span>
+<span class="source-line-no">433</span><span id="line-433">    *</span>
+<span class="source-line-no">434</span><span id="line-434">    * &lt;p&gt;</span>
+<span class="source-line-no">435</span><span id="line-435">    * The returned instance is a point-in-time copy of the leaf's nested {@code Unmodifiable} type; any attempt to set a</span>
+<span class="source-line-no">436</span><span id="line-436">    * property on it throws an {@link UnsupportedOperationException}.  This method is idempotent: if this bean is already</span>
+<span class="source-line-no">437</span><span id="line-437">    * unmodifiable it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still</span>
+<span class="source-line-no">438</span><span id="line-438">    * modifiable unless it was already unmodifiable).</span>
+<span class="source-line-no">439</span><span id="line-439">    *</span>
+<span class="source-line-no">440</span><span id="line-440">    * @return An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.</span>
+<span class="source-line-no">441</span><span id="line-441">    */</span>
+<span class="source-line-no">442</span><span id="line-442">   public BasicHttpException unmodifiable() {</span>
+<span class="source-line-no">443</span><span id="line-443">      return this instanceof Unmodifiable ? this : new Unmodifiable(this);</span>
+<span class="source-line-no">444</span><span id="line-444">   }</span>
+<span class="source-line-no">445</span><span id="line-445"></span>
+<span class="source-line-no">446</span><span id="line-446">   // ------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">447</span><span id="line-447">   // Stack/cause helpers</span>
+<span class="source-line-no">448</span><span id="line-448">   // ------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">449</span><span id="line-449"></span>
+<span class="source-line-no">450</span><span id="line-450">   /**</span>
+<span class="source-line-no">451</span><span id="line-451">    * Returns the root cause of this exception.</span>
+<span class="source-line-no">452</span><span id="line-452">    *</span>
+<span class="source-line-no">453</span><span id="line-453">    * &lt;p&gt;</span>
+<span class="source-line-no">454</span><span id="line-454">    * The root cause is the first exception in the init-cause parent chain that's not one of the following:</span>
+<span class="source-line-no">455</span><span id="line-455">    * &lt;ul&gt;</span>
+<span class="source-line-no">456</span><span id="line-456">    *    &lt;li&gt;{@link BasicHttpException}</span>
+<span class="source-line-no">457</span><span id="line-457">    *    &lt;li&gt;{@link InvocationTargetException}</span>
+<span class="source-line-no">458</span><span id="line-458">    * &lt;/ul&gt;</span>
+<span class="source-line-no">459</span><span id="line-459">    *</span>
+<span class="source-line-no">460</span><span id="line-460">    * @return The root cause of this exception, or &lt;jk&gt;null&lt;/jk&gt; if no root cause was found.</span>
+<span class="source-line-no">461</span><span id="line-461">    */</span>
+<span class="source-line-no">462</span><span id="line-462">   public Throwable getRootCause() {</span>
+<span class="source-line-no">463</span><span id="line-463">      Throwable t = this;</span>
+<span class="source-line-no">464</span><span id="line-464">      while (nn(t)) {</span>
+<span class="source-line-no">465</span><span id="line-465">         if (! (t instanceof BasicHttpException || t instanceof InvocationTargetException))</span>
+<span class="source-line-no">466</span><span id="line-466">            return t;</span>
+<span class="source-line-no">467</span><span id="line-467">         t = t.getCause();</span>
+<span class="source-line-no">468</span><span id="line-468">      }</span>
+<span class="source-line-no">469</span><span id="line-469">      return null;</span>
+<span class="source-line-no">470</span><span id="line-470">   }</span>
+<span class="source-line-no">471</span><span id="line-471"></span>
+<span class="source-line-no">472</span><span id="line-472">   /**</span>
+<span class="source-line-no">473</span><span id="line-473">    * Returns all error messages from all errors in this exception's cause chain joined into a single string.</span>
+<span class="source-line-no">474</span><span id="line-474">    *</span>
+<span class="source-line-no">475</span><span id="line-475">    * @param scrubForXssVulnerabilities</span>
+<span class="source-line-no">476</span><span id="line-476">    *    If {@code true}, replaces {@code &lt;}, {@code &gt;}, and {@code &amp;} characters with spaces.</span>
+<span class="source-line-no">477</span><span id="line-477">    * @return A multi-line string of messages. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">478</span><span id="line-478">    */</span>
+<span class="source-line-no">479</span><span id="line-479">   public String getFullStackMessage(boolean scrubForXssVulnerabilities) {</span>
+<span class="source-line-no">480</span><span id="line-480">      var msg = getMessage();</span>
+<span class="source-line-no">481</span><span id="line-481">      var sb = new StringBuilder();</span>
+<span class="source-line-no">482</span><span id="line-482">      if (nn(msg)) {</span>
+<span class="source-line-no">483</span><span id="line-483">         if (scrubForXssVulnerabilities)</span>
+<span class="source-line-no">484</span><span id="line-484">            msg = msg.replace('&lt;', ' ').replace('&gt;', ' ').replace('&amp;', ' ');</span>
+<span class="source-line-no">485</span><span id="line-485">         sb.append(msg);</span>
+<span class="source-line-no">486</span><span id="line-486">      }</span>
+<span class="source-line-no">487</span><span id="line-487">      var e = getCause();</span>
+<span class="source-line-no">488</span><span id="line-488">      while (nn(e)) {</span>
+<span class="source-line-no">489</span><span id="line-489">         msg = e.getMessage();</span>
+<span class="source-line-no">490</span><span id="line-490">         if (nn(msg) &amp;&amp; scrubForXssVulnerabilities)</span>
+<span class="source-line-no">491</span><span id="line-491">            msg = msg.replace('&lt;', ' ').replace('&gt;', ' ').replace('&amp;', ' ');</span>
+<span class="source-line-no">492</span><span id="line-492">         var cls = cns(e);</span>
+<span class="source-line-no">493</span><span id="line-493">         if (msg == null)</span>
+<span class="source-line-no">494</span><span id="line-494">            sb.append(f("\nCaused by (%s)", cls));</span>
+<span class="source-line-no">495</span><span id="line-495">         else</span>
+<span class="source-line-no">496</span><span id="line-496">            sb.append(f("\nCaused by (%s): %s", cls, msg));</span>
+<span class="source-line-no">497</span><span id="line-497">         e = e.getCause();</span>
+<span class="source-line-no">498</span><span id="line-498">      }</span>
+<span class="source-line-no">499</span><span id="line-499">      return sb.toString();</span>
+<span class="source-line-no">500</span><span id="line-500">   }</span>
+<span class="source-line-no">501</span><span id="line-501"></span>
+<span class="source-line-no">502</span><span id="line-502">   // ------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">503</span><span id="line-503">   // Immutability paradigm plumbing</span>
+<span class="source-line-no">504</span><span id="line-504">   // ------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">505</span><span id="line-505"></span>
+<span class="source-line-no">506</span><span id="line-506">   /**</span>
+<span class="source-line-no">507</span><span id="line-507">    * Single mutation funnel — the only choke-point through which all state changes on this bean flow.</span>
+<span class="source-line-no">508</span><span id="line-508">    *</span>
+<span class="source-line-no">509</span><span id="line-509">    * &lt;p&gt;</span>
+<span class="source-line-no">510</span><span id="line-510">    * Every fluent setter routes through this method.  The nested {@code Unmodifiable} snapshot overrides only this</span>
+<span class="source-line-no">511</span><span id="line-511">    * method to throw, which freezes the entire mutation surface with a single override.  Because this is a</span>
+<span class="source-line-no">512</span><span id="line-512">    * {@link Throwable}-rooted hierarchy (no CRTP self-type), the funnel returns the base type.</span>
+<span class="source-line-no">513</span><span id="line-513">    *</span>
+<span class="source-line-no">514</span><span id="line-514">    * @param mutation The state change to apply.</span>
+<span class="source-line-no">515</span><span id="line-515">    * @return This object.</span>
+<span class="source-line-no">516</span><span id="line-516">    */</span>
+<span class="source-line-no">517</span><span id="line-517">   protected BasicHttpException modify(Runnable mutation) {</span>
+<span class="source-line-no">518</span><span id="line-518">      mutation.run();</span>
+<span class="source-line-no">519</span><span id="line-519">      return this;</span>
+<span class="source-line-no">520</span><span id="line-520">   }</span>
+<span class="source-line-no">521</span><span id="line-521"></span>
+<span class="source-line-no">522</span><span id="line-522">   /**</span>
+<span class="source-line-no">523</span><span id="line-523">    * Deep-freeze hook invoked from the nested {@code Unmodifiable} constructor after the snapshot copy completes.</span>
+<span class="source-line-no">524</span><span id="line-524">    *</span>
+<span class="source-line-no">525</span><span id="line-525">    * &lt;p&gt;</span>
+<span class="source-line-no">526</span><span id="line-526">    * The mutable sub-beans are frozen here by &lt;b&gt;direct field assignment&lt;/b&gt; (never via a setter, which would route</span>
+<span class="source-line-no">527</span><span id="line-527">    * through the throwing {@link #modify(Runnable)} and blow up during construction).  A leaf that adds its own mutable</span>
+<span class="source-line-no">528</span><span id="line-528">    * sub-bean overrides this method (calling {@code super.freeze()} first).</span>
+<span class="source-line-no">529</span><span id="line-529">    */</span>
+<span class="source-line-no">530</span><span id="line-530">   protected void freeze() {</span>
+<span class="source-line-no">531</span><span id="line-531">      headers = headers.unmodifiable();   // DIRECT field write — snapshot the copied HttpHeaderList.</span>
+<span class="source-line-no">532</span><span id="line-532">   }</span>
+<span class="source-line-no">533</span><span id="line-533"></span>
+<span class="source-line-no">534</span><span id="line-534">   @Override /* Object */</span>
+<span class="source-line-no">535</span><span id="line-535">   public boolean equals(Object o) {</span>
+<span class="source-line-no">536</span><span id="line-536">      // Content equality.  The 'body' HttpBody is deliberately excluded: it is a wrapper without value semantics</span>
+<span class="source-line-no">537</span><span id="line-537">      // and is derived from the message (getMessage()), which is already compared here.</span>
+<span class="source-line-no">538</span><span id="line-538">      return o instanceof BasicHttpException other &amp;&amp; eq(this, other, (x, y) -&gt;</span>
+<span class="source-line-no">539</span><span id="line-539">         eq(x.statusLine, y.statusLine) &amp;&amp; eq(x.headers, y.headers) &amp;&amp; eq(x.getMessage(), y.getMessage()));</span>
+<span class="source-line-no">540</span><span id="line-540">   }</span>
+<span class="source-line-no">541</span><span id="line-541"></span>
+<span class="source-line-no">542</span><span id="line-542">   @Override /* Object */</span>
+<span class="source-line-no">543</span><span id="line-543">   public int hashCode() {</span>
+<span class="source-line-no">544</span><span id="line-544">      return h(statusLine, headers, getMessage());</span>
+<span class="source-line-no">545</span><span id="line-545">   }</span>
+<span class="source-line-no">546</span><span id="line-546"></span>
+<span class="source-line-no">547</span><span id="line-547">   @Override /* Object */</span>
+<span class="source-line-no">548</span><span id="line-548">   public String toString() {</span>
+<span class="source-line-no">549</span><span id="line-549">      return statusLine.toString();</span>
+<span class="source-line-no">550</span><span id="line-550">   }</span>
+<span class="source-line-no">551</span><span id="line-551"></span>
+<span class="source-line-no">552</span><span id="line-552">   /**</span>
+<span class="source-line-no">553</span><span id="line-553">    * Unmodifiable point-in-time snapshot of the enclosing {@link BasicHttpException}.</span>
+<span class="source-line-no">554</span><span id="line-554">    *</span>
+<span class="source-line-no">555</span><span id="line-555">    * &lt;p&gt;</span>
+<span class="source-line-no">556</span><span id="line-556">    * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through</span>
+<span class="source-line-no">557</span><span id="line-557">    * {@code modify(...)}, this single override freezes the entire mutation surface.</span>
+<span class="source-line-no">558</span><span id="line-558">    */</span>
+<span class="source-line-no">559</span><span id="line-559">   public static class Unmodifiable extends BasicHttpException implements UnmodifiableBean {</span>
+<span class="source-line-no">560</span><span id="line-560"></span>
+<span class="source-line-no">561</span><span id="line-561">      private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">562</span><span id="line-562"></span>
+<span class="source-line-no">563</span><span id="line-563">      /**</span>
+<span class="source-line-no">564</span><span id="line-564">       * Constructor.</span>
+<span class="source-line-no">565</span><span id="line-565">       *</span>
+<span class="source-line-no">566</span><span id="line-566">       * @param copyFrom The exception to snapshot.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">567</span><span id="line-567">       */</span>
+<span class="source-line-no">568</span><span id="line-568">      @SuppressWarnings({</span>
+<span class="source-line-no">569</span><span id="line-569">         "java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.</span>
+<span class="source-line-no">570</span><span id="line-570">      })</span>
+<span class="source-line-no">571</span><span id="line-571">      protected Unmodifiable(BasicHttpException copyFrom) {</span>
+<span class="source-line-no">572</span><span id="line-572">         super(copyFrom);</span>
+<span class="source-line-no">573</span><span id="line-573">         freeze();</span>
+<span class="source-line-no">574</span><span id="line-574">      }</span>
+<span class="source-line-no">575</span><span id="line-575"></span>
+<span class="source-line-no">576</span><span id="line-576">      @Override /* Overridden from BasicHttpException */</span>
+<span class="source-line-no">577</span><span id="line-577">      protected BasicHttpException modify(Runnable mutation) {</span>
+<span class="source-line-no">578</span><span id="line-578">         throw uoex("Bean is unmodifiable.");</span>
+<span class="source-line-no">579</span><span id="line-579">      }</span>
+<span class="source-line-no">580</span><span id="line-580">   }</span>
+<span class="source-line-no">581</span><span id="line-581">}</span>
 
 
 

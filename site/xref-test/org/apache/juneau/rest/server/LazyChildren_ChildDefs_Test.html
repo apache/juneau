@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<em class="jxr_comment">// (including its @Child seed) survived deferred construction, not just eager construction.</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<em class="jxr_comment">// (Materialized lazy children live on the LazyChildEntry itself, not in RestChildren.asMap() --</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<em class="jxr_comment">// that map holds only eagerly-built children.)</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> childCtx = entry.materialized;
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> childCtx = entry.materialized.get();
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertNotNull(childCtx);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertInstanceOf(SeedPS.<strong class="jxr_keyword">class</strong>, childCtx.getPartSerializer(),
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<span class="jxr_string">"Lazily-materialized child must receive the host's seeded SeedPS, same as an eager child would"</span>);

@@ -323,13 +323,13 @@
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		assertEquals(Map.Entry.<strong class="jxr_keyword">class</strong>, ClassFormat.parse(<span class="jxr_string">"java.util.Map.Entry"</span>, ClassFormat.FQCN, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 	}
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	@Test <strong class="jxr_keyword">void</strong> h05_classNameGuard_appliesToClassTypedParse() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	@Test <strong class="jxr_keyword">void</strong> h05_classNameGuard_appliesToClassTypedParse() {
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.create().classNameGuard(<span class="jxr_string">"java.lang.String"</span>::equals).build();
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 		assertEquals(String.<strong class="jxr_keyword">class</strong>, p.read(<span class="jxr_string">"\&quot;java.lang.String\&quot;"</span>, Class.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; p.read(<span class="jxr_string">"\&quot;java.util.Date\&quot;"</span>, Class.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 	}
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	@Test <strong class="jxr_keyword">void</strong> h06_classNameGuard_scopedToContext() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	@Test <strong class="jxr_keyword">void</strong> h06_classNameGuard_scopedToContext() {
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<em class="jxr_comment">// A guard on one parser does not affect another parser in the same JVM.</em>
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">var</strong> guarded = JsonParser.create().classNameGuard(<span class="jxr_string">"java.lang.String"</span>::equals).build();
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; guarded.read(<span class="jxr_string">"\&quot;java.util.Date\&quot;"</span>, Class.<strong class="jxr_keyword">class</strong>));
@@ -337,7 +337,7 @@
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 		assertEquals(Date.<strong class="jxr_keyword">class</strong>, JsonParser.create().build().read(<span class="jxr_string">"\&quot;java.util.Date\&quot;"</span>, Class.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	@Test <strong class="jxr_keyword">void</strong> h07_classNameGuard_appliesToBeanProperty() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	@Test <strong class="jxr_keyword">void</strong> h07_classNameGuard_appliesToBeanProperty() {
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.create().classNameGuard(<span class="jxr_string">"java.lang.String"</span>::equals).build();
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 		assertEquals(String.<strong class="jxr_keyword">class</strong>, p.read(<span class="jxr_string">"{\&quot;c\&quot;:\&quot;java.lang.String\&quot;}"</span>, H07Bean.<strong class="jxr_keyword">class</strong>).c);
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; p.read(<span class="jxr_string">"{\&quot;c\&quot;:\&quot;java.util.Date\&quot;}"</span>, H07Bean.<strong class="jxr_keyword">class</strong>));
@@ -348,7 +348,7 @@
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">public</strong> Class&lt;?&gt; c;
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 	}
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	@Test <strong class="jxr_keyword">void</strong> h08_classNameGuard_appliesToAnnotatedClassFormatProperty() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	@Test <strong class="jxr_keyword">void</strong> h08_classNameGuard_appliesToAnnotatedClassFormatProperty() {
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.create().classNameGuard(<span class="jxr_string">"java.lang.String"</span>::equals).build();
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 		assertEquals(String.<strong class="jxr_keyword">class</strong>, p.read(<span class="jxr_string">"{\&quot;c\&quot;:\&quot;java.lang.String\&quot;}"</span>, H08Bean.<strong class="jxr_keyword">class</strong>).c);
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; p.read(<span class="jxr_string">"{\&quot;c\&quot;:\&quot;java.util.Date\&quot;}"</span>, H08Bean.<strong class="jxr_keyword">class</strong>));
@@ -362,19 +362,21 @@
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 	@Test <strong class="jxr_keyword">void</strong> h09_classNameGuard_appliesToContextConverter() {
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">var</strong> ctx = MarshallingContext.create().classNameGuard(<span class="jxr_string">"java.lang.String"</span>::equals).build();
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 		assertEquals(String.<strong class="jxr_keyword">class</strong>, ctx.getConverter().to(<span class="jxr_string">"java.lang.String"</span>, Class.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; ctx.getConverter().to(<span class="jxr_string">"java.util.Date"</span>, Class.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; ctx.getBasicConverter().to(<span class="jxr_string">"java.util.Date"</span>, Class.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertEquals(Date.<strong class="jxr_keyword">class</strong>, MarshallingContext.DEFAULT.getConverter().to(<span class="jxr_string">"java.util.Date"</span>, Class.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	}
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	@Test <strong class="jxr_keyword">void</strong> h10_classNameGuard_copiedByCopyBuilder() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">var</strong> p1 = JsonParser.create().classNameGuard(<span class="jxr_string">"java.lang.String"</span>::equals).build();
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">var</strong> p2 = p1.copy().build();
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; p2.read(<span class="jxr_string">"\&quot;java.util.Date\&quot;"</span>, Class.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">var</strong> p3 = p1.copy().classNameGuard(<strong class="jxr_keyword">null</strong>).build();
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertEquals(Date.<strong class="jxr_keyword">class</strong>, p3.read(<span class="jxr_string">"\&quot;java.util.Date\&quot;"</span>, Class.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> }
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">var</strong> converter = ctx.getConverter();
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; converter.to(<span class="jxr_string">"java.util.Date"</span>, Class.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">var</strong> basicConverter = ctx.getBasicConverter();
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; basicConverter.to(<span class="jxr_string">"java.util.Date"</span>, Class.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertEquals(Date.<strong class="jxr_keyword">class</strong>, MarshallingContext.DEFAULT.getConverter().to(<span class="jxr_string">"java.util.Date"</span>, Class.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	}
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	@Test <strong class="jxr_keyword">void</strong> h10_classNameGuard_copiedByCopyBuilder() {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> p1 = JsonParser.create().classNameGuard(<span class="jxr_string">"java.lang.String"</span>::equals).build();
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">var</strong> p2 = p1.copy().build();
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; p2.read(<span class="jxr_string">"\&quot;java.util.Date\&quot;"</span>, Class.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">var</strong> p3 = p1.copy().classNameGuard(<strong class="jxr_keyword">null</strong>).build();
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		assertEquals(Date.<strong class="jxr_keyword">class</strong>, p3.read(<span class="jxr_string">"\&quot;java.util.Date\&quot;"</span>, Class.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	}
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
