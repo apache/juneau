@@ -116,6 +116,14 @@ class Ctx:
         else:
             self.say(text)
 
+    def subrows(self, step_id, items):
+        """Declare the open step's sub-rows, [(id, title[, state[, summary]])], when the toolkit has them; True when
+        it did.  False (nothing declared) leaves the caller on the label-only fallback."""
+        if "sub-rows" not in self.features or not hasattr(self.run, "subrows"):
+            return False
+        self.run.subrows(step_id, items)
+        return True
+
     def fail(self, msg):
         raise StepError(msg)
 

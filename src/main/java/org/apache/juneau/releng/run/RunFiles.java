@@ -148,11 +148,30 @@ public class RunFiles {
 		return a;
 	}
 
+	/**
+	 * The byte log of a UI attempt. Juneau's terminal process creates its own {@code run-*} directory under the attempt
+	 * dir and keeps {@code terminal.log} there; an attempt dir that holds the log directly (an older layout) is also found.
+	 *
+	 * @param attemptDir The attempt dir.
+	 * @return The log, or empty if the attempt has none.
+	 */
+	public static Optional<Path> terminalLog(Path attemptDir) {
+		var direct = attemptDir.resolve("terminal.log");
+		if (Files.isRegularFile(direct))
+			return Optional.of(direct);
+		try (var children = Files.list(attemptDir)) {
+			return children.filter(c -> c.getFileName().toString().startsWith("run-"))
+				.map(c -> c.resolve("terminal.log")).filter(Files::isRegularFile).findFirst();
+		} catch (@SuppressWarnings("unused") IOException | RuntimeException e) {
+			return Optional.empty();
+		}
+	}
+
 	private void derive(Attempt a) {
 		var dir = Path.of(a.dir);
 		a.id = "attempt-" + dir.getFileName();
 		a.label = a.n > 0 ? "#" + a.n : dir.getFileName().toString();
-		a.hasTerminalLog = Files.isRegularFile(dir.resolve("terminal.log"));
+		a.hasTerminalLog = terminalLog(dir).isPresent();
 		var stopped = Files.exists(dir.resolve(STOPPED_MARKER));
 		var running = "running".equals(a.status);
 		if (stopped && (running || "cancelled".equals(a.status)))

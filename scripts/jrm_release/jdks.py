@@ -18,6 +18,7 @@ import os
 import re
 import subprocess
 import tempfile
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -173,6 +174,23 @@ def recorded_line(labels):
     return f"Tested on JDK {names}."
 
 
+def elapsed(seconds):
+    """'2h13m', '5m07s' or '42s' for a duration in seconds."""
+    s = int(seconds)
+    h, m = divmod(s // 60, 60)
+    return f"{h}h{m:02d}m" if h else (f"{m}m{s % 60:02d}s" if m else f"{s}s")
+
+
+def _subrow(row_id, label, required, prior):
+    """One JDK's sub-row for the board: (id, title, state, summary).  A JDK that passed (or warned) on an earlier
+    attempt is declared done, so a resume shows it as it was; any other is pending until its command starts."""
+    title = f"JDK {label}" + ("" if required else " (experimental)")
+    status = (prior or {}).get("status")
+    if status in ("pass", "warn"):
+        return (row_id, title, status, "passed earlier" if status == "pass" else "failed earlier (experimental)")
+    return (row_id, title, "pending", None)
+
+
 def verify(ctx):
     """The jdk-verify step: `mvn -B clean verify` on the release workspace under each listed JDK.  Every JDK runs even
     when an earlier one failed.  A required failure fails the step at the end; an experimental one is a warning in the
@@ -185,7 +203,13 @@ def verify(ctx):
     results = dict(ctx.rf.get("jdkResults") or {})
     mark = len(ctx.runner.skipped)
     failed, warned = [], []
-    for label, required in todo:
+    total = len(todo)
+    ids = {label: f"jdk-verify-{n}" for n, (label, _) in enumerate(todo, 1)}
+    step_id = getattr(ctx.runner, "step_id", None)
+    rows = bool(step_id) and ctx.subrows(step_id, [_subrow(ids[label], label, required, results.get(label))
+                                                   for label, required in todo])
+    for n, (label, required) in enumerate(todo, 1):
+        where = f"JDK {label} ({n} of {total})"
         prior = results.get(label)
         if prior and prior.get("status") in ("pass", "warn"):
             ctx.say(f"JDK {label}: already {prior['status']}, skipped on resume")
@@ -197,8 +221,14 @@ def verify(ctx):
         except JdkError as e:
             raise StepError(f"JDK {e}") from e
         env = {"JAVA_HOME": home, "PATH": os.path.join(home, "bin") + os.pathsep + os.environ.get("PATH", "")}
-        r = ctx.runner.run(["mvn", "-B", "clean", "verify"], title=f"Verify on JDK {label}", mutating=True,
-                           tool="maven", cwd=ctx.ws, env=env)
+        ctx.say(f"{where}: starting")
+        if not rows:
+            ctx.note(where)   # the step row's live detail; the toolkit hides a lone command child, so this names the JDK
+        began = time.monotonic()
+        r = ctx.runner.run(["mvn", "-B", "clean", "verify"], title=f"Verify on {where}", mutating=True,
+                           tool="maven", cwd=ctx.ws, env=env, **({"id": ids[label]} if rows else {}))
+        ctx.say(f"JDK {label}: {'pass' if r.ok else 'fail'} ({elapsed(time.monotonic() - began)})",
+                "info" if r.ok else "warn")
         status = "pass" if r.ok else ("fail" if required else "warn")
         results[label] = {"status": status, "required": required, "home": home, "code": r.code}
         if status == "pass" and re.fullmatch(r"[0-9a-f]{40}", tested):

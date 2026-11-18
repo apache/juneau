@@ -75,6 +75,24 @@ def _expected(old_version, new_version, old_tag, new_tag):
                                  ("tag", old_tag, new_tag))}
 
 
+_TIMESTAMP = re.compile(r"<project\.build\.outputTimestamp>[^<]*</project\.build\.outputTimestamp>")
+
+
+def _canon(lines):
+    """The lines joined and normalized the way the plugin's pom writer rewrites them: <x></x> and <x /> become <x/>, whitespace collapses."""
+    s = " ".join(lines)
+    s = re.sub(r"<([\w.-]+)>\s*</\1>", r"<\1/>", s)
+    return re.sub(r"\s+", " ", re.sub(r"\s*/>", "/>", s)).strip()
+
+
+def _benign(removed, added):
+    """A hunk the plugin makes on its own: its pom writer re-serializes elements without changing their meaning (an empty
+    element written <x/>, <x></x> or <x />, an attribute split over lines), and it moves project.build.outputTimestamp."""
+    if len(removed) == 1 and len(added) == 1 and _TIMESTAMP.fullmatch(removed[0]) and _TIMESTAMP.fullmatch(added[0]):
+        return True
+    return bool(removed) and _canon(removed) == _canon(added)
+
+
 def _hunk_text(path, hunk):
     return "\n".join([f"  {path} {hunk[0]}"] + [f"  -{r}" for r in hunk[1]] + [f"  +{a}" for a in hunk[2]])
 
@@ -98,6 +116,8 @@ def check_commit(diff, subject, subject_part, old_version, new_version, old_tag,
             problems.append(f"{path} was {', '.join(info['flags'])}")
         for h in info["hunks"]:
             pairs = list(zip(h[1], h[2]))
+            if _benign(h[1], h[2]):
+                continue
             if len(h[1]) != len(h[2]) or any(p not in ok_pairs for p in pairs):
                 problems.append("unexpected change:\n" + _hunk_text(path, h))
             tags += sum(1 for p in pairs if p[0].startswith("<tag>") and p in ok_pairs)

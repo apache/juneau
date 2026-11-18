@@ -243,6 +243,24 @@ def test_release_diff_dependency_version_change_is_flagged(make_ctx):
     assert "9.2.1-SNAPSHOT" not in said.split("unexpected change")[1].split("[next")[0].replace("<version>9.2.1-SNAPSHOT", "")
 
 
+def test_release_diff_plugin_reserialization_and_output_timestamp_are_accepted(make_ctx):
+    # the plugin's pom writer rewrites <x></x> / <x/> as <x />, joins a split attribute line, and moves outputTimestamp
+    noise = (_hunk("pom.xml", "<argLine></argLine>", "<argLine />")
+             + _hunk("a/pom.xml", '<excludes combine.self="override"/>', '<excludes combine.self="override" />')
+             + _hunk("pom.xml", "<project.build.outputTimestamp>2026-10-26T00:00:00Z</project.build.outputTimestamp>",
+                     "<project.build.outputTimestamp>2026-11-17T23:37:32Z</project.build.outputTimestamp>"))
+    base = _hunk("pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1")) + _hunk("a/pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1"))
+    ctx = _release_ctx(make_ctx, rel=base + noise)
+    assert rc.release_diff_review(ctx).startswith("diff clean")
+
+
+def test_release_diff_empty_element_filled_is_still_flagged(make_ctx):
+    ctx = _release_ctx(make_ctx, rel=_hunk("pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1")) + _hunk("a/pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1"))
+                       + _hunk("pom.xml", "<argLine></argLine>", "<argLine>-Xmx1g</argLine>"))
+    with pytest.raises(StepError, match="unexpected changes"):
+        rc.release_diff_review(ctx)
+
+
 def test_release_diff_missing_module_is_flagged(make_ctx):
     poms = {**ROOT_POMS, "b/pom.xml": "<version>9.2.1-SNAPSHOT</version>", "pom.xml": "<module>a</module><module>b</module><version>9.2.1-SNAPSHOT</version>"}
     ctx = _release_ctx(make_ctx, poms=poms)

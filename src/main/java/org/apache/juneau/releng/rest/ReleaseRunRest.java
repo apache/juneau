@@ -38,6 +38,7 @@ import org.apache.juneau.rest.server.RestRequest;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
 import org.apache.juneau.rest.server.staticfile.WebJarsMixin;
 import org.apache.juneau.terminal.region.FileTerminalSource;
+import org.apache.juneau.terminal.region.TerminalAccess;
 import org.apache.juneau.terminal.region.TerminalMixin;
 import org.apache.juneau.terminal.region.TerminalSource;
 import org.apache.juneau.console.views.IdempotencyKey;
@@ -54,15 +55,15 @@ import jakarta.servlet.http.HttpServletRequest;
 /**
  * Release tab: runs {@code scripts/release.py} under a terminal, shows where it paused, and replays past attempts.
  *
- * <p>{@code disableContentParam} is set for the reason given on {@code CredentialRest}: Juneau's default lets a
- * {@code POST} body arrive in a {@code &content=} query parameter, which puts every action payload into browser
- * history and access logs. That matters for any action payload.
+ * <p>The {@code &content=} query parameter is not enabled ({@code allowContentParam} is off by default), for the
+ * reason given on {@code CredentialRest}: a {@code POST} body that arrives in a query parameter puts every action
+ * payload into browser history and access logs. That matters for any action payload.
  */
 @SuppressWarnings({
 	"java:S1192" // JSON response keys read more clearly inline than as constants.
 })
 @Rest(path = "/runs", title = "Release", responseProcessors = FreemarkerViewRenderer.class,
-	disableContentParam = "true", mixins = { ViewsMixin.class, WebJarsMixin.class })
+	mixins = { ViewsMixin.class, WebJarsMixin.class })
 public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
 
 	/**
@@ -231,6 +232,15 @@ public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
 	}
 
 	/**
+	 * Anyone who reaches this resource may watch a terminal: the app is loopback-only (see {@code LoopbackBoundary}),
+	 * and this is what Juneau's former default allowed.
+	 */
+	@Override /* TerminalMixin */
+	public TerminalAccess terminalAccess() {
+		return (caller, id) -> true;
+	}
+
+	/**
 	 * An attempt's terminal. The id is {@code attempt-<attempt dir name>}: the live process's own source while it
 	 * runs, then the dir's {@code terminal.log}, then (for a CLI attempt run without one) its {@code full.log}.
 	 */
@@ -244,12 +254,8 @@ public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
 		if (! mt.matches())
 			return Optional.empty();
 		var dir = runFiles.home().resolve("attempts").resolve(mt.group(1));
-		for (var name : new String[] { "terminal.log", "full.log" }) {
-			var f = dir.resolve(name);
-			if (Files.isRegularFile(f))
-				return Optional.of(FileTerminalSource.create(f).terminal(() -> true).build());
-		}
-		return Optional.empty();
+		var f = RunFiles.terminalLog(dir).orElse(dir.resolve("full.log"));
+		return Files.isRegularFile(f) ? Optional.of(FileTerminalSource.create(f).terminal(() -> true).build()) : Optional.empty();
 	}
 
 	private static String launch(java.util.function.Supplier<ReleaseProcessService.Live> spawn) {

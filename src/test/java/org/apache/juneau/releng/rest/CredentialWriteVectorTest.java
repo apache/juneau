@@ -116,13 +116,12 @@ class CredentialWriteVectorTest {
 	@Test
 	void a03_contentQueryParameterOverwritesAStoredCredentialWhenDisableContentParamIsDefault() throws Exception {
 		// The content= query-parameter route, reproduced as an actual overwrite -- the half that contentQueryParameterIsRefusedByThe
-		// Resource (below) cannot demonstrate. That test runs against the real CredentialRest, which sets
-		// disableContentParam="true", so it can only ever show the fix working; a &content= reproduction there
+		// Resource (below) cannot demonstrate. That test runs against the real CredentialRest, which leaves
+		// allowContentParam off, so it can only ever show the fix working; a &content= reproduction there
 		// could not fail against unfixed code, which would make it a test of the remedy rather than a confirmation
 		// of the finding. This runs against DefaultConfigCredentialResource instead -- BasicRestResource's defaults
-		// unchanged, disableContentParam at its default false -- the configuration every BasicUniversalConfig
-		// consumer ships. That is the only difference from CredentialRest that matters for this route, so the pair
-		// (this and the remedy test below) records that disableContentParam="true" is the control closing it.
+		// unchanged, allowContentParam="true" -- what older Juneau shipped by default. That is the only difference from CredentialRest that matters for this route, so the pair
+		// (this and the remedy test below) records that allowContentParam="false" is the control closing it.
 		//
 		// The payload is UON, not JSON, for the same reason the remedy test gives: RestRequest rewrites the content
 		// type to UON's own and hands the parameter to UonParser, so JSON here would be refused as malformed and
@@ -139,9 +138,8 @@ class CredentialWriteVectorTest {
 
 	@Test
 	void a04_contentQueryParameterIsRefusedByTheResource() throws Exception {
-		// The other half of the content= route, asserted closed rather than reproduced. disableContentParam defaults to false, so
-		// the body can travel in the URL instead; CredentialRest now sets it to "true", and this fails if that is
-		// removed.
+		// The other half of the content= route, asserted closed rather than reproduced. allowContentParam defaults to false, so
+		// the body cannot travel in the URL; this fails if CredentialRest ever turns it on.
 		//
 		// Worth a test of its own rather than folding into the form vector, for two reasons. The attacker sends no
 		// body and therefore no content type at all, so a check that only inspected the content type of a present
@@ -150,7 +148,7 @@ class CredentialWriteVectorTest {
 		//
 		// The payload is UON, not JSON, because that is what the server would actually parse -- RestRequest's
 		// constructor rewrites the content type to UON's own and hands the parameter to UonParser. JSON here would
-		// be refused as malformed and this test would pass while proving nothing about disableContentParam. It is
+		// be refused as malformed and this test would pass while proving nothing about allowContentParam. It is
 		// asserted on the store, not only the status, for the same reason.
 		//
 		// This is defence in depth and not the primary control: the boundary refuses this shape from a hostile
@@ -165,11 +163,11 @@ class CredentialWriteVectorTest {
 	}
 
 	@Test
-	void a05_contentQueryParameterIsRefusedByTheTwinWithDisableContentParamTrue() throws Exception {
+	void a05_contentQueryParameterIsRefusedByTheTwinWithAllowContentParamFalse() throws Exception {
 		// The airtight version of contentQueryParameterIsRefusedByTheResource (above), which stays because it is
 		// also correct. That test's subject is the real CredentialRest, which differs from the reproduction
-		// subject (DefaultConfigCredentialResource) in more than disableContentParam -- so a pass there does not,
-		// on its own, prove disableContentParam is the operative control rather than some other difference
+		// subject (DefaultConfigCredentialResource) in more than allowContentParam -- so a pass there does not,
+		// on its own, prove allowContentParam is the operative control rather than some other difference
 		// between the two resources. HardenedConfigCredentialResource is DefaultConfigCredentialResource with
 		// only that one flag flipped to "true", so reproduction and remedy subjects here differ by exactly the
 		// control under test.
@@ -181,7 +179,7 @@ class CredentialWriteVectorTest {
 			var res = c.post("/apache?content=" + java.net.URLEncoder.encode(
 				"(account=" + KEYCHAIN_FREE_ACCOUNT + ",secret=hijacked-via-url)",
 				java.nio.charset.StandardCharsets.UTF_8)).noTrace().run()) {
-			assertNotEquals(200, res.getStatusCode(), "content= parameter was still honoured with disableContentParam=true");
+			assertNotEquals(200, res.getStatusCode(), "content= parameter was still honoured with allowContentParam=false");
 		}
 		assertEquals("the-real-password", storedSecret(), "content= parameter still reached the store on the hardened twin");
 	}
@@ -280,16 +278,16 @@ class CredentialWriteVectorTest {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// Test subject for the content= route's reproduction: BasicRestResource defaults, disableContentParam left at false
+	// Test subject for the content= route's reproduction: BasicRestResource defaults, allowContentParam turned on
 	// -----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * A credential-write resource carrying {@code BasicRestResource}'s defaults unchanged, in particular
-	 * {@code disableContentParam} left at its default {@code false} so the {@code &content=} query route is
+	 * {@code allowContentParam} set to {@code "true"} (older Juneau's default) so the {@code &content=} query route is
 	 * live. The write mirrors {@link CredentialRest#set(String, CredentialRest.StoreRequest)} and reuses its
 	 * {@link CredentialRest.StoreRequest} body.
 	 */
-	@Rest
+	@Rest(allowContentParam = "true")
 	public static class DefaultConfigCredentialResource extends BasicRestResource {
 
 		private final CredentialService service;
@@ -319,14 +317,14 @@ class CredentialWriteVectorTest {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// Test subject for route (b)'s remedy: DefaultConfigCredentialResource with only disableContentParam flipped
+	// Test subject for route (b)'s remedy: DefaultConfigCredentialResource with only allowContentParam flipped
 	// -----------------------------------------------------------------------------------------------------------
 
 	/**
-	 * {@link DefaultConfigCredentialResource} with only {@code disableContentParam} flipped to {@code "true"};
+	 * {@link DefaultConfigCredentialResource} with only {@code allowContentParam} set to {@code "false"} (current Juneau's default);
 	 * every other property &mdash; parser list, method, path, body shape &mdash; is copy-identical.
 	 */
-	@Rest(disableContentParam = "true")
+	@Rest(allowContentParam = "false")
 	public static class HardenedConfigCredentialResource extends BasicRestResource {
 
 		private final CredentialService service;

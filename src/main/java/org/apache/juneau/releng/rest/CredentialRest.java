@@ -36,13 +36,13 @@ import org.apache.juneau.releng.credential.Validator.ValidationResult;
 /**
  * Credential write APIs for Setup Details. The human page is gone (404).
  *
- * <p>{@code disableContentParam} is set because Juneau's default allows a {@code POST} body to arrive in a
- * {@code &content=} query parameter instead, and a secret that travels in a URL lands in browser history, in any
+ * <p>The {@code &content=} query parameter stays off ({@code allowContentParam} defaults to false; older Juneau
+ * allowed it), because a secret that travels in a URL lands in browser history, in any
  * access log, and in the {@code Referer} of the next request. {@code LoopbackBoundary} already refuses that shape
  * from a hostile page (it carries no JSON content type), so this is not the attack control — it closes the accident
  * of a developer, a curl line or a copied URL doing it. See {@code CredentialWriteVectorTest}.
  */
-@Rest(path = "/credentials", title = "Credentials", disableContentParam = "true")
+@Rest(path = "/credentials", title = "Credentials")
 public class CredentialRest extends BasicRestResource {
 
 	/**

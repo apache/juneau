@@ -82,6 +82,7 @@ class FakeRunner:
 
     def __init__(self):
         self.calls, self.rules, self.said, self.counts = [], [], [], []
+        self.subrow_decls = []      # (step id, items) of each run.subrows call
 
     def script(self, *prefix, out="", ok=True, code=None):
         """Answer argvs starting with prefix; code is the exit code when ok is False (default 1)."""
@@ -89,7 +90,7 @@ class FakeRunner:
 
     def cmd(self, cmd, *, title="", id=None, n=None, tool=None, cwd=None, env=None, capture=False, tty=False,
             summarize=None, input=None, parent=None, bar=None, quiet=False):
-        rec = dict(argv=[str(c) for c in cmd], title=title, tool=tool, cwd=cwd, env=dict(env or {}), input=input,
+        rec = dict(id=id, argv=[str(c) for c in cmd], title=title, tool=tool, cwd=cwd, env=dict(env or {}), input=input,
                    tty=tty, capture=capture, parent=parent, bar=bar, quiet=quiet)
         self.calls.append(rec)
         for prefix, out, ok, code in reversed(self.rules):
@@ -135,6 +136,9 @@ class FakeRunner:
         self.calls[-1]["quiet"] = True
         self.calls[-1]["timeout"] = timeout
         return out
+
+    def subrows(self, step_id, items):
+        self.subrow_decls.append((step_id, [tuple(i) for i in items]))
 
     def say(self, text="", level="info"):
         self.said.append(str(text))

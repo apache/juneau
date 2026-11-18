@@ -69,18 +69,19 @@ class Runner:
         return bool(missing)
 
     def run(self, cmd, *, title, mutating, tool="generic", cwd=None, env=None, input=None, tty=False, capture=None,
-            merge_err=False, bar=None):
+            merge_err=False, bar=None, id=None):
         """Run argv.  capture defaults to read-only commands (their stdout is the answer); pass capture=True for a
         mutating command whose output the caller needs.  merge_err appends stderr to the answer, for tools like
         `java -version` that print there (the toolkit's plain mode keeps the two apart).  bar names the module bar the
-        toolkit draws; None leaves the parser's default."""
+        toolkit draws; None leaves the parser's default.  id names the command's board row (a declared sub-row's id, see
+        Ctx.subrows); None leaves the toolkit's own."""
         argv = [str(c) for c in cmd]
         if not self.gate(" ".join(argv), mutating) or self._no_dir(argv, cwd):
             return Outcome(True, 0, "")
         child_env = getattr(self.run_mod, "child_env", None)
         if child_env is not None:   # the toolkit's: this process's environment minus juneau-terminal's own variables
             env = {**child_env(), **(env or {})}
-        extra = {"bar": bar} if bar is not None else {}
+        extra = {**({"bar": bar} if bar is not None else {}), **({"id": id} if id is not None else {})}
         r = self.run_mod.cmd(argv, title=title, tool=tool, cwd=cwd, env=env, input=input, tty=tty,
                              capture=(not mutating) if capture is None else capture, parent=self.step_id, **extra)
         out = getattr(r, "out", "") or ""

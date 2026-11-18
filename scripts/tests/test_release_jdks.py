@@ -13,6 +13,7 @@
 """The multi-JDK gate: resolution, the jdk-verify step, the --check row, the params keys and the vote email line."""
 import json
 import os
+import re
 from datetime import datetime, timedelta, timezone
 
 import pytest
@@ -304,3 +305,65 @@ def test_vote_email_omits_the_line_when_nothing_is_recorded(make_ctx, root):
     with pytest.raises(ctx.pause):
         rc.compose_vote_email(ctx)
     assert "Tested on" not in (ctx.run_dir / "emails" / "vote.eml.txt").read_text()
+
+
+def test_each_jdk_is_announced_with_its_position_and_finished_with_its_time(make_ctx, root):
+    ctx = ctx_with(make_ctx, root)
+    rc.jdk_verify(ctx)
+    said = " | ".join(ctx.fake.said)
+    assert "JDK 17 (1 of 3): starting" in said
+    assert "JDK 28 (3 of 3): starting" in said
+    assert re.search(r"JDK 21: pass \(\d+s\)", said)
+    assert [c["title"] for c in mvn_calls(ctx)] == ["Verify on JDK 17 (1 of 3)", "Verify on JDK 21 (2 of 3)",
+                                                    "Verify on JDK 28 (3 of 3)"]
+
+
+def test_a_failed_jdk_finish_line_says_fail(make_ctx, root):
+    ctx = ctx_with(make_ctx, root)
+    ctx.fake.script("mvn", ok=False)
+    with pytest.raises(StepError):
+        rc.jdk_verify(ctx)
+    assert any(re.search(r"JDK 17: fail \(\d+s\)", s) for s in ctx.fake.said)
+
+
+def test_elapsed_formats_hours_minutes_and_seconds():
+    assert [jdks.elapsed(x) for x in (42, 307, 7980)] == ["42s", "5m07s", "2h13m"]
+
+
+# ---- sub-rows on the board -----------------------------------------------------------------------------------------
+
+def rows_ctx(make_ctx, root, state=None, **kw):
+    ctx = ctx_with(make_ctx, root, state=state, features={"sub-rows"}, **kw)
+    ctx.runner.step_id = "jdk-verify"
+    return ctx
+
+
+def test_without_the_sub_rows_feature_nothing_is_declared_and_the_row_is_noted(make_ctx, root):
+    ctx = ctx_with(make_ctx, root)
+    ctx.runner.step_id = "jdk-verify"
+    rc.jdk_verify(ctx)
+    assert ctx.fake.subrow_decls == []
+    assert all(c["id"] is None for c in mvn_calls(ctx))
+
+
+def test_each_jdk_is_declared_pending_in_order_with_experimental_marked(make_ctx, root):
+    ctx = rows_ctx(make_ctx, root)
+    rc.jdk_verify(ctx)
+    assert ctx.fake.subrow_decls == [("jdk-verify", [
+        ("jdk-verify-1", "JDK 17", "pending", None), ("jdk-verify-2", "JDK 21", "pending", None),
+        ("jdk-verify-3", "JDK 28 (experimental)", "pending", None)])]
+
+
+def test_each_maven_command_is_its_own_sub_row(make_ctx, root):
+    ctx = rows_ctx(make_ctx, root)
+    rc.jdk_verify(ctx)
+    assert [c["id"] for c in mvn_calls(ctx)] == ["jdk-verify-1", "jdk-verify-2", "jdk-verify-3"]
+    assert all(c["parent"] == "jdk-verify" for c in mvn_calls(ctx))
+
+
+def test_a_jdk_that_passed_is_declared_done_and_not_rerun_on_resume(make_ctx, root):
+    ctx = rows_ctx(make_ctx, root, state={"jdkResults": {"17": {"status": "pass", "required": True}}})
+    rc.jdk_verify(ctx)
+    assert ctx.fake.subrow_decls[0][1][0] == ("jdk-verify-1", "JDK 17", "pass", "passed earlier")
+    assert [c["id"] for c in mvn_calls(ctx)] == ["jdk-verify-2", "jdk-verify-3"]
+    assert any("JDK 17: already pass" in s for s in ctx.fake.said)
