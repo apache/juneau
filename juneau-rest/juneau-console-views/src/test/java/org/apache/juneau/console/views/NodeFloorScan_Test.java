@@ -93,7 +93,7 @@ class NodeFloorScan_Test {
 
 			@Override
 			public FileVisitResult visitFile(Path f, BasicFileAttributes attrs) {
-				if (isScanned(f)) {
+				if (isScanned(root, f)) {
 					scanned[0]++;
 					scan(root, f, hits);
 				}
@@ -124,10 +124,11 @@ class NodeFloorScan_Test {
 		assertFalse(STATIC_BUILTIN.matcher("function groupByTransform(frame)").find());
 	}
 
-	private static boolean isScanned(Path f) {
+	private static boolean isScanned(Path root, Path f) {
 		if (!Files.isRegularFile(f))
 			return false;
-		var s = f.toString().replace('\\', '/');
+		// Relative to the scan root, so a checkout living under a directory named target/ is still scanned.
+		var s = "/" + root.relativize(f).toString().replace('\\', '/');
 		for (var d : SKIPPED_DIRS)
 			if (s.contains("/" + d + "/"))
 				return false;

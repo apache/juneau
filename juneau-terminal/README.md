@@ -278,7 +278,7 @@ pytest plugin's counts or the Playwright reporter, both bars count tests.
 ### Board features
 
 A script that drives a release board checks `run.BOARD_FEATURES` before using these, so an older toolkit still works. The
-set is `dividers`, `count`, `reactor-bar` and `history-alias`.
+set is `dividers`, `count`, `reactor-bar`, `history-alias` and `sub-rows`.
 
 - `Session.plan(ids, run=, dividers=)` takes `run`, this run's number, and `dividers`, a list of `juneau_terminal.Divider(after, text,
   state)` entries (plain `(after, text, state)` tuples work too). A divider is drawn after step `after`; `state` is
@@ -288,6 +288,15 @@ set is `dividers`, `count`, `reactor-bar` and `history-alias`.
 - `Session.divider_state(after, state)` changes a declared divider, for example to `stops` when the run pauses at runtime.
 - `run.count(done, total, kind="files")` (also `Session.count`) shows a count bar on the open step's row, for work that has
   no parser to size it. It does nothing in a plain run.
+- `run.subrows(step_id, items)` (also `Session.subrows`, `juneau_terminal.subrows`) gives a step one line per child, for a step that
+  runs the same kind of command several times in turn (one Maven build per JDK). `items` are `(id, title)` or
+  `(id, title, state[, summary])`, state `pending` (the default), `pass`, `warn`, `fail` or `skip`. Each sub-row draws under the
+  step's row: a dim `○ title` while pending, then its own icon, title, bar (the Maven module bar and the test count of the
+  command it runs), result and elapsed time. The step's own bar counts the sub-rows finished over the total, and a
+  sub-row declared `pass` (a resume) counts at once. The command for a sub-row is started with `run.cmd(..., id=<sub-row id>,
+  parent=<step id>)`; a child with any other id behaves as before, and a step that never declares sub-rows is drawn exactly as it
+  was. A sub-row that never starts is skipped when its step ends, and a failed one is named on the step's row. Check
+  `"sub-rows"` in `BOARD_FEATURES` first; an older toolkit has neither the feature nor the call.
 - `run.cmd(..., bar="reactor")` gives a Maven row the reactor bar: a module with no tests keeps its cell as a pass or skip
   instead of vanishing from the bar.
 - `run.session(..., history_alias={step: (key, script, step, tool)})` reads another history's expected test count for that

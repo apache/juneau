@@ -404,19 +404,26 @@ final class RawContentSinkScanner {
 	}
 
 	private static void collectRawText(Path moduleRoot, List<RawTextSite> out) throws IOException {
-		var target = File.separator + "target" + File.separator;
 		var srcRoot = moduleRoot.resolve("src").resolve("main").resolve("java");
 		if (!Files.isDirectory(srcRoot))
 			return;
 		try (var stream = Files.walk(srcRoot)) {
 			var files = stream
 				.filter(p -> p.toString().endsWith(".java"))
-				.filter(p -> !p.toString().contains(target))
+				.filter(p -> !inTargetDir(srcRoot.relativize(p)))
 				.sorted()
 				.toList();
 			for (var f : files)
 				out.addAll(scanRawText(f.getFileName().toString(), Files.readString(f)));
 		}
+	}
+
+	/** Returns true if any directory segment of the (scan-root-relative) path is named {@code target}; ancestors of the scan root are never considered. */
+	private static boolean inTargetDir(Path relative) {
+		for (var i = 0; i < relative.getNameCount() - 1; i++)
+			if ("target".equals(relative.getName(i).toString()))
+				return true;
+		return false;
 	}
 
 	/**

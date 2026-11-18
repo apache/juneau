@@ -41,7 +41,7 @@ GATE_CODES = MappingProxyType({0: "pass", 2: "fail", 3: "skip"})
 _ROW_STATUS = {"pass": "ok", "skip": "skip"}   # a gate status as a row status; anything else is "fail"
 
 # What this toolkit's board supports; callers (JRM's release.py) pass a newer keyword, bar value or call only when its name is here.
-BOARD_FEATURES = frozenset({"count", "dividers", "history-alias", "reactor-bar"})
+BOARD_FEATURES = frozenset({"count", "dividers", "history-alias", "reactor-bar", "sub-rows"})
 
 _n = 0              # the session's step counter: the last step number handed out
 _session = None     # the open Session, if any
@@ -203,6 +203,16 @@ def count(done, total, kind="files"):
         return
     jr.publish("units", step=_open_steps[-1], total=total, kind=kind)
     jr.publish("unit", step=_open_steps[-1], done=done, outcome="pass")
+
+
+def subrows(step_id, items):
+    """Declare step_id's sub-rows: one line each under the step's row, with its own bar, count, result and elapsed time.
+    items are (id, title) or (id, title, state[, summary]), state pending (the default), pass, warn, fail or skip; a
+    command started with cmd(..., id=<sub-row id>, parent=step_id) is that sub-row's work.  The step's own bar counts the
+    sub-rows done.  Bus only; does nothing in a plain run.  Check "sub-rows" in BOARD_FEATURES first."""
+    jr = _base.jr()
+    if jr is not None and hasattr(jr, "subrows"):
+        jr.subrows(step_id, items)
 
 
 def _slug(title):
@@ -472,6 +482,10 @@ class Session:
     def count(self, done, total, kind="files"):
         """run.count(done, total, kind): a count bar on the open step's row."""
         count(done, total, kind)
+
+    def subrows(self, step_id, items):
+        """run.subrows(step_id, items): declare a step's sub-rows."""
+        subrows(step_id, items)
 
     def fail(self, msg, *, hint=None):
         """Print msg verbatim (level error), then the hint lines, and end the session as failed.  msg is required

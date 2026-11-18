@@ -327,6 +327,18 @@ class UnitHandle:
         self.status = "fail"
 
 
+def subrows(step_id, items):
+    """Declare step_id's sub-rows (bus only, no marker): items are (id, title) or (id, title, state[, summary]), state
+    one of pending (the default), pass, warn, fail or skip.  Each draws as its own line under the step's row, pending
+    until a child step with that id (step(..., parent=step_id) or run_tool) starts, with its own module bar, test count,
+    result and elapsed time; the step's own bar counts the sub-rows done.  A sub-row already known to be done (a
+    resume) is declared with its state and a summary.  Declare them again to replace the set."""
+    rows = [list(i) + [None] * (4 - len(i)) for i in items]
+    for row in rows:
+        row[2] = row[2] or "pending"
+    publish("subrows", step=step_id, items=rows)
+
+
 @contextmanager
 def step(id, n, title, *, parent=None, label=None):  # NOSONAR python:S5806 - parameter names mirror protocol field names
     """Emit `step`, run the block, then emit `end` with its status and duration.  An exception ends it as fail and propagates."""
@@ -996,6 +1008,11 @@ class _Row:
         self.timed = False      # a time bar was drawn while it ran: the finished row keeps it, green or red
         self.shown_total = None # the estimated total last displayed, held steady by damp_total
         self.hidden = set()     # command children that are the step's own row (see Board._demote_row_child)
+        self.kids = OrderedDict()   # declared sub-rows (Board._on_subrows), id -> _Row, in declaration order
+        self.kid_width = 0      # the longest kid title, so their labels line up
+        self.parent = None      # a sub-row: the id of the step row it hangs under
+        self.index = None       # a sub-row: its cell in the parent's bar
+        self.pending = False    # a sub-row declared but not started
 
     @property
     def running(self):
@@ -1039,6 +1056,12 @@ class _Row:
         what has not finished."""
         if not self.running:
             return self.unit_cells
+        if self.unit_kind == "rows":        # the sub-rows now running fill their own cells, so the bar shows which
+            view = bytearray(self.unit_cells)
+            for k in self.kids.values():
+                if k.running and not k.pending and k.index is not None and not view[k.index]:
+                    view[k.index] = UNIT_RUN
+            return view
         if self.unit_kind == "modules":
             running = sum(1 for m in self.units.values() if m.src in BAR_SRCS and m.started and m.status is None
                           and m.unit_index is None and not m.dropped and m.id not in self.unbarred)
@@ -1105,6 +1128,7 @@ class Board:
         self.failure_lines = set()  # stripped lines already shown by a failure event, so notes don't repeat them
         self.failed_title = None
         self.aliases = {}           # a run_tool sub-row's step id -> its parent row's id (parent=, release.py)
+        self.kid_rows = {}          # a declared sub-row's id -> its _Row (Board._on_subrows): own bar, count and result
         self.setup = None           # the run's one Setup row (pom modules), owned by the first Maven row that has poms
         self.plan = None            # the planned top-level step ids, in order (spec 6), or None
         self.plan_labels = {}       # planned step id -> label, for the ones that draw a pending row
@@ -1172,6 +1196,8 @@ class Board:
         row."""
         if step_id:
             r = self._target(step_id) or self.unit_rows.get(step_id)
+            if r is not None and r.parent is not None:
+                r = self.rows.get(r.parent) or r    # a sub-row's notes and failures belong to its step's row
             if r is not None:
                 return r
         return self._latest_running()
@@ -1209,6 +1235,8 @@ class Board:
     def _target(self, step_id):
         """The row a step id draws on: its own, or, for a sub-row started with parent=, its parent's."""
         r = self.rows.get(step_id)
+        if r is None:
+            r = self.kid_rows.get(step_id)
         return r if r is not None else self.rows.get(self.aliases.get(step_id))
 
     def _adopt(self, step_id):
@@ -1391,6 +1419,9 @@ class Board:
         return sum(1 for sid, state, _, _ in steps if state == "done" and sid not in failed), len(steps)
 
     def _on_step_start(self, f):
+        kid = self.kid_rows.get(f["id"])
+        if kid is not None and kid.parent == f.get("parent"):
+            return self._start_kid(kid)
         parent = self.rows.get(f.get("parent"))
         if parent is not None:      # a sub-row: a box on its parent's row until its tool sends modules (_adopt)
             self.aliases[f["id"]] = parent.id
@@ -1402,6 +1433,74 @@ class Board:
             except Exception:
                 row.estimate = None
         return []
+
+    def _on_subrows(self, f):
+        """Declare a step's sub-rows, [id, title, state, summary] in order: each draws as its own line under the step's row
+        (pending until a child step with that id starts under it) and the step's bar counts them done over total.  A
+        state other than pending is a result already known (a resume's passed JDK).  A child step under it with another
+        id is not a sub-row: it behaves as before.  A second declaration replaces the first."""
+        r = self.rows.get(f["step"])
+        if r is None:
+            return []
+        for k in r.kids.values():
+            self.kid_rows.pop(k.id, None)
+        r.kids = OrderedDict()
+        cells = bytearray()
+        for i, item in enumerate(f["items"]):
+            sid, title, state, summary = (list(item) + [None, None])[:4] if len(item) < 4 else item[:4]
+            k = _Row(sid, 1, title, title, self.clock())
+            k.parent, k.index, k.pending = r.id, i, state == "pending"
+            if not k.pending:
+                k.status, k.ms, k.summary = "fail" if state == "fail" else "skip" if state == "skip" else "ok", 0, summary
+                k.warned = state == "warn"
+            cells.append({"pass": UNIT_PASS, "warn": UNIT_WARN, "fail": UNIT_FAIL, "skip": UNIT_SKIP}.get(state, 0))
+            r.kids[sid] = k
+            self.kid_rows[sid] = k
+        r.kid_width = max((len(k.title) for k in r.kids.values()), default=0)
+        r.unit_kind, r.units_total, r.unit_cells = "rows", len(cells), cells
+        r.units_done = sum(1 for c in cells if c)
+        r.estimate = estimate_for_kind(r.estimate, "rows")
+        return []
+
+    def _start_kid(self, k):
+        """A declared sub-row's child step started: the row runs (again, on a retry), with a bar of its own."""
+        parent = self.rows[k.parent]
+        k.pending, k.status, k.ms, k.summary, k.totals, k.warned = False, None, None, None, None, False
+        k.t0 = self.clock()
+        k.units, k.order, k.failed_units, k.outcomes_reset = OrderedDict(), [], [], None
+        parent.unit_cells[k.index] = 0
+        parent.units_done = sum(1 for c in parent.unit_cells if c)
+        return []
+
+    def _end_kid(self, k, f):
+        """A sub-row's child step ended: its result, and one more done on its step's bar."""
+        k.status, k.ms, k.quiet, k.progress = f["status"], f["ms"], 0, None
+        if f.get("summary") is not None:
+            k.summary = f["summary"]
+        if f.get("totals"):
+            k.totals = _totals(f["totals"])
+        self._close_units(k)
+        parent = self.rows.get(k.parent)
+        if parent is not None:
+            parent.unit_cells[k.index] = {"fail": UNIT_FAIL, "skip": UNIT_SKIP}.get(k.status, UNIT_PASS)
+            parent.units_done = sum(1 for c in parent.unit_cells if c)
+            if k.status == "fail" and k.title not in parent.failed_units:
+                parent.failed_units.append(k.title)
+        return []
+
+    def _close_units(self, r):
+        """A row ended: its modules that never ended are boxed, and any unit still open is closed, so no line outlives it."""
+        for m in r.units.values():   # never ended: it ran nothing we saw (close_children ends the open ones)
+            if m.src in BAR_SRCS and m.box is None and m.id not in r.unbarred:
+                self._grant(r, m, "fail" if "fail" in m.outcomes else "pass" if m.outcomes else "skip")
+                if m.box == "fail" and m.title not in r.failed_units:
+                    r.failed_units.append(m.title)
+        for m in r.units.values():     # still open: closed here, so no line outlives its row (no finished line)
+            if m.status is None:
+                m.status = "fail" if "fail" in m.outcomes or m.box == "fail" or r.status == "fail" else "ok"
+                m.ms = int((self.clock() - m.t0) * 1000)
+                if m.src == "file" and "fail" in m.outcomes:
+                    self._fail_file(r, m)   # only a file with a failed test: an interrupted run doesn't name them all
 
     def _on_unit_start(self, f):
         src = f.get("src", "sub")
@@ -1463,7 +1562,7 @@ class Board:
                 r.unit_cells.extend(bytes(r.units_total - len(r.unit_cells)))
             for pom in f["poms"]:
                 self._unit({"step": r.id, "module": pom}, key="module", create=True)
-            if r.poms and self.setup is None:
+            if r.poms and self.setup is None and r.parent is None:     # a sub-row keeps its poms off its bar, no Setup row
                 self.setup = _Setup(r.id, f["poms"], self.clock())
             elif self.setup is not None and self.setup.row == r.id:
                 self.setup.add(f["poms"])
@@ -1715,6 +1814,8 @@ class Board:
         return self.run_n + open_.index(d) if d in open_ else self.run_n
 
     def _end_row(self, f):
+        if f["id"] in self.kid_rows and f["id"] not in self.rows:
+            return self._end_kid(self.kid_rows[f["id"]], f)
         if f["id"] not in self.rows and f["id"] in self.unit_rows:
             if f["id"] in self.aliases:
                 self.unit_rows[f["id"]].quiet = 0     # a sub-row's tool exited: its parent row is not silent
@@ -1739,17 +1840,13 @@ class Board:
             r.summary = f["summary"]
         if f.get("totals"):
             r.totals = _totals(f["totals"])
-        for m in r.units.values():   # never ended: it ran nothing we saw (close_children ends the open ones)
-            if m.src in BAR_SRCS and m.box is None and m.id not in r.unbarred:
-                self._grant(r, m, "fail" if "fail" in m.outcomes else "pass" if m.outcomes else "skip")
-                if m.box == "fail" and m.title not in r.failed_units:
-                    r.failed_units.append(m.title)
-        for m in r.units.values():     # still open: closed here, so no line outlives its row (no finished line)
-            if m.status is None:
-                m.status = "fail" if "fail" in m.outcomes or m.box == "fail" or r.status == "fail" else "ok"
-                m.ms = int((self.clock() - m.t0) * 1000)
-                if m.src == "file" and "fail" in m.outcomes:
-                    self._fail_file(r, m)   # only a file with a failed test: an interrupted run doesn't name them all
+        self._close_units(r)
+        for k in r.kids.values():       # a sub-row that never started was skipped; one still open ends with its step
+            if k.pending or k.status is None:
+                k.status = "skip" if k.pending else "fail" if r.status == "fail" else "ok"
+                k.ms = 0 if k.pending else int((self.clock() - k.t0) * 1000)
+                k.pending = False
+                self._close_units(k)
         if r.status == "fail" and self.failed_title is None:
             self.failed_title = r.label
         blocks = []
@@ -1763,6 +1860,8 @@ class Board:
             blocks.append(("row", r))
         elif blocks[0] != ("row", r):
             blocks.append(("row", r))
+        if r.kids:
+            blocks.append(("kids", r))
         hints = r.status not in ("ok", "skip") or r.held_failure or (r.unit_kind == "checks" and r.warned)
         shown = {line.strip() for line in r.hints} if hints else set()
         for level, text in r.notes:
@@ -1873,6 +1972,8 @@ class Board:
 def row_state(row):
     """running, ok, warn, paused, skip or fail (spec 5.2): fail wins; a skip is always skip; ok with a pause is
     paused, with a warn is warn."""
+    if row.pending:
+        return "pending"
     if row.running:
         return "running"
     if row.status == "skip":
@@ -2006,6 +2107,32 @@ def row_text(row, glyphs, now, pending=False):
         if row.detail:
             text = f"{text}  {row.detail}" if text else row.detail
     return cells, "  ".join(parts), text or "", elapsed, cut
+
+
+def kid_lines(row, glyphs, now, cols, color=False, running_only=False):
+    """A step's declared sub-rows (Board._on_subrows) as lines under its row, in declaration order: a dim ○ and the title
+    while pending, else the icon, the title, the sub-row's own bar and count, its result and its elapsed time.  Each is
+    laid out like a step row, indented four columns.  cols None is the plain form: the parts joined by two spaces, no
+    flush-right elapsed (the log and a non-TTY screen)."""
+    out = []
+    for k in row.kids.values():
+        if k.pending:
+            line = f"    {icon('pending', now, color)} {k.title}"
+            out.append(f"\x1b[2m{line}\x1b[0m" if color else line)
+            continue
+        cells, count, text, elapsed, cut = row_text(k, glyphs, now, True)
+        label = f"    {icon(row_state(k), now, color)} {k.title.ljust(row.kid_width)}"
+        if cut and text and cols is not None:
+            used = _vlen(label) + (2 + len(cells) if cells is not None else 0) + (2 + _vlen(count) if count else 0)
+            text = _cut_text(text, cols - (len(elapsed) + 2 if elapsed else 0) - used - 2)
+        rest = "  ".join(p for p in (count, text) if p)
+        if k.running and k.progress and not k.units_running:
+            rest = f"{rest} · {k.progress}" if rest else k.progress
+        if cols is None:
+            out.append("  ".join(p for p in (label, "".join(cells) if cells is not None else "", rest, elapsed) if p))
+            continue
+        out += _fit_row(label, cells, rest, elapsed, cols, wrap=bool(k.unit_kind)).split("\n")
+    return out
 
 
 def row_cells(row, glyphs, now, pending=False):
@@ -2169,6 +2296,8 @@ class PlainRenderer:
                 self._write("".join(line + "\n" for line in hint_lines(block)))
             elif kind == "module":
                 self._write(module_line(block[2], self.glyphs, self.clock()) + "\n")
+            elif kind == "kids":
+                self._write("".join(ln + "\n" for ln in kid_lines(block[1], self.glyphs, self.clock(), None)))
             elif kind == "raw":
                 self._write(block[1])
             elif kind == "logonly" and self.log:
@@ -2407,6 +2536,8 @@ class LiveRenderer:
             return hint_lines(block)
         if kind == "module":
             return [module_line(block[2], self.glyphs, self.clock())]
+        if kind == "kids":
+            return kid_lines(block[1], self.glyphs, self.clock(), cols, self.color)
         if kind == "final":
             return [final_line(block, self.color)]
         return []
@@ -2551,6 +2682,7 @@ class LiveRenderer:
             if setup_running and board.setup.row == r.id and not nested:
                 out.append(setup_line(board, self.glyphs, cols, now, self.color))
             out += self._row(board, r, cols, pending=True).split("\n")     # a wrapped unit bar spans several lines
+            out += kid_lines(r, self.glyphs, now, cols, self.color)         # its declared sub-rows
             if nested:
                 out.append(setup_line(board, self.glyphs, cols, now, self.color))
             if r.id in current:
