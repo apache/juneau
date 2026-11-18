@@ -142,6 +142,13 @@ def test_revert_record_bumps_rc_and_resets_last(make_ctx):
     assert ctx.rf.get("phase") == "rc"
 
 
+def test_revert_record_clears_the_jdk_results(make_ctx):
+    ctx = make_ctx(state={**RC, "rcHistory": [], "jdkResults": {"17": {"status": "pass", "sha": "a" * 40}}})
+    revert.revert_record(ctx)
+    assert ctx.rf.get("jdkResults") is None
+    revert.revert_record(ctx)    # nothing left to clear: still harmless
+
+
 def test_revert_rerun_idempotent(make_ctx):
     ctx = make_ctx(state=RC)
     nx = ctx.nexus

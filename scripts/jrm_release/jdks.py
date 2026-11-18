@@ -181,12 +181,19 @@ def elapsed(seconds):
     return f"{h}h{m:02d}m" if h else (f"{m}m{s % 60:02d}s" if m else f"{s}s")
 
 
-def _subrow(row_id, label, required, prior):
+def _reusable(prior, tested):
+    """True when a prior result passed (or warned) on the very commit being verified now.  A result with no recorded
+    sha (an older run file) or a different one is for other sources, so it is not reused."""
+    return bool(prior) and prior.get("status") in ("pass", "warn") and bool(tested) and prior.get("sha") == tested
+
+
+def _subrow(row_id, label, required, prior, tested=""):
     """One JDK's sub-row for the board: (id, title, state, summary).  A JDK that passed (or warned) on an earlier
-    attempt is declared done, so a resume shows it as it was; any other is pending until its command starts."""
+    attempt at this same commit is declared done, so a resume shows it as it was; any other is pending until its
+    command starts."""
     title = f"JDK {label}" + ("" if required else " (experimental)")
     status = (prior or {}).get("status")
-    if status in ("pass", "warn"):
+    if _reusable(prior, tested):
         return (row_id, title, status, "passed earlier" if status == "pass" else "failed earlier (experimental)")
     return (row_id, title, "pending", None)
 
@@ -194,7 +201,8 @@ def _subrow(row_id, label, required, prior):
 def verify(ctx):
     """The jdk-verify step: `mvn -B clean verify` on the release workspace under each listed JDK.  Every JDK runs even
     when an earlier one failed.  A required failure fails the step at the end; an experimental one is a warning in the
-    result.  run.json 'jdkResults' holds one record per JDK, so a resume reruns only the ones that did not pass (or fail)."""
+    result.  run.json 'jdkResults' holds one record per JDK, so a resume reruns only the ones that did not pass (or fail), or that passed on a different commit (each record
+    keeps the sha it verified, so a new RC after --revert never reuses a result for old sources)."""
     todo = entries(ctx.d)
     if not todo:
         raise StepError("no jdks in the params file")
@@ -206,16 +214,18 @@ def verify(ctx):
     total = len(todo)
     ids = {label: f"jdk-verify-{n}" for n, (label, _) in enumerate(todo, 1)}
     step_id = getattr(ctx.runner, "step_id", None)
-    rows = bool(step_id) and ctx.subrows(step_id, [_subrow(ids[label], label, required, results.get(label))
+    rows = bool(step_id) and ctx.subrows(step_id, [_subrow(ids[label], label, required, results.get(label), tested)
                                                    for label, required in todo])
     for n, (label, required) in enumerate(todo, 1):
         where = f"JDK {label} ({n} of {total})"
         prior = results.get(label)
-        if prior and prior.get("status") in ("pass", "warn"):
+        if _reusable(prior, tested):
             ctx.say(f"JDK {label}: already {prior['status']}, skipped on resume")
             if prior["status"] == "warn":
                 warned.append(label)
             continue
+        if prior and prior.get("status") in ("pass", "warn"):
+            ctx.say(f"JDK {label}: previous result was for a different commit, rerunning", "warn")
         try:
             home = resolve(label)
         except JdkError as e:
@@ -230,7 +240,7 @@ def verify(ctx):
         ctx.say(f"JDK {label}: {'pass' if r.ok else 'fail'} ({elapsed(time.monotonic() - began)})",
                 "info" if r.ok else "warn")
         status = "pass" if r.ok else ("fail" if required else "warn")
-        results[label] = {"status": status, "required": required, "home": home, "code": r.code}
+        results[label] = {"status": status, "required": required, "home": home, "code": r.code, "sha": tested}
         if status == "pass" and re.fullmatch(r"[0-9a-f]{40}", tested):
             record_pass(tested, pass_label(label, home))
         ctx.rf.update({"jdkResults": results})

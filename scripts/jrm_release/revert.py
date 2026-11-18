@@ -131,7 +131,8 @@ def revert_record(ctx):
     hist.append({"rc": d["rc"], "nexusRepoId": ctx.rf.get("nexusRepoId"), "commit": ctx.rf.get("rcCommit")})
     d["rc"] += 1
     ctx.rf.update({"details": d, "rcHistory": hist, "last": None, "nexusRepoId": None, "rcCommit": None,
-                   "voteDeadline": None, "vote": None, "phase": "rc"})
+                   "voteDeadline": None, "vote": None, "phase": "rc",
+                   "jdkResults": None})   # the next RC's sources differ, so no JDK result carries over
     return f"ready for RC{d['rc']}"
 
 

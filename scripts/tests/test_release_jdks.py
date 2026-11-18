@@ -25,6 +25,8 @@ from jrm_release.preflight import FAIL, PASS
 
 pytestmark = pytest.mark.usefixtures("clean_env")
 
+SHA = "a" * 40
+
 
 def make_jdk(path, bundle=False):
     home = path / "Contents" / "Home" if bundle else path
@@ -130,10 +132,23 @@ def test_an_experimental_failure_is_a_warning_in_the_result(make_ctx, root):
 
 
 def test_resume_reruns_only_the_jdks_that_did_not_pass(make_ctx, root):
-    ctx = ctx_with(make_ctx, root, state={"jdkResults": {"17": {"status": "pass", "required": True}}})
+    ctx = ctx_with(make_ctx, root, state={"jdkResults": {"17": {"status": "pass", "required": True, "sha": SHA}}})
+    ctx.fake.script("git", "-C", str(ctx.ws), "rev-parse", "HEAD", out=SHA)
     rc.jdk_verify(ctx)
     assert [c["env"]["JAVA_HOME"] for c in mvn_calls(ctx)] == [str(root / "jdk-21"), str(root / "jdk-28")]
     assert ctx.rf.get("jdkResults")["17"]["status"] == "pass"
+
+
+@pytest.mark.parametrize("prior_sha", ["b" * 40, None])
+def test_a_result_for_another_commit_or_without_a_sha_is_rerun(make_ctx, root, prior_sha):
+    prior = {"status": "pass", "required": True, **({"sha": prior_sha} if prior_sha else {})}
+    ctx = rows_ctx(make_ctx, root, state={"jdkResults": {"17": prior}})
+    ctx.fake.script("git", "-C", str(ctx.ws), "rev-parse", "HEAD", out=SHA)
+    rc.jdk_verify(ctx)
+    assert [c["env"]["JAVA_HOME"] for c in mvn_calls(ctx)] == [str(root / f"jdk-{n}") for n in (17, 21, 28)]
+    assert ctx.fake.subrow_decls[0][1][0] == ("jdk-verify-1", "JDK 17", "pending", None)
+    assert any("JDK 17: previous result was for a different commit, rerunning" in s for s in ctx.fake.said)
+    assert ctx.rf.get("jdkResults")["17"]["sha"] == SHA
 
 
 def test_an_unresolvable_jdk_fails_before_any_build(make_ctx, root):
@@ -362,7 +377,8 @@ def test_each_maven_command_is_its_own_sub_row(make_ctx, root):
 
 
 def test_a_jdk_that_passed_is_declared_done_and_not_rerun_on_resume(make_ctx, root):
-    ctx = rows_ctx(make_ctx, root, state={"jdkResults": {"17": {"status": "pass", "required": True}}})
+    ctx = rows_ctx(make_ctx, root, state={"jdkResults": {"17": {"status": "pass", "required": True, "sha": SHA}}})
+    ctx.fake.script("git", "-C", str(ctx.ws), "rev-parse", "HEAD", out=SHA)
     rc.jdk_verify(ctx)
     assert ctx.fake.subrow_decls[0][1][0] == ("jdk-verify-1", "JDK 17", "pass", "passed earlier")
     assert [c["id"] for c in mvn_calls(ctx)] == ["jdk-verify-2", "jdk-verify-3"]
