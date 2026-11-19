@@ -21,7 +21,7 @@
 
 	<groupId>org.apache.juneau</groupId>
 	<artifactId>juneau</artifactId>
-	<version>10.1.0-SNAPSHOT</version>
+	<version>10.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Apache Juneau</name>
 	<description>Apache Juneau</description>
@@ -40,7 +40,7 @@
 
 		<!-- Stamps every reproducible build output: the module jars and, under -Papache-release, the juneau-terminal
 		     packages.  maven-release-plugin rewrites it at release:prepare; the value here is the starting point. -->
-		<project.build.outputTimestamp>2026-11-18T01:23:16Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2026-10-26T00:00:00Z</project.build.outputTimestamp>
 
 		<!-- Configure checksum algorithms: MD5, SHA-1, and SHA-512 -->
 		<aether.checksums.algorithms>MD5,SHA-1,SHA-512</aether.checksums.algorithms>
@@ -53,9 +53,9 @@
 		<javadoc.plugin.version>3.11.3</javadoc.plugin.version>
 		<jacoco.plugin.version>0.8.15</jacoco.plugin.version>
 		<!-- Default so surefire's @{argLine} late binding resolves when jacoco is skipped. -->
-		<argLine />
+		<argLine></argLine>
 		<!-- Extra surefire JVM args; Mockito modules set a -javaagent here. -->
-		<surefire.extraArgs />
+		<surefire.extraArgs></surefire.extraArgs>
 		<!-- Oldest Node the build supports.  No Node version is pinned in this repo (the Jenkins agent supplies its own),
 		     so this is the conservative assumption that the agent's Node lacks the Node 20+ builtins (toSorted, ...).
 		     src/test/js/node-floor-preload.cjs strips everything newer from the test JVM's node child processes;
@@ -508,7 +508,7 @@
 					<!-- 6.46.1 is the last 6.x on Maven Central; 6.47+ is Code Genome only. -->
 					<version>6.46.1</version>
 					<configuration>
-						<activeRecipes />
+						<activeRecipes/>
 						<exportDatatables>false</exportDatatables>
 					</configuration>
 					<dependencies>
