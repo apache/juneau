@@ -28,13 +28,16 @@
  * URL.canParse, String.prototype.replaceAll.
  * Removed (added after Node 18):
  *   Node 20  Array/TypedArray prototype toSorted, toReversed, toSpliced (Array only), with;
- *            String.prototype.isWellFormed, toWellFormed (guarded rather than deleted, see below)
+ *            String.prototype.isWellFormed, toWellFormed
  *   Node 21  Object.groupBy, Map.groupBy; ArrayBuffer.prototype.transfer, transferToFixedLength
  *   Node 22  Promise.withResolvers; Array.fromAsync; the ES2025 Set methods (union, intersection, difference,
  *            symmetricDifference, isSubsetOf, isSupersetOf, isDisjointFrom); the global Iterator and its helpers
  *   Node 24  Promise.try; RegExp.escape; Error.isError
- * Node's own lazily loaded internals (undici behind fetch, http, ...) use these builtins, so they are loaded before
- * the deletion; otherwise the first fetch in a harness would trip over the removal instead of the harness's own code.
+ * Node's own internals use some of these builtins at call time (undici behind fetch calls Promise.withResolvers on
+ * Node 26 and String.prototype.toWellFormed on every request), so a builtin is not deleted outright.  Each one becomes
+ * an accessor that returns the real function only to a caller whose stack frame is a Node module (node:... or
+ * internal/...) and undefined to everyone else, so harness code still gets "X is not a function" while fetch, http and
+ * streams keep working on any Node.  The lazy internals are also loaded up front, before the replacement.
  *
  * When the floor is raised, shrink this list to match and update juneau.node.floor and NodeFloorScan_Test.
  */
@@ -62,28 +65,32 @@ const REMOVED = [
 	[Promise, ['withResolvers', 'try']],
 	[Array, ['fromAsync']],
 	[RegExp, ['escape']],
+	[proto(String), ['isWellFormed', 'toWellFormed']],
 	[Error, ['isError']],
 	[globalThis, ['Iterator']]
 ];
 
-// Node's own runtime code (undici's string conversion behind fetch) calls String.prototype.{isWellFormed,toWellFormed}
-// on every request, so deleting them would break fetch itself.  They stay, but throw "is not a function" to any caller
-// outside Node's own modules, which is the observable failure on an older Node.
-for (const name of ['isWellFormed', 'toWellFormed']) {
-	const original = String.prototype[name];
-	if (typeof original !== 'function')
-		continue;  // Absent on this Node already, so there is nothing to guard.
-	const guarded = {
-		[name](...args) {
-			const stack = new Error('caller probe').stack.split('\n')[2] || '';
-			if (!/\(?node:|^\s*at node:|\(?internal\//.test(stack))
-				throw new TypeError(`${String(this)}.${name} is not a function (removed by node-floor-preload)`);  // NOSONAR javascript:S6551 - this is the receiver of a String.prototype method, so it stringifies as the string
-			return original.apply(this, args);
-		}
-	}[name];
-	Object.defineProperty(String.prototype, name, { value: guarded, configurable: true, writable: true, enumerable: false });  // NOSONAR javascript:S6643 - deliberate: swaps in a guard that mimics an older Node
-}
+// Node's own runtime code calls some of these at CALL time (undici's fetch calls Promise.withResolvers on Node 26, and
+// String.prototype.{isWellFormed,toWellFormed} on every request), so plain deletion would break fetch itself.  Each
+// builtin is therefore replaced by an accessor that hands the real function only to a caller inside Node's own modules
+// (a "node:internal/..." stack frame) and answers undefined to everyone else.  User code then sees exactly what it
+// sees on the floor Node: "typeof X" is "undefined" and calling it throws "X is not a function".
+// Frame 3 is the code that read the property (see the getter in hide).
+const fromNode = () => /node:|internal\//.test((new Error('caller probe').stack || '').split('\n')[3] || '');
+
+const hide = (target, name) => {
+	const desc = Object.getOwnPropertyDescriptor(target, name);
+	if (!desc || !('value' in desc) || !desc.configurable)
+		return;  // Absent on this Node already (nothing to hide), or not replaceable.
+	const original = desc.value;
+	Object.defineProperty(target, name, {
+		configurable: true,
+		enumerable: false,
+		get() { return fromNode() ? original : undefined; },  // Stack: 0 message, 1 fromNode, 2 this getter, 3 the code reading the property.
+		set(v) { Object.defineProperty(target, name, { value: v, configurable: true, writable: true, enumerable: false }); }
+	});
+};
 
 for (const [target, names] of REMOVED)
 	for (const name of names)
-		try { if (target) delete target[name]; } catch (e) { /* ignore */ } // NOSONAR javascript:S2486 - the preload must never throw
+		try { if (target) hide(target, name); } catch (e) { /* ignore */ } // NOSONAR javascript:S2486 - the preload must never throw

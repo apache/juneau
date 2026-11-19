@@ -124,6 +124,34 @@ class NodeFloorScan_Test {
 		assertFalse(STATIC_BUILTIN.matcher("function groupByTransform(frame)").find());
 	}
 
+	/**
+	 * The floor preload must hide post-floor builtins from user code but leave them to Node's own internals, so
+	 * {@code fetch} keeps working on any Node (on Node 26 fetch itself calls Promise.withResolvers).
+	 */
+	@Test void a03_preloadKeepsFetchWorkingAndHidesBuiltinsFromUserCode() throws Exception {
+		var root = repoRoot();
+		assumeTrue(root != null, "repository root not found");
+		var preload = root.resolve("src/test/js/node-floor-preload.cjs");
+		assumeTrue(Files.isRegularFile(preload), "preload not found");
+		var script = "const a=AbortSignal.abort();const hidden=typeof Promise['with'+'Resolvers']==='undefined'&&typeof Array['from'+'Async']==='undefined'&&typeof [].toSorted==='undefined';"
+			+ "fetch('https://juneau.invalid/none',{signal:a}).then(()=>console.log('resolved'),e=>console.log(e.name+' hidden='+hidden));";
+		Process p;
+		try {
+			var pb = new ProcessBuilder("node", "-e", script).redirectErrorStream(true);
+			pb.environment().put("NODE_OPTIONS", "--require=\"" + preload + "\"");
+			p = pb.start();
+		} catch (IOException e) {
+			assumeTrue(false, "node not available: " + e);
+			return;
+		}
+		String out;
+		try (var in = p.getInputStream()) {
+			out = new String(in.readAllBytes(), UTF_8).trim();
+		}
+		assertTrue(p.waitFor(30, java.util.concurrent.TimeUnit.SECONDS));
+		assertEquals("AbortError hidden=true", out);
+	}
+
 	private static boolean isScanned(Path root, Path f) {
 		if (!Files.isRegularFile(f))
 			return false;
