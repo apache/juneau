@@ -61,7 +61,7 @@
 		     src/test/js/node-floor-preload.cjs hides everything newer from user code in the test JVM's node child processes (Node's own internals still see it, so fetch works on any Node);
 		     keep the two in step, and NodeFloorScan_Test too. -->
 		<juneau.node.floor>18</juneau.node.floor>
-		<jetty.version>12.1.14</jetty.version>
+		<jetty.version>12.1.15</jetty.version>
 		<jetty.ee.version>11</jetty.ee.version>
 		<tomcat.version>11.0.27</tomcat.version>
 		<spring.version>4.1.2</spring.version>
