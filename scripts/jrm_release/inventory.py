@@ -55,11 +55,12 @@ STEPS = [
     Step(21, "promote", "dist-promote", "Promote on dist/release", "SVN", False),
     Step(22, "promote", "final-tag", "Final tag", "Final tag", False),
     Step(23, "promote", "github-release", "GitHub release", "GitHub", False),
-    Step(24, "promote", "compose-announce-email", "Announce email", "Announce email", False),
-    Step(25, "promote", "reporter-release", "Add release to Reporter", "Reporter", False),
-    Step(26, "promote", "dist-cleanup", "Remove old releases", "SVN", False),
-    Step(27, "promote", "followup-checklist", "Follow-up checklist", "Manual", False),
-    Step(28, "promote", "finalize", "Finalize", "Done", False),
+    Step(24, "promote", "mirror-wait", "Mirror wait", "Mirror wait", False),
+    Step(25, "promote", "compose-announce-email", "Announce email", "Announce email", False),
+    Step(26, "promote", "reporter-release", "Add release to Reporter", "Reporter", False),
+    Step(27, "promote", "dist-cleanup", "Remove old releases", "SVN", False),
+    Step(28, "promote", "followup-checklist", "Follow-up checklist", "Manual", False),
+    Step(29, "promote", "finalize", "Finalize", "Done", False),
 ]
 # Steps removed from the table, and the step an old run.json's "last" now means (the one before the removed step).
 RETIRED = {"test-workspace-verify": "javadoc-verify"}
@@ -68,10 +69,10 @@ ROW_NAMES = {1: "Prerequisites", 2: "Release checks", 3: "Proposal email", 4: "W
              6: "Build verify", 7: "Javadoc", 8: "GPG unlock", 9: "Deploy snapshot", 10: "Release prepare",
              11: "Diff review", 12: "Release perform", 13: "Nexus close", 14: "Stage dist/dev",
              15: "Verify dist/dev", 16: "Vote email", 17: "Vote wait (72h)", 18: "Vote tally", 19: "Result email",
-             20: "Nexus release", 21: "Promote dist", 22: "Final tag", 23: "GitHub release", 24: "Announce email",
-             25: "Add to Reporter", 26: "Dist cleanup", 27: "Follow-up list", 28: "Finalize"}
+             20: "Nexus release", 21: "Promote dist", 22: "Final tag", 23: "GitHub release", 24: "Mirror wait",
+             25: "Announce email", 26: "Add to Reporter", 27: "Dist cleanup", 28: "Follow-up list", 29: "Finalize"}
 
-# Steps where the run exits for the operator (spec 1.3) -> the divider's text.  17 (vote tally), the 23 mirror wait and a
+# Steps where the run exits for the operator (spec 1.3) -> the divider's text.  17 (vote tally), the 24 mirror wait and a
 # failed vote at 18 pause conditionally and appear only when raised.
 PAUSE_DIVIDERS = {"compose-propose-email": "send proposal email", "compose-vote-email": "send vote email",
                   "vote-gate": "vote closes", "compose-result-email": "send result email",

@@ -24,7 +24,7 @@ def test_mirror_wait_pauses_after_30_minutes(make_ctx):
     ctx = make_ctx(http_ok=lambda url: False)
     ctx.sleep = sleeps.append
     with pytest.raises(PauseExc) as e:
-        promote.compose_announce_email(ctx)
+        promote.mirror_wait(ctx)
     assert sleeps == [25] * 72
     assert e.value.done is False and ctx.resume_hint in e.value.message and "mirrors" in e.value.message
 
@@ -35,7 +35,7 @@ def test_mirror_wait_notes_progress_on_the_row(make_ctx):
     ctx.sleep = lambda s: None
     ctx.current_step = lambda: type("Row", (), {"detail": staticmethod(notes.append)})()
     with pytest.raises(PauseExc):
-        promote.compose_announce_email(ctx)
+        promote.mirror_wait(ctx)
     assert len(notes) == promote.MIRROR_POLLS
     assert notes[0] == "waiting for downloads.apache.org (1/72, ~30:00 left)"
     assert notes[-1] == "waiting for downloads.apache.org (72/72, ~00:25 left)"
@@ -59,9 +59,25 @@ def test_mirror_wait_proceeds_when_the_release_appears(make_ctx):
         return len(calls) > 3
     ctx = make_ctx(http_ok=seen)
     ctx.sleep = sleeps.append
-    with pytest.raises(PauseExc):                      # then the announce email itself pauses
+    promote.mirror_wait(ctx)
+    assert sleeps == [25] * 3
+    with pytest.raises(PauseExc):                      # the announce email itself pauses, without polling
         promote.compose_announce_email(ctx)
-    assert sleeps == [25] * 3 and ctx.rf.get("emailPending") == "announce"
+    assert len(calls) == 4 and ctx.rf.get("emailPending") == "announce"
+
+
+def test_announce_email_does_not_poll_the_mirrors(make_ctx):
+    ctx = make_ctx(http_ok=lambda url: pytest.fail("polled"))
+    with pytest.raises(PauseExc):
+        promote.compose_announce_email(ctx)
+
+
+def test_mirror_wait_sits_just_before_the_announce_email_and_an_old_run_resumes():
+    names = inventory.NAMES
+    assert names.index("mirror-wait") + 1 == names.index("compose-announce-email")
+    assert inventory.num_of("mirror-wait") == 24 and inventory.num_of("compose-announce-email") == 25
+    for last, first in (("github-release", "mirror-wait"), ("compose-announce-email", "reporter-release")):
+        assert names[names.index(last) + 1] == first
 
 
 def test_followup_checklist_is_written_not_asked(make_ctx):

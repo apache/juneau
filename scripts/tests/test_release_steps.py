@@ -563,12 +563,11 @@ def test_github_release_latest_left_to_gh_when_highest(make_ctx):
     assert "--latest=false" not in ctx.fake.ran("gh")[0]
 
 
-def test_announce_waits_for_downloads(make_ctx):
+def test_mirror_wait_waits_for_downloads(make_ctx):
     seen = []
     results = iter([False, False, True])
     ctx = make_ctx(state=PASSED, http_ok=lambda u: (seen.append(u), next(results))[1])
-    with pytest.raises(ctx.pause):               # the mirrors are up on the third poll; then the mail pauses
-        promote.compose_announce_email(ctx)
+    promote.mirror_wait(ctx)                     # the mirrors are up on the third poll
     assert len(seen) == 3
     assert seen[0] == "https://downloads.apache.org/juneau/9.2.1/"
 
@@ -656,7 +655,7 @@ def test_registry_runs_both_check_groups_as_labelled_bars():
                                         lock=None), release.impl_map())
     assert reg._labels["prerequisites"] == "01 Prerequisites"
     assert reg._labels["prechecks"] == "02 Release checks"
-    assert len(reg.names) == 28
+    assert len(reg.names) == 29
     assert "test-workspace-verify" not in reg.names
 
 

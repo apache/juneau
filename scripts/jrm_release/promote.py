@@ -99,7 +99,7 @@ def github_release(ctx):
 
 
 @step
-def compose_announce_email(ctx):
+def mirror_wait(ctx):
     url = f"{inventory.DOWNLOADS}/{ctx.version}/"
     polls = 0
     while not ctx.http_ok(url):
@@ -112,6 +112,10 @@ def compose_announce_email(ctx):
         left = (MIRROR_POLLS - polls + 1) * MIRROR_POLL_SECONDS
         ctx.note(f"waiting for downloads.apache.org ({polls}/{MIRROR_POLLS}, ~{left // 60:02d}:{left % 60:02d} left)")
         ctx.sleep(MIRROR_POLL_SECONDS)
+
+
+@step
+def compose_announce_email(ctx):
     to, sub, body = emails.announce(ctx.d, ctx.rf.get("githubReleaseUrl"))
     return emails.send(ctx, "announce", to, sub, body, cc=(inventory.DEV_LIST,))
 

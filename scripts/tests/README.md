@@ -67,7 +67,7 @@ real release is touched.
 | `test_release_steps.py` | each rc, vote and promote step against the fakes |
 | `test_release_emails.py` | propose, vote, result and announce emails: the `.eml.txt` file, `emailPending`, the pause, `mailto:` length handling |
 | `test_release_vote.py` | the vote gate and tally: the `vote:` block of the params file, the early-tally pause, `nexus-release` without a confirmation |
-| `test_release_promote.py` | the mirror-wait pause and the follow-up checklist file |
+| `test_release_promote.py` | the mirror-wait step (its own step before the announce email) and its pause and the follow-up checklist file |
 | `test_release_rc_files.py` | the Javadoc report and release-diff files and their failures |
 | `test_release_no_prompts.py` | guard: nothing under `scripts/` asks a question (`askpass.py` excepted) |
 | `test_release_revert.py` | `--revert` checks and actions |
