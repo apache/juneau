@@ -9,9 +9,9 @@ Apache Juneau takes security seriously and uses automated tools to help identify
 
 ## Current Security Status
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
+- [Quality Gate Status](https://sonarcloud.io/summary/new_code?id=apache_juneau)
+- [Security Rating](https://sonarcloud.io/summary/new_code?id=apache_juneau)
+- [Reliability Rating](https://sonarcloud.io/summary/new_code?id=apache_juneau)
 
 ### Analysis Results
 - [**GitHub CodeQL Analysis →**](https://github.com/apache/juneau/security/code-scanning) - Security vulnerability detection
