@@ -101,7 +101,7 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  			@Override
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<strong class="jxr_keyword">public</strong> FileVisitResult visitFile(Path f, BasicFileAttributes attrs) {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  				<strong class="jxr_keyword">if</strong> (isScanned(f)) {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  				<strong class="jxr_keyword">if</strong> (isScanned(root, f)) {
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  					scanned[0]++;
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  					scan(root, f, hits);
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  				}
@@ -132,46 +132,75 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertFalse(STATIC_BUILTIN.matcher(<span class="jxr_string">"function groupByTransform(frame)"</span>).find());
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isScanned(Path f) {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">if</strong> (!Files.isRegularFile(f))
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> s = f.toString().replace('&#92;&#92;', '/');
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> d : SKIPPED_DIRS)
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">if</strong> (s.contains(<span class="jxr_string">"/"</span> + d + <span class="jxr_string">"/"</span>))
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">if</strong> (s.endsWith(<span class="jxr_string">".min.js"</span>) || s.endsWith(<span class="jxr_string">"/node-floor-preload.cjs"</span>))  <em class="jxr_comment">// the preload names the builtins it removes</em>
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">return</strong> (s.endsWith(<span class="jxr_string">".js"</span>) &amp;&amp; s.contains(<span class="jxr_string">"/src/main/resources/"</span>)) || (s.endsWith(<span class="jxr_string">".cjs"</span>) &amp;&amp; s.contains(<span class="jxr_string">"/src/test/js/"</span>));
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> scan(Path root, Path f, List&lt;String&gt; hits) {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">var</strong> lines = Files.readAllLines(f, UTF_8);
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; lines.size(); i++) {
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 				<strong class="jxr_keyword">var</strong> line = lines.get(i);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 				<strong class="jxr_keyword">if</strong> (line.contains(ALLOW_MARKER))
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 					<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 				<strong class="jxr_keyword">var</strong> code = LINE_COMMENT.matcher(line).replaceFirst(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 				<strong class="jxr_keyword">var</strong> m = METHOD_CALL.matcher(code);
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 				<strong class="jxr_keyword">var</strong> s = STATIC_BUILTIN.matcher(code);
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 				<strong class="jxr_keyword">if</strong> (m.find() || s.find())
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 					hits.add(root.relativize(f) + <span class="jxr_string">":"</span> + (i + 1) + <span class="jxr_string">": "</span> + line.trim());
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			}
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UncheckedIOException(e);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		}
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<em class="jxr_javadoccomment">/** The directory holding the root pom: the nearest ancestor of the module directory that has a {@code juneau-core} sibling module. */</em>
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Path repoRoot() {
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">var</strong> basedir = System.getProperty(<span class="jxr_string">"basedir"</span>);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">var</strong> p = Path.of(basedir == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"."</span> : basedir).toAbsolutePath().normalize();
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">for</strong> (; p != <strong class="jxr_keyword">null</strong>; p = p.getParent())
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<strong class="jxr_keyword">if</strong> (Files.isDirectory(p.resolve(<span class="jxr_string">"juneau-core"</span>)) &amp;&amp; Files.isDirectory(p.resolve(<span class="jxr_string">"juneau-rest"</span>)))
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 				<strong class="jxr_keyword">return</strong> p;
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> }
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * The floor preload must hide post-floor builtins from user code but leave them to Node's own internals, so</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * {@code fetch} keeps working on any Node (on Node 26 fetch itself calls Promise.withResolvers).</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test <strong class="jxr_keyword">void</strong> a03_preloadKeepsFetchWorkingAndHidesBuiltinsFromUserCode() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> root = repoRoot();
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assumeTrue(root != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"repository root not found"</span>);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> preload = root.resolve(<span class="jxr_string">"src/test/js/node-floor-preload.cjs"</span>);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assumeTrue(Files.isRegularFile(preload), <span class="jxr_string">"preload not found"</span>);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">var</strong> script = <span class="jxr_string">"const a=AbortSignal.abort();const hidden=typeof Promise['with'+'Resolvers']==='undefined'&amp;&amp;typeof Array['from'+'Async']==='undefined'&amp;&amp;typeof [].toSorted==='undefined';"</span>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			+ <span class="jxr_string">"fetch('https://juneau.invalid/none',{signal:a}).then(()=&gt;console.log('resolved'),e=&gt;console.log(e.name+' hidden='+hidden));"</span>;
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		Process p;
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">var</strong> pb = <strong class="jxr_keyword">new</strong> ProcessBuilder(<span class="jxr_string">"node"</span>, <span class="jxr_string">"-e"</span>, script).redirectErrorStream(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			pb.environment().put(<span class="jxr_string">"NODE_OPTIONS"</span>, <span class="jxr_string">"--require=\&quot;"</span> + preload + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			p = pb.start();
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			assumeTrue(false, <span class="jxr_string">"node not available: "</span> + e);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		String out;
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = p.getInputStream()) {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			out = <strong class="jxr_keyword">new</strong> String(in.readAllBytes(), UTF_8).trim();
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		}
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertTrue(p.waitFor(30, java.util.concurrent.TimeUnit.SECONDS));
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertEquals(<span class="jxr_string">"AbortError hidden=true"</span>, out);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isScanned(Path root, Path f) {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">if</strong> (!Files.isRegularFile(f))
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<em class="jxr_comment">// Relative to the scan root, so a checkout living under a directory named target/ is still scanned.</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">var</strong> s = <span class="jxr_string">"/"</span> + root.relativize(f).toString().replace('&#92;&#92;', '/');
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> d : SKIPPED_DIRS)
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">if</strong> (s.contains(<span class="jxr_string">"/"</span> + d + <span class="jxr_string">"/"</span>))
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">if</strong> (s.endsWith(<span class="jxr_string">".min.js"</span>) || s.endsWith(<span class="jxr_string">"/node-floor-preload.cjs"</span>))  <em class="jxr_comment">// the preload names the builtins it removes</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">return</strong> (s.endsWith(<span class="jxr_string">".js"</span>) &amp;&amp; s.contains(<span class="jxr_string">"/src/main/resources/"</span>)) || (s.endsWith(<span class="jxr_string">".cjs"</span>) &amp;&amp; s.contains(<span class="jxr_string">"/src/test/js/"</span>));
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> scan(Path root, Path f, List&lt;String&gt; hits) {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">var</strong> lines = Files.readAllLines(f, UTF_8);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; lines.size(); i++) {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 				<strong class="jxr_keyword">var</strong> line = lines.get(i);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 				<strong class="jxr_keyword">if</strong> (line.contains(ALLOW_MARKER))
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 				<strong class="jxr_keyword">var</strong> code = LINE_COMMENT.matcher(line).replaceFirst(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 				<strong class="jxr_keyword">var</strong> m = METHOD_CALL.matcher(code);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				<strong class="jxr_keyword">var</strong> s = STATIC_BUILTIN.matcher(code);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				<strong class="jxr_keyword">if</strong> (m.find() || s.find())
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 					hits.add(root.relativize(f) + <span class="jxr_string">":"</span> + (i + 1) + <span class="jxr_string">": "</span> + line.trim());
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			}
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UncheckedIOException(e);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		}
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<em class="jxr_javadoccomment">/** The directory holding the root pom: the nearest ancestor of the module directory that has a {@code juneau-core} sibling module. */</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Path repoRoot() {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> basedir = System.getProperty(<span class="jxr_string">"basedir"</span>);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> p = Path.of(basedir == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"."</span> : basedir).toAbsolutePath().normalize();
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">for</strong> (; p != <strong class="jxr_keyword">null</strong>; p = p.getParent())
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<strong class="jxr_keyword">if</strong> (Files.isDirectory(p.resolve(<span class="jxr_string">"juneau-core"</span>)) &amp;&amp; Files.isDirectory(p.resolve(<span class="jxr_string">"juneau-rest"</span>)))
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 				<strong class="jxr_keyword">return</strong> p;
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	}
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
