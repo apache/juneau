@@ -60,14 +60,6 @@ const siteUrl = process.env.SITE_URL || 'https://juneau.apache.org';
 
 const baseThemeConfig: Preset.ThemeConfig = {
   image: 'img/juneau-social-card.png',
-  announcementBar: {
-    id: 'prerelease-10-0',
-    content:
-      'These docs describe 10.0 (pre-release, 10.0.0-SNAPSHOT). The latest release is <a href="/downloads">9.2.3</a>.',
-    backgroundColor: '#fff3cd',
-    textColor: '#533f03',
-    isCloseable: false,
-  },
   navbar: {
     title: 'Apache Juneau',
     logo: {
