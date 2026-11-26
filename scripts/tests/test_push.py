@@ -1302,6 +1302,7 @@ class TestJavadocHtmlStep:
     def test_summary_parses_clean_and_counts(self, push_module):
         assert push_module.javadoc_html_summary("Ignored 1.\njavadoc html check: clean.\n") == "clean"
         assert push_module.javadoc_html_summary("javadoc html check: 12 diagnostics in 3 kinds.") == "12 diagnostics"
+        assert push_module.javadoc_html_summary("javadoc html check: skipped reference\njavadoc html check: clean.\n") == "clean (warning: reference skipped)"
         assert push_module.javadoc_html_summary("nope") is None
         assert push_module.javadoc_html_summary(None) is None
 

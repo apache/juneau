@@ -601,12 +601,16 @@ def bom_summary(text):
 
 
 JAVADOC_HTML_LINE = re.compile(r"javadoc html check: (clean|\d+ diagnostics)")
+JAVADOC_HTML_SKIPPED = re.compile(r"^javadoc html check: skipped (.+)$", re.MULTILINE)
 
 
 def javadoc_html_summary(text):
-    """The Javadoc HTML row, `clean` or `<n> diagnostics`, from check-javadoc-html.py's output; None if not recognised."""
+    """The Javadoc HTML row, `clean` or `<n> diagnostics` (plus a warning when a group was skipped), from check-javadoc-html.py's output; None if not recognised."""
     found = JAVADOC_HTML_LINE.search(text or "")
-    return found.group(1) if found else None
+    if not found:
+        return None
+    skipped = JAVADOC_HTML_SKIPPED.search(text)
+    return found.group(1) + (f" (warning: {skipped.group(1)} skipped)" if skipped else "")
 
 
 def javadoc_html_command(script):

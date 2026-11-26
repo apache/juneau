@@ -49,7 +49,10 @@ class RestDebugLoggingPropagation_Springboot_Test extends TestBase {
 	private static final String OP_TWO = HOST + ".two";
 	private static final String OP_ECHO = HOST + ".echo";
 
+	// HTTP/1.1 only: the default HTTP/2 client attempts an h2c upgrade against each freshly started Tomcat, which
+	// returned a spurious 400 once on JDK 21 (RC3 verification).
 	private static final HttpClient HTTP = HttpClient.newBuilder()
+		.version(HttpClient.Version.HTTP_1_1)
 		.connectTimeout(Duration.ofSeconds(5))
 		.followRedirects(HttpClient.Redirect.NEVER)
 		.build();

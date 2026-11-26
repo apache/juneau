@@ -115,6 +115,7 @@ class WatchCase(PaneCase):
         super().setUp()
         self.logs = self.tmp / "logs"
         self.env["JUNEAU_TERMINAL_LOG_DIR"] = str(self.logs)
+        self.env["JUNEAU_TERMINAL_TOOLBAR"] = "0"   # the existing cases count panes; the toolbar cases switch it on
 
     def popen(self, *args):
         return subprocess.Popen([str(self.SCRIPT), *args], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, env=self.env)   # the leader's late tmux errors stay out of the log

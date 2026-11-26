@@ -32,7 +32,7 @@ from juneau_terminal_scripts.testing import bare_remote, fake_tool, hermetic_git
 ASM = "{http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3}"
 POM = "{http://maven.apache.org/POM/4.0.0}"
 
-BIN_NAMES = ["juneau_terminal_scripts/bin/tmux-pane.sh", "juneau_terminal_scripts/bin/watch-run.sh"]
+BIN_NAMES = ["juneau_terminal_scripts/bin/tmux-pane.sh", "juneau_terminal_scripts/bin/tmux-toolbar.sh", "juneau_terminal_scripts/bin/watch-run.sh"]
 EXPECTED_NAMES = sorted(package_files() + BIN_NAMES + ["LICENSE", "NOTICE", "bootstrap.py", "__main__.py",
                                                        "pytest_plugin/juneau_terminal_pytest.py",
                                                        "playwright_reporter/juneau_terminal_playwright.cjs"])

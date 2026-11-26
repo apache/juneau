@@ -364,6 +364,13 @@ The zip ships two bash scripts in `juneau_terminal_scripts/bin/`, so a repositor
   `close` and `equalize` such panes. It knows nothing about juneau-terminal.
 - `watch-run.sh` wraps it for a juneau-terminal based script (`push.py`, `release.py`, `deploy*.py`): it picks the log and
   result paths, opens a follower pane that tails the full log, and prints the result summary when the script ends.
+- `tmux-toolbar.sh` is the one-row toolbar `watch-run.sh` opens under the log pane: `[Hide output]`/`[Show output]` (key `h`),
+  `[Cancel]` (`k`, live only while the run is running) and `[Close]` (`x`, cancels a running run first, then closes every pane of
+  the run), with the run's status (`running`, `ok`, `failed (exit N)`, `cancelled`) after the buttons. It takes the run from the
+  `TMUX_PANE_RUN_ID`/`TMUX_PANE_RUN_CANCEL` env that `tmux-pane.sh` gives every follower and polls the leader's `@tmux_state`.
+  With the toolbar, `watch-run.sh` runs `tmux-pane.sh` as `-k always --keep-on-cancel`, so the panes stay until Close, Enter in the
+  leader, or the next `watch-run.sh` launch (which closes kept panes unless `--no-close-kept`). `--no-toolbar` or
+  `JUNEAU_TERMINAL_TOOLBAR=0` restores the two-pane layout and the old `-k` behaviour. It needs tmux 3.4 or newer.
 
 Each script's header comment is its usage text.
 

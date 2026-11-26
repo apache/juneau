@@ -16,11 +16,16 @@
 # chooses the log and result paths itself (so nothing has to guess them), exports them, and prints the result summary.
 # Requires: bash, tmux, tmux-pane.sh beside it, perl (for the follower filter), python3 (optional, for the result summary).  Tested on macOS.
 #
-# Usage: watch-run.sh [--no-tail] [--no-close-kept] [-d DIR] [-n LINES] [-t TITLE] [-k fail|always|never] [-K MIN] [--reap]
+# Usage: watch-run.sh [--no-tail] [--no-close-kept] [--no-toolbar] [-d DIR] [-n LINES] [-t TITLE] [-k fail|always|never] [-K MIN] [--reap]
 #                     [--keep-on-cancel] [--read-only] -- CMD [ARGS...]
 #
 #   --no-tail  do not open the lower pane running `tail -F` on the full log
 #   --no-close-kept  leave kept panes from earlier runs open (by default they are closed before the new pane opens)
+#   --no-toolbar  do not open the one-row toolbar pane (see tmux-toolbar.sh: Hide/Show output, Cancel, Close and the run status).
+#                 The toolbar is on by default (set JUNEAU_TERMINAL_TOOLBAR=0 to turn it off everywhere); with it the panes stay
+#                 open after the run, so -k and a cancel's closing have no effect (it runs as -k always --keep-on-cancel).  It needs
+#                 tmux 3.4 or newer; on an older tmux a warning is printed and the run opens without it.
+#   --check-tmux-version "tmux 3.7c"  exit 0 when that `tmux -V` text is 3.4 or newer (used by the tests)
 #   --print-tail-filter  print the filter the follower pane pipes `tail -F` through, and exit (used by the tests)
 #   other options pass straight through to tmux-pane.sh (see its header); -t defaults to the script's name
 #
@@ -46,13 +51,28 @@ here=$(cd "$(dirname "$0")" && pwd)
 
 usage() { awk '/^# \*+$/ && length($0) > 40 {n++; next} n >= 2 && /^# Edit this file/ {exit} n >= 2' "$0" >&2; exit 2; }
 
-no_tail=0 close_kept=1 title=
+# Succeeds when `tmux -V` text $1 names version 3.4 or newer ("tmux 3.7c", "tmux next-3.5").  Text with no version passes: a
+# development build is assumed new enough.
+tmux_version_ok() {
+	local v=${1#tmux } major minor
+	v=${v#next-}
+	case $v in [0-9]*.[0-9]*) ;; *) return 0 ;; esac
+	major=${v%%.*}
+	minor=${v#*.}
+	minor=${minor%%[!0-9]*}
+	[ "$major" -gt 3 ] || { [ "$major" -eq 3 ] && [ "${minor:-0}" -ge 4 ]; }
+}
+
+no_tail=0 close_kept=1 title= toolbar=1
+[ "${JUNEAU_TERMINAL_TOOLBAR:-1}" != 0 ] || toolbar=0
 passthru=()
 while [ $# -gt 0 ]; do
 	case $1 in
 		--) shift; break ;;
 		--no-tail) no_tail=1 ;;
 		--no-close-kept) close_kept=0 ;;
+		--no-toolbar) toolbar=0 ;;
+		--check-tmux-version) tmux_version_ok "${2:-}"; exit $? ;;
 		--print-tail-filter) tail_filter; echo; exit 0 ;;
 		--reap|--keep-on-cancel|--read-only) passthru+=("$1") ;;
 		-[dntkK]) [ $# -ge 2 ] || usage; [ "$1" != -t ] || title=$2; passthru+=("$1" "$2"); shift ;;
@@ -63,6 +83,10 @@ while [ $# -gt 0 ]; do
 done
 [ $# -gt 0 ] || usage
 [ -n "${TMUX:-}" ] || { echo "watch-run.sh: not inside tmux" >&2; exit 2; }
+if [ $toolbar = 1 ] && ! tmux_version_ok "$(tmux -V 2>/dev/null)"; then
+	echo "watch-run.sh: warning: the toolbar needs tmux 3.4 or newer; opening without it" >&2
+	toolbar=0
+fi
 
 # The file-name form of a name, as juneau-terminal's safe_name makes it: runs of anything but word characters and dots
 # become one `-`, leading and trailing `-` and `.` are trimmed, and an empty result is `run`.
@@ -108,6 +132,11 @@ cmdq=$(printf '%q ' "$@")
 leader="JUNEAU_TERMINAL_FULL_LOG=$(printf '%q' "$full") JUNEAU_TERMINAL_BOARD_LOG=$(printf '%q' "$board") JUNEAU_TERMINAL_RESULT=$(printf '%q' "$result") JUNEAU_TERMINAL_CANCEL=\"\$TMUX_PANE_RUN_CANCEL\" ${cmdq% }"
 args=(${passthru[@]+"${passthru[@]}"} --pane "$leader")
 [ $no_tail = 1 ] || args+=(--pane-title "$(basename "$full")" --pane "tail -F $(printf '%q' "$full") | $(tail_filter)")
+# The toolbar is the last follower.  The panes must outlive the run (the toolbar shows its result), and a cancel must not close
+# them, so -k always and --keep-on-cancel come last and win over anything the caller passed (tmux-pane.sh keeps the last -k).
+if [ $toolbar = 1 ]; then
+	args+=(--pane-title controls --pane "exec $(printf '%q' "$here/tmux-toolbar.sh") --title $(printf '%q' "${title:-$stem}")" -k always --keep-on-cancel)
+fi
 
 # Clear finished (kept) panes from earlier runs and their followers first; tmux-pane.sh refuses running ones.  A failed
 # cleanup only warns, so it never stops the launch.  --no-close-kept skips it.

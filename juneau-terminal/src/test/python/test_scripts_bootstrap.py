@@ -346,7 +346,7 @@ class BinPathTest(unittest.TestCase):
     def test_zip_source_extracts_executable_scripts_under_the_version(self):
         got = self.bs.bin_path("watch-run.sh", source=self.zip, bin_root=self.root)
         self.assertEqual(got, self.root / "1.2.3" / "watch-run.sh")
-        for name in ("tmux-pane.sh", "watch-run.sh"):
+        for name in ("tmux-pane.sh", "tmux-toolbar.sh", "watch-run.sh"):
             self.assertTrue(os.access(self.root / "1.2.3" / name, os.X_OK), name)
 
     def test_unknown_name_lists_what_ships(self):
@@ -354,6 +354,7 @@ class BinPathTest(unittest.TestCase):
             with self.subTest(src=src.name), self.assertRaises(self.bs.BootstrapError) as cm:
                 self.bs.bin_path("nope.sh", source=src, bin_root=self.root)
             self.assertIn("tmux-pane.sh", str(cm.exception))
+            self.assertIn("tmux-toolbar.sh", str(cm.exception))
             self.assertIn("watch-run.sh", str(cm.exception))
 
     def test_zip_without_bin_names_the_remedy(self):

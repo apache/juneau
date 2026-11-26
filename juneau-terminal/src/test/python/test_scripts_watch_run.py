@@ -80,6 +80,53 @@ class WatchRunTest(WatchCase):
     def test_usage_error_without_a_command(self):
         self.assertEqual(self.run_watch("--no-tail")[0], 2)
 
+    def toolbar_env(self):
+        return dict(self.env, JUNEAU_TERMINAL_TOOLBAR="1")
+
+    def watch_with_toolbar(self, *args):
+        r = subprocess.run([str(SCRIPT), *args], capture_output=True, text=True, env=self.toolbar_env(), timeout=60)
+        return r.returncode, r.stdout, r.stderr
+
+    def test_tmux_version_gate(self):
+        for v, ok in (("tmux 3.7c", 0), ("tmux 3.4", 0), ("tmux next-3.5", 0), ("tmux 3.3a", 1), ("tmux 2.9", 1), ("tmux 4.0", 0)):
+            with self.subTest(v=v):
+                r = subprocess.run([str(SCRIPT), "--check-tmux-version", v], capture_output=True, text=True)
+                self.assertEqual(r.returncode, ok)
+
+    @slow_tmux
+    def test_toolbar_keeps_leader_log_and_toolbar_after_a_successful_run(self):
+        code, out, _ = self.watch_with_toolbar("--", "true")
+        self.assertEqual(code, 0)
+        self.assertEqual(self.wait_panes(4), 4)     # agent + leader + log + toolbar
+        rows = self.tmux("list-panes", "-s", "-t", "t", "-F", "#{pane_current_command}|#{pane_title}")
+        self.assertIn("controls", rows)
+
+    @slow_tmux
+    def test_toolbar_overrides_k_never_and_cancel_closing(self):
+        code, _, _ = self.watch_with_toolbar("-k", "never", "--", "true")
+        self.assertEqual(code, 0)
+        self.assertEqual(self.wait_panes(4), 4)
+
+    @slow_tmux
+    def test_no_toolbar_flag_restores_the_two_pane_layout(self):
+        code, _, _ = self.watch_with_toolbar("--no-toolbar", "--", "true")
+        self.assertEqual(code, 0)
+        self.assertEqual(self.wait_panes(1), 1)     # -k fail closes both panes on success
+
+    @slow_tmux
+    def test_toolbar_status_reaches_ok_and_close_cleans_up(self):
+        self.watch_with_toolbar("--", "true")
+        self.wait_panes(4)
+        bar = next(l.split("|")[0] for l in self.tmux("list-panes", "-s", "-t", "t", "-F", "#{pane_id}|#{pane_title}").splitlines()
+                   if l.endswith("|controls"))
+        deadline = time.time() + 8
+        while "ok" not in self.tmux("capture-pane", "-p", "-t", bar) and time.time() < deadline:
+            time.sleep(0.2)
+        self.assertIn("[Hide output] [Cancel] [Close]", self.tmux("capture-pane", "-p", "-t", bar))
+        self.assertIn(": ok", self.tmux("capture-pane", "-p", "-t", bar))
+        self.tmux("send-keys", "-t", bar, "-l", "x")
+        self.assertEqual(self.wait_panes(1, timeout=15), 1)
+
     def test_paths_stem_pattern_and_pretouch_before_the_pane_opens(self):
         tmp_path = self.tmp
         out_file = tmp_path / "seen.txt"

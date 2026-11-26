@@ -105,24 +105,39 @@ def normalize(msg: str) -> str:
     return msg
 
 
+def classpath_modules(root: Path) -> list[Path]:
+    """The target directory of every module that has Java sources, i.e. each one that needs a cached classpath file."""
+    return sorted(p.parent / "target" for p in root.glob("**/pom.xml")
+                  if (p.parent / "src" / "main" / "java").is_dir() and not {"node_modules", "target"} & set(p.relative_to(root).parts))
+
+
 def dependency_classpath(root: Path, refresh: bool = False) -> str:
     """The union of every module's compile classpath, minus Juneau's own artifacts (the sources are compiled directly).
 
     Each module's classpath is cached at target/javadoc-classpath.txt by one offline `mvn dependency:build-classpath` run; delete
-    the files (or pass --refresh-classpath) after a dependency change.
+    the files (or pass --refresh-classpath) after a dependency change. A cache that lacks a file for any module is treated as
+    missing, and a rebuild goes to a temporary name first so a failed one leaves the existing cache alone.
+    Raises RuntimeError when the classpath cannot be built.
     """
-    def cached() -> list[Path]:
-        return sorted(p for p in root.glob("**/target/" + CLASSPATH_FILE) if "node_modules" not in p.parts)
-    if refresh or not cached():
-        for p in cached():
-            p.unlink()
-        cmd = ["mvn", "-o", "-q", "dependency:build-classpath", "-Dmdep.outputFile=target/" + CLASSPATH_FILE, "-Dmdep.includeScope=compile"]
+    modules = classpath_modules(root)
+
+    def complete(name: str) -> bool:
+        return bool(modules) and all((m / name).is_file() for m in modules)
+    if refresh or not complete(CLASSPATH_FILE):
+        building = CLASSPATH_FILE + ".new"
+        for m in modules:
+            (m / building).unlink(missing_ok=True)
+        cmd = ["mvn", "-o", "-q", "dependency:build-classpath", "-Dmdep.outputFile=target/" + building, "-Dmdep.includeScope=compile"]
         proc = subprocess.run(cmd, cwd=root, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, check=False)
-        if proc.returncode != 0 or not cached():
+        if proc.returncode != 0 or not complete(building):
+            for m in modules:
+                (m / building).unlink(missing_ok=True)
             raise RuntimeError("could not build the dependency classpath with mvn:\n" + proc.stdout[-2000:])
+        for m in modules:
+            (m / building).replace(m / CLASSPATH_FILE)
     entries, seen = [], set()
-    for p in cached():
-        for e in p.read_text(encoding="utf-8").strip().split(os.pathsep):
+    for m in modules:
+        for e in (m / CLASSPATH_FILE).read_text(encoding="utf-8").strip().split(os.pathsep):
             if e and e not in seen and "/org/apache/juneau/" not in e.replace(os.sep, "/"):
                 seen.add(e)
                 entries.append(e)
@@ -179,12 +194,19 @@ def main(argv=None) -> int:
     if args.from_file:
         output = Path(args.from_file).read_text(encoding="utf-8")
     else:
-        try:
-            classpath = dependency_classpath(root, args.refresh_classpath) if RESOLVING_GROUPS.intersection(groups) else None
-        except RuntimeError as e:
-            print(f"javadoc html check: {e}", file=sys.stderr)
-            return 2
-        output = run_javadoc(root, groups, args.java_home, classpath)
+        classpath = None
+        if RESOLVING_GROUPS.intersection(groups):
+            try:
+                classpath = dependency_classpath(root, args.refresh_classpath)
+            except RuntimeError as e:
+                skipped = sorted(RESOLVING_GROUPS.intersection(groups))
+                groups = [g for g in groups if g not in RESOLVING_GROUPS]
+                reason = str(e).splitlines()[0]
+                print(f"javadoc html check: warning: skipped the {', '.join(skipped)} group ({reason}); "
+                      "CI's maven-javadoc-plugin:aggregate still enforces it. Run `mvn install` to build the sibling snapshots, "
+                      "then --refresh-classpath.", file=sys.stderr)
+                print(f"javadoc html check: skipped {', '.join(skipped)}")
+        output = run_javadoc(root, groups, args.java_home, classpath) if groups else ""
     remaining, custom, noise = classify(parse(output))
     digest(remaining, custom, noise, args.first, root)
     return 0 if args.report_only or not remaining else 1
