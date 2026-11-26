@@ -13,12 +13,14 @@
 """watch-run.sh on a throwaway tmux server (-L), skipped where no private server can start."""
 
 import re
+import shutil
 import subprocess
+import sys
 import time
 import unittest
 from pathlib import Path
 
-from tmux_support import WATCH_RUN_SH, WatchCase, requires_tmux, slow_tmux
+from tmux_support import BIN, WATCH_RUN_SH, WatchCase, requires_tmux, slow_tmux
 
 SCRIPT = WATCH_RUN_SH
 
@@ -318,12 +320,20 @@ class WatchRunTest(WatchCase):
         proc.communicate(timeout=60)
         self.assertEqual(proc.returncode, 0)
 
+    @requires_tmux
+    def test_the_engine_runs_in_process_through_load_engine(self):
+        code = (
+            "import sys; sys.path.insert(0, %r); import bootstrap\n"
+            "eng = bootstrap.load_engine(source=%r)\n"
+            "sys.exit(eng.main(['watch-run', '-k', 'never', '--', 'bash', '-c', 'exit 3']))\n"
+            % (str(BIN.parents[1]), str(BIN.parents[1])))
+        r = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env=self.env, timeout=60)
+        self.assertEqual(r.returncode, 3, r.stdout + r.stderr)
+        self.assertIn("exit=3", r.stdout)
+
     def test_a_failing_cleanup_warns_and_the_launch_continues(self):
         d = self.tmp / "copy"
-        d.mkdir()
-        for name in ("watch-run.sh", "tmux-pane.sh"):
-            (d / name).write_text((SCRIPT.parent / name).read_text())
-            (d / name).chmod(0o755)
+        shutil.copytree(SCRIPT.parent, d, ignore=shutil.ignore_patterns("__pycache__"))
         real = d / "tmux-pane-real.sh"
         (d / "tmux-pane.sh").rename(real)
         (d / "tmux-pane.sh").write_text(

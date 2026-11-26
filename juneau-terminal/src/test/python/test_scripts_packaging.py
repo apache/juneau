@@ -83,6 +83,27 @@ class DescriptorTest(unittest.TestCase):
         self.assertEqual([i.text for i in bins.iter(f"{ASM}include")], ["juneau_terminal_scripts/bin/*.sh"])
         self.assertEqual(bins.findtext(f"{ASM}fileMode"), "0755")
 
+    def test_the_engine_ships_with_the_python_modules_at_normal_mode(self):
+        files = package_files()
+        for rel in ("juneau_terminal_scripts/bin/engine.py", "juneau_terminal_scripts/bin/terminal_engine/__init__.py",
+                    "juneau_terminal_scripts/bin/terminal_engine/toolbar.py"):
+            self.assertIn(rel, files)
+        fs = self.root.findall(f"{ASM}fileSets/{ASM}fileSet")[0]
+        includes = [_ant(i.text) for i in fs.iter(f"{ASM}include")]
+        for rel in ("juneau_terminal_scripts/bin/engine.py", "juneau_terminal_scripts/bin/terminal_engine/toolbar.py"):
+            with self.subTest(rel=rel):
+                self.assertTrue(any(p.match(rel) for p in includes))
+        shims = self.root.findall(f"{ASM}fileSets/{ASM}fileSet")[1]      # only the shims carry the exec bit
+        self.assertEqual([i.text for i in shims.iter(f"{ASM}include")], ["juneau_terminal_scripts/bin/*.sh"])
+
+    def test_the_engine_modules_are_in_the_built_zip_with_the_shims_executable(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with zipfile.ZipFile(build_zip(Path(tmp) / "t.zip")) as z:
+                names = z.namelist()
+                self.assertIn("juneau_terminal_scripts/bin/engine.py", names)
+                self.assertIn("juneau_terminal_scripts/bin/terminal_engine/runner.py", names)
+                _assert_bin_modes(self, z)
+
     def test_root_files(self):
         sources = [f.findtext(f"{ASM}source") for f in self.root.findall(f"{ASM}files/{ASM}file")]
         self.assertEqual(sources, ["${project.basedir}/src/main/python/bootstrap.py",

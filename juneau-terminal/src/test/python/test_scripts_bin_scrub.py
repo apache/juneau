@@ -37,7 +37,7 @@ class BinScrubTest(unittest.TestCase):
     def test_license_header_on_the_scripts(self):
         for p in (TMUX_PANE_SH, WATCH_RUN_SH):
             lines = p.read_text().splitlines()
-            self.assertEqual(lines[0], "#!/usr/bin/env bash", p.name)
+            self.assertEqual(lines[0], "#!/bin/sh", p.name)      # the shims; the engine is Python
             self.assertIn("Licensed to the Apache Software Foundation", "\n".join(lines[:14]), p.name)
 
     def test_no_personal_or_tracker_text(self):
@@ -63,9 +63,10 @@ class BinScrubTest(unittest.TestCase):
             for bad in ("Licensed", "License", "WARRANTIES", "apache.org", "tail_filter", "perl -", "Edit this file"):
                 self.assertNotIn(bad, r.stderr, "%s usage has %s" % (p.name, bad))
             # the first usage line is the script's description: the first comment line after the license block
-            body = p.read_text().splitlines()
-            rules = [i for i, line in enumerate(body) if re.fullmatch(r"# \*{40,}", line)]
-            self.assertEqual(lines[0], body[rules[1] + 1], p.name)
+            # (the shims hold no usage; the text lives in terminal_engine/usage_text.py, so compare with that)
+            from terminal_engine.usage_text import TEXT
+            self.assertEqual(r.stderr, TEXT[p.stem], p.name)
+            self.assertTrue(lines[0].startswith("# "), p.name)
         self.assertIn("perl (for the follower filter)", usage_of(WATCH_RUN_SH).stderr)
 
 

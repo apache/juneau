@@ -203,26 +203,28 @@ _TEMP_TTL = 3600     # seconds a leftover dot-prefixed temp file survives before
 
 
 def _extract_bin(zip_path, dest):
-    """Extract every juneau_terminal_scripts/bin/ file into dest, replacing each atomically; returns the names."""
+    """Extract every juneau_terminal_scripts/bin/ file (subdirectories included) into dest, replacing each atomically;
+    returns the names of the top-level files (the scripts and engine.py), sorted."""
     dest.mkdir(parents=True, exist_ok=True)
     wanted = {}
     with zipfile.ZipFile(zip_path) as z:
         for info in z.infolist():
             if info.is_dir() or not info.filename.startswith(BIN_DIR + "/"):
                 continue
-            wanted[Path(info.filename).name] = z.read(info)
+            wanted[info.filename[len(BIN_DIR) + 1:]] = z.read(info)
     if not wanted:
         raise BootstrapError(f"{zip_path} has no {BIN_DIR}/ (an older toolkit); {_REMEDY}")
-    for name, data in wanted.items():
-        target = dest / name
+    for rel, data in wanted.items():
+        target = dest / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
         if target.is_file() and target.read_bytes() == data and os.access(target, os.X_OK):
             continue
-        fd, tmp = tempfile.mkstemp(dir=str(dest), prefix="." + name + ".")
+        fd, tmp = tempfile.mkstemp(dir=str(target.parent), prefix="." + target.name + ".")
         try:
             with os.fdopen(fd, "wb") as f:
                 f.write(data)
             os.chmod(tmp, 0o755)
-            os.replace(tmp, target)      # atomic; a running bash keeps reading the inode it opened
+            os.replace(tmp, target)      # atomic; a running interpreter keeps the inode it opened
         except BaseException:
             try:
                 os.unlink(tmp)
@@ -230,15 +232,21 @@ def _extract_bin(zip_path, dest):
                 pass
             raise
     now = time.time()
-    for old in dest.iterdir():
-        if not old.is_file():
+    for old in sorted(dest.rglob("*"), key=lambda p: len(p.parts), reverse=True):
+        if "__pycache__" in old.parts:
+            continue                     # bytecode caches the engine writes beside its modules
+        if old.is_dir():
+            try:
+                old.rmdir()              # only succeeds when empty (a package the new zip dropped)
+            except OSError:
+                pass
             continue
         if old.name.startswith("."):      # a crashed extract's temp file; leave a concurrent caller's fresh one
             if now - old.stat().st_mtime > _TEMP_TTL:
                 old.unlink()
-        elif old.name not in wanted:
+        elif old.relative_to(dest).as_posix() not in wanted:
             old.unlink()
-    return sorted(wanted)
+    return sorted(n for n in wanted if "/" not in n)
 
 
 def _bin_version(source, version):
@@ -263,11 +271,11 @@ def bin_path(name, pom="pom.xml", version=None, cache_dir="target/juneau-termina
     src = Path(str(source))
     if src.is_dir():
         d = src / BIN_DIR
-        shipped = sorted(f.name for f in d.glob("*.sh")) if d.is_dir() else []
+        shipped = sorted(f.name for f in d.iterdir() if f.is_file() and f.suffix in (".sh", ".py")) if d.is_dir() else []
         if name not in shipped:
             raise BootstrapError(f"no script {name!r} in {d}; shipped: {', '.join(shipped) or '(none)'}")
         f = d / name
-        if not os.access(f, os.X_OK):
+        if f.suffix == ".sh" and not os.access(f, os.X_OK):
             raise BootstrapError(f"{f} is not executable (a packaging bug)")
         return f
     ver, digest = _bin_version(src, version)
@@ -280,6 +288,17 @@ def bin_path(name, pom="pom.xml", version=None, cache_dir="target/juneau-termina
     if name not in shipped:
         raise BootstrapError(f"no script {name!r} in {src}; shipped: {', '.join(shipped)}")
     return dest / name
+
+
+def load_engine(pom="pom.xml", version=None, cache_dir="target/juneau-terminal", *, bin_root=None, source=None):
+    """Import and return the `terminal_engine` package (the Python tmux engine) from the directory that holds the shims
+    (extracted from the zip when the toolkit is one).  The direct path of the script mode helper calls this instead of
+    running a shim."""
+    engine_py = bin_path("engine.py", pom=pom, version=version, cache_dir=cache_dir, bin_root=bin_root, source=source)
+    entry = str(engine_py.parent)
+    if entry not in sys.path:
+        sys.path.insert(0, entry)
+    return importlib.import_module("terminal_engine")
 
 
 def _cli_source(pom, cache_dir, version):

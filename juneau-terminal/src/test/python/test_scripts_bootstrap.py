@@ -325,6 +325,58 @@ class BinPathTest(unittest.TestCase):
         self.bs._located = None
         self.addCleanup(setattr, self.bs, "_located", self.saved)
 
+    def _zip_with_engine(self):
+        path = self.tmp / "engine.zip"
+        with zipfile.ZipFile(path, "w") as z:
+            z.writestr("juneau_terminal_scripts/__init__.py", "")
+            for name in ("tmux-pane.sh", "tmux-toolbar.sh", "watch-run.sh"):
+                info = zipfile.ZipInfo("juneau_terminal_scripts/bin/" + name)
+                info.external_attr = 0o100755 << 16
+                z.writestr(info, "#!/bin/sh\n")
+            z.writestr("juneau_terminal_scripts/bin/engine.py", "X = 1\n")
+            z.writestr("juneau_terminal_scripts/bin/terminal_engine/__init__.py", "Y = 2\n")
+            z.writestr("juneau_terminal_scripts/bin/terminal_engine/mouse.py", "Z = 3\n")
+        return path
+
+    def test_extract_keeps_the_engine_package_layout(self):
+        src = self._zip_with_engine()
+        got = self.bs.bin_path("engine.py", source=src, version="9.9", bin_root=self.root)
+        self.assertEqual(got, self.root / "9.9" / "engine.py")
+        self.assertEqual((self.root / "9.9" / "terminal_engine" / "mouse.py").read_text(), "Z = 3\n")
+        self.assertTrue(os.access(self.root / "9.9" / "tmux-pane.sh", os.X_OK))
+
+    def test_extract_prunes_a_file_the_new_zip_no_longer_ships(self):
+        src = self._zip_with_engine()
+        self.bs.bin_path("engine.py", source=src, version="9.9", bin_root=self.root)
+        stale = self.root / "9.9" / "terminal_engine" / "old_module.py"
+        stale.write_text("gone = True\n")
+        self.bs.bin_path("engine.py", source=src, version="9.9", bin_root=self.root)
+        self.assertFalse(stale.exists())
+
+    def test_directory_source_finds_engine_py_in_place(self):
+        d = self.tmp / "tree" / "juneau_terminal_scripts" / "bin"
+        (d / "terminal_engine").mkdir(parents=True)
+        (d / "engine.py").write_text("X = 1\n")
+        (d / "watch-run.sh").write_text("#!/bin/sh\n")
+        (d / "watch-run.sh").chmod(0o755)
+        got = self.bs.bin_path("engine.py", source=self.tmp / "tree", bin_root=self.root)
+        self.assertEqual(got, d / "engine.py")
+
+    def test_load_engine_imports_terminal_engine_from_the_bin_directory(self):
+        d = self.tmp / "tree2" / "juneau_terminal_scripts" / "bin"
+        (d / "terminal_engine").mkdir(parents=True)
+        (d / "engine.py").write_text("")
+        (d / "terminal_engine" / "__init__.py").write_text("MARK = 'loaded'\n")
+        saved_mod, saved_path = sys.modules.pop("terminal_engine", None), list(sys.path)
+        try:
+            mod = self.bs.load_engine(source=self.tmp / "tree2", bin_root=self.root)
+            self.assertEqual(mod.MARK, "loaded")
+        finally:                       # the real engine may already be imported by other test modules
+            sys.modules.pop("terminal_engine", None)
+            if saved_mod is not None:
+                sys.modules["terminal_engine"] = saved_mod
+            sys.path[:] = saved_path
+
     def cli(self, *args, cwd=None, env=None, script=None):
         full = base_env(HOME=str(self.home), **(env or {}))
         return python([str(script or BOOTSTRAP), *args], cwd=cwd or str(self.tmp), env=full)

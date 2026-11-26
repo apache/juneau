@@ -25,6 +25,8 @@ from pathlib import Path
 BIN = Path(__file__).resolve().parents[2] / "main" / "python" / "juneau_terminal_scripts" / "bin"
 TMUX_PANE_SH = BIN / "tmux-pane.sh"
 WATCH_RUN_SH = BIN / "watch-run.sh"
+if str(BIN) not in sys.path:
+    sys.path.insert(0, str(BIN))      # the engine modules (terminal_engine) are imported by the unit tests
 
 
 def _probe():

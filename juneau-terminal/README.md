@@ -204,7 +204,7 @@ region.
 `juneau-terminal` also ships `juneau_terminal_scripts`, a stdlib-only toolkit for push and release scripts, as
 `org.apache.juneau:juneau-terminal:<version>:zip`. It holds the helpers every push.py and release.py rewrites: git
 readers and writers, a session with exit codes, the bell and the done marker, tool runners, a step registry with
-resume, locks and prompts. The zip also carries `juneau_terminal_scripts/bin/tmux-pane.sh` and `watch-run.sh` (mode 0755; see
+resume, locks and prompts. The zip also carries `juneau_terminal_scripts/bin/tmux-pane.sh`, `watch-run.sh` and `tmux-toolbar.sh` (shims, mode 0755, plus `engine.py` and `terminal_engine/`, which `--bin` extracts beside them; see
 [The side-pane scripts](#the-side-pane-scripts)) and a root `__main__.py`, so `python3 juneau-terminal-<v>.zip --bin NAME`
 works. Policy stays in the script. The toolkit never runs `git add`, and it never decides what
 counts as unreviewed.
@@ -359,7 +359,11 @@ The `load_juneau_terminal` snippet above still works for a single-file adopter t
 
 ## The side-pane scripts
 
-The zip ships two bash scripts in `juneau_terminal_scripts/bin/`, so a repository gets one maintained copy instead of its own:
+The zip ships three scripts in `juneau_terminal_scripts/bin/`, so a repository gets one maintained copy instead of its own.
+Each `.sh` file is a two-line shim that runs the Python engine beside it (`engine.py` and the `terminal_engine/` package,
+standard library only, Python 3.9 or newer), so the script paths stay the same. `python3` must be on the `PATH`. The engine is
+also importable: `bootstrap.load_engine()` returns the `terminal_engine` package, and `terminal_engine.main(["watch-run", ...])`
+returns the same exit code the shim would, without a second process.
 - `tmux-pane.sh` runs a command in a tmux side pane with a real TTY, blocks until it ends, and can `cancel`, `list`,
   `close` and `equalize` such panes. It knows nothing about juneau-terminal.
 - `watch-run.sh` wraps it for a juneau-terminal based script (`push.py`, `release.py`, `deploy*.py`): it picks the log and
@@ -372,7 +376,7 @@ The zip ships two bash scripts in `juneau_terminal_scripts/bin/`, so a repositor
   leader, or the next `watch-run.sh` launch (which closes kept panes unless `--no-close-kept`). `--no-toolbar` or
   `JUNEAU_TERMINAL_TOOLBAR=0` restores the two-pane layout and the old `-k` behaviour. It needs tmux 3.4 or newer.
 
-Each script's header comment is its usage text.
+Run a script with a bad argument (or none, for `watch-run.sh`) for its usage text; it exits 2.
 
 ### Finding them
 
@@ -401,8 +405,8 @@ name, so a new build replaces the files under it.
 
 ### Requirements
 
-`bash`, `tmux`, `ps` and `pgrep`, plus `perl` for the follower filter. `python3` (for the result summary) and `lsof`
-(for the listening ports in the orphan report) are optional. Tested on macOS.
+`tmux` 3.4 or newer, `python3` 3.9 or newer, `ps` and `pgrep`, plus `bash` (it runs `--pane STRING` commands) and `perl` (the
+follower filter). `lsof` (for the listening ports in the orphan report) is optional. Tested on macOS.
 
 ### Using them
 

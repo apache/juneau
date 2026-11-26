@@ -17,7 +17,7 @@
 -->
 <!--
 	The juneau_terminal_scripts toolkit as org.apache.juneau:juneau-terminal:<version>:zip.  Layout: juneau_terminal_scripts/**/*.py, the shell
-	scripts in juneau_terminal_scripts/bin/*.sh (mode 0755), plus bootstrap.py and __main__.py (the zip's entry point, for
+	shims in juneau_terminal_scripts/bin/*.sh (mode 0755), which exec the Python engine (bin/engine.py and bin/terminal_engine/*.py, shipped by the first file set), plus bootstrap.py and __main__.py (the zip's entry point, for
 	the zip run as a script) at the root (a zip on sys.path imports juneau_terminal_scripts) and the pytest plugin alone in pytest_plugin/ (the suite under test gets only
 	zip/pytest_plugin on PYTHONPATH), the Playwright reporter in playwright_reporter/ (juneau_terminal.py extracts it, since node can't
 	load from a zip), plus the repository's LICENSE and NOTICE.

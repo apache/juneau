@@ -126,6 +126,18 @@ class PyzAndTarballTest(Tmp):
         self.assertEqual(reporter.name, "juneau_terminal_playwright.cjs")
         self.assertEqual(pyz("path", "plugin").stdout.strip(), str(self.tmp / PYZ) + os.sep + "juneau_terminal_pytest_plugin")
 
+    def test_pyz_bin_extracts_a_working_shim(self):
+        self.assertEqual(build(self.tmp, "pyz").returncode, 0)
+        home = self.tmp / "home"
+        home.mkdir()
+        env = {**os.environ, "HOME": str(home), "PYTHONDONTWRITEBYTECODE": "1"}
+        out = subprocess.run([sys.executable, str(self.tmp / PYZ), "--bin", "tmux-toolbar.sh"], capture_output=True, text=True, env=env)
+        script = Path(out.stdout.strip())
+        self.assertTrue((script.parent / "engine.py").is_file())
+        self.assertTrue((script.parent / "terminal_engine" / "toolbar.py").is_file())
+        r = subprocess.run([str(script), "--print-hit", "15"], capture_output=True, text=True)
+        self.assertEqual((r.returncode, r.stdout.strip()), (0, "cancel"))
+
     def test_tarball(self):
         self.assertEqual(build(self.tmp, "tgz").returncode, 0)
         raw = (self.tmp / TGZ).read_bytes()
@@ -171,7 +183,8 @@ class BackendTest(Tmp):
             info = "apache_juneau_terminal-10.0.0.dev0.dist-info/"
             entry_points = z.read(info + "entry_points.txt").decode()
             metadata = z.read(info + "METADATA").decode()
-        for want in [*TOP, "juneau_terminal_scripts/_build_version.py", "juneau_terminal_scripts/bin/watch-run.sh",
+        for want in [*TOP, "juneau_terminal_scripts/_build_version.py", "juneau_terminal_scripts/bin/watch-run.sh", "juneau_terminal_scripts/bin/engine.py",
+                     "juneau_terminal_scripts/bin/terminal_engine/__init__.py",
                      info + "licenses/LICENSE", info + "licenses/NOTICE"]:
             self.assertIn(want, names)
         self.assertIn("juneau-terminal = juneau_terminal_cli:main", entry_points)
