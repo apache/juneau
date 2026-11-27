@@ -76,3 +76,4 @@ The commit and push steps run under a PTY with a 20-second watchdog. If git goes
 
 - `test.py`, `push-timings.py`, `check-container-tags.py`, `check-bom-completeness.py`, `check-javadoc-html.py`
 - Docs site: Developer Info, Script: push (`04.02.02.ScriptPush.md` in juneau-docs)
+- Split-mode scenario 2 check (Claude Code + tmux): placeholder line, removed after scenario 3.
