@@ -36,6 +36,7 @@ import signal
 import subprocess
 import sys
 import tempfile
+import time
 from collections import namedtuple
 from pathlib import Path
 
@@ -44,6 +45,7 @@ ENGINES = ("auto", "shim", "direct")
 MODE_ENV = "JUNEAU_TERMINAL_MODE"
 ENGINE_ENV = "JUNEAU_TERMINAL_ENGINE"
 ATTACH_ENV = "JUNEAU_TERMINAL_ATTACH_CMD"
+ALT_ON, ALT_OFF = "\033[?1049h\033[H\033[2J", "\033[?1049l"
 FINAL_FILE_ENV = "JUNEAU_TERMINAL_FINAL_FILE"
 CONSOLE_ENV = "JUNEAU_TERMINAL_CONSOLE"
 LOG_DIR_ENV = "JUNEAU_TERMINAL_LOG_DIR"
@@ -315,8 +317,29 @@ def _launch_new_session(script, cwd, title, inner):
     sys.stdout.flush()
     stub = os.environ.get(ATTACH_ENV)
     attach = [*shlex.split(stub), name] if stub else ["tmux", "attach", "-t", name]
-    rc = subprocess.run(attach, env=env).returncode
+    _await_hidden_launcher(name, env)
+    alt = sys.stdout.isatty()
+    if alt:                                  # the board's frames stay on the alternate screen, never in the user's scrollback
+        sys.stdout.write(ALT_ON)
+        sys.stdout.flush()
+    try:
+        rc = subprocess.run(attach, env=env).returncode
+    finally:
+        if alt:
+            sys.stdout.write(ALT_OFF)
+            sys.stdout.flush()
     return True, _final_report(final, rc)
+
+
+def _await_hidden_launcher(name, env, limit=5.0):
+    """Hold the attach until the session's launcher pane has moved to its own window (or the session is gone), so the first frame
+    the user sees is the run's panes.  Gives up after limit seconds and attaches anyway."""
+    deadline = time.monotonic() + limit
+    while time.monotonic() < deadline:
+        rc, out = _tmux("list-windows", "-t", name, "-F", "#{window_name}", env=env)
+        if rc != 0 or "launcher" in out.split():
+            return
+        time.sleep(0.05)
 
 
 def _final_report(final, attach_rc):

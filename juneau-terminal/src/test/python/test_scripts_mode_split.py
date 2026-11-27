@@ -252,7 +252,7 @@ class SplitNewSessionTest(ModeSplitCase):
 
     def test_stale_tmux_variable_still_creates_a_session(self):
         self.nest_env["TMUX"] = "/nonexistent/sock,1,0"
-        code, _ = self.pty_run("--mode", "split")
+        code, _ = self.pty_run("--mode", "split", "--sleep", "8")     # the attach stub returns at once; the run must outlive the check
         self.assertEqual(code, 0)
         names = self.sessions()
         self.assertTrue(any(n.startswith("jt-fixture-") for n in names), names)
@@ -267,7 +267,7 @@ class SplitNewSessionTest(ModeSplitCase):
         self.pty_run("--mode", "split")
         first = [n for n in self.sessions() if n.startswith("jt-fixture-")]
         time.sleep(3)
-        self.pty_run("--mode", "split")
+        self.pty_run("--mode", "split", "--sleep", "8")
         second = [n for n in self.sessions() if n.startswith("jt-fixture-")]
         self.assertTrue(second)
         self.assertFalse(set(first) & set(second) and len(second) > 1, (first, second))
@@ -295,3 +295,33 @@ class SplitNewSessionTest(ModeSplitCase):
         self.assertIn("fixture ran mode=dash", text)
         self.assertIn("exit=3", text)
         self.assertIn("full log: ", text)
+
+    def test_attach_frames_stay_off_the_main_screen_and_the_launcher_is_hidden_at_attach(self):
+        import pty
+        import select
+        seen = self.tmp_seen = Path(tempfile.mkdtemp(prefix="jt-seen-", dir="/tmp")) / "windows"
+        self.addCleanup(shutil.rmtree, str(seen.parent), True)
+        self.nest_env["JUNEAU_TERMINAL_ATTACH_CMD"] = (
+            "sh -c 'tmux -L default list-windows -t \"$1\" -F \"#{window_name}\" > %s; printf \"FRAMEROW1\\nFRAMEROW2\\n\"; "
+            "while tmux -L default has-session -t \"$1\" 2>/dev/null; do sleep 0.3; done' attach" % seen)
+        master, slave = pty.openpty()
+        try:
+            p = subprocess.Popen([sys.executable, str(self.fixture), "--mode", "split"], stdin=slave, stdout=slave,
+                                 stderr=subprocess.PIPE, text=True, env=self.nest_env)
+            p.wait(timeout=90)
+            data = b""
+            while select.select([master], [], [], 0.5)[0]:
+                chunk = os.read(master, 65536)
+                if not chunk:
+                    break
+                data += chunk
+        finally:
+            os.close(slave)
+            os.close(master)
+        text = data.decode(errors="replace")
+        self.assertIn("launcher", seen.read_text().split())          # already in a window of its own when the client attached
+        on, off = text.index("\033[?1049h"), text.rindex("\033[?1049l")
+        self.assertIn("FRAMEROW1", text[on:off])
+        self.assertNotIn("FRAMEROW", text[off:])                      # nothing of the live frames after the alternate screen is left
+        self.assertNotIn("FRAMEROW", text[:on])
+        self.assertEqual(text[off:].count("fixture ran"), 1)
