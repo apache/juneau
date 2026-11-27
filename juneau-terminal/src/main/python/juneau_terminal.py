@@ -2166,7 +2166,7 @@ def header_lines(block, cols, color=False, live=False):
     """A header block's lines.  ("header", text) is the text as is; ("header", text, mark) puts mark in the icon
     column, dim when it is MORE_MARK.  A fourth field ("cut") marks a `lines` entry.  On the live screen (live) the
     title row and the cut rows are cut to cols with an ellipsis, so each costs one line; elsewhere the title row
-    word-wraps at cols with a two-space hanging indent.  The log rows never wrap or cut, so a path stays on its
+    word-wraps at cols with a two-space hanging indent.  The log rows never wrap or cut (in a toolkit pane, TMUX_PANE_RUN_ID set, they are cut to the width with an ellipsis), so a path stays on its
     `tail -f` line."""
     if len(block) < 3:
         return [block[1]]
@@ -2437,6 +2437,13 @@ def _fit_row(label, cells, rest, elapsed, cols, wrap=False):
     return _fit(label + "  …" + "".join(cells[len(cells) - (room - 1):]) + "  " + rest, elapsed, cols)
 
 
+def _in_toolkit_pane():
+    """True in a pane tmux-pane.sh opened (it sets TMUX_PANE_RUN_ID): the pane is resized on its own, so a log row is cut to
+    the width with an ellipsis, as every other live line is, instead of wrapping onto rows that a resize would lay out again.
+    The record printed at the end still holds the whole path."""
+    return bool(os.environ.get("TMUX_PANE_RUN_ID"))
+
+
 def terminal_size():
     """shutil.get_terminal_size() with Python 3.11's fallback: before 3.11 a terminal that reports no size (a fresh PTY,
     Docker, a CI agent) yields 0 columns or lines instead of 80x24."""
@@ -2644,6 +2651,8 @@ class LiveRenderer:
             text = header_lines(block, cols, self.color, live=True)[0]
             if len(block) > 2 and block[2] == HEAD_MARK and not title:
                 title = [(text, False)]
+            elif len(block) <= 3 and _in_toolkit_pane():
+                head.append((text if _vlen(text) <= cols else _vcut(text, max(0, cols - 1)) + "…", False))
             else:
                 head.append((text, len(block) <= 3))
         return title + head

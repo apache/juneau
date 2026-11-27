@@ -21,6 +21,7 @@ import time
 
 from . import ENGINE_PY, UsageError, script_path
 from . import panes, procs, registry
+from .out import emit
 from .tmux import show_option, tmux, tmux_out
 
 
@@ -34,6 +35,8 @@ class Options:
         self.reap = False
         self.keeponcancel = False
         self.readonly = False
+        self.hide = False
+        self.quietexit = False
         self.cmdmode = False
         self.panes = []
         self.sizes = []
@@ -76,6 +79,10 @@ def parse_options(argv):
             o.keeponcancel = True
         elif a == "--read-only":
             o.readonly = True
+        elif a == "--hide-launcher":
+            o.hide = True
+        elif a == "--quiet-exit":
+            o.quietexit = True
         elif a == "--pane":
             if i + 1 >= n:
                 raise UsageError()
@@ -136,6 +143,44 @@ def _pane_h(pane):
     return int(h) if h.isdigit() else 0
 
 
+class Launcher:
+    """The pane the command was typed in.  With --hide-launcher it moves to a window of its own while the run is going, so the
+    run's panes fill the window, and moves back when the run ends.  Only a launcher that is the pane's own foreground process
+    moves (its stdout is the pane's tty): a caller that merely has TMUX_PANE set, an agent running a tool call, keeps its pane."""
+
+    def __init__(self, pane, leader):
+        self.pane, self.leader, self.window = pane, leader, ""
+
+    @staticmethod
+    def owns(pane):
+        """True when this process's stdout is the tty of pane."""
+        try:
+            mine = os.ttyname(1)
+        except OSError:
+            return False
+        return bool(pane) and tmux_out("display-message", "-p", "-t", pane, "#{pane_tty}") == mine
+
+    def hide(self):
+        if not self.owns(self.pane):
+            return False
+        rc, out = tmux("break-pane", "-d", "-P", "-F", "#{window_id}", "-s", self.pane, "-n", "launcher")
+        self.window = out.strip() if rc == 0 else ""
+        if self.window:
+            tmux("select-pane", "-t", self.leader)
+        return bool(self.window)
+
+    def show(self):
+        """Back beside the leader (before anything is closed, or the window would go with its last pane).  When that fails the
+        launcher's own window is selected, so the output is not left where nobody looks."""
+        if not self.window:
+            return
+        window, self.window = self.window, ""
+        if tmux("join-pane", "-d", "-h", "-b", "-s", self.pane, "-t", self.leader)[0] == 0:
+            tmux("select-pane", "-t", self.pane)
+        else:
+            tmux("select-window", "-t", window)
+
+
 def _write_json(path, data):
     import json
     tmp = path + ".tmp"
@@ -176,7 +221,7 @@ def run(argv):
     _write_json(os.path.join(state, "env.json"), dict(os.environ))
     _write_json(os.path.join(state, "spec.json"),
                 {"dir": o.dir, "title": title, "cmd": cmd, "self": self_path, "chan": chan, "readonly": o.readonly,
-                 "keepmin": int(o.keepmin) if o.keepmin else None})
+                 "keepmin": int(o.keepmin) if o.keepmin else None, "keep": o.keep, "keeponcancel": o.keeponcancel})
     agent = os.environ.get("TMUX_PANE", "")
     leader_cmd = "%s %s leader %s" % (shlex.quote(sys.executable), shlex.quote(ENGINE_PY), shlex.quote(state))
     rc, out = tmux("split-window", "-h", "-d", "-l", "50%", "-P", "-F", "#{pane_id}", leader_cmd)
@@ -210,9 +255,11 @@ def run(argv):
         raise SystemExit(128 + signum)
     for s in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
         signal.signal(s, on_signal)
+    launcher = Launcher(agent, pane)
     try:
-        return _supervise(o, state, chan, pane, win, agent, title, regdir, reg, reg_fields, pids, cancelflag, grace, self_path)
+        return _supervise(o, state, chan, pane, win, agent, title, regdir, reg, reg_fields, pids, cancelflag, grace, self_path, launcher)
     finally:
+        launcher.show()         # a signal ended the run: the launcher still comes back
         for p in (reg, reg + ".tmp", pids, cancelflag):
             try:
                 os.unlink(p)
@@ -221,7 +268,7 @@ def run(argv):
         shutil.rmtree(state, ignore_errors=True)
 
 
-def _supervise(o, state, chan, pane, win, agent, title, regdir, reg, reg_fields, pids, cancelflag, grace, self_path):
+def _supervise(o, state, chan, pane, win, agent, title, regdir, reg, reg_fields, pids, cancelflag, grace, self_path, launcher):
     followers = []
     unsized = [True]
 
@@ -274,6 +321,7 @@ def _supervise(o, state, chan, pane, win, agent, title, regdir, reg, reg_fields,
     if o.readonly:
         for p in [pane] + followers:
             tmux("select-pane", "-d", "-t", p)
+    hidden = o.hide and launcher.hide()
 
     def kill_all():
         for p in [pane] + followers:
@@ -323,6 +371,7 @@ def _supervise(o, state, chan, pane, win, agent, title, regdir, reg, reg_fields,
     if gone:
         waiter.kill()
         waiter.wait()
+        launcher.show()
         print("pane gone")
         procs.report(pids, o.reap, grace)
         kill_all()
@@ -339,16 +388,22 @@ def _supervise(o, state, chan, pane, win, agent, title, regdir, reg, reg_fields,
     lines = captured.split("\n")
     while lines and lines[-1] == "":
         lines.pop()
+    launcher.show()
+    if hidden:
+        sys.stdout.write("\033[H\033[2J")       # only the board is left in the window: the lines the launcher printed at the start go
+        sys.stdout.flush()
     for line in lines:
-        print(line)
+        emit(line)
     procs.report(pids, o.reap, grace)
-    print("exit=%d" % rc)
+    if not o.quietexit:
+        emit("exit=%d" % rc)
     if cancelled and not o.keeponcancel:
         kill_all()
         print("pane %s closed (cancelled)" % pane)
     elif o.keep == "never" or (o.keep == "fail" and rc == 0):
         kill_all()
-        print("pane %s closed" % pane)
+        if not hidden:
+            print("pane %s closed" % pane)
     else:
         tmux("set-option", "-p", "-t", pane, "@tmux_state",
              "kept (cancelled, exit %d)" % rc if cancelled else "kept (exit %d)" % rc)

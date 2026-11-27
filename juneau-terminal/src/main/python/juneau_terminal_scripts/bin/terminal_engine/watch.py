@@ -21,6 +21,7 @@ import sys
 import time
 
 from . import UsageError, script_path
+from .out import emit, write_exit_code
 from .tmux import tmux_out
 
 TAIL_FILTER = ("perl -MEncode -e '$|=1; while (<STDIN>) { $_ = decode(\"UTF-8\", $_); s/[\\x{2028}\\x{2029}\\p{Cf}]/ /g; "
@@ -81,8 +82,33 @@ def result_summary(r):
     return "\n".join(out)
 
 
+ERROR_WORDS = re.compile(r"error|fail|exception|traceback|fatal|refused|cannot|denied", re.I)
+
+
+def failure_block(full, limit=15):
+    """Lines telling where a failed run's log is and what went wrong: its path, then the last error-looking lines (else the last lines)."""
+    try:
+        with open(full, errors="replace") as f:
+            lines = [l.rstrip() for l in f.readlines()[-4000:] if l.strip()]
+    except OSError:
+        lines = []
+    hits = [l for l in lines if ERROR_WORDS.search(l)] or lines
+    out = ["full log: %s" % full]
+    if hits:
+        out.append("last error lines:")
+        out += ["  " + l[:300] for l in hits[-limit:]]
+    return out
+
+
+def keeping(keep, keep_flag):
+    """True when the panes stay after the run: --keep, or an explicit -k always or fail."""
+    return keep_flag or keep in ("always", "fail")
+
+
 def main(argv):
     no_tail = False
+    keep_flag = False
+    keep = None
     close_kept = True
     title = ""
     toolbar = os.environ.get("JUNEAU_TERMINAL_TOOLBAR", "1") != "0"
@@ -98,6 +124,8 @@ def main(argv):
             no_tail = True
         elif a == "--no-close-kept":
             close_kept = False
+        elif a == "--keep":
+            keep_flag = True
         elif a == "--no-toolbar":
             toolbar = False
         elif a == "--check-tmux-version":
@@ -112,11 +140,15 @@ def main(argv):
                 raise UsageError()
             if a == "-t":
                 title = argv[i + 1]
+            if a == "-k":
+                keep = argv[i + 1]
             passthru += [a, argv[i + 1]]
             i += 1
         elif len(a) > 2 and a[0] == "-" and a[1] in "dntkK":
             if a[:2] == "-t":
                 title = a[2:]
+            if a[:2] == "-k":
+                keep = a[2:]
             passthru.append(a)
         else:
             raise UsageError()
@@ -136,6 +168,12 @@ def main(argv):
     stem = script_stem(cmd)
     if not title:
         passthru += ["-t", stem]
+    kept = keeping(keep, keep_flag)
+    if keep_flag and keep is None:
+        passthru += ["-k", "always"]
+    elif keep is None:
+        passthru += ["-k", "never"]
+    passthru += ["--hide-launcher", "--quiet-exit"]
     logdir = os.environ.get("JUNEAU_TERMINAL_LOG_DIR") or os.path.join(os.path.expanduser("~"), ".cache", "juneau-terminal")
     try:
         os.makedirs(logdir, exist_ok=True)
@@ -149,8 +187,8 @@ def main(argv):
     try:
         for p in (full, board):
             open(p, "a").close()
-        print("tail -f %s" % shlex.quote(full))
-        print("board: %s" % shlex.quote(board))
+        emit("tail -f %s" % shlex.quote(full))
+        emit("board: %s" % shlex.quote(board))
         # Two levels of `bash -c` (the pane's wrapper, then this string), so every value is quoted.  JUNEAU_TERMINAL_CANCEL is
         # left as a reference, expanded inside the pane where the leader has already exported TMUX_PANE_RUN_CANCEL.
         cmdq = " ".join(shlex.quote(a) for a in cmd)
@@ -164,8 +202,9 @@ def main(argv):
         # close them, so -k always and --keep-on-cancel come last and win over anything the caller passed.
         if toolbar:
             args += ["--pane-title", "controls", "--pane",
-                     "exec %s --title %s" % (shlex.quote(script_path("tmux-toolbar.sh")), shlex.quote(title or stem)),
-                     "-k", "always", "--keep-on-cancel"]
+                     "exec %s --title %s" % (shlex.quote(script_path("tmux-toolbar.sh")), shlex.quote(title or stem))]
+            if kept:
+                args += ["-k", "always", "--keep-on-cancel"]
         pane_sh = script_path("tmux-pane.sh")
         # Clear finished (kept) panes from earlier runs first; a failed cleanup only warns.
         if close_kept:
@@ -182,14 +221,20 @@ def main(argv):
         for s, h in old.items():
             signal.signal(s, h)
         # The summary supplements the pane tail; a missing or unparseable result file is silent.
-        try:
-            if os.path.getsize(result) > 0:
-                with open(result) as f:
-                    text = result_summary(json.load(f))
-                print(text)
-        except Exception:
-            pass
-        print("exit=%d" % (rc if rc >= 0 else 128 - rc))
-        return rc if rc >= 0 else 128 - rc
+        code = rc if rc >= 0 else 128 - rc
+        if kept:
+            try:
+                if os.path.getsize(result) > 0:
+                    with open(result) as f:
+                        text = result_summary(json.load(f))
+                    emit(text)
+            except Exception:
+                pass
+        if code != 0:
+            for line in failure_block(full):
+                emit(line)
+        emit("exit=%d" % code)
+        write_exit_code(code)
+        return code
     finally:
         shutil.rmtree(rd, ignore_errors=True)

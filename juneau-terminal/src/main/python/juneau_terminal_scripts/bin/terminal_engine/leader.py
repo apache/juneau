@@ -103,6 +103,9 @@ def leader(state_dir):
     tmux("wait-for", "-S", spec["chan"])
     if spec["readonly"]:
         kept.readonly_wait(rc, cancelled, spec["keepmin"])
+    elif (spec.get("keep") == "never" or (cancelled and not spec.get("keeponcancel"))
+          or (spec.get("keep") == "fail" and rc == 0 and not cancelled)):
+        kept.quiet_wait()       # the run closes this pane after it has read the screen: no prompt to land in that capture
     else:
         kept.kept_wait(kept.prompt_prefix(rc, cancelled), spec["keepmin"])
     for line in tmux_out("list-panes", "-a", "-F", "#{pane_id} #{@tmux_parent}").splitlines():

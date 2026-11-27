@@ -1007,6 +1007,10 @@ class FileBarTest(unittest.TestCase):
 
 class LiveTest(unittest.TestCase):
     def setUp(self):
+        env = mock.patch.dict(os.environ)
+        env.start()
+        self.addCleanup(env.stop)
+        os.environ.pop("TMUX_PANE_RUN_ID", None)     # inside a toolkit pane the log rows are cut, not wrapped; these cases expect the wrapping
         reset_run_state()
         self.addCleanup(reset_run_state)
         self.clock = Clock()

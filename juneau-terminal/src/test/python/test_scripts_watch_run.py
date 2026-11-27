@@ -97,17 +97,17 @@ class WatchRunTest(WatchCase):
 
     @slow_tmux
     def test_toolbar_keeps_leader_log_and_toolbar_after_a_successful_run(self):
-        code, out, _ = self.watch_with_toolbar("--", "true")
+        code, out, _ = self.watch_with_toolbar("--keep", "--", "true")
         self.assertEqual(code, 0)
         self.assertEqual(self.wait_panes(4), 4)     # agent + leader + log + toolbar
         rows = self.tmux("list-panes", "-s", "-t", "t", "-F", "#{pane_current_command}|#{pane_title}")
         self.assertIn("controls", rows)
 
     @slow_tmux
-    def test_toolbar_overrides_k_never_and_cancel_closing(self):
-        code, _, _ = self.watch_with_toolbar("-k", "never", "--", "true")
+    def test_a_run_closes_every_pane_including_the_toolbar_by_default(self):
+        code, _, _ = self.watch_with_toolbar("--", "true")
         self.assertEqual(code, 0)
-        self.assertEqual(self.wait_panes(4), 4)
+        self.assertEqual(self.wait_panes(1), 1)
 
     @slow_tmux
     def test_no_toolbar_flag_restores_the_two_pane_layout(self):
@@ -117,7 +117,7 @@ class WatchRunTest(WatchCase):
 
     @slow_tmux
     def test_toolbar_status_reaches_ok_and_close_cleans_up(self):
-        self.watch_with_toolbar("--", "true")
+        self.watch_with_toolbar("--keep", "--", "true")
         self.wait_panes(4)
         bar = next(l.split("|")[0] for l in self.tmux("list-panes", "-s", "-t", "t", "-F", "#{pane_id}|#{pane_title}").splitlines()
                    if l.endswith("|controls"))
@@ -210,7 +210,7 @@ class WatchRunTest(WatchCase):
 
     def test_summary_follows_the_pane_tail_with_exit_last(self):
         fx = script(self.tmp, "fx.py", WRITE_RESULT)
-        code, out, _ = self.run_watch("-k", "never", "--", "python3", fx)
+        code, out, _ = self.run_watch("-k", "always", "--", "python3", fx)
         self.assertEqual(code, 3)
         lines = out.splitlines()
         self.assertIn("pane-only-text", out)

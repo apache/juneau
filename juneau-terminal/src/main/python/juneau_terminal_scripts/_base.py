@@ -12,6 +12,8 @@
 # ***************************************************************************************************************************
 """Shared pieces: the Result type, the juneau_terminal lookup and the POSIX guard.  Private to the package."""
 
+from __future__ import annotations
+
 import os
 import sys
 from dataclasses import dataclass

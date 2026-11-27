@@ -1040,6 +1040,8 @@ Examples:
         help="Maven output on the console: full, board (default) or none (also JUNEAU_TERMINAL_CONSOLE; the flag wins)."
     )
 
+    toolkit("mode").add_argument(parser)
+
     parser.add_argument(
         "--detail",
         help="Console detail: summary, actionable (default), modules or all (also JUNEAU_TERMINAL_DETAIL)."
@@ -1076,6 +1078,9 @@ Examples:
 
 def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
     args = parse_args()
+    applied = toolkit("mode").apply(args)    # split: this process only launches the panes and re-runs itself as --mode dash
+    if applied.done:
+        return applied.exit_code
     run = _juneau.load()[0]
     if not args.test_only:
         args.message = resolve_commit_message(args.message)

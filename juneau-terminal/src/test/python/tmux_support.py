@@ -70,7 +70,9 @@ class PaneCase(unittest.TestCase):
         self.addCleanup(shutil.rmtree, str(tmp), True)
         self.tmp = tmp
         self.sock = "juneau-pane-" + uuid.uuid4().hex[:8]
-        subprocess.run(["tmux", "-L", self.sock, "new-session", "-d", "-s", "t", "-x", "200", "-y", "50"], check=True)
+        # The server's own environment is what every pane starts with, so it must not carry the run session of a push that runs these tests.
+        clean = {k: v for k, v in os.environ.items() if not k.startswith(("JUNEAU_TERMINAL_", "TMUX_PANE_RUN_"))}
+        subprocess.run(["tmux", "-L", self.sock, "new-session", "-d", "-s", "t", "-x", "200", "-y", "50"], check=True, env=clean)
         self.addCleanup(subprocess.run, ["tmux", "-L", self.sock, "kill-server"], check=False)
         path = subprocess.run(["tmux", "-L", self.sock, "display", "-p", "#{socket_path},#{pid},0"],
                               capture_output=True, text=True, check=True).stdout.strip()

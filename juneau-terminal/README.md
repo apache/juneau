@@ -131,6 +131,8 @@ off a terminal (`TERM=dumb` and `JUNEAU_TERMINAL_LIVE=0` count as off) it prints
 | `JUNEAU_TERMINAL_DETAIL=summary\|actionable\|modules\|all` | How much the view shows (default `actionable`). `--detail` on `push.py` and `test.py` wins. |
 | `JUNEAU_TERMINAL_FULL_LOG`, `JUNEAU_TERMINAL_BOARD_LOG` | The raw log, and the view's rows as plain text. The header prints `tail -f` for each on a line of its own, to paste into another terminal: `Output: tail -f <full log>`, then `Board: tail -f <board log>`. With `board` or `none` and no full log, the full log defaults to `~/.cache/juneau-terminal/<script>-<YYYYMMDD-HHMMSS>.log`, and unless a board log is set (by argument or variable) a `.board.log` beside it, so another tool can follow the view's rows as plain text; the newest 20 of each kind are kept, and nested scripts share them. |
 | `JUNEAU_TERMINAL_CANCEL` | A command that cancels the run (for example a pane launcher's own cancel command); the header shows it as a `Cancel: <command>` row after the log rows. Unset, there is no such row. |
+| `JUNEAU_TERMINAL_MODE=auto\|raw\|dash\|split` | The layout of a script that adopts `juneau_terminal_scripts.mode`, when it has no `--mode` flag (the flag wins). See [Split mode](#split-mode---mode). |
+| `JUNEAU_TERMINAL_ENGINE=shim\|direct\|auto` | How `--mode split` reaches the tmux engine: the extracted `watch-run.sh` shim as a child, or in process through `terminal_engine`. `auto` (default) uses the shim when a 5 second `tmux display-message` probe fails, which is what a sandbox that blocks tmux looks like. |
 | `JUNEAU_TERMINAL_LOG_DIR` | Where those default logs go (default `~/.cache/juneau-terminal`). The tests point it at a temp dir. |
 | `JUNEAU_TERMINAL_TERM_GRACE=<seconds>` | How long a cancelled child's process group gets between SIGTERM and SIGKILL (default 5). A `grace=` argument to `run_tool` or `run.cmd` wins for that child; a value that isn't a non-negative number is ignored. |
 | `JUNEAU_TERMINAL_LIVE=0` | Plain view: each row printed once, when it ends. Also used when stdout isn't a terminal or `TERM=dumb`. |
@@ -357,6 +359,46 @@ The `load_juneau_terminal` snippet above still works for a single-file adopter t
   `JUNEAU_TERMINAL_HISTORY=0` it says the run history is off.
 - With markers off and the default console, `push.py` and `test.py` behave exactly as before.
 
+## Split mode (`--mode`)
+
+A push, release or deploy script adds `--mode auto|raw|dash|split` with `juneau_terminal_scripts.mode`:
+
+```python
+from juneau_terminal_scripts import mode
+mode.add_argument(parser)                    # next to --console
+args = parser.parse_args()
+applied = mode.apply(args)                   # after parsing, before any real work
+if applied.done:                             # this process was only the launcher
+    sys.exit(applied.exit_code)
+```
+
+Pass `oneshot=True` for an informational run (`--list-steps`, `--check`), which `auto` then keeps out of tmux. Pass
+`title=` and `no_close_kept=True` to change the pane title and keep earlier runs' panes.
+
+| Mode | What runs |
+|---|---|
+| `raw` | Plain stdout. No board, no log, result or board file; `--console` is ignored (forced to `full`). |
+| `dash` | The board view in this terminal, as before. `--console` applies. |
+| `split` | The script re-runs itself as `--mode dash` in a tmux pane, its full log tailed in the pane below and the toolbar under that. |
+| `auto` (default) | `split` when tmux is installed and either `$TMUX` is set (and answers) or stdin and stdout are terminals; otherwise `dash`. |
+
+The requested mode is the `--mode` flag, then `JUNEAU_TERMINAL_MODE`, then `auto`. An explicit `dash` or `split` that cannot run
+warns once on stderr and runs `raw`. Inside tmux the launcher runs `watch-run.sh` (the log paths, `exit=N` lines and result
+summary are exactly its output; the last `exit=` line is authoritative) and exits with the inner run's code, so it also works from
+an agent's shell with no terminal. Outside tmux on a terminal it creates a `jt-<script>-<pid>` session and runs `tmux attach`;
+when the session ends it prints the final board and `exit=N` in the original terminal (the launcher records them in the file
+`JUNEAU_TERMINAL_FINAL_FILE` names) and exits with the run's code. The run's panes close when it ends and its launcher pane is
+hidden while it goes (see `watch-run.sh` above). A second split run in a window refuses with exit 3 and names the running
+pane and its cancel command. A run that inherits `JUNEAU_TERMINAL_SESSION`, `_ACTIVE`, `_RESULT`, `_CANCEL` or `TMUX_PANE_RUN_ID`
+never splits again (explicit `split` and `auto` become `dash`). The toolbar behaves as in `watch-run.sh`
+(`JUNEAU_TERMINAL_TOOLBAR=0` turns it off).
+
+`JUNEAU_TERMINAL_ENGINE` picks how the launcher reaches `watch-run.sh`. `shim` runs the extracted shim as a child (the literal
+path a sandbox exclusion matches; from a directory source it warns that a sandbox may block it). `direct` calls
+`terminal_engine` in process. `auto` probes with `tmux display-message -p ok` (5 seconds) and uses `shim` when that fails.
+No environment variable is trusted as a sandbox marker: a Claude Code shell sets none that names the sandbox.
+`JUNEAU_TERMINAL_ATTACH_CMD` replaces `tmux attach` in the tests; `JUNEAU_TERMINAL_FINAL_FILE` is set by the launcher for the new-session case.
+
 ## The side-pane scripts
 
 The zip ships three scripts in `juneau_terminal_scripts/bin/`, so a repository gets one maintained copy instead of its own.
@@ -366,15 +408,21 @@ also importable: `bootstrap.load_engine()` returns the `terminal_engine` package
 returns the same exit code the shim would, without a second process.
 - `tmux-pane.sh` runs a command in a tmux side pane with a real TTY, blocks until it ends, and can `cancel`, `list`,
   `close` and `equalize` such panes. It knows nothing about juneau-terminal.
-- `watch-run.sh` wraps it for a juneau-terminal based script (`push.py`, `release.py`, `deploy*.py`): it picks the log and
-  result paths, opens a follower pane that tails the full log, and prints the result summary when the script ends.
+- `watch-run.sh` wraps it for a juneau-terminal based script (`push.py`, `release.py`, IRS's `deploy-docs.py`): it picks the log and
+  result paths, opens a follower pane that tails the full log, and prints the result summary when the script ends. A script
+  that adopts `juneau_terminal_scripts.mode` launches it itself with `--mode split` (next section), so wrapping by hand is
+  only needed for a script that has not.
 - `tmux-toolbar.sh` is the one-row toolbar `watch-run.sh` opens under the log pane: `[Hide output]`/`[Show output]` (key `h`),
   `[Cancel]` (`k`, live only while the run is running) and `[Close]` (`x`, cancels a running run first, then closes every pane of
   the run), with the run's status (`running`, `ok`, `failed (exit N)`, `cancelled`) after the buttons. It takes the run from the
   `TMUX_PANE_RUN_ID`/`TMUX_PANE_RUN_CANCEL` env that `tmux-pane.sh` gives every follower and polls the leader's `@tmux_state`.
-  With the toolbar, `watch-run.sh` runs `tmux-pane.sh` as `-k always --keep-on-cancel`, so the panes stay until Close, Enter in the
-  leader, or the next `watch-run.sh` launch (which closes kept panes unless `--no-close-kept`). `--no-toolbar` or
-  `JUNEAU_TERMINAL_TOOLBAR=0` restores the two-pane layout and the old `-k` behaviour. It needs tmux 3.4 or newer.
+  By default a run closes every pane when it ends (toolbar included) and prints the final board, the result and `exit=N` in the window
+  it was started from; a failure adds the full-log path and the last error lines. `--keep` (or an explicit `-k always|fail`) leaves the
+  panes open with the toolbar as `-k always --keep-on-cancel`: they stay until Close, Enter in the leader, or the next `watch-run.sh`
+  launch (which closes kept panes unless `--no-close-kept`). While the run goes, the launcher pane (the one the command was typed in)
+  is moved to a window of its own when it is the pane's own foreground process, so the board, log and toolbar fill the window;
+  it comes back when the run ends. A kept, finished board is laid out again when the pane is resized, and long board rows in a
+  toolkit pane are cut to the width with an ellipsis. `--no-toolbar` or `JUNEAU_TERMINAL_TOOLBAR=0` restores the two-pane layout. It needs tmux 3.4 or newer.
 
 Run a script with a bad argument (or none, for `watch-run.sh`) for its usage text; it exits 2.
 

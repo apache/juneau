@@ -34,6 +34,7 @@ The commit message is optional on the command line. It is prompted for when omit
 | `--no-js-tests` | none | off | Never run the JS harness, even when JS, CSS or FTL files changed. |
 | `--warn-traces` | none | off | Report stack traces in the test output as a warning instead of failing the Traces row. Allowlist errors still fail. |
 | `--jdk` | `N` or path | current `JAVA_HOME` | Run the Maven, javadoc and `test.py` steps on this JDK. A number resolves to `~/jdk/jdk-<N>`, else the single `~/jdk/*<N>*` entry (none or several: exit 2); anything else is a JDK home path. A macOS bundle resolves to its `Contents/Home`. The home must have `bin/java` (else exit 2). Sets `JAVA_HOME` and puts `<home>/bin` first on `PATH`; works with `--dry-run` and `--test-only`. The resolved home and first `java -version` line show in the session header. |
+| `--mode` | `auto`, `raw`, `dash`, `split` | `auto` | Layout. `split` opens the board and a full-log tail in tmux panes (a new tmux session when run outside tmux on a terminal); `dash` is the board in this terminal; `raw` is plain output with no board or log files. `auto` picks `split` when tmux and a terminal (or a surrounding tmux) are there, else `dash`. Also `JUNEAU_TERMINAL_MODE`; the flag wins. See the juneau-terminal README, "Split mode". |
 | `--console` | `full`, `board`, `none` | `board` | Maven output on the console. Also `JUNEAU_TERMINAL_CONSOLE`; the flag wins. |
 | `--detail` | `summary`, `actionable`, `modules`, `all` | `actionable` | Console detail. Also `JUNEAU_TERMINAL_DETAIL`. |
 

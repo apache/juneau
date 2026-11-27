@@ -19,8 +19,10 @@ import select
 import signal
 import sys
 import time
+import unicodedata
 
 from .mouse import left_press
+from .tmux import tmux_out
 from .ttymode import CbreakInput
 
 BUTTON = "[ click here to close ]"
@@ -94,29 +96,81 @@ def _terminal_columns(fd):
         return 0
 
 
+_ANSI = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]")
+
+
+def cut_visible(text, width):
+    """text cut to width columns, escapes kept (they take none) and wide characters counted as two; a cut line ends in a reset."""
+    out, used, i = [], 0, 0
+    while i < len(text):
+        m = _ANSI.match(text, i)
+        if m:
+            out.append(m.group())
+            i = m.end()
+            continue
+        w = 2 if unicodedata.east_asian_width(text[i]) in "WF" else 1
+        if used + w > width:
+            return "".join(out) + "\033[0m"
+        out.append(text[i])
+        used += w
+        i += 1
+    return "".join(out)
+
+
+def screen_lines():
+    """The pane's visible lines, colour kept, wrapped lines joined, trailing blanks dropped: what a resize would rewrap into a mess."""
+    text = tmux_out("capture-pane", "-p", "-e", "-J", "-t", os.environ.get("TMUX_PANE", ""))
+    lines = [line.rstrip() for line in text.split("\n")]
+    while lines and not lines[-1]:
+        lines.pop()
+    return lines
+
+
+def quiet_wait():
+    """Wait with nothing on the screen until the run closes the pane."""
+    while True:
+        time.sleep(3600)
+
+
+def _rows(fd):
+    try:
+        return os.get_terminal_size(fd).lines
+    except OSError:
+        return 24
+
+
 def kept_wait(prefix, minutes=None, fd=0):
     """Print PREFIX and the close button, then wait for a click on the button, Enter, or the timeout (minutes).  The button's
     row comes from a cursor-position report taken on the line below it; when that fails, or the line would wrap, any left click closes."""
     def die(signum, frame):
         raise SystemExit(130)
+    resized = []
     old = {s: signal.signal(s, die) for s in (signal.SIGHUP, signal.SIGINT, signal.SIGTERM)}
+    old[signal.SIGWINCH] = signal.signal(signal.SIGWINCH, lambda signum, frame: resized.append(1))
+    board = screen_lines()
     try:
         with CbreakInput(fd):
             try:
                 _write(MOUSE_ON)
                 _write("\n%s%s%s\n" % (prefix, BUTTON, HINT))
-                box = None
-                if _terminal_columns(fd) > len(prefix) + len(BUTTON) + len(HINT):
-                    _write("\033[6n")
-                    box = button_box(_read_until(fd, b"R", 1.0), prefix)
-                row, c1, c2 = box if box else (None, None, None)
+                row, c1, c2 = _button(fd, prefix)
                 deadline = time.monotonic() + minutes * 60 if minutes is not None else None
                 while True:
                     left = None if deadline is None else deadline - time.monotonic()
                     if left is not None and left <= 0:
                         break
-                    ch = _read_byte(fd, left)
-                    if ch is None or ch == b"":
+                    if resized:
+                        # The finished board is plain text in the pane, which tmux rewraps (and no process redraws): lay it out again, cut to the width.
+                        del resized[:]
+                        width = max(1, _terminal_columns(fd) - 1)
+                        shown = board[-max(0, _rows(fd) - 4):]
+                        _write("\033[H\033[2J" + "".join(cut_visible(line, width) + "\n" for line in shown))
+                        _write("\n%s%s%s\n" % (prefix, BUTTON, HINT))
+                        row, c1, c2 = _button(fd, prefix)
+                    ch = _read_byte(fd, 0.25 if left is None else min(left, 0.25))
+                    if ch is None:
+                        continue
+                    if ch == b"":
                         break
                     if ch in (b"\r", b"\n"):
                         break
@@ -137,6 +191,15 @@ def kept_wait(prefix, minutes=None, fd=0):
     finally:
         for s, h in old.items():
             signal.signal(s, h)
+
+
+def _button(fd, prefix):
+    """(row, c1, c2) of the close button just written, from a cursor-position report; all None when it cannot be told."""
+    box = None
+    if _terminal_columns(fd) > len(prefix) + len(BUTTON) + len(HINT):
+        _write("\033[6n")
+        box = button_box(_read_until(fd, b"R", 1.0), prefix)
+    return box if box else (None, None, None)
 
 
 def readonly_wait(rc, cancelled, minutes=None):
