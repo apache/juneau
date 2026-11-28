@@ -35,6 +35,7 @@ The commit message is optional on the command line. It is prompted for when omit
 | `--warn-traces` | none | off | Report stack traces in the test output as a warning instead of failing the Traces row. Allowlist errors still fail. |
 | `--jdk` | `N` or path | current `JAVA_HOME` | Run the Maven, javadoc and `test.py` steps on this JDK. A number resolves to `~/jdk/jdk-<N>`, else the single `~/jdk/*<N>*` entry (none or several: exit 2); anything else is a JDK home path. A macOS bundle resolves to its `Contents/Home`. The home must have `bin/java` (else exit 2). Sets `JAVA_HOME` and puts `<home>/bin` first on `PATH`; works with `--dry-run` and `--test-only`. The resolved home and first `java -version` line show in the session header. |
 | `--mode` | `auto`, `raw`, `dash`, `split` | `auto` | Layout. `split` opens the board and a full-log tail in tmux panes (a new tmux session when run outside tmux on a terminal); `dash` is the board in this terminal; `raw` is plain output with no board or log files. `auto` picks `split` when tmux and a terminal (or a surrounding tmux) are there, else `dash`. Also `JUNEAU_TERMINAL_MODE`; the flag wins. See the juneau-terminal README, "Split mode". |
+| `--keep` | `never`, `fail`, `always` | `fail` | With `--mode split`, when the run's panes stay open after it ends: `fail` closes them on success and keeps them (board, log, toolbar) after a non-zero exit, `always` keeps them every time, `never` always closes them. Also `JUNEAU_TERMINAL_KEEP`; the flag wins. |
 | `--console` | `full`, `board`, `none` | `board` | Maven output on the console. Also `JUNEAU_TERMINAL_CONSOLE`; the flag wins. |
 | `--detail` | `summary`, `actionable`, `modules`, `all` | `actionable` | Console detail. Also `JUNEAU_TERMINAL_DETAIL`. |
 
@@ -77,3 +78,4 @@ The commit and push steps run under a PTY with a 20-second watchdog. If git goes
 - `test.py`, `push-timings.py`, `check-container-tags.py`, `check-bom-completeness.py`, `check-javadoc-html.py`
 - Docs site: Developer Info, Script: push (`04.02.02.ScriptPush.md` in juneau-docs)
 - Split-mode scenario 2 check (Claude Code + tmux): placeholder line, removed after scenario 3.
+- Split-mode scenario 3 check (Claude Desktop): placeholder line, removed after this check.

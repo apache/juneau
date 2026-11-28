@@ -1078,7 +1078,7 @@ Examples:
 
 def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
     args = parse_args()
-    applied = toolkit("mode").apply(args)    # split: this process only launches the panes and re-runs itself as --mode dash
+    applied = toolkit("mode").apply(args, title="push juneau")    # split: this process only launches the panes and re-runs itself as --mode dash
     if applied.done:
         return applied.exit_code
     run = _juneau.load()[0]

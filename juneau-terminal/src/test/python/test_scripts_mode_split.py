@@ -185,10 +185,46 @@ class SplitInsideTest(ModeSplitCase):
 
     @slow_tmux
     def test_a_failed_run_ends_with_the_log_path_and_the_error_lines(self):
-        code, out, _ = self.fx("--mode", "split", "--exit", "4")
+        code, out, _ = self.fx("--mode", "split", "--keep", "never", "--exit", "4")
         self.assertEqual(code, 4)
         self.assertIn("full log: ", out)
         self.assertEqual(self.panes(), 1)
+
+    def kept_states(self):
+        return [l for l in self.tmux("list-panes", "-s", "-t", "t", "-F", "#{@tmux_state}").splitlines() if l.startswith("kept")]
+
+    @slow_tmux
+    def test_by_default_a_failing_run_keeps_its_panes_and_a_passing_run_closes_them(self):
+        code, out, _ = self.fx("--mode", "split", "--exit", "4")
+        self.assertEqual(code, 4)
+        self.assertIn("full log: ", out)                    # the final board and the log path print even though the panes stay
+        self.assertEqual(self.kept_states(), ["kept (exit 4)"])
+        self.assertEqual(self.panes(), 3)                   # the caller's pane, the kept leader and the log
+        self.pane_sub("close", "--kept")
+        code, _, _ = self.fx("--mode", "split")
+        self.assertEqual(code, 0)
+        self.assertEqual(self.panes(), 1)
+
+    @slow_tmux
+    def test_keep_never_closes_a_failing_run(self):
+        self.assertEqual(self.fx("--mode", "split", "--keep", "never", "--exit", "4")[0], 4)
+        self.assertEqual(self.panes(), 1)
+        env = dict(self.env, JUNEAU_TERMINAL_KEEP="never")
+        self.assertEqual(self.fx("--mode", "split", "--exit", "4", env=env)[0], 4)
+        self.assertEqual(self.panes(), 1)
+
+    @slow_tmux
+    def test_keep_always_keeps_a_passing_run(self):
+        self.assertEqual(self.fx("--mode", "split", "--keep", "always")[0], 0)
+        self.assertEqual(self.kept_states(), ["kept (exit 0)"])
+        env = dict(self.env, JUNEAU_TERMINAL_KEEP="always")
+        self.assertEqual(self.fx("--mode", "split", "--keep", "never", env=env)[0], 0)    # the flag wins over the variable
+        self.assertEqual(self.panes(), 1)
+
+    def test_bad_environment_keep_exits_2(self):
+        code, _, err = self.fx(env=dict(self.env, JUNEAU_TERMINAL_KEEP="bogus"))
+        self.assertEqual(code, 2)
+        self.assertIn("JUNEAU_TERMINAL_KEEP", err)
 
     @slow_tmux
     def test_second_run_in_the_window_is_refused(self):
@@ -278,7 +314,7 @@ class SplitNewSessionTest(ModeSplitCase):
         self.nest_env[ "JUNEAU_TERMINAL_ATTACH_CMD"] = "sh -c 'while tmux -L default has-session -t \"$1\" 2>/dev/null; do sleep 0.3; done' attach"
         master, slave = pty.openpty()
         try:
-            p = subprocess.Popen([sys.executable, str(self.fixture), "--mode", "split", "--exit", "3"], stdin=slave, stdout=slave,
+            p = subprocess.Popen([sys.executable, str(self.fixture), "--mode", "split", "--keep", "never", "--exit", "3"], stdin=slave, stdout=slave,
                                  stderr=subprocess.PIPE, text=True, env=self.nest_env)
             code = p.wait(timeout=90)
             data = b""
@@ -295,6 +331,34 @@ class SplitNewSessionTest(ModeSplitCase):
         self.assertIn("fixture ran mode=dash", text)
         self.assertIn("exit=3", text)
         self.assertIn("full log: ", text)
+
+    def test_a_failing_run_leaves_the_session_up_and_the_outer_terminal_gets_the_board_when_it_ends(self):
+        import pty
+        import select
+        # The attached client stays on the kept panes; this stub plays the user who reads them, then closes them (kills the session).
+        self.nest_env["JUNEAU_TERMINAL_ATTACH_CMD"] = (
+            "sh -c 'until tmux -L default list-panes -s -t \"$1\" -F \"#{@tmux_state}\" | grep -q kept; do sleep 0.2; done; sleep 2; "
+            "tmux -L default list-panes -s -t \"$1\" -F \"#{pane_id}\" | wc -l > %s; tmux -L default kill-session -t \"$1\"' attach" % (self.tmp / "panes"))
+        master, slave = pty.openpty()
+        try:
+            p = subprocess.Popen([sys.executable, str(self.fixture), "--mode", "split", "--exit", "3"], stdin=slave, stdout=slave,
+                                 stderr=subprocess.PIPE, text=True, env=self.nest_env)
+            code = p.wait(timeout=90)
+            data = b""
+            while select.select([master], [], [], 0.5)[0]:
+                chunk = os.read(master, 65536)
+                if not chunk:
+                    break
+                data += chunk
+        finally:
+            os.close(slave)
+            os.close(master)
+        self.assertEqual(code, 3)
+        self.assertGreaterEqual(int((self.tmp / "panes").read_text()), 2)    # the leader and the log were still up for the user
+        text = data.decode(errors="replace")
+        after = text[text.rindex("\033[?1049l"):]
+        self.assertIn("full log: ", after)
+        self.assertEqual(after.count("exit=3"), 1)
 
     def test_attach_frames_stay_off_the_main_screen_and_the_launcher_is_hidden_at_attach(self):
         import pty

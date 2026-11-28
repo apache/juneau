@@ -168,11 +168,10 @@ def main(argv):
     stem = script_stem(cmd)
     if not title:
         passthru += ["-t", stem]
-    kept = keeping(keep, keep_flag)
-    if keep_flag and keep is None:
-        passthru += ["-k", "always"]
-    elif keep is None:
-        passthru += ["-k", "never"]
+    if keep is None:
+        keep = "always" if keep_flag else "never"
+        passthru += ["-k", keep]
+    kept = keeping(keep, False)
     passthru += ["--hide-launcher", "--quiet-exit"]
     logdir = os.environ.get("JUNEAU_TERMINAL_LOG_DIR") or os.path.join(os.path.expanduser("~"), ".cache", "juneau-terminal")
     try:
@@ -204,7 +203,7 @@ def main(argv):
             args += ["--pane-title", "controls", "--pane",
                      "exec %s --title %s" % (shlex.quote(script_path("tmux-toolbar.sh")), shlex.quote(title or stem))]
             if kept:
-                args += ["-k", "always", "--keep-on-cancel"]
+                args += ["-k", keep, "--keep-on-cancel"]
         pane_sh = script_path("tmux-pane.sh")
         # Clear finished (kept) panes from earlier runs first; a failed cleanup only warns.
         if close_kept:
@@ -222,7 +221,7 @@ def main(argv):
             signal.signal(s, h)
         # The summary supplements the pane tail; a missing or unparseable result file is silent.
         code = rc if rc >= 0 else 128 - rc
-        if kept:
+        if kept and (keep != "fail" or code != 0):          # the panes are still up; with -k fail a clean run closed them
             try:
                 if os.path.getsize(result) > 0:
                     with open(result) as f:

@@ -43,6 +43,8 @@ from pathlib import Path
 MODES = ("auto", "raw", "dash", "split")
 ENGINES = ("auto", "shim", "direct")
 MODE_ENV = "JUNEAU_TERMINAL_MODE"
+KEEPS = ("never", "fail", "always")
+KEEP_ENV = "JUNEAU_TERMINAL_KEEP"
 ENGINE_ENV = "JUNEAU_TERMINAL_ENGINE"
 ATTACH_ENV = "JUNEAU_TERMINAL_ATTACH_CMD"
 ALT_ON, ALT_OFF = "\033[?1049h\033[H\033[2J", "\033[?1049l"
@@ -71,6 +73,12 @@ def add_argument(parser):
         "--mode",
         choices=MODES,
         help="Layout: auto (default), raw, dash or split. See --console for how much dash shows (also JUNEAU_TERMINAL_MODE; the flag wins)."
+    )
+    parser.add_argument(
+        "--keep",
+        choices=KEEPS,
+        help="Split mode: when the run's panes stay open after it ends: never, fail (default; only after a non-zero exit) or always "
+             "(also JUNEAU_TERMINAL_KEEP; the flag wins)."
     )
 
 
@@ -105,6 +113,14 @@ def requested_mode(flag, env):
     value = flag or env.get(MODE_ENV) or "auto"
     if value not in MODES:
         raise ValueError(f"{MODE_ENV} must be one of {', '.join(MODES)}, not {value!r}")
+    return value
+
+
+def requested_keep(flag, env):
+    """flag, else JUNEAU_TERMINAL_KEEP, else fail.  A bad environment value raises ValueError."""
+    value = flag or env.get(KEEP_ENV) or "fail"
+    if value not in KEEPS:
+        raise ValueError(f"{KEEP_ENV} must be one of {', '.join(KEEPS)}, not {value!r}")
     return value
 
 
@@ -210,8 +226,8 @@ def choose_engine(env=None, sandboxed=None):
     return "shim" if blocked else "direct"
 
 
-def _watch_args(cwd, title, no_close_kept, inner):
-    return ["-d", cwd, "-t", title] + (["--no-close-kept"] if no_close_kept else []) + ["--", *inner]
+def _watch_args(cwd, title, no_close_kept, inner, keep="fail"):
+    return ["-d", cwd, "-t", title, "-k", keep] + (["--no-close-kept"] if no_close_kept else []) + ["--", *inner]
 
 
 def _tmux_version():
@@ -258,13 +274,13 @@ def _run_direct(args):
     return engine.main(["watch-run", *args])
 
 
-def _launch_inside(script, cwd, title, no_close_kept, inner, engine=None):
+def _launch_inside(script, cwd, title, no_close_kept, inner, engine=None, keep="fail"):
     pane = running_leader(script)
     if pane:
         print(f"{script}: another run is still running in this window: pane {pane} (cancel: tmux-pane.sh cancel {pane})",
               file=sys.stderr)
         return EXIT_REFUSED
-    args = _watch_args(cwd, title, no_close_kept, inner)
+    args = _watch_args(cwd, title, no_close_kept, inner, keep)
     try:
         choice = choose_engine() if engine is None else engine
     except ValueError as e:
@@ -290,7 +306,7 @@ def _sessions(stem, env):
     return out
 
 
-def _launch_new_session(script, cwd, title, inner):
+def _launch_new_session(script, cwd, title, inner, keep="fail"):
     """(done, exit code).  done is False when new-session failed and the caller should run dash instead."""
     env = {k: v for k, v in os.environ.items() if k != "TMUX"}     # a stale $TMUX must not aim new-session at a dead server
     stem = Path(script).stem
@@ -304,7 +320,7 @@ def _launch_new_session(script, cwd, title, inner):
     shim = engine_script()
     fd, final = tempfile.mkstemp(prefix="jt-final-")
     os.close(fd)
-    cmd = " ".join([f"{FINAL_FILE_ENV}={shlex.quote(final)}"] + [shlex.quote(a) for a in [str(shim), *_watch_args(cwd, title, True, inner)]])    # the session is this run's alone
+    cmd = " ".join([f"{FINAL_FILE_ENV}={shlex.quote(final)}"] + [shlex.quote(a) for a in [str(shim), *_watch_args(cwd, title, True, inner, keep)]])    # the session is this run's alone
     size = shutil.get_terminal_size()
     r = subprocess.run(["tmux", "new-session", "-d", "-s", name, "-x", str(size.columns), "-y", str(size.lines), "-c", cwd, cmd],
                        capture_output=True, text=True, env=env)
@@ -368,15 +384,15 @@ def _python():
     return "python3" if found and os.path.realpath(found) == os.path.realpath(sys.executable) else sys.executable
 
 
-def launch_split(script, argv, *, inside, title=None, no_close_kept=False, engine=None):
+def launch_split(script, argv, *, inside, title=None, no_close_kept=False, engine=None, keep="fail"):
     """Run the script as `--mode dash` in tmux panes.  Returns (done, exit code); done is False only when a new session could
     not be created, and the caller continues the run as dash."""
     cwd = os.getcwd()
     title = title or Path(script).stem
     inner = [_python(), str(Path(script).resolve()), *rewrite_argv(argv)]
     if inside:
-        return True, _launch_inside(script, cwd, title, no_close_kept, inner, engine)
-    return _launch_new_session(script, cwd, title, inner)
+        return True, _launch_inside(script, cwd, title, no_close_kept, inner, engine, keep)
+    return _launch_new_session(script, cwd, title, inner, keep)
 
 
 def apply(args=None, argv=None, *, oneshot=False, script=None, title=None, no_close_kept=False, probes=None, env=None):
@@ -391,6 +407,7 @@ def apply(args=None, argv=None, *, oneshot=False, script=None, title=None, no_cl
     argv = sys.argv[1:] if argv is None else argv
     try:
         requested = requested_mode(getattr(args, "mode", None), env)
+        keep = requested_keep(getattr(args, "keep", None), env)
     except ValueError as e:
         print(f"{name}: {e}", file=sys.stderr)
         return Applied("auto", True, 2)
@@ -402,7 +419,7 @@ def apply(args=None, argv=None, *, oneshot=False, script=None, title=None, no_cl
     if mode == "raw":
         prepare_raw(args)
     elif mode == "split":
-        done, code = launch_split(script, argv, inside=p.inside, title=title, no_close_kept=no_close_kept)
+        done, code = launch_split(script, argv, inside=p.inside, title=title, no_close_kept=no_close_kept, keep=keep)
         if done:
             return Applied("split", True, code)
         mode = "dash"

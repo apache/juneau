@@ -104,6 +104,32 @@ class ResolveTest(IsolatedCase):
             mode.requested_mode(None, {mode.MODE_ENV: "bogus"})
 
 
+class KeepTest(IsolatedCase):
+    def test_requested_keep_precedence_flag_then_env_then_fail(self):
+        self.assertEqual(mode.requested_keep("always", {mode.KEEP_ENV: "never"}), "always")
+        self.assertEqual(mode.requested_keep(None, {mode.KEEP_ENV: "never"}), "never")
+        self.assertEqual(mode.requested_keep(None, {}), "fail")
+
+    def test_a_bad_environment_value_is_an_error(self):
+        with self.assertRaises(ValueError) as e:
+            mode.requested_keep(None, {mode.KEEP_ENV: "bogus"})
+        self.assertIn(mode.KEEP_ENV, str(e.exception))
+
+    def test_the_flag_takes_only_the_three_values(self):
+        import argparse
+        p = argparse.ArgumentParser()
+        mode.add_argument(p)
+        self.assertEqual(p.parse_args(["--keep", "never"]).keep, "never")
+        self.assertIsNone(p.parse_args([]).keep)
+        with self.assertRaises(SystemExit):
+            p.parse_args(["--keep", "sometimes"])
+
+    def test_the_launch_passes_the_keep_value_to_watch_run(self):
+        args = mode._watch_args("/w", "t", False, ["x"], "always")
+        self.assertEqual(args[args.index("-k") + 1], "always")
+        self.assertEqual(mode._watch_args("/w", "t", False, ["x"])[4:6], ["-k", "fail"])
+
+
 class RewriteArgvTest(IsolatedCase):
 
     def test_absent_appends_mode_dash(self):

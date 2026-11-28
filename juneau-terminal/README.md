@@ -132,6 +132,7 @@ off a terminal (`TERM=dumb` and `JUNEAU_TERMINAL_LIVE=0` count as off) it prints
 | `JUNEAU_TERMINAL_FULL_LOG`, `JUNEAU_TERMINAL_BOARD_LOG` | The raw log, and the view's rows as plain text. The header prints `tail -f` for each on a line of its own, to paste into another terminal: `Output: tail -f <full log>`, then `Board: tail -f <board log>`. With `board` or `none` and no full log, the full log defaults to `~/.cache/juneau-terminal/<script>-<YYYYMMDD-HHMMSS>.log`, and unless a board log is set (by argument or variable) a `.board.log` beside it, so another tool can follow the view's rows as plain text; the newest 20 of each kind are kept, and nested scripts share them. |
 | `JUNEAU_TERMINAL_CANCEL` | A command that cancels the run (for example a pane launcher's own cancel command); the header shows it as a `Cancel: <command>` row after the log rows. Unset, there is no such row. |
 | `JUNEAU_TERMINAL_MODE=auto\|raw\|dash\|split` | The layout of a script that adopts `juneau_terminal_scripts.mode`, when it has no `--mode` flag (the flag wins). See [Split mode](#split-mode---mode). |
+| `JUNEAU_TERMINAL_KEEP=never\|fail\|always` | When a split run's panes stay open after it ends, for a script that adopts `juneau_terminal_scripts.mode`, when it has no `--keep` flag (the flag wins). Default `fail`. See [Split mode](#split-mode---mode). |
 | `JUNEAU_TERMINAL_ENGINE=shim\|direct\|auto` | How `--mode split` reaches the tmux engine: the extracted `watch-run.sh` shim as a child, or in process through `terminal_engine`. `auto` (default) uses the shim when a 5 second `tmux display-message` probe fails, which is what a sandbox that blocks tmux looks like. |
 | `JUNEAU_TERMINAL_LOG_DIR` | Where those default logs go (default `~/.cache/juneau-terminal`). The tests point it at a temp dir. |
 | `JUNEAU_TERMINAL_TERM_GRACE=<seconds>` | How long a cancelled child's process group gets between SIGTERM and SIGKILL (default 5). A `grace=` argument to `run_tool` or `run.cmd` wins for that child; a value that isn't a non-negative number is ignored. |
@@ -382,13 +383,20 @@ Pass `oneshot=True` for an informational run (`--list-steps`, `--check`), which 
 | `split` | The script re-runs itself as `--mode dash` in a tmux pane, its full log tailed in the pane below and the toolbar under that. |
 | `auto` (default) | `split` when tmux is installed and either `$TMUX` is set (and answers) or stdin and stdout are terminals; otherwise `dash`. |
 
+`--keep never|fail|always` (default `fail`; the flag, then `JUNEAU_TERMINAL_KEEP`, then `fail`) says when the run's panes stay up after it ends.
+`fail` closes them on success and keeps the board, log and toolbar on a non-zero exit until Enter in the leader, the toolbar's Close, or
+`tmux-pane.sh close --kept`; `always` keeps them on every run; `never` always closes them. The launcher comes back beside the
+kept panes (hidden again on the next run). Outside tmux the attached client stays on the kept panes; when they are closed and the
+session ends, the launching terminal gets the final board, the log path and error lines, and `exit=N` (the client's own frames stay
+on the alternate screen). `--keep` only matters to `split`.
+
 The requested mode is the `--mode` flag, then `JUNEAU_TERMINAL_MODE`, then `auto`. An explicit `dash` or `split` that cannot run
 warns once on stderr and runs `raw`. Inside tmux the launcher runs `watch-run.sh` (the log paths, `exit=N` lines and result
 summary are exactly its output; the last `exit=` line is authoritative) and exits with the inner run's code, so it also works from
 an agent's shell with no terminal. Outside tmux on a terminal it creates a `jt-<script>-<pid>` session and runs `tmux attach`;
 when the session ends it prints the final board and `exit=N` in the original terminal (the launcher records them in the file
-`JUNEAU_TERMINAL_FINAL_FILE` names) and exits with the run's code. The run's panes close when it ends and its launcher pane is
-hidden while it goes (see `watch-run.sh` above). A second split run in a window refuses with exit 3 and names the running
+`JUNEAU_TERMINAL_FINAL_FILE` names) and exits with the run's code. The run's panes close when it ends cleanly (after a failure they
+stay, see below) and its launcher pane is hidden while it goes (see `watch-run.sh` above). A second split run in a window refuses with exit 3 and names the running
 pane and its cancel command. A run that inherits `JUNEAU_TERMINAL_SESSION`, `_ACTIVE`, `_RESULT`, `_CANCEL` or `TMUX_PANE_RUN_ID`
 never splits again (explicit `split` and `auto` become `dash`). The toolbar behaves as in `watch-run.sh`
 (`JUNEAU_TERMINAL_TOOLBAR=0` turns it off).
