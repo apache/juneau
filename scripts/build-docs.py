@@ -805,7 +805,7 @@ def main():
     # so CI runners (which have no sibling checkout) can still run the Docusaurus smoke.
     master_root = find_juneau_root(script_dir.parent, args.juneau_root,
                                    allow_missing=DRY_RUN or args.skip_maven, validate=not DRY_RUN)
-    VIEW = terminal_view.open_view(master_root, args.console, verbose=VERBOSE, plain=DRY_RUN)
+    VIEW = terminal_view.open_view(master_root, args.console, verbose=VERBOSE, plain=DRY_RUN, args=args, title='build docs')
 
     # Change to docs directory for npm operations
     os.chdir(docs_dir)

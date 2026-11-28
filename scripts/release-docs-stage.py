@@ -43,6 +43,7 @@ This script:
 Usage:
     python3 scripts/release-docs-stage.py [--no-push] [--commit-message MESSAGE]
                                           [--juneau-root DIR] [--console full|board|none]
+                                          [--mode auto|raw|dash|split] [--keep never|fail|always]
 
 Options:
     --no-push          Build and commit but don't push to remote
@@ -51,6 +52,8 @@ Options:
                        then sibling ../juneau); passed on to build-docs.py
     --console          Console output when the Juneau checkout has juneau-terminal: full, board
                        (default) or none (also $JUNEAU_TERMINAL_CONSOLE)
+    --mode             Layout: auto (default), raw, dash or split (tmux panes; also $JUNEAU_TERMINAL_MODE)
+    --keep             Split mode: panes stay open never, fail (default) or always (also $JUNEAU_TERMINAL_KEEP)
     --use-existing-build
                        Stage the build/ directory as it is, without running build-docs.py (the
                        staging build must already exist; scripts/push.py uses this path)
@@ -414,7 +417,7 @@ def main():
     script_dir = Path(__file__).parent.absolute()
     docs_dir = script_dir.parent  # docs/
     juneau_root = find_juneau_root(docs_dir, args.juneau_root, allow_missing=True, validate=False)
-    view = terminal_view.open_view(juneau_root, args.console)
+    view = terminal_view.open_view(juneau_root, args.console, args=args, title='stage docs')
 
     if view.live:
         header = ["Juneau Docs"]

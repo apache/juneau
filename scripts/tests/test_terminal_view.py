@@ -399,6 +399,89 @@ def test_open_view_falls_back_to_plain_on_bad_console(monkeypatch, capsys):
     assert view.run is None and 'console setting rejected' in capsys.readouterr().err
 
 # ----------------------------------------------------------------------------------------------------------------------
+# --mode and --keep (juneau-terminal's split mode)
+
+class FakeRun:
+    def export_console(self, console):
+        self.console = console
+
+
+def fake_mode(monkeypatch, mode, exit_code=0, done=False):
+    """Installs a juneau_terminal_scripts.mode whose apply() records its call and returns the given outcome."""
+    seen = []
+
+    def apply(args, **kwargs):
+        seen.append((args, kwargs))
+        return types.SimpleNamespace(mode=mode, done=done, exit_code=exit_code)
+    monkeypatch.setitem(sys.modules, 'juneau_terminal_scripts.mode', types.SimpleNamespace(apply=apply))
+    monkeypatch.setattr(terminal_view, 'load_toolkit', lambda root: FakeRun())
+    return seen
+
+
+@pytest.mark.parametrize('script', ['build-docs.py', 'release-docs-stage.py', 'release-docs.py', 'push.py'])
+def test_mode_and_keep_flags_are_validated(script):
+    for flag, value in (('--mode', 'wide'), ('--keep', 'sometimes')):
+        result = subprocess.run([sys.executable, '-B', str(SCRIPTS_DIR / script), flag, value], capture_output=True, text=True)
+        assert result.returncode == 2 and f"invalid choice: '{value}'" in result.stderr
+
+
+def test_mode_and_keep_default_to_none():
+    parser = argparse.ArgumentParser()
+    terminal_view.add_console_argument(parser)
+    args = parser.parse_args([])
+    assert args.mode is None and args.keep is None
+    args = parser.parse_args(['--mode', 'split', '--keep', 'always'])
+    assert (args.mode, args.keep) == ('split', 'always')
+
+
+def test_dash_mode_keeps_the_live_view_and_passes_the_title(monkeypatch):
+    seen = fake_mode(monkeypatch, 'dash')
+    args = argparse.Namespace(mode=None, keep=None)
+    view = terminal_view.open_view('/nowhere', 'board', args=args, title='build docs')
+    assert view.live and view.run.console == 'board'
+    assert seen == [(args, {'title': 'build docs'})]
+
+
+def test_raw_mode_is_plain(monkeypatch):
+    fake_mode(monkeypatch, 'raw')
+    view = terminal_view.open_view('/nowhere', None, args=argparse.Namespace(mode='raw', keep=None), title='x')
+    assert not view.live
+
+
+def test_split_launcher_exits_with_the_runs_code(monkeypatch):
+    fake_mode(monkeypatch, 'split', exit_code=7, done=True)
+    with pytest.raises(SystemExit) as e:
+        terminal_view.open_view('/nowhere', None, args=argparse.Namespace(mode='split', keep=None), title='x')
+    assert e.value.code == 7
+
+
+def test_plain_run_never_applies_the_mode(monkeypatch):
+    seen = fake_mode(monkeypatch, 'split', done=True)
+    assert not terminal_view.open_view('/nowhere', None, plain=True, args=argparse.Namespace(mode='split', keep=None), title='x').live
+    assert seen == []
+
+
+def test_missing_toolkit_never_applies_the_mode(monkeypatch):
+    seen = fake_mode(monkeypatch, 'split', done=True)
+    monkeypatch.setattr(terminal_view, 'load_toolkit', lambda root: None)
+    assert not terminal_view.open_view('/nowhere', None, args=argparse.Namespace(mode='split', keep=None), title='x').live
+    assert seen == []
+
+
+def test_toolkit_without_a_mode_module_stays_dash(monkeypatch, capsys):
+    monkeypatch.setitem(sys.modules, 'juneau_terminal_scripts.mode', types.SimpleNamespace())
+    monkeypatch.setattr(terminal_view, 'load_toolkit', lambda root: FakeRun())
+    view = terminal_view.open_view('/nowhere', None, args=argparse.Namespace(mode=None, keep=None), title='x')
+    assert view.live and 'no usable mode module' in capsys.readouterr().err
+
+
+@pytest.mark.parametrize('script,title', [('push.py', 'push juneau-docs'), ('build-docs.py', 'build docs'),
+                                          ('release-docs-stage.py', 'stage docs'), ('release-docs.py', 'release docs')])
+def test_each_script_passes_its_pane_title(script, title):
+    assert f"title='{title}'" in (SCRIPTS_DIR / script).read_text()
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 # build-docs.py end to end, plain
 
 def run_build_docs(*args, juneau_root):

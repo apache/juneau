@@ -3097,6 +3097,11 @@ const sidebars: SidebarsConfig = {
 			collapsed: true,
 			items: [
 				{
+					type: 'doc',
+					id: 'release-notes/10.1.0',
+					label: '10.1.0',
+				},
+				{
 					type: 'category',
 					label: '10.0.0',
 					link: {

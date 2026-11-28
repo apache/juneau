@@ -17,7 +17,9 @@ Optional juneau-terminal live view for build-docs.py, release-docs-stage.py and 
 The scripts load juneau-terminal's toolkit from the Juneau checkout they resolve
 (<juneau-root>/juneau-terminal/src/main/python).  With it, each stage is a row of the console view
 (--console full|board|none, default board, or JUNEAU_TERMINAL_CONSOLE), with the full and
-board logs under ~/.cache/juneau-terminal/.  When it can't be found or imported, View is plain:
+board logs under ~/.cache/juneau-terminal/.  --mode auto|raw|dash|split (also JUNEAU_TERMINAL_MODE) and
+--keep never|fail|always (also JUNEAU_TERMINAL_KEEP) are juneau-terminal's shared split-mode options: split re-runs
+the script in tmux panes, raw is plain output.  When it can't be found or imported, View is plain:
 banners and the tools' own output on the terminal, as the scripts printed before.  juneau-docs
 never depends on juneau-terminal.
 """
@@ -34,6 +36,9 @@ import mvn_lock
 
 BOOTSTRAP_FILE = 'bootstrap.py'
 CONSOLE_MODES = ('full', 'board', 'none')
+# juneau_terminal_scripts.mode's choices, repeated because the parser is built before the toolkit is loaded.
+LAYOUT_MODES = ('auto', 'raw', 'dash', 'split')
+KEEP_MODES = ('never', 'fail', 'always')
 
 #: Every row build-docs.py draws, in order, as (id, label).  Skipped stages still draw, as skipped rows.
 BUILD_ROWS = (
@@ -87,12 +92,33 @@ def load_toolkit(juneau_root):
         return None
 
 
-def open_view(juneau_root, console=None, *, verbose=False, plain=False):
+def apply_mode(args, title):
+    """
+    Apply --mode and --keep through juneau_terminal_scripts.mode and return the effective mode ('raw', 'dash').
+    In split mode this process is only the launcher: it re-runs the script in tmux panes as --mode dash, then
+    exits with that run's code.  A toolkit without a usable mode module leaves the run as dash, with one warning.
+    """
+    try:
+        mode = importlib.import_module('juneau_terminal_scripts.mode')
+        applied = mode.apply(args, title=title)
+    except (ImportError, AttributeError) as e:
+        print(f"warning: juneau-terminal has no usable mode module ({e}); running as dash", file=sys.stderr)
+        return 'dash'
+    if applied.done:
+        sys.exit(applied.exit_code)
+    return applied.mode
+
+
+def open_view(juneau_root, console=None, *, verbose=False, plain=False, args=None, title=None):
     """
     The View for a script run.  console is the --console value (None: JUNEAU_TERMINAL_CONSOLE, else
-    board).  plain=True (e.g. --dry-run) skips juneau-terminal altogether.
+    board).  plain=True (e.g. --dry-run) skips juneau-terminal altogether.  With args (the parsed arguments,
+    carrying --mode and --keep) and the pane title, the layout mode is applied first: split launches the panes
+    and exits, raw gives the plain View.
     """
     run = None if plain else load_toolkit(juneau_root)
+    if run is not None and args is not None and apply_mode(args, title) == 'raw':
+        run = None
     if run is not None:
         try:
             run.export_console(console)
@@ -103,10 +129,16 @@ def open_view(juneau_root, console=None, *, verbose=False, plain=False):
 
 
 def add_console_argument(parser):
-    """--console, for the docs scripts.  Validated here, since the toolkit may not be loaded."""
+    """--console, --mode and --keep, for the docs scripts.  Validated here, since the toolkit may not be loaded."""
     parser.add_argument('--console', choices=CONSOLE_MODES, default=None,
                         help='Console output when juneau-terminal is available: full, board (default) or none '
                              '(also JUNEAU_TERMINAL_CONSOLE; the flag wins)')
+    parser.add_argument('--mode', choices=LAYOUT_MODES, default=None,
+                        help='Layout: auto (default), raw, dash or split; see --console for how much dash shows '
+                             '(also JUNEAU_TERMINAL_MODE; the flag wins)')
+    parser.add_argument('--keep', choices=KEEP_MODES, default=None,
+                        help='Split mode: when the run\'s panes stay open after it ends: never, fail (default; only '
+                             'after a non-zero exit) or always (also JUNEAU_TERMINAL_KEEP; the flag wins)')
 
 
 def branch_warning(repo):

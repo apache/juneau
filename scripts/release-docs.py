@@ -44,6 +44,7 @@ The script:
 Usage:
     python3 scripts/release-docs.py [--no-push] [--commit-message MESSAGE]
                                     [--juneau-root DIR] [--console full|board|none]
+                                    [--mode auto|raw|dash|split] [--keep never|fail|always]
 
 Options:
     --no-push          Perform all steps except the final git push
@@ -52,6 +53,8 @@ Options:
                        $JUNEAU_ROOT, then sibling ../master, then sibling ../juneau)
     --console          Console output when juneau-terminal is available: full, board (default)
                        or none (also $JUNEAU_TERMINAL_CONSOLE)
+    --mode             Layout: auto (default), raw, dash or split (tmux panes; also $JUNEAU_TERMINAL_MODE)
+    --keep             Split mode: panes stay open never, fail (default) or always (also $JUNEAU_TERMINAL_KEEP)
 
 With juneau-terminal available, the run is one live view: Prechecks, then Promote (Fetch, Switch,
 Push).  Without it the output is plain.
@@ -271,7 +274,7 @@ def main():
     script_dir = Path(__file__).parent.absolute()
     docs_dir = script_dir.parent  # docs/
     juneau_root = find_juneau_root(docs_dir, args.juneau_root, allow_missing=True, validate=False)
-    view = terminal_view.open_view(juneau_root, args.console)
+    view = terminal_view.open_view(juneau_root, args.console, args=args, title='release docs')
 
     if view.live:
         header = ["Juneau Docs", "--no-push: nothing is pushed" if args.no_push else "makes asf-staging LIVE on asf-site"]

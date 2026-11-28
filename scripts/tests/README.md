@@ -12,6 +12,8 @@ python3 -m pytest -q scripts/tests
 
 `test_push.py` covers `push.py`: each precheck, `commit_and_push` against real temp git repos (nothing staged, staged, unpushed commits, never stages), the plan rows and the dry run.
 
+`test_terminal_view.py` covers the juneau-terminal adapter, including `--mode`/`--keep` (`apply_mode` and `open_view` with a fake `mode` module: dash, raw, split launcher exit code, plain and missing-toolkit runs).
+
 `test_check_fences.py` covers `check-code-fences.py`, `check-java-fences.py` and `code_fences.py`. Its Java test needs a JDK (`~/jdk/default/bin/java` or `java` on the path) and is skipped without one.
 
 `test_check_topic_template.py`, `test_apply_renames.py` and `test_renumber_topics.py` cover `check-topic-template.py`, `apply-renames.py` and `renumber-topics.py`. They build small docs trees under pytest's `tmp_path` and pass them with `--docs-dir`, so they never touch the live pages.

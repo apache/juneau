@@ -33,6 +33,8 @@ Run from the docs checkout root.
 | `--verbose` | none | off | Print the full banner for each stage instead of one line. |
 | `--juneau-root` | directory | `$JUNEAU_ROOT`, then `../master`, then `../juneau` | Juneau source checkout to build against. Must contain `pom.xml`. |
 | `--console` | `full`, `board`, `none` | `board` | Console output when the Juneau checkout provides `juneau-terminal`; also `JUNEAU_TERMINAL_CONSOLE` (the flag wins). |
+| `--mode` | `auto`, `raw`, `dash`, `split` | `auto` | Layout, shared with the other juneau-terminal scripts; also `JUNEAU_TERMINAL_MODE` (the flag wins). `split` re-runs this script as `--mode dash` in tmux panes (the board, the log tail and a toolbar), in the current tmux window or in a new session it attaches to; `raw` is plain output with no board and no log files; `dash` is the board view (`--console` sets how much it shows). `auto` is `split` on a terminal with tmux, else `dash`; a run already inside a juneau-terminal run, and `--dry-run`, never split. Needs the Juneau checkout's `juneau-terminal`; without it the run is plain. |
+| `--keep` | `never`, `fail`, `always` | `fail` | Split mode: when the run's panes stay open after it ends (`fail` keeps them only after a non-zero exit); also `JUNEAU_TERMINAL_KEEP` (the flag wins). |
 
 ## What it does
 

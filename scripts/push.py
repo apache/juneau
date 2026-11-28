@@ -42,12 +42,15 @@ This script:
 Usage:
     python3 scripts/push.py "Commit message" [--no-stage] [--dry-run]
                             [--juneau-root DIR] [--console full|board|none]
+                            [--mode auto|raw|dash|split] [--keep never|fail|always]
 
 Options:
     --no-stage       Gate, commit and push only: build with --skip-maven (no Maven site) and do not stage
     --dry-run        Print the steps and run the Prechecks; build, commit and push nothing
     --juneau-root    Juneau source checkout (default: $JUNEAU_ROOT, then sibling ../master, then ../juneau)
     --console        Console output when the Juneau checkout has juneau-terminal: full, board (default) or none
+    --mode           Layout: auto (default), raw, dash or split (tmux panes); also $JUNEAU_TERMINAL_MODE
+    --keep           Split mode: panes stay open never, fail (default) or always; also $JUNEAU_TERMINAL_KEEP
     --stage-message  Commit message for the asf-staging commit (default: "Deploy documentation staging")
 
 Never promotes to production; that stays release-docs.py.
@@ -420,7 +423,7 @@ def main():
         print("❌ A staged push needs the Juneau checkout for the Maven site and javadocs; "
               "pass --juneau-root or use --no-stage.")
         sys.exit(1)
-    view = terminal_view.open_view(juneau_root, args.console, plain=args.dry_run)
+    view = terminal_view.open_view(juneau_root, args.console, plain=args.dry_run, args=args, title='push juneau-docs')
 
     if args.dry_run:
         args.message = args.message or '<message>'

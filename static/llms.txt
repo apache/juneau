@@ -490,8 +490,8 @@
 
 ## Resources
 
-- [Release notes 10.0.0](https://juneau.apache.org/docs/release-notes/10.0.0): What changed in the current release.
+- [Release notes 10.1.0](https://juneau.apache.org/docs/release-notes/10.1.0): What changed in the current release.
 - [v10.0 Migration Guide](https://juneau.apache.org/docs/topics/V10MigrationGuide): Upgrading from Juneau 9.x to 10.0.
-- [Javadocs 10.0.0](https://juneau.apache.org/javadocs/10.0.0/index.html): API reference for the current release.
+- [Javadocs 10.1.0](https://juneau.apache.org/javadocs/10.1.0/index.html): API reference for the current release.
 - [Knowledge base (JSONL)](https://juneau.apache.org/ai/juneau-knowledge.jsonl): Machine-readable records of all topics, release notes, About project pages and API metadata, for RAG pipelines.
 - [Knowledge base manifest](https://juneau.apache.org/ai/manifest.json): Version, record count and source commits for the knowledge base.
